@@ -1,11 +1,15 @@
 package com.wxm.keepaccount;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,5 +43,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
+
+        Resources res = getResources();
+        final int pay_ret = res.getInteger(R.integer.payrecord_return);
+        final int income_ret = res.getInteger(R.integer.incomerecord_return);
+
+        if(resultCode == pay_ret)
+        {
+            Log.i(TAG, "从支出页面返回");
+        }
+        else if(resultCode == income_ret)
+        {
+            Log.i(TAG, "从收入页面返回");
+        }
+        else
+        {
+            Log.e(TAG, String.format("非法的resultCode(%d)!",  resultCode));
+        }
     }
 }
