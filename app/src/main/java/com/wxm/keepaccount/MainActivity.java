@@ -5,6 +5,9 @@ import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.math.BigDecimal;
@@ -22,13 +25,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /* for sqlite */
         dbm = new DBManager(this);
-
         // only for test
         List<RecordItem> lr = dbm.query();
         for (RecordItem record : lr) {
             Log.d(TAG, String.format("old record [%s]", record.toString()));
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actbar_menu, menu);
+        return true;
     }
 
     /*

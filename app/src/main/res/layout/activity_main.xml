@@ -10,33 +10,33 @@
     tools:context="com.wxm.keepaccount.MainActivity"
     android:background="#80ffffff">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="120dp"
-        android:text="Hello World!"
-        android:id="@+id/textView"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:background="#7fa87f" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="记录支出"
         android:id="@+id/bt_record_pay"
-        android:layout_marginTop="36dp"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
         android:drawableTop="@drawable/abc_ic_menu_paste_mtrl_am_alpha"
-        android:onClick="onClickPayRecord" />
+        android:onClick="onClickPayRecord"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/bt_record_income" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="记录收入"
         android:id="@+id/bt_record_income"
-        android:layout_alignTop="@+id/bt_record_pay"
-        android:layout_alignEnd="@+id/textView"
         android:drawableTop="@drawable/abc_ic_menu_paste_mtrl_am_alpha"
-        android:onClick="onClickIncomeRecord" />
+        android:onClick="onClickIncomeRecord"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:background="#80ffffff"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/bt_record_pay" />
+
 </RelativeLayout>
