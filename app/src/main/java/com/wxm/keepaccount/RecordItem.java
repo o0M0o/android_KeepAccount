@@ -20,4 +20,12 @@ public class RecordItem {
         record_type = "";
         record_info = "";
     }
+
+    @Override
+    public String toString()
+    {
+        String ret = String.format("type : %s, info : %s, val : %f, timestamp : %s",
+                            record_type, record_info, record_val, record_ts.toString());
+        return ret;
+    }
 }

@@ -7,14 +7,28 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private DBManager dbm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dbm = new DBManager(this);
+
+        // only for test
+        List<RecordItem> lr = dbm.query();
+        for (RecordItem record : lr) {
+            Log.d(TAG, String.format("old record [%s]", record.toString()));
+        }
     }
 
     /*
@@ -48,17 +62,38 @@ public class MainActivity extends AppCompatActivity {
         final int pay_ret = res.getInteger(R.integer.payrecord_return);
         final int income_ret = res.getInteger(R.integer.incomerecord_return);
 
+        ArrayList<RecordItem> items = new ArrayList<RecordItem>();
         if(resultCode == pay_ret)
         {
             Log.i(TAG, "从支出页面返回");
+            Date de = new Date();
+            RecordItem ri = new RecordItem();
+            ri.record_type = "pay";
+            ri.record_info = data.getStringExtra(res.getString(R.string.pay_type));
+            ri.record_val = new BigDecimal(
+                                    data.getStringExtra(
+                                            res.getString(R.string.pay_val)));
+            ri.record_ts.setTime(de.getTime());
+            items.add(ri);
         }
         else if(resultCode == income_ret)
         {
             Log.i(TAG, "从收入页面返回");
+            Date de = new Date();
+            RecordItem ri = new RecordItem();
+            ri.record_type = "income";
+            ri.record_info = data.getStringExtra(res.getString(R.string.income_type));
+            ri.record_val = new BigDecimal(
+                                    data.getStringExtra(
+                                            res.getString(R.string.income_val)));
+            ri.record_ts.setTime(de.getTime());
+            items.add(ri);
         }
         else
         {
             Log.e(TAG, String.format("非法的resultCode(%d)!",  resultCode));
         }
+
+        dbm.add(items);
     }
 }

@@ -5,7 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,6 +50,7 @@ public class DBManager {
      * @return List<Person>
      */
     public List<RecordItem> query() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         ArrayList<RecordItem> persons = new ArrayList<RecordItem>();
         Cursor c = queryTheCursor();
         while (c.moveToNext()) {
@@ -53,9 +58,18 @@ public class DBManager {
             ri._id = c.getInt(c.getColumnIndex("_id"));
             ri.record_type = c.getString(c.getColumnIndex("record_type"));
             ri.record_info = c.getString(c.getColumnIndex("record_info"));
-            ri.record_type = c.getString(c.getColumnIndex("record_type"));
-            ri.record_ts.setTime(c.getLong(c.getColumnIndex("record_ts")));
             ri.record_val = new BigDecimal(c.getDouble(c.getColumnIndex("record_val")));
+
+            try {
+                Date date = format.parse(c.getString(c.getColumnIndex("record_ts")));
+                ri.record_ts.setTime(date.getTime());
+            }
+            catch (ParseException ex)
+            {
+
+                ri.record_ts = new Timestamp(0);
+            }
+
             persons.add(ri);
         }
         c.close();
