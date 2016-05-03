@@ -23,9 +23,9 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS tb_KeepAccout" +
                 "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "   record_type NVARCHAR, " +
-                "   record_info NVARCHAR), " +
+                "   record_info NVARCHAR, " +
                 "   record_val DECIMAL(10,2), " +
-                "   record_ts TIMESTAMP");
+                "   record_ts TIMESTAMP)");
     }
 
     //如果DATABASE_VERSION值被改为2,系统发现现有数据库版本不同,即会调用onUpgrade
