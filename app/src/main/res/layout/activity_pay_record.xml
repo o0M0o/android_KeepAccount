@@ -29,20 +29,15 @@
         android:layout_alignEnd="@+id/ed_pay_amount"
         android:hint="支出类型 :" />
 
-    <Button
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="确认"
-        android:id="@+id/bt_payinfo_ok"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/ed_pay_date"
         android:layout_below="@+id/ed_pay_type"
-        android:layout_alignEnd="@+id/ed_pay_type"
-        android:onClick="onClickOk" />
+        android:layout_alignParentStart="true"
+        android:hint="支出时间"
+        android:layout_alignEnd="@+id/ed_pay_type" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="放弃"
-        android:id="@+id/bt_payinfo_cancel"
-        android:layout_below="@+id/ed_pay_type"
-        android:layout_toStartOf="@+id/bt_payinfo_ok" />
 </RelativeLayout>

@@ -6,4 +6,7 @@
     <string name="pay_type">pay_type</string>
     <string name="save">save</string>
     <string name="edit">edit</string>
+    <string name="cn_save">保存</string>
+    <string name="cn_edit">编辑</string>
+    <string name="cn_giveup">放弃</string>
 </resources>

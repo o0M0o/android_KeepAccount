@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -19,7 +18,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -133,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actbar_menu, menu);
+        inflater.inflate(R.menu.main_actbar_menu, menu);
         return true;
     }
 
@@ -200,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else
         {
-            Log.e(TAG, String.format("非法的resultCode(%d)!",  resultCode));
+            Log.d(TAG, String.format("不处理的resultCode(%d)!",  resultCode));
         }
 
         if(bAdd) {

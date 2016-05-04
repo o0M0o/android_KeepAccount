@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="payrecord_return">1</integer>
-    <integer name="incomerecord_return">2</integer>
+    <integer name="payrecord_giveup">2</integer>
+    <integer name="incomerecord_return">11</integer>
+    <integer name="incomerecord_giveup">12</integer>
 </resources>
