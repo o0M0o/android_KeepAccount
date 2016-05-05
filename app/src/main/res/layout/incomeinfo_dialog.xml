@@ -6,11 +6,12 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/et_input_payinfo"
-        android:hint="支出类型" />
+        android:id="@+id/et_input_incomeinfo"
+        android:hint="收入类型" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/sp_payinfo" />
+        android:id="@+id/sp_incomdinfo" />
+
 </LinearLayout>
