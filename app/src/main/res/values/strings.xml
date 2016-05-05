@@ -2,8 +2,10 @@
     <string name="app_name">KeepAccount</string>
     <string name="income_val">income_val</string>
     <string name="income_type">income_type</string>
+    <string name="income_date">income_date</string>
     <string name="pay_val">pay_val</string>
     <string name="pay_type">pay_type</string>
+    <string name="pay_date">pay_date</string>
     <string name="save">save</string>
     <string name="edit">edit</string>
     <string name="cn_save">保存</string>

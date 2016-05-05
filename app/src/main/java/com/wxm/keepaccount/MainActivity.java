@@ -2,6 +2,7 @@ package com.wxm.keepaccount;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +13,16 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -26,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String ITEM_TITLE = "ItemTitle";
     private static final String ITEM_TEXT = "ItemText";
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         showListView();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     /**
@@ -43,16 +61,17 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<HashMap<String, String>> mylist = getListViewHMap();
 
         SimpleAdapter mSchedule = new SimpleAdapter(this,
-                                                    mylist,
-                                                    R.layout.main_listitem,
-                                                    new String[] {ITEM_TITLE, ITEM_TEXT},
-                                                    new int[] {R.id.ItemTitle, R.id.ItemText});
+                mylist,
+                R.layout.main_listitem,
+                new String[]{ITEM_TITLE, ITEM_TEXT},
+                new int[]{R.id.ItemTitle, R.id.ItemText});
 
         lv.setAdapter(mSchedule);
     }
 
     /**
      * 生成供listview显示的数据
+     *
      * @return 在listview上显示的数据
      */
     @NonNull
@@ -63,18 +82,15 @@ public class MainActivity extends AppCompatActivity {
         List<RecordItem> lr = dbm.query();
 
         HashMap<String, ArrayList<RecordItem>> hm_data =
-                                            new HashMap<String, ArrayList<RecordItem>>();
+                new HashMap<String, ArrayList<RecordItem>>();
         for (RecordItem record : lr) {
             String h_k = record.record_ts.toString().substring(0, 10);
             ArrayList<RecordItem> h_v = hm_data.get(h_k);
-            if(null == h_v)
-            {
+            if (null == h_v) {
                 ArrayList<RecordItem> v = new ArrayList<RecordItem>();
                 v.add(record);
                 hm_data.put(h_k, v);
-            }
-            else
-            {
+            } else {
                 h_v.add(record);
             }
         }
@@ -82,8 +98,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
         ArrayList<String> set_k = new ArrayList<String>(hm_data.keySet());
         Collections.sort(set_k);
-        for(String k : set_k)
-        {
+        for (String k : set_k) {
             ArrayList<RecordItem> v = hm_data.get(k);
 
             int pay_cout = 0;
@@ -91,15 +106,11 @@ public class MainActivity extends AppCompatActivity {
             BigDecimal pay_amount = BigDecimal.ZERO;
             BigDecimal income_amount = BigDecimal.ZERO;
 
-            for(RecordItem r : v)
-            {
-                if((r.record_type.equals("pay")) || (r.record_type.equals("支出")))
-                {
+            for (RecordItem r : v) {
+                if ((r.record_type.equals("pay")) || (r.record_type.equals("支出"))) {
                     pay_cout += 1;
                     pay_amount = pay_amount.add(r.record_val);
-                }
-                else
-                {
+                } else {
                     income_cout += 1;
                     income_amount = income_amount.add(r.record_val);
                 }
@@ -140,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onClickIncomeRecord(View view) {
         // Do something in response to button click
-        Intent intent=new Intent(this, IncomeRecordActivity.class);
+        Intent intent = new Intent(this, IncomeRecordActivity.class);
         startActivityForResult(intent, 1);
     }
 
@@ -149,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onClickPayRecord(View view) {
         // Do something in response to button click
-        Intent intent=new Intent(this, PayRecordActivity.class);
+        Intent intent = new Intent(this, PayRecordActivity.class);
         startActivityForResult(intent, 1);
     }
 
@@ -158,8 +169,7 @@ public class MainActivity extends AppCompatActivity {
         其它activity返回结果
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
         super.onActivityResult(requestCode, resultCode, data);
 
         Resources res = getResources();
@@ -168,42 +178,103 @@ public class MainActivity extends AppCompatActivity {
 
         Boolean bAdd = false;
         ArrayList<RecordItem> items = new ArrayList<RecordItem>();
-        if(resultCode == pay_ret)
-        {
+        if (resultCode == pay_ret) {
             Log.i(TAG, "从支出页面返回");
-            Date de = new Date();
             RecordItem ri = new RecordItem();
             ri.record_type = "支出";
             ri.record_info = data.getStringExtra(res.getString(R.string.pay_type));
             ri.record_val = new BigDecimal(
-                                    data.getStringExtra(
-                                            res.getString(R.string.pay_val)));
-            ri.record_ts.setTime(de.getTime());
+                    data.getStringExtra(
+                            res.getString(R.string.pay_val)));
+
+            String str_dt = data.getStringExtra(
+                    res.getString(R.string.pay_date));
+            try {
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                ri.record_ts.setTime(df.parse(str_dt).getTime());
+            }
+            catch(Exception ex)
+            {
+                Log.e(TAG, String.format("解析'%s'到日期失败", str_dt));
+
+                Date dt = new Date();
+                ri.record_ts.setTime(dt.getTime());
+            }
+
             items.add(ri);
             bAdd = true;
-        }
-        else if(resultCode == income_ret)
-        {
+        } else if (resultCode == income_ret) {
             Log.i(TAG, "从收入页面返回");
-            Date de = new Date();
             RecordItem ri = new RecordItem();
             ri.record_type = "收入";
             ri.record_info = data.getStringExtra(res.getString(R.string.income_type));
             ri.record_val = new BigDecimal(
-                                    data.getStringExtra(
-                                            res.getString(R.string.income_val)));
-            ri.record_ts.setTime(de.getTime());
+                    data.getStringExtra(
+                            res.getString(R.string.income_val)));
+
+            String str_dt = data.getStringExtra(
+                    res.getString(R.string.income_date));
+            try {
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                ri.record_ts.setTime(df.parse(str_dt).getTime());
+            }
+            catch(Exception ex)
+            {
+                Log.e(TAG, String.format("解析'%s'到日期失败", str_dt));
+
+                Date dt = new Date();
+                ri.record_ts.setTime(dt.getTime());
+            }
+
             items.add(ri);
             bAdd = true;
-        }
-        else
-        {
-            Log.d(TAG, String.format("不处理的resultCode(%d)!",  resultCode));
+        } else {
+            Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
         }
 
-        if(bAdd) {
+        if (bAdd) {
             dbm.add(items);
             showListView();
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.wxm.keepaccount/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.wxm.keepaccount/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 }
