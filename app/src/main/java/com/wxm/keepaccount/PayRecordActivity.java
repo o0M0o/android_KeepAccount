@@ -14,8 +14,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import java.util.Calendar;
 
@@ -23,6 +26,7 @@ public class PayRecordActivity extends AppCompatActivity implements View.OnTouch
     private static final String TAG = "PayRecordActivity";
 
     private EditText et_date;
+    private EditText et_info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,11 @@ public class PayRecordActivity extends AppCompatActivity implements View.OnTouch
         setContentView(R.layout.activity_pay_record);
 
         et_date = (EditText) findViewById(R.id.ed_pay_date);
+        et_info = (EditText) findViewById(R.id.ed_pay_type);
         et_date.setOnTouchListener(this);
+        et_info.setOnTouchListener(this);
+
+        /* */
     }
 
     @Override
@@ -124,45 +132,91 @@ public class PayRecordActivity extends AppCompatActivity implements View.OnTouch
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (v.getId() == R.id.ed_pay_date) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				View view = View.inflate(this, R.layout.date_dialog, null);
-				final DatePicker datePicker = (DatePicker) view.findViewById(R.id.date_picker);
-				builder.setView(view);
-
-				Calendar cal = Calendar.getInstance();
-				cal.setTimeInMillis(System.currentTimeMillis());
-				datePicker.init(cal.get(Calendar.YEAR),
-				cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), null);
-
-                final int inType = et_date.getInputType();
-                et_date.setInputType(InputType.TYPE_NULL);
-                et_date.onTouchEvent(event);
-                et_date.setInputType(inType);
-                et_date.setSelection(et_date.getText().length());
-
-                builder.setTitle("选取支付日期");
-                builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        StringBuffer sb = new StringBuffer();
-                        sb.append(String.format("%d-%02d-%02d",
-                                datePicker.getYear(),
-                                datePicker.getMonth() + 1,
-                                datePicker.getDayOfMonth()));
-
-                        et_date.setText(sb);
-                        et_date.requestFocus();
-
-                        dialog.cancel();
-                    }
-                });
-
-				Dialog dialog = builder.create();
-				dialog.show();
+                onTouchDate(event);
+            }
+            else if(v.getId() == R.id.ed_pay_type)
+            {
+                onTouchType(event);
             }
         }
 
         return true;
+    }
+
+    private void onTouchType(MotionEvent event) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = View.inflate(this, R.layout.payinfo_dialog, null);
+        final EditText et_self_info = (EditText)view.findViewById(R.id.et_input_payinfo);
+        builder.setView(view);
+        builder.setTitle("输入或选择支付信息");
+        builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                et_info.setText(et_self_info.getText().toString());
+                et_info.requestFocus();
+
+                dialog.cancel();
+            }
+        });
+
+        final ArrayAdapter info_ap = ArrayAdapter.createFromResource(this,
+                R.array.payinfo, R.layout.payinfo_spinner);
+        info_ap.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        Spinner sp = (Spinner)view.findViewById(R.id.sp_payinfo);
+        sp.setAdapter(info_ap);
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+                                       long arg3) {
+                et_self_info.setText(info_ap.getItem(arg2).toString());
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // do nothing
+                //et_self_info.setText("");
+            }
+        });
+        sp.setVisibility(View.VISIBLE);
+
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void onTouchDate(MotionEvent event) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = View.inflate(this, R.layout.date_dialog, null);
+        final DatePicker datePicker = (DatePicker) view.findViewById(R.id.date_picker);
+        builder.setView(view);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        datePicker.init(cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), null);
+
+        final int inType = et_date.getInputType();
+        et_date.setInputType(InputType.TYPE_NULL);
+        et_date.onTouchEvent(event);
+        et_date.setInputType(inType);
+        et_date.setSelection(et_date.getText().length());
+
+        builder.setTitle("选取支付日期");
+        builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                StringBuffer sb = new StringBuffer();
+                sb.append(String.format("%d-%02d-%02d",
+                        datePicker.getYear(),
+                        datePicker.getMonth() + 1,
+                        datePicker.getDayOfMonth()));
+
+                et_date.setText(sb);
+                et_date.requestFocus();
+
+                dialog.cancel();
+            }
+        });
+
+        Dialog dialog = builder.create();
+        dialog.show();
     }
 }

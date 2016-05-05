@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="payinfo">
+        <item>生活费</item>
+        <item>通讯费</item>
+        <item>社交费用</item>
+        <item>投资</item>
+        <item>其他</item>
+    </string-array>
+</resources>
