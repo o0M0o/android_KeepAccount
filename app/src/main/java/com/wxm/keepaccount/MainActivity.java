@@ -16,6 +16,9 @@ import android.widget.SimpleAdapter;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.wxm.keepaccout.base.AppGobalDef;
+import com.wxm.keepaccout.base.AppMsg;
+import com.wxm.keepaccout.base.AppMsgDef;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -34,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private DBManager dbm;
 
-    private static final String ITEM_TITLE = "ItemTitle";
-    private static final String ITEM_TEXT = "ItemText";
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -58,85 +59,21 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showListView() {
         ListView lv = (ListView) findViewById(R.id.lv_main);
-        ArrayList<HashMap<String, String>> mylist = getListViewHMap();
+
+        AppMsg am = new AppMsg();
+        am.msg = AppMsgDef.MSG_ALL_RECORDS_TO_DAYREPORT;
+        am.obj = this;
+        ArrayList<HashMap<String, String>> mylist =
+                (ArrayList<HashMap<String, String>>)AppManager.getInstance().ProcessAppMsg(am);
 
         SimpleAdapter mSchedule = new SimpleAdapter(this,
                 mylist,
                 R.layout.main_listitem,
-                new String[]{ITEM_TITLE, ITEM_TEXT},
+                new String[]{AppGobalDef.ITEM_TITLE, AppGobalDef.ITEM_TEXT},
                 new int[]{R.id.ItemTitle, R.id.ItemText});
 
         lv.setAdapter(mSchedule);
     }
-
-    /**
-     * 生成供listview显示的数据
-     *
-     * @return 在listview上显示的数据
-     */
-    @NonNull
-    private ArrayList<HashMap<String, String>> getListViewHMap() {
-
-        /* get data from sqlite */
-        dbm = new DBManager(this);
-        List<RecordItem> lr = dbm.query();
-
-        HashMap<String, ArrayList<RecordItem>> hm_data =
-                new HashMap<String, ArrayList<RecordItem>>();
-        for (RecordItem record : lr) {
-            String h_k = record.record_ts.toString().substring(0, 10);
-            ArrayList<RecordItem> h_v = hm_data.get(h_k);
-            if (null == h_v) {
-                ArrayList<RecordItem> v = new ArrayList<RecordItem>();
-                v.add(record);
-                hm_data.put(h_k, v);
-            } else {
-                h_v.add(record);
-            }
-        }
-
-        ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
-        ArrayList<String> set_k = new ArrayList<String>(hm_data.keySet());
-        Collections.sort(set_k);
-        for (String k : set_k) {
-            ArrayList<RecordItem> v = hm_data.get(k);
-
-            int pay_cout = 0;
-            int income_cout = 0;
-            BigDecimal pay_amount = BigDecimal.ZERO;
-            BigDecimal income_amount = BigDecimal.ZERO;
-
-            for (RecordItem r : v) {
-                if ((r.record_type.equals("pay")) || (r.record_type.equals("支出"))) {
-                    pay_cout += 1;
-                    pay_amount = pay_amount.add(r.record_val);
-                } else {
-                    income_cout += 1;
-                    income_amount = income_amount.add(r.record_val);
-                }
-            }
-
-            String show_str =
-                    String.format("支出笔数 ： %d, 支出金额 ：%.02f\n收入笔数 ： %d, 收入金额 ：%.02f",
-                            pay_cout, pay_amount, income_cout, income_amount);
-
-            HashMap<String, String> map = new HashMap<String, String>();
-            map.put(ITEM_TITLE, k);
-            map.put(ITEM_TEXT, show_str);
-            mylist.add(map);
-        }
-
-//        for (RecordItem record : lr) {
-//            //Log.d(TAG, String.format("old record [%s]", record.toString()));
-//            String show_str =
-//                    String.format("类型 : %s  金额 : %.02f\n时间 : %s",
-//                            record.record_info, record.record_val,
-//                            record.record_ts.toString().substring(0, 19));
-//        }
-
-        return mylist;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
