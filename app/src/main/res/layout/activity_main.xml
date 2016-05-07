@@ -16,7 +16,6 @@
         android:text="记录支出"
         android:id="@+id/bt_record_pay"
         android:drawableTop="@drawable/abc_ic_menu_paste_mtrl_am_alpha"
-        android:onClick="onClickPayRecord"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/bt_record_income" />
 
@@ -26,7 +25,6 @@
         android:text="记录收入"
         android:id="@+id/bt_record_income"
         android:drawableTop="@drawable/abc_ic_menu_paste_mtrl_am_alpha"
-        android:onClick="onClickIncomeRecord"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
 
@@ -37,6 +35,7 @@
         android:background="#80ffffff"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/bt_record_pay" />
+        android:layout_below="@+id/bt_record_pay"
+        android:longClickable="true" />
 
 </RelativeLayout>

@@ -1,15 +1,17 @@
 package com.wxm.keepaccount;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -20,22 +22,12 @@ import com.wxm.keepaccout.base.AppGobalDef;
 import com.wxm.keepaccout.base.AppMsg;
 import com.wxm.keepaccout.base.AppMsgDef;
 
-import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private DBManager dbm;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -48,10 +40,48 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initViews();
         showListView();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+
+    /**
+     * 初始化可视控件
+     */
+    private void initViews()
+    {
+        Button pay_bt = (Button)findViewById(R.id.bt_record_pay);
+        pay_bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), PayRecordActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        Button income_bt = (Button)findViewById(R.id.bt_record_income);
+        income_bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), IncomeRecordActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        ListView lv = (ListView) findViewById(R.id.lv_main);
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String str= parent.getItemAtPosition(position).toString();
+                String class_str= parent.getItemAtPosition(position).getClass().toString();
+
+                Log.d(TAG, String.format("long click(%s) : %s", class_str, str));
+                return true;
+            }
+        });
     }
 
     /**
@@ -62,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
         AppMsg am = new AppMsg();
         am.msg = AppMsgDef.MSG_ALL_RECORDS_TO_DAYREPORT;
-        am.obj = this;
+        am.sender = this;
         ArrayList<HashMap<String, String>> mylist =
                 (ArrayList<HashMap<String, String>>)AppManager.getInstance().ProcessAppMsg(am);
 
@@ -83,24 +113,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    /*
-        记录收入
-     */
-    public void onClickIncomeRecord(View view) {
-        // Do something in response to button click
-        Intent intent = new Intent(this, IncomeRecordActivity.class);
-        startActivityForResult(intent, 1);
-    }
-
-    /*
-        记录支出
-     */
-    public void onClickPayRecord(View view) {
-        // Do something in response to button click
-        Intent intent = new Intent(this, PayRecordActivity.class);
-        startActivityForResult(intent, 1);
-    }
-
 
     /*
         其它activity返回结果
@@ -117,60 +129,29 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<RecordItem> items = new ArrayList<RecordItem>();
         if (resultCode == pay_ret) {
             Log.i(TAG, "从支出页面返回");
-            RecordItem ri = new RecordItem();
-            ri.record_type = "支出";
-            ri.record_info = data.getStringExtra(res.getString(R.string.pay_type));
-            ri.record_val = new BigDecimal(
-                    data.getStringExtra(
-                            res.getString(R.string.pay_val)));
 
-            String str_dt = data.getStringExtra(
-                    res.getString(R.string.pay_date));
-            try {
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                ri.record_ts.setTime(df.parse(str_dt).getTime());
-            }
-            catch(Exception ex)
-            {
-                Log.e(TAG, String.format("解析'%s'到日期失败", str_dt));
+            AppMsg am = new AppMsg();
+            am.msg = AppMsgDef.MSG_ADD_PAY_RECORD;
+            am.sender = this;
+            am.obj = data;
+            AppManager.getInstance().ProcessAppMsg(am);
 
-                Date dt = new Date();
-                ri.record_ts.setTime(dt.getTime());
-            }
-
-            items.add(ri);
             bAdd = true;
         } else if (resultCode == income_ret) {
             Log.i(TAG, "从收入页面返回");
-            RecordItem ri = new RecordItem();
-            ri.record_type = "收入";
-            ri.record_info = data.getStringExtra(res.getString(R.string.income_type));
-            ri.record_val = new BigDecimal(
-                    data.getStringExtra(
-                            res.getString(R.string.income_val)));
 
-            String str_dt = data.getStringExtra(
-                    res.getString(R.string.income_date));
-            try {
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                ri.record_ts.setTime(df.parse(str_dt).getTime());
-            }
-            catch(Exception ex)
-            {
-                Log.e(TAG, String.format("解析'%s'到日期失败", str_dt));
+            AppMsg am = new AppMsg();
+            am.msg = AppMsgDef.MSG_ADD_INCOME_RECORD;
+            am.sender = this;
+            am.obj = data;
+            AppManager.getInstance().ProcessAppMsg(am);
 
-                Date dt = new Date();
-                ri.record_ts.setTime(dt.getTime());
-            }
-
-            items.add(ri);
             bAdd = true;
         } else {
             Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
         }
 
         if (bAdd) {
-            dbm.add(items);
             showListView();
         }
     }

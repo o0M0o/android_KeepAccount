@@ -11,6 +11,7 @@ public class AppMsg {
     public int msg;
 
     public Object obj;
+    public Object sender;
 
     public AppMsg()
     {
