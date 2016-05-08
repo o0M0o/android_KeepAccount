@@ -1,0 +1,86 @@
+package com.wxm.keepaccout.base;
+
+import android.app.Activity;
+import android.content.Context;
+
+import com.wxm.keepaccount.DBManager;
+import com.wxm.keepaccount.MainActivity;
+import com.wxm.keepaccount.RecordItem;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by 123 on 2016/5/7.
+ * 本类为app的数据类
+ */
+public class AppModel {
+    private static AppModel ourInstance = new AppModel();
+    private List<RecordItem> allRecords;
+    private boolean dbChange;
+
+    public static AppModel getInstance() {
+        return ourInstance;
+    }
+
+    private AppModel() {
+        allRecords = null;
+        dbChange = false;
+    }
+
+    /**
+     * 从数据库加载所有记录
+     */
+    public void LoadAllRecords()    {
+        DBManager dbm = new DBManager(ContextUtil.getInstance());
+        allRecords = dbm.query();
+        dbChange = false;
+    }
+
+    /**
+     * 获得所有的记录
+     * @return 所有记录
+     */
+    public List<RecordItem> GetAllRecords()     {
+        if((null == allRecords) || dbChange)
+            LoadAllRecords();
+
+        ArrayList<RecordItem> ret = new ArrayList<>();
+        if(null != allRecords)  {
+            for(RecordItem it : allRecords) {
+                RecordItem nit = it;
+                ret.add(nit);
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+     * 根据日期条件(例如 : '2016-05-07')获得相关记录
+     * @param day_str   日期条件
+     * @return  满足日期条件的记录
+     */
+    public List<RecordItem> GetRecordsByDay(String day_str)   {
+        if((null == allRecords) || dbChange)
+            LoadAllRecords();
+
+        String check_str = "XXXX-XX-XX";
+        int check_len = check_str.length();
+        if(check_len != day_str.length())
+            return null;
+
+        ArrayList<RecordItem> ret = new ArrayList<>();
+        if(null != allRecords)  {
+            for(RecordItem it : allRecords) {
+                String h_k = it.record_ts.toString().substring(0, check_len);
+                if(h_k.equals(day_str)) {
+                    RecordItem nit = it;
+                    ret.add(nit);
+                }
+            }
+        }
+
+        return ret;
+    }
+}

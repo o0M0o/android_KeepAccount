@@ -1,16 +1,16 @@
-package com.wxm.keepaccount;
+package com.wxm.keepaccout.base;
 
 
 import android.app.Activity;
+import android.app.backup.RestoreObserver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ObbInfo;
 import android.content.res.Resources;
 import android.util.Log;
 
-import com.wxm.keepaccout.base.AppGobalDef;
-import com.wxm.keepaccout.base.AppMsg;
-import com.wxm.keepaccout.base.AppMsgDef;
+import com.wxm.keepaccount.DBManager;
+import com.wxm.keepaccount.R;
+import com.wxm.keepaccount.RecordItem;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -65,9 +64,54 @@ public class AppManager {
                 ret = AddIncomeRecord(am);
             }
             break;
+
+            case AppMsgDef.MSG_DAILY_RECORDS_TO_DETAILREPORT: {
+                ret = DailyRecordsToDetailReport(am);
+            }
+            break;
         }
 
         return ret;
+    }
+
+    private Object DailyRecordsToDetailReport(AppMsg am)    {
+        String date_str = (String)am.obj;
+
+        // load record
+        List<RecordItem> lr = AppModel.getInstance().GetRecordsByDay(date_str);
+
+        // format output
+        int pay_cout = 0;
+        int income_cout = 0;
+        BigDecimal pay_amount = BigDecimal.ZERO;
+        BigDecimal income_amount = BigDecimal.ZERO;
+        ArrayList<HashMap<String, String>> mylist = new ArrayList<>();
+        for (RecordItem r : lr) {
+            String tit = "";
+            String show_str = "";
+            if ((r.record_type.equals("pay")) || (r.record_type.equals("支出"))) {
+                pay_cout += 1;
+                pay_amount = pay_amount.add(r.record_val);
+
+                tit = "支出";
+                show_str = String.format("支出原因 : %s, 支出金额 : %s",
+                                r.record_info, r.record_val);
+            } else {
+                income_cout += 1;
+                income_amount = income_amount.add(r.record_val);
+
+                tit = "收入";
+                show_str = String.format("收入原因 : %s, 收入金额 : %s",
+                        r.record_info, r.record_val);
+            }
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put(AppGobalDef.ITEM_TITLE, tit);
+            map.put(AppGobalDef.ITEM_TEXT, show_str);
+            mylist.add(map);
+        }
+
+        return mylist;
     }
 
     private Object AddPayRecord(AppMsg am)
@@ -138,16 +182,13 @@ public class AppManager {
 
     private Object LoadAllRecords(AppMsg am)
     {
-        DBManager dbm = new DBManager((Context)am.sender);
-        List<RecordItem> lr = dbm.query();
-        return lr;
+        return AppModel.getInstance().GetAllRecords();
     }
 
     private Object AllRecordsToDayReport(AppMsg am)
     {
         // load record
-        DBManager dbm = new DBManager((Context)am.sender);
-        List<RecordItem> lr = dbm.query();
+        List<RecordItem> lr = AppModel.getInstance().GetAllRecords();
 
         // get days info from record
         HashMap<String, ArrayList<RecordItem>> hm_data =

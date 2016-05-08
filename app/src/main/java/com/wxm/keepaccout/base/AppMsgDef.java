@@ -14,4 +14,6 @@ public class AppMsgDef {
     static final public int MSG_ALL_RECORDS_TO_DAYREPORT = 3;
     static final public int MSG_ADD_PAY_RECORD = 4;
     static final public int MSG_ADD_INCOME_RECORD = 5;
+
+    static final public int MSG_DAILY_RECORDS_TO_DETAILREPORT = 6;
 }

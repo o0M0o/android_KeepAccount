@@ -1,6 +1,5 @@
 package com.wxm.keepaccount;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -19,6 +18,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.wxm.keepaccout.base.AppGobalDef;
+import com.wxm.keepaccout.base.AppManager;
 import com.wxm.keepaccout.base.AppMsg;
 import com.wxm.keepaccout.base.AppMsgDef;
 
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         am.msg = AppMsgDef.MSG_ALL_RECORDS_TO_DAYREPORT;
         am.sender = this;
         ArrayList<HashMap<String, String>> mylist =
-                (ArrayList<HashMap<String, String>>)AppManager.getInstance().ProcessAppMsg(am);
+                (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
 
         SimpleAdapter mSchedule = new SimpleAdapter(this,
                 mylist,
