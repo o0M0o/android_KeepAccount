@@ -94,14 +94,14 @@ public class AppManager {
                 pay_amount = pay_amount.add(r.record_val);
 
                 tit = "支出";
-                show_str = String.format("支出原因 : %s, 支出金额 : %s",
+                show_str = String.format("支出原因 : %s, 支出金额 : %.02f",
                                 r.record_info, r.record_val);
             } else {
                 income_cout += 1;
                 income_amount = income_amount.add(r.record_val);
 
                 tit = "收入";
-                show_str = String.format("收入原因 : %s, 收入金额 : %s",
+                show_str = String.format("收入原因 : %s, 收入金额 : %.02f",
                         r.record_info, r.record_val);
             }
 

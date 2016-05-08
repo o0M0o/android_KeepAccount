@@ -6,4 +6,6 @@ package com.wxm.keepaccout.base;
 public class AppGobalDef {
     static public final String ITEM_TITLE = "ItemTitle";
     static public final String ITEM_TEXT = "ItemText";
+
+	static public final String TEXT_SELECT_ITEM = "select_item";
 }

@@ -11,5 +11,6 @@
     <string name="cn_save">保存</string>
     <string name="cn_edit">编辑</string>
     <string name="cn_giveup">放弃</string>
+    <string name="cn_goback">返回</string>
     <string name="title_activity_activity_record_day_detail">DailyDetail</string>
 </resources>

@@ -4,4 +4,5 @@
     <integer name="payrecord_giveup">2</integer>
     <integer name="incomerecord_return">11</integer>
     <integer name="incomerecord_giveup">12</integer>
+    <integer name="dailydetail_goback">21</integer>
 </resources>
