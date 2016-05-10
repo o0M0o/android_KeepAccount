@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -69,10 +70,21 @@ public class AppManager {
                 ret = DailyRecordsToDetailReport(am);
             }
             break;
+
+            case AppMsgDef.MSG_DELETE_RECORDS: {
+                ret = DeleteRecords(am);
+            }
+            break;
         }
 
         return ret;
     }
+
+    private Object DeleteRecords(AppMsg am)    {
+        List<String> ls_del = (List<String>)am.obj;
+        return AppModel.getInstance().DeleteRecords(ls_del);
+    }
+
 
     private Object DailyRecordsToDetailReport(AppMsg am)    {
         String date_str = (String)am.obj;
@@ -94,22 +106,30 @@ public class AppManager {
                 pay_amount = pay_amount.add(r.record_val);
 
                 tit = "支出";
-                show_str = String.format("支出原因 : %s, 支出金额 : %.02f",
+                show_str = String.format("原因 : %s\n金额 : %.02f",
                                 r.record_info, r.record_val);
             } else {
                 income_cout += 1;
                 income_amount = income_amount.add(r.record_val);
 
                 tit = "收入";
-                show_str = String.format("收入原因 : %s, 收入金额 : %.02f",
+                show_str = String.format("原因 : %s\n金额 : %.02f",
                         r.record_info, r.record_val);
             }
 
             HashMap<String, String> map = new HashMap<>();
             map.put(AppGobalDef.ITEM_TITLE, tit);
             map.put(AppGobalDef.ITEM_TEXT, show_str);
+            map.put(AppGobalDef.TEXT_ITEMID, String.format("%d", r._id));
             mylist.add(map);
         }
+
+        Collections.sort(mylist, new Comparator<HashMap<String, String>>() {
+            @Override
+            public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
+                return lhs.get(AppGobalDef.ITEM_TITLE).compareTo(rhs.get(AppGobalDef.ITEM_TITLE));
+            }
+        });
 
         return mylist;
     }
@@ -141,8 +161,7 @@ public class AppManager {
         }
 
         items.add(ri);
-        DBManager dbm = new DBManager((Context)am.sender);
-        dbm.add(items);
+        AppModel.getInstance().AddRecords(items);
 
         return new Object();
     }
@@ -174,8 +193,7 @@ public class AppManager {
         }
 
         items.add(ri);
-        DBManager dbm = new DBManager((Context)am.sender);
-        dbm.add(items);
+        AppModel.getInstance().AddRecords(items);
 
         return new Object();
     }
@@ -228,7 +246,7 @@ public class AppManager {
             }
 
             String show_str =
-                    String.format("支出笔数 ： %d, 支出金额 ：%.02f\n收入笔数 ： %d, 收入金额 ：%.02f",
+                    String.format("支出笔数 ： %d\t总金额 ：%.02f\n收入笔数 ： %d\t总金额 ：%.02f",
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();

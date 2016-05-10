@@ -92,6 +92,21 @@ public class DBManager {
     }
 
 
+    public void deleteRecords(List<String> lsi) {
+        db.beginTransaction();
+        try {
+            for(String i : lsi) {
+                String sql = String.format("DELETE FROM tb_KeepAccout WHERE _id = '%s'", i);
+                db.execSQL(sql);
+            }
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+
     /**
      * query all persons, return cursor
      * @return  Cursor

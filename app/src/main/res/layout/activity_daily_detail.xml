@@ -14,5 +14,6 @@
         android:layout_height="fill_parent"
         android:id="@+id/lv_daily_detail"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:clickable="true" />
 </RelativeLayout>

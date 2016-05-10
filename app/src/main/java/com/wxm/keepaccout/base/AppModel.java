@@ -18,6 +18,7 @@ public class AppModel {
     private static AppModel ourInstance = new AppModel();
     private List<RecordItem> allRecords;
     private boolean dbChange;
+    private DBManager dbm = new DBManager(ContextUtil.getInstance());
 
     public static AppModel getInstance() {
         return ourInstance;
@@ -32,7 +33,6 @@ public class AppModel {
      * 从数据库加载所有记录
      */
     public void LoadAllRecords()    {
-        DBManager dbm = new DBManager(ContextUtil.getInstance());
         allRecords = dbm.query();
         dbChange = false;
     }
@@ -82,5 +82,27 @@ public class AppModel {
         }
 
         return ret;
+    }
+
+    /**
+     * 添加记录到文件
+     * @param lsi 待添加的记录集合
+     * @return 添加成功返回true
+     */
+    public boolean AddRecords(List<RecordItem> lsi)    {
+        dbm.add(lsi);
+        dbChange = true;
+        return true;
+    }
+
+    /**
+     * 删除文件中的记录
+     * @param lsi 待删除的记录集合
+     * @return  操作成功返回true
+     */
+    public boolean DeleteRecords(List<String> lsi)  {
+        dbm.deleteRecords(lsi);
+        dbChange = true;
+        return true;
     }
 }

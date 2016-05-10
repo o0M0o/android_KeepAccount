@@ -78,10 +78,10 @@ public class MainActivity extends AppCompatActivity {
                 HashMap<String, String> hmsel =
                         (HashMap<String, String>)parent.getItemAtPosition(position);
 
-                String str= parent.getItemAtPosition(position).toString();
-                String class_str= parent.getItemAtPosition(position).getClass().toString();
+                //String str= parent.getItemAtPosition(position).toString();
+                //String class_str= parent.getItemAtPosition(position).getClass().toString();
+                //Log.d(TAG, String.format("long click(%s) : %s", class_str, str));
 
-                Log.d(TAG, String.format("long click(%s) : %s", class_str, str));
                 Intent intent = new Intent(parent.getContext(), ActivityDailyDetail.class);
                 intent.putExtra(AppGobalDef.TEXT_SELECT_ITEM,
                                     (String)hmsel.get(AppGobalDef.ITEM_TITLE));

@@ -1,13 +1,22 @@
 package com.wxm.keepaccount;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -18,11 +27,19 @@ import com.wxm.keepaccout.base.AppMsgDef;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+
 
 public class ActivityDailyDetail extends AppCompatActivity {
     private static final String TAG = "ActivityDailyDetail";
     private ListView lv_show;
     private String invoke_str;
+
+    private HashMap<Integer, Boolean> cb_state = new HashMap<>();
+    private HashMap<Integer, String> cb_sqltag = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +74,35 @@ public class ActivityDailyDetail extends AppCompatActivity {
                 setResult(ret_data, data);
                 finish();
             }
-            return true;
+            break;
+
+            case R.id.dailydetailmenu_delete :  {
+                ArrayList<String> str_ls = new ArrayList<>();
+                for(int i : cb_state.keySet()) {
+                    if(cb_state.get(i))     {
+                        str_ls.add(cb_sqltag.get(i));
+                    }
+                }
+
+                if(0 < str_ls.size()) {
+                    AppMsg am = new AppMsg();
+                    am.msg = AppMsgDef.MSG_DELETE_RECORDS;
+                    am.sender = this;
+                    am.obj = str_ls;
+
+                    AppManager.getInstance().ProcessAppMsg(am);
+                    showListView();
+                }
+
+            }
+            break;
 
             default:
                 return super.onOptionsItemSelected(item);
 
         }
+
+        return true;
     }
 
     private void initViews()    {
@@ -77,12 +117,47 @@ public class ActivityDailyDetail extends AppCompatActivity {
         ArrayList<HashMap<String, String>> mylist =
                 (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
 
+        int ct  = mylist.size();
+        for(int i = 0; i < ct; ++i) {
+            cb_sqltag.put(i, mylist.get(i).get(AppGobalDef.TEXT_ITEMID));
+        }
+
         SimpleAdapter mSchedule = new SimpleAdapter(this,
                 mylist,
-                R.layout.main_listitem,
+                R.layout.daily_detail_listitem,
                 new String[]{AppGobalDef.ITEM_TITLE, AppGobalDef.ITEM_TEXT},
-                new int[]{R.id.ItemTitle, R.id.ItemText});
+                new int[]{R.id.DailyDetailTitle, R.id.DailyDetailText}) {
+            @Override
+            public int getViewTypeCount() {
+                return getCount();
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                return position;
+            }
+        };
 
         lv_show.setAdapter(mSchedule);
     }
+
+
+    /**
+     * checkbox被点击后激活
+     * @param v  被点击的view
+     */
+    public void onCBClick(View v)
+    {
+        CheckBox sv = (CheckBox)v;
+        int pos = lv_show.getPositionForView(sv);
+        Log.d(TAG, "onCBClick at " + pos);
+
+        if(!sv.isSelected())     {
+            cb_state.put(pos, true);
+        }
+        else       {
+            cb_state.put(pos, false);
+        }
+    }
 }
+
