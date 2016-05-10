@@ -131,9 +131,9 @@ public class MainActivity extends AppCompatActivity {
         Resources res = getResources();
         final int pay_ret = res.getInteger(R.integer.payrecord_return);
         final int income_ret = res.getInteger(R.integer.incomerecord_return);
+        final int daildetail_ret = res.getInteger(R.integer.dailydetail_goback);
 
-        Boolean bAdd = false;
-        ArrayList<RecordItem> items = new ArrayList<RecordItem>();
+        Boolean bModify = false;
         if (resultCode == pay_ret) {
             Log.i(TAG, "从支出页面返回");
 
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             am.obj = data;
             AppManager.getInstance().ProcessAppMsg(am);
 
-            bAdd = true;
+            bModify = true;
         } else if (resultCode == income_ret) {
             Log.i(TAG, "从收入页面返回");
 
@@ -153,12 +153,16 @@ public class MainActivity extends AppCompatActivity {
             am.obj = data;
             AppManager.getInstance().ProcessAppMsg(am);
 
-            bAdd = true;
+            bModify = true;
+        } else if (resultCode == daildetail_ret) {
+            Log.i(TAG, "从详情页面返回");
+
+            bModify = true;
         } else {
             Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
         }
 
-        if (bAdd) {
+        if (bModify) {
             showListView();
         }
     }

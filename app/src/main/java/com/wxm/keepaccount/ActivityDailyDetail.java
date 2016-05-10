@@ -37,6 +37,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
     private static final String TAG = "ActivityDailyDetail";
     private ListView lv_show;
     private String invoke_str;
+    private boolean checkbox_visity = false;
 
     private HashMap<Integer, Boolean> cb_state = new HashMap<>();
     private HashMap<Integer, String> cb_sqltag = new HashMap<>();
@@ -105,8 +106,29 @@ public class ActivityDailyDetail extends AppCompatActivity {
         return true;
     }
 
+    private void switchCheckbox()
+    {
+        checkbox_visity = !checkbox_visity;
+        int vv = checkbox_visity ? View.VISIBLE : View.INVISIBLE;
+
+        int ct = lv_show.getChildCount();
+        for(int i = 0; i < ct; ++i) {
+            View v = lv_show.getChildAt(i);
+
+            CheckBox cb = (CheckBox)v.findViewById(R.id.dailydetail_cb);
+            cb.setVisibility(vv);
+        }
+    }
+
     private void initViews()    {
         lv_show = (ListView)findViewById(R.id.lv_daily_detail);
+        lv_show.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                switchCheckbox();
+                return false;
+            }
+        });
     }
 
     private void showListView() {
