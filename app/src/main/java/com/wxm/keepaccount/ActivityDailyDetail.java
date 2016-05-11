@@ -1,22 +1,16 @@
 package com.wxm.keepaccount;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -27,20 +21,22 @@ import com.wxm.keepaccout.base.AppMsgDef;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
 
 
 public class ActivityDailyDetail extends AppCompatActivity {
     private static final String TAG = "ActivityDailyDetail";
     private ListView lv_show;
     private String invoke_str;
-    private boolean checkbox_visity = false;
+    private boolean delete_visity = false;
+    private MenuItem mi_delete = null;
 
     private HashMap<Integer, Boolean> cb_state = new HashMap<>();
     private HashMap<Integer, String> cb_sqltag = new HashMap<>();
+
+    // for listview
+    private ArrayList<HashMap<String, String>> lv_datalist =
+            new ArrayList<>();
+    private SimpleAdapter lv_adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +48,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
         Log.i(TAG, String.format("invoke with '%s'", invoke_str));
 
         initViews();
-        showListView();
+        updateListView();
     }
 
     @Override
@@ -60,6 +56,9 @@ public class ActivityDailyDetail extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.dailydetail_actbar_menu, menu);
+
+        mi_delete = menu.findItem(R.id.dailydetailmenu_delete);
+        mi_delete.setVisible(delete_visity);
         return true;
     }
 
@@ -92,9 +91,8 @@ public class ActivityDailyDetail extends AppCompatActivity {
                     am.obj = str_ls;
 
                     AppManager.getInstance().ProcessAppMsg(am);
-                    showListView();
+                    updateListView();
                 }
-
             }
             break;
 
@@ -108,8 +106,8 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
     private void switchCheckbox()
     {
-        checkbox_visity = !checkbox_visity;
-        int vv = checkbox_visity ? View.VISIBLE : View.INVISIBLE;
+        delete_visity = !delete_visity;
+        int vv = delete_visity ? View.VISIBLE : View.INVISIBLE;
 
         int ct = lv_show.getChildCount();
         for(int i = 0; i < ct; ++i) {
@@ -118,6 +116,8 @@ public class ActivityDailyDetail extends AppCompatActivity {
             CheckBox cb = (CheckBox)v.findViewById(R.id.dailydetail_cb);
             cb.setVisibility(vv);
         }
+
+        mi_delete.setVisible(delete_visity);
     }
 
     private void initViews()    {
@@ -129,29 +129,20 @@ public class ActivityDailyDetail extends AppCompatActivity {
                 return false;
             }
         });
-    }
 
-    private void showListView() {
-        AppMsg am = new AppMsg();
-        am.msg = AppMsgDef.MSG_DAILY_RECORDS_TO_DETAILREPORT;
-        am.sender = this;
-        am.obj = invoke_str;
-        ArrayList<HashMap<String, String>> mylist =
-                (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
+        lv_datalist.clear();
+        cb_state.clear();
+        cb_sqltag.clear();
 
-        int ct  = mylist.size();
-        for(int i = 0; i < ct; ++i) {
-            cb_sqltag.put(i, mylist.get(i).get(AppGobalDef.TEXT_ITEMID));
-        }
-
-        SimpleAdapter mSchedule = new SimpleAdapter(this,
-                mylist,
+        lv_adapter= new SimpleAdapter(this,
+                lv_datalist,
                 R.layout.daily_detail_listitem,
                 new String[]{AppGobalDef.ITEM_TITLE, AppGobalDef.ITEM_TEXT},
                 new int[]{R.id.DailyDetailTitle, R.id.DailyDetailText}) {
             @Override
             public int getViewTypeCount() {
-                return getCount();
+                int org_ct = getCount();
+                return org_ct < 1 ? 1 : org_ct;
             }
 
             @Override
@@ -160,7 +151,44 @@ public class ActivityDailyDetail extends AppCompatActivity {
             }
         };
 
-        lv_show.setAdapter(mSchedule);
+        lv_show.setAdapter(lv_adapter);
+    }
+
+    private void updateListView()   {
+        // clear delete flag
+        int cct = lv_show.getChildCount();
+        for(int i = 0; i < cct; ++i) {
+            View v = lv_show.getChildAt(i);
+
+            CheckBox cb = (CheckBox)v.findViewById(R.id.dailydetail_cb);
+            cb.setVisibility(View.INVISIBLE);
+        }
+
+        if(null != mi_delete) {
+            mi_delete.setVisible(false);
+        }
+
+        // update date
+        AppMsg am = new AppMsg();
+        am.msg = AppMsgDef.MSG_DAILY_RECORDS_TO_DETAILREPORT;
+        am.sender = this;
+        am.obj = invoke_str;
+        ArrayList<HashMap<String, String>> up_ls =
+                (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
+
+        cb_state.clear();
+        lv_datalist.clear();
+        for(HashMap<String, String> r : up_ls)   {
+            lv_datalist.add(r);
+        }
+
+        cb_sqltag.clear();
+        int ct = lv_datalist.size();
+        for (int i = 0; i < ct; ++i) {
+            cb_sqltag.put(i, lv_datalist.get(i).get(AppGobalDef.TEXT_ITEMID));
+        }
+
+        lv_adapter.notifyDataSetChanged();
     }
 
 
