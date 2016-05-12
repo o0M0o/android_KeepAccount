@@ -9,4 +9,5 @@ public class AppGobalDef {
     static public final String TEXT_ITEMID = "ItemID";
 
 	static public final String TEXT_SELECT_ITEM = "select_item";
+    static public final String TEXT_RECORD_DATE = "record_date";
 }

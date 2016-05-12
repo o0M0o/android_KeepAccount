@@ -76,6 +76,13 @@ public class ActivityDailyDetail extends AppCompatActivity {
             }
             break;
 
+            case R.id.dailydetailmenu_add : {
+                Intent intent = new Intent(this, ActivityAddRecord.class);
+                intent.putExtra(AppGobalDef.TEXT_RECORD_DATE, invoke_str);
+                startActivityForResult(intent, 1);
+            }
+            break;
+
             case R.id.dailydetailmenu_delete :  {
                 ArrayList<String> str_ls = new ArrayList<>();
                 for(int i : cb_state.keySet()) {
@@ -104,8 +111,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
         return true;
     }
 
-    private void switchCheckbox()
-    {
+    private void switchCheckbox()       {
         delete_visity = !delete_visity;
         int vv = delete_visity ? View.VISIBLE : View.INVISIBLE;
 
@@ -121,6 +127,11 @@ public class ActivityDailyDetail extends AppCompatActivity {
     }
 
     private void initViews()    {
+        // set title
+        //String tt = String.format("%s日详情", invoke_str);
+        //getDelegate().setTitle(tt);
+
+        // set listview
         lv_show = (ListView)findViewById(R.id.lv_daily_detail);
         lv_show.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -208,6 +219,20 @@ public class ActivityDailyDetail extends AppCompatActivity {
         else       {
             cb_state.put(pos, false);
         }
+    }
+
+
+    /**
+     * 其它activity返回结果
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        updateListView();
     }
 }
 

@@ -13,4 +13,10 @@
         android:orderInCategory="2"
         app:showAsAction="ifRoom|withText"
         android:title="@string/cn_goback"/>
+
+    <item
+        android:id="@+id/dailydetailmenu_add"
+        android:orderInCategory="3"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/cn_add"/>
 </menu>

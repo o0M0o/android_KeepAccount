@@ -13,5 +13,15 @@
     <string name="cn_giveup">放弃</string>
     <string name="cn_goback">返回</string>
     <string name="cn_delete">删除</string>
+    <string name="cn_add">添加</string>
+    <string name="cn_applabel">随手帐</string>
     <string name="title_activity_activity_record_day_detail">DailyDetail</string>
+
+    <string name="cn_hint_income_info">收入原因</string>
+    <string name="cn_hint_income_date">收入日期</string>
+    <string name="cn_hint_income_amount">收入金额</string>
+
+    <string name="cn_hint_pay_info">支出原因</string>
+    <string name="cn_hint_pay_date">支出日期</string>
+    <string name="cn_hint_pay_amount">支出金额</string>
 </resources>
