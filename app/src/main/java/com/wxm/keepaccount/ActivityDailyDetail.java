@@ -232,7 +232,28 @@ public class ActivityDailyDetail extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
         super.onActivityResult(requestCode, resultCode, data);
 
-        updateListView();
+        Resources res = getResources();
+        final int add_ret = res.getInteger(R.integer.addrecord_return);
+
+        Boolean bModify = false;
+        if(resultCode == add_ret)  {
+            Log.i(TAG, "从'添加记录'页面返回");
+
+            AppMsg am = new AppMsg();
+            am.msg = AppMsgDef.MSG_ADD_RECORD;
+            am.sender = this;
+            am.obj = data;
+            AppManager.getInstance().ProcessAppMsg(am);
+
+            bModify = true;
+        }
+        else    {
+            Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
+        }
+
+        if(bModify) {
+            updateListView();
+        }
     }
 }
 

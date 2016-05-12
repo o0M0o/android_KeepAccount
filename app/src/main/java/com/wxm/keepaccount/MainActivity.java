@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         Resources res = getResources();
         final int pay_ret = res.getInteger(R.integer.payrecord_return);
         final int income_ret = res.getInteger(R.integer.incomerecord_return);
-        final int daildetail_ret = res.getInteger(R.integer.dailydetail_goback);
+        final int dailydetail_ret = res.getInteger(R.integer.dailydetail_goback);
 
         Boolean bModify = false;
         if (resultCode == pay_ret) {
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             AppManager.getInstance().ProcessAppMsg(am);
 
             bModify = true;
-        } else if (resultCode == daildetail_ret) {
+        } else if (resultCode == dailydetail_ret) {
             Log.i(TAG, "从详情页面返回");
 
             bModify = true;

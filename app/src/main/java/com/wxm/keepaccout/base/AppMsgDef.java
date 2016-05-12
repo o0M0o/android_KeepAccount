@@ -17,4 +17,6 @@ public class AppMsgDef {
 
     static final public int MSG_DAILY_RECORDS_TO_DETAILREPORT = 6;
     static final public int MSG_DELETE_RECORDS = 7;
+
+    static final public int MSG_ADD_RECORD = 10;
 }

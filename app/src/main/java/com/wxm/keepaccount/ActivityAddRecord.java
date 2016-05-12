@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +20,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+
+import com.wxm.keepaccout.base.AppGobalDef;
 
 import java.util.Calendar;
 
@@ -59,7 +62,17 @@ public class ActivityAddRecord
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.addrecord_memenu_save: {
-                finish();
+                boolean ret;
+                if(record_type.equals(TYPE_INCOME))     {
+                    ret = setIncomeResult();
+                }
+                else    {
+                    ret = setPayResult();
+                }
+
+                if(ret) {
+                    finish();
+                }
             }
             break;
 
@@ -150,13 +163,20 @@ public class ActivityAddRecord
         record_type = TYPE_INCOME;
 
         et_info.setHint(R.string.cn_hint_income_info);
-        et_date.setHint(R.string.cn_hint_income_date);
+        //et_date.setHint(R.string.cn_hint_income_date);
         et_amount.setHint(R.string.cn_hint_income_amount);
 
         et_date.setOnTouchListener(this);
         et_info.setOnTouchListener(this);
         rb_income.setOnClickListener(this);
         rb_pay.setOnClickListener(this);
+
+        Resources res = getResources();
+        Intent it = getIntent();
+        String ad_date = it.getStringExtra(AppGobalDef.TEXT_RECORD_DATE);
+        if(null != ad_date) {
+            et_date.setText(ad_date);
+        }
     }
 
 
@@ -274,4 +294,115 @@ public class ActivityAddRecord
         Dialog dialog = builder.create();
         dialog.show();
     }
+
+    private boolean setPayResult()     {
+        String et_val = et_amount.getText().toString();
+        String et_type = et_info.getText().toString();
+        String str_date = et_date.getText().toString();
+        if(et_val.isEmpty())
+        {
+            Log.i(TAG, "支出数值为空");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("请输入支出数值!")
+                    .setTitle("警告");
+
+            AlertDialog dlg = builder.create();
+            dlg.show();
+            return false;
+        }
+
+        if(et_type.isEmpty())
+        {
+            Log.i(TAG, "支出信息为空");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("请输入支出信息!")
+                    .setTitle("警告");
+
+            AlertDialog dlg = builder.create();
+            dlg.show();
+            return false;
+        }
+
+        if(str_date.isEmpty())
+        {
+            Log.i(TAG, "支出日期为空");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("请输入支出日期!")
+                    .setTitle("警告");
+
+            AlertDialog dlg = builder.create();
+            dlg.show();
+            return false;
+        }
+
+        /* send intent */
+        Resources res = getResources();
+        int ret_data = res.getInteger(R.integer.addrecord_return);
+
+        Intent data=new Intent();
+        data.putExtra(res.getString(R.string.record_type), R.string.cn_pay_record);
+        data.putExtra(res.getString(R.string.record_info), et_type);
+        data.putExtra(res.getString(R.string.record_amount), et_val);
+        data.putExtra(res.getString(R.string.record_date), str_date);
+
+        setResult(ret_data, data);
+        return true;
+    }
+
+    private boolean setIncomeResult()     {
+        String et_val = et_amount.getText().toString();
+        String et_type = et_info.getText().toString();
+        String str_date = et_date.getText().toString();
+        if(et_val.isEmpty())
+        {
+            Log.i(TAG, "收入数值为空");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("请输入收入数值!")
+                    .setTitle("警告");
+
+            AlertDialog dlg = builder.create();
+            dlg.show();
+            return false;
+        }
+
+        if(et_type.isEmpty())
+        {
+            Log.i(TAG, "收入类型为空");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("请输入收入类型!")
+                    .setTitle("警告");
+
+            AlertDialog dlg = builder.create();
+            dlg.show();
+            return false;
+        }
+
+        if(str_date.isEmpty())
+        {
+            Log.i(TAG, "收入日期为空");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("请输入收入日期!")
+                    .setTitle("警告");
+
+            AlertDialog dlg = builder.create();
+            dlg.show();
+            return false;
+        }
+
+        /* send intent */
+        Resources res = getResources();
+        int ret_data = res.getInteger(R.integer.addrecord_return);
+
+        Intent data=new Intent();
+        data.putExtra(res.getString(R.string.record_type),
+                            res.getString(R.string.cn_income_record));
+        data.putExtra(res.getString(R.string.record_info), et_type);
+        data.putExtra(res.getString(R.string.record_amount), et_val);
+        data.putExtra(res.getString(R.string.record_date), str_date);
+
+        setResult(ret_data, data);
+        return true;
+    }
 }
+
+

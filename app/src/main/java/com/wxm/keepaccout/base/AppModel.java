@@ -62,13 +62,13 @@ public class AppModel {
      * @return  满足日期条件的记录
      */
     public List<RecordItem> GetRecordsByDay(String day_str)   {
-        if((null == allRecords) || dbChange)
-            LoadAllRecords();
-
         String check_str = "XXXX-XX-XX";
         int check_len = check_str.length();
         if(check_len != day_str.length())
             return null;
+
+        if((null == allRecords) || dbChange)
+            LoadAllRecords();
 
         ArrayList<RecordItem> ret = new ArrayList<>();
         if(null != allRecords)  {

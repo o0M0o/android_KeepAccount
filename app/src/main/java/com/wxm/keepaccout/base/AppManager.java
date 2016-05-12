@@ -75,6 +75,11 @@ public class AppManager {
                 ret = DeleteRecords(am);
             }
             break;
+
+            case AppMsgDef.MSG_ADD_RECORD: {
+                ret = AddRecord(am);
+            }
+            break;
         }
 
         return ret;
@@ -256,6 +261,37 @@ public class AppManager {
         }
 
         return mylist;
+    }
+
+    private Object AddRecord(AppMsg am) {
+        Resources res = ((Activity)am.sender).getResources();
+        ArrayList<RecordItem> items = new ArrayList<>();
+        Intent data = (Intent)am.obj;
+        RecordItem ri = new RecordItem();
+        ri.record_type = data.getStringExtra(res.getString(R.string.record_type));
+        ri.record_info = data.getStringExtra(res.getString(R.string.record_info));
+        ri.record_val = new BigDecimal(
+                data.getStringExtra(
+                        res.getString(R.string.record_amount)));
+
+        String str_dt = data.getStringExtra(
+                res.getString(R.string.record_date));
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            ri.record_ts.setTime(df.parse(str_dt).getTime());
+        }
+        catch(Exception ex)
+        {
+            Log.e(TAG, String.format("解析'%s'到日期失败", str_dt));
+
+            Date dt = new Date();
+            ri.record_ts.setTime(dt.getTime());
+        }
+
+        items.add(ri);
+        AppModel.getInstance().AddRecords(items);
+
+        return new Object();
     }
 
 }
