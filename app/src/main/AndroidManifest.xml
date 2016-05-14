@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wxm.keepaccount">
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name="com.wxm.keepaccout.base.ContextUtil"
         android:allowBackup="true"
@@ -10,11 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         </activity>
         <activity android:name=".PayRecordActivity" />
         <activity android:name=".IncomeRecordActivity" />
@@ -27,7 +34,20 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".ActivityDailyDetail" />
-        <activity android:name=".ActivityAddRecord"></activity>
+        <activity android:name=".ActivityAddRecord" />
+        <activity
+            android:name=".ActivityLogin"
+            android:label="@string/title_activity_login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ActivityAddAccount"
+            android:label="@string/title_activity_add_account">
+            </activity>
     </application>
 
 </manifest>

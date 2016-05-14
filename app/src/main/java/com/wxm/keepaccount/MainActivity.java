@@ -23,6 +23,7 @@ import com.wxm.keepaccout.base.AppMsg;
 import com.wxm.keepaccout.base.AppMsgDef;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,7 +58,17 @@ public class MainActivity extends AppCompatActivity {
         pay_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), PayRecordActivity.class);
+                Intent intent = new Intent(v.getContext(), ActivityAddRecord.class);
+                intent.putExtra(AppGobalDef.TEXT_RECORD_TYPE, AppGobalDef.TEXT_RECORD_PAY);
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                intent.putExtra(AppGobalDef.TEXT_RECORD_DATE,
+                        String.format("%d-%02d-%02d",
+                                cal.get(cal.YEAR),
+                                cal.get(cal.MONTH) + 1,
+                                cal.get(cal.DAY_OF_MONTH)));
+
                 startActivityForResult(intent, 1);
             }
         });
@@ -66,7 +77,17 @@ public class MainActivity extends AppCompatActivity {
         income_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), IncomeRecordActivity.class);
+                Intent intent = new Intent(v.getContext(), ActivityAddRecord.class);
+                intent.putExtra(AppGobalDef.TEXT_RECORD_TYPE, AppGobalDef.TEXT_RECORD_INCOME);
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                intent.putExtra(AppGobalDef.TEXT_RECORD_DATE,
+                        String.format("%d-%02d-%02d",
+                                cal.get(cal.YEAR),
+                                cal.get(cal.MONTH) + 1,
+                                cal.get(cal.DAY_OF_MONTH)));
+
                 startActivityForResult(intent, 1);
             }
         });
@@ -132,8 +153,10 @@ public class MainActivity extends AppCompatActivity {
         final int pay_ret = res.getInteger(R.integer.payrecord_return);
         final int income_ret = res.getInteger(R.integer.incomerecord_return);
         final int dailydetail_ret = res.getInteger(R.integer.dailydetail_goback);
+        final int add_ret = res.getInteger(R.integer.addrecord_return);
 
         Boolean bModify = false;
+        /*
         if (resultCode == pay_ret) {
             Log.i(TAG, "从支出页面返回");
 
@@ -149,6 +172,16 @@ public class MainActivity extends AppCompatActivity {
 
             AppMsg am = new AppMsg();
             am.msg = AppMsgDef.MSG_ADD_INCOME_RECORD;
+            am.sender = this;
+            am.obj = data;
+            AppManager.getInstance().ProcessAppMsg(am);
+
+            bModify = true;   */
+        if(resultCode == add_ret)    {
+            Log.i(TAG, "从'添加记录'页面返回");
+
+            AppMsg am = new AppMsg();
+            am.msg = AppMsgDef.MSG_ADD_RECORD;
             am.sender = this;
             am.obj = data;
             AppManager.getInstance().ProcessAppMsg(am);

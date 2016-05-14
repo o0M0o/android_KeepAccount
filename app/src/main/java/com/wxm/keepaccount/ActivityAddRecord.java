@@ -30,9 +30,7 @@ public class ActivityAddRecord
         implements View.OnTouchListener, View.OnClickListener     {
     private static final String TAG = "ActivityAddRecord";
 
-    private final String TYPE_INCOME = "income";
-    private final String TYPE_PAY = "PAY";
-    private String record_type = TYPE_INCOME;
+    private String record_type;
 
     private EditText et_info;
     private EditText et_date;
@@ -63,7 +61,7 @@ public class ActivityAddRecord
         switch (item.getItemId()) {
             case R.id.addrecord_memenu_save: {
                 boolean ret;
-                if(record_type.equals(TYPE_INCOME))     {
+                if(record_type.equals(AppGobalDef.TEXT_RECORD_INCOME))     {
                     ret = setIncomeResult();
                 }
                 else    {
@@ -117,12 +115,12 @@ public class ActivityAddRecord
     public void onClick(View v) {
         switch(v.getId())    {
             case R.id.ar_rb_income :    {
-                if(!record_type.equals(TYPE_INCOME))  {
+                if(!record_type.equals(AppGobalDef.TEXT_RECORD_INCOME))  {
                     et_info.clearComposingText();
                     et_info.setText("");
                 }
 
-                record_type = TYPE_INCOME;
+                record_type = AppGobalDef.TEXT_RECORD_INCOME;
 
                 et_info.setHint(R.string.cn_hint_income_info);
                 et_date.setHint(R.string.cn_hint_income_date);
@@ -133,12 +131,12 @@ public class ActivityAddRecord
             break;
 
             case R.id.ar_rb_pay:    {
-                if(!record_type.equals(TYPE_PAY))  {
+                if(!record_type.equals(AppGobalDef.TEXT_RECORD_PAY))  {
                     et_info.clearComposingText();
                     et_info.setText("");
                 }
 
-                record_type = TYPE_PAY;
+                record_type = AppGobalDef.TEXT_RECORD_PAY;
 
                 et_info.setHint(R.string.cn_hint_pay_info);
                 et_date.setHint(R.string.cn_hint_pay_date);
@@ -160,30 +158,49 @@ public class ActivityAddRecord
 
         rb_income.setSelected(true);
         rb_pay.setSelected(false);
-        record_type = TYPE_INCOME;
 
-        et_info.setHint(R.string.cn_hint_income_info);
-        //et_date.setHint(R.string.cn_hint_income_date);
-        et_amount.setHint(R.string.cn_hint_income_amount);
-
-        et_date.setOnTouchListener(this);
-        et_info.setOnTouchListener(this);
-        rb_income.setOnClickListener(this);
-        rb_pay.setOnClickListener(this);
-
-        Resources res = getResources();
         Intent it = getIntent();
         String ad_date = it.getStringExtra(AppGobalDef.TEXT_RECORD_DATE);
         if(null != ad_date) {
             et_date.setText(ad_date);
         }
+
+        String ad_type = it.getStringExtra(AppGobalDef.TEXT_RECORD_TYPE);
+        if(null != ad_type)     {
+            record_type = ad_type;
+        }
+        else    {
+            record_type = AppGobalDef.TEXT_RECORD_INCOME;
+        }
+
+        if(AppGobalDef.TEXT_RECORD_INCOME.equals(record_type)) {
+            rb_income.setChecked(true);
+            rb_pay.setChecked(false);
+
+            et_info.setHint(R.string.cn_hint_income_info);
+            //et_date.setHint(R.string.cn_hint_income_date);
+            et_amount.setHint(R.string.cn_hint_income_amount);
+        }
+        else    {
+            rb_income.setChecked(false);
+            rb_pay.setChecked(true);
+
+            et_info.setHint(R.string.cn_hint_pay_info);
+            //et_date.setHint(R.string.cn_hint_pay_date);
+            et_amount.setHint(R.string.cn_hint_pay_amount);
+        }
+
+        et_date.setOnTouchListener(this);
+        et_info.setOnTouchListener(this);
+        rb_income.setOnClickListener(this);
+        rb_pay.setOnClickListener(this);
     }
 
 
     private void onTouchType(MotionEvent event) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        if(TYPE_INCOME == record_type) {
+        if(record_type.equals(AppGobalDef.TEXT_RECORD_INCOME)) {
             View view = View.inflate(this, R.layout.incomeinfo_dialog, null);
             final EditText et_self_info = (EditText) view.findViewById(R.id.et_input_incomeinfo);
             builder.setView(view);
