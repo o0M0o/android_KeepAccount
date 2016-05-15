@@ -1,4 +1,4 @@
-package com.wxm.keepaccout.base;
+package com.wxm.BaseLib;
 
 /**
  * Created by 123 on 2016/5/6.
@@ -19,5 +19,8 @@ public class AppMsgDef {
     static final public int MSG_DELETE_RECORDS = 7;
 
     static final public int MSG_ADD_RECORD = 10;
-    static final public int MSG_ADD_ACCOUNT = 11;
+
+    static final public int MSG_USR_HASUSR = 1000;
+    static final public int MSG_USR_ADDUSR = 1001;
+    static final public int MSG_USR_CHECKUSR = 1002;
 }

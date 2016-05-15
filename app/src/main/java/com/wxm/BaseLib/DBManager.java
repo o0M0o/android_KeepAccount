@@ -1,4 +1,4 @@
-package com.wxm.keepaccount;
+package com.wxm.BaseLib;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -92,6 +92,10 @@ public class DBManager {
     }
 
 
+    /**
+     * 删除指定的记录
+     * @param lsi 需删除数据
+     */
     public void deleteRecords(List<String> lsi) {
         db.beginTransaction();
         try {
@@ -114,6 +118,93 @@ public class DBManager {
     public Cursor queryTheCursor() {
         Cursor c = db.rawQuery("SELECT * FROM tb_KeepAccout", null);
         return c;
+    }
+
+
+    public Cursor queryUsrCursor()  {
+        Cursor c = db.rawQuery("SELECT * FROM tb_Usr", null);
+        return c;
+    }
+
+
+    /**
+     * 判断是否已经存在用户
+     * @param usr 待检查用户名
+     * @return 如果用户已经存在，返回true, 否则返回false
+     */
+    public boolean hasUsr(String usr)   {
+        if(usr.isEmpty())   {
+            return false;
+        }
+
+        String sql = String.format("SELECT %s FROM tb_Usr WHERE %s = '%s'",
+                DBHelper.COLNAME_USER_NAME,
+                DBHelper.COLNAME_USER_NAME,
+                usr);
+        Cursor c = db.rawQuery(sql, null);
+
+        boolean ret = false;
+        if(c.moveToNext())   {
+            ret = true;
+        }
+
+        c.close();
+        return ret;
+    }
+
+
+    /**
+     * 添加用户
+     * @param usr   用户名
+     * @param pwd   用户密码
+     * @return  成功返回true,否则返回false
+     */
+    public boolean addUsr(String usr, String pwd)   {
+        if(hasUsr(usr) || pwd.isEmpty()) {
+            return false;
+        }
+
+        boolean ret = false;
+        db.beginTransaction();  //开始事务
+        try {
+            db.execSQL("INSERT INTO tb_Usr VALUES(?, ?)",
+                    new Object[]{usr, pwd});
+
+            ret = true;
+            db.setTransactionSuccessful();  //设置事务成功完成
+        } finally {
+            db.endTransaction();    //结束事务
+        }
+
+        return ret;
+    }
+
+    /**
+     * 检查用户
+     * @param usr   用户名
+     * @param pwd   密码
+     * @return  成功返回true,否则返回false
+     */
+    public boolean checkUsr(String usr, String pwd) {
+        if(hasUsr(usr) || pwd.isEmpty()) {
+            return false;
+        }
+
+        String sql = String.format("SELECT %s FROM tb_Usr WHERE %s = '%s'",
+                                        DBHelper.COLNAME_USER_PWD,
+                                        DBHelper.COLNAME_USER_NAME,
+                                        pwd);
+        Cursor c = db.rawQuery(sql, null);
+
+        boolean ret = false;
+        if(c.moveToNext())   {
+            String db_pwd = c.getString(
+                                c.getColumnIndex(DBHelper.COLNAME_USER_PWD));
+            ret = pwd.equals(db_pwd);
+        }
+
+        c.close();
+        return ret;
     }
 
 

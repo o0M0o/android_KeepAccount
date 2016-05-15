@@ -1,4 +1,4 @@
-package com.wxm.keepaccount;
+package com.wxm.KeepAccount;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

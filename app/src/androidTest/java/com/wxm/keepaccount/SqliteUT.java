@@ -1,8 +1,10 @@
-package com.wxm.keepaccount;
+package com.wxm.KeepAccount;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
 import android.test.ApplicationTestCase;
+
+import com.wxm.BaseLib.DBManager;
+import com.wxm.BaseLib.RecordItem;
 
 import org.junit.Before;
 import org.junit.Test;

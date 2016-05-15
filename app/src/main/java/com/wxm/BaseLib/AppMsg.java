@@ -1,4 +1,4 @@
-package com.wxm.keepaccout.base;
+package com.wxm.BaseLib;
 
 import java.lang.Object;
 
@@ -11,6 +11,7 @@ public class AppMsg {
     public int msg;
 
     public Object obj;
+    public Object sub_obj;
     public Object sender;
 
     public AppMsg()

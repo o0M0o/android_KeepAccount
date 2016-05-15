@@ -1,4 +1,4 @@
-package com.wxm.keepaccount;
+package com.wxm.KeepAccount;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -31,10 +31,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import com.wxm.keepaccout.base.AppManager;
-import com.wxm.keepaccout.base.AppMsg;
-import com.wxm.keepaccout.base.AppMsgDef;
 
 import java.util.ArrayList;
 import java.util.List;

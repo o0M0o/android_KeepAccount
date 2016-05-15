@@ -1,4 +1,4 @@
-package com.wxm.keepaccount;
+package com.wxm.BaseLib;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,8 +9,11 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "test.db";
+    private static final String DATABASE_NAME = "AppLocal.db";
     private static final int DATABASE_VERSION = 1;
+
+    public final static String COLNAME_USER_NAME = "usr_name";
+    public final static String COLNAME_USER_PWD = "usr_pwd";
 
     public DBHelper(Context context) {
         //CursorFactory设置为null,使用默认值
@@ -26,6 +29,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 "   record_info NVARCHAR, " +
                 "   record_val DECIMAL(10,2), " +
                 "   record_ts TIMESTAMP)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS tb_Usr" +
+                    "(" + COLNAME_USER_NAME + " NVARCHAR PRIMARY KEY AUTOINCREMENT, " +
+                    "   " + COLNAME_USER_PWD + " NVARCHAR)");
     }
 
     //如果DATABASE_VERSION值被改为2,系统发现现有数据库版本不同,即会调用onUpgrade

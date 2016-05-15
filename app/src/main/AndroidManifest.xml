@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wxm.keepaccount">
+    package="com.wxm.KeepAccount">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -8,13 +8,12 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-        android:name="com.wxm.keepaccout.base.ContextUtil"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/cn_applabel"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.wxm.KeepAccount.MainActivity">
 
             <!--
             <intent-filter>
@@ -23,8 +22,8 @@
             </intent-filter>
             -->
         </activity>
-        <activity android:name=".PayRecordActivity" />
-        <activity android:name=".IncomeRecordActivity" />
+        <activity android:name="com.wxm.KeepAccount.PayRecordActivity" />
+        <activity android:name="com.wxm.KeepAccount.IncomeRecordActivity" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -33,10 +32,10 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".ActivityDailyDetail" />
-        <activity android:name=".ActivityAddRecord" />
+        <activity android:name="com.wxm.KeepAccount.ActivityDailyDetail" />
+        <activity android:name="com.wxm.KeepAccount.ActivityAddRecord" />
         <activity
-            android:name=".ActivityLogin"
+            android:name="com.wxm.KeepAccount.ActivityLogin"
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ActivityAddAccount"
+            android:name="com.wxm.KeepAccount.ActivityAddAccount"
             android:label="@string/title_activity_add_account">
             </activity>
     </application>

@@ -1,4 +1,4 @@
-package com.wxm.keepaccout.base;
+package com.wxm.BaseLib;
 
 /**
  * Created by 123 on 2016/5/6.

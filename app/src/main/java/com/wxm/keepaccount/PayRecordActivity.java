@@ -1,4 +1,4 @@
-package com.wxm.keepaccount;
+package com.wxm.KeepAccount;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

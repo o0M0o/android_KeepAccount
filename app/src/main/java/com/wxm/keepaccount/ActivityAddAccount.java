@@ -1,6 +1,5 @@
-package com.wxm.keepaccount;
+package com.wxm.KeepAccount;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;

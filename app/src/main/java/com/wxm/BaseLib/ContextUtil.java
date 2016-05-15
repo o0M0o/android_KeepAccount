@@ -1,4 +1,4 @@
-package com.wxm.keepaccout.base;
+package com.wxm.BaseLib;
 
 import android.app.Application;
 

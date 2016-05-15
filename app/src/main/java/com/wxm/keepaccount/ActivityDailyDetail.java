@@ -1,4 +1,4 @@
-package com.wxm.keepaccount;
+package com.wxm.KeepAccount;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -14,10 +14,10 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.wxm.keepaccout.base.AppGobalDef;
-import com.wxm.keepaccout.base.AppManager;
-import com.wxm.keepaccout.base.AppMsg;
-import com.wxm.keepaccout.base.AppMsgDef;
+import com.wxm.BaseLib.AppGobalDef;
+import com.wxm.BaseLib.AppManager;
+import com.wxm.BaseLib.AppMsg;
+import com.wxm.BaseLib.AppMsgDef;
 
 import java.util.ArrayList;
 import java.util.HashMap;
