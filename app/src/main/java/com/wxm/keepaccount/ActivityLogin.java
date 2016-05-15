@@ -222,7 +222,7 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() >= 4;
     }
 
     /**
@@ -375,21 +375,30 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
+            /*for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
-            }
+            }*/
 
-            // TODO: register the new account here.
-            return true;
+            Resources res = getResources();
+            Intent data = new Intent();
+            data.putExtra(res.getString(R.string.usr_name), mEmail);
+            data.putExtra(res.getString(R.string.usr_pwd), mPassword);
+
+            AppMsg am = new AppMsg();
+            am.msg = AppMsgDef.MSG_USR_CHECKUSR;
+            am.sender = this;
+            am.obj = data;
+
+            return (boolean)AppManager.getInstance().ProcessAppMsg(am);
         }
 
         @Override

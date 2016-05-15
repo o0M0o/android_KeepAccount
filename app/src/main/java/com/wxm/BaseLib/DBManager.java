@@ -186,14 +186,14 @@ public class DBManager {
      * @return  成功返回true,否则返回false
      */
     public boolean checkUsr(String usr, String pwd) {
-        if(hasUsr(usr) || pwd.isEmpty()) {
+        if(!hasUsr(usr) || pwd.isEmpty()) {
             return false;
         }
 
         String sql = String.format("SELECT %s FROM tb_Usr WHERE %s = '%s'",
                                         DBHelper.COLNAME_USER_PWD,
                                         DBHelper.COLNAME_USER_NAME,
-                                        pwd);
+                                        usr);
         Cursor c = db.rawQuery(sql, null);
 
         boolean ret = false;
