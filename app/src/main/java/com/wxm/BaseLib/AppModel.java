@@ -119,10 +119,6 @@ public class AppModel {
      * @return  添加成功返回true, 否则返回false
      */
     public boolean addUsr(String usr, String pwd)   {
-        if(!hasUsr(usr))    {
-            return false;
-        }
-
         return dbm.addUsr(usr, pwd);
     }
 

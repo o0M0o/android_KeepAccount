@@ -9,44 +9,65 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.wxm.KeepAccount.ActivityAddAccount">
 
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ac_naet_accountname"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:hint="@string/cn_new_account_name"
-        android:singleLine="true" />
+        android:id="@+id/ac_navw_usrname"
+        android:layout_marginTop="12dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ac_naet_accountname"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:hint="@string/cn_new_account_name"
+            android:singleLine="true"  />
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/ac_naet_accountpwd"
-        android:layout_below="@+id/ac_naet_accountname"
-        android:layout_alignParentStart="true"
-        android:hint="@string/cn_new_account_pwd"
-        android:singleLine="true" />
+        android:id="@+id/ac_navw_pwd"
+        android:layout_below="@+id/ac_navw_usrname"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="12dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/ac_naet_accountpwd"
+            android:layout_alignParentStart="true"
+            android:hint="@string/cn_new_account_pwd"
+            android:singleLine="true"/>
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:id="@+id/ac_naet_repeatpwd"
-        android:layout_below="@+id/ac_naet_accountpwd"
-        android:layout_alignParentStart="true"
-        android:hint="@string/cn_new_account_repeat_pwd"
-        android:singleLine="true" />
+        android:id="@+id/ac_navw_repwd"
+        android:layout_below="@+id/ac_navw_pwd"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="12dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:id="@+id/ac_naet_repeatpwd"
+            android:hint="@string/cn_new_account_repeat_pwd"
+            android:singleLine="true"
+            android:layout_alignParentStart="true"/>
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:text="确认"
         android:id="@+id/ac_nabt_confirm"
-        android:layout_below="@+id/ac_naet_repeatpwd"
-        android:layout_alignEnd="@+id/ac_naet_repeatpwd"
-        android:layout_marginTop="40dp"
+        android:layout_below="@+id/ac_navw_repwd"
+        android:layout_alignEnd="@+id/ac_navw_repwd"
+        android:layout_marginTop="30dp"
         android:layout_marginRight="10dp" />
 
     <Button

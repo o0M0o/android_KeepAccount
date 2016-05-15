@@ -150,33 +150,10 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         Resources res = getResources();
-        final int pay_ret = res.getInteger(R.integer.payrecord_return);
-        final int income_ret = res.getInteger(R.integer.incomerecord_return);
         final int dailydetail_ret = res.getInteger(R.integer.dailydetail_goback);
         final int add_ret = res.getInteger(R.integer.addrecord_return);
 
         Boolean bModify = false;
-        /*
-        if (resultCode == pay_ret) {
-            Log.i(TAG, "从支出页面返回");
-
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_ADD_PAY_RECORD;
-            am.sender = this;
-            am.obj = data;
-            AppManager.getInstance().ProcessAppMsg(am);
-
-            bModify = true;
-        } else if (resultCode == income_ret) {
-            Log.i(TAG, "从收入页面返回");
-
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_ADD_INCOME_RECORD;
-            am.sender = this;
-            am.obj = data;
-            AppManager.getInstance().ProcessAppMsg(am);
-
-            bModify = true;   */
         if(resultCode == add_ret)    {
             Log.i(TAG, "从'添加记录'页面返回");
 

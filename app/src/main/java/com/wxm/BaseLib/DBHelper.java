@@ -31,7 +31,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "   record_ts TIMESTAMP)");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS tb_Usr" +
-                    "(" + COLNAME_USER_NAME + " NVARCHAR PRIMARY KEY AUTOINCREMENT, " +
+                    "(" + COLNAME_USER_NAME + " NVARCHAR PRIMARY KEY, " +
                     "   " + COLNAME_USER_PWD + " NVARCHAR)");
     }
 

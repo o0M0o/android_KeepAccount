@@ -32,6 +32,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.wxm.BaseLib.AppManager;
+import com.wxm.BaseLib.AppMsg;
+import com.wxm.BaseLib.AppMsgDef;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -329,11 +333,11 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
         if(resultCode == ret_add_account)  {
             Log.i(TAG, "从'添加新帐户'页面返回");
 
-            /*AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_ADD_ACCOUNT;
+            AppMsg am = new AppMsg();
+            am.msg = AppMsgDef.MSG_USR_ADDUSR;
             am.sender = this;
             am.obj = data;
-            AppManager.getInstance().ProcessAppMsg(am);*/
+            AppManager.getInstance().ProcessAppMsg(am);
         }
         else if(resultCode == ret_add_account_giveup)    {
             Log.i(TAG, "从'添加新帐户'页面返回(放弃添加新帐户)");
