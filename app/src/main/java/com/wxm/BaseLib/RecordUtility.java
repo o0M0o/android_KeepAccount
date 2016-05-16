@@ -36,16 +36,6 @@ public class RecordUtility {
             }
             break;
 
-            case AppMsgDef.MSG_ADD_PAY_RECORD: {
-                ret = AddPayRecord(am);
-            }
-            break;
-
-            case AppMsgDef.MSG_ADD_INCOME_RECORD: {
-                ret = AddIncomeRecord(am);
-            }
-            break;
-
             case AppMsgDef.MSG_DAILY_RECORDS_TO_DETAILREPORT: {
                 ret = DailyRecordsToDetailReport(am);
             }
@@ -117,70 +107,6 @@ public class RecordUtility {
         });
 
         return mylist;
-    }
-
-    private static Object AddPayRecord(AppMsg am)
-    {
-        Resources res = ((Activity)am.sender).getResources();
-        ArrayList<RecordItem> items = new ArrayList<>();
-        Intent data = (Intent)am.obj;
-        RecordItem ri = new RecordItem();
-        ri.record_type = "支出";
-        ri.record_info = data.getStringExtra(res.getString(R.string.pay_type));
-        ri.record_val = new BigDecimal(
-                data.getStringExtra(
-                        res.getString(R.string.pay_val)));
-
-        String str_dt = data.getStringExtra(
-                res.getString(R.string.pay_date));
-        try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            ri.record_ts.setTime(df.parse(str_dt).getTime());
-        }
-        catch(Exception ex)
-        {
-            Log.e(TAG, String.format("解析'%s'到日期失败", str_dt));
-
-            Date dt = new Date();
-            ri.record_ts.setTime(dt.getTime());
-        }
-
-        items.add(ri);
-        AppModel.getInstance().AddRecords(items);
-
-        return new Object();
-    }
-
-    private static Object AddIncomeRecord(AppMsg am)
-    {
-        Resources res = ((Activity)am.sender).getResources();
-        ArrayList<RecordItem> items = new ArrayList<>();
-        Intent data = (Intent)am.obj;
-        RecordItem ri = new RecordItem();
-        ri.record_type = "收入";
-        ri.record_info = data.getStringExtra(res.getString(R.string.income_type));
-        ri.record_val = new BigDecimal(
-                data.getStringExtra(
-                        res.getString(R.string.income_val)));
-
-        String str_dt = data.getStringExtra(
-                res.getString(R.string.income_date));
-        try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            ri.record_ts.setTime(df.parse(str_dt).getTime());
-        }
-        catch(Exception ex)
-        {
-            Log.e(TAG, String.format("解析'%s'到日期失败", str_dt));
-
-            Date dt = new Date();
-            ri.record_ts.setTime(dt.getTime());
-        }
-
-        items.add(ri);
-        AppModel.getInstance().AddRecords(items);
-
-        return new Object();
     }
 
     private static Object LoadAllRecords(AppMsg am)

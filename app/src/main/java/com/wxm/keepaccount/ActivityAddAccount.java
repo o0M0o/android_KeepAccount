@@ -11,6 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.wxm.BaseLib.AppManager;
+import com.wxm.BaseLib.AppMsg;
+import com.wxm.BaseLib.AppMsgDef;
+
 public class ActivityAddAccount
         extends AppCompatActivity
         implements View.OnClickListener, TextView.OnEditorActionListener {
@@ -42,6 +46,12 @@ public class ActivityAddAccount
                                     et_usrname.getText().toString());
                     data.putExtra(res.getString(R.string.usr_pwd),
                                     et_pwd.getText().toString());
+
+                    AppMsg am = new AppMsg();
+                    am.msg = AppMsgDef.MSG_USR_ADDUSR;
+                    am.sender = this;
+                    am.obj = data;
+                    AppManager.getInstance().ProcessAppMsg(am);
 
                     setResult(ret_data, data);
                     finish();

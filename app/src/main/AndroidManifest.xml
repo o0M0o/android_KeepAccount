@@ -14,7 +14,7 @@
         android:label="@string/cn_applabel"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.wxm.KeepAccount.MainActivity">
+        <activity android:name=".ActivityMain">
 
             <!--
             <intent-filter>

@@ -21,12 +21,22 @@ public class UsrUtility {
                 return AppModel.getInstance().addUsr(usr, pwd);
             }
 
-            case AppMsgDef.MSG_USR_CHECKUSR : {
+            case AppMsgDef.MSG_USR_LOGIN: {
                 Resources res = ContextUtil.getInstance().getResources();
                 Intent data = (Intent) am.obj;
                 String usr = data.getStringExtra(res.getString(R.string.usr_name));
                 String pwd = data.getStringExtra(res.getString(R.string.usr_pwd));
-                return AppModel.getInstance().checkUsr(usr, pwd);
+                if(AppModel.getInstance().checkUsr(usr, pwd))   {
+                    AppModel.getInstance().cur_usr = usr;
+                    return true;
+                }
+
+                return false;
+            }
+
+            case AppMsgDef.MSG_USR_LOGOUT : {
+                AppModel.getInstance().cur_usr = "";
+                return true;
             }
 
             case AppMsgDef.MSG_USR_HASUSR : {

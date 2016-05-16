@@ -36,7 +36,8 @@ public class AppManager {
 
             case AppMsgDef.MSG_USR_HASUSR :
             case AppMsgDef.MSG_USR_ADDUSR :
-            case AppMsgDef.MSG_USR_CHECKUSR: {
+            case AppMsgDef.MSG_USR_LOGOUT :
+            case AppMsgDef.MSG_USR_LOGIN: {
                 ret = UsrUtility.processMsg(am);
             }
             break;

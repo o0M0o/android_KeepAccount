@@ -13,6 +13,9 @@ public class AppModel {
     private boolean dbChange;
     private DBManager dbm = new DBManager(ContextUtil.getInstance());
 
+    // 当前登录用户
+    public String cur_usr;
+
     public static AppModel getInstance() {
         return ourInstance;
     }

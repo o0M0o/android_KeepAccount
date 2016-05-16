@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/dailydetailmenu_goback"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:title="@string/cn_goback"/>
+
+    <item
         android:id="@+id/dailydetailmenu_delete"
-        android:orderInCategory="1"
+        android:orderInCategory="101"
         app:showAsAction="ifRoom|withText"
         android:title="@string/cn_delete"/>
 
     <item
-        android:id="@+id/dailydetailmenu_goback"
-        android:orderInCategory="2"
-        app:showAsAction="ifRoom|withText"
-        android:title="@string/cn_goback"/>
-
-    <item
         android:id="@+id/dailydetailmenu_add"
-        android:orderInCategory="3"
+        android:orderInCategory="102"
         app:showAsAction="ifRoom|withText"
         android:title="@string/cn_add"/>
 </menu>

@@ -329,21 +329,38 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
         Resources res = getResources();
         final int ret_add_account = res.getInteger(R.integer.account_add_return);
         final int ret_add_account_giveup = res.getInteger(R.integer.account_add_giveup);
+        final int ret_logout = res.getInteger(R.integer.usr_logout);
 
+        boolean b_resetview = false;
         if(resultCode == ret_add_account)  {
             Log.i(TAG, "从'添加新帐户'页面返回");
-
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_USR_ADDUSR;
-            am.sender = this;
-            am.obj = data;
-            AppManager.getInstance().ProcessAppMsg(am);
+            b_resetview = true;
         }
         else if(resultCode == ret_add_account_giveup)    {
             Log.i(TAG, "从'添加新帐户'页面返回(放弃添加新帐户)");
         }
+        else if(resultCode == ret_logout)    {
+            Log.i(TAG, "注销帐户");
+            b_resetview = true;
+
+            AppMsg am = new AppMsg();
+            am.msg = AppMsgDef.MSG_USR_LOGOUT;
+            am.sender = this;
+            am.obj = null;
+
+            AppManager.getInstance().ProcessAppMsg(am);
+        }
         else    {
             Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
+        }
+
+        if(b_resetview) {
+            // 恢复到初始状态等待输入
+            mEmailView.setText(null);
+            mEmailView.setError(null);
+
+            mPasswordView.setText(null);
+            mPasswordView.setError(null);
         }
     }
 
@@ -351,7 +368,7 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
      * 切换到工作主activity
      */
     private void SwitchToWorkActivity()  {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ActivityMain.class);
         startActivityForResult(intent, 1);
     }
 
@@ -394,7 +411,7 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
             data.putExtra(res.getString(R.string.usr_pwd), mPassword);
 
             AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_USR_CHECKUSR;
+            am.msg = AppMsgDef.MSG_USR_LOGIN;
             am.sender = this;
             am.obj = data;
 
@@ -408,7 +425,7 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 SwitchToWorkActivity();
-                finish();
+                //finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

@@ -5,4 +5,5 @@
     <integer name="addrecord_giveup">32</integer>
     <integer name="account_add_return">41</integer>
     <integer name="account_add_giveup">42</integer>
+    <integer name="usr_logout">1000</integer>
 </resources>

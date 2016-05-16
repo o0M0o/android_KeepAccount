@@ -357,7 +357,8 @@ public class ActivityAddRecord
         int ret_data = res.getInteger(R.integer.addrecord_return);
 
         Intent data=new Intent();
-        data.putExtra(res.getString(R.string.record_type), R.string.cn_pay_record);
+        data.putExtra(res.getString(R.string.record_type),
+                        res.getString(R.string.cn_pay_record));
         data.putExtra(res.getString(R.string.record_info), et_type);
         data.putExtra(res.getString(R.string.record_amount), et_val);
         data.putExtra(res.getString(R.string.record_date), str_date);
