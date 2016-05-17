@@ -111,7 +111,7 @@ public class SlidingTabsColorsFragment extends Fragment {
          * Populate our tab list with tabs. Each item contains a title, indicator color and divider
          * color, which are used by {@link SlidingTabLayout}.
          */
-        mTabs.add(new SamplePagerItem(
+        /*mTabs.add(new SamplePagerItem(
                 getString(R.string.tab_stream), // Title
                 Color.BLUE, // Indicator color
                 Color.GRAY // Divider color
@@ -133,7 +133,26 @@ public class SlidingTabsColorsFragment extends Fragment {
                 getString(R.string.tab_notifications), // Title
                 Color.GREEN, // Indicator color
                 Color.GRAY // Divider color
+        ));*/
+
+        mTabs.add(new SamplePagerItem(
+                getString(R.string.tab_cn_daily), // Title
+                Color.GREEN, // Indicator color
+                Color.GREEN// Divider color
         ));
+
+        mTabs.add(new SamplePagerItem(
+                getString(R.string.tab_cn_monthly), // Title
+                Color.GREEN, // Indicator color
+                Color.GREEN// Divider color
+        ));
+
+        mTabs.add(new SamplePagerItem(
+                getString(R.string.tab_cn_yearly), // Title
+                Color.GREEN, // Indicator color
+                Color.GREEN// Divider color
+        ));
+
         // END_INCLUDE (populate_tabs)
     }
 

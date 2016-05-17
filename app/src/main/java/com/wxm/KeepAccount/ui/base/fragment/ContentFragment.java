@@ -16,14 +16,25 @@
 
 package com.wxm.KeepAccount.ui.base.fragment;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.wxm.KeepAccount.BaseLib.AppGobalDef;
+import com.wxm.KeepAccount.BaseLib.AppManager;
+import com.wxm.KeepAccount.BaseLib.AppMsg;
+import com.wxm.KeepAccount.BaseLib.AppMsgDef;
+import com.wxm.KeepAccount.BaseLib.ContextUtil;
 import com.wxm.KeepAccount.R;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Simple Fragment used to display some meaningful content for each page in the sample's
@@ -34,6 +45,8 @@ public class ContentFragment extends Fragment {
     private static final String KEY_TITLE = "title";
     private static final String KEY_INDICATOR_COLOR = "indicator_color";
     private static final String KEY_DIVIDER_COLOR = "divider_color";
+
+    private View cur_view;
 
     /**
      * @return a new instance of {@link ContentFragment}, adding the parameters into a bundle and
@@ -55,7 +68,8 @@ public class ContentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.pager_item, container, false);
+        cur_view =  inflater.inflate(R.layout.pager_item, container, false);
+        return cur_view;
     }
 
     @Override
@@ -63,8 +77,8 @@ public class ContentFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle args = getArguments();
-
         if (args != null) {
+            /*
             TextView title = (TextView) view.findViewById(R.id.item_title);
             title.setText("Title: " + args.getCharSequence(KEY_TITLE));
 
@@ -77,7 +91,36 @@ public class ContentFragment extends Fragment {
             TextView dividerColorView = (TextView) view.findViewById(R.id.item_divider_color);
             dividerColorView.setText("Divider: #" + Integer.toHexString(dividerColor));
             dividerColorView.setTextColor(dividerColor);
+            */
+
+            Resources res =  getResources();
+            if(res.getString(R.string.tab_cn_daily)
+                    .equals(args.getCharSequence(KEY_TITLE))) {
+                showListView(view);
+            }
         }
+    }
+
+
+    /**
+     * 加载并显示数据
+     */
+    private void showListView(View vw) {
+        ListView lv = (ListView) vw.findViewById(R.id.tabvp_lv_main);
+
+        AppMsg am = new AppMsg();
+        am.msg = AppMsgDef.MSG_ALL_RECORDS_TO_DAYREPORT;
+        am.sender = this;
+        ArrayList<HashMap<String, String>> mylist =
+                (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
+
+        SimpleAdapter mSchedule = new SimpleAdapter(ContextUtil.getInstance(),
+                mylist,
+                R.layout.main_listitem,
+                new String[]{AppGobalDef.ITEM_TITLE, AppGobalDef.ITEM_TEXT},
+                new int[]{R.id.ItemTitle, R.id.ItemText});
+
+        lv.setAdapter(mSchedule);
     }
 }
 
