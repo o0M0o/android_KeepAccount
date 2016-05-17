@@ -16,12 +16,14 @@
 
 package com.wxm.KeepAccount.ui.base.fragment;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import com.wxm.KeepAccount.BaseLib.AppMsg;
 import com.wxm.KeepAccount.BaseLib.AppMsgDef;
 import com.wxm.KeepAccount.BaseLib.ContextUtil;
 import com.wxm.KeepAccount.R;
+import com.wxm.KeepAccount.ui.activities.ActivityDailyDetail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,6 +72,30 @@ public class ContentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         cur_view =  inflater.inflate(R.layout.pager_item, container, false);
+
+        Bundle args = getArguments();
+        String title = args.getCharSequence(KEY_TITLE).toString();
+        ListView lv = (ListView) cur_view.findViewById(R.id.tabvp_lv_main);
+        Resources res =  getResources();
+        if(title.equals(res.getString(R.string.tab_cn_daily)))  {
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    HashMap<String, String> hmsel =
+                            (HashMap<String, String>)parent.getItemAtPosition(position);
+
+                    //String str= parent.getItemAtPosition(position).toString();
+                    //String class_str= parent.getItemAtPosition(position).getClass().toString();
+                    //Log.d(TAG, String.format("long click(%s) : %s", class_str, str));
+
+                    Intent intent = new Intent(parent.getContext(), ActivityDailyDetail.class);
+                    intent.putExtra(AppGobalDef.TEXT_SELECT_ITEM,
+                            (String)hmsel.get(AppGobalDef.ITEM_TITLE));
+                    startActivityForResult(intent, 1);
+                }
+            });
+        }
+
         return cur_view;
     }
 
