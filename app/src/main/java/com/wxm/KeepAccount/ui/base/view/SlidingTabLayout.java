@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wxm.andriod.common.view;
+package com.wxm.KeepAccount.ui.base.view;
 
 import android.content.Context;
 import android.graphics.Typeface;

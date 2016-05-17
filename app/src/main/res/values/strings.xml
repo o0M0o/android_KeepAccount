@@ -55,7 +55,11 @@
     <string name="cn_new_account_repeat_pwd">请重复输入密码</string>
 	<string name="error_repeatpwd_notmatch">两次输入密码不一样</string>
 
-
     <string name="usr_name">usr_name</string>
     <string name="usr_pwd">usr_pwd</string>
+
+    <string name="tab_stream">Stream</string>
+    <string name="tab_messages">Messages</string>
+    <string name="tab_notifications">Notifications</string>
+    <string name="tab_photos">Photos</string>
 </resources>

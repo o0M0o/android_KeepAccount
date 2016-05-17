@@ -1,4 +1,4 @@
-package com.wxm.KeepAccount;
+package com.wxm.KeepAccount.ui.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -32,9 +32,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.wxm.BaseLib.AppManager;
-import com.wxm.BaseLib.AppMsg;
-import com.wxm.BaseLib.AppMsgDef;
+import com.wxm.KeepAccount.BaseLib.AppManager;
+import com.wxm.KeepAccount.BaseLib.AppMsg;
+import com.wxm.KeepAccount.BaseLib.AppMsgDef;
+import com.wxm.KeepAccount.R;
 
 import java.util.ArrayList;
 import java.util.List;

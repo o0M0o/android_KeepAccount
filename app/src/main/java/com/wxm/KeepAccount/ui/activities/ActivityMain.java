@@ -1,4 +1,4 @@
-package com.wxm.KeepAccount;
+package com.wxm.KeepAccount.ui.activities;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -18,10 +18,11 @@ import android.widget.SimpleAdapter;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.wxm.BaseLib.AppGobalDef;
-import com.wxm.BaseLib.AppManager;
-import com.wxm.BaseLib.AppMsg;
-import com.wxm.BaseLib.AppMsgDef;
+import com.wxm.KeepAccount.BaseLib.AppGobalDef;
+import com.wxm.KeepAccount.BaseLib.AppManager;
+import com.wxm.KeepAccount.BaseLib.AppMsg;
+import com.wxm.KeepAccount.BaseLib.AppMsgDef;
+import com.wxm.KeepAccount.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;

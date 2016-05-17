@@ -1,4 +1,4 @@
-package com.wxm.KeepAccount;
+package com.wxm.KeepAccount.ui.dialog;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+
+import com.wxm.KeepAccount.R;
 
 /**
  * Created by 123 on 2016/5/5.

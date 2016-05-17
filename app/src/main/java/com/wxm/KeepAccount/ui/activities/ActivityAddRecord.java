@@ -1,4 +1,4 @@
-package com.wxm.KeepAccount;
+package com.wxm.KeepAccount.ui.activities;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -21,7 +21,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
-import com.wxm.BaseLib.AppGobalDef;
+import com.wxm.KeepAccount.BaseLib.AppGobalDef;
+import com.wxm.KeepAccount.R;
 
 import java.util.Calendar;
 

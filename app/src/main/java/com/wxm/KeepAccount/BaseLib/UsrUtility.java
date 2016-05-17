@@ -1,4 +1,4 @@
-package com.wxm.BaseLib;
+package com.wxm.KeepAccount.BaseLib;
 
 import android.content.Intent;
 import android.content.res.Resources;

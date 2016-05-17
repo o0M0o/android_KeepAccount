@@ -8,13 +8,13 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-        android:name="com.wxm.BaseLib.ContextUtil"
+        android:name=".BaseLib.ContextUtil"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/cn_applabel"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ActivityMain">
+        <activity android:name=".ui.activities.ActivityMain">
 
             <!--
             <intent-filter>
@@ -31,10 +31,11 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name="com.wxm.KeepAccount.ActivityDailyDetail" />
-        <activity android:name="com.wxm.KeepAccount.ActivityAddRecord" />
+        <activity android:name=".ui.activities.ActivityDailyDetail" />
+        <activity android:name=".ui.activities.ActivityAddRecord" />
+        <activity android:name=".ui.activities.ActivityMainTab" />
         <activity
-            android:name="com.wxm.KeepAccount.ActivityLogin"
+            android:name=".ui.activities.ActivityLogin"
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.wxm.KeepAccount.ActivityAddAccount"
+            android:name=".ui.activities.ActivityAddAccount"
             android:label="@string/title_activity_add_account">
             </activity>
     </application>
