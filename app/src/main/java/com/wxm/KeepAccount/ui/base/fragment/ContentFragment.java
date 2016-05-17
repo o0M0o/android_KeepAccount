@@ -92,12 +92,7 @@ public class ContentFragment extends Fragment {
             dividerColorView.setText("Divider: #" + Integer.toHexString(dividerColor));
             dividerColorView.setTextColor(dividerColor);
             */
-
-            Resources res =  getResources();
-            if(res.getString(R.string.tab_cn_daily)
-                    .equals(args.getCharSequence(KEY_TITLE))) {
-                showListView(view);
-            }
+            showListView(view, args);
         }
     }
 
@@ -105,22 +100,45 @@ public class ContentFragment extends Fragment {
     /**
      * 加载并显示数据
      */
-    private void showListView(View vw) {
-        ListView lv = (ListView) vw.findViewById(R.id.tabvp_lv_main);
+    private void showListView(View vw, Bundle args) {
+        Resources res =  getResources();
+        String title = args.getCharSequence(KEY_TITLE).toString();
+        ArrayList<HashMap<String, String>> mylist = null;
+        if(res.getString(R.string.tab_cn_daily)
+                .equals(title)) {
+            AppMsg am = new AppMsg();
+            am.msg = AppMsgDef.MSG_ALL_RECORDS_TO_DAYREPORT;
+            am.sender = this;
+            mylist =
+                    (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
+        }
+        else if(res.getString(R.string.tab_cn_monthly)
+                .equals(title)) {
+            AppMsg am = new AppMsg();
+            am.msg = AppMsgDef.MSG_ALL_RECORDS_TO_MONTHREPORT;
+            am.sender = this;
+            mylist =
+                    (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
+        }
+        else if(res.getString(R.string.tab_cn_yearly)
+                .equals(title)) {
+            AppMsg am = new AppMsg();
+            am.msg = AppMsgDef.MSG_ALL_RECORDS_TO_YEARREPORT;
+            am.sender = this;
+            mylist =
+                    (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
+        }
 
-        AppMsg am = new AppMsg();
-        am.msg = AppMsgDef.MSG_ALL_RECORDS_TO_DAYREPORT;
-        am.sender = this;
-        ArrayList<HashMap<String, String>> mylist =
-                (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
+        if(null != mylist) {
+            SimpleAdapter mSchedule = new SimpleAdapter(ContextUtil.getInstance(),
+                    mylist,
+                    R.layout.main_listitem,
+                    new String[]{AppGobalDef.ITEM_TITLE, AppGobalDef.ITEM_TEXT},
+                    new int[]{R.id.ItemTitle, R.id.ItemText});
 
-        SimpleAdapter mSchedule = new SimpleAdapter(ContextUtil.getInstance(),
-                mylist,
-                R.layout.main_listitem,
-                new String[]{AppGobalDef.ITEM_TITLE, AppGobalDef.ITEM_TEXT},
-                new int[]{R.id.ItemTitle, R.id.ItemText});
-
-        lv.setAdapter(mSchedule);
+            ListView lv = (ListView) vw.findViewById(R.id.tabvp_lv_main);
+            lv.setAdapter(mSchedule);
+        }
     }
 }
 

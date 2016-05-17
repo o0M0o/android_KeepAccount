@@ -29,7 +29,9 @@ public class AppManager {
             case AppMsgDef.MSG_ADD_RECORD:
             case AppMsgDef.MSG_DAILY_RECORDS_TO_DETAILREPORT:
             case AppMsgDef.MSG_DELETE_RECORDS:
-            case AppMsgDef.MSG_ALL_RECORDS_TO_DAYREPORT :   {
+            case AppMsgDef.MSG_ALL_RECORDS_TO_DAYREPORT :
+            case AppMsgDef.MSG_ALL_RECORDS_TO_MONTHREPORT :
+            case AppMsgDef.MSG_ALL_RECORDS_TO_YEARREPORT :   {
                 ret = RecordUtility.processMsg(am);
             }
             break;

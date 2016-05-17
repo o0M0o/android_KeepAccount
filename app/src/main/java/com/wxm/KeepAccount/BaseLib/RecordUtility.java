@@ -36,6 +36,16 @@ public class RecordUtility {
             }
             break;
 
+            case AppMsgDef.MSG_ALL_RECORDS_TO_MONTHREPORT : {
+                ret = AllRecordsToMonthReport(am);
+            }
+            break;
+
+            case AppMsgDef.MSG_ALL_RECORDS_TO_YEARREPORT : {
+                ret = AllRecordsToYearReport(am);
+            }
+            break;
+
             case AppMsgDef.MSG_DAILY_RECORDS_TO_DETAILREPORT: {
                 ret = DailyRecordsToDetailReport(am);
             }
@@ -113,6 +123,117 @@ public class RecordUtility {
     {
         return AppModel.getInstance().GetAllRecords();
     }
+
+    private static Object AllRecordsToYearReport(AppMsg am)
+    {
+        // load record
+        List<RecordItem> lr = AppModel.getInstance().GetAllRecords();
+
+        // get year info from record
+        HashMap<String, ArrayList<RecordItem>> hm_data =
+                new HashMap<>();
+        for (RecordItem record : lr) {
+            String h_k = record.record_ts.toString().substring(0, 4);
+            ArrayList<RecordItem> h_v = hm_data.get(h_k);
+            if (null == h_v) {
+                ArrayList<RecordItem> v = new ArrayList<>();
+                v.add(record);
+                hm_data.put(h_k, v);
+            } else {
+                h_v.add(record);
+            }
+        }
+
+        // format output
+        ArrayList<HashMap<String, String>> mylist = new ArrayList<>();
+        ArrayList<String> set_k = new ArrayList<String>(hm_data.keySet());
+        Collections.sort(set_k);
+        for (String k : set_k) {
+            ArrayList<RecordItem> v = hm_data.get(k);
+
+            int pay_cout = 0;
+            int income_cout = 0;
+            BigDecimal pay_amount = BigDecimal.ZERO;
+            BigDecimal income_amount = BigDecimal.ZERO;
+
+            for (RecordItem r : v) {
+                if ((r.record_type.equals("pay")) || (r.record_type.equals("支出"))) {
+                    pay_cout += 1;
+                    pay_amount = pay_amount.add(r.record_val);
+                } else {
+                    income_cout += 1;
+                    income_amount = income_amount.add(r.record_val);
+                }
+            }
+
+            String show_str =
+                    String.format("支出笔数 ： %d\t总金额 ：%.02f\n收入笔数 ： %d\t总金额 ：%.02f",
+                            pay_cout, pay_amount, income_cout, income_amount);
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put(AppGobalDef.ITEM_TITLE, k);
+            map.put(AppGobalDef.ITEM_TEXT, show_str);
+            mylist.add(map);
+        }
+
+        return mylist;
+    }
+
+    private static Object AllRecordsToMonthReport(AppMsg am)
+    {
+        // load record
+        List<RecordItem> lr = AppModel.getInstance().GetAllRecords();
+
+        // get months info from record
+        HashMap<String, ArrayList<RecordItem>> hm_data =
+                new HashMap<>();
+        for (RecordItem record : lr) {
+            String h_k = record.record_ts.toString().substring(0, 7);
+            ArrayList<RecordItem> h_v = hm_data.get(h_k);
+            if (null == h_v) {
+                ArrayList<RecordItem> v = new ArrayList<>();
+                v.add(record);
+                hm_data.put(h_k, v);
+            } else {
+                h_v.add(record);
+            }
+        }
+
+        // format output
+        ArrayList<HashMap<String, String>> mylist = new ArrayList<>();
+        ArrayList<String> set_k = new ArrayList<String>(hm_data.keySet());
+        Collections.sort(set_k);
+        for (String k : set_k) {
+            ArrayList<RecordItem> v = hm_data.get(k);
+
+            int pay_cout = 0;
+            int income_cout = 0;
+            BigDecimal pay_amount = BigDecimal.ZERO;
+            BigDecimal income_amount = BigDecimal.ZERO;
+
+            for (RecordItem r : v) {
+                if ((r.record_type.equals("pay")) || (r.record_type.equals("支出"))) {
+                    pay_cout += 1;
+                    pay_amount = pay_amount.add(r.record_val);
+                } else {
+                    income_cout += 1;
+                    income_amount = income_amount.add(r.record_val);
+                }
+            }
+
+            String show_str =
+                    String.format("支出笔数 ： %d\t总金额 ：%.02f\n收入笔数 ： %d\t总金额 ：%.02f",
+                            pay_cout, pay_amount, income_cout, income_amount);
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put(AppGobalDef.ITEM_TITLE, k);
+            map.put(AppGobalDef.ITEM_TEXT, show_str);
+            mylist.add(map);
+        }
+
+        return mylist;
+    }
+
 
     private static Object AllRecordsToDayReport(AppMsg am)
     {

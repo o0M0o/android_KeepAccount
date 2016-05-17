@@ -11,7 +11,9 @@ public class AppMsgDef {
 
     static final public int MSG_CHANGE_ACTIVITY = 1;
     static final public int MSG_LOAD_ALL_RECORDS = 2;
-    static final public int MSG_ALL_RECORDS_TO_DAYREPORT = 3;
+    static final public int MSG_ALL_RECORDS_TO_DAYREPORT = 2001;
+    static final public int MSG_ALL_RECORDS_TO_MONTHREPORT = 2003;
+    static final public int MSG_ALL_RECORDS_TO_YEARREPORT = 2004;
 
     static final public int MSG_DAILY_RECORDS_TO_DETAILREPORT = 6;
     static final public int MSG_DELETE_RECORDS = 7;
