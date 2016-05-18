@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -138,19 +139,19 @@ public class SlidingTabsColorsFragment extends Fragment {
         mTabs.add(new SamplePagerItem(
                 getString(R.string.tab_cn_daily), // Title
                 Color.GREEN, // Indicator color
-                Color.GREEN// Divider color
+                Color.GRAY// Divider color
         ));
 
         mTabs.add(new SamplePagerItem(
                 getString(R.string.tab_cn_monthly), // Title
                 Color.GREEN, // Indicator color
-                Color.GREEN// Divider color
+                Color.GRAY// Divider color
         ));
 
         mTabs.add(new SamplePagerItem(
                 getString(R.string.tab_cn_yearly), // Title
                 Color.GREEN, // Indicator color
-                Color.GREEN// Divider color
+                Color.GRAY// Divider color
         ));
 
         // END_INCLUDE (populate_tabs)
@@ -211,6 +212,18 @@ public class SlidingTabsColorsFragment extends Fragment {
         // END_INCLUDE (setup_slidingtablayout)
     }
     // END_INCLUDE (fragment_onviewcreated)
+
+    public void notifyDataChange()  {
+/*        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        for (Fragment f : fragments) {
+            transaction.remove(f);
+        }
+        transaction.commit();*/
+
+        mViewPager.setAdapter(new SampleFragmentPagerAdapter(getChildFragmentManager()));
+    }
 
     /**
      * The {@link FragmentPagerAdapter} used to display pages in this sample. The individual pages

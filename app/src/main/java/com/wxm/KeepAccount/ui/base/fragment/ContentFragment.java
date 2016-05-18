@@ -50,6 +50,8 @@ public class ContentFragment extends Fragment {
     private static final String KEY_DIVIDER_COLOR = "divider_color";
 
     private View cur_view;
+    private ArrayList<HashMap<String, String>> lv_list = new ArrayList<>();
+    private SimpleAdapter lv_adapter = null;
 
     /**
      * @return a new instance of {@link ContentFragment}, adding the parameters into a bundle and
@@ -96,6 +98,26 @@ public class ContentFragment extends Fragment {
             });
         }
 
+        // 设置listview adapter
+        lv_adapter= new SimpleAdapter(ContextUtil.getInstance(),
+                lv_list,
+                R.layout.main_listitem,
+                new String[]{AppGobalDef.ITEM_TITLE, AppGobalDef.ITEM_TEXT},
+                new int[]{R.id.ItemTitle, R.id.ItemText}) {
+            @Override
+            public int getViewTypeCount() {
+                int org_ct = getCount();
+                return org_ct < 1 ? 1 : org_ct;
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                return position;
+            }
+        };
+
+        lv.setAdapter(lv_adapter);
+
         return cur_view;
     }
 
@@ -119,15 +141,21 @@ public class ContentFragment extends Fragment {
             dividerColorView.setText("Divider: #" + Integer.toHexString(dividerColor));
             dividerColorView.setTextColor(dividerColor);
             */
-            showListView(view, args);
         }
+
+        updateView();
     }
 
 
     /**
      * 加载并显示数据
      */
-    private void showListView(View vw, Bundle args) {
+    public void updateView() {
+        Bundle args = getArguments();
+        if(null == args)    {
+            return;
+        }
+
         Resources res =  getResources();
         String title = args.getCharSequence(KEY_TITLE).toString();
         ArrayList<HashMap<String, String>> mylist = null;
@@ -157,14 +185,12 @@ public class ContentFragment extends Fragment {
         }
 
         if(null != mylist) {
-            SimpleAdapter mSchedule = new SimpleAdapter(ContextUtil.getInstance(),
-                    mylist,
-                    R.layout.main_listitem,
-                    new String[]{AppGobalDef.ITEM_TITLE, AppGobalDef.ITEM_TEXT},
-                    new int[]{R.id.ItemTitle, R.id.ItemText});
+            lv_list.clear();
+            for(HashMap<String, String> r : mylist) {
+                lv_list.add(r);
+            }
 
-            ListView lv = (ListView) vw.findViewById(R.id.tabvp_lv_main);
-            lv.setAdapter(mSchedule);
+            lv_adapter.notifyDataSetChanged();
         }
     }
 }

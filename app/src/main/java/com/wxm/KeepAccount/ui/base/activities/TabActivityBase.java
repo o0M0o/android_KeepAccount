@@ -17,14 +17,15 @@
 package com.wxm.KeepAccount.ui.base.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+//import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 
 /**
  * Base launcher activity, to handle most of the common plumbing for samples.
  */
-public class TabActivityBase extends FragmentActivity {
+public class TabActivityBase extends AppCompatActivity {
 
     public static final String TAG = "TabActivityBase";
 
@@ -48,5 +49,7 @@ public class TabActivityBase extends FragmentActivity {
 
         Log.i(TAG, "Ready");
     }
+
+
 }
 

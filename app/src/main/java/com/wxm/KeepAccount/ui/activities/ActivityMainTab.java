@@ -1,18 +1,39 @@
 package com.wxm.KeepAccount.ui.activities;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+import android.widget.Button;
 
+import com.wxm.KeepAccount.BaseLib.AppGobalDef;
+import com.wxm.KeepAccount.BaseLib.AppManager;
+import com.wxm.KeepAccount.BaseLib.AppMsg;
+import com.wxm.KeepAccount.BaseLib.AppMsgDef;
 import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 import com.wxm.KeepAccount.ui.base.activities.TabActivityBase;
+
+import java.util.Calendar;
 
 /**
  * tab版本的main activity
  * Created by 123 on 2016/5/16.
  */
-public class ActivityMainTab extends TabActivityBase {
-    public static final String TAG = "ActivityMainTab";
+public class ActivityMainTab
+        extends TabActivityBase
+        implements View.OnClickListener {
+
+    private static final String TAG = "ActivityMainTab";
+    private Button bt_add_pay = null;
+    private Button bt_add_income = null;
+
+    private SlidingTabsColorsFragment mTabFragment;
 
 
     @Override
@@ -20,11 +41,108 @@ public class ActivityMainTab extends TabActivityBase {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maintab);
 
+        initView(savedInstanceState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_actbar_menu, menu);
+        return true;
+    }
+
+
+    /**
+     * 处理按键
+     * @param v 被点击
+     */
+    @Override
+    public void onClick(View v) {
+        switch(v.getId())    {
+            case R.id.tabbt_record_pay :    {
+                Intent intent = new Intent(v.getContext(), ActivityAddRecord.class);
+                intent.putExtra(AppGobalDef.TEXT_RECORD_TYPE, AppGobalDef.TEXT_RECORD_PAY);
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                intent.putExtra(AppGobalDef.TEXT_RECORD_DATE,
+                        String.format("%d-%02d-%02d",
+                                cal.get(cal.YEAR),
+                                cal.get(cal.MONTH) + 1,
+                                cal.get(cal.DAY_OF_MONTH)));
+
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+            case R.id.tabbt_record_income :    {
+                Intent intent = new Intent(v.getContext(), ActivityAddRecord.class);
+                intent.putExtra(AppGobalDef.TEXT_RECORD_TYPE, AppGobalDef.TEXT_RECORD_INCOME);
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                intent.putExtra(AppGobalDef.TEXT_RECORD_DATE,
+                        String.format("%d-%02d-%02d",
+                                cal.get(cal.YEAR),
+                                cal.get(cal.MONTH) + 1,
+                                cal.get(cal.DAY_OF_MONTH)));
+
+                startActivityForResult(intent, 1);
+            }
+            break;
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Resources res = getResources();
+        final int dailydetail_ret = res.getInteger(R.integer.dailydetail_goback);
+        final int add_ret = res.getInteger(R.integer.addrecord_return);
+
+        Boolean bModify = false;
+        if(resultCode == add_ret)    {
+            Log.i(TAG, "从'添加记录'页面返回");
+
+            AppMsg am = new AppMsg();
+            am.msg = AppMsgDef.MSG_ADD_RECORD;
+            am.sender = this;
+            am.obj = data;
+            AppManager.getInstance().ProcessAppMsg(am);
+
+            bModify = true;
+        } else if (resultCode == dailydetail_ret) {
+            Log.i(TAG, "从详情页面返回");
+
+            bModify = true;
+        } else {
+            Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
+        }
+
+        if (bModify) {
+            mTabFragment.notifyDataChange();
+        }
+    }
+
+
+    /**
+     * 初始化
+     * @param savedInstanceState activity创建参数
+     */
+    private void initView(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            SlidingTabsColorsFragment fragment = new SlidingTabsColorsFragment();
-            transaction.replace(R.id.tabfl_content, fragment);
+            mTabFragment = new SlidingTabsColorsFragment();
+            transaction.replace(R.id.tabfl_content, mTabFragment);
             transaction.commit();
         }
+
+        bt_add_pay = (Button)findViewById(R.id.tabbt_record_pay);
+        bt_add_income = (Button)findViewById(R.id.tabbt_record_income);
+        bt_add_pay.setOnClickListener(this);
+        bt_add_income.setOnClickListener(this);
     }
 }
