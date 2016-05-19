@@ -167,16 +167,16 @@ public class ActivityStart
      */
     private void initView(Bundle savedInstanceState) {
         // set nav view
-/*        Toolbar tb = (Toolbar)findViewById(R.id.ac_navw_toolbar);
-        setSupportActionBar(tb);*/
+        Toolbar tb = (Toolbar)findViewById(R.id.ac_navw_toolbar);
+        setSupportActionBar(tb);
 
-/*        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, tb,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
-        toggle.syncState();*/
+        toggle.syncState();
 
         NavigationView nv = (NavigationView) findViewById(R.id.start_nav_view);
         nv.setNavigationItemSelectedListener(this);

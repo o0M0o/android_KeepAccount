@@ -28,6 +28,7 @@
         <activity android:name=".ui.activities.ActivityAddRecord" />
         <activity
             android:name=".ui.activities.ActivityStart"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_start">
         </activity>
         <activity
