@@ -23,6 +23,9 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -31,6 +34,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wxm.KeepAccount.BaseLib.AppManager;
 import com.wxm.KeepAccount.BaseLib.AppMsg;
@@ -112,11 +116,50 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.acm_login_actbar, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.acm_mi_leave: {
+                Toast.makeText(getApplicationContext(),
+                        "退出应用!",
+                        Toast.LENGTH_SHORT).show();
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    return false;
+                }
+
+                //finish();
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+            break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+
+        return true;
+    }
+
+
+
     /**
      * 注册新帐户
      */
     private void registerNewAccount()    {
-        Intent intent = new Intent(this, ActivityAddAccount.class);
+        Intent intent = new Intent(this, ActivityAddUsr.class);
         startActivityForResult(intent, 1);
     }
 

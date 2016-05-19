@@ -21,7 +21,7 @@
         android:id="@+id/start_nav_view"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/ac_start_nav_header"
-        app:menu="@menu/ac_start_navmenu" />
+        app:menu="@menu/acm_start_nav" />
 
 
     <!--

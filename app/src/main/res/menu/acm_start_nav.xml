@@ -4,11 +4,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_help"
-            android:icon="@mipmap/ic_help"
+            android:icon="@drawable/ic_menu_help"
             android:title="帮助" />
         <item
             android:id="@+id/nav_setting"
-            android:icon="@mipmap/ic_setting"
+            android:icon="@drawable/ic_menu_setting"
             android:title="设定" />
     </group>
 
@@ -16,11 +16,11 @@
         <menu>
             <item
                 android:id="@+id/nav_share_app"
-                android:icon="@mipmap/ic_share"
+                android:icon="@drawable/ic_menu_share"
                 android:title="分享此应用" />
             <item
                 android:id="@+id/nav_contact_writer"
-                android:icon="@mipmap/ic_send_email"
+                android:icon="@drawable/ic_menu_send"
                 android:title="联系作者" />
         </menu>
     </item>

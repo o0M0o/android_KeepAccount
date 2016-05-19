@@ -52,7 +52,7 @@ public class ActivityAddRecord
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.addrecord_actbar_menu, menu);
+        inflater.inflate(R.menu.acm_addrecord_actbar, menu);
         return true;
     }
 

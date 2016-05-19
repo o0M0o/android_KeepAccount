@@ -1,6 +1,5 @@
 package com.wxm.KeepAccount.ui.activities;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -16,7 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.wxm.KeepAccount.BaseLib.AppGobalDef;
 import com.wxm.KeepAccount.BaseLib.AppManager;
@@ -60,8 +59,18 @@ public class ActivityStart
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_actbar_menu, menu);
+        inflater.inflate(R.menu.acm_start_actbar, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
 
@@ -205,20 +214,38 @@ public class ActivityStart
         int id = item.getItemId();
         switch(id)  {
             case R.id.nav_help :    {
+                Toast.makeText(getApplicationContext(),
+                        "invoke help!",
+                        Toast.LENGTH_SHORT).show();
             }
             break;
 
             case R.id.nav_setting :    {
+                Toast.makeText(getApplicationContext(),
+                        "invoke setting!",
+                        Toast.LENGTH_SHORT).show();
             }
             break;
 
             case R.id.nav_share_app :    {
+                Toast.makeText(getApplicationContext(),
+                        "invoke share!",
+                        Toast.LENGTH_SHORT).show();
             }
             break;
 
             case R.id.nav_contact_writer :    {
+                Toast.makeText(getApplicationContext(),
+                        "invoke contact!",
+                        Toast.LENGTH_SHORT).show();
             }
             break;
+        }
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            return false;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);

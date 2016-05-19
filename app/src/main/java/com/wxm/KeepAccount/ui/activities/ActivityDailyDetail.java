@@ -61,7 +61,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.dailydetail_actbar_menu, menu);
+        inflater.inflate(R.menu.acm_dailydetail_actbar, menu);
 
         mi_delete = menu.findItem(R.id.dailydetailmenu_delete);
         mi_delete.setVisible(delete_visity);

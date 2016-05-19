@@ -17,7 +17,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/ac_navw_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
@@ -31,7 +31,7 @@
         android:fitsSystemWindows="true"
         android:layout_gravity="start"
         app:headerLayout="@layout/ac_start_nav_header"
-        app:menu="@menu/ac_start_navmenu" />
+        app:menu="@menu/acm_start_nav" />
         -->
 
 </android.support.design.widget.CoordinatorLayout>

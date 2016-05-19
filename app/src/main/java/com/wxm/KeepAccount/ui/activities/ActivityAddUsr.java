@@ -16,11 +16,11 @@ import com.wxm.KeepAccount.BaseLib.AppMsg;
 import com.wxm.KeepAccount.BaseLib.AppMsgDef;
 import com.wxm.KeepAccount.R;
 
-public class ActivityAddAccount
+public class ActivityAddUsr
         extends AppCompatActivity
         implements View.OnClickListener, TextView.OnEditorActionListener {
 
-    private static final String TAG = "ActivityAddAccount";
+    private static final String TAG = "ActivityAddUsr";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
