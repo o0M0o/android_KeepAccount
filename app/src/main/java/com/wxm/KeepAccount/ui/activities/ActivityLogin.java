@@ -75,7 +75,7 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.ac_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -369,7 +369,7 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
      * 切换到工作主activity
      */
     private void SwitchToWorkActivity()  {
-        Intent intent = new Intent(this, ActivityMain.class);
+        Intent intent = new Intent(this, ActivityStart.class);
         startActivityForResult(intent, 1);
     }
 

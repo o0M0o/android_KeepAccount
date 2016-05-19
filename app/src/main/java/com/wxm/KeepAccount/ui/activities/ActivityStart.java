@@ -1,15 +1,22 @@
 package com.wxm.KeepAccount.ui.activities;
 
-import android.content.DialogInterface;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.wxm.KeepAccount.BaseLib.AppGobalDef;
 import com.wxm.KeepAccount.BaseLib.AppManager;
@@ -25,11 +32,11 @@ import java.util.Calendar;
  * tab版本的main activity
  * Created by 123 on 2016/5/16.
  */
-public class ActivityMainTab
+public class ActivityStart
         extends TabActivityBase
-        implements View.OnClickListener {
+        implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "ActivityMainTab";
+    private static final String TAG = "ActivityStart";
     private Button bt_add_pay = null;
     private Button bt_add_income = null;
 
@@ -39,9 +46,14 @@ public class ActivityMainTab
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maintab);
+        setContentView(R.layout.ac_start);
 
         initView(savedInstanceState);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -52,6 +64,27 @@ public class ActivityMainTab
         return true;
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.am_bi_logout : {
+                Resources res = getResources();
+                int ret_data = res.getInteger(R.integer.usr_logout);
+
+                Intent data=new Intent();
+                setResult(ret_data, data);
+                finish();
+            }
+            break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+
+        return true;
+    }
 
     /**
      * 处理按键
@@ -133,6 +166,23 @@ public class ActivityMainTab
      * @param savedInstanceState activity创建参数
      */
     private void initView(Bundle savedInstanceState) {
+        // set nav view
+/*        Toolbar tb = (Toolbar)findViewById(R.id.ac_navw_toolbar);
+        setSupportActionBar(tb);*/
+
+/*        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, tb,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();*/
+
+        NavigationView nv = (NavigationView) findViewById(R.id.start_nav_view);
+        nv.setNavigationItemSelectedListener(this);
+
+
+        // set fragment for tab
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             mTabFragment = new SlidingTabsColorsFragment();
@@ -140,9 +190,39 @@ public class ActivityMainTab
             transaction.commit();
         }
 
+        // set button
         bt_add_pay = (Button)findViewById(R.id.tabbt_record_pay);
         bt_add_income = (Button)findViewById(R.id.tabbt_record_income);
         bt_add_pay.setOnClickListener(this);
         bt_add_income.setOnClickListener(this);
+    }
+
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        switch(id)  {
+            case R.id.nav_help :    {
+            }
+            break;
+
+            case R.id.nav_setting :    {
+            }
+            break;
+
+            case R.id.nav_share_app :    {
+            }
+            break;
+
+            case R.id.nav_contact_writer :    {
+            }
+            break;
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

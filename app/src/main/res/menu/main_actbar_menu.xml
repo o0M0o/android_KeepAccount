@@ -8,8 +8,8 @@
         android:title="@string/save"/>-->
 
     <item
+        android:orderInCategory="9000"
         android:id="@+id/am_bi_logout"
-        android:orderInCategory="1"
         app:showAsAction="ifRoom|withText"
         android:title="@string/cn_logout"/>
 </menu>

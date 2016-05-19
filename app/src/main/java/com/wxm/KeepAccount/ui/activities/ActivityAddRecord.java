@@ -43,7 +43,7 @@ public class ActivityAddRecord
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_record);
+        setContentView(R.layout.ac_record_add);
 
         initView();
     }

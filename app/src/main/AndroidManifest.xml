@@ -7,22 +7,15 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <uses-sdk android:minSdkVersion="11" />
     <application
         android:name=".BaseLib.ContextUtil"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_share"
         android:label="@string/cn_applabel"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activities.ActivityMain">
 
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-        </activity>
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -33,7 +26,10 @@
 
         <activity android:name=".ui.activities.ActivityDailyDetail" />
         <activity android:name=".ui.activities.ActivityAddRecord" />
-        <activity android:name=".ui.activities.ActivityMainTab" />
+        <activity
+            android:name=".ui.activities.ActivityStart"
+            android:label="@string/title_activity_start">
+        </activity>
         <activity
             android:name=".ui.activities.ActivityLogin"
             android:label="@string/title_activity_login">
@@ -46,7 +42,12 @@
         <activity
             android:name=".ui.activities.ActivityAddAccount"
             android:label="@string/title_activity_add_account">
-            </activity>
+        </activity>
+        <activity
+            android:name=".ui.activities.ActivityMainTest"
+            android:label="@string/title_activity_activity_main_test"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

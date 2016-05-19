@@ -25,7 +25,7 @@ public class ActivityAddAccount
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_account);
+        setContentView(R.layout.ac_usr_add);
 
         initView();
     }
