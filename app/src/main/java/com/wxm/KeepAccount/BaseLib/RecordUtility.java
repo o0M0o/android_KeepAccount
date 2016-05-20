@@ -167,7 +167,7 @@ public class RecordUtility {
             }
 
             String show_str =
-                    String.format("支出笔数 ： %d\t总金额 ：%.02f\n收入笔数 ： %d\t总金额 ：%.02f",
+                    String.format("支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
@@ -222,7 +222,7 @@ public class RecordUtility {
             }
 
             String show_str =
-                    String.format("支出笔数 ： %d\t总金额 ：%.02f\n收入笔数 ： %d\t总金额 ：%.02f",
+                    String.format("支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
@@ -278,7 +278,7 @@ public class RecordUtility {
             }
 
             String show_str =
-                    String.format("支出笔数 ： %d\t总金额 ：%.02f\n收入笔数 ： %d\t总金额 ：%.02f",
+                    String.format("支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
