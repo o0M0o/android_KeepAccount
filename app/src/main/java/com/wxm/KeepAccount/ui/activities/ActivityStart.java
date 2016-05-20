@@ -2,6 +2,7 @@ package com.wxm.KeepAccount.ui.activities;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -234,21 +235,34 @@ public class ActivityStart
             break;
 
             case R.id.nav_contact_writer :    {
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         "invoke contact!",
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();*/
+                contactWriter();
             }
             break;
         }
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            return false;
-        }
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            return false;
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void contactWriter()    {
+        Resources res = getResources();
+
+        Intent data=new Intent(Intent.ACTION_SENDTO);
+        data.setData(
+                Uri.parse(
+                    String.format("mailto:%s", res.getString(R.string.contact_email))));
+        //data.putExtra(Intent.EXTRA_SUBJECT, "这是标题");
+        //data.putExtra(Intent.EXTRA_TEXT, "这是内容");
+        startActivity(data);
     }
 }

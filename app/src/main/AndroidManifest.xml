@@ -2,12 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wxm.KeepAccount">
 
+    <uses-sdk android:minSdkVersion="11" />
+
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <uses-sdk android:minSdkVersion="11" />
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".BaseLib.ContextUtil"
         android:allowBackup="true"
@@ -28,9 +33,8 @@
         <activity android:name=".ui.activities.ActivityAddRecord" />
         <activity
             android:name=".ui.activities.ActivityStart"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_start">
-        </activity>
+            android:label="@string/title_activity_start"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ui.activities.ActivityLogin"
             android:label="@string/title_activity_login">
@@ -42,13 +46,8 @@
         </activity>
         <activity
             android:name=".ui.activities.ActivityAddUsr"
-            android:label="@string/title_activity_add_account">
-        </activity>
-        <activity
-            android:name=".ui.activities.ActivityMainTest"
-            android:label="@string/title_activity_activity_main_test"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:label="@string/title_activity_add_account"></activity>
+        <activity android:name=".ui.activities.ActivityHelp"></activity>
     </application>
 
 </manifest>
