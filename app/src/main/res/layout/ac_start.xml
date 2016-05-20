@@ -9,14 +9,13 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/ac_start_nv"
+        layout="@layout/ac_start_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <android.support.design.widget.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
         android:layout_gravity="start"
         android:id="@+id/start_nav_view"
         android:fitsSystemWindows="true"
@@ -27,15 +26,16 @@
     <!--
     <include
         layout="@layout/ac_start_inner"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-        -->
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
+        tools:context=".ui.activities.ActivityStart"
+        tools:showIn="@layout/ac_start"
         android:id="@+id/ac_start_innerlayout">
 
         <FrameLayout
@@ -70,6 +70,7 @@
             android:layout_toStartOf="@+id/tabbt_record_pay"
             android:layout_marginEnd="20dp" />
     </RelativeLayout>
+    -->
 
 </android.support.v4.widget.DrawerLayout>
 

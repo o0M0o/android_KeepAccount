@@ -92,7 +92,7 @@ public class ContentFragment extends Fragment {
 
                     Intent intent = new Intent(parent.getContext(), ActivityDailyDetail.class);
                     intent.putExtra(AppGobalDef.TEXT_SELECT_ITEM,
-                            (String)hmsel.get(AppGobalDef.ITEM_TITLE));
+                            hmsel.get(AppGobalDef.ITEM_TITLE));
                     startActivityForResult(intent, 1);
                 }
             });

@@ -110,9 +110,9 @@ public class ActivityStart
                 cal.setTimeInMillis(System.currentTimeMillis());
                 intent.putExtra(AppGobalDef.TEXT_RECORD_DATE,
                         String.format("%d-%02d-%02d",
-                                cal.get(cal.YEAR),
-                                cal.get(cal.MONTH) + 1,
-                                cal.get(cal.DAY_OF_MONTH)));
+                                cal.get(Calendar.YEAR),
+                                cal.get(Calendar.MONTH) + 1,
+                                cal.get(Calendar.DAY_OF_MONTH)));
 
                 startActivityForResult(intent, 1);
             }
@@ -126,9 +126,9 @@ public class ActivityStart
                 cal.setTimeInMillis(System.currentTimeMillis());
                 intent.putExtra(AppGobalDef.TEXT_RECORD_DATE,
                         String.format("%d-%02d-%02d",
-                                cal.get(cal.YEAR),
-                                cal.get(cal.MONTH) + 1,
-                                cal.get(cal.DAY_OF_MONTH)));
+                                cal.get(Calendar.YEAR),
+                                cal.get(Calendar.MONTH) + 1,
+                                cal.get(Calendar.DAY_OF_MONTH)));
 
                 startActivityForResult(intent, 1);
             }
@@ -189,7 +189,6 @@ public class ActivityStart
 
         NavigationView nv = (NavigationView) findViewById(R.id.start_nav_view);
         nv.setNavigationItemSelectedListener(this);
-
 
         // set fragment for tab
         if (savedInstanceState == null) {

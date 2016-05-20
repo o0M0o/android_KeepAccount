@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ac_start_nav"
+    android:id="@+id/ac_start_bar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -22,16 +22,11 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
-    <!--
-    <android.support.design.widget.NavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+    <include
+        android:layout_width="match_parent"
+        android:layout_height = "match_parent"
+        android:layout_alignEnd="@id/ac_navw_toolbar"
         android:layout_marginTop="?attr/actionBarSize"
-        android:id="@+id/start_nav_view"
-        android:fitsSystemWindows="true"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/ac_start_nav_header"
-        app:menu="@menu/acm_start_nav" />
-        -->
+        layout="@layout/ac_start_inner" />
 
 </android.support.design.widget.CoordinatorLayout>
