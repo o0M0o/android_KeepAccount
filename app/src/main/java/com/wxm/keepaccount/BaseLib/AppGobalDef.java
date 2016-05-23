@@ -14,4 +14,7 @@ public class AppGobalDef {
 	static public final String TEXT_SELECT_ITEM = "select_item";
     static public final String TEXT_RECORD_DATE = "record_date";
     static public final String TEXT_RECORD_TYPE = "record_type";
+
+    static public final String TEXT_HELP_TYPE = "HELP_TYPE";
+    static public final String TEXT_HELP_MAIN = "help_main";
 }

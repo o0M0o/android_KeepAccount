@@ -36,6 +36,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wxm.KeepAccount.BaseLib.AppGobalDef;
 import com.wxm.KeepAccount.BaseLib.AppManager;
 import com.wxm.KeepAccount.BaseLib.AppMsg;
 import com.wxm.KeepAccount.BaseLib.AppMsgDef;
@@ -142,6 +143,14 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
 
                 //finish();
                 android.os.Process.killProcess(android.os.Process.myPid());
+            }
+            break;
+
+            case R.id.acm_mi_help : {
+                Intent intent = new Intent(this, ActivityHelp.class);
+                intent.putExtra(AppGobalDef.TEXT_HELP_TYPE, AppGobalDef.TEXT_HELP_MAIN);
+
+                startActivityForResult(intent, 1);
             }
             break;
 
