@@ -35,9 +35,9 @@ public class DBManager {
         db.beginTransaction();  //开始事务
         try {
             for (RecordItem record : records) {
-                db.execSQL("INSERT INTO tb_KeepAccout VALUES(null, ?, ?, ?, ?)",
+                db.execSQL("INSERT INTO tb_KeepAccount VALUES(null, ?, ?, ?, ?, ?)",
                         new Object[]{record.record_type, record.record_info,
-                                        record.record_val, record.record_ts});
+                            record.record_note, record.record_val, record.record_ts});
             }
             db.setTransactionSuccessful();  //设置事务成功完成
         } finally {
@@ -59,6 +59,7 @@ public class DBManager {
             ri.record_type = c.getString(c.getColumnIndex("record_type"));
             ri.record_info = c.getString(c.getColumnIndex("record_info"));
             ri.record_val = new BigDecimal(c.getDouble(c.getColumnIndex("record_val")));
+            ri.record_note = c.getString(c.getColumnIndex("record_note"));
 
             try {
                 Date date = format.parse(c.getString(c.getColumnIndex("record_ts")));
@@ -84,7 +85,7 @@ public class DBManager {
     {
         db.beginTransaction();  //开始事务
         try {
-            db.execSQL("DELETE FROM tb_KeepAccout");
+            db.execSQL("DELETE FROM tb_KeepAccount");
             db.setTransactionSuccessful();  //设置事务成功完成
         } finally {
             db.endTransaction();    //结束事务
@@ -100,7 +101,7 @@ public class DBManager {
         db.beginTransaction();
         try {
             for(String i : lsi) {
-                String sql = String.format("DELETE FROM tb_KeepAccout WHERE _id = '%s'", i);
+                String sql = String.format("DELETE FROM tb_KeepAccount WHERE _id = '%s'", i);
                 db.execSQL(sql);
             }
 
@@ -116,7 +117,7 @@ public class DBManager {
      * @return  Cursor
      */
     public Cursor queryTheCursor() {
-        Cursor c = db.rawQuery("SELECT * FROM tb_KeepAccout", null);
+        Cursor c = db.rawQuery("SELECT * FROM tb_KeepAccount", null);
         return c;
     }
 

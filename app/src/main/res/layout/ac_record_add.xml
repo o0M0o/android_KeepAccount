@@ -99,4 +99,15 @@
         android:numeric="decimal"
         android:singleLine="true" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ar_et_note"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/ar_et_amount"
+        android:layout_below="@+id/ar_et_amount"
+        android:layout_marginTop="20dp"
+        android:hint="备注(200字以内)" />
+
 </RelativeLayout>

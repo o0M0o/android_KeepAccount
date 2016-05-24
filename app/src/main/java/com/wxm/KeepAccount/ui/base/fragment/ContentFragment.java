@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import com.wxm.KeepAccount.BaseLib.AppGobalDef;
 import com.wxm.KeepAccount.BaseLib.AppManager;
@@ -91,7 +90,7 @@ public class ContentFragment extends Fragment {
                     //Log.d(TAG, String.format("long click(%s) : %s", class_str, str));
 
                     Intent intent = new Intent(parent.getContext(), ActivityDailyDetail.class);
-                    intent.putExtra(AppGobalDef.TEXT_SELECT_ITEM,
+                    intent.putExtra(AppGobalDef.STR_SELECT_ITEM,
                             hmsel.get(AppGobalDef.ITEM_TITLE));
                     startActivityForResult(intent, 1);
                 }

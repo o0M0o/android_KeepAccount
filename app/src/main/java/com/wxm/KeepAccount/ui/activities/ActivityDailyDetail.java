@@ -45,7 +45,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
         setContentView(R.layout.ac_daily_detail);
 
         Intent i = getIntent();
-        invoke_str = i.getStringExtra(AppGobalDef.TEXT_SELECT_ITEM);
+        invoke_str = i.getStringExtra(AppGobalDef.STR_SELECT_ITEM);
         Log.i(TAG, String.format("invoke with '%s'", invoke_str));
 
         initViews();
@@ -85,7 +85,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
             case R.id.dailydetailmenu_add : {
                 Intent intent = new Intent(this, ActivityAddRecord.class);
-                intent.putExtra(AppGobalDef.TEXT_RECORD_DATE, invoke_str);
+                intent.putExtra(AppGobalDef.STR_RECORD_DATE, invoke_str);
                 startActivityForResult(intent, 1);
             }
             break;
@@ -203,7 +203,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
         cb_sqltag.clear();
         int ct = lv_datalist.size();
         for (int i = 0; i < ct; ++i) {
-            cb_sqltag.put(i, lv_datalist.get(i).get(AppGobalDef.TEXT_ITEMID));
+            cb_sqltag.put(i, lv_datalist.get(i).get(AppGobalDef.ITEM_ID));
         }
 
         lv_adapter.notifyDataSetChanged();

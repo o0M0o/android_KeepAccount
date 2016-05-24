@@ -78,34 +78,30 @@ public class RecordUtility {
         List<RecordItem> lr = AppModel.getInstance().GetRecordsByDay(date_str);
 
         // format output
-        int pay_cout = 0;
-        int income_cout = 0;
-        BigDecimal pay_amount = BigDecimal.ZERO;
-        BigDecimal income_amount = BigDecimal.ZERO;
         ArrayList<HashMap<String, String>> mylist = new ArrayList<>();
         for (RecordItem r : lr) {
             String tit = "";
             String show_str = "";
+
             if ((r.record_type.equals("pay")) || (r.record_type.equals("支出"))) {
-                pay_cout += 1;
-                pay_amount = pay_amount.add(r.record_val);
-
                 tit = "支出";
-                show_str = String.format("原因 : %s\n金额 : %.02f",
-                        r.record_info, r.record_val);
             } else {
-                income_cout += 1;
-                income_amount = income_amount.add(r.record_val);
-
                 tit = "收入";
+            }
+
+            if(r.record_note.isEmpty()) {
                 show_str = String.format("原因 : %s\n金额 : %.02f",
                         r.record_info, r.record_val);
+            }
+            else    {
+                show_str = String.format("原因 : %s\n金额 : %.02f\n备注 : %s",
+                        r.record_info, r.record_val, r.record_note);
             }
 
             HashMap<String, String> map = new HashMap<>();
             map.put(AppGobalDef.ITEM_TITLE, tit);
             map.put(AppGobalDef.ITEM_TEXT, show_str);
-            map.put(AppGobalDef.TEXT_ITEMID, String.format("%d", r._id));
+            map.put(AppGobalDef.ITEM_ID, String.format("%d", r._id));
             mylist.add(map);
         }
 
@@ -295,14 +291,13 @@ public class RecordUtility {
         ArrayList<RecordItem> items = new ArrayList<>();
         Intent data = (Intent)am.obj;
         RecordItem ri = new RecordItem();
-        ri.record_type = data.getStringExtra(res.getString(R.string.record_type));
-        ri.record_info = data.getStringExtra(res.getString(R.string.record_info));
+        ri.record_type = data.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
+        ri.record_info = data.getStringExtra(AppGobalDef.STR_RECORD_INFO);
+        ri.record_note = data.getStringExtra(AppGobalDef.STR_RECORD_NOTE);
         ri.record_val = new BigDecimal(
-                data.getStringExtra(
-                        res.getString(R.string.record_amount)));
+                            data.getStringExtra(AppGobalDef.STR_RECORD_AMOUNT));
 
-        String str_dt = data.getStringExtra(
-                res.getString(R.string.record_date));
+        String str_dt = data.getStringExtra(AppGobalDef.STR_RECORD_DATE);
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             ri.record_ts.setTime(df.parse(str_dt).getTime());

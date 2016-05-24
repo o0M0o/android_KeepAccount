@@ -1,18 +1,5 @@
 <resources>
     <string name="app_name">KeepAccount</string>
-    <string name="income_val">income_val</string>
-    <string name="income_type">income_type</string>
-    <string name="income_date">income_date</string>
-    <string name="pay_val">pay_val</string>
-    <string name="pay_type">pay_type</string>
-    <string name="pay_date">pay_date</string>
-
-    <string name="cn_pay_record">支出</string>
-    <string name="cn_income_record">收入</string>
-    <string name="record_date">record_date</string>
-    <string name="record_type">record_type</string>
-    <string name="record_info">record_info</string>
-    <string name="record_amount">record_amount</string>
 
     <string name="save">save</string>
     <string name="edit">edit</string>
@@ -64,12 +51,6 @@
     <string name="tab_cn_daily">日统计</string>
     <string name="tab_cn_monthly">月统计</string>
     <string name="tab_cn_yearly">年统计</string>
-
-    <string name="tab_stream">Stream</string>
-    <string name="tab_messages">Messages</string>
-    <string name="tab_notifications">Notifications</string>
-    <string name="tab_photos">Photos</string>
-    <string name="title_activity_activity_main_test">Activity_main_test</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -148,7 +148,7 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
 
             case R.id.acm_mi_help : {
                 Intent intent = new Intent(this, ActivityHelp.class);
-                intent.putExtra(AppGobalDef.TEXT_HELP_TYPE, AppGobalDef.TEXT_HELP_MAIN);
+                intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_MAIN);
 
                 startActivityForResult(intent, 1);
             }

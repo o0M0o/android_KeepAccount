@@ -105,11 +105,11 @@ public class ActivityStart
         switch(v.getId())    {
             case R.id.tabbt_record_pay :    {
                 Intent intent = new Intent(v.getContext(), ActivityAddRecord.class);
-                intent.putExtra(AppGobalDef.TEXT_RECORD_TYPE, AppGobalDef.TEXT_RECORD_PAY);
+                intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_PAY);
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
-                intent.putExtra(AppGobalDef.TEXT_RECORD_DATE,
+                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
                         String.format("%d-%02d-%02d",
                                 cal.get(Calendar.YEAR),
                                 cal.get(Calendar.MONTH) + 1,
@@ -121,11 +121,11 @@ public class ActivityStart
 
             case R.id.tabbt_record_income :    {
                 Intent intent = new Intent(v.getContext(), ActivityAddRecord.class);
-                intent.putExtra(AppGobalDef.TEXT_RECORD_TYPE, AppGobalDef.TEXT_RECORD_INCOME);
+                intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_INCOME);
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
-                intent.putExtra(AppGobalDef.TEXT_RECORD_DATE,
+                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
                         String.format("%d-%02d-%02d",
                                 cal.get(Calendar.YEAR),
                                 cal.get(Calendar.MONTH) + 1,
@@ -214,9 +214,14 @@ public class ActivityStart
         int id = item.getItemId();
         switch(id)  {
             case R.id.nav_help :    {
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         "invoke help!",
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();*/
+
+                Intent intent = new Intent(this, ActivityHelp.class);
+                intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_START);
+
+                startActivityForResult(intent, 1);
             }
             break;
 

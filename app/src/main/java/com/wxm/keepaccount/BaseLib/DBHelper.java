@@ -23,10 +23,11 @@ public class DBHelper extends SQLiteOpenHelper {
     //数据库第一次被创建时onCreate会被调用
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS tb_KeepAccout" +
+        db.execSQL("CREATE TABLE IF NOT EXISTS tb_KeepAccount" +
                 "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "   record_type NVARCHAR, " +
                 "   record_info NVARCHAR, " +
+                "   record_note NVARCHAR, " +
                 "   record_val DECIMAL(10,2), " +
                 "   record_ts TIMESTAMP)");
 
