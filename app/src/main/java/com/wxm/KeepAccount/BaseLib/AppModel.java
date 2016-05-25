@@ -33,6 +33,24 @@ public class AppModel {
         dbChange = false;
     }
 
+    public RecordItem GetRecord(String sql_tg)  {
+        if((null == allRecords) || dbChange)
+            LoadAllRecords();
+
+        int id = Integer.parseInt(sql_tg);
+        RecordItem ret = null;
+        if(null != allRecords) {
+            for (RecordItem it : allRecords) {
+                if(id == it._id)    {
+                    ret = it;
+                    break;
+                }
+            }
+        }
+
+        return ret;
+    }
+
     /**
      * 获得所有的记录
      * @return 所有记录
@@ -86,6 +104,17 @@ public class AppModel {
      * @return 添加成功返回true
      */
     public boolean AddRecords(List<RecordItem> lsi)    {
+        dbm.add(lsi);
+        dbChange = true;
+        return true;
+    }
+
+    /**
+     * 修改记录到文件
+     * @param lsi 待修改的记录集合
+     * @return  修改成功返回true
+     */
+    public boolean ModifyRecords(List<RecordItem> lsi)  {
         dbm.add(lsi);
         dbChange = true;
         return true;

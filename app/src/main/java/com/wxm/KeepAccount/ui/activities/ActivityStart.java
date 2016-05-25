@@ -104,7 +104,8 @@ public class ActivityStart
     public void onClick(View v) {
         switch(v.getId())    {
             case R.id.tabbt_record_pay :    {
-                Intent intent = new Intent(v.getContext(), ActivityAddRecord.class);
+                Intent intent = new Intent(v.getContext(), ActivityRecord.class);
+                intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
                 intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_PAY);
 
                 Calendar cal = Calendar.getInstance();
@@ -120,7 +121,8 @@ public class ActivityStart
             break;
 
             case R.id.tabbt_record_income :    {
-                Intent intent = new Intent(v.getContext(), ActivityAddRecord.class);
+                Intent intent = new Intent(v.getContext(), ActivityRecord.class);
+                intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
                 intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_INCOME);
 
                 Calendar cal = Calendar.getInstance();
@@ -144,14 +146,13 @@ public class ActivityStart
 
         Resources res = getResources();
         final int dailydetail_ret = res.getInteger(R.integer.dailydetail_goback);
-        final int add_ret = res.getInteger(R.integer.addrecord_return);
 
         Boolean bModify = false;
-        if(resultCode == add_ret)    {
+        if(AppGobalDef.INTRET_RECORD_ADD == resultCode)    {
             Log.i(TAG, "从'添加记录'页面返回");
 
             AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_ADD_RECORD;
+            am.msg = AppMsgDef.MSG_RECORD_ADD;
             am.sender = this;
             am.obj = data;
             AppManager.getInstance().ProcessAppMsg(am);

@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -18,6 +19,7 @@ import com.wxm.KeepAccount.BaseLib.AppGobalDef;
 import com.wxm.KeepAccount.BaseLib.AppManager;
 import com.wxm.KeepAccount.BaseLib.AppMsg;
 import com.wxm.KeepAccount.BaseLib.AppMsgDef;
+import com.wxm.KeepAccount.BaseLib.RecordItem;
 import com.wxm.KeepAccount.R;
 
 import java.util.ArrayList;
@@ -84,7 +86,8 @@ public class ActivityDailyDetail extends AppCompatActivity {
             break;
 
             case R.id.dailydetailmenu_add : {
-                Intent intent = new Intent(this, ActivityAddRecord.class);
+                Intent intent = new Intent(this, ActivityRecord.class);
+                intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
                 intent.putExtra(AppGobalDef.STR_RECORD_DATE, invoke_str);
                 startActivityForResult(intent, 1);
             }
@@ -128,6 +131,9 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
             CheckBox cb = (CheckBox)v.findViewById(R.id.dailydetail_cb);
             cb.setVisibility(vv);
+
+            Button mod = (Button)v.findViewById(R.id.dailydetail_bt);
+            mod.setVisibility(vv);
         }
 
         mi_delete.setVisible(delete_visity);
@@ -145,6 +151,14 @@ public class ActivityDailyDetail extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 switchCheckbox();
                 return false;
+            }
+        });
+
+        lv_show.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, String.format("get click : %s", view.toString()));
+                view.setBackgroundResource(R.color.wheat);
             }
         });
 
@@ -180,6 +194,9 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
             CheckBox cb = (CheckBox)v.findViewById(R.id.dailydetail_cb);
             cb.setVisibility(View.INVISIBLE);
+
+            Button mod = (Button)v.findViewById(R.id.dailydetail_bt);
+            mod.setVisibility(View.INVISIBLE);
         }
 
         if(null != mi_delete) {
@@ -228,6 +245,26 @@ public class ActivityDailyDetail extends AppCompatActivity {
         }
     }
 
+    public void onBTClick(View v)   {
+        Button mod_bt = (Button)v;
+        int pos = lv_show.getPositionForView(mod_bt);
+        Log.d(TAG, "onBTClick at " + pos);
+
+        Intent intent = new Intent(this, ActivityRecord.class);
+        intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_MODIFY);
+
+        String str_id = cb_sqltag.get(pos);
+        AppMsg am = new AppMsg();
+        am.msg = AppMsgDef.MSG_RECORD_GET;
+        am.sender = this;
+        am.obj = str_id;
+        RecordItem ri = (RecordItem) AppManager.getInstance().ProcessAppMsg(am);
+
+        intent.putExtra(AppGobalDef.STR_RECORD_DATE, invoke_str);
+        intent.putExtra(AppGobalDef.STR_RECORD, ri);
+        startActivityForResult(intent, 1);
+    }
+
 
     /**
      * 其它activity返回结果
@@ -239,15 +276,23 @@ public class ActivityDailyDetail extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Resources res = getResources();
-        final int add_ret = res.getInteger(R.integer.addrecord_return);
-
         Boolean bModify = false;
-        if(resultCode == add_ret)  {
+        if(AppGobalDef.INTRET_RECORD_ADD ==  resultCode)  {
             Log.i(TAG, "从'添加记录'页面返回");
 
             AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_ADD_RECORD;
+            am.msg = AppMsgDef.MSG_RECORD_ADD;
+            am.sender = this;
+            am.obj = data;
+            AppManager.getInstance().ProcessAppMsg(am);
+
+            bModify = true;
+        }
+        else if(AppGobalDef.INTRET_RECORD_MODIFY == resultCode)   {
+            Log.i(TAG, "从'修改记录'页面返回");
+
+            AppMsg am = new AppMsg();
+            am.msg = AppMsgDef.MSG_RECORD_MODIFY;
             am.sender = this;
             am.obj = data;
             AppManager.getInstance().ProcessAppMsg(am);

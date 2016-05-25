@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.util.Log;
 
-import com.wxm.KeepAccount.R;
-
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,8 +54,18 @@ public class RecordUtility {
             }
             break;
 
-            case AppMsgDef.MSG_ADD_RECORD: {
+            case AppMsgDef.MSG_RECORD_ADD: {
                 ret = AddRecord(am);
+            }
+            break;
+
+            case AppMsgDef.MSG_RECORD_MODIFY: {
+                ret = ModifyRecord(am);
+            }
+            break;
+
+            case AppMsgDef.MSG_RECORD_GET: {
+                ret = GetRecord(am);
             }
             break;
         }
@@ -287,7 +295,6 @@ public class RecordUtility {
     }
 
     private static Object AddRecord(AppMsg am) {
-        Resources res = ((Activity)am.sender).getResources();
         ArrayList<RecordItem> items = new ArrayList<>();
         Intent data = (Intent)am.obj;
         RecordItem ri = new RecordItem();
@@ -314,5 +321,40 @@ public class RecordUtility {
         AppModel.getInstance().AddRecords(items);
 
         return new Object();
+    }
+
+    private static Object ModifyRecord(AppMsg am)   {
+        ArrayList<RecordItem> items = new ArrayList<>();
+        Intent data = (Intent)am.obj;
+        RecordItem ri = new RecordItem();
+        ri.record_type = data.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
+        ri.record_info = data.getStringExtra(AppGobalDef.STR_RECORD_INFO);
+        ri.record_note = data.getStringExtra(AppGobalDef.STR_RECORD_NOTE);
+        ri.record_val = new BigDecimal(
+                            data.getStringExtra(AppGobalDef.STR_RECORD_AMOUNT));
+        ri._id = Integer.parseInt(data.getStringExtra(AppGobalDef.STR_RECORD_ID));
+
+        String str_dt = data.getStringExtra(AppGobalDef.STR_RECORD_DATE);
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            ri.record_ts.setTime(df.parse(str_dt).getTime());
+        }
+        catch(Exception ex)
+        {
+            Log.e(TAG, String.format("解析'%s'到日期失败", str_dt));
+
+            Date dt = new Date();
+            ri.record_ts.setTime(dt.getTime());
+        }
+
+        items.add(ri);
+        AppModel.getInstance().AddRecords(items);
+
+        return new Object();
+    }
+
+    private static Object GetRecord(AppMsg am)  {
+        String tag = (String)am.obj;
+        return AppModel.getInstance().GetRecord(tag);
     }
 }

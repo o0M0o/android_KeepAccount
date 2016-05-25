@@ -30,7 +30,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".ui.activities.ActivityDailyDetail" />
-        <activity android:name=".ui.activities.ActivityAddRecord" />
+        <activity android:name=".ui.activities.ActivityRecord" />
         <activity
             android:name=".ui.activities.ActivityStart"
             android:label="@string/title_activity_start"

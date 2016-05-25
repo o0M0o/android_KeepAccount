@@ -28,12 +28,13 @@ import com.wxm.KeepAccount.R;
 
 import java.util.Calendar;
 
-public class ActivityAddRecord
+public class ActivityRecord
         extends AppCompatActivity
         implements View.OnTouchListener, View.OnClickListener     {
-    private static final String TAG = "ActivityAddRecord";
+    private static final String TAG = "ActivityRecord";
     private static final int MAX_NOTELEN = 200;
 
+    private String action;
     private String record_type;
 
     private EditText et_info;
@@ -48,6 +49,12 @@ public class ActivityAddRecord
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_record_add);
+
+        Intent it = getIntent();
+        action = it.getStringExtra(AppGobalDef.STR_RECORD_ACTION);
+        if((null == action) || (action.isEmpty()))  {
+            action = AppGobalDef.STR_RECORD_ACTION_ADD;
+        }
 
         initView();
     }
@@ -158,11 +165,6 @@ public class ActivityAddRecord
         rb_pay.setSelected(false);
 
         Intent it = getIntent();
-        String ad_date = it.getStringExtra(AppGobalDef.STR_RECORD_DATE);
-        if(null != ad_date) {
-            et_date.setText(ad_date);
-        }
-
         String ad_type = it.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
         if(null != ad_type)     {
             record_type = ad_type;
@@ -233,6 +235,27 @@ public class ActivityAddRecord
                 }
             }
         });
+
+        // 填充其它预定值
+        String ad_date = it.getStringExtra(AppGobalDef.STR_RECORD_DATE);
+        if((null != ad_date) && (!ad_date.isEmpty())) {
+            et_date.setText(ad_date);
+        }
+
+        String ad_amount = it.getStringExtra(AppGobalDef.STR_RECORD_AMOUNT);
+        if((null != ad_amount) && (!ad_amount.isEmpty())) {
+            et_amount.setText(ad_amount);
+        }
+
+        String ad_info = it.getStringExtra(AppGobalDef.STR_RECORD_INFO);
+        if((null != ad_info) && (!ad_info.isEmpty())) {
+            et_info.setText(ad_info);
+        }
+
+        String ad_note = it.getStringExtra(AppGobalDef.STR_RECORD_NOTE);
+        if((null != ad_note) && (!ad_note.isEmpty())) {
+            et_note.setText(ad_info);
+        }
     }
 
 
@@ -409,8 +432,9 @@ public class ActivityAddRecord
         }
 
         /* send intent */
-        Resources res = getResources();
-        int ret_data = res.getInteger(R.integer.addrecord_return);
+        int ret_data = action.equals(AppGobalDef.STR_RECORD_ACTION_ADD) ?
+                            AppGobalDef.INTRET_RECORD_ADD
+                            : AppGobalDef.INTRET_RECORD_MODIFY;
 
         Intent data=new Intent();
         data.putExtra(AppGobalDef.STR_RECORD_TYPE, retype);

@@ -1,12 +1,19 @@
 package com.wxm.KeepAccount.BaseLib;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
+ * 数据类
  * Created by 123 on 2016/5/3.
  */
-public class RecordItem {
+public class RecordItem implements Parcelable {
     public int _id;
     public String record_type;
     public String record_info;
@@ -30,5 +37,48 @@ public class RecordItem {
                             record_type, record_info, record_val,
                             record_ts.toString(), record_note);
         return ret;
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(_id);
+        out.writeString(record_type);
+        out.writeString(record_info);
+        out.writeString(record_note);
+        out.writeString(record_val.toString());
+        out.writeString(record_ts.toString());
+
+    }
+
+    public static final Parcelable.Creator<RecordItem> CREATOR
+            = new Parcelable.Creator<RecordItem>() {
+        public RecordItem createFromParcel(Parcel in) {
+            return new RecordItem(in);
+        }
+
+        public RecordItem[] newArray(int size) {
+            return new RecordItem[size];
+        }
+    };
+
+    private RecordItem(Parcel in)   {
+        _id = in.readInt();
+        record_type = in.readString();
+        record_info = in.readString();
+        record_note = in.readString();
+        record_val = new BigDecimal(in.readString());
+
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = format.parse(in.readString());
+            record_ts.setTime(date.getTime());
+        }
+        catch (ParseException ex)
+        {
+            record_ts = new Timestamp(0);
+        }
     }
 }
