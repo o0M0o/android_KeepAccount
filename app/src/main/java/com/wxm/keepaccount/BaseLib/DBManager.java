@@ -28,7 +28,7 @@ public class DBManager {
 
     /**
      * 添加帐目记录
-     * @param records
+     * @param records  待添加数据
      */
     public void add(List<RecordItem> records)
     {
@@ -42,6 +42,33 @@ public class DBManager {
             db.setTransactionSuccessful();  //设置事务成功完成
         } finally {
             db.endTransaction();    //结束事务
+        }
+    }
+
+    /**
+     * 修改记录
+     * @param records 待修改数据
+     */
+    public void modify(List<RecordItem> records)    {
+        db.beginTransaction();
+        try {
+            for (RecordItem record : records) {
+                db.execSQL("UPDATE tb_KeepAccount"
+                                + " SET"
+                                + " record_type = ?"
+                                + " ,record_info = ?"
+                                + " ,record_note = ?"
+                                + " ,record_val = ?"
+                                + " ,record_ts = ?"
+                                + " WHERE _id = ?",
+                        new Object[]{
+                                record.record_type, record.record_info,
+                                record.record_note, record.record_val,
+                                record.record_ts, record._id});
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
     }
 

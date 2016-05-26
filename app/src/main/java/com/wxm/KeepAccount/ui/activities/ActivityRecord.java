@@ -24,9 +24,13 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import com.wxm.KeepAccount.BaseLib.AppGobalDef;
+import com.wxm.KeepAccount.BaseLib.RecordItem;
 import com.wxm.KeepAccount.R;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class ActivityRecord
         extends AppCompatActivity
@@ -36,6 +40,7 @@ public class ActivityRecord
 
     private String action;
     private String record_type;
+    private RecordItem old_item = null;
 
     private EditText et_info;
     private EditText et_date;
@@ -54,6 +59,10 @@ public class ActivityRecord
         action = it.getStringExtra(AppGobalDef.STR_RECORD_ACTION);
         if((null == action) || (action.isEmpty()))  {
             action = AppGobalDef.STR_RECORD_ACTION_ADD;
+        }
+
+        if(action.equals(AppGobalDef.STR_RECORD_ACTION_MODIFY)) {
+            old_item = it.getParcelableExtra(AppGobalDef.STR_RECORD);
         }
 
         initView();
@@ -170,7 +179,12 @@ public class ActivityRecord
             record_type = ad_type;
         }
         else    {
-            record_type = AppGobalDef.CNSTR_RECORD_INCOME;
+            if(null == old_item) {
+                record_type = AppGobalDef.CNSTR_RECORD_INCOME;
+            }
+            else    {
+                record_type = old_item.record_type;
+            }
         }
 
         if(record_type.equals(AppGobalDef.CNSTR_RECORD_INCOME)) {
@@ -242,19 +256,15 @@ public class ActivityRecord
             et_date.setText(ad_date);
         }
 
-        String ad_amount = it.getStringExtra(AppGobalDef.STR_RECORD_AMOUNT);
-        if((null != ad_amount) && (!ad_amount.isEmpty())) {
-            et_amount.setText(ad_amount);
-        }
+        if(null != old_item)    {
+            if(!old_item.record_info.isEmpty())
+                et_info.setText(old_item.record_info);
 
-        String ad_info = it.getStringExtra(AppGobalDef.STR_RECORD_INFO);
-        if((null != ad_info) && (!ad_info.isEmpty())) {
-            et_info.setText(ad_info);
-        }
+            if(!old_item.record_note.isEmpty())
+                et_note.setText(old_item.record_note);
 
-        String ad_note = it.getStringExtra(AppGobalDef.STR_RECORD_NOTE);
-        if((null != ad_note) && (!ad_note.isEmpty())) {
-            et_note.setText(ad_info);
+            et_date.setText(old_item.record_ts.toString().substring(0, 8));
+            et_amount.setText(old_item.record_val.toString());
         }
     }
 
@@ -375,12 +385,12 @@ public class ActivityRecord
     }
 
     private boolean setResult(String retype)    {
-        String et_val = et_amount.getText().toString();
-        String et_type = et_info.getText().toString();
+        String str_val = et_amount.getText().toString();
+        String str_info = et_info.getText().toString();
         String str_date = et_date.getText().toString();
         String str_note = et_note.getText().toString();
 
-        if(et_val.isEmpty())
+        if(str_val.isEmpty())
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             if(retype.equals(AppGobalDef.CNSTR_RECORD_PAY)) {
@@ -397,7 +407,7 @@ public class ActivityRecord
             return false;
         }
 
-        if(et_type.isEmpty())
+        if(str_info.isEmpty())
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             if(retype.equals(AppGobalDef.CNSTR_RECORD_PAY)) {
@@ -437,15 +447,29 @@ public class ActivityRecord
                             : AppGobalDef.INTRET_RECORD_MODIFY;
 
         Intent data=new Intent();
-        data.putExtra(AppGobalDef.STR_RECORD_TYPE, retype);
-        data.putExtra(AppGobalDef.STR_RECORD_INFO, et_type);
-        data.putExtra(AppGobalDef.STR_RECORD_AMOUNT, et_val);
-        data.putExtra(AppGobalDef.STR_RECORD_DATE, str_date);
+        RecordItem ri = new RecordItem();
+        ri.record_type = retype;
+        ri.record_note = str_note;
+        ri.record_info = str_info;
+        ri.record_val = new BigDecimal(str_val);
 
-        if((null != str_note) && !str_note.isEmpty())   {
-            data.putExtra(AppGobalDef.STR_RECORD_NOTE, str_note);
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            ri.record_ts.setTime(df.parse(str_date).getTime());
+        }
+        catch(Exception ex)
+        {
+            Log.e(TAG, String.format("解析'%s'到日期失败", str_date));
+
+            Date dt = new Date();
+            ri.record_ts.setTime(dt.getTime());
         }
 
+        if(null != old_item)    {
+            ri._id = old_item._id;
+        }
+
+        data.putExtra(AppGobalDef.STR_RECORD, ri);
         setResult(ret_data, data);
         return true;
     }

@@ -1,8 +1,6 @@
 package com.wxm.KeepAccount.BaseLib;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.util.Log;
 
 import java.math.BigDecimal;
@@ -29,22 +27,22 @@ public class RecordUtility {
             }
             break;
 
-            case AppMsgDef.MSG_ALL_RECORDS_TO_DAYREPORT : {
+            case AppMsgDef.MSG_TO_DAYREPORT: {
                 ret = AllRecordsToDayReport(am);
             }
             break;
 
-            case AppMsgDef.MSG_ALL_RECORDS_TO_MONTHREPORT : {
+            case AppMsgDef.MSG_TO_MONTHREPORT: {
                 ret = AllRecordsToMonthReport(am);
             }
             break;
 
-            case AppMsgDef.MSG_ALL_RECORDS_TO_YEARREPORT : {
+            case AppMsgDef.MSG_TO_YEARREPORT: {
                 ret = AllRecordsToYearReport(am);
             }
             break;
 
-            case AppMsgDef.MSG_DAILY_RECORDS_TO_DETAILREPORT: {
+            case AppMsgDef.MSG_TO_DAILY_DETAILREPORT: {
                 ret = DailyRecordsToDetailReport(am);
             }
             break;
@@ -295,28 +293,10 @@ public class RecordUtility {
     }
 
     private static Object AddRecord(AppMsg am) {
-        ArrayList<RecordItem> items = new ArrayList<>();
         Intent data = (Intent)am.obj;
-        RecordItem ri = new RecordItem();
-        ri.record_type = data.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
-        ri.record_info = data.getStringExtra(AppGobalDef.STR_RECORD_INFO);
-        ri.record_note = data.getStringExtra(AppGobalDef.STR_RECORD_NOTE);
-        ri.record_val = new BigDecimal(
-                            data.getStringExtra(AppGobalDef.STR_RECORD_AMOUNT));
+        RecordItem ri = data.getParcelableExtra(AppGobalDef.STR_RECORD);
 
-        String str_dt = data.getStringExtra(AppGobalDef.STR_RECORD_DATE);
-        try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            ri.record_ts.setTime(df.parse(str_dt).getTime());
-        }
-        catch(Exception ex)
-        {
-            Log.e(TAG, String.format("解析'%s'到日期失败", str_dt));
-
-            Date dt = new Date();
-            ri.record_ts.setTime(dt.getTime());
-        }
-
+        ArrayList<RecordItem> items = new ArrayList<>();
         items.add(ri);
         AppModel.getInstance().AddRecords(items);
 
@@ -324,31 +304,12 @@ public class RecordUtility {
     }
 
     private static Object ModifyRecord(AppMsg am)   {
-        ArrayList<RecordItem> items = new ArrayList<>();
         Intent data = (Intent)am.obj;
-        RecordItem ri = new RecordItem();
-        ri.record_type = data.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
-        ri.record_info = data.getStringExtra(AppGobalDef.STR_RECORD_INFO);
-        ri.record_note = data.getStringExtra(AppGobalDef.STR_RECORD_NOTE);
-        ri.record_val = new BigDecimal(
-                            data.getStringExtra(AppGobalDef.STR_RECORD_AMOUNT));
-        ri._id = Integer.parseInt(data.getStringExtra(AppGobalDef.STR_RECORD_ID));
+        RecordItem ri = data.getParcelableExtra(AppGobalDef.STR_RECORD);
 
-        String str_dt = data.getStringExtra(AppGobalDef.STR_RECORD_DATE);
-        try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            ri.record_ts.setTime(df.parse(str_dt).getTime());
-        }
-        catch(Exception ex)
-        {
-            Log.e(TAG, String.format("解析'%s'到日期失败", str_dt));
-
-            Date dt = new Date();
-            ri.record_ts.setTime(dt.getTime());
-        }
-
+        ArrayList<RecordItem> items = new ArrayList<>();
         items.add(ri);
-        AppModel.getInstance().AddRecords(items);
+        AppModel.getInstance().ModifyRecords(items);
 
         return new Object();
     }

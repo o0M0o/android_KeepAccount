@@ -205,7 +205,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
         // update date
         AppMsg am = new AppMsg();
-        am.msg = AppMsgDef.MSG_DAILY_RECORDS_TO_DETAILREPORT;
+        am.msg = AppMsgDef.MSG_TO_DAILY_DETAILREPORT;
         am.sender = this;
         am.obj = invoke_str;
         ArrayList<HashMap<String, String>> up_ls =

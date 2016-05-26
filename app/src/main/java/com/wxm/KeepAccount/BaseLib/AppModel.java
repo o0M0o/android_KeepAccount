@@ -115,7 +115,7 @@ public class AppModel {
      * @return  修改成功返回true
      */
     public boolean ModifyRecords(List<RecordItem> lsi)  {
-        dbm.add(lsi);
+        dbm.modify(lsi);
         dbChange = true;
         return true;
     }

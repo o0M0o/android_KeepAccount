@@ -72,6 +72,8 @@ public class RecordItem implements Parcelable {
         record_val = new BigDecimal(in.readString());
 
         try {
+            record_ts = new Timestamp(0);
+
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = format.parse(in.readString());
             record_ts.setTime(date.getTime());

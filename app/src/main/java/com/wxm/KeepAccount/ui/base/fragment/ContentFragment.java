@@ -161,7 +161,7 @@ public class ContentFragment extends Fragment {
         if(res.getString(R.string.tab_cn_daily)
                 .equals(title)) {
             AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_ALL_RECORDS_TO_DAYREPORT;
+            am.msg = AppMsgDef.MSG_TO_DAYREPORT;
             am.sender = this;
             mylist =
                     (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
@@ -169,7 +169,7 @@ public class ContentFragment extends Fragment {
         else if(res.getString(R.string.tab_cn_monthly)
                 .equals(title)) {
             AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_ALL_RECORDS_TO_MONTHREPORT;
+            am.msg = AppMsgDef.MSG_TO_MONTHREPORT;
             am.sender = this;
             mylist =
                     (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
@@ -177,7 +177,7 @@ public class ContentFragment extends Fragment {
         else if(res.getString(R.string.tab_cn_yearly)
                 .equals(title)) {
             AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_ALL_RECORDS_TO_YEARREPORT;
+            am.msg = AppMsgDef.MSG_TO_YEARREPORT;
             am.sender = this;
             mylist =
                     (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);

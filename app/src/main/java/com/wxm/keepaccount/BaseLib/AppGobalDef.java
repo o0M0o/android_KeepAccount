@@ -13,14 +13,23 @@ public class AppGobalDef {
 	static public final String CNSTR_RECORD_PAY = "支出";
 	static public final String CNSTR_RECORD_INCOME = "收入";
 
-	static public final String STR_SELECT_ITEM = "select_item";
-    static public final String STR_RECORD_DATE = "record_date";
-    static public final String STR_RECORD_TYPE = "record_type";
-    static public final String STR_RECORD_INFO = "record_info";
-    static public final String STR_RECORD_AMOUNT = "record_amount";
-    static public final String STR_RECORD_NOTE = "record_note";
+    static public final String STR_RECORD_ACTION            = "record_action";
+    static public final String STR_RECORD_ACTION_ADD        = "record_action_add";
+    static public final String STR_RECORD_ACTION_MODIFY     = "record_action_modify";
+
+	static public final String STR_SELECT_ITEM      = "select_item";
+    static public final String STR_RECORD           = "record";
+    static public final String STR_RECORD_ID        = "record_id";
+    static public final String STR_RECORD_DATE      = "record_date";
+    static public final String STR_RECORD_TYPE      = "record_type";
+    static public final String STR_RECORD_INFO      = "record_info";
+    static public final String STR_RECORD_AMOUNT    = "record_amount";
+    static public final String STR_RECORD_NOTE  = "record_note";
 
     static public final String STR_HELP_TYPE = "HELP_TYPE";
     static public final String STR_HELP_MAIN = "help_main";
     static public final String STR_HELP_START = "help_start";
+
+    static public final int INTRET_RECORD_ADD       = 1000;
+    static public final int INTRET_RECORD_MODIFY    = 1001;
 }
