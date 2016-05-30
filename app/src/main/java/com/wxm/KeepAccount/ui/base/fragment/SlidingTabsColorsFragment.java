@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,32 +35,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A basic sample which shows how to use {@link com.example.android.common.view.SlidingTabLayout}
+ * A basic sample which shows how to use {}
  * to display a custom {@link ViewPager} title strip which gives continuous feedback to the user
  * when scrolling.
  */
 public class SlidingTabsColorsFragment extends Fragment {
+    private static final String TAG = "LVSlidingTabsFragment ";
 
     /**
      * This class represents a tab to be displayed by {@link ViewPager} and it's associated
      * {@link SlidingTabLayout}.
      */
-    protected  static class SamplePagerItem {
-        private final CharSequence mTitle;
-        private final int mIndicatorColor;
-        private final int mDividerColor;
+    protected  static abstract class SamplePagerItem {
+        protected CharSequence mTitle;
+        protected int mIndicatorColor;
+        protected int mDividerColor;
 
         public SamplePagerItem(CharSequence title, int indicatorColor, int dividerColor) {
             mTitle = title;
             mIndicatorColor = indicatorColor;
             mDividerColor = dividerColor;
-        }
-
-        /**
-         * @return A new {@link Fragment} to be displayed by a {@link ViewPager}
-         */
-        Fragment createFragment() {
-            return ContentFragment.newInstance(mTitle, mIndicatorColor, mDividerColor);
         }
 
         /**
@@ -83,6 +78,14 @@ public class SlidingTabsColorsFragment extends Fragment {
         int getDividerColor() {
             return mDividerColor;
         }
+
+        /**
+         * @return A new {@link Fragment} to be displayed by a {@link ViewPager}
+         */
+        abstract protected  Fragment createFragment();
+       /* Fragment createFragment()   {
+            return null;
+        }*/
     }
 
     static final String LOG_TAG = "SlidingTabsColorsFragment";
@@ -163,6 +166,9 @@ public class SlidingTabsColorsFragment extends Fragment {
      */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        Log.i(TAG, String.format("savedInstanceState = %s",
+                            null == savedInstanceState ? "null" : savedInstanceState.toString()));
+
         // BEGIN_INCLUDE (setup_viewpager)
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);

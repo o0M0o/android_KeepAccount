@@ -12,11 +12,11 @@ import com.wxm.KeepAccount.ui.base.fragment.ContentFragment;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 
 /**
- * 列表视图方式显示数据
+ * 图表视图表现数据
  * Created by wxm on 2016/5/30.
  */
-public class ListViewSlidingTabsFragment extends SlidingTabsColorsFragment {
-    private static final String TAG = "LVSlidingTabsFragment ";
+public class GraphViewSlidingTabsFragment extends SlidingTabsColorsFragment {
+    private static final String TAG = "GVSlidingTabsFragment ";
 
     protected static class ListViewPagerItem extends SamplePagerItem {
         public ListViewPagerItem(CharSequence title, int indicatorColor, int dividerColor) {
@@ -34,7 +34,6 @@ public class ListViewSlidingTabsFragment extends SlidingTabsColorsFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // BEGIN_INCLUDE (populate_tabs)
         mTabs.add(new ListViewPagerItem(
                 getString(R.string.tab_cn_daily), // Title
                 Color.GREEN, // Indicator color
@@ -47,13 +46,11 @@ public class ListViewSlidingTabsFragment extends SlidingTabsColorsFragment {
                 Color.GRAY// Divider color
         ));
 
-        mTabs.add(new ListViewPagerItem(
+        /*mTabs.add(new ListViewPagerItem(
                 getString(R.string.tab_cn_yearly), // Title
                 Color.GREEN, // Indicator color
                 Color.GRAY// Divider color
-        ));
-
-        // END_INCLUDE (populate_tabs)
+        ));*/
     }
 
     @Override
@@ -64,3 +61,4 @@ public class ListViewSlidingTabsFragment extends SlidingTabsColorsFragment {
 
 
 }
+

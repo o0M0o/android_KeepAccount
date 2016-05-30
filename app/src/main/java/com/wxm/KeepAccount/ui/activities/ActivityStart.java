@@ -25,6 +25,7 @@ import com.wxm.KeepAccount.BaseLib.AppMsgDef;
 import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 import com.wxm.KeepAccount.ui.base.activities.TabActivityBase;
+import com.wxm.KeepAccount.ui.fragment.GraphViewSlidingTabsFragment;
 import com.wxm.KeepAccount.ui.fragment.ListViewSlidingTabsFragment;
 
 import java.util.Calendar;
@@ -43,6 +44,8 @@ public class ActivityStart
     private Button bt_view_switch = null;
 
     private SlidingTabsColorsFragment mTabFragment;
+    private GraphViewSlidingTabsFragment gvTabFragment = new GraphViewSlidingTabsFragment();
+    private ListViewSlidingTabsFragment lvTabFragment = new ListViewSlidingTabsFragment();
 
 
     @Override
@@ -132,7 +135,16 @@ public class ActivityStart
                 Log.i(TAG, "切换视图");
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                mTabFragment = new ListViewSlidingTabsFragment();
+
+                if(mTabFragment instanceof ListViewSlidingTabsFragment) {
+                    //mTabFragment = gvTabFragment;
+                    mTabFragment = new GraphViewSlidingTabsFragment();
+                }
+                else    {
+                    //mTabFragment = lvTabFragment;
+                    mTabFragment = new ListViewSlidingTabsFragment();
+                }
+
                 transaction.replace(R.id.tabfl_content, mTabFragment);
                 transaction.commit();
             }
@@ -193,7 +205,8 @@ public class ActivityStart
         // set fragment for tab
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            mTabFragment = new ListViewSlidingTabsFragment();
+            //mTabFragment = new ListViewSlidingTabsFragment();
+            mTabFragment = lvTabFragment;
             transaction.replace(R.id.tabfl_content, mTabFragment);
             transaction.commit();
         }
