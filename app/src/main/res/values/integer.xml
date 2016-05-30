@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="dailydetail_goback">21</integer>
-    <integer name="modifyrecord_return">1031</integer>
-    <integer name="addrecord_return">31</integer>
-    <integer name="addrecord_giveup">32</integer>
-    <integer name="account_add_return">41</integer>
-    <integer name="account_add_giveup">42</integer>
+    <!--
     <integer name="usr_logout">1000</integer>
+    -->
 </resources>

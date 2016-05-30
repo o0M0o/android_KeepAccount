@@ -25,6 +25,7 @@ import com.wxm.KeepAccount.BaseLib.AppMsgDef;
 import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 import com.wxm.KeepAccount.ui.base.activities.TabActivityBase;
+import com.wxm.KeepAccount.ui.fragment.ListViewSlidingTabsFragment;
 
 import java.util.Calendar;
 
@@ -39,6 +40,7 @@ public class ActivityStart
     private static final String TAG = "ActivityStart";
     private Button bt_add_pay = null;
     private Button bt_add_income = null;
+    private Button bt_view_switch = null;
 
     private SlidingTabsColorsFragment mTabFragment;
 
@@ -79,8 +81,7 @@ public class ActivityStart
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.am_bi_logout : {
-                Resources res = getResources();
-                int ret_data = res.getInteger(R.integer.usr_logout);
+                int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
 
                 Intent data=new Intent();
                 setResult(ret_data, data);
@@ -103,10 +104,17 @@ public class ActivityStart
     @Override
     public void onClick(View v) {
         switch(v.getId())    {
-            case R.id.tabbt_record_pay :    {
+            case R.id.tabbt_record_pay :
+            case R.id.tabbt_record_income :    {
                 Intent intent = new Intent(v.getContext(), ActivityRecord.class);
                 intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
-                intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_PAY);
+
+                if(v.getId() == R.id.tabbt_record_income) {
+                    intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_INCOME);
+                }
+                else    {
+                    intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_PAY);
+                }
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
@@ -120,20 +128,13 @@ public class ActivityStart
             }
             break;
 
-            case R.id.tabbt_record_income :    {
-                Intent intent = new Intent(v.getContext(), ActivityRecord.class);
-                intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
-                intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_INCOME);
+            case R.id.tabbt_view_switch :   {
+                Log.i(TAG, "切换视图");
 
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(System.currentTimeMillis());
-                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
-                        String.format("%d-%02d-%02d",
-                                cal.get(Calendar.YEAR),
-                                cal.get(Calendar.MONTH) + 1,
-                                cal.get(Calendar.DAY_OF_MONTH)));
-
-                startActivityForResult(intent, 1);
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                mTabFragment = new ListViewSlidingTabsFragment();
+                transaction.replace(R.id.tabfl_content, mTabFragment);
+                transaction.commit();
             }
             break;
         }
@@ -143,9 +144,6 @@ public class ActivityStart
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
         super.onActivityResult(requestCode, resultCode, data);
-
-        Resources res = getResources();
-        final int dailydetail_ret = res.getInteger(R.integer.dailydetail_goback);
 
         Boolean bModify = false;
         if(AppGobalDef.INTRET_RECORD_ADD == resultCode)    {
@@ -158,7 +156,7 @@ public class ActivityStart
             AppManager.getInstance().ProcessAppMsg(am);
 
             bModify = true;
-        } else if (resultCode == dailydetail_ret) {
+        } else if (AppGobalDef.INTRET_DAILY_DETAIL ==  resultCode) {
             Log.i(TAG, "从详情页面返回");
 
             bModify = true;
@@ -195,7 +193,7 @@ public class ActivityStart
         // set fragment for tab
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            mTabFragment = new SlidingTabsColorsFragment();
+            mTabFragment = new ListViewSlidingTabsFragment();
             transaction.replace(R.id.tabfl_content, mTabFragment);
             transaction.commit();
         }
@@ -203,8 +201,10 @@ public class ActivityStart
         // set button
         bt_add_pay = (Button)findViewById(R.id.tabbt_record_pay);
         bt_add_income = (Button)findViewById(R.id.tabbt_record_income);
+        bt_view_switch = (Button)findViewById(R.id.tabbt_view_switch);
         bt_add_pay.setOnClickListener(this);
         bt_add_income.setOnClickListener(this);
+        bt_view_switch.setOnClickListener(this);
     }
 
 

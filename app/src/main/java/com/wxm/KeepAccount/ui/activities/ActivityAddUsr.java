@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.wxm.KeepAccount.BaseLib.AppGobalDef;
 import com.wxm.KeepAccount.BaseLib.AppManager;
 import com.wxm.KeepAccount.BaseLib.AppMsg;
 import com.wxm.KeepAccount.BaseLib.AppMsgDef;
@@ -40,7 +41,7 @@ public class ActivityAddUsr
                     EditText et_pwd = (EditText)findViewById(R.id.ac_naet_accountpwd);
 
                     Resources res = getResources();
-                    int ret_data = res.getInteger(R.integer.account_add_return);
+                    int ret_data = AppGobalDef.INTRET_USR_ADD;
 
                     Intent data = new Intent();
                     data.putExtra(res.getString(R.string.usr_name),
@@ -61,8 +62,7 @@ public class ActivityAddUsr
             break;
 
             case R.id.ac_nabt_giveup : {
-                Resources res = getResources();
-                int ret_data = res.getInteger(R.integer.account_add_giveup);
+                int ret_data = AppGobalDef.INTRET_GIVEUP;
 
                 Intent data=new Intent();
                 setResult(ret_data, data);

@@ -379,20 +379,15 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
     protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Resources res = getResources();
-        final int ret_add_account = res.getInteger(R.integer.account_add_return);
-        final int ret_add_account_giveup = res.getInteger(R.integer.account_add_giveup);
-        final int ret_logout = res.getInteger(R.integer.usr_logout);
-
         boolean b_resetview = false;
-        if(resultCode == ret_add_account)  {
+        if(AppGobalDef.INTRET_USR_ADD == resultCode)  {
             Log.i(TAG, "从'添加新帐户'页面返回");
             b_resetview = true;
         }
-        else if(resultCode == ret_add_account_giveup)    {
+        else if(AppGobalDef.INTRET_GIVEUP == resultCode)    {
             Log.i(TAG, "从'添加新帐户'页面返回(放弃添加新帐户)");
         }
-        else if(resultCode == ret_logout)    {
+        else if(AppGobalDef.INTRET_USR_LOGOUT ==  resultCode)    {
             Log.i(TAG, "注销帐户");
             b_resetview = true;
 

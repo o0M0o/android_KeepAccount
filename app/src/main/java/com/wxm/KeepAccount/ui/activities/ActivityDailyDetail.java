@@ -76,10 +76,9 @@ public class ActivityDailyDetail extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.home :
             case R.id.dailydetailmenu_goback: {
-                Resources res = getResources();
-                int ret_data = res.getInteger(R.integer.dailydetail_goback);
+                int ret_data = AppGobalDef.INTRET_DAILY_DETAIL;
 
-                Intent data=new Intent();
+                Intent data = new Intent();
                 setResult(ret_data, data);
                 finish();
             }

@@ -44,12 +44,12 @@ public class SlidingTabsColorsFragment extends Fragment {
      * This class represents a tab to be displayed by {@link ViewPager} and it's associated
      * {@link SlidingTabLayout}.
      */
-    static class SamplePagerItem {
+    protected  static class SamplePagerItem {
         private final CharSequence mTitle;
         private final int mIndicatorColor;
         private final int mDividerColor;
 
-        SamplePagerItem(CharSequence title, int indicatorColor, int dividerColor) {
+        public SamplePagerItem(CharSequence title, int indicatorColor, int dividerColor) {
             mTitle = title;
             mIndicatorColor = indicatorColor;
             mDividerColor = dividerColor;
@@ -96,12 +96,12 @@ public class SlidingTabsColorsFragment extends Fragment {
     /**
      * A {@link ViewPager} which will be used in conjunction with the {@link SlidingTabLayout} above.
      */
-    private ViewPager mViewPager;
+    protected ViewPager mViewPager;
 
     /**
      * List of {@link SamplePagerItem} which represent this sample's tabs.
      */
-    private List<SamplePagerItem> mTabs = new ArrayList<SamplePagerItem>();
+    protected List<SamplePagerItem> mTabs = new ArrayList<SamplePagerItem>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,25 +135,6 @@ public class SlidingTabsColorsFragment extends Fragment {
                 Color.GREEN, // Indicator color
                 Color.GRAY // Divider color
         ));*/
-
-        mTabs.add(new SamplePagerItem(
-                getString(R.string.tab_cn_daily), // Title
-                Color.GREEN, // Indicator color
-                Color.GRAY// Divider color
-        ));
-
-        mTabs.add(new SamplePagerItem(
-                getString(R.string.tab_cn_monthly), // Title
-                Color.GREEN, // Indicator color
-                Color.GRAY// Divider color
-        ));
-
-        mTabs.add(new SamplePagerItem(
-                getString(R.string.tab_cn_yearly), // Title
-                Color.GREEN, // Indicator color
-                Color.GRAY// Divider color
-        ));
-
         // END_INCLUDE (populate_tabs)
     }
 
@@ -161,11 +142,13 @@ public class SlidingTabsColorsFragment extends Fragment {
      * Inflates the {@link View} which will be displayed by this {@link Fragment}, from the app's
      * resources.
      */
+    /*
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
+    */
 
     // BEGIN_INCLUDE (fragment_onviewcreated)
     /**
@@ -233,9 +216,9 @@ public class SlidingTabsColorsFragment extends Fragment {
      * The important section of this class is the {@link #getPageTitle(int)} method which controls
      * what is displayed in the {@link SlidingTabLayout}.
      */
-    class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+    protected class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
 
-        SampleFragmentPagerAdapter(FragmentManager fm) {
+        public SampleFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

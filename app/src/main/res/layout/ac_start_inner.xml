@@ -17,14 +17,26 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="切换视图"
+        android:id="@+id/tabbt_view_switch"
+        android:drawableTop="@drawable/abc_ic_menu_paste_mtrl_am_alpha"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/tabbt_record_income"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@+id/tabbt_record_income" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="记录支出"
         android:id="@+id/tabbt_record_pay"
         android:drawableTop="@drawable/abc_ic_menu_paste_mtrl_am_alpha"
-        android:layout_marginBottom="34dp"
         android:layout_marginRight="10dp"
+        android:layout_marginEnd="32dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="30dp" />
+        android:layout_marginBottom="16dp" />
 
     <Button
         android:layout_width="wrap_content"

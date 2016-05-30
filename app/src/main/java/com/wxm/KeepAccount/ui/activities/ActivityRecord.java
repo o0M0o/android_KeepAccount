@@ -88,8 +88,7 @@ public class ActivityRecord
             break;
 
             case R.id.addrecord_menu_giveup: {
-                Resources res = getResources();
-                int ret_data = res.getInteger(R.integer.addrecord_giveup);
+                int ret_data = AppGobalDef.INTRET_GIVEUP;
 
                 Intent data = new Intent();
                 setResult(ret_data, data);
@@ -263,8 +262,16 @@ public class ActivityRecord
             if(!old_item.record_note.isEmpty())
                 et_note.setText(old_item.record_note);
 
-            et_date.setText(old_item.record_ts.toString().substring(0, 8));
-            et_amount.setText(old_item.record_val.toString());
+            et_date.setText(old_item.record_ts.toString().substring(0, 10));
+
+            String oldval = old_item.record_val.toString();
+            int pos = oldval.indexOf(".");
+            if(pos >= 0)    {
+                et_amount.setText(oldval.substring(0, pos + 3));
+            }
+            else    {
+                et_amount.setText(oldval);
+            }
         }
     }
 

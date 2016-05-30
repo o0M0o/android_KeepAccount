@@ -32,4 +32,9 @@ public class AppGobalDef {
 
     static public final int INTRET_RECORD_ADD       = 1000;
     static public final int INTRET_RECORD_MODIFY    = 1001;
+    static public final int INTRET_DAILY_DETAIL     = 1002;
+    static public final int INTRET_GIVEUP           = 1003;
+
+    static public final int INTRET_USR_ADD       = 2000;
+    static public final int INTRET_USR_LOGOUT    = 2001;
 }
