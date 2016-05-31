@@ -137,12 +137,12 @@ public class ActivityStart
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
                 if(mTabFragment instanceof ListViewSlidingTabsFragment) {
-                    //mTabFragment = gvTabFragment;
-                    mTabFragment = new GraphViewSlidingTabsFragment();
+                    mTabFragment = gvTabFragment;
+                    //mTabFragment = new GraphViewSlidingTabsFragment();
                 }
                 else    {
-                    //mTabFragment = lvTabFragment;
-                    mTabFragment = new ListViewSlidingTabsFragment();
+                    mTabFragment = lvTabFragment;
+                    //mTabFragment = new ListViewSlidingTabsFragment();
                 }
 
                 transaction.replace(R.id.tabfl_content, mTabFragment);
