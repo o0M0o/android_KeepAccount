@@ -42,7 +42,7 @@ import java.util.HashMap;
  * Simple Fragment used to display some meaningful content for each page in the sample's
  * {@link android.support.v4.view.ViewPager}.
  */
-public class ContentFragment extends Fragment {
+public class LVContentFragment extends Fragment {
 
     private static final String KEY_TITLE = "title";
     private static final String KEY_INDICATOR_COLOR = "indicator_color";
@@ -53,17 +53,17 @@ public class ContentFragment extends Fragment {
     private SimpleAdapter lv_adapter = null;
 
     /**
-     * @return a new instance of {@link ContentFragment}, adding the parameters into a bundle and
+     * @return a new instance of {@link LVContentFragment}, adding the parameters into a bundle and
      * setting them as arguments.
      */
-    public static ContentFragment newInstance(CharSequence title, int indicatorColor,
-                                              int dividerColor) {
+    public static LVContentFragment newInstance(CharSequence title, int indicatorColor,
+                                                int dividerColor) {
         Bundle bundle = new Bundle();
         bundle.putCharSequence(KEY_TITLE, title);
         bundle.putInt(KEY_INDICATOR_COLOR, indicatorColor);
         bundle.putInt(KEY_DIVIDER_COLOR, dividerColor);
 
-        ContentFragment fragment = new ContentFragment();
+        LVContentFragment fragment = new LVContentFragment();
         fragment.setArguments(bundle);
 
         return fragment;

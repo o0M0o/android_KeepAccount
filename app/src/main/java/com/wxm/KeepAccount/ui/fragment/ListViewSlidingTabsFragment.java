@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wxm.KeepAccount.R;
-import com.wxm.KeepAccount.ui.base.fragment.ContentFragment;
+import com.wxm.KeepAccount.ui.base.fragment.LVContentFragment;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 
 /**
@@ -25,7 +25,7 @@ public class ListViewSlidingTabsFragment extends SlidingTabsColorsFragment {
 
         @Override
         protected Fragment createFragment() {
-            return ContentFragment.newInstance(mTitle, mIndicatorColor, mDividerColor);
+            return LVContentFragment.newInstance(mTitle, mIndicatorColor, mDividerColor);
         }
     }
 

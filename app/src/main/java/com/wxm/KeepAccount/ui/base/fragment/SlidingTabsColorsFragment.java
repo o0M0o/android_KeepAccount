@@ -16,12 +16,10 @@
 
 package com.wxm.KeepAccount.ui.base.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -216,7 +214,7 @@ public class SlidingTabsColorsFragment extends Fragment {
 
     /**
      * The {@link FragmentPagerAdapter} used to display pages in this sample. The individual pages
-     * are instances of {@link ContentFragment} which just display three lines of text. Each page is
+     * are instances of {@link LVContentFragment} which just display three lines of text. Each page is
      * created by the relevant {@link SamplePagerItem} for the requested position.
      * <p>
      * The important section of this class is the {@link #getPageTitle(int)} method which controls
