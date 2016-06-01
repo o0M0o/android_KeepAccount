@@ -134,14 +134,14 @@ public class GVContentFragment extends Fragment {
             chartLayout.addView(cur_view, layoutParams);
 
             ((ViewGroup) content).addView(chartLayout);
-            this.getActivity().setContentView(content);
+            //this.getActivity().setContentView(content);
         }
         else if(title.equals(res.getString(R.string.tab_cn_monthly)))   {
             cur_view = new MonthlyCharts(this.getContext());
             chartLayout.addView(cur_view, layoutParams);
 
             ((ViewGroup) content).addView(chartLayout);
-            this.getActivity().setContentView(content);
+            //this.getActivity().setContentView(content);
         }
 
         return cur_view;
