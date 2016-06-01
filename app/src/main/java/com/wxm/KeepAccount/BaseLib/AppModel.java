@@ -59,12 +59,12 @@ public class AppModel {
         if((null == allRecords) || dbChange)
             LoadAllRecords();
 
-        ArrayList<RecordItem> ret = new ArrayList<>();
+        ArrayList<RecordItem> ret;
         if(null != allRecords)  {
-            for(RecordItem it : allRecords) {
-                RecordItem nit = it;
-                ret.add(nit);
-            }
+            ret = new ArrayList<>(allRecords);
+        }
+        else    {
+            ret = new ArrayList<>();
         }
 
         return ret;

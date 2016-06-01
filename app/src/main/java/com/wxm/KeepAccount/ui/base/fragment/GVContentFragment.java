@@ -12,9 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 
-import com.wxm.KeepAccount.BaseLib.AppManager;
-import com.wxm.KeepAccount.BaseLib.AppMsg;
-import com.wxm.KeepAccount.BaseLib.AppMsgDef;
+import com.wxm.KeepAccount.BaseLib.AppModel;
 import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.base.view.ChartsBase;
 import com.wxm.KeepAccount.ui.base.view.DailyCharts;
@@ -164,49 +162,7 @@ public class GVContentFragment extends Fragment {
      * 加载并显示数据
      */
     public void updateView() {
-        /*Bundle args = getArguments();
-        if(null == args)    {
-            return;
-        }
-
-        Resources res =  getResources();
-        String title = args.getCharSequence(KEY_TITLE).toString();
-        ArrayList<HashMap<String, String>> mylist = null;
-        if(res.getString(R.string.tab_cn_daily)
-                .equals(title)) {
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_TO_DAYREPORT;
-            am.sender = this;
-            mylist =
-                    (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
-        }
-        else if(res.getString(R.string.tab_cn_monthly)
-                .equals(title)) {
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_TO_MONTHREPORT;
-            am.sender = this;
-            mylist =
-                    (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
-        }
-        else if(res.getString(R.string.tab_cn_yearly)
-                .equals(title)) {
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_TO_YEARREPORT;
-            am.sender = this;
-            mylist =
-                    (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
-        }
-
-        if(null != mylist) {
-            gv_list.clear();
-            for(HashMap<String, String> r : mylist) {
-                gv_list.add(r);
-            }
-
-            gv_adapter.notifyDataSetChanged();
-        }*/
-
-        cur_view.ReRenderChart();
+        cur_view.RenderChart(AppModel.getInstance().GetAllRecords());
     }
 }
 

@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.wxm.KeepAccount.BaseLib.RecordItem;
+
 import org.xclcharts.chart.BarChart3D;
 import org.xclcharts.chart.BarData;
 import org.xclcharts.common.DensityUtil;
@@ -27,12 +29,12 @@ import java.util.List;
  */
 public abstract class ChartsBase extends ChartView {
     private String TAG = "ChartsBase";
-    private BarChart3D chart = new BarChart3D();
+    protected BarChart3D chart = new BarChart3D();
 
     //标签轴
-    private List<String> chartLabels = new LinkedList<String>();
+    protected List<String> chartLabels = new LinkedList<String>();
     //数据轴
-    private List<BarData> BarDataset = new LinkedList<BarData>();
+    protected List<BarData> BarDataset = new LinkedList<BarData>();
 
     Paint mPaintToolTip = new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -53,14 +55,15 @@ public abstract class ChartsBase extends ChartView {
 
     /**
      * 重新绘制chart
+     * @param ls_data
      */
-    public abstract void ReRenderChart();
+    public abstract void RenderChart(List<RecordItem> ls_data);
 
     private void initView()
     {
-        chartLabels();
-        chartDataSet();
-        chartRender();
+        //chartLabels();
+        //chartDataSet();
+        //chartRender();
 
         //綁定手势滑动事件
         this.bindTouch(this,chart);
@@ -136,6 +139,7 @@ public abstract class ChartsBase extends ChartView {
         chart.getToolTip().addToolTip(
                 " Current Value:" +Double.toString(bValue),mPaintToolTip);
         chart.getToolTip().getBackgroundPaint().setAlpha(100);
+        chart.getToolTip().getBackgroundPaint().setTextSize(32);
         this.invalidate();
     }
 
@@ -158,9 +162,9 @@ public abstract class ChartsBase extends ChartView {
             chart.setCategories(chartLabels);
 
             //坐标系
-            chart.getDataAxis().setAxisMax(500);
+            /*chart.getDataAxis().setAxisMax(500);
             chart.getDataAxis().setAxisMin(100);
-            chart.getDataAxis().setAxisSteps(100);
+            chart.getDataAxis().setAxisSteps(100);*/
             //chart.getCategoryAxis().setAxisTickLabelsRotateAngle(-45f);
 
             //隐藏轴线和tick
@@ -192,7 +196,7 @@ public abstract class ChartsBase extends ChartView {
                     Double tmp = Double.parseDouble(value);
                     DecimalFormat df=new DecimalFormat("#0");
                     String label = df.format(tmp).toString();
-                    return (label +"公斤");
+                    return (label +"元");
                 }
 
             });
@@ -238,8 +242,10 @@ public abstract class ChartsBase extends ChartView {
             chart.disableHighPrecision();
 
             // 设置轴标签字体大小
-            chart.getDataAxis().getTickLabelPaint().setTextSize(26);
+            chart.getDataAxis().getTickLabelPaint().setTextSize(36);
+            chart.getCategoryAxis().getTickLabelPaint().setTextSize(36);
 
+            refreshChart();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
