@@ -33,7 +33,7 @@ public class GVContentFragment extends Fragment {
     private static final String KEY_INDICATOR_COLOR = "indicator_color";
     private static final String KEY_DIVIDER_COLOR = "divider_color";
 
-    private View cur_view;
+    private ChartsBase cur_view;
     private ArrayList<HashMap<String, String>> gv_list = new ArrayList<>();
     private SimpleAdapter gv_adapter = null;
 
@@ -205,6 +205,8 @@ public class GVContentFragment extends Fragment {
 
             gv_adapter.notifyDataSetChanged();
         }*/
+
+        cur_view.ReRenderChart();
     }
 }
 

@@ -200,6 +200,7 @@ public class SlidingTabsColorsFragment extends Fragment {
     }
     // END_INCLUDE (fragment_onviewcreated)
 
+
     public void notifyDataChange()  {
 /*        FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

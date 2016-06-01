@@ -25,7 +25,7 @@ import java.util.List;
  * charts基类
  * Created by 123 on 2016/6/1.
  */
-public class ChartsBase extends ChartView {
+public abstract class ChartsBase extends ChartView {
     private String TAG = "ChartsBase";
     private BarChart3D chart = new BarChart3D();
 
@@ -50,6 +50,11 @@ public class ChartsBase extends ChartView {
         super(context, attrs, defStyle);
         initView();
     }
+
+    /**
+     * 重新绘制chart
+     */
+    public abstract void ReRenderChart();
 
     private void initView()
     {
@@ -135,7 +140,7 @@ public class ChartsBase extends ChartView {
     }
 
 
-    private void chartRender()
+    protected void chartRender()
     {
         try {
 
