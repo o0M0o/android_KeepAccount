@@ -54,7 +54,7 @@ public class GVContentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FrameLayout content = new FrameLayout(this.getContext());
+/*        FrameLayout content = new FrameLayout(this.getContext());
         //缩放控件放置在FrameLayout的上层，用于放大缩小图表
         FrameLayout.LayoutParams frameParm = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -70,7 +70,7 @@ public class GVContentFragment extends Fragment {
         //居中显示
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
         //图表view放入布局中，也可直接将图表view放入Activity对应的xml文件中
-        final RelativeLayout chartLayout = new RelativeLayout(this.getContext());
+        //final RelativeLayout chartLayout = new RelativeLayout(this.getContext());*/
 
         // 根据页签选择视图
         Bundle args = getArguments();
