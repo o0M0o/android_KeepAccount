@@ -44,20 +44,20 @@ public class GraphViewSlidingTabsFragment extends SlidingTabsColorsFragment {
                     getString(R.string.tab_cn_daily), // Title
                     Color.GREEN, // Indicator color
                     Color.GRAY// Divider color
-            ));
+                    ));
 
             mTabs.add(new ListViewPagerItem(
                     getString(R.string.tab_cn_monthly), // Title
                     Color.GREEN, // Indicator color
                     Color.GRAY// Divider color
-            ));
-        }
+                    ));
 
-        /*mTabs.add(new ListViewPagerItem(
-                getString(R.string.tab_cn_yearly), // Title
-                Color.GREEN, // Indicator color
-                Color.GRAY// Divider color
-        ));*/
+            mTabs.add(new ListViewPagerItem(
+                    getString(R.string.tab_cn_yearly), // Title
+                    Color.GREEN, // Indicator color
+                    Color.GRAY// Divider color
+                    ));
+        }
     }
 
     @Override

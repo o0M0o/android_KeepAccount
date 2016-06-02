@@ -88,8 +88,10 @@ public class MonthlyCharts extends ChartsBase {
             dsB.add(retB);
         }
 
-        BarDataset.add(new BarData(AppGobalDef.CNSTR_RECORD_INCOME, dsA, Color.BLUE));
-        BarDataset.add(new BarData(AppGobalDef.CNSTR_RECORD_PAY, dsB, Color.CYAN));
+        BarDataset.add(new BarData(AppGobalDef.CNSTR_RECORD_INCOME, dsA,
+                            Color.BLUE));
+        BarDataset.add(new BarData(AppGobalDef.CNSTR_RECORD_PAY, dsB,
+                            Color.RED));
 
         chartRender();
     }

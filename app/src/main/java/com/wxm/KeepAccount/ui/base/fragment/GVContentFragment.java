@@ -17,6 +17,7 @@ import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.base.view.ChartsBase;
 import com.wxm.KeepAccount.ui.base.view.DailyCharts;
 import com.wxm.KeepAccount.ui.base.view.MonthlyCharts;
+import com.wxm.KeepAccount.ui.base.view.YeaylyCharts;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,9 +33,6 @@ public class GVContentFragment extends Fragment {
     private static final String KEY_DIVIDER_COLOR = "divider_color";
 
     private ChartsBase cur_view;
-    private ArrayList<HashMap<String, String>> gv_list = new ArrayList<>();
-    private SimpleAdapter gv_adapter = null;
-
 
     /**
      * @return a new instance of {@link LVContentFragment}, adding the parameters into a bundle and
@@ -80,16 +78,23 @@ public class GVContentFragment extends Fragment {
         Resources res =  getResources();
         if(title.equals(res.getString(R.string.tab_cn_daily)))  {
             cur_view = new DailyCharts(this.getContext());
-            chartLayout.addView(cur_view, layoutParams);
 
-            ((ViewGroup) content).addView(chartLayout);
+            //chartLayout.addView(cur_view, layoutParams);
+            //((ViewGroup) content).addView(chartLayout);
             //this.getActivity().setContentView(content);
         }
         else if(title.equals(res.getString(R.string.tab_cn_monthly)))   {
             cur_view = new MonthlyCharts(this.getContext());
-            chartLayout.addView(cur_view, layoutParams);
 
-            ((ViewGroup) content).addView(chartLayout);
+            //chartLayout.addView(cur_view, layoutParams);
+            //((ViewGroup) content).addView(chartLayout);
+            //this.getActivity().setContentView(content);
+        }
+        else if(title.equals(res.getString(R.string.tab_cn_yearly)))    {
+            cur_view = new YeaylyCharts(this.getContext());
+
+            //chartLayout.addView(cur_view, layoutParams);
+            //((ViewGroup) content).addView(chartLayout);
             //this.getActivity().setContentView(content);
         }
 
@@ -111,7 +116,8 @@ public class GVContentFragment extends Fragment {
      * 加载并显示数据
      */
     public void updateView() {
-        cur_view.RenderChart(AppModel.getInstance().GetAllRecords());
+        if(null != cur_view)
+            cur_view.RenderChart(AppModel.getInstance().GetAllRecords());
     }
 }
 
