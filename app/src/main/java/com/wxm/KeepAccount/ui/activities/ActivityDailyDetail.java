@@ -20,6 +20,7 @@ import com.wxm.KeepAccount.BaseLib.AppManager;
 import com.wxm.KeepAccount.BaseLib.AppMsg;
 import com.wxm.KeepAccount.BaseLib.AppMsgDef;
 import com.wxm.KeepAccount.BaseLib.RecordItem;
+import com.wxm.KeepAccount.BaseLib.ToolUtil;
 import com.wxm.KeepAccount.R;
 
 import java.util.ArrayList;
@@ -140,8 +141,8 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
     private void initViews()    {
         // set title
-        //String tt = String.format("%s日详情", invoke_str);
-        //getDelegate().setTitle(tt);
+        String tt = String.format("%s详情", ToolUtil.FormatDateString(invoke_str));
+        setTitle(tt);
 
         // set listview
         lv_show = (ListView)findViewById(R.id.lv_daily_detail);

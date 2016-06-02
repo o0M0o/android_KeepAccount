@@ -173,7 +173,7 @@ public class RecordUtility {
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(AppGobalDef.ITEM_TITLE, k);
+            map.put(AppGobalDef.ITEM_TITLE, ToolUtil.FormatDateString(k));
             map.put(AppGobalDef.ITEM_TEXT, show_str);
             mylist.add(map);
         }
@@ -228,7 +228,7 @@ public class RecordUtility {
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(AppGobalDef.ITEM_TITLE, k);
+            map.put(AppGobalDef.ITEM_TITLE, ToolUtil.FormatDateString(k));
             map.put(AppGobalDef.ITEM_TEXT, show_str);
             mylist.add(map);
         }
@@ -284,7 +284,7 @@ public class RecordUtility {
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(AppGobalDef.ITEM_TITLE, k);
+            map.put(AppGobalDef.ITEM_TITLE, ToolUtil.FormatDateString(k));
             map.put(AppGobalDef.ITEM_TEXT, show_str);
             mylist.add(map);
         }
