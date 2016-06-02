@@ -16,7 +16,7 @@
     <application
         android:name=".BaseLib.ContextUtil"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_share"
+        android:icon="@mipmap/ic_app"
         android:label="@string/cn_applabel"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

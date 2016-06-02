@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "AppLocal.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public final static String COLNAME_USER_NAME = "usr_name";
     public final static String COLNAME_USER_PWD = "usr_pwd";
@@ -40,5 +40,15 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //db.execSQL("ALTER TABLE person ADD COLUMN other STRING");
+
+        if((1 == oldVersion) && (2 == newVersion))  {
+            db.execSQL("CREATE TABLE IF NOT EXISTS tb_KeepAccount" +
+                    "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "   record_type NVARCHAR, " +
+                    "   record_info NVARCHAR, " +
+                    "   record_note NVARCHAR, " +
+                    "   record_val DECIMAL(10,2), " +
+                    "   record_ts TIMESTAMP)");
+        }
     }
 }
