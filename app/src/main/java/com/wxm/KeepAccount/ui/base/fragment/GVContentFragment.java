@@ -56,54 +56,6 @@ public class GVContentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        /*
-        cur_view =  inflater.inflate(R.layout.pager_item, container, false);
-
-        Bundle args = getArguments();
-        String title = args.getCharSequence(KEY_TITLE).toString();
-        ListView lv = (ListView) cur_view.findViewById(R.id.tabvp_lv_main);
-        Resources res =  getResources();
-        if(title.equals(res.getString(R.string.tab_cn_daily)))  {
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    HashMap<String, String> hmsel =
-                            (HashMap<String, String>)parent.getItemAtPosition(position);
-
-                    //String str= parent.getItemAtPosition(position).toString();
-                    //String class_str= parent.getItemAtPosition(position).getClass().toString();
-                    //Log.d(TAG, String.format("long click(%s) : %s", class_str, str));
-
-                    Intent intent = new Intent(parent.getContext(), ActivityDailyDetail.class);
-                    intent.putExtra(AppGobalDef.STR_SELECT_ITEM,
-                            hmsel.get(AppGobalDef.ITEM_TITLE));
-                    startActivityForResult(intent, 1);
-                }
-            });
-        }
-
-        // 设置listview adapter
-        gv_adapter= new SimpleAdapter(ContextUtil.getInstance(),
-                gv_list,
-                R.layout.main_listitem,
-                new String[]{AppGobalDef.ITEM_TITLE, AppGobalDef.ITEM_TEXT},
-                new int[]{R.id.ItemTitle, R.id.ItemText}) {
-            @Override
-            public int getViewTypeCount() {
-                int org_ct = getCount();
-                return org_ct < 1 ? 1 : org_ct;
-            }
-
-            @Override
-            public int getItemViewType(int position) {
-                return position;
-            }
-        };
-
-        lv.setAdapter(gv_adapter);
-        return cur_view;
-        */
-
         FrameLayout content = new FrameLayout(this.getContext());
         //缩放控件放置在FrameLayout的上层，用于放大缩小图表
         FrameLayout.LayoutParams frameParm = new FrameLayout.LayoutParams(
@@ -113,7 +65,7 @@ public class GVContentFragment extends Fragment {
         //图表显示范围在占屏幕大小的90%的区域内
         DisplayMetrics dm = getResources().getDisplayMetrics();
         int scrWidth = (int) (dm.widthPixels * 0.9);
-        int scrHeight = (int) (dm.heightPixels * 0.9);
+        int scrHeight = (int) (dm.heightPixels * 0.95);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 scrWidth, scrHeight);
 
@@ -121,7 +73,6 @@ public class GVContentFragment extends Fragment {
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
         //图表view放入布局中，也可直接将图表view放入Activity对应的xml文件中
         final RelativeLayout chartLayout = new RelativeLayout(this.getContext());
-
 
         // 根据页签选择视图
         Bundle args = getArguments();
@@ -148,11 +99,9 @@ public class GVContentFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        /*
-        Bundle args = getArguments();
+        /*Bundle args = getArguments();
         if (args != null) {
-        }
-        */
+        }*/
 
         updateView();
     }

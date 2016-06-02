@@ -20,6 +20,8 @@ import org.xclcharts.renderer.XEnum;
 import org.xclcharts.view.ChartView;
 
 import java.text.DecimalFormat;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,6 +37,9 @@ public abstract class ChartsBase extends ChartView {
     protected List<String> chartLabels = new LinkedList<String>();
     //数据轴
     protected List<BarData> BarDataset = new LinkedList<BarData>();
+
+    protected String chartTitle = "";
+    protected String subChartTitle = "";
 
     Paint mPaintToolTip = new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -139,7 +144,8 @@ public abstract class ChartsBase extends ChartView {
         chart.getToolTip().addToolTip(
                 " Current Value:" +Double.toString(bValue),mPaintToolTip);
         chart.getToolTip().getBackgroundPaint().setAlpha(100);
-        chart.getToolTip().getBackgroundPaint().setTextSize(32);
+        chart.getToolTip().getBorderPaint().setTextSize(24);
+
         this.invalidate();
     }
 
@@ -156,38 +162,42 @@ public abstract class ChartsBase extends ChartView {
             //显示边框
             chart.showRoundBorder();
 
-
             //数据源
             chart.setDataSource(BarDataset);
             chart.setCategories(chartLabels);
+            chart.getPlotLegend().getPaint().setTextSize(24);
 
-            //坐标系
-            /*chart.getDataAxis().setAxisMax(500);
-            chart.getDataAxis().setAxisMin(100);
-            chart.getDataAxis().setAxisSteps(100);*/
-            //chart.getCategoryAxis().setAxisTickLabelsRotateAngle(-45f);
+            adjustAxis();
 
             //隐藏轴线和tick
             chart.getDataAxis().hideAxisLine();
             //chart.getDataAxis().setTickMarksVisible(false);
 
             //标题
-            chart.setTitle("本周水果销售情况");
-            chart.addSubtitle("(XCL-Charts Demo)");
-            chart.setTitleAlign(XEnum.HorizontalAlign.RIGHT);
+            chart.setTitle(chartTitle);
+            chart.addSubtitle(subChartTitle);
+            chart.setTitleAlign(XEnum.HorizontalAlign.LEFT);
 
 
             //背景网格
             chart.getPlotGrid().showHorizontalLines();
             chart.getPlotGrid().showVerticalLines();
             chart.getPlotGrid().showEvenRowBgColor();
-            chart.getPlotGrid().showOddRowBgColor();
-
+            //chart.getPlotGrid().showOddRowBgColor();
 
             //定义数据轴标签显示格式
-            chart.getDataAxis().setTickLabelRotateAngle(-45);
-            chart.getDataAxis().getTickMarksPaint().
-                    setColor(Color.rgb(186, 20, 26));
+//            chart.getDataAxis().setTickLabelRotateAngle(-45);
+//            chart.getDataAxis().getTickMarksPaint().
+//                    setColor(Color.rgb(186, 20, 26));
+
+            //标签轴文字旋转-45度
+            chart.getCategoryAxis().setTickLabelRotateAngle(-45f);
+            //横向显示柱形
+            chart.setChartDirection(XEnum.Direction.HORIZONTAL);
+            //在柱形顶部显示值
+            chart.getBar().setItemLabelVisible(true);
+            chart.getBar().getItemLabelPaint().setTextSize(22);
+
             chart.getDataAxis().setLabelFormatter(new IFormatterTextCallBack(){
 
                 @Override
@@ -202,7 +212,7 @@ public abstract class ChartsBase extends ChartView {
             });
 
             //设置标签轴标签交错换行显示
-            chart.getCategoryAxis().setLabelLineFeed(XEnum.LabelLineFeed.EVEN_ODD);
+            //chart.getCategoryAxis().setLabelLineFeed(XEnum.LabelLineFeed.EVEN_ODD);
 
             //定义标签轴标签显示格式
             chart.getCategoryAxis().setLabelFormatter(new IFormatterTextCallBack(){
@@ -214,6 +224,7 @@ public abstract class ChartsBase extends ChartView {
                 }
 
             });
+
             //定义柱形上标签显示格式
             chart.getBar().setItemLabelVisible(true);
             chart.setItemLabelFormatter(new IFormatterDoubleCallBack() {
@@ -228,8 +239,8 @@ public abstract class ChartsBase extends ChartView {
             //激活点击监听
             chart.ActiveListenItemClick();
 
-            //仅能横向移动
-            chart.setPlotPanMode(XEnum.PanMode.HORIZONTAL);
+            //仅能竖向移动
+            chart.setPlotPanMode(XEnum.PanMode.VERTICAL);
 
 
             //扩展横向显示范围
@@ -242,8 +253,8 @@ public abstract class ChartsBase extends ChartView {
             chart.disableHighPrecision();
 
             // 设置轴标签字体大小
-            chart.getDataAxis().getTickLabelPaint().setTextSize(36);
-            chart.getCategoryAxis().getTickLabelPaint().setTextSize(36);
+            chart.getDataAxis().getTickLabelPaint().setTextSize(28);
+            chart.getCategoryAxis().getTickLabelPaint().setTextSize(28);
 
             refreshChart();
         } catch (Exception e) {
@@ -252,44 +263,33 @@ public abstract class ChartsBase extends ChartView {
         }
     }
 
+    /**
+     * 调整坐标系参数
+     */
+    private void adjustAxis()   {
+        Double max_v = 0d;
+        Double min_v = 0d;
+        for(BarData bd : BarDataset)    {
+            Double max_val = Collections.max(bd.getDataSet());
+            Double min_val = Collections.min(bd.getDataSet());
 
-    private void chartLabels()
-    {
-        chartLabels.add("桃子(Peach)");
-        chartLabels.add("梨子(Pear)");
-        chartLabels.add("香蕉 (Banana)");
-        chartLabels.add("苹果");
-        chartLabels.add("桔子");
-    }
+            if(max_val > max_v)
+                max_v = max_val;
 
+            if(min_val < min_v)
+                min_v = min_val;
+        }
 
-    private void chartDataSet()
-    {
-        //标签对应的柱形数据集
-        List<Double> dataSeriesA= new LinkedList<Double>();
-        dataSeriesA.add(200d);
-        dataSeriesA.add(250d);
-        dataSeriesA.add(400d);
-        dataSeriesA.add(450d);
-        dataSeriesA.add(150d);
+        int dif = (int)(max_v - min_v);
+        if(dif < 10)        {
+            chart.getDataAxis().setAxisSteps(2);
+        }
+        else    {
+            max_v += dif/8;
+            chart.getDataAxis().setAxisSteps(dif/6);
+        }
 
-        List<Double> dataSeriesB= new LinkedList<Double>();
-        dataSeriesB.add(300d);
-        dataSeriesB.add(150d);
-        dataSeriesB.add(450d);
-        dataSeriesB.add(480d);
-        dataSeriesB.add(200d);
-
-        BarDataset.add(new BarData("左边店",dataSeriesA, Color.rgb(252, 210, 9)));
-        BarDataset.add(new BarData("右边店",dataSeriesB,Color.rgb(55, 144, 206)));
-
-
-        List<Double> dataSeriesC= new LinkedList<Double>();
-        dataSeriesC.add(270d);
-        dataSeriesC.add(180d);
-        //dataSeriesC.add(450d);
-        //dataSeriesC.add(380d);
-        //dataSeriesC.add(230d);
-        BarDataset.add(new BarData("右边店2",dataSeriesC,Color.rgb(155, 144, 206)));
+        chart.getDataAxis().setAxisMax(max_v);
+        chart.getDataAxis().setAxisMin(min_v);
     }
 }
