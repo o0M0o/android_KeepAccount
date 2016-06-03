@@ -151,7 +151,12 @@ public class AppModel {
      * @return  添加成功返回true, 否则返回false
      */
     public boolean addUsr(String usr, String pwd)   {
-        return dbm.addUsr(usr, pwd);
+        String pwdpad = pwd;
+        if(pwdpad.length() < AppGobalDef.STR_PWD_PAD.length()) {
+            pwdpad += AppGobalDef.STR_PWD_PAD.substring(pwd.length());
+        }
+
+        return dbm.addUsr(usr, MD5Util.string2MD5(pwdpad));
     }
 
     /**
@@ -161,6 +166,11 @@ public class AppModel {
      * @return  如果符合返回true, 否则返回false
      */
     public boolean checkUsr(String usr, String pwd) {
-        return dbm.checkUsr(usr, pwd);
+        String pwdpad = pwd;
+        if(pwdpad.length() < AppGobalDef.STR_PWD_PAD.length()) {
+            pwdpad += AppGobalDef.STR_PWD_PAD.substring(pwd.length());
+        }
+
+        return dbm.checkUsr(usr, MD5Util.string2MD5(pwdpad));
     }
 }

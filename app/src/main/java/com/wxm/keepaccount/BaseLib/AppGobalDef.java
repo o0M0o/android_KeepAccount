@@ -30,6 +30,8 @@ public class AppGobalDef {
     static public final String STR_HELP_MAIN = "help_main";
     static public final String STR_HELP_START = "help_start";
 
+    static public final String STR_PWD_PAD = "JkpYkhiayh@#$_)(";
+
     static public final int INTRET_RECORD_ADD       = 1000;
     static public final int INTRET_RECORD_MODIFY    = 1001;
     static public final int INTRET_DAILY_DETAIL     = 1002;

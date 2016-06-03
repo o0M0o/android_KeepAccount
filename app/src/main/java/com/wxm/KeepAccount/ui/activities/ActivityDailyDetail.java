@@ -48,7 +48,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
         setContentView(R.layout.ac_daily_detail);
 
         Intent i = getIntent();
-        invoke_str = i.getStringExtra(AppGobalDef.STR_SELECT_ITEM);
+        invoke_str = ToolUtil.ReFormatDateString(i.getStringExtra(AppGobalDef.STR_SELECT_ITEM));
         Log.i(TAG, String.format("invoke with '%s'", invoke_str));
 
         initViews();
