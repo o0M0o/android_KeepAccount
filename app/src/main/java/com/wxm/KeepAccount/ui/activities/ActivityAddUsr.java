@@ -129,8 +129,8 @@ public class ActivityAddUsr
         String usr_rpwd = et_repeatpwd.getText().toString();
 
         Resources res = getResources();
-        if(!usr_name.contains("@"))     {
-            et_usrname.setError(res.getString(R.string.error_invalid_email));
+        if(usr_name.isEmpty())  {
+            et_usrname.setError(res.getString(R.string.error_no_usrname));
             et_usrname.requestFocus();
             return false;
         }

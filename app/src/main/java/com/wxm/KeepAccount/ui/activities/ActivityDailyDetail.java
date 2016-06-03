@@ -123,20 +123,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
     private void switchCheckbox()       {
         delete_visity = !delete_visity;
-        int vv = delete_visity ? View.VISIBLE : View.INVISIBLE;
-
-        int ct = lv_show.getChildCount();
-        for(int i = 0; i < ct; ++i) {
-            View v = lv_show.getChildAt(i);
-
-            CheckBox cb = (CheckBox)v.findViewById(R.id.dailydetail_cb);
-            cb.setVisibility(vv);
-
-            Button mod = (Button)v.findViewById(R.id.dailydetail_bt);
-            mod.setVisibility(vv);
-        }
-
-        mi_delete.setVisible(delete_visity);
+        updateCheckBox(delete_visity ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void initViews()    {
@@ -187,20 +174,12 @@ public class ActivityDailyDetail extends AppCompatActivity {
     }
 
     private void updateListView()   {
-        // clear delete flag
-        int cct = lv_show.getChildCount();
-        for(int i = 0; i < cct; ++i) {
-            View v = lv_show.getChildAt(i);
-
-            CheckBox cb = (CheckBox)v.findViewById(R.id.dailydetail_cb);
-            cb.setVisibility(View.INVISIBLE);
-
-            Button mod = (Button)v.findViewById(R.id.dailydetail_bt);
-            mod.setVisibility(View.INVISIBLE);
-        }
-
-        if(null != mi_delete) {
-            mi_delete.setVisible(false);
+        // clear old view
+        if(!lv_datalist.isEmpty()) {
+            cb_sqltag.clear();
+            cb_state.clear();
+            lv_datalist.clear();
+            lv_adapter.notifyDataSetChanged();
         }
 
         // update date
@@ -211,19 +190,38 @@ public class ActivityDailyDetail extends AppCompatActivity {
         ArrayList<HashMap<String, String>> up_ls =
                 (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
 
-        cb_state.clear();
-        lv_datalist.clear();
-        for(HashMap<String, String> r : up_ls)   {
-            lv_datalist.add(r);
-        }
-
-        cb_sqltag.clear();
+        lv_datalist.addAll(up_ls);
         int ct = lv_datalist.size();
         for (int i = 0; i < ct; ++i) {
             cb_sqltag.put(i, lv_datalist.get(i).get(AppGobalDef.ITEM_ID));
         }
 
         lv_adapter.notifyDataSetChanged();
+
+        updateCheckBox(View.INVISIBLE);
+    }
+
+    /**
+     * 设置listview的附加选择控件是否显示
+     * @param show_stat  如果是View.VISIBLE则显示，否则不显示
+     */
+    private void updateCheckBox(int show_stat)   {
+        int ct = lv_show.getChildCount();
+        for(int i = 0; i < ct; ++i) {
+            View v = lv_show.getChildAt(i);
+
+            CheckBox cb = (CheckBox)v.findViewById(R.id.dailydetail_cb);
+            cb.setVisibility(show_stat);
+            if(View.VISIBLE == show_stat)  {
+                cb.setChecked(false);
+            }
+
+            Button mod = (Button)v.findViewById(R.id.dailydetail_bt);
+            mod.setVisibility(show_stat);
+        }
+
+        if(null != mi_delete)
+            mi_delete.setVisible(show_stat == View.VISIBLE ? true : false);
     }
 
 
