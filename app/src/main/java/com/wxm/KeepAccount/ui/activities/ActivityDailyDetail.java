@@ -113,6 +113,14 @@ public class ActivityDailyDetail extends AppCompatActivity {
             }
             break;
 
+            case R.id.dailydetailmenu_help : {
+                Intent intent = new Intent(this, ActivityHelp.class);
+                intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_DAILYDETAIL);
+
+                startActivityForResult(intent, 1);
+            }
+            break;
+
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -145,7 +153,8 @@ public class ActivityDailyDetail extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, String.format("get click : %s", view.toString()));
-                view.setBackgroundResource(R.color.wheat);
+                //view.setBackgroundResource(R.color.wheat);
+                switchCheckbox();
             }
         });
 

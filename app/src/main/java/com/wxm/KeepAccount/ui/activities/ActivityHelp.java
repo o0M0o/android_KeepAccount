@@ -19,6 +19,8 @@ import com.wxm.KeepAccount.R;
 public class ActivityHelp extends AppCompatActivity {
     private String HELP_MAIN_FILEPATH = "file:///android_asset/help_main.html";
     private String HELP_START_FILEPATH = "file:///android_asset/help_start.html";
+    private String HELP_DAILYDETAIL_FILEPATH = "file:///android_asset/help_dailydetail.html";
+    private String HELP_RECORD_FILEPATH = "file:///android_asset/help_dailydetail.html";
     //private static String TAG = "ActivityHelp";
     private static final String ENCODING = "utf-8";
     //private static final String MIMETYPE = "text/html; charset=UTF-8";
@@ -37,6 +39,12 @@ public class ActivityHelp extends AppCompatActivity {
             }
             else if(help_type.equals(AppGobalDef.STR_HELP_START))  {
                 load_start_help();
+            }
+            else if(help_type.equals(AppGobalDef.STR_HELP_DAILYDETAIL))  {
+                load_dailydetail_help();
+            }
+            else if(help_type.equals(AppGobalDef.STR_HELP_RECORD))  {
+                load_dailydetail_help();
             }
         }
     }
@@ -61,6 +69,25 @@ public class ActivityHelp extends AppCompatActivity {
         wv.loadUrl(HELP_START_FILEPATH);
     }
 
+    /**
+     * 加载应用'日详情'帮助信息
+     */
+    private void load_dailydetail_help()   {
+        WebView wv = (WebView) findViewById(R.id.ac_help_webvw);
+        WebSettings wSet = wv.getSettings();
+        wSet.setDefaultTextEncodingName(ENCODING);
+        wv.loadUrl(HELP_DAILYDETAIL_FILEPATH);
+    }
+
+    /**
+     * 加载应用'日详情'帮助信息
+     */
+    private void load_record_help()   {
+        WebView wv = (WebView) findViewById(R.id.ac_help_webvw);
+        WebSettings wSet = wv.getSettings();
+        wSet.setDefaultTextEncodingName(ENCODING);
+        wv.loadUrl(HELP_RECORD_FILEPATH);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

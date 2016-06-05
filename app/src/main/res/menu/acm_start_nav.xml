@@ -8,6 +8,7 @@
             android:title="帮助" />
         <item
             android:id="@+id/nav_setting"
+            android:visible="false"
             android:icon="@drawable/ic_menu_setting"
             android:title="设定" />
     </group>
@@ -16,6 +17,7 @@
         <menu>
             <item
                 android:id="@+id/nav_share_app"
+                android:visible="false"
                 android:icon="@drawable/ic_menu_share"
                 android:title="分享此应用" />
             <item

@@ -3,7 +3,6 @@ package com.wxm.KeepAccount.ui.activities;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -72,7 +71,7 @@ public class ActivityRecord
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.acm_addrecord_actbar, menu);
+        inflater.inflate(R.menu.acm_record_actbar, menu);
         return true;
     }
 
@@ -80,20 +79,28 @@ public class ActivityRecord
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.addrecord_memenu_save: {
+            case R.id.record_memenu_save: {
                 if(setResult(record_type)) {
                     finish();
                 }
             }
             break;
 
-            case R.id.addrecord_menu_giveup: {
+            case R.id.record_menu_giveup: {
                 int ret_data = AppGobalDef.INTRET_GIVEUP;
 
                 Intent data = new Intent();
                 setResult(ret_data, data);
 
                 finish();
+            }
+            break;
+
+            case R.id.recordmenu_help : {
+                Intent intent = new Intent(this, ActivityHelp.class);
+                intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_RECORD);
+
+                startActivityForResult(intent, 1);
             }
             break;
 

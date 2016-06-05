@@ -39,7 +39,7 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ui.activities.ActivityLogin"
-            android:label="@string/title_activity_login">
+            android:label="@string/cn_applabel">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

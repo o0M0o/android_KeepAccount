@@ -39,6 +39,9 @@ public class ActivityStart
         implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "ActivityStart";
+    private static final String GV_VIEW_TXT = "切换列表";
+    private static final String LV_VIEW_TXT = "切换图表";
+
     private Button bt_add_pay = null;
     private Button bt_add_income = null;
     private Button bt_view_switch = null;
@@ -139,10 +142,14 @@ public class ActivityStart
                 if(mTabFragment instanceof ListViewSlidingTabsFragment) {
                     mTabFragment = gvTabFragment;
                     //mTabFragment = new GraphViewSlidingTabsFragment();
+
+                    bt_view_switch.setText(GV_VIEW_TXT);
                 }
                 else    {
                     mTabFragment = lvTabFragment;
                     //mTabFragment = new ListViewSlidingTabsFragment();
+
+                    bt_view_switch.setText(LV_VIEW_TXT);
                 }
 
                 transaction.replace(R.id.tabfl_content, mTabFragment);
@@ -201,6 +208,8 @@ public class ActivityStart
 
         NavigationView nv = (NavigationView) findViewById(R.id.start_nav_view);
         nv.setNavigationItemSelectedListener(this);
+        //nv.findViewById(R.id.nav_setting).setVisibility(View.INVISIBLE);
+        //nv.findViewById(R.id.nav_share_app).setVisibility(View.INVISIBLE);
 
         // set fragment for tab
         if (savedInstanceState == null) {
@@ -218,6 +227,8 @@ public class ActivityStart
         bt_add_pay.setOnClickListener(this);
         bt_add_income.setOnClickListener(this);
         bt_view_switch.setOnClickListener(this);
+
+        bt_view_switch.setText(LV_VIEW_TXT);
     }
 
 
