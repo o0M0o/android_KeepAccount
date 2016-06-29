@@ -20,7 +20,6 @@ import org.xclcharts.renderer.XEnum;
 import org.xclcharts.view.ChartView;
 
 import java.text.DecimalFormat;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,18 +29,18 @@ import java.util.List;
  * Created by 123 on 2016/6/1.
  */
 public abstract class ChartsBase extends ChartView {
-    private String TAG = "ChartsBase";
-    protected BarChart3D chart = new BarChart3D();
+    private final String TAG = "ChartsBase";
+    protected final BarChart3D chart = new BarChart3D();
 
     //标签轴
-    protected List<String> chartLabels = new LinkedList<String>();
+    protected final List<String> chartLabels = new LinkedList<>();
     //数据轴
-    protected List<BarData> BarDataset = new LinkedList<BarData>();
+    protected final List<BarData> BarDataset = new LinkedList<>();
 
     protected String chartTitle = "";
     protected String subChartTitle = "";
 
-    Paint mPaintToolTip = new Paint(Paint.ANTI_ALIAS_FLAG);
+    final Paint mPaintToolTip = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public ChartsBase(Context context)  {
         super(context);
@@ -205,7 +204,7 @@ public abstract class ChartsBase extends ChartView {
                     // TODO Auto-generated method stub
                     Double tmp = Double.parseDouble(value);
                     DecimalFormat df=new DecimalFormat("#0");
-                    String label = df.format(tmp).toString();
+                    String label = df.format(tmp);
                     return (label +"元");
                 }
 
@@ -232,8 +231,7 @@ public abstract class ChartsBase extends ChartView {
                 public String doubleFormatter(Double value) {
                     // TODO Auto-generated method stub
                     DecimalFormat df=new DecimalFormat("#0.00");
-                    String label = df.format(value).toString();
-                    return label;
+                    return df.format(value).toString();
                 }});
 
             //激活点击监听

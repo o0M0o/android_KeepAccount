@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:id="@+id/ItemTitle"
-        android:textSize="24dp"
+        android:textSize="24sp"
         android:textColor="@color/abc_input_method_navigation_guard"
         android:text="mainitem">
     </TextView>
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:textColor="@color/hint_foreground_material_light"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:id="@+id/ItemText"
         android:text="subitem">
     </TextView>

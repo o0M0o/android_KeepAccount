@@ -7,7 +7,7 @@ package com.wxm.KeepAccount.BaseLib;
 public class AppManager {
     private static final String TAG = "AppManager";
 
-    private static AppManager ourInstance = new AppManager();
+    private static final AppManager ourInstance = new AppManager();
     public static AppManager getInstance() {
         return ourInstance;
     }

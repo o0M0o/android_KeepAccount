@@ -8,10 +8,10 @@ import java.util.List;
  * 本类为app的数据类
  */
 public class AppModel {
-    private static AppModel ourInstance = new AppModel();
+    private static final AppModel ourInstance = new AppModel();
     private List<RecordItem> allRecords;
     private boolean dbChange;
-    private DBManager dbm = new DBManager(ContextUtil.getInstance());
+    private final DBManager dbm = new DBManager(ContextUtil.getInstance());
 
     // 当前登录用户
     public String cur_usr;
@@ -28,7 +28,7 @@ public class AppModel {
     /**
      * 从数据库加载所有记录
      */
-    public void LoadAllRecords()    {
+    private void LoadAllRecords()    {
         allRecords = dbm.query();
         dbChange = false;
     }
@@ -89,8 +89,7 @@ public class AppModel {
             for(RecordItem it : allRecords) {
                 String h_k = it.record_ts.toString().substring(0, check_len);
                 if(h_k.equals(day_str)) {
-                    RecordItem nit = it;
-                    ret.add(nit);
+                    ret.add(it);
                 }
             }
         }
@@ -103,10 +102,9 @@ public class AppModel {
      * @param lsi 待添加的记录集合
      * @return 添加成功返回true
      */
-    public boolean AddRecords(List<RecordItem> lsi)    {
+    public void AddRecords(List<RecordItem> lsi)    {
         dbm.add(lsi);
         dbChange = true;
-        return true;
     }
 
     /**
@@ -136,12 +134,9 @@ public class AppModel {
      * @param usr   待检查用户
      * @return  如果存在返回true,否则返回false
      */
-    public boolean hasUsr(String usr)   {
-        if(usr.isEmpty())   {
-            return false;
-        }
+    public boolean hasUsr(String usr) {
+        return !usr.isEmpty() && dbm.hasUsr(usr);
 
-        return dbm.hasUsr(usr);
     }
 
     /**

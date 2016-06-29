@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 数据类
@@ -33,10 +34,9 @@ public class RecordItem implements Parcelable {
     @Override
     public String toString()
     {
-        String ret = String.format("type : %s, info : %s, val : %f, timestamp : %s\nnote : %s",
+        return String.format("type : %s, info : %s, val : %f, timestamp : %s\nnote : %s",
                             record_type, record_info, record_val,
                             record_ts.toString(), record_note);
-        return ret;
     }
 
     public int describeContents() {
@@ -74,7 +74,7 @@ public class RecordItem implements Parcelable {
         try {
             record_ts = new Timestamp(0);
 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
             Date date = format.parse(in.readString());
             record_ts.setTime(date.getTime());
         }

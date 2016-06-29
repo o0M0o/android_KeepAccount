@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -24,7 +25,6 @@ import com.wxm.KeepAccount.BaseLib.AppMsg;
 import com.wxm.KeepAccount.BaseLib.AppMsgDef;
 import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
-import com.wxm.KeepAccount.ui.base.activities.TabActivityBase;
 import com.wxm.KeepAccount.ui.fragment.GraphViewSlidingTabsFragment;
 import com.wxm.KeepAccount.ui.fragment.ListViewSlidingTabsFragment;
 
@@ -35,7 +35,7 @@ import java.util.Calendar;
  * Created by 123 on 2016/5/16.
  */
 public class ActivityStart
-        extends TabActivityBase
+        extends AppCompatActivity
         implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "ActivityStart";
@@ -47,8 +47,8 @@ public class ActivityStart
     private Button bt_view_switch = null;
 
     private SlidingTabsColorsFragment mTabFragment;
-    private GraphViewSlidingTabsFragment gvTabFragment = new GraphViewSlidingTabsFragment();
-    private ListViewSlidingTabsFragment lvTabFragment = new ListViewSlidingTabsFragment();
+    private final GraphViewSlidingTabsFragment gvTabFragment = new GraphViewSlidingTabsFragment();
+    private final ListViewSlidingTabsFragment lvTabFragment = new ListViewSlidingTabsFragment();
 
 
     @Override
@@ -75,6 +75,7 @@ public class ActivityStart
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);
+        assert drawer != null;
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -203,7 +204,7 @@ public class ActivityStart
                 this, drawer, tb,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView nv = (NavigationView) findViewById(R.id.start_nav_view);

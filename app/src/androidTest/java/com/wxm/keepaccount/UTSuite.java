@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 /**
+ * 单元测试类
  * Created by 123 on 2016/5/2.
  */
 

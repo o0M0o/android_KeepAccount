@@ -6,7 +6,6 @@ import android.test.ApplicationTestCase;
 import com.wxm.KeepAccount.BaseLib.DBManager;
 import com.wxm.KeepAccount.BaseLib.RecordItem;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -14,25 +13,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-
 /**
+ * Sqlite辅助类
  * Created by 123 on 2016/5/2.
  */
 //@RunWith(AndroidJUnit4.class)
 //@LargeTest
 public class SqliteUT extends ApplicationTestCase<Application> {
-    private DBManager dbm;
 
     public SqliteUT() {
         super(Application.class);
-    }
-
-    @Before
-    public void createDbHelper()
-    {
-//        dbm = new DBManager(this.getContext());
-//        assertNotNull(dbm);
     }
 
     @Test
@@ -43,7 +33,7 @@ public class SqliteUT extends ApplicationTestCase<Application> {
 
     public void testAdd()
     {
-        dbm = new DBManager(this.getContext());
+        DBManager dbm = new DBManager(this.getContext());
         assertNotNull(dbm);
 
         dbm.deleteAll();

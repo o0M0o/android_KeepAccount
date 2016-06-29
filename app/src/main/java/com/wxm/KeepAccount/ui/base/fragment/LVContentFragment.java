@@ -49,7 +49,7 @@ public class LVContentFragment extends Fragment {
     private static final String KEY_DIVIDER_COLOR = "divider_color";
 
     private View cur_view;
-    private ArrayList<HashMap<String, String>> lv_list = new ArrayList<>();
+    private final ArrayList<HashMap<String, String>> lv_list = new ArrayList<>();
     private SimpleAdapter lv_adapter = null;
 
     /**
@@ -84,6 +84,7 @@ public class LVContentFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     HashMap<String, String> hmsel =
                             (HashMap<String, String>)parent.getItemAtPosition(position);
+                    assert null != hmsel;
 
                     //String str= parent.getItemAtPosition(position).toString();
                     //String class_str= parent.getItemAtPosition(position).getClass().toString();

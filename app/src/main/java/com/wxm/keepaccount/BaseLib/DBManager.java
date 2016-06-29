@@ -11,16 +11,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
+ * DB功能类
  * Created by 123 on 2016/5/3.
  */
 public class DBManager {
-    private DBHelper helper;
     private SQLiteDatabase db;
 
     public DBManager(Context context) {
-        helper = new DBHelper(context);
+        DBHelper helper = new DBHelper(context);
         //因为getWritableDatabase内部调用了mContext.openOrCreateDatabase(mName, 0, mFactory);
         //所以要确保context已初始化,我们可以把实例化DBManager的步骤放在Activity的onCreate里
         db = helper.getWritableDatabase();
@@ -77,7 +78,7 @@ public class DBManager {
      * @return List<Person>
      */
     public List<RecordItem> query() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         ArrayList<RecordItem> persons = new ArrayList<RecordItem>();
         Cursor c = queryTheCursor();
         while (c.moveToNext()) {
@@ -144,14 +145,12 @@ public class DBManager {
      * @return  Cursor
      */
     public Cursor queryTheCursor() {
-        Cursor c = db.rawQuery("SELECT * FROM tb_KeepAccount", null);
-        return c;
+        return db.rawQuery("SELECT * FROM tb_KeepAccount", null);
     }
 
 
     public Cursor queryUsrCursor()  {
-        Cursor c = db.rawQuery("SELECT * FROM tb_Usr", null);
-        return c;
+        return db.rawQuery("SELECT * FROM tb_Usr", null);
     }
 
 

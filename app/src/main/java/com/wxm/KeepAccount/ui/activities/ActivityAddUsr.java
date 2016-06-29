@@ -44,6 +44,7 @@ public class ActivityAddUsr
                     int ret_data = AppGobalDef.INTRET_USR_ADD;
 
                     Intent data = new Intent();
+                    assert et_usrname != null;
                     data.putExtra(res.getString(R.string.usr_name),
                                     et_usrname.getText().toString());
                     data.putExtra(res.getString(R.string.usr_pwd),
@@ -78,18 +79,21 @@ public class ActivityAddUsr
         switch(textView.getId())  {
             case R.id.ac_naet_accountname : {
                 EditText et_usrname = (EditText)findViewById(R.id.ac_naet_accountname);
+                assert et_usrname != null;
                 Log.d(TAG, "now usr name : " + et_usrname.getText().toString());
             }
             break;
 
             case R.id.ac_naet_accountpwd : {
                 EditText et_pwd = (EditText)findViewById(R.id.ac_naet_accountpwd);
+                assert et_pwd != null;
                 Log.d(TAG, "now pwd : " + et_pwd.getText().toString());
             }
             break;
 
             case R.id.ac_naet_repeatpwd : {
                 EditText et_repeatpwd = (EditText)findViewById(R.id.ac_naet_repeatpwd);
+                assert et_repeatpwd != null;
                 Log.d(TAG, "now repeatpwd : " + et_repeatpwd.getText().toString());
             }
             break;
@@ -102,6 +106,7 @@ public class ActivityAddUsr
     private void initView() {
         Button bt_confirm = (Button)findViewById(R.id.ac_nabt_confirm);
         Button bt_giveup = (Button)findViewById(R.id.ac_nabt_giveup);
+        assert bt_confirm != null && bt_giveup != null;
 
         bt_confirm.setOnClickListener(this);
         bt_giveup.setOnClickListener(this);
@@ -109,6 +114,7 @@ public class ActivityAddUsr
         EditText et_usrname = (EditText)findViewById(R.id.ac_naet_accountname);
         EditText et_pwd = (EditText)findViewById(R.id.ac_naet_accountpwd);
         EditText et_repeatpwd = (EditText)findViewById(R.id.ac_naet_repeatpwd);
+        assert et_usrname != null && et_pwd != null && et_repeatpwd != null;
 
         et_usrname.setOnEditorActionListener(this);
         et_pwd.setOnEditorActionListener(this);
@@ -123,6 +129,7 @@ public class ActivityAddUsr
         EditText et_usrname = (EditText)findViewById(R.id.ac_naet_accountname);
         EditText et_pwd = (EditText)findViewById(R.id.ac_naet_accountpwd);
         EditText et_repeatpwd = (EditText)findViewById(R.id.ac_naet_repeatpwd);
+        assert et_usrname != null && et_pwd != null && et_repeatpwd != null;
 
         String usr_name = et_usrname.getText().toString();
         String usr_pwd = et_pwd.getText().toString();

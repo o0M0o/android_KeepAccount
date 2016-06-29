@@ -3,6 +3,7 @@
 
     <string name="save">save</string>
     <string name="edit">edit</string>
+    <string name="cn_sure">确认</string>
     <string name="cn_leave">退出应用</string>
     <string name="cn_help">帮助</string>
     <string name="cn_logout">退出</string>
@@ -11,6 +12,7 @@
     <string name="cn_giveup">放弃</string>
     <string name="cn_goback">返回</string>
     <string name="cn_delete">删除</string>
+    <string name="cn_modify">修改</string>
     <string name="cn_add">添加</string>
     <string name="cn_applabel">随手帐</string>
 
@@ -55,4 +57,22 @@
     <string name="action_settings">Settings</string>
     <string name="contact_email">fly_in_wind@qq.com</string>
     <string name="contact_studio">oko studio</string>
+
+    <string name="cn_income">收入</string>
+    <string name="cn_pay">支出</string>
+    <string name="cn_record_type">记录类型</string>
+    <string name="cn_record_detail">记录详情</string>
+    <string name="cn_reason">原因</string>
+    <string name="cn_date">日期</string>
+    <string name="cn_amount">金额</string>
+    <string name="cn_note">备注(200字以内）</string>
+    <string name="cn_swithview">切换视图</string>
+    <string name="cn_record_pay">记录支出</string>
+    <string name="cn_record_income">记录收入</string>
+    <string name="cn_income_type">收入类型</string>
+    <string name="cn_pay_type">支出类型</string>
+    <string name="cn_setting">设定</string>
+    <string name="cn_other">其它</string>
+    <string name="cn_share_app">分享应用</string>
+    <string name="cn_contact_writer">联系作者</string>
 </resources>

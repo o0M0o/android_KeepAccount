@@ -11,7 +11,7 @@ public class MD5Util {
      * MD5加码 生成32位md5码
      */
     public static String string2MD5(String inStr){
-        MessageDigest md5 = null;
+        MessageDigest md5;
         try{
             md5 = MessageDigest.getInstance("MD5");
         }catch (Exception e){
@@ -44,13 +44,12 @@ public class MD5Util {
         for (int i = 0; i < a.length; i++){
             a[i] = (char) (a[i] ^ 't');
         }
-        String s = new String(a);
-        return s;
+        return new String(a);
     }
 
     // 测试主函数
     public static void main(String args[]) {
-        String s = new String("tangfuqiang");
+        String s = "tangfuqiang";
         System.out.println("原始：" + s);
         System.out.println("MD5后：" + string2MD5(s));
         System.out.println("加密的：" + convertMD5(s));

@@ -1,6 +1,7 @@
 package com.wxm.KeepAccount.BaseLib;
 
 /**
+ * App全局定义
  * Created by 123 on 2016/5/6.
  */
 public class AppGobalDef {
@@ -30,7 +31,7 @@ public class AppGobalDef {
     static public final String STR_HELP_MAIN            = "help_main";
     static public final String STR_HELP_START           = "help_start";
     static public final String STR_HELP_DAILYDETAIL     = "help_dailydetail";
-    static public final String STR_HELP_RECORD          = "help_dailydetail";
+    static public final String STR_HELP_RECORD          = "help_record";
 
     static public final String STR_PWD_PAD = "JkpYkhiayh@#$_)(";
 

@@ -1,6 +1,7 @@
 package com.wxm.KeepAccount.BaseLib;
 
 /**
+ * 消息定义
  * Created by 123 on 2016/5/6.
  */
 public class AppMsgDef {

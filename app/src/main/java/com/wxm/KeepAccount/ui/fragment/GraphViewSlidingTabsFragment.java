@@ -1,17 +1,14 @@
 package com.wxm.KeepAccount.ui.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.base.fragment.GVContentFragment;
-import com.wxm.KeepAccount.ui.base.fragment.LVContentFragment;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 
 import java.util.List;
@@ -34,31 +31,6 @@ public class GraphViewSlidingTabsFragment extends SlidingTabsColorsFragment {
         }
     }
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if(mTabs.isEmpty()) {
-            mTabs.add(new ListViewPagerItem(
-                    getString(R.string.tab_cn_daily), // Title
-                    Color.GREEN, // Indicator color
-                    Color.GRAY// Divider color
-                    ));
-
-            mTabs.add(new ListViewPagerItem(
-                    getString(R.string.tab_cn_monthly), // Title
-                    Color.GREEN, // Indicator color
-                    Color.GRAY// Divider color
-                    ));
-
-            mTabs.add(new ListViewPagerItem(
-                    getString(R.string.tab_cn_yearly), // Title
-                    Color.GREEN, // Indicator color
-                    Color.GRAY// Divider color
-                    ));
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

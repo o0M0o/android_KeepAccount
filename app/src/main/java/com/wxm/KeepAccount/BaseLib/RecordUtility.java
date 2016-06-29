@@ -1,14 +1,11 @@
 package com.wxm.KeepAccount.BaseLib;
 
 import android.content.Intent;
-import android.util.Log;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -73,6 +70,7 @@ public class RecordUtility {
 
     private static Object DeleteRecords(AppMsg am)    {
         List<String> ls_del = (List<String>)am.obj;
+        assert null != ls_del;
         return AppModel.getInstance().DeleteRecords(ls_del);
     }
 
@@ -86,8 +84,8 @@ public class RecordUtility {
         // format output
         ArrayList<HashMap<String, String>> mylist = new ArrayList<>();
         for (RecordItem r : lr) {
-            String tit = "";
-            String show_str = "";
+            String tit;
+            String show_str;
 
             if ((r.record_type.equals("pay")) || (r.record_type.equals("支出"))) {
                 tit = "支出";

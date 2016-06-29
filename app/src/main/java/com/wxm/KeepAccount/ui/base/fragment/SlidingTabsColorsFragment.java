@@ -45,9 +45,9 @@ public class SlidingTabsColorsFragment extends Fragment {
      * {@link SlidingTabLayout}.
      */
     protected  static abstract class SamplePagerItem {
-        protected CharSequence mTitle;
-        protected int mIndicatorColor;
-        protected int mDividerColor;
+        protected final CharSequence mTitle;
+        protected final int mIndicatorColor;
+        protected final int mDividerColor;
 
         public SamplePagerItem(CharSequence title, int indicatorColor, int dividerColor) {
             mTitle = title;
@@ -89,12 +89,6 @@ public class SlidingTabsColorsFragment extends Fragment {
     static final String LOG_TAG = "SlidingTabsColorsFragment";
 
     /**
-     * A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
-     * above, but is designed to give continuous feedback to the user when scrolling.
-     */
-    private SlidingTabLayout mSlidingTabLayout;
-
-    /**
      * A {@link ViewPager} which will be used in conjunction with the {@link SlidingTabLayout} above.
      */
     protected ViewPager mViewPager;
@@ -103,24 +97,6 @@ public class SlidingTabsColorsFragment extends Fragment {
      * List of {@link SamplePagerItem} which represent this sample's tabs.
      */
     protected List<SamplePagerItem> mTabs = new ArrayList<SamplePagerItem>();
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // BEGIN_INCLUDE (populate_tabs)
-        /**
-         * Populate our tab list with tabs. Each item contains a title, indicator color and divider
-         * color, which are used by {@link SlidingTabLayout}.
-         */
-        /*mTabs.add(new SamplePagerItem(
-                getString(R.string.tab_stream), // Title
-                Color.BLUE, // Indicator color
-                Color.GRAY // Divider color
-        ));
-        */
-        // END_INCLUDE (populate_tabs)
-    }
 
     /**
      * Inflates the {@link View} which will be displayed by this {@link Fragment}, from the app's
@@ -159,7 +135,11 @@ public class SlidingTabsColorsFragment extends Fragment {
         // BEGIN_INCLUDE (setup_slidingtablayout)
         // Give the SlidingTabLayout the ViewPager, this must be done AFTER the ViewPager has had
         // it's PagerAdapter set.
-        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+        /*
+      A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
+      above, but is designed to give continuous feedback to the user when scrolling.
+     */
+        SlidingTabLayout mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
 
         // BEGIN_INCLUDE (tab_colorizer)

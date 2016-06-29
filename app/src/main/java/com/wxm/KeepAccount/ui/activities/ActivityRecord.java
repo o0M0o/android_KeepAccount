@@ -30,6 +30,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class ActivityRecord
         extends AppCompatActivity
@@ -371,6 +372,7 @@ public class ActivityRecord
                 cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), null);
 
         final EditText et_date = (EditText)findViewById(R.id.ar_et_date);
+        assert et_date != null;
         final int inType = et_date.getInputType();
         et_date.setInputType(InputType.TYPE_NULL);
         et_date.onTouchEvent(event);
@@ -468,7 +470,7 @@ public class ActivityRecord
         ri.record_val = new BigDecimal(str_val);
 
         try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             ri.record_ts.setTime(df.parse(str_date).getTime());
         }
         catch(Exception ex)

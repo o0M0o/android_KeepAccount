@@ -1,9 +1,8 @@
 package com.wxm.KeepAccount.ui.activities;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,11 +52,6 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
         initViews();
         updateListView();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -198,6 +192,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
         am.obj = invoke_str;
         ArrayList<HashMap<String, String>> up_ls =
                 (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
+        assert null != up_ls;
 
         lv_datalist.addAll(up_ls);
         int ct = lv_datalist.size();
@@ -230,7 +225,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
         }
 
         if(null != mi_delete)
-            mi_delete.setVisible(show_stat == View.VISIBLE ? true : false);
+            mi_delete.setVisible(show_stat == View.VISIBLE);
     }
 
 

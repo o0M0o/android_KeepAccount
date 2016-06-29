@@ -63,7 +63,7 @@
     <Button
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:text="确认"
+        android:text="@string/cn_sure"
         android:id="@+id/ac_nabt_confirm"
         android:layout_below="@+id/ac_navw_repwd"
         android:layout_alignEnd="@+id/ac_navw_repwd"
@@ -73,7 +73,7 @@
     <Button
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:text="放弃"
+        android:text="@string/cn_giveup"
         android:id="@+id/ac_nabt_giveup"
         android:layout_below="@+id/ac_nabt_confirm"
         android:layout_alignStart="@+id/ac_nabt_confirm"
