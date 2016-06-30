@@ -1,5 +1,6 @@
 package com.wxm.KeepAccount.ui.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,10 +31,36 @@ public class ListViewSlidingTabsFragment extends SlidingTabsColorsFragment {
 
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // BEGIN_INCLUDE (populate_tabs)
+        if(mTabs.isEmpty()) {
+            mTabs.add(new ListViewPagerItem(
+                    getString(R.string.tab_cn_daily), // Title
+                    Color.GREEN, // Indicator color
+                    Color.GRAY// Divider color
+            ));
+
+            mTabs.add(new ListViewPagerItem(
+                    getString(R.string.tab_cn_monthly), // Title
+                    Color.GREEN, // Indicator color
+                    Color.GRAY// Divider color
+            ));
+
+            mTabs.add(new ListViewPagerItem(
+                    getString(R.string.tab_cn_yearly), // Title
+                    Color.GREEN, // Indicator color
+                    Color.GRAY// Divider color
+            ));
+        }
+
+        // END_INCLUDE (populate_tabs)
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
-
-
 }

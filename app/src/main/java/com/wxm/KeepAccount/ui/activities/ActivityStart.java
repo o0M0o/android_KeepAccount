@@ -51,8 +51,8 @@ public class ActivityStart
     private Button bt_view_switch = null;
 
     private SlidingTabsColorsFragment mTabFragment;
-    private final GraphViewSlidingTabsFragment gvTabFragment = new GraphViewSlidingTabsFragment();
-    private final ListViewSlidingTabsFragment lvTabFragment = new ListViewSlidingTabsFragment();
+    private GraphViewSlidingTabsFragment gvTabFragment = new GraphViewSlidingTabsFragment();
+    private ListViewSlidingTabsFragment lvTabFragment = new ListViewSlidingTabsFragment();
 
 
     @Override

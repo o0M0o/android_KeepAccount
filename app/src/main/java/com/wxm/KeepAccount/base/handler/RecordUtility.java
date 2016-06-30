@@ -168,6 +168,19 @@ public class RecordUtility {
             map.put(AppGobalDef.ITEM_TEXT, show_str);
             mylist.add(map);
         }
+
+        Collections.sort(mylist, new Comparator<HashMap<String, String>>() {
+            @Override
+            public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
+                return lhs.get(AppGobalDef.ITEM_TITLE).compareTo(rhs.get(AppGobalDef.ITEM_TITLE));
+            }
+        });
+
+        Handler h = ToolUtil.cast(am.obj);
+        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
+        m.arg1 = AppMsgDef.MSG_TO_YEARREPORT;
+        m.obj = mylist;
+        m.sendToTarget();
     }
 
     private static void AllRecordsToMonthReport(Message am)
@@ -219,6 +232,19 @@ public class RecordUtility {
             map.put(AppGobalDef.ITEM_TEXT, show_str);
             mylist.add(map);
         }
+
+        Collections.sort(mylist, new Comparator<HashMap<String, String>>() {
+            @Override
+            public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
+                return lhs.get(AppGobalDef.ITEM_TITLE).compareTo(rhs.get(AppGobalDef.ITEM_TITLE));
+            }
+        });
+
+        Handler h = ToolUtil.cast(am.obj);
+        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
+        m.arg1 = AppMsgDef.MSG_TO_MONTHREPORT;
+        m.obj = mylist;
+        m.sendToTarget();
     }
 
     private static void AllRecordsToDayReport(Message am)
@@ -270,6 +296,19 @@ public class RecordUtility {
             map.put(AppGobalDef.ITEM_TEXT, show_str);
             mylist.add(map);
         }
+
+        Collections.sort(mylist, new Comparator<HashMap<String, String>>() {
+            @Override
+            public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
+                return lhs.get(AppGobalDef.ITEM_TITLE).compareTo(rhs.get(AppGobalDef.ITEM_TITLE));
+            }
+        });
+
+        Handler h = ToolUtil.cast(am.obj);
+        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
+        m.arg1 = AppMsgDef.MSG_TO_DAYREPORT;
+        m.obj = mylist;
+        m.sendToTarget();
     }
 
     private static void AddRecord(Message am) {
