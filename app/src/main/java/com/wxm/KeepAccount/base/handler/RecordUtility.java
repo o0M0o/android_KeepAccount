@@ -66,9 +66,17 @@ public class RecordUtility {
     }
 
     private static void DeleteRecords(Message am)    {
-        List<String> ls_del = ToolUtil.cast(am.obj);
+        Object[] arr = ToolUtil.cast(am.obj);
+        List<String> ls_del = ToolUtil.cast(arr[0]);
         assert null != ls_del;
-        AppModel.getInstance().DeleteRecords(ls_del);
+        boolean ret = AppModel.getInstance().DeleteRecords(ls_del);
+
+        // reply message
+        Handler h = ToolUtil.cast(arr[1]);
+        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
+        m.arg1 = AppMsgDef.MSG_DELETE_RECORDS;
+        m.obj = ret;
+        m.sendToTarget();
     }
 
     private static void DailyRecordsToDetailReport(Message am)    {

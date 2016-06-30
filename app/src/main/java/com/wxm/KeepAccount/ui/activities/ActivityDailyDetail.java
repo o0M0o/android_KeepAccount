@@ -150,13 +150,13 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
         // set listview
         lv_show = (ListView)findViewById(R.id.lv_daily_detail);
-        /*lv_show.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lv_show.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 switchCheckbox();
                 return false;
             }
-        });*/
+        });
 
         lv_show.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -305,6 +305,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
                     switch (msg.arg1)   {
                         case AppMsgDef.MSG_RECORD_ADD :
                         case AppMsgDef.MSG_RECORD_MODIFY :
+                        case AppMsgDef.MSG_DELETE_RECORDS :
                             updateActivity(msg);
                             break;
 
