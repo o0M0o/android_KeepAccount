@@ -3,23 +3,22 @@ package com.wxm.KeepAccount.ui.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -36,11 +35,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wxm.KeepAccount.BaseLib.AppGobalDef;
-import com.wxm.KeepAccount.BaseLib.AppManager;
-import com.wxm.KeepAccount.BaseLib.AppMsg;
-import com.wxm.KeepAccount.BaseLib.AppMsgDef;
 import com.wxm.KeepAccount.R;
+import com.wxm.KeepAccount.base.data.AppGobalDef;
+import com.wxm.KeepAccount.base.data.AppMsgDef;
+import com.wxm.KeepAccount.base.utility.ContextUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -383,12 +381,9 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
             Log.i(TAG, "注销帐户");
             b_resetview = true;
 
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_USR_LOGOUT;
-            am.sender = this;
-            am.obj = null;
-
-            AppManager.getInstance().ProcessAppMsg(am);
+            Message m = Message.obtain(ContextUtil.getMsgHandler(),
+                            AppMsgDef.MSG_USR_LOGOUT);
+            m.sendToTarget();
         }
         else    {
             Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
@@ -450,12 +445,13 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
             data.putExtra(res.getString(R.string.usr_name), mEmail);
             data.putExtra(res.getString(R.string.usr_pwd), mPassword);
 
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_USR_LOGIN;
-            am.sender = this;
-            am.obj = data;
+            Message m = Message.obtain(ContextUtil.getMsgHandler(),
+                            AppMsgDef.MSG_USR_LOGIN);
+            m.obj = data;
+            m.sendToTarget();
 
-            return (boolean)AppManager.getInstance().ProcessAppMsg(am);
+            //return (boolean)AppManager.getInstance().ProcessAppMsg(am);
+            return true;
         }
 
         @Override

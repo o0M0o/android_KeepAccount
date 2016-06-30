@@ -19,6 +19,7 @@ package com.wxm.KeepAccount.ui.base.fragment;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +28,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.wxm.KeepAccount.BaseLib.AppGobalDef;
-import com.wxm.KeepAccount.BaseLib.AppManager;
-import com.wxm.KeepAccount.BaseLib.AppMsg;
-import com.wxm.KeepAccount.BaseLib.AppMsgDef;
-import com.wxm.KeepAccount.BaseLib.ContextUtil;
 import com.wxm.KeepAccount.R;
+import com.wxm.KeepAccount.base.data.AppGobalDef;
+import com.wxm.KeepAccount.base.data.AppMsgDef;
+import com.wxm.KeepAccount.base.utility.ContextUtil;
 import com.wxm.KeepAccount.ui.activities.ActivityDailyDetail;
 
 import java.util.ArrayList;
@@ -158,32 +157,21 @@ public class LVContentFragment extends Fragment {
 
         Resources res =  getResources();
         String title = args.getCharSequence(KEY_TITLE).toString();
-        ArrayList<HashMap<String, String>> mylist = null;
-        if(res.getString(R.string.tab_cn_daily)
-                .equals(title)) {
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_TO_DAYREPORT;
-            am.sender = this;
-            mylist =
-                    (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
+        Message m = Message.obtain(ContextUtil.getMsgHandler());
+        if(res.getString(R.string.tab_cn_daily).equals(title)) {
+            m.what = AppMsgDef.MSG_TO_DAYREPORT;
         }
-        else if(res.getString(R.string.tab_cn_monthly)
-                .equals(title)) {
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_TO_MONTHREPORT;
-            am.sender = this;
-            mylist =
-                    (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
+        else if(res.getString(R.string.tab_cn_monthly).equals(title)) {
+            m.what = AppMsgDef.MSG_TO_MONTHREPORT;
         }
-        else if(res.getString(R.string.tab_cn_yearly)
-                .equals(title)) {
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_TO_YEARREPORT;
-            am.sender = this;
-            mylist =
-                    (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
+        else if(res.getString(R.string.tab_cn_yearly).equals(title)) {
+            m.what = AppMsgDef.MSG_TO_YEARREPORT;
         }
 
+        m.sendToTarget();
+
+        /*
+        ArrayList<HashMap<String, String>> mylist = null;
         if(null != mylist) {
             lv_list.clear();
             for(HashMap<String, String> r : mylist) {
@@ -192,6 +180,7 @@ public class LVContentFragment extends Fragment {
 
             lv_adapter.notifyDataSetChanged();
         }
+        */
     }
 }
 

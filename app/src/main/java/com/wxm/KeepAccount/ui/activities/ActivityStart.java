@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -19,11 +20,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.wxm.KeepAccount.BaseLib.AppGobalDef;
-import com.wxm.KeepAccount.BaseLib.AppManager;
-import com.wxm.KeepAccount.BaseLib.AppMsg;
-import com.wxm.KeepAccount.BaseLib.AppMsgDef;
 import com.wxm.KeepAccount.R;
+import com.wxm.KeepAccount.base.data.AppGobalDef;
+import com.wxm.KeepAccount.base.data.AppMsgDef;
+import com.wxm.KeepAccount.base.utility.ContextUtil;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 import com.wxm.KeepAccount.ui.fragment.GraphViewSlidingTabsFragment;
 import com.wxm.KeepAccount.ui.fragment.ListViewSlidingTabsFragment;
@@ -169,11 +169,10 @@ public class ActivityStart
         if(AppGobalDef.INTRET_RECORD_ADD == resultCode)    {
             Log.i(TAG, "从'添加记录'页面返回");
 
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_RECORD_ADD;
-            am.sender = this;
-            am.obj = data;
-            AppManager.getInstance().ProcessAppMsg(am);
+            Message m = Message.obtain(ContextUtil.getMsgHandler(),
+                            AppMsgDef.MSG_RECORD_ADD);
+            m.obj = data;
+            m.sendToTarget();
 
             bModify = true;
         } else if (AppGobalDef.INTRET_DAILY_DETAIL ==  resultCode) {

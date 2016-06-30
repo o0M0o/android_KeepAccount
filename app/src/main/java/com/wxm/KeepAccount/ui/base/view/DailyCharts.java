@@ -1,14 +1,12 @@
 package com.wxm.KeepAccount.ui.base.view;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.wxm.KeepAccount.BaseLib.AppGobalDef;
-import com.wxm.KeepAccount.BaseLib.RecordItem;
-import com.wxm.KeepAccount.R;
+import com.wxm.KeepAccount.base.data.AppGobalDef;
+import com.wxm.KeepAccount.base.data.RecordItem;
 
 import org.xclcharts.chart.BarData;
 

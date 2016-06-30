@@ -2,6 +2,8 @@ package com.wxm.KeepAccount.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -14,13 +16,12 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.wxm.KeepAccount.BaseLib.AppGobalDef;
-import com.wxm.KeepAccount.BaseLib.AppManager;
-import com.wxm.KeepAccount.BaseLib.AppMsg;
-import com.wxm.KeepAccount.BaseLib.AppMsgDef;
-import com.wxm.KeepAccount.BaseLib.RecordItem;
-import com.wxm.KeepAccount.BaseLib.ToolUtil;
 import com.wxm.KeepAccount.R;
+import com.wxm.KeepAccount.base.data.AppGobalDef;
+import com.wxm.KeepAccount.base.data.AppMsgDef;
+import com.wxm.KeepAccount.base.data.RecordItem;
+import com.wxm.KeepAccount.base.utility.ContextUtil;
+import com.wxm.KeepAccount.base.utility.ToolUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,10 +29,11 @@ import java.util.HashMap;
 
 public class ActivityDailyDetail extends AppCompatActivity {
     private static final String TAG = "ActivityDailyDetail";
-    private ListView lv_show;
-    private String invoke_str;
-    private boolean delete_visity = false;
-    private MenuItem mi_delete = null;
+    private ListView        lv_show;
+    private String          invoke_str;
+    private boolean         delete_visity = false;
+    private MenuItem        mi_delete;
+    private ACDDMsgHandler  mMHHandler;
 
     private HashMap<Integer, Boolean> cb_state = new HashMap<>();
     private HashMap<Integer, String> cb_sqltag = new HashMap<>();
@@ -45,6 +47,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_daily_detail);
+        mMHHandler = new ACDDMsgHandler(this);
 
         Intent i = getIntent();
         invoke_str = ToolUtil.ReFormatDateString(i.getStringExtra(AppGobalDef.STR_SELECT_ITEM));
@@ -96,12 +99,10 @@ public class ActivityDailyDetail extends AppCompatActivity {
                 }
 
                 if(0 < str_ls.size()) {
-                    AppMsg am = new AppMsg();
-                    am.msg = AppMsgDef.MSG_DELETE_RECORDS;
-                    am.sender = this;
-                    am.obj = str_ls;
-
-                    AppManager.getInstance().ProcessAppMsg(am);
+                    Message m = Message.obtain(ContextUtil.getMsgHandler(),
+                                       AppMsgDef.MSG_DELETE_RECORDS);
+                    m.obj = new Object[] {str_ls, mMHHandler};
+                    m.sendToTarget();
                     updateListView();
                 }
             }
@@ -177,32 +178,11 @@ public class ActivityDailyDetail extends AppCompatActivity {
     }
 
     private void updateListView()   {
-        // clear old view
-        if(!lv_datalist.isEmpty()) {
-            cb_sqltag.clear();
-            cb_state.clear();
-            lv_datalist.clear();
-            lv_adapter.notifyDataSetChanged();
-        }
-
         // update date
-        AppMsg am = new AppMsg();
-        am.msg = AppMsgDef.MSG_TO_DAILY_DETAILREPORT;
-        am.sender = this;
-        am.obj = invoke_str;
-        ArrayList<HashMap<String, String>> up_ls =
-                (ArrayList<HashMap<String, String>>) AppManager.getInstance().ProcessAppMsg(am);
-        assert null != up_ls;
-
-        lv_datalist.addAll(up_ls);
-        int ct = lv_datalist.size();
-        for (int i = 0; i < ct; ++i) {
-            cb_sqltag.put(i, lv_datalist.get(i).get(AppGobalDef.ITEM_ID));
-        }
-
-        lv_adapter.notifyDataSetChanged();
-
-        updateCheckBox(View.INVISIBLE);
+        Message m = Message.obtain(ContextUtil.getMsgHandler(),
+                            AppMsgDef.MSG_TO_DAILY_DETAILREPORT);
+        m.obj = new Object[] {invoke_str, mMHHandler};
+        m.sendToTarget();
     }
 
     /**
@@ -250,21 +230,30 @@ public class ActivityDailyDetail extends AppCompatActivity {
     public void onBTClick(View v)   {
         Button mod_bt = (Button)v;
         int pos = lv_show.getPositionForView(mod_bt);
-        Log.d(TAG, "onBTClick at " + pos);
-
-        Intent intent = new Intent(this, ActivityRecord.class);
-        intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_MODIFY);
+        //Log.d(TAG, "onBTClick at " + pos);
 
         String str_id = cb_sqltag.get(pos);
-        AppMsg am = new AppMsg();
-        am.msg = AppMsgDef.MSG_RECORD_GET;
-        am.sender = this;
-        am.obj = str_id;
-        RecordItem ri = (RecordItem) AppManager.getInstance().ProcessAppMsg(am);
+        Message m = Message.obtain(ContextUtil.getMsgHandler(), AppMsgDef.MSG_RECORD_GET);
+        m.obj = new Object[] {str_id, mMHHandler};
+        m.sendToTarget();
+    }
 
-        intent.putExtra(AppGobalDef.STR_RECORD_DATE, invoke_str);
-        intent.putExtra(AppGobalDef.STR_RECORD, ri);
-        startActivityForResult(intent, 1);
+    private void loadView(ArrayList<HashMap<String, String>> nal)   {
+        // clear old view
+        if(!lv_datalist.isEmpty()) {
+            cb_sqltag.clear();
+            cb_state.clear();
+            lv_datalist.clear();
+        }
+
+        lv_datalist.addAll(nal);
+        int ct = lv_datalist.size();
+        for (int i = 0; i < ct; ++i) {
+            cb_sqltag.put(i, lv_datalist.get(i).get(AppGobalDef.ITEM_ID));
+        }
+
+        lv_adapter.notifyDataSetChanged();
+        updateCheckBox(View.INVISIBLE);
     }
 
 
@@ -278,35 +267,93 @@ public class ActivityDailyDetail extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Boolean bModify = false;
+        Message m = Message.obtain(ContextUtil.getMsgHandler());
+        m.obj = new Object[] {data, mMHHandler};
         if(AppGobalDef.INTRET_RECORD_ADD ==  resultCode)  {
-            Log.i(TAG, "从'添加记录'页面返回");
-
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_RECORD_ADD;
-            am.sender = this;
-            am.obj = data;
-            AppManager.getInstance().ProcessAppMsg(am);
-
-            bModify = true;
+            //Log.i(TAG, "从'添加记录'页面返回");
+            m.what = AppMsgDef.MSG_RECORD_ADD;
+            m.sendToTarget();
         }
         else if(AppGobalDef.INTRET_RECORD_MODIFY == resultCode)   {
-            Log.i(TAG, "从'修改记录'页面返回");
-
-            AppMsg am = new AppMsg();
-            am.msg = AppMsgDef.MSG_RECORD_MODIFY;
-            am.sender = this;
-            am.obj = data;
-            AppManager.getInstance().ProcessAppMsg(am);
-
-            bModify = true;
+            //Log.i(TAG, "从'修改记录'页面返回");
+            m.what = AppMsgDef.MSG_RECORD_MODIFY;
+            m.sendToTarget();
         }
         else    {
             Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
         }
 
-        if(bModify) {
-            updateListView();
+    }
+
+
+    public class ACDDMsgHandler extends Handler  {
+        private static final String TAG = "ACDDMsgHandler";
+        private ActivityDailyDetail     mACCur;
+
+        public ACDDMsgHandler(ActivityDailyDetail cur)  {
+            super();
+            mACCur = cur;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case AppMsgDef.MSG_REPLY: {
+                    switch (msg.arg1)   {
+                        case AppMsgDef.MSG_RECORD_ADD :
+                        case AppMsgDef.MSG_RECORD_MODIFY :
+                            updateActivity(msg);
+                            break;
+
+                        case AppMsgDef.MSG_RECORD_GET :
+                            switchActivity(msg);
+                            break;
+
+                        case AppMsgDef.MSG_TO_DAILY_DETAILREPORT :
+                            reloadView(msg);
+                            break;
+
+                        default:
+                            Log.e(TAG, String.format("msg(%s) can not process", msg.toString()));
+                            break;
+                    }
+                }
+                break;
+
+                default:
+                    Log.e(TAG, String.format("msg(%s) can not process", msg.toString()));
+                    break;
+            }
+        }
+
+        private void reloadView(Message msg) {
+            ArrayList<HashMap<String, String>> up_ls = (ArrayList<HashMap<String, String>>)msg.obj;
+            assert null != up_ls;
+
+            mACCur.loadView(up_ls);
+        }
+
+        private void switchActivity(Message msg) {
+            RecordItem ri = (RecordItem) msg.obj;
+            if(null != ri)  {
+                Intent intent = new Intent(mACCur, ActivityRecord.class);
+                intent.putExtra(AppGobalDef.STR_RECORD_ACTION,
+                        AppGobalDef.STR_RECORD_ACTION_MODIFY);
+
+                intent.putExtra(AppGobalDef.STR_RECORD_DATE, invoke_str);
+                intent.putExtra(AppGobalDef.STR_RECORD, ri);
+                startActivityForResult(intent, 1);
+            }
+            else   {
+                Log.e(TAG, "get reply message but with no result");
+            }
+        }
+
+        private void updateActivity(Message msg) {
+            boolean ret = (boolean)msg.obj;
+            if(ret) {
+                mACCur.updateListView();
+            }
         }
     }
 }

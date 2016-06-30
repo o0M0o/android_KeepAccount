@@ -1,4 +1,4 @@
-package com.wxm.KeepAccount.BaseLib;
+package com.wxm.KeepAccount.base.data;
 
 /**
  * 消息定义
@@ -26,4 +26,6 @@ public class AppMsgDef {
     static final public int MSG_TO_MONTHREPORT              = 3001;
     static final public int MSG_TO_YEARREPORT               = 3002;
     static final public int MSG_TO_DAILY_DETAILREPORT       = 3003;
+
+    static final public int MSG_REPLY                       = 9999;
 }

@@ -3,24 +3,16 @@ package com.wxm.KeepAccount.ui.base.fragment;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 
-import com.wxm.KeepAccount.BaseLib.AppModel;
+import com.wxm.KeepAccount.base.data.AppModel;
 import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.base.view.ChartsBase;
 import com.wxm.KeepAccount.ui.base.view.DailyCharts;
 import com.wxm.KeepAccount.ui.base.view.MonthlyCharts;
 import com.wxm.KeepAccount.ui.base.view.YeaylyCharts;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Simple Fragment used to display some meaningful content for each page in the sample's

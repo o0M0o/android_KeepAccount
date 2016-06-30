@@ -1,4 +1,4 @@
-package com.wxm.KeepAccount.BaseLib;
+package com.wxm.KeepAccount.base.data;
 
 /**
  * App全局定义

@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import com.wxm.KeepAccount.BaseLib.AppGobalDef;
+import com.wxm.KeepAccount.base.data.AppGobalDef;
 import com.wxm.KeepAccount.R;
 
 /**
