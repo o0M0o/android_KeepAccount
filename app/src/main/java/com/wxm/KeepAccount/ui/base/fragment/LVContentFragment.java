@@ -19,8 +19,10 @@ package com.wxm.KeepAccount.ui.base.fragment;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,7 @@ import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.base.data.AppGobalDef;
 import com.wxm.KeepAccount.base.data.AppMsgDef;
 import com.wxm.KeepAccount.base.utility.ContextUtil;
+import com.wxm.KeepAccount.base.utility.ToolUtil;
 import com.wxm.KeepAccount.ui.activities.ActivityDailyDetail;
 
 import java.util.ArrayList;
@@ -42,10 +45,13 @@ import java.util.HashMap;
  * {@link android.support.v4.view.ViewPager}.
  */
 public class LVContentFragment extends Fragment {
+    private static final String TAG = "LVContentFragment";
 
     private static final String KEY_TITLE = "title";
     private static final String KEY_INDICATOR_COLOR = "indicator_color";
     private static final String KEY_DIVIDER_COLOR = "divider_color";
+
+    private LVFMsgHandler   mMHHandler;
 
     private View cur_view;
     private final ArrayList<HashMap<String, String>> lv_list = new ArrayList<>();
@@ -66,6 +72,11 @@ public class LVContentFragment extends Fragment {
         fragment.setArguments(bundle);
 
         return fragment;
+    }
+
+    public LVContentFragment()  {
+        super();
+        mMHHandler = new LVFMsgHandler(this);
     }
 
     @Override
@@ -156,31 +167,71 @@ public class LVContentFragment extends Fragment {
         }
 
         Resources res =  getResources();
-        String title = args.getCharSequence(KEY_TITLE).toString();
+        String title;
+        try {
+            //noinspection ConstantConditions
+            title = args.getCharSequence(KEY_TITLE).toString();
+        } catch (NullPointerException e)    {
+            title = "";
+            Log.e(TAG, ToolUtil.ExceptionToString(e));
+        }
+
         Message m = Message.obtain(ContextUtil.getMsgHandler());
+        m.obj = mMHHandler;
         if(res.getString(R.string.tab_cn_daily).equals(title)) {
             m.what = AppMsgDef.MSG_TO_DAYREPORT;
+            m.sendToTarget();
         }
         else if(res.getString(R.string.tab_cn_monthly).equals(title)) {
             m.what = AppMsgDef.MSG_TO_MONTHREPORT;
+            m.sendToTarget();
         }
         else if(res.getString(R.string.tab_cn_yearly).equals(title)) {
             m.what = AppMsgDef.MSG_TO_YEARREPORT;
+            m.sendToTarget();
+        }
+    }
+
+    private void reloadView(ArrayList<HashMap<String, String>> data)    {
+        lv_list.clear();
+        lv_list.addAll(data);
+        lv_adapter.notifyDataSetChanged();
+    }
+
+
+    private class LVFMsgHandler extends Handler {
+        private static final String TAG = "ACDDMsgHandler";
+        private LVContentFragment     mLVFCur;
+
+        public LVFMsgHandler(LVContentFragment cur)  {
+            super();
+            mLVFCur = cur;
         }
 
-        m.sendToTarget();
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case AppMsgDef.MSG_REPLY: {
+                    switch (msg.arg1)   {
+                        case AppMsgDef.MSG_TO_DAYREPORT :
+                        case AppMsgDef.MSG_TO_MONTHREPORT :
+                        case AppMsgDef.MSG_TO_YEARREPORT :
+                            ArrayList<HashMap<String, String>> data = ToolUtil.cast(msg.obj);
+                            mLVFCur.reloadView(data);
+                            break;
 
-        /*
-        ArrayList<HashMap<String, String>> mylist = null;
-        if(null != mylist) {
-            lv_list.clear();
-            for(HashMap<String, String> r : mylist) {
-                lv_list.add(r);
+                        default:
+                            Log.e(TAG, String.format("msg(%s) can not process", msg.toString()));
+                            break;
+                    }
+                }
+                break;
+
+                default:
+                    Log.e(TAG, String.format("msg(%s) can not process", msg.toString()));
+                    break;
             }
-
-            lv_adapter.notifyDataSetChanged();
         }
-        */
     }
 }
 

@@ -1,10 +1,91 @@
 package com.wxm.KeepAccount.base.utility;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * 工具类
  * Created by 123 on 2016/6/2.
  */
 public class ToolUtil {
+    private static final String TAG = "ToolUtil";
+
+    @SuppressWarnings("unchecked")
+    public static <T> T cast(Object obj) {
+        /*
+        try {
+            return (T) obj;
+        }catch (ClassCastException | NullPointerException e)   {
+            Log.e(TAG, ToolUtil.ExceptionToString(e));
+        }
+
+        return null;
+        */
+        return (T) obj;
+    }
+
+    /**
+     * 可抛出类打印字符串
+     * @param e 可抛出类
+     * @return 字符串
+     */
+    public static String ThrowableToString(Throwable e) {
+        StringWriter sw = null;
+        PrintWriter pw = null;
+        try {
+            sw = new StringWriter();
+            pw =  new PrintWriter(sw);
+            //pw.append(e.getMessage());
+            e.printStackTrace(pw);
+            pw.flush();
+            sw.flush();
+        } finally {
+            if (sw != null) {
+                try {
+                    sw.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if (pw != null) {
+                pw.close();
+            }
+        }
+
+        return sw.toString();
+    }
+
+    /**
+     * 异常 --> 字符串
+     * @param e 异常
+     * @return 字符串
+     */
+    public static String ExceptionToString(Exception e) {
+        StringWriter sw = null;
+        PrintWriter pw = null;
+        try {
+            sw = new StringWriter();
+            pw =  new PrintWriter(sw);
+            //将出错的栈信息输出到printWriter中
+            e.printStackTrace(pw);
+            pw.flush();
+            sw.flush();
+        } finally {
+            if (sw != null) {
+                try {
+                    sw.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if (pw != null) {
+                pw.close();
+            }
+        }
+
+        return sw.toString();
+    }
 
     /**
      * 检查字符串是否空或者null

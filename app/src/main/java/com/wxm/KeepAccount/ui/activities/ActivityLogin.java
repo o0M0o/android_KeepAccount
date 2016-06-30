@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
@@ -39,6 +40,7 @@ import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.base.data.AppGobalDef;
 import com.wxm.KeepAccount.base.data.AppMsgDef;
 import com.wxm.KeepAccount.base.utility.ContextUtil;
+import com.wxm.KeepAccount.base.utility.ToolUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,8 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
 
     private static final String TAG = "ActivityLogin";
+
+    private ACLMsgHandler   mMHHandler;
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -79,6 +83,8 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_login);
+        mMHHandler = new ACLMsgHandler(this);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         //populateAutoComplete();
@@ -408,6 +414,22 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
     }
 
     /**
+     * 执行完登陆动作后辅助函数
+     * @param loginret  登陆结果
+     */
+    private void afterLoginExecute(final boolean loginret)  {
+        mAuthTask = null;
+        showProgress(false);
+
+        if (loginret) {
+            SwitchToWorkActivity();
+        } else {
+            mPasswordView.setError(getString(R.string.error_incorrect_password));
+            mPasswordView.requestFocus();
+        }
+    }
+
+    /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
@@ -423,22 +445,12 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
             try {
                 // Simulate network access.
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 return false;
             }
-
-            /*for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }*/
 
             Resources res = getResources();
             Intent data = new Intent();
@@ -447,7 +459,7 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
 
             Message m = Message.obtain(ContextUtil.getMsgHandler(),
                             AppMsgDef.MSG_USR_LOGIN);
-            m.obj = data;
+            m.obj = new Object[] {data, mMHHandler};
             m.sendToTarget();
 
             //return (boolean)AppManager.getInstance().ProcessAppMsg(am);
@@ -455,23 +467,46 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                SwitchToWorkActivity();
-                //finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+    }
+
+    public class ACLMsgHandler extends Handler {
+        private static final String TAG = "ACLMsgHandler";
+        private ActivityLogin mACCur;
+
+        public ACLMsgHandler(ActivityLogin cur) {
+            super();
+            mACCur = cur;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case AppMsgDef.MSG_REPLY: {
+                    switch (msg.arg1) {
+                        case AppMsgDef.MSG_USR_LOGIN:
+                            afterLogin(msg);
+                            break;
+
+                        default:
+                            Log.e(TAG, String.format("msg(%s) can not process", msg.toString()));
+                            break;
+                    }
+                }
+                break;
+
+                default:
+                    Log.e(TAG, String.format("msg(%s) can not process", msg.toString()));
+                    break;
+            }
+        }
+
+        private void afterLogin(Message msg) {
+            boolean ret = ToolUtil.cast(msg.obj);
+            mACCur.afterLoginExecute(ret);
         }
     }
 }

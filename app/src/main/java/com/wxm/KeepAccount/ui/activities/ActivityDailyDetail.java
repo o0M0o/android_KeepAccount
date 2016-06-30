@@ -327,14 +327,14 @@ public class ActivityDailyDetail extends AppCompatActivity {
         }
 
         private void reloadView(Message msg) {
-            ArrayList<HashMap<String, String>> up_ls = (ArrayList<HashMap<String, String>>)msg.obj;
+            ArrayList<HashMap<String, String>> up_ls = ToolUtil.cast(msg.obj);
             assert null != up_ls;
 
             mACCur.loadView(up_ls);
         }
 
         private void switchActivity(Message msg) {
-            RecordItem ri = (RecordItem) msg.obj;
+            RecordItem ri = ToolUtil.cast(msg.obj);
             if(null != ri)  {
                 Intent intent = new Intent(mACCur, ActivityRecord.class);
                 intent.putExtra(AppGobalDef.STR_RECORD_ACTION,
@@ -350,7 +350,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
         }
 
         private void updateActivity(Message msg) {
-            boolean ret = (boolean)msg.obj;
+            boolean ret = ToolUtil.cast(msg.obj);
             if(ret) {
                 mACCur.updateListView();
             }

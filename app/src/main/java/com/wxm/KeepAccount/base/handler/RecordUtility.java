@@ -1,12 +1,13 @@
 package com.wxm.KeepAccount.base.handler;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.os.Message;
 
-import com.wxm.KeepAccount.base.data.AppModel;
-import com.wxm.KeepAccount.base.data.RecordItem;
 import com.wxm.KeepAccount.base.data.AppGobalDef;
+import com.wxm.KeepAccount.base.data.AppModel;
 import com.wxm.KeepAccount.base.data.AppMsgDef;
+import com.wxm.KeepAccount.base.data.RecordItem;
 import com.wxm.KeepAccount.base.utility.ToolUtil;
 
 import java.math.BigDecimal;
@@ -65,18 +66,17 @@ public class RecordUtility {
     }
 
     private static void DeleteRecords(Message am)    {
-        List<String> ls_del = (List<String>)am.obj;
+        List<String> ls_del = ToolUtil.cast(am.obj);
         assert null != ls_del;
         AppModel.getInstance().DeleteRecords(ls_del);
     }
 
     private static void DailyRecordsToDetailReport(Message am)    {
-        String date_str = (String)am.obj;
+        Object[] arr = ToolUtil.cast(am.obj);
 
-        // load record
+        String date_str = ToolUtil.cast(arr[0]);
+        // load record & format output
         List<RecordItem> lr = AppModel.getInstance().GetRecordsByDay(date_str);
-
-        // format output
         ArrayList<HashMap<String, String>> mylist = new ArrayList<>();
         for (RecordItem r : lr) {
             String tit = r.record_type;
@@ -105,6 +105,13 @@ public class RecordUtility {
                 return lhs.get(AppGobalDef.ITEM_TITLE).compareTo(rhs.get(AppGobalDef.ITEM_TITLE));
             }
         });
+
+        // reply message
+        Handler h = ToolUtil.cast(arr[1]);
+        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
+        m.arg1 = AppMsgDef.MSG_TO_DAILY_DETAILREPORT;
+        m.obj = mylist;
+        m.sendToTarget();
     }
 
     private static void LoadAllRecords(Message am)
@@ -266,25 +273,47 @@ public class RecordUtility {
     }
 
     private static void AddRecord(Message am) {
-        Intent data = (Intent)am.obj;
-        RecordItem ri = data.getParcelableExtra(AppGobalDef.STR_RECORD);
+        Object[] arr = ToolUtil.cast(am.obj);
 
+        Intent data = ToolUtil.cast(arr[0]);
+        RecordItem ri = data.getParcelableExtra(AppGobalDef.STR_RECORD);
         ArrayList<RecordItem> items = new ArrayList<>();
         items.add(ri);
         AppModel.getInstance().AddRecords(items);
+
+        Handler h = ToolUtil.cast(arr[1]);
+        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
+        m.arg1 = AppMsgDef.MSG_RECORD_ADD;
+        m.obj = true;
+        m.sendToTarget();
     }
 
     private static void ModifyRecord(Message am)   {
-        Intent data = (Intent)am.obj;
-        RecordItem ri = data.getParcelableExtra(AppGobalDef.STR_RECORD);
+        Object[] arr = ToolUtil.cast(am.obj);
 
+        Intent data = ToolUtil.cast(arr[0]);
+        RecordItem ri = data.getParcelableExtra(AppGobalDef.STR_RECORD);
         ArrayList<RecordItem> items = new ArrayList<>();
         items.add(ri);
         AppModel.getInstance().ModifyRecords(items);
+
+        Handler h = ToolUtil.cast(arr[1]);
+        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
+        m.arg1 = AppMsgDef.MSG_RECORD_MODIFY;
+        m.obj = true;
+        m.sendToTarget();
     }
 
     private static void GetRecord(Message am)  {
-        String tag = (String)am.obj;
+        Object[] arr = ToolUtil.cast(am.obj);
+
+        String tag = ToolUtil.cast(arr[0]);
         RecordItem ri = AppModel.getInstance().GetRecord(tag);
+
+        Handler h = ToolUtil.cast(arr[1]);
+        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
+        m.obj = ri;
+        m.arg1 = AppMsgDef.MSG_RECORD_GET;
+        m.sendToTarget();
     }
 }
