@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -29,14 +30,18 @@ import java.util.HashMap;
 
 public class ActivityDailyDetail extends AppCompatActivity {
     private static final String TAG = "ActivityDailyDetail";
+    private static final String CHECKBOX_STATUS = "checkbox_status";
+    private static final String CHECKBOX_VISIBLE = "checkbox_visible";
+    private static final String CHECKBOX_STATUS_SELECTED = "selected";
+    private static final String CHECKBOX_STATUS_NOSELECTED = "no_selected";
+    private static final String CHECKBOX_VISIBLE_SHOW = "show";
+    private static final String CHECKBOX_VISIBLE_NOSHOW = "no_show";
+
     private ListView        lv_show;
     private String          invoke_str;
     private boolean         delete_visity = false;
     private MenuItem        mi_delete;
     private ACDDMsgHandler  mMHHandler;
-
-    private HashMap<Integer, Boolean> cb_state = new HashMap<>();
-    private HashMap<Integer, String> cb_sqltag = new HashMap<>();
 
     // for listview
     private ArrayList<HashMap<String, String>> lv_datalist =
@@ -92,9 +97,9 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
             case R.id.dailydetailmenu_delete :  {
                 ArrayList<String> str_ls = new ArrayList<>();
-                for(int i : cb_state.keySet()) {
-                    if(cb_state.get(i))     {
-                        str_ls.add(cb_sqltag.get(i));
+                for(HashMap<String, String> i : lv_datalist)    {
+                    if(i.get(CHECKBOX_STATUS).equals(CHECKBOX_STATUS_SELECTED)) {
+                        str_ls.add(i.get(AppGobalDef.ITEM_ID));
                     }
                 }
 
@@ -126,7 +131,16 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
     private void switchCheckbox()       {
         delete_visity = !delete_visity;
-        updateCheckBox(delete_visity ? View.VISIBLE : View.INVISIBLE);
+        if(null != mi_delete)
+            mi_delete.setVisible(delete_visity);
+
+        for (HashMap<String, String> i : lv_datalist) {
+            i.put(CHECKBOX_STATUS, CHECKBOX_STATUS_NOSELECTED);
+            i.put(CHECKBOX_VISIBLE,
+                    delete_visity ? CHECKBOX_VISIBLE_SHOW : CHECKBOX_VISIBLE_NOSHOW);
+        }
+
+        lv_adapter.notifyDataSetChanged();
     }
 
     private void initViews()    {
@@ -136,13 +150,13 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
         // set listview
         lv_show = (ListView)findViewById(R.id.lv_daily_detail);
-        lv_show.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        /*lv_show.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 switchCheckbox();
                 return false;
             }
-        });
+        });*/
 
         lv_show.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -154,8 +168,6 @@ public class ActivityDailyDetail extends AppCompatActivity {
         });
 
         lv_datalist.clear();
-        cb_state.clear();
-        cb_sqltag.clear();
 
         lv_adapter= new SimpleAdapter(this,
                 lv_datalist,
@@ -167,6 +179,31 @@ public class ActivityDailyDetail extends AppCompatActivity {
                 int org_ct = getCount();
                 return org_ct < 1 ? 1 : org_ct;
             }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View ret = super.getView(position, convertView, parent);
+                if(null != ret) {
+                    CheckBox cb = (CheckBox)ret.findViewById(R.id.dailydetail_cb);
+                    Button mod = (Button)ret.findViewById(R.id.dailydetail_bt);
+                    assert null != cb && null != mod;
+
+                    HashMap<String, String> m = lv_datalist.get(position);
+                    if(m.get(CHECKBOX_VISIBLE).equals(CHECKBOX_VISIBLE_SHOW))   {
+                        cb.setVisibility(View.VISIBLE);
+                        cb.setChecked(false);
+
+                        mod.setVisibility(View.VISIBLE);
+                    }
+                    else    {
+                        cb.setVisibility(View.INVISIBLE);
+
+                        mod.setVisibility(View.INVISIBLE);
+                    }
+                }
+                return ret;
+            }
+
 
             @Override
             public int getItemViewType(int position) {
@@ -185,54 +222,28 @@ public class ActivityDailyDetail extends AppCompatActivity {
         m.sendToTarget();
     }
 
-    /**
-     * 设置listview的附加选择控件是否显示
-     * @param show_stat  如果是View.VISIBLE则显示，否则不显示
-     */
-    private void updateCheckBox(int show_stat)   {
-        int ct = lv_show.getChildCount();
-        for(int i = 0; i < ct; ++i) {
-            View v = lv_show.getChildAt(i);
-
-            CheckBox cb = (CheckBox)v.findViewById(R.id.dailydetail_cb);
-            cb.setVisibility(show_stat);
-            if(View.VISIBLE == show_stat)  {
-                cb.setChecked(false);
-            }
-
-            Button mod = (Button)v.findViewById(R.id.dailydetail_bt);
-            mod.setVisibility(show_stat);
-        }
-
-        if(null != mi_delete)
-            mi_delete.setVisible(show_stat == View.VISIBLE);
-    }
-
 
     /**
      * checkbox被点击后激活
      * @param v  被点击的view
      */
-    public void onCBClick(View v)
-    {
+    public void onCBClick(View v)       {
         CheckBox sv = (CheckBox)v;
         int pos = lv_show.getPositionForView(sv);
-        Log.d(TAG, "onCBClick at " + pos);
+        //Log.d(TAG, "onCBClick at " + pos);
 
-        if(!sv.isSelected())     {
-            cb_state.put(pos, true);
-        }
-        else       {
-            cb_state.put(pos, false);
-        }
+        HashMap<String, String> m = lv_datalist.get(pos);
+        m.put(CHECKBOX_STATUS,
+                sv.isSelected() ? CHECKBOX_STATUS_NOSELECTED: CHECKBOX_STATUS_SELECTED);
     }
 
     public void onBTClick(View v)   {
-        Button mod_bt = (Button)v;
-        int pos = lv_show.getPositionForView(mod_bt);
+        int pos = lv_show.getPositionForView(v);
         //Log.d(TAG, "onBTClick at " + pos);
 
-        String str_id = cb_sqltag.get(pos);
+        HashMap<String, String> hm = lv_datalist.get(pos);
+        String str_id = hm.get(AppGobalDef.ITEM_ID);
+
         Message m = Message.obtain(ContextUtil.getMsgHandler(), AppMsgDef.MSG_RECORD_GET);
         m.obj = new Object[] {str_id, mMHHandler};
         m.sendToTarget();
@@ -240,29 +251,21 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
     private void loadView(ArrayList<HashMap<String, String>> nal)   {
         // clear old view
-        if(!lv_datalist.isEmpty()) {
-            cb_sqltag.clear();
-            cb_state.clear();
-            lv_datalist.clear();
-        }
+        lv_datalist.clear();
 
         lv_datalist.addAll(nal);
-        int ct = lv_datalist.size();
-        for (int i = 0; i < ct; ++i) {
-            cb_sqltag.put(i, lv_datalist.get(i).get(AppGobalDef.ITEM_ID));
+        for(HashMap<String, String> i : lv_datalist)    {
+            i.put(CHECKBOX_STATUS, CHECKBOX_STATUS_NOSELECTED);
+            i.put(CHECKBOX_VISIBLE, CHECKBOX_VISIBLE_NOSHOW);
         }
 
         lv_adapter.notifyDataSetChanged();
-        updateCheckBox(View.INVISIBLE);
+        delete_visity = false;
+        if(null != mi_delete)
+            mi_delete.setVisible(false);
     }
 
 
-    /**
-     * 其它activity返回结果
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
         super.onActivityResult(requestCode, resultCode, data);

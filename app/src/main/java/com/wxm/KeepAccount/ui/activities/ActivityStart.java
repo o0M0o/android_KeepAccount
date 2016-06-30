@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -24,6 +25,7 @@ import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.base.data.AppGobalDef;
 import com.wxm.KeepAccount.base.data.AppMsgDef;
 import com.wxm.KeepAccount.base.utility.ContextUtil;
+import com.wxm.KeepAccount.base.utility.ToolUtil;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 import com.wxm.KeepAccount.ui.fragment.GraphViewSlidingTabsFragment;
 import com.wxm.KeepAccount.ui.fragment.ListViewSlidingTabsFragment;
@@ -42,6 +44,8 @@ public class ActivityStart
     private static final String GV_VIEW_TXT = "切换列表";
     private static final String LV_VIEW_TXT = "切换图表";
 
+    private ACSMsgHandler mMHHandler;
+
     private Button bt_add_pay = null;
     private Button bt_add_income = null;
     private Button bt_view_switch = null;
@@ -56,6 +60,7 @@ public class ActivityStart
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_start);
 
+        mMHHandler = new ACSMsgHandler(this);
         initView(savedInstanceState);
     }
 
@@ -87,10 +92,10 @@ public class ActivityStart
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.am_bi_logout : {
+            case R.id.am_bi_logout: {
                 int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
 
-                Intent data=new Intent();
+                Intent data = new Intent();
                 setResult(ret_data, data);
                 finish();
             }
@@ -106,20 +111,20 @@ public class ActivityStart
 
     /**
      * 处理按键
+     *
      * @param v 被点击
      */
     @Override
     public void onClick(View v) {
-        switch(v.getId())    {
-            case R.id.tabbt_record_pay :
-            case R.id.tabbt_record_income :    {
+        switch (v.getId()) {
+            case R.id.tabbt_record_pay:
+            case R.id.tabbt_record_income: {
                 Intent intent = new Intent(v.getContext(), ActivityRecord.class);
                 intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
 
-                if(v.getId() == R.id.tabbt_record_income) {
+                if (v.getId() == R.id.tabbt_record_income) {
                     intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_INCOME);
-                }
-                else    {
+                } else {
                     intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_PAY);
                 }
 
@@ -135,18 +140,17 @@ public class ActivityStart
             }
             break;
 
-            case R.id.tabbt_view_switch :   {
+            case R.id.tabbt_view_switch: {
                 Log.i(TAG, "切换视图");
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-                if(mTabFragment instanceof ListViewSlidingTabsFragment) {
+                if (mTabFragment instanceof ListViewSlidingTabsFragment) {
                     mTabFragment = gvTabFragment;
                     //mTabFragment = new GraphViewSlidingTabsFragment();
 
                     bt_view_switch.setText(GV_VIEW_TXT);
-                }
-                else    {
+                } else {
                     mTabFragment = lvTabFragment;
                     //mTabFragment = new ListViewSlidingTabsFragment();
 
@@ -162,20 +166,18 @@ public class ActivityStart
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         Boolean bModify = false;
-        if(AppGobalDef.INTRET_RECORD_ADD == resultCode)    {
+        if (AppGobalDef.INTRET_RECORD_ADD == resultCode) {
             Log.i(TAG, "从'添加记录'页面返回");
 
             Message m = Message.obtain(ContextUtil.getMsgHandler(),
-                            AppMsgDef.MSG_RECORD_ADD);
-            m.obj = data;
+                    AppMsgDef.MSG_RECORD_ADD);
+            m.obj = new Object[] {data, mMHHandler};
             m.sendToTarget();
-
-            bModify = true;
-        } else if (AppGobalDef.INTRET_DAILY_DETAIL ==  resultCode) {
+        } else if (AppGobalDef.INTRET_DAILY_DETAIL == resultCode) {
             Log.i(TAG, "从详情页面返回");
 
             bModify = true;
@@ -184,18 +186,23 @@ public class ActivityStart
         }
 
         if (bModify) {
-            mTabFragment.notifyDataChange();
+            updateView();
         }
+    }
+
+    private void updateView() {
+        mTabFragment.notifyDataChange();
     }
 
 
     /**
      * 初始化
+     *
      * @param savedInstanceState activity创建参数
      */
     private void initView(Bundle savedInstanceState) {
         // set nav view
-        Toolbar tb = (Toolbar)findViewById(R.id.ac_navw_toolbar);
+        Toolbar tb = (Toolbar) findViewById(R.id.ac_navw_toolbar);
         setSupportActionBar(tb);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);
@@ -221,9 +228,9 @@ public class ActivityStart
         }
 
         // set button
-        bt_add_pay = (Button)findViewById(R.id.tabbt_record_pay);
-        bt_add_income = (Button)findViewById(R.id.tabbt_record_income);
-        bt_view_switch = (Button)findViewById(R.id.tabbt_view_switch);
+        bt_add_pay = (Button) findViewById(R.id.tabbt_record_pay);
+        bt_add_income = (Button) findViewById(R.id.tabbt_record_income);
+        bt_view_switch = (Button) findViewById(R.id.tabbt_view_switch);
         bt_add_pay.setOnClickListener(this);
         bt_add_income.setOnClickListener(this);
         bt_view_switch.setOnClickListener(this);
@@ -237,8 +244,8 @@ public class ActivityStart
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        switch(id)  {
-            case R.id.nav_help :    {
+        switch (id) {
+            case R.id.nav_help: {
                 /*Toast.makeText(getApplicationContext(),
                         "invoke help!",
                         Toast.LENGTH_SHORT).show();*/
@@ -250,21 +257,21 @@ public class ActivityStart
             }
             break;
 
-            case R.id.nav_setting :    {
+            case R.id.nav_setting: {
                 Toast.makeText(getApplicationContext(),
                         "invoke setting!",
                         Toast.LENGTH_SHORT).show();
             }
             break;
 
-            case R.id.nav_share_app :    {
+            case R.id.nav_share_app: {
                 Toast.makeText(getApplicationContext(),
                         "invoke share!",
                         Toast.LENGTH_SHORT).show();
             }
             break;
 
-            case R.id.nav_contact_writer :    {
+            case R.id.nav_contact_writer: {
                 /*Toast.makeText(getApplicationContext(),
                         "invoke contact!",
                         Toast.LENGTH_SHORT).show();*/
@@ -273,26 +280,62 @@ public class ActivityStart
             break;
         }
 
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            return false;
-//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);
+        assert null != drawer;
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void contactWriter()    {
+    private void contactWriter() {
         Resources res = getResources();
 
-        Intent data=new Intent(Intent.ACTION_SENDTO);
+        Intent data = new Intent(Intent.ACTION_SENDTO);
         data.setData(
                 Uri.parse(
-                    String.format("mailto:%s", res.getString(R.string.contact_email))));
+                        String.format("mailto:%s", res.getString(R.string.contact_email))));
         //data.putExtra(Intent.EXTRA_SUBJECT, "这是标题");
         //data.putExtra(Intent.EXTRA_TEXT, "这是内容");
         startActivity(data);
+    }
+
+
+    public class ACSMsgHandler extends Handler {
+        private static final String TAG = "ACSMsgHandler";
+        private ActivityStart mACCur;
+
+        public ACSMsgHandler(ActivityStart cur) {
+            super();
+            mACCur = cur;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case AppMsgDef.MSG_REPLY: {
+                    switch (msg.arg1) {
+                        case AppMsgDef.MSG_RECORD_ADD:
+                            updateActivity(msg);
+                            break;
+
+                        default:
+                            Log.e(TAG, String.format("msg(%s) can not process", msg.toString()));
+                            break;
+                    }
+                }
+                break;
+
+                default:
+                    Log.e(TAG, String.format("msg(%s) can not process", msg.toString()));
+                    break;
+            }
+        }
+
+        private void updateActivity(Message msg) {
+            boolean ret = ToolUtil.cast(msg.obj);
+            if(ret) {
+                mACCur.updateView();
+            }
+        }
     }
 }
