@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wxm.KeepAccount">
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -26,7 +27,7 @@
         <activity
             android:name=".ui.activities.ActivityStart"
             android:label="@string/title_activity_start"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activities.ActivityLogin"
             android:label="@string/cn_applabel">
@@ -38,8 +39,9 @@
         </activity>
         <activity
             android:name=".ui.activities.ActivityAddUsr"
-            android:label="@string/title_activity_add_account"></activity>
-        <activity android:name=".ui.activities.ActivityHelp"></activity>
+            android:label="@string/title_activity_add_account" />
+        <activity android:name=".ui.activities.ActivityHelp" />
+        <activity android:name=".ui.activities.ACRecordType"></activity>
     </application>
 
 </manifest>
