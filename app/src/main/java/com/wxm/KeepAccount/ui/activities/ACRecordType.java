@@ -12,6 +12,7 @@ import android.widget.ViewSwitcher;
 
 import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.base.utility.ContextUtil;
+import com.wxm.KeepAccount.base.utility.ToolUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,6 +76,7 @@ public class ACRecordType extends AppCompatActivity {
      */
     public class MySimpleAdapter extends SimpleAdapter {
         private ACRecordType mHome;
+        private List<? extends Map<String, ?>> mSelfData;
 
         public MySimpleAdapter(ACRecordType home,
                                Context context, List<? extends Map<String, ?>> data,
@@ -82,6 +84,7 @@ public class ACRecordType extends AppCompatActivity {
                                int[] to) {
             super(context, data, R.layout.lv_record_type, from, to);
             mHome = home;
+            mSelfData = data;
         }
 
         @Override
@@ -94,18 +97,18 @@ public class ACRecordType extends AppCompatActivity {
             View v;
             v = super.getView(position, view, arg2);
             if (null != v) {
-                HashMap<String, String> hm = mLHData.get(position);
-
                 ViewSwitcher vs = (ViewSwitcher)v.findViewById(R.id.lvvs_switcher);
                 assert vs != null;
 
-                String tp = hm.get(CHILD_TYPE);
+                Map<String, ?> hm = mSelfData.get(position);
+                String tp = ToolUtil.cast(hm.get(CHILD_TYPE));
                 if(tp.equals(TEXTVIEW_CHILD)) {
                     vs.setDisplayedChild(0);
                 } else {
                     vs.setDisplayedChild(1);
+                    String info = ToolUtil.cast(hm.get(TITLE));
                     EditText et = (EditText)vs.getCurrentView().findViewById(R.id.lvet_title);
-                    et.setText(hm.get(TITLE));
+                    et.setText(info);
                 }
             }
 
