@@ -1,4 +1,4 @@
-package com.wxm.KeepAccount.base.handler;
+package com.wxm.KeepAccount.Base.handler;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -6,10 +6,10 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.wxm.KeepAccount.R;
-import com.wxm.KeepAccount.base.data.AppModel;
-import com.wxm.KeepAccount.base.data.AppMsgDef;
-import com.wxm.KeepAccount.base.utility.ContextUtil;
-import com.wxm.KeepAccount.base.utility.ToolUtil;
+import com.wxm.KeepAccount.Base.data.AppModel;
+import com.wxm.KeepAccount.Base.data.AppMsgDef;
+import com.wxm.KeepAccount.Base.utility.ContextUtil;
+import com.wxm.KeepAccount.Base.utility.ToolUtil;
 
 /**
  * 处理用户登录的辅助类

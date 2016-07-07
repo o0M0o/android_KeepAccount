@@ -1,4 +1,4 @@
-package com.wxm.KeepAccount.base.db;
+package com.wxm.KeepAccount.Base.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

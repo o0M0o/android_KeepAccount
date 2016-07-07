@@ -5,8 +5,8 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.wxm.KeepAccount.base.data.AppGobalDef;
-import com.wxm.KeepAccount.base.data.RecordItem;
+import com.wxm.KeepAccount.Base.data.AppGobalDef;
+import com.wxm.KeepAccount.Base.data.RecordItem;
 
 import org.xclcharts.chart.BarData;
 

@@ -1,4 +1,4 @@
-package com.wxm.KeepAccount.base.utility;
+package com.wxm.KeepAccount.Base.utility;
 
 /**
  * 处理app内部消息接口类

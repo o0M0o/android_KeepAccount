@@ -1,10 +1,10 @@
-package com.wxm.KeepAccount.base.handler;
+package com.wxm.KeepAccount.Base.handler;
 
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.wxm.KeepAccount.base.data.AppMsgDef;
+import com.wxm.KeepAccount.Base.data.AppMsgDef;
 
 /**
  * APP全局消息处理器

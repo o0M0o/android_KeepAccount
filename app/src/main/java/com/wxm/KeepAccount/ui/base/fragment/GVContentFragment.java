@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wxm.KeepAccount.base.data.AppModel;
+import com.wxm.KeepAccount.Base.data.AppModel;
 import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.base.view.ChartsBase;
 import com.wxm.KeepAccount.ui.base.view.DailyCharts;

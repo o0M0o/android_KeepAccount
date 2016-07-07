@@ -1,7 +1,7 @@
-package com.wxm.KeepAccount.base.utility;
+package com.wxm.KeepAccount.Base.utility;
 
 import android.app.Application;
-import com.wxm.KeepAccount.base.handler.GlobalMsgHandler;
+import com.wxm.KeepAccount.Base.handler.GlobalMsgHandler;
 
 /**
  * Created by 123 on 2016/5/7.

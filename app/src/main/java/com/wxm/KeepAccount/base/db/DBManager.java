@@ -1,10 +1,10 @@
-package com.wxm.KeepAccount.base.db;
+package com.wxm.KeepAccount.Base.db;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.wxm.KeepAccount.base.data.RecordItem;
+import com.wxm.KeepAccount.Base.data.RecordItem;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -81,7 +81,7 @@ public class DBManager {
      */
     public List<RecordItem> query() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-        ArrayList<RecordItem> persons = new ArrayList<RecordItem>();
+        ArrayList<RecordItem> persons = new ArrayList<>();
         Cursor c = queryTheCursor();
         while (c.moveToNext()) {
             RecordItem ri = new RecordItem();

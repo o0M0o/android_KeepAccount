@@ -22,10 +22,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.wxm.KeepAccount.R;
-import com.wxm.KeepAccount.base.data.AppGobalDef;
-import com.wxm.KeepAccount.base.data.AppMsgDef;
-import com.wxm.KeepAccount.base.utility.ContextUtil;
-import com.wxm.KeepAccount.base.utility.ToolUtil;
+import com.wxm.KeepAccount.Base.data.AppGobalDef;
+import com.wxm.KeepAccount.Base.data.AppMsgDef;
+import com.wxm.KeepAccount.Base.utility.ContextUtil;
+import com.wxm.KeepAccount.Base.utility.ToolUtil;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 import com.wxm.KeepAccount.ui.fragment.GraphViewSlidingTabsFragment;
 import com.wxm.KeepAccount.ui.fragment.ListViewSlidingTabsFragment;

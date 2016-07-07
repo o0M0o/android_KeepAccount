@@ -1,4 +1,4 @@
-package com.wxm.KeepAccount.base.data;
+package com.wxm.KeepAccount.Base.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

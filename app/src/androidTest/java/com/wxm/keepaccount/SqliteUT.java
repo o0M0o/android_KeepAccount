@@ -3,8 +3,8 @@ package com.wxm.KeepAccount;
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
-import com.wxm.KeepAccount.base.db.DBManager;
-import com.wxm.KeepAccount.base.data.RecordItem;
+import com.wxm.KeepAccount.Base.db.DBManager;
+import com.wxm.KeepAccount.Base.data.RecordItem;
 
 import org.junit.Test;
 
