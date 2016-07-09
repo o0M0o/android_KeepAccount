@@ -22,14 +22,14 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".ui.activities.ActivityDailyDetail" />
-        <activity android:name=".ui.activities.ActivityRecord" />
+        <activity android:name=".ui.activities.ACDailyDetail" />
+        <activity android:name=".ui.activities.ACRecord" />
         <activity
-            android:name=".ui.activities.ActivityStart"
+            android:name=".ui.activities.ACStart"
             android:label="@string/title_activity_start"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.activities.ActivityLogin"
+            android:name=".ui.activities.ACLogin"
             android:label="@string/cn_applabel">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,9 +38,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.ActivityAddUsr"
+            android:name=".ui.activities.ACAddUsr"
             android:label="@string/title_activity_add_account" />
-        <activity android:name=".ui.activities.ActivityHelp" />
+        <activity android:name=".ui.activities.ACHelp" />
         <activity android:name=".ui.activities.ACRecordType"></activity>
     </application>
 

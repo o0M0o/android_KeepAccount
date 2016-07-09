@@ -36,11 +36,11 @@ import java.util.Calendar;
  * tab版本的main activity
  * Created by 123 on 2016/5/16.
  */
-public class ActivityStart
+public class ACStart
         extends AppCompatActivity
         implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "ActivityStart";
+    private static final String TAG = "ACStart";
     private static final String GV_VIEW_TXT = "切换列表";
     private static final String LV_VIEW_TXT = "切换图表";
 
@@ -119,7 +119,7 @@ public class ActivityStart
         switch (v.getId()) {
             case R.id.tabbt_record_pay:
             case R.id.tabbt_record_income: {
-                Intent intent = new Intent(v.getContext(), ActivityRecord.class);
+                Intent intent = new Intent(v.getContext(), ACRecord.class);
                 intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
 
                 if (v.getId() == R.id.tabbt_record_income) {
@@ -250,7 +250,7 @@ public class ActivityStart
                         "invoke help!",
                         Toast.LENGTH_SHORT).show();*/
 
-                Intent intent = new Intent(this, ActivityHelp.class);
+                Intent intent = new Intent(this, ACHelp.class);
                 intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_START);
 
                 startActivityForResult(intent, 1);
@@ -302,9 +302,9 @@ public class ActivityStart
 
     public class ACSMsgHandler extends Handler {
         private static final String TAG = "ACSMsgHandler";
-        private ActivityStart mACCur;
+        private ACStart mACCur;
 
-        public ACSMsgHandler(ActivityStart cur) {
+        public ACSMsgHandler(ACStart cur) {
             super();
             mACCur = cur;
         }

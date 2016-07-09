@@ -32,10 +32,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class ActivityRecord
+public class ACRecord
         extends AppCompatActivity
         implements View.OnTouchListener, View.OnClickListener     {
-    private static final String TAG = "ActivityRecord";
+    private static final String TAG = "ACRecord";
     private static final int MAX_NOTELEN = 200;
 
     private String action;
@@ -98,7 +98,7 @@ public class ActivityRecord
             break;
 
             case R.id.recordmenu_help : {
-                Intent intent = new Intent(this, ActivityHelp.class);
+                Intent intent = new Intent(this, ACHelp.class);
                 intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_RECORD);
 
                 startActivityForResult(intent, 1);
@@ -285,79 +285,15 @@ public class ActivityRecord
 
 
     private void onTouchType(MotionEvent event) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
+        Intent it = new Intent(this, ACRecordType.class);
         if(record_type.equals(AppGobalDef.CNSTR_RECORD_INCOME)) {
-            View view = View.inflate(this, R.layout.incomeinfo_dialog, null);
-            final EditText et_self_info = (EditText) view.findViewById(R.id.et_input_incomeinfo);
-            builder.setView(view);
-            builder.setTitle("输入或选择收入信息");
-            builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    et_info.setText(et_self_info.getText().toString());
-                    et_info.requestFocus();
-
-                    dialog.cancel();
-                }
-            });
-
-            final ArrayAdapter info_ap = ArrayAdapter.createFromResource(this,
-                    R.array.incomeinfo, R.layout.incomeinfo_spinner);
-            info_ap.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-
-            Spinner sp = (Spinner) view.findViewById(R.id.sp_incomdinfo);
-            sp.setAdapter(info_ap);
-            sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-                                           long arg3) {
-                    et_self_info.setText(info_ap.getItem(arg2).toString());
-                }
-
-                public void onNothingSelected(AdapterView<?> arg0) {
-                    // do nothing
-                    //et_self_info.setText("");
-                }
-            });
-            sp.setVisibility(View.VISIBLE);
+            it.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.STR_RECORD_INCOME);
         }
         else    {
-            View view = View.inflate(this, R.layout.payinfo_dialog, null);
-            final EditText et_self_info = (EditText) view.findViewById(R.id.et_input_payinfo);
-            builder.setView(view);
-            builder.setTitle("输入或选择支出信息");
-            builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    et_info.setText(et_self_info.getText().toString());
-                    et_info.requestFocus();
-
-                    dialog.cancel();
-                }
-            });
-
-            final ArrayAdapter info_ap = ArrayAdapter.createFromResource(this,
-                    R.array.payinfo, R.layout.payinfo_spinner);
-            info_ap.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-
-            Spinner sp = (Spinner) view.findViewById(R.id.sp_payinfo);
-            sp.setAdapter(info_ap);
-            sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-                                           long arg3) {
-                    et_self_info.setText(info_ap.getItem(arg2).toString());
-                }
-
-                public void onNothingSelected(AdapterView<?> arg0) {
-                    // do nothing
-                    //et_self_info.setText("");
-                }
-            });
-            sp.setVisibility(View.VISIBLE);
+            it.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.STR_RECORD_PAY);
         }
 
-        Dialog dialog = builder.create();
-        dialog.show();
+        startActivityForResult(it, 1);
     }
 
     private void onTouchDate(MotionEvent event) {

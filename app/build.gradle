@@ -41,6 +41,7 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile files('libs/extend_lib/httpcomponents-core-4.4.4/lib/httpcore-4.4.4.jar')
     compile files('libs/extend_lib/xcl/xcl-charts.jar')
+    compile files('libs/extend_lib/junit/junit-4.12.jar')
 }
 
 

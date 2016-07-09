@@ -42,4 +42,6 @@ public class AppGobalDef {
 
     static public final int INTRET_USR_ADD       = 2000;
     static public final int INTRET_USR_LOGOUT    = 2001;
+
+    static public final int INTRET_ERROR         = 9000;
 }

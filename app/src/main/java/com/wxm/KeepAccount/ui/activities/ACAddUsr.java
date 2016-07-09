@@ -18,11 +18,11 @@ import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
 
-public class ActivityAddUsr
+public class ACAddUsr
         extends AppCompatActivity
         implements View.OnClickListener, TextView.OnEditorActionListener {
 
-    private static final String TAG = "ActivityAddUsr";
+    private static final String TAG = "ACAddUsr";
     private ACAUMsgHandler      mMHHandler;
 
     @Override
@@ -153,9 +153,9 @@ public class ActivityAddUsr
 
     public class ACAUMsgHandler extends Handler {
         private static final String TAG = "ACAUMsgHandler";
-        private ActivityAddUsr mActivity;
+        private ACAddUsr mActivity;
 
-        public ACAUMsgHandler(ActivityAddUsr acstart) {
+        public ACAUMsgHandler(ACAddUsr acstart) {
             super();
             mActivity = acstart;
         }

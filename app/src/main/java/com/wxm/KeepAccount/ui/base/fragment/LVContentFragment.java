@@ -35,7 +35,7 @@ import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
 import com.wxm.KeepAccount.Base.utility.ToolUtil;
-import com.wxm.KeepAccount.ui.activities.ActivityDailyDetail;
+import com.wxm.KeepAccount.ui.activities.ACDailyDetail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,7 +100,7 @@ public class LVContentFragment extends Fragment {
                     //String class_str= parent.getItemAtPosition(position).getClass().toString();
                     //Log.d(TAG, String.format("long click(%s) : %s", class_str, str));
 
-                    Intent intent = new Intent(parent.getContext(), ActivityDailyDetail.class);
+                    Intent intent = new Intent(parent.getContext(), ACDailyDetail.class);
                     intent.putExtra(AppGobalDef.STR_SELECT_ITEM,
                             hmsel.get(AppGobalDef.ITEM_TITLE));
                     startActivityForResult(intent, 1);

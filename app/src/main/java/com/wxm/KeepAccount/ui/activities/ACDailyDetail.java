@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class ActivityDailyDetail extends AppCompatActivity {
-    private static final String TAG = "ActivityDailyDetail";
+public class ACDailyDetail extends AppCompatActivity {
+    private static final String TAG = "ACDailyDetail";
     private static final String CHECKBOX_STATUS = "checkbox_status";
     private static final String CHECKBOX_VISIBLE = "checkbox_visible";
     private static final String CHECKBOX_STATUS_SELECTED = "selected";
@@ -88,7 +88,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
             break;
 
             case R.id.dailydetailmenu_add : {
-                Intent intent = new Intent(this, ActivityRecord.class);
+                Intent intent = new Intent(this, ACRecord.class);
                 intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
                 intent.putExtra(AppGobalDef.STR_RECORD_DATE, invoke_str);
                 startActivityForResult(intent, 1);
@@ -114,7 +114,7 @@ public class ActivityDailyDetail extends AppCompatActivity {
             break;
 
             case R.id.dailydetailmenu_help : {
-                Intent intent = new Intent(this, ActivityHelp.class);
+                Intent intent = new Intent(this, ACHelp.class);
                 intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_DAILYDETAIL);
 
                 startActivityForResult(intent, 1);
@@ -214,6 +214,9 @@ public class ActivityDailyDetail extends AppCompatActivity {
         lv_show.setAdapter(lv_adapter);
     }
 
+    /**
+     * 发出消息请求新数据
+     */
     private void updateListView()   {
         // update date
         Message m = Message.obtain(ContextUtil.getMsgHandler(),
@@ -249,6 +252,10 @@ public class ActivityDailyDetail extends AppCompatActivity {
         m.sendToTarget();
     }
 
+    /**
+     * 用新数据更新视图
+     * @param nal  新数据
+     */
     private void loadView(ArrayList<HashMap<String, String>> nal)   {
         // clear old view
         lv_datalist.clear();
@@ -291,9 +298,9 @@ public class ActivityDailyDetail extends AppCompatActivity {
 
     public class ACDDMsgHandler extends Handler  {
         private static final String TAG = "ACDDMsgHandler";
-        private ActivityDailyDetail     mACCur;
+        private ACDailyDetail mACCur;
 
-        public ACDDMsgHandler(ActivityDailyDetail cur)  {
+        public ACDDMsgHandler(ACDailyDetail cur)  {
             super();
             mACCur = cur;
         }
@@ -337,10 +344,14 @@ public class ActivityDailyDetail extends AppCompatActivity {
             mACCur.loadView(up_ls);
         }
 
+        /**
+         * 切换到记录修改UI
+         * @param msg  消息
+         */
         private void switchActivity(Message msg) {
             RecordItem ri = ToolUtil.cast(msg.obj);
             if(null != ri)  {
-                Intent intent = new Intent(mACCur, ActivityRecord.class);
+                Intent intent = new Intent(mACCur, ACRecord.class);
                 intent.putExtra(AppGobalDef.STR_RECORD_ACTION,
                         AppGobalDef.STR_RECORD_ACTION_MODIFY);
 

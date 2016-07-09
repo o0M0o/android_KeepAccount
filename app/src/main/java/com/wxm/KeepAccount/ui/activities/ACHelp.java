@@ -16,8 +16,8 @@ import com.wxm.KeepAccount.R;
  * 本activity用于展示应用帮助信息
  * 为优化代码架构，activity启动时根据intent参数加载不同帮助信息
  */
-public class ActivityHelp extends AppCompatActivity {
-    //private static String TAG = "ActivityHelp";
+public class ACHelp extends AppCompatActivity {
+    //private static String TAG = "ACHelp";
     private static final String ENCODING = "utf-8";
     //private static final String MIMETYPE = "text/html; charset=UTF-8";
 

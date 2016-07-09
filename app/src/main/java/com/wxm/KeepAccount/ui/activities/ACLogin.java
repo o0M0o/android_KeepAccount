@@ -50,14 +50,14 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    private static final String TAG = "ActivityLogin";
+    private static final String TAG = "ACLogin";
 
     private ACLMsgHandler   mMHHandler;
 
@@ -152,7 +152,7 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
             break;
 
             case R.id.acm_mi_help : {
-                Intent intent = new Intent(this, ActivityHelp.class);
+                Intent intent = new Intent(this, ACHelp.class);
                 intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_MAIN);
 
                 startActivityForResult(intent, 1);
@@ -173,7 +173,7 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
      * 注册新帐户
      */
     private void registerNewAccount()    {
-        Intent intent = new Intent(this, ActivityAddUsr.class);
+        Intent intent = new Intent(this, ACAddUsr.class);
         startActivityForResult(intent, 1);
     }
 
@@ -347,7 +347,7 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(ActivityLogin.this,
+                new ArrayAdapter<>(ACLogin.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
@@ -409,7 +409,7 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
      * 切换到工作主activity
      */
     private void SwitchToWorkActivity()  {
-        Intent intent = new Intent(this, ActivityStart.class);
+        Intent intent = new Intent(this, ACStart.class);
         startActivityForResult(intent, 1);
     }
 
@@ -475,9 +475,9 @@ public class ActivityLogin extends AppCompatActivity implements LoaderCallbacks<
 
     public class ACLMsgHandler extends Handler {
         private static final String TAG = "ACLMsgHandler";
-        private ActivityLogin mACCur;
+        private ACLogin mACCur;
 
-        public ACLMsgHandler(ActivityLogin cur) {
+        public ACLMsgHandler(ACLogin cur) {
             super();
             mACCur = cur;
         }

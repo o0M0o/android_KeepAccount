@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        tools:context=".ui.activities.ActivityStart"
+        tools:context=".ui.activities.ACStart"
         tools:showIn="@layout/ac_start"
         android:id="@+id/ac_start_innerlayout">
 
