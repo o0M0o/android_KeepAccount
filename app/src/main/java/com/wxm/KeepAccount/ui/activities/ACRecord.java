@@ -425,6 +425,22 @@ public class ACRecord
         setResult(ret_data, data);
         return true;
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(AppGobalDef.INTRET_SURE ==  resultCode)  {
+            String ty = data.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
+            et_info.setText(ty);
+            et_info.requestFocus();
+        }
+        else    {
+            Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
+        }
+
+    }
 }
 
 

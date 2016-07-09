@@ -6,9 +6,13 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -28,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ACRecordType extends AppCompatActivity
-    implements View.OnClickListener {
+    implements View.OnClickListener, AdapterView.OnItemClickListener {
     private static final String TAG = "ACRecordType";
 
     private static final String TEXTVIEW_CHILD = "TEXTVIEW_CHILD";
@@ -40,6 +44,8 @@ public class ACRecordType extends AppCompatActivity
     private ArrayList<HashMap<String, String>> mLHData = new ArrayList<>();
     private ListView                        mLVRecordType;
     private MySimpleAdapter                 mMAAdapter;
+
+    private MenuItem        mMISure;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +79,65 @@ public class ACRecordType extends AppCompatActivity
                                     new String[] {TITLE, EXPLAIN},
                                     new int[] {R.id.lvtv_title, R.id.lvtv_explain});
         mLVRecordType.setAdapter(mMAAdapter);
-        //forTest();
+        mLVRecordType.setOnItemClickListener(this);
+
 
         load_type(rty);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.acm_record_type, menu);
+
+        mMISure = menu.findItem(R.id.recordtype_menu_sure);
+        mMISure.setVisible(false);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.recordtype_menu_sure: {
+                String ty = "";
+                int cc = mLVRecordType.getChildCount();
+                for(int i = 0; i < cc; i++) {
+                    View vo = mLVRecordType.getChildAt(i);
+                    CheckBox cb = (CheckBox)vo.findViewById(R.id.lvcb_selected);
+                    assert null != cb;
+
+                    if(cb.isChecked())  {
+                        ty = mLHData.get(i).get(TITLE);
+                    }
+                }
+
+                Intent data = new Intent();
+                if(!ToolUtil.StringIsNullOrEmpty(ty)) {
+                    data.putExtra(AppGobalDef.STR_RECORD_TYPE, ty);
+                    setResult(AppGobalDef.INTRET_SURE, data);
+                }
+                else    {
+                    setResult(AppGobalDef.INTRET_GIVEUP, data);
+                }
+                finish();
+            }
+            break;
+
+            case R.id.recordtype_menu_giveup: {
+                Intent data = new Intent();
+                setResult(AppGobalDef.INTRET_GIVEUP, data);
+                finish();
+            }
+            break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+
+        return true;
     }
 
 
@@ -161,19 +223,38 @@ public class ACRecordType extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        int pos = mLVRecordType.getPositionForView(v);
+        int id = v.getId();
+        if (id == R.id.lvcb_selected){
+            int pos = mLVRecordType.getPositionForView(v);
+            activeItem(pos);
+        }
+    }
+
+
+    /**
+     * 选中指定位置的节点
+     * @param pos 节点的位置
+     */
+    private void activeItem(int pos)    {
         int cc = mLVRecordType.getChildCount();
         for(int i = 0; i < cc; i++) {
-            if(i != pos) {
-                View vo = mLVRecordType.getChildAt(i);
-                CheckBox cb = (CheckBox)vo.findViewById(R.id.lvcb_selected);
-                assert null != cb;
+            View vo = mLVRecordType.getChildAt(i);
+            CheckBox cb = (CheckBox)vo.findViewById(R.id.lvcb_selected);
+            assert null != cb;
 
+            if(i != pos) {
                 if (cb.isChecked()) {
                     cb.setChecked(false);
                 }
+            } else  {
+                mMISure.setVisible(cb.isChecked());
             }
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        activeItem(position);
     }
 
 

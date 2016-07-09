@@ -5,12 +5,12 @@
         <item>通讯费-tv-手机/电话/宽带费用</item>
         <item>社交费用-tv-交友社交开销</item>
         <item>投资-tv-用于投资的开销</item>
-        <item>其他-et-其它不好归类的开销</item>
+        <item>其他-tv-其它不好归类的开销</item>
     </string-array>
     <string-array name="incomeinfo">
         <item>工资-tv-工作报酬</item>
         <item>奖金-tv-工作产生的额外报酬</item>
         <item>投资收益-tv-投资产生的收益</item>
-        <item>其他-et-其它不好归类的收入</item>
+        <item>其他-tv-其它不好归类的收入</item>
     </string-array>
 </resources>
