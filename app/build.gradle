@@ -42,6 +42,15 @@ dependencies {
     compile files('libs/extend_lib/httpcomponents-core-4.4.4/lib/httpcore-4.4.4.jar')
     compile files('libs/extend_lib/xcl/xcl-charts.jar')
     compile files('libs/extend_lib/junit/junit-4.12.jar')
+    compile files('libs/extend_lib/mybatis/mybatis-3.3.0.jar')
+    compile files('libs/extend_lib/mybatis/lib/asm-4.2.jar')
+    compile files('libs/extend_lib/mybatis/lib/cglib-3.1.jar')
+    compile files('libs/extend_lib/mybatis/lib/commons-logging-1.2.jar')
+    compile files('libs/extend_lib/mybatis/lib/log4j-1.2.17.jar')
+    compile files('libs/extend_lib/mybatis/lib/log4j-api-2.2.jar')
+    compile files('libs/extend_lib/mybatis/lib/log4j-core-2.2.jar')
+    compile files('libs/extend_lib/mybatis/lib/slf4j-api-1.7.12.jar')
+    compile files('libs/extend_lib/mybatis/lib/slf4j-log4j12-1.7.12.jar')
 }
 
 
