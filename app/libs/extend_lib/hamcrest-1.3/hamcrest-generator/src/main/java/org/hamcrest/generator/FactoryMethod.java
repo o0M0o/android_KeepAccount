@@ -1,8 +1,9 @@
 package org.hamcrest.generator;
 
 import java.util.ArrayList;
-import static java.util.Collections.unmodifiableList;
 import java.util.List;
+
+import static java.util.Collections.unmodifiableList;
 
 /**
  * Represents a Matcher Factory method.

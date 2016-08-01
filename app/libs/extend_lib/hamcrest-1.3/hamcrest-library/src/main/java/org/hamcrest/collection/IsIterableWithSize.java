@@ -1,12 +1,12 @@
 package org.hamcrest.collection;
 
-import static org.hamcrest.core.IsEqual.equalTo;
-
-import java.util.Iterator;
-
 import org.hamcrest.Factory;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
+
+import java.util.Iterator;
+
+import static org.hamcrest.core.IsEqual.equalTo;
 
 public class IsIterableWithSize<E> extends FeatureMatcher<Iterable<E>, Integer> {
 

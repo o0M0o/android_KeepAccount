@@ -2,11 +2,12 @@
  */
 package org.hamcrest.core;
 
-import static org.hamcrest.core.IsNot.not;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.Factory;
 import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
+
+import static org.hamcrest.core.IsNot.not;
 
 /**
  * Is the value null?

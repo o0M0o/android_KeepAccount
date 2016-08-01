@@ -1,10 +1,12 @@
 package org.hamcrest.integration;
 
 import junit.framework.TestCase;
+
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
-import static org.hamcrest.core.IsEqual.equalTo;
 import org.jmock.core.Constraint;
+
+import static org.hamcrest.core.IsEqual.equalTo;
 
 public class JMock1AdapterTest extends TestCase {
 

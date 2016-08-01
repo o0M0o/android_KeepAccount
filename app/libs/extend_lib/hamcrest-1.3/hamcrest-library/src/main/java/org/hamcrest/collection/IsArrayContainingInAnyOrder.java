@@ -1,16 +1,16 @@
 package org.hamcrest.collection;
 
-import static org.hamcrest.core.IsEqual.equalTo;
+import org.hamcrest.Description;
+import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.hamcrest.Description;
-import org.hamcrest.Factory;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 public class IsArrayContainingInAnyOrder<E> extends TypeSafeMatcher<E[]> {
     private final IsIterableContainingInAnyOrder<E> iterableMatcher;

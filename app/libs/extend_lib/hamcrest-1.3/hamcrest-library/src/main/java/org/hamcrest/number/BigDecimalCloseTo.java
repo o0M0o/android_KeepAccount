@@ -1,12 +1,12 @@
 package org.hamcrest.number;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
 
 public class BigDecimalCloseTo extends TypeSafeMatcher<BigDecimal> {
 

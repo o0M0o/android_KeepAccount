@@ -1,11 +1,11 @@
 package org.hamcrest.number;
 
-import static org.hamcrest.number.BigDecimalCloseTo.closeTo;
+import org.hamcrest.AbstractMatcherTest;
+import org.hamcrest.Matcher;
 
 import java.math.BigDecimal;
 
-import org.hamcrest.AbstractMatcherTest;
-import org.hamcrest.Matcher;
+import static org.hamcrest.number.BigDecimalCloseTo.closeTo;
 
 public class BigDecimalCloseToTest  extends AbstractMatcherTest {
 

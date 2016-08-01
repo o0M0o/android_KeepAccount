@@ -2,12 +2,13 @@
  */
 package org.hamcrest.core;
 
-import static org.hamcrest.core.IsSame.theInstance;
-import static org.hamcrest.core.IsSame.sameInstance;
-import static org.hamcrest.core.IsNot.not;
 import org.hamcrest.AbstractMatcherTest;
 import org.hamcrest.Matcher;
+
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsSame.sameInstance;
+import static org.hamcrest.core.IsSame.theInstance;
 
 
 public class IsSameTest extends AbstractMatcherTest {

@@ -1,8 +1,8 @@
 package org.hamcrest.integration;
 
-import org.jmock.core.Constraint;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
+import org.jmock.core.Constraint;
 
 /**
  * An adapter allowing a Hamcrest {@link org.hamcrest.Matcher}

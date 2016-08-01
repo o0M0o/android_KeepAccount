@@ -27,9 +27,6 @@
 
 package org.apache.http.examples;
 
-import java.io.IOException;
-import java.util.concurrent.Future;
-
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.HttpClientConnection;
 import org.apache.http.HttpException;
@@ -50,6 +47,9 @@ import org.apache.http.protocol.RequestExpectContinue;
 import org.apache.http.protocol.RequestTargetHost;
 import org.apache.http.protocol.RequestUserAgent;
 import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.util.concurrent.Future;
 
 /**
  * Elemental example for executing multiple GET requests from different threads using a connection

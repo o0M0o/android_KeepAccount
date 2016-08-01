@@ -1,7 +1,7 @@
 package org.hamcrest.integration;
 
-import org.easymock.IArgumentMatcher;
 import org.easymock.EasyMock;
+import org.easymock.IArgumentMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 

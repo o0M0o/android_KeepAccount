@@ -1,9 +1,11 @@
 package org.hamcrest.integration;
 
 import junit.framework.TestCase;
+
 import org.easymock.IArgumentMatcher;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class EasyMock2AdapterTest extends TestCase {

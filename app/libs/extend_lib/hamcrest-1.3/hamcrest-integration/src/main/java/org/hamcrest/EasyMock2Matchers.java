@@ -1,7 +1,7 @@
 package org.hamcrest;
 
-import org.hamcrest.integration.EasyMock2Adapter;
 import org.hamcrest.core.IsEqual;
+import org.hamcrest.integration.EasyMock2Adapter;
 
 /**
  *

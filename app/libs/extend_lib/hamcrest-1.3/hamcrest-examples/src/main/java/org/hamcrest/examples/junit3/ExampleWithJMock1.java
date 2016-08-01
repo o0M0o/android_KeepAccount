@@ -1,9 +1,9 @@
 package org.hamcrest.examples.junit3;
 
-import static org.hamcrest.JMock1Matchers.equalTo;
-
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
+
+import static org.hamcrest.JMock1Matchers.equalTo;
 
 /**
  * Demonstrates how HamCrest matchers can be used from jMock with JUnit 3.8.x.

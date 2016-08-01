@@ -26,15 +26,6 @@
  */
 package org.apache.http.examples.nio;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.SSLContext;
-
 import org.apache.http.ExceptionLogger;
 import org.apache.http.HttpConnection;
 import org.apache.http.HttpException;
@@ -56,6 +47,15 @@ import org.apache.http.nio.protocol.HttpAsyncRequestHandler;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.ssl.SSLContexts;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLContext;
 
 /**
  * Embedded HTTP/1.1 file server based on a non-blocking I/O model and capable of direct channel

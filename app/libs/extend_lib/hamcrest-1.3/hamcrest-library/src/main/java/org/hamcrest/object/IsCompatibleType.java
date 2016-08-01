@@ -1,8 +1,8 @@
 package org.hamcrest.object;
 
 import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 public class IsCompatibleType<T> extends TypeSafeMatcher<Class<?>> {

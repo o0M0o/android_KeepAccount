@@ -1,10 +1,8 @@
 package org.hamcrest.xml;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.StringContains.containsString;
-import static org.hamcrest.xml.HasXPath.hasXPath;
+import org.hamcrest.AbstractMatcherTest;
+import org.hamcrest.Matcher;
+import org.w3c.dom.Document;
 
 import java.io.ByteArrayInputStream;
 import java.util.HashSet;
@@ -14,9 +12,11 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.hamcrest.AbstractMatcherTest;
-import org.hamcrest.Matcher;
-import org.w3c.dom.Document;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.StringContains.containsString;
+import static org.hamcrest.xml.HasXPath.hasXPath;
 
 /**
  * @author Joe Walnes

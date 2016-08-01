@@ -2,13 +2,13 @@
  */
 package org.hamcrest.core;
 
+import org.hamcrest.AbstractMatcherTest;
+import org.hamcrest.Matcher;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AnyOf.anyOf;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
-
-import org.hamcrest.AbstractMatcherTest;
-import org.hamcrest.Matcher;
 
 public class AnyOfTest extends AbstractMatcherTest {
 

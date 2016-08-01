@@ -1,9 +1,10 @@
 package org.hamcrest.core;
 
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.Is.is;
 import org.hamcrest.AbstractMatcherTest;
 import org.hamcrest.Matcher;
+
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 public class IsTest extends AbstractMatcherTest {
 

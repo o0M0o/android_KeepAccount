@@ -1,7 +1,5 @@
 package org.hamcrest.core;
 
-import org.hamcrest.*;
-
 import java.util.ArrayList;
 
 public class CombinableMatcher<T> extends TypeSafeDiagnosingMatcher<T> {

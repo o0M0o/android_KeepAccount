@@ -1,6 +1,7 @@
 package org.hamcrest.generator.config;
 
 import junit.framework.TestCase;
+
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.CombinableMatcher;

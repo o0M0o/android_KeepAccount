@@ -1,13 +1,13 @@
 
 package org.hamcrest.text;
 
-import static org.hamcrest.core.AnyOf.anyOf;
-import static org.hamcrest.core.IsNull.nullValue;
-
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
+
+import static org.hamcrest.core.AnyOf.anyOf;
+import static org.hamcrest.core.IsNull.nullValue;
 
 /**
  * Matches empty Strings (and null).

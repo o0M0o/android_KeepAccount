@@ -1,10 +1,10 @@
 package org.hamcrest.collection;
 
-import static org.hamcrest.collection.IsArray.array;
-import static org.hamcrest.core.IsEqual.equalTo;
-
 import org.hamcrest.AbstractMatcherTest;
 import org.hamcrest.Matcher;
+
+import static org.hamcrest.collection.IsArray.array;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 @SuppressWarnings("unchecked")
 public class IsArrayTest extends AbstractMatcherTest {

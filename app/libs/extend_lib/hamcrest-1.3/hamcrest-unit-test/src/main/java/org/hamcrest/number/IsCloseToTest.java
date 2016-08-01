@@ -4,6 +4,7 @@ package org.hamcrest.number;
 
 import org.hamcrest.AbstractMatcherTest;
 import org.hamcrest.Matcher;
+
 import static org.hamcrest.number.IsCloseTo.closeTo;
 
 public class IsCloseToTest extends AbstractMatcherTest {

@@ -2,8 +2,8 @@ package org.hamcrest.generator;
 
 import junit.framework.TestCase;
 
-import java.io.StringWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 
 public class EasyMock2FactoryWriterTest extends TestCase {
 

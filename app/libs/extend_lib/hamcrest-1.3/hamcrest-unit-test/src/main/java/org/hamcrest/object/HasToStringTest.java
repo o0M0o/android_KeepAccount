@@ -1,13 +1,13 @@
 package org.hamcrest.object;
 
+import org.hamcrest.AbstractMatcherTest;
+import org.hamcrest.Matcher;
+import org.hamcrest.StringDescription;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.object.HasToString.hasToString;
-
-import org.hamcrest.AbstractMatcherTest;
-import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
 
 public class HasToStringTest extends AbstractMatcherTest {
     private static final String TO_STRING_RESULT = "toString result";

@@ -2,10 +2,10 @@
  */
 package org.hamcrest.text;
 
-import static org.hamcrest.core.StringContains.containsString;
-
 import org.hamcrest.AbstractMatcherTest;
 import org.hamcrest.Matcher;
+
+import static org.hamcrest.core.StringContains.containsString;
 
 
 public class StringContainsTest extends AbstractMatcherTest {

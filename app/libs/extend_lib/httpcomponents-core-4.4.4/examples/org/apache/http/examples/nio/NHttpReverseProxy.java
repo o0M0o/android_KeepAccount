@@ -26,14 +26,6 @@
  */
 package org.apache.http.examples.nio;
 
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.nio.ByteBuffer;
-import java.util.Locale;
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpException;
@@ -95,6 +87,14 @@ import org.apache.http.protocol.ResponseConnControl;
 import org.apache.http.protocol.ResponseContent;
 import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
+
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.nio.ByteBuffer;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Asynchronous, fully streaming HTTP/1.1 reverse proxy.

@@ -1,12 +1,10 @@
 package org.hamcrest.xml;
 
-import org.hamcrest.*;
 import org.hamcrest.core.IsAnything;
 import org.w3c.dom.Node;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
-import javax.xml.xpath.*;
 
 import static javax.xml.xpath.XPathConstants.STRING;
 import static org.hamcrest.Condition.matched;

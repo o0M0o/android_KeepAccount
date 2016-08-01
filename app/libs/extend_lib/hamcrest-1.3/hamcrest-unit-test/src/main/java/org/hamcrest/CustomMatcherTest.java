@@ -1,7 +1,8 @@
 package org.hamcrest;
 
-import static org.hamcrest.AbstractMatcherTest.assertDescription;
 import junit.framework.TestCase;
+
+import static org.hamcrest.AbstractMatcherTest.assertDescription;
 
 public class CustomMatcherTest extends TestCase {
 

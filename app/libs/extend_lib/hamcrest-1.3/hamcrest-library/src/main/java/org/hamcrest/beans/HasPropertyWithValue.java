@@ -2,14 +2,14 @@
  */
 package org.hamcrest.beans;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
-
 import org.hamcrest.Condition;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 
 import static org.hamcrest.Condition.matched;
 import static org.hamcrest.Condition.notMatched;

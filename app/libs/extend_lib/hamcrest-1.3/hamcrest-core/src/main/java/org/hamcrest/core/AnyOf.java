@@ -1,12 +1,12 @@
 package org.hamcrest.core;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Calculates the logical disjunction of multiple matchers. Evaluation is shortcut, so

@@ -27,11 +27,6 @@
 
 package org.apache.http.examples;
 
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-
 import org.apache.http.ConnectionClosedException;
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.HttpClientConnection;
@@ -64,6 +59,11 @@ import org.apache.http.protocol.ResponseContent;
 import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
 import org.apache.http.protocol.UriHttpRequestHandlerMapper;
+
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Elemental HTTP/1.1 reverse proxy.

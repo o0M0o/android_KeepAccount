@@ -1,11 +1,12 @@
 package org.hamcrest.examples.junit3;
 
+import junit.framework.TestCase;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.hamcrest.EasyMock2Matchers.equalTo;
-import junit.framework.TestCase;
 
 /**
  * Demonstrates how HamCrest matchers can be used from EasyMock with

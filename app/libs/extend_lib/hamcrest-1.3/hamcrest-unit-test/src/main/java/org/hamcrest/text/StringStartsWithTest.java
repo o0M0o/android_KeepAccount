@@ -2,10 +2,10 @@
  */
 package org.hamcrest.text;
 
-import static org.hamcrest.core.StringStartsWith.startsWith;
-
 import org.hamcrest.AbstractMatcherTest;
 import org.hamcrest.Matcher;
+
+import static org.hamcrest.core.StringStartsWith.startsWith;
 
 
 public class StringStartsWithTest extends AbstractMatcherTest {

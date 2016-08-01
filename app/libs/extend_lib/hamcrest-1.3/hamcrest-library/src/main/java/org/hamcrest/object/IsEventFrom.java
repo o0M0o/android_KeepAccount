@@ -2,12 +2,12 @@
  */
 package org.hamcrest.object;
 
-import java.util.EventObject;
-
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+
+import java.util.EventObject;
 
 
 /**

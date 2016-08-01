@@ -3,6 +3,7 @@
 package org.hamcrest;
 
 import junit.framework.TestCase;
+
 import org.junit.Assert;
 
 public abstract class AbstractMatcherTest extends TestCase {

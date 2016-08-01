@@ -1,8 +1,8 @@
 package org.hamcrest.generator;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.io.IOException;
 
 /**
  * {@link FactoryWriter} that outputs Java code which simply delegates all

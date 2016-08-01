@@ -2,12 +2,13 @@ package org.hamcrest.generator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import static java.lang.reflect.Modifier.isPublic;
-import static java.lang.reflect.Modifier.isStatic;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Iterator;
+
+import static java.lang.reflect.Modifier.isPublic;
+import static java.lang.reflect.Modifier.isStatic;
 
 /**
  * Reads a list of Hamcrest factory methods from a class, using standard Java reflection.

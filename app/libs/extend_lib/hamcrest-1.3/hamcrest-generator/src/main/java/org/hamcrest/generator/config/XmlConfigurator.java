@@ -1,23 +1,24 @@
 package org.hamcrest.generator.config;
 
 import org.hamcrest.generator.HamcrestFactoryWriter;
+import org.hamcrest.generator.QDox;
 import org.hamcrest.generator.QDoxFactoryReader;
 import org.hamcrest.generator.QuickReferenceWriter;
 import org.hamcrest.generator.ReflectiveFactoryReader;
 import org.hamcrest.generator.SugarConfiguration;
 import org.hamcrest.generator.SugarGenerator;
-import org.hamcrest.generator.QDox;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 public class XmlConfigurator {
 

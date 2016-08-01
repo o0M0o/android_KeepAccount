@@ -27,9 +27,6 @@
 
 package org.apache.http.examples;
 
-import java.io.ByteArrayInputStream;
-import java.net.Socket;
-
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
@@ -52,6 +49,9 @@ import org.apache.http.protocol.RequestExpectContinue;
 import org.apache.http.protocol.RequestTargetHost;
 import org.apache.http.protocol.RequestUserAgent;
 import org.apache.http.util.EntityUtils;
+
+import java.io.ByteArrayInputStream;
+import java.net.Socket;
 
 /**
  * Elemental example for executing multiple POST requests sequentially.

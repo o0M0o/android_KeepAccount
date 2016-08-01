@@ -1,11 +1,11 @@
 package org.hamcrest.collection;
 
-import java.util.Arrays;
-
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+
+import java.util.Arrays;
 
 /**
  * Matcher for array whose elements satisfy a sequence of matchers.

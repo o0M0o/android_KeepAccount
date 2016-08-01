@@ -1,7 +1,5 @@
 package org.hamcrest.beans;
 
-import org.hamcrest.*;
-
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;

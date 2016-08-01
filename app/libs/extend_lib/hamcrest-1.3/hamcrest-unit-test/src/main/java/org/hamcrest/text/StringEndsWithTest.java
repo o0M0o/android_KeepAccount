@@ -2,10 +2,10 @@
  */
 package org.hamcrest.text;
 
-import static org.hamcrest.core.StringEndsWith.endsWith;
-
 import org.hamcrest.AbstractMatcherTest;
 import org.hamcrest.Matcher;
+
+import static org.hamcrest.core.StringEndsWith.endsWith;
 
 
 public class StringEndsWithTest extends AbstractMatcherTest {

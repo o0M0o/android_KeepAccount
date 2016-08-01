@@ -27,17 +27,6 @@
 
 package org.apache.http.examples;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.Charset;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.SSLContext;
-
 import org.apache.http.ConnectionClosedException;
 import org.apache.http.ExceptionLogger;
 import org.apache.http.HttpConnection;
@@ -59,6 +48,17 @@ import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLContext;
 
 /**
  * Embedded HTTP/1.1 file server based on a classic (blocking) I/O model.

@@ -1,12 +1,12 @@
 package org.hamcrest.text;
 
+import org.hamcrest.AbstractMatcherTest;
+import org.hamcrest.Matcher;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
 import static org.hamcrest.text.IsEmptyString.isEmptyString;
-
-import org.hamcrest.AbstractMatcherTest;
-import org.hamcrest.Matcher;
 
 public class IsEmptyStringTest extends AbstractMatcherTest {
 

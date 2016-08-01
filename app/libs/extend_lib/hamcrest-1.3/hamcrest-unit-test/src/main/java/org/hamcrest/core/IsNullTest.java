@@ -2,15 +2,15 @@
  */
 package org.hamcrest.core;
 
+import org.hamcrest.AbstractMatcherTest;
+import org.hamcrest.Matcher;
+
+import java.math.BigDecimal;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
-
-import java.math.BigDecimal;
-
-import org.hamcrest.AbstractMatcherTest;
-import org.hamcrest.Matcher;
 
 
 public class IsNullTest extends AbstractMatcherTest {

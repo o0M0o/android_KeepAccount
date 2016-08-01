@@ -27,8 +27,6 @@
 
 package org.apache.http.examples;
 
-import java.net.Socket;
-
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -45,6 +43,8 @@ import org.apache.http.protocol.RequestExpectContinue;
 import org.apache.http.protocol.RequestTargetHost;
 import org.apache.http.protocol.RequestUserAgent;
 import org.apache.http.util.EntityUtils;
+
+import java.net.Socket;
 
 /**
  * Elemental example for executing multiple GET requests sequentially.

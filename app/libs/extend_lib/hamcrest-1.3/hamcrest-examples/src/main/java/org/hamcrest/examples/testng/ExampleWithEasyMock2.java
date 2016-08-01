@@ -1,13 +1,13 @@
 package org.hamcrest.examples.testng;
 
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.hamcrest.EasyMock2Matchers.equalTo;
-
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 /**
  * Demonstrates how Hamcrest matchers can be used from EasyMock with
