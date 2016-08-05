@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ui.activities.ACDailyDetail"
+    tools:context="com.wxm.KeepAccount.ui.activities.ACDailyDetail"
     android:focusable="true">
 
     <ListView
