@@ -10,6 +10,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.wxm.KeepAccount.Base.data.RecordItem;
+import com.wxm.KeepAccount.Base.data.UsrItem;
 
 import java.sql.SQLException;
 
@@ -27,8 +28,11 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 3;
 
     // the DAO object we use to access the SimpleData table
-    private Dao<RecordItem, Integer> simpleDao = null;
-    private RuntimeExceptionDao<RecordItem, Integer> simpleRuntimeDao = null;
+    private Dao<RecordItem, Integer> simpleRecordItemDao = null;
+    private RuntimeExceptionDao<RecordItem, Integer> simpleRecordItemRuntimeDao = null;
+
+    private Dao<UsrItem, String> simpleUsrItemDao = null;
+    private RuntimeExceptionDao<UsrItem, String> simpleUsrItemRuntimeDao = null;
 
     public DBOrmliteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,22 +47,11 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         try {
             Log.i(TAG, "onCreate");
             TableUtils.createTable(connectionSource, RecordItem.class);
+            TableUtils.createTable(connectionSource, UsrItem.class);
         } catch (SQLException e) {
             Log.e(TAG, "Can't create database", e);
             throw new RuntimeException(e);
         }
-
-        /*
-        // here we try inserting data in the on-create as a test
-        RuntimeExceptionDao<RecordItem, Integer> dao = getSimpleDataDao();
-        long millis = System.currentTimeMillis();
-        // create some entries in the onCreate
-        RecordItem simple = new RecordItem(millis);
-        dao.create(simple);
-        simple = new RecordItem(millis + 1);
-        dao.create(simple);
-        Log.i(DatabaseHelper.class.getName(), "created new entries in onCreate: " + millis);
-        */
     }
 
     /**
@@ -83,22 +76,36 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
      * Returns the Database Access Object (DAO) for our SimpleData class. It will create it or just give the cached
      * value.
      */
-    public Dao<RecordItem, Integer> getDao() throws SQLException {
-        if (simpleDao == null) {
-            simpleDao = getDao(RecordItem.class);
+    public Dao<RecordItem, Integer> getRecordItemDao() throws SQLException {
+        if (simpleRecordItemDao == null) {
+            simpleRecordItemDao = getDao(RecordItem.class);
         }
-        return simpleDao;
+        return simpleRecordItemDao;
+    }
+
+    public Dao<UsrItem, String> getUsrItemDao() throws SQLException {
+        if (simpleUsrItemDao == null) {
+            simpleUsrItemDao = getDao(UsrItem.class);
+        }
+        return simpleUsrItemDao;
     }
 
     /**
      * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our SimpleData class. It will
      * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
      */
-    public RuntimeExceptionDao<RecordItem, Integer> getSimpleDataDao() {
-        if (simpleRuntimeDao == null) {
-            simpleRuntimeDao = getRuntimeExceptionDao(RecordItem.class);
+    public RuntimeExceptionDao<RecordItem, Integer> getRecordItemREDao() {
+        if (simpleRecordItemRuntimeDao == null) {
+            simpleRecordItemRuntimeDao = getRuntimeExceptionDao(RecordItem.class);
         }
-        return simpleRuntimeDao;
+        return simpleRecordItemRuntimeDao;
+    }
+
+    public RuntimeExceptionDao<UsrItem, String> getUsrItemREDao() {
+        if (simpleUsrItemRuntimeDao == null) {
+            simpleUsrItemRuntimeDao = getRuntimeExceptionDao(UsrItem.class);
+        }
+        return simpleUsrItemRuntimeDao;
     }
 
     /**
@@ -107,7 +114,10 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void close() {
         super.close();
-        simpleDao = null;
-        simpleRuntimeDao = null;
+        simpleRecordItemDao = null;
+        simpleRecordItemRuntimeDao = null;
+
+        simpleUsrItemDao = null;
+        simpleUsrItemRuntimeDao = null;
     }
 }

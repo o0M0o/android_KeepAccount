@@ -53,6 +53,7 @@ dependencies {
     compile files('libs/extend_lib/mybatis/lib/slf4j-log4j12-1.7.12.jar')
     compile files('libs/extend_lib/ormlite/ormlite-android-5.0.jar')
     compile files('libs/extend_lib/ormlite/ormlite-core-5.0.jar')
+    compile files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
 }
 
 
