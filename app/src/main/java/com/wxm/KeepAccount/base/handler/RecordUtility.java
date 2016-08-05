@@ -7,8 +7,8 @@ import android.os.Message;
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppModel;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
-import com.wxm.KeepAccount.Base.data.RecordItem;
 import com.wxm.KeepAccount.Base.utility.ToolUtil;
+import com.wxm.KeepAccount.Base.data.RecordItem;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -87,23 +87,23 @@ public class RecordUtility {
         List<RecordItem> lr = AppModel.getInstance().GetRecordsByDay(date_str);
         ArrayList<HashMap<String, String>> mylist = new ArrayList<>();
         for (RecordItem r : lr) {
-            String tit = r.record_type;
+            String tit = r.getRecord_type();
             String show_str;
-            if(ToolUtil.StringIsNullOrEmpty(r.record_note)) {
+            if(ToolUtil.StringIsNullOrEmpty(r.getRecord_note())) {
                 show_str = String.format(Locale.CHINA,
                         "原因 : %s\n金额 : %.02f",
-                        r.record_info, r.record_val);
+                        r.getRecord_info(), r.getRecord_val());
             }
             else    {
                 show_str = String.format(Locale.CHINA,
                         "原因 : %s\n金额 : %.02f\n备注 : %s",
-                        r.record_info, r.record_val, r.record_note);
+                        r.getRecord_info(), r.getRecord_val(), r.getRecord_note());
             }
 
             HashMap<String, String> map = new HashMap<>();
             map.put(AppGobalDef.ITEM_TITLE, tit);
             map.put(AppGobalDef.ITEM_TEXT, show_str);
-            map.put(AppGobalDef.ITEM_ID, String.format(Locale.CHINA, "%d", r._id));
+            map.put(AppGobalDef.ITEM_ID, String.format(Locale.CHINA, "%d", r.get_id()));
             mylist.add(map);
         }
 
@@ -133,7 +133,7 @@ public class RecordUtility {
         List<RecordItem> lr = AppModel.getInstance().GetAllRecords();
         HashMap<String, ArrayList<RecordItem>> hm_data = new HashMap<>();
         for (RecordItem record : lr) {
-            String h_k = record.record_ts.toString().substring(0, 4);
+            String h_k = record.getRecord_ts().toString().substring(0, 4);
             ArrayList<RecordItem> h_v = hm_data.get(h_k);
             if (null == h_v) {
                 ArrayList<RecordItem> v = new ArrayList<>();
@@ -157,12 +157,12 @@ public class RecordUtility {
             BigDecimal income_amount = BigDecimal.ZERO;
 
             for (RecordItem r : v) {
-                if(AppGobalDef.CNSTR_RECORD_PAY.equals(r.record_type))  {
+                if(AppGobalDef.CNSTR_RECORD_PAY.equals(r.getRecord_type()))  {
                     pay_cout += 1;
-                    pay_amount = pay_amount.add(r.record_val);
+                    pay_amount = pay_amount.add(r.getRecord_val());
                 } else {
                     income_cout += 1;
-                    income_amount = income_amount.add(r.record_val);
+                    income_amount = income_amount.add(r.getRecord_val());
                 }
             }
 
@@ -197,7 +197,7 @@ public class RecordUtility {
         List<RecordItem> lr = AppModel.getInstance().GetAllRecords();
         HashMap<String, ArrayList<RecordItem>> hm_data = new HashMap<>();
         for (RecordItem record : lr) {
-            String h_k = record.record_ts.toString().substring(0, 7);
+            String h_k = record.getRecord_ts().toString().substring(0, 7);
             ArrayList<RecordItem> h_v = hm_data.get(h_k);
             if (null == h_v) {
                 ArrayList<RecordItem> v = new ArrayList<>();
@@ -221,12 +221,12 @@ public class RecordUtility {
             BigDecimal income_amount = BigDecimal.ZERO;
 
             for (RecordItem r : v) {
-                if(AppGobalDef.CNSTR_RECORD_PAY.equals(r.record_type))  {
+                if(AppGobalDef.CNSTR_RECORD_PAY.equals(r.getRecord_type()))  {
                     pay_cout += 1;
-                    pay_amount = pay_amount.add(r.record_val);
+                    pay_amount = pay_amount.add(r.getRecord_val());
                 } else {
                     income_cout += 1;
-                    income_amount = income_amount.add(r.record_val);
+                    income_amount = income_amount.add(r.getRecord_val());
                 }
             }
 
@@ -261,7 +261,7 @@ public class RecordUtility {
         List<RecordItem> lr = AppModel.getInstance().GetAllRecords();
         HashMap<String, ArrayList<RecordItem>> hm_data = new HashMap<>();
         for (RecordItem record : lr) {
-            String h_k = record.record_ts.toString().substring(0, 10);
+            String h_k = record.getRecord_ts().toString().substring(0, 10);
             ArrayList<RecordItem> h_v = hm_data.get(h_k);
             if (null == h_v) {
                 ArrayList<RecordItem> v = new ArrayList<>();
@@ -285,12 +285,12 @@ public class RecordUtility {
             BigDecimal income_amount = BigDecimal.ZERO;
 
             for (RecordItem r : v) {
-                if(AppGobalDef.CNSTR_RECORD_PAY.equals(r.record_type))  {
+                if(AppGobalDef.CNSTR_RECORD_PAY.equals(r.getRecord_type()))  {
                     pay_cout += 1;
-                    pay_amount = pay_amount.add(r.record_val);
+                    pay_amount = pay_amount.add(r.getRecord_val());
                 } else {
                     income_cout += 1;
-                    income_amount = income_amount.add(r.record_val);
+                    income_amount = income_amount.add(r.getRecord_val());
                 }
             }
 

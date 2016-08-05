@@ -3,6 +3,11 @@ package com.wxm.KeepAccount.Base.utility;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * 工具类
@@ -151,5 +156,63 @@ public class ToolUtil {
         }
 
         return ret;
+    }
+
+
+    /**
+     * 日历类到字符串
+     * @param cl 日历类
+     * @return 结果
+     */
+    public static String CalenderToString(Calendar cl)  {
+        String ret = String.format(Locale.CHINA,
+                "%d-%02d-%02d %02d:%02d:%02d"
+                ,cl.get(Calendar.YEAR)
+                ,cl.get(Calendar.MONTH) + 1
+                ,cl.get(Calendar.DAY_OF_MONTH)
+                ,cl.get(Calendar.HOUR_OF_DAY)
+                ,cl.get(Calendar.MINUTE)
+                ,cl.get(Calendar.SECOND));
+        return ret;
+    }
+
+    /**
+     * 毫秒数到字符串
+     * @param ms 1970年以来的毫秒数
+     * @return 结果
+     */
+    public static String MilliSecsToString(long ms) {
+        Calendar cl = Calendar.getInstance();
+        cl.setTimeInMillis(ms);
+        return CalenderToString(cl);
+    }
+
+    /**
+     * 时间戳转换到字符串
+     * @param ts 时间戳
+     * @return 结果
+     */
+    public static String TimestampToString(Timestamp ts)    {
+        Calendar cl = Calendar.getInstance();
+        cl.setTimeInMillis(ts.getTime());
+        return CalenderToString(cl);
+    }
+
+    /**
+     * 时间字符串转换到时间戳
+     * @param str   待转换时间字符串
+     * @return 结果
+     */
+    public static Timestamp StringToTimestamp(String str)   {
+        Timestamp ts = new Timestamp(0);
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+            java.util.Date date = format.parse(str);
+            ts.setTime(date.getTime());
+        } catch (ParseException ex)     {
+            ts = new Timestamp(0);
+        }
+
+        return  ts;
     }
 }

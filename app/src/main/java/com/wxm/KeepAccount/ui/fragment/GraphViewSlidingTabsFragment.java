@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.base.fragment.GVContentFragment;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
+import com.wxm.KeepAccount.R;
 
 import java.util.List;
 

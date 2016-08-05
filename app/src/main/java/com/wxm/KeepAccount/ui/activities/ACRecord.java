@@ -15,12 +15,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.RecordItem;
@@ -190,7 +187,7 @@ public class ACRecord
                 record_type = AppGobalDef.CNSTR_RECORD_INCOME;
             }
             else    {
-                record_type = old_item.record_type;
+                record_type = old_item.getRecord_type();
             }
         }
 
@@ -264,15 +261,15 @@ public class ACRecord
         }
 
         if(null != old_item)    {
-            if(!old_item.record_info.isEmpty())
-                et_info.setText(old_item.record_info);
+            if(!old_item.getRecord_info().isEmpty())
+                et_info.setText(old_item.getRecord_info());
 
-            if(!old_item.record_note.isEmpty())
-                et_note.setText(old_item.record_note);
+            if(!old_item.getRecord_note().isEmpty())
+                et_note.setText(old_item.getRecord_note());
 
-            et_date.setText(old_item.record_ts.toString().substring(0, 10));
+            et_date.setText(old_item.getRecord_ts().toString().substring(0, 10));
 
-            String oldval = old_item.record_val.toString();
+            String oldval = old_item.getRecord_val().toString();
             int pos = oldval.indexOf(".");
             if(pos >= 0)    {
                 et_amount.setText(oldval.substring(0, pos + 3));
@@ -400,25 +397,25 @@ public class ACRecord
 
         Intent data=new Intent();
         RecordItem ri = new RecordItem();
-        ri.record_type = retype;
-        ri.record_note = str_note;
-        ri.record_info = str_info;
-        ri.record_val = new BigDecimal(str_val);
+        ri.setRecord_type(retype);
+        ri.setRecord_note(str_note);
+        ri.setRecord_info(str_info);
+        ri.setRecord_val(new BigDecimal(str_val));
 
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            ri.record_ts.setTime(df.parse(str_date).getTime());
+            ri.getRecord_ts().setTime(df.parse(str_date).getTime());
         }
         catch(Exception ex)
         {
             Log.e(TAG, String.format("解析'%s'到日期失败", str_date));
 
             Date dt = new Date();
-            ri.record_ts.setTime(dt.getTime());
+            ri.getRecord_ts().setTime(dt.getTime());
         }
 
         if(null != old_item)    {
-            ri._id = old_item._id;
+            ri.set_id(old_item.get_id());
         }
 
         data.putExtra(AppGobalDef.STR_RECORD, ri);

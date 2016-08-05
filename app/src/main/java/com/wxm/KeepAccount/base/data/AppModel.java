@@ -45,7 +45,7 @@ public class AppModel {
         RecordItem ret = null;
         if(null != allRecords) {
             for (RecordItem it : allRecords) {
-                if(id == it._id)    {
+                if(id == it.get_id())    {
                     ret = it;
                     break;
                 }
@@ -91,7 +91,7 @@ public class AppModel {
         ArrayList<RecordItem> ret = new ArrayList<>();
         if(null != allRecords)  {
             for(RecordItem it : allRecords) {
-                String h_k = it.record_ts.toString().substring(0, check_len);
+                String h_k = it.getRecord_ts().toString().substring(0, check_len);
                 if(h_k.equals(day_str)) {
                     ret.add(it);
                 }

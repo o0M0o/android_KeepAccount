@@ -39,8 +39,8 @@ public class DBManager {
         try {
             for (RecordItem record : records) {
                 db.execSQL("INSERT INTO tb_KeepAccount VALUES(null, ?, ?, ?, ?, ?)",
-                        new Object[]{record.record_type, record.record_info,
-                            record.record_note, record.record_val, record.record_ts});
+                        new Object[]{record.getRecord_type(), record.getRecord_info(),
+                                record.getRecord_note(), record.getRecord_val(), record.getRecord_ts()});
             }
             db.setTransactionSuccessful();  //设置事务成功完成
         } finally {
@@ -65,9 +65,9 @@ public class DBManager {
                                 + " ,record_ts = ?"
                                 + " WHERE _id = ?",
                         new Object[]{
-                                record.record_type, record.record_info,
-                                record.record_note, record.record_val,
-                                record.record_ts, record._id});
+                                record.getRecord_type(), record.getRecord_info(),
+                                record.getRecord_note(), record.getRecord_val(),
+                                record.getRecord_ts(), record.get_id()});
             }
             db.setTransactionSuccessful();
         } finally {
@@ -85,20 +85,20 @@ public class DBManager {
         Cursor c = queryTheCursor();
         while (c.moveToNext()) {
             RecordItem ri = new RecordItem();
-            ri._id = c.getInt(c.getColumnIndex("_id"));
-            ri.record_type = c.getString(c.getColumnIndex("record_type"));
-            ri.record_info = c.getString(c.getColumnIndex("record_info"));
-            ri.record_val = new BigDecimal(c.getDouble(c.getColumnIndex("record_val")));
-            ri.record_note = c.getString(c.getColumnIndex("record_note"));
+            ri.set_id(c.getInt(c.getColumnIndex("_id")));
+            ri.setRecord_type(c.getString(c.getColumnIndex("record_type")));
+            ri.setRecord_info(c.getString(c.getColumnIndex("record_info")));
+            ri.setRecord_val(new BigDecimal(c.getDouble(c.getColumnIndex("record_val"))));
+            ri.setRecord_note(c.getString(c.getColumnIndex("record_note")));
 
             try {
                 Date date = format.parse(c.getString(c.getColumnIndex("record_ts")));
-                ri.record_ts.setTime(date.getTime());
+                ri.getRecord_ts().setTime(date.getTime());
             }
             catch (ParseException ex)
             {
 
-                ri.record_ts = new Timestamp(0);
+                ri.setRecord_ts(new Timestamp(0));
             }
 
             persons.add(ri);

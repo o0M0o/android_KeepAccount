@@ -52,7 +52,7 @@ public class DailyCharts extends ChartsBase {
         ArrayList<String> ls_date = new ArrayList<>();
         HashMap<String, ArrayList<RecordItem>> rimap = new HashMap<>();
         for (RecordItem ri: ls_data) {
-            String day = ri.record_ts.toString().substring(0, 10);
+            String day = ri.getRecord_ts().toString().substring(0, 10);
 
             if(!ls_date.contains(day))  {
                 ls_date.add(day);
@@ -77,11 +77,11 @@ public class DailyCharts extends ChartsBase {
             Double retB = 0d;
 
             for(RecordItem ri : rimap.get(day)) {
-                if(ri.record_type.equals(AppGobalDef.CNSTR_RECORD_INCOME))  {
-                    retA += ri.record_val.doubleValue();
+                if(ri.getRecord_type().equals(AppGobalDef.CNSTR_RECORD_INCOME))  {
+                    retA += ri.getRecord_val().doubleValue();
                 }
                 else    {
-                    retB += ri.record_val.doubleValue();
+                    retB += ri.getRecord_val().doubleValue();
                 }
             }
 

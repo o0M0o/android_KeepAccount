@@ -41,7 +41,7 @@
             android:name=".ui.activities.ACAddUsr"
             android:label="@string/title_activity_add_account" />
         <activity android:name=".ui.activities.ACHelp" />
-        <activity android:name=".ui.activities.ACRecordType"></activity>
+        <activity android:name=".ui.activities.ACRecordType" />
     </application>
 
 </manifest>

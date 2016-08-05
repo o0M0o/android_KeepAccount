@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.base.fragment.LVContentFragment;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
+import com.wxm.KeepAccount.R;
 
 /**
  * 列表视图方式显示数据

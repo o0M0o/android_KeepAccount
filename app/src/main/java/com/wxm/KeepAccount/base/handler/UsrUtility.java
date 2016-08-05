@@ -5,11 +5,11 @@ import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
 
-import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.Base.data.AppModel;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
-import com.wxm.KeepAccount.Base.utility.ContextUtil;
 import com.wxm.KeepAccount.Base.utility.ToolUtil;
+import com.wxm.KeepAccount.R;
+import com.wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**
  * 处理用户登录的辅助类

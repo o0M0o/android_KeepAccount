@@ -11,20 +11,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.ViewSwitcher;
 
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
-import com.wxm.KeepAccount.BuildConfig;
-import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
 import com.wxm.KeepAccount.Base.utility.ToolUtil;
+import com.wxm.KeepAccount.BuildConfig;
+import com.wxm.KeepAccount.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
