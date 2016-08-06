@@ -10,6 +10,9 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "tb_Usr")
 public class UsrItem {
+    public final static String FIELD_USR_NAME   = "usr_name";
+    public final static String FIELD_USR_PWD    = "usr_pwd";
+
     @DatabaseField(id = true, columnName = "usr_name", dataType = DataType.STRING)
     private String usr_name;
 

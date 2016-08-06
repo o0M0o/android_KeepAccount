@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.ReferenceObjectCache;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -80,6 +81,8 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         if (simpleRecordItemDao == null) {
             simpleRecordItemDao = getDao(RecordItem.class);
         }
+
+        simpleRecordItemDao.setObjectCache(ReferenceObjectCache.makeSoftCache());
         return simpleRecordItemDao;
     }
 
@@ -87,6 +90,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         if (simpleUsrItemDao == null) {
             simpleUsrItemDao = getDao(UsrItem.class);
         }
+
         return simpleUsrItemDao;
     }
 
@@ -98,6 +102,8 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         if (simpleRecordItemRuntimeDao == null) {
             simpleRecordItemRuntimeDao = getRuntimeExceptionDao(RecordItem.class);
         }
+
+        simpleRecordItemRuntimeDao.setObjectCache(ReferenceObjectCache.makeSoftCache());
         return simpleRecordItemRuntimeDao;
     }
 

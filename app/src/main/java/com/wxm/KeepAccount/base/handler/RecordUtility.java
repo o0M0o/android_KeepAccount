@@ -67,7 +67,7 @@ public class RecordUtility {
 
     private static void DeleteRecords(Message am)    {
         Object[] arr = ToolUtil.cast(am.obj);
-        List<String> ls_del = ToolUtil.cast(arr[0]);
+        List<Integer> ls_del = ToolUtil.cast(arr[0]);
         assert null != ls_del;
         boolean ret = AppModel.getInstance().DeleteRecords(ls_del);
 
@@ -354,8 +354,8 @@ public class RecordUtility {
     private static void GetRecord(Message am)  {
         Object[] arr = ToolUtil.cast(am.obj);
 
-        String tag = ToolUtil.cast(arr[0]);
-        RecordItem ri = AppModel.getInstance().GetRecord(tag);
+        Integer tag = ToolUtil.cast(arr[0]);
+        RecordItem ri = AppModel.getInstance().GetRecordById(tag);
 
         Handler h = ToolUtil.cast(arr[1]);
         Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);

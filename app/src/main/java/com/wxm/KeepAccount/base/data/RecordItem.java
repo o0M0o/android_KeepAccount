@@ -20,6 +20,10 @@ import java.util.Locale;
  */
 @DatabaseTable(tableName = "tb_KeepAccount")
 public class RecordItem implements Parcelable {
+    public final static String FIELD_RECORD_TS      = "record_ts";
+    public final static String FIELD_RECORD_TYPE    = "record_type";
+
+
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     private int _id;
 

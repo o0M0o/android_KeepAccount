@@ -200,14 +200,24 @@ public class ToolUtil {
 
     /**
      * 时间字符串转换到时间戳
+     * 待转换字符串必须是"2016-08-06"或者"2016-08-06 12:00:00"格式
      * @param str   待转换时间字符串
-     * @return 结果
+     * @return  如果字符串不符合规范或者遭遇异常则返回 Timestamp(0)
      */
     public static Timestamp StringToTimestamp(String str)   {
         Timestamp ts = new Timestamp(0);
+        int slen = str.length();
+        if((slen != "yyyy-MM-dd HH:mm:ss".length())
+                && (slen != "yyyy-MM-dd".length()))
+            return ts;
+
+        String valstr = str;
+        if(slen == "yyyy-MM-dd".length())
+            valstr += " 00:00:00";
+
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-            java.util.Date date = format.parse(str);
+            java.util.Date date = format.parse(valstr);
             ts.setTime(date.getTime());
         } catch (ParseException ex)     {
             ts = new Timestamp(0);

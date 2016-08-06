@@ -1,10 +1,16 @@
 package com.wxm.KeepAccount.Base.data;
 
-import com.wxm.KeepAccount.Base.db.DBManager;
-import com.wxm.KeepAccount.Base.utility.MD5Util;
-import com.wxm.KeepAccount.Base.utility.ContextUtil;
+import android.content.Context;
+import android.util.Log;
 
-import java.util.ArrayList;
+import com.wxm.KeepAccount.Base.db.DBOrmliteHelper;
+import com.wxm.KeepAccount.Base.utility.ContextUtil;
+import com.wxm.KeepAccount.Base.utility.MD5Util;
+import com.wxm.KeepAccount.Base.utility.ToolUtil;
+
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,47 +18,63 @@ import java.util.List;
  * 本类为app的数据类
  */
 public class AppModel {
-    private static final AppModel ourInstance = new AppModel();
-    private List<RecordItem> allRecords;
-    private boolean dbChange;
-    private final DBManager dbm = new DBManager(ContextUtil.getInstance());
+    private static final String TAG = "AppModel";
+
+    private static Context      mMockContext = null;
+    private static AppModel ourInstance;
+
+    private DBOrmliteHelper mDBHelper;
 
     // 当前登录用户
     public String cur_usr;
 
     public static AppModel getInstance() {
+        if(null == ourInstance)
+            ourInstance = new AppModel();
+
         return ourInstance;
     }
 
+
+    public static void SetContext(Context ct)   {
+        mMockContext = ct;
+    }
+
+    public static void Release()    {
+        if(null != ourInstance) {
+            ourInstance.mDBHelper.close();
+            ourInstance.mDBHelper = null;
+            ourInstance = null;
+        }
+    }
+
     private AppModel() {
-        allRecords = null;
-        dbChange = false;
+        if(null == mMockContext)
+            mDBHelper = new DBOrmliteHelper(ContextUtil.getInstance());
+        else
+            mDBHelper = new DBOrmliteHelper(mMockContext);
     }
 
     /**
-     * 从数据库加载所有记录
+     * 清理数据库
      */
-    private void LoadAllRecords()    {
-        allRecords = dbm.query();
-        dbChange = false;
+    public void ClearDB()   {
+        try {
+            mDBHelper.getRecordItemREDao().deleteBuilder().delete();
+            mDBHelper.getUsrItemREDao().deleteBuilder().delete();
+        }catch (SQLException e) {
+            Log.e(TAG, ToolUtil.ExceptionToString(e));
+        }
     }
 
-    public RecordItem GetRecord(String sql_tg)  {
-        if((null == allRecords) || dbChange)
-            LoadAllRecords();
 
-        int id = Integer.parseInt(sql_tg);
-        RecordItem ret = null;
-        if(null != allRecords) {
-            for (RecordItem it : allRecords) {
-                if(id == it.get_id())    {
-                    ret = it;
-                    break;
-                }
-            }
-        }
-
-        return ret;
+    /**
+     * 根据ID查找RecordItem数据
+     * @param id 待查找id
+     * @return 查找到的数据
+     */
+    public RecordItem GetRecordById(int id)  {
+        return mDBHelper.getRecordItemREDao().queryForId(id);
     }
 
     /**
@@ -60,18 +82,7 @@ public class AppModel {
      * @return 所有记录
      */
     public List<RecordItem> GetAllRecords()     {
-        if((null == allRecords) || dbChange)
-            LoadAllRecords();
-
-        ArrayList<RecordItem> ret;
-        if(null != allRecords)  {
-            ret = new ArrayList<>(allRecords);
-        }
-        else    {
-            ret = new ArrayList<>();
-        }
-
-        return ret;
+        return mDBHelper.getRecordItemREDao().queryForAll();
     }
 
     /**
@@ -80,22 +91,16 @@ public class AppModel {
      * @return  满足日期条件的记录
      */
     public List<RecordItem> GetRecordsByDay(String day_str)   {
-        String check_str = "XXXX-XX-XX";
-        int check_len = check_str.length();
-        if(check_len != day_str.length())
-            return null;
+        Timestamp tsb = ToolUtil.StringToTimestamp(day_str);
+        Timestamp tse = ToolUtil.StringToTimestamp(day_str + " 23:59:59");
 
-        if((null == allRecords) || dbChange)
-            LoadAllRecords();
-
-        ArrayList<RecordItem> ret = new ArrayList<>();
-        if(null != allRecords)  {
-            for(RecordItem it : allRecords) {
-                String h_k = it.getRecord_ts().toString().substring(0, check_len);
-                if(h_k.equals(day_str)) {
-                    ret.add(it);
-                }
-            }
+        List<RecordItem> ret;
+        try {
+            ret = mDBHelper.getRecordItemREDao().queryBuilder()
+                    .where().between(RecordItem.FIELD_RECORD_TS, tsb, tse).query();
+        }catch (SQLException e) {
+            Log.e(TAG, ToolUtil.ExceptionToString(e));
+            ret = new LinkedList<>();
         }
 
         return ret;
@@ -107,8 +112,7 @@ public class AppModel {
      * @return 添加成功返回true
      */
     public void AddRecords(List<RecordItem> lsi)    {
-        dbm.add(lsi);
-        dbChange = true;
+        mDBHelper.getRecordItemREDao().create(lsi);
     }
 
     /**
@@ -117,19 +121,19 @@ public class AppModel {
      * @return  修改成功返回true
      */
     public boolean ModifyRecords(List<RecordItem> lsi)  {
-        dbm.modify(lsi);
-        dbChange = true;
+        for(RecordItem i : lsi) {
+            mDBHelper.getRecordItemREDao().update(i);
+        }
         return true;
     }
 
     /**
      * 删除文件中的记录
-     * @param lsi 待删除的记录集合
+     * @param lsi 待删除的记录集合的id值
      * @return  操作成功返回true
      */
-    public boolean DeleteRecords(List<String> lsi)  {
-        dbm.deleteRecords(lsi);
-        dbChange = true;
+    public boolean DeleteRecords(List<Integer> lsi)  {
+        mDBHelper.getRecordItemREDao().deleteIds(lsi);
         return true;
     }
 
@@ -139,7 +143,15 @@ public class AppModel {
      * @return  如果存在返回true,否则返回false
      */
     public boolean hasUsr(String usr) {
-        return !usr.isEmpty() && dbm.hasUsr(usr);
+        if(ToolUtil.StringIsNullOrEmpty(usr))
+            return false;
+
+        List<UsrItem> ret = mDBHelper.getUsrItemREDao()
+                                .queryForEq(UsrItem.FIELD_USR_NAME, usr);
+        if(null == ret)
+            return false;
+
+        return ret.size() >= 1;
 
     }
 
@@ -155,7 +167,11 @@ public class AppModel {
             pwdpad += AppGobalDef.STR_PWD_PAD.substring(pwd.length());
         }
 
-        return dbm.addUsr(usr, MD5Util.string2MD5(pwdpad));
+        UsrItem ui = new UsrItem();
+        ui.setUsr_name(usr);
+        ui.setUsr_pwd(MD5Util.string2MD5(pwdpad));
+
+        return mDBHelper.getUsrItemREDao().createOrUpdate(ui).getNumLinesChanged() == 1;
     }
 
     /**
@@ -170,6 +186,15 @@ public class AppModel {
             pwdpad += AppGobalDef.STR_PWD_PAD.substring(pwd.length());
         }
 
-        return dbm.checkUsr(usr, MD5Util.string2MD5(pwdpad));
+        List<UsrItem> lsui = mDBHelper.getUsrItemREDao()
+                                .queryForEq(UsrItem.FIELD_USR_NAME, usr);
+        if((null == lsui) || (lsui.size() < 1))
+            return false;
+
+        String checkPwd = MD5Util.string2MD5(pwdpad);
+        if(checkPwd.equals(lsui.get(0).getUsr_pwd()))
+            return true;
+
+        return false;
     }
 }

@@ -96,10 +96,10 @@ public class ACDailyDetail extends AppCompatActivity {
             break;
 
             case R.id.dailydetailmenu_delete :  {
-                ArrayList<String> str_ls = new ArrayList<>();
+                ArrayList<Integer> str_ls = new ArrayList<>();
                 for(HashMap<String, String> i : lv_datalist)    {
                     if(i.get(CHECKBOX_STATUS).equals(CHECKBOX_STATUS_SELECTED)) {
-                        str_ls.add(i.get(AppGobalDef.ITEM_ID));
+                        str_ls.add(Integer.parseInt(i.get(AppGobalDef.ITEM_ID)));
                     }
                 }
 
@@ -248,7 +248,7 @@ public class ACDailyDetail extends AppCompatActivity {
         String str_id = hm.get(AppGobalDef.ITEM_ID);
 
         Message m = Message.obtain(ContextUtil.getMsgHandler(), AppMsgDef.MSG_RECORD_GET);
-        m.obj = new Object[] {str_id, mMHHandler};
+        m.obj = new Object[] {Integer.parseInt(str_id), mMHHandler};
         m.sendToTarget();
     }
 
