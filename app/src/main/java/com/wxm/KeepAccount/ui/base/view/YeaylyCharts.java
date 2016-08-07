@@ -88,10 +88,17 @@ public class YeaylyCharts extends ChartsBase {
             dsB.add(retB);
         }
 
-        BarDataset.add(new BarData(AppGobalDef.CNSTR_RECORD_INCOME, dsA,
-                Color.BLUE));
-        BarDataset.add(new BarData(AppGobalDef.CNSTR_RECORD_PAY, dsB,
-                Color.RED));
+
+        //当只有一个数据时，若加入的首数据为0，则该数据不会显示,所以要做下面的workaround
+        if(0.01 < Collections.max(dsA)) {
+            BarDataset.add(new BarData(AppGobalDef.CNSTR_RECORD_INCOME, dsA,
+                    Color.BLUE));
+        }
+
+        if(0.01 < Collections.max(dsB)) {
+            BarDataset.add(new BarData(AppGobalDef.CNSTR_RECORD_PAY, dsB,
+                    Color.RED));
+        }
 
         chartRender();
     }

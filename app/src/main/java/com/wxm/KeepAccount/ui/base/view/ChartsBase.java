@@ -148,11 +148,9 @@ public abstract class ChartsBase extends ChartView {
         this.invalidate();
     }
 
-
     protected void chartRender()
     {
         try {
-
             //设置绘图区默认缩进px值,留置空间显示Axis,Axistitle....
             int [] ltrb = getBarLnDefaultSpadding();
             chart.setPadding( DensityUtil.dip2px(getContext(), 50),ltrb[1],

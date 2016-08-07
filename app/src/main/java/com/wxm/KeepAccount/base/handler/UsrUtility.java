@@ -25,16 +25,24 @@ public class UsrUtility {
                 Object[] arr = ToolUtil.cast(msg.obj);
 
                 Intent data = ToolUtil.cast(arr[0]);
+                Handler h = ToolUtil.cast(arr[1]);
                 String usr = data.getStringExtra(res.getString(R.string.usr_name));
                 String pwd = data.getStringExtra(res.getString(R.string.usr_pwd));
-                boolean ret = AppModel.getInstance().addUsr(usr, pwd);
 
-                Handler h = ToolUtil.cast(arr[1]);
                 Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
-                m.obj = new Object[] {ret, data};
-                m.arg1 = AppMsgDef.MSG_USR_ADDUSR;
-                m.sendToTarget();
+                if(AppModel.getInstance().hasUsr(usr))  {
+                    m.obj = new Object[]{false, data, "用户已经存在！"};
+                    m.arg1 = AppMsgDef.MSG_USR_ADDUSR;
+                    m.sendToTarget();
+                } else {
+                    boolean ret = AppModel.getInstance().addUsr(usr, pwd);
+
+                    m.obj = new Object[]{ret, data};
+                    m.arg1 = AppMsgDef.MSG_USR_ADDUSR;
+                    m.sendToTarget();
+                }
             }
+            break;
 
             case AppMsgDef.MSG_USR_LOGIN: {
                 Object[] arr = ToolUtil.cast(msg.obj);
@@ -42,26 +50,31 @@ public class UsrUtility {
                 Intent data = ToolUtil.cast(arr[0]);
                 String usr = data.getStringExtra(res.getString(R.string.usr_name));
                 String pwd = data.getStringExtra(res.getString(R.string.usr_pwd));
-                if(AppModel.getInstance().checkUsr(usr, pwd))   {
+
+                boolean ret = AppModel.getInstance().checkUsr(usr, pwd);
+                if(ret)   {
                     AppModel.getInstance().cur_usr = usr;
                 }
 
                 Handler h = ToolUtil.cast(arr[1]);
                 Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
-                m.obj = data;
+                m.obj = ret;
                 m.arg1 = AppMsgDef.MSG_USR_LOGIN;
                 m.sendToTarget();
             }
+            break;
 
             case AppMsgDef.MSG_USR_LOGOUT : {
                 AppModel.getInstance().cur_usr = "";
             }
+            break;
 
             case AppMsgDef.MSG_USR_HASUSR : {
                 Intent data = (Intent) msg.obj;
                 String usr = data.getStringExtra(res.getString(R.string.usr_name));
                 AppModel.getInstance().hasUsr(usr);
             }
+            break;
         }
     }
 }

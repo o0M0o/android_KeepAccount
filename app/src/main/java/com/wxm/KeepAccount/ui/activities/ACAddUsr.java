@@ -12,10 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
+import com.wxm.KeepAccount.Base.utility.ToolUtil;
 import com.wxm.KeepAccount.R;
 
 public class ACAddUsr
@@ -114,6 +116,21 @@ public class ACAddUsr
         return false;
     }
 
+    /**
+     * 清空已经存在的数据
+     */
+    public void repeatInput()   {
+        EditText et_usrname = (EditText)findViewById(R.id.ac_naet_accountname);
+        EditText et_pwd = (EditText)findViewById(R.id.ac_naet_accountpwd);
+        EditText et_repeatpwd = (EditText)findViewById(R.id.ac_naet_repeatpwd);
+        assert et_usrname != null && et_pwd != null && et_repeatpwd != null;
+
+        et_usrname.setText("");
+        et_pwd.setText("");
+        et_repeatpwd.setText("");
+        et_usrname.requestFocus();
+    }
+
 
     /**
      * 检查输入数据合法性，并设置提示信息
@@ -182,6 +199,10 @@ public class ACAddUsr
             }
         }
 
+        /**
+         * 如果添加用户成功就返回，否则显示错误信息
+         * @param msg 返回的消息
+         */
         private void afterAddUsr(Message msg) {
             Object[] arr = (Object[]) msg.obj;
             if(null != arr) {
@@ -193,6 +214,15 @@ public class ACAddUsr
                     int ret_data = AppGobalDef.INTRET_USR_ADD;
                     mActivity.setResult(ret_data, data);
                     mActivity.finish();
+                } else  {
+                    String sstr = "添加用户失败!";
+                    if(2 < arr.length)
+                        sstr = ToolUtil.cast(arr[2]);
+
+                    Toast.makeText(ContextUtil.getInstance(),
+                            sstr, Toast.LENGTH_LONG).show();
+
+                    mActivity.repeatInput();
                 }
             }
         }
