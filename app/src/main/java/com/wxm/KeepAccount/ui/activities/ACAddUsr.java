@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
+import com.wxm.KeepAccount.Base.data.UsrItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
 import com.wxm.KeepAccount.Base.utility.ToolUtil;
 import com.wxm.KeepAccount.R;
@@ -63,9 +64,9 @@ public class ACAddUsr
 
                     Resources res = getResources();
                     Intent data = new Intent();
-                    data.putExtra(res.getString(R.string.usr_name),
+                    data.putExtra(UsrItem.FIELD_NAME,
                                     et_usrname.getText().toString());
-                    data.putExtra(res.getString(R.string.usr_pwd),
+                    data.putExtra(UsrItem.FIELD_PWD,
                                     et_pwd.getText().toString());
 
                     Message m = Message.obtain(ContextUtil.getMsgHandler(),

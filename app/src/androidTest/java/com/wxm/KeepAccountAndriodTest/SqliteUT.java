@@ -44,43 +44,43 @@ public class SqliteUT extends AndroidTestCase {
         ArrayList<RecordItem> items = new ArrayList<RecordItem>();
         Date de = new Date();
         RecordItem ri = new RecordItem();
-        ri.setRecord_type("pay");
-        ri.setRecord_info("tax");
-        ri.setRecord_val(new BigDecimal(12.34));
-        ri.getRecord_ts().setTime(de.getTime());
+        ri.setType("pay");
+        ri.setInfo("tax");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
         items.add(ri);
 
         de = new Date();
         ri = new RecordItem();
-        ri.setRecord_type("pay");
-        ri.setRecord_info("water cost");
-        ri.setRecord_val(new BigDecimal(12.34));
-        ri.getRecord_ts().setTime(de.getTime());
+        ri.setType("pay");
+        ri.setInfo("water cost");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
         items.add(ri);
 
         de = new Date();
         ri = new RecordItem();
-        ri.setRecord_type("pay");
-        ri.setRecord_info("electrcity cost");
-        ri.setRecord_val(new BigDecimal(12.34));
-        ri.getRecord_ts().setTime(de.getTime());
+        ri.setType("pay");
+        ri.setInfo("electrcity cost");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
         items.add(ri);
 
         de = new Date();
         ri = new RecordItem();
-        ri.setRecord_type("income");
-        ri.setRecord_info("工资");
-        ri.setRecord_val(new BigDecimal(12.34));
-        ri.getRecord_ts().setTime(de.getTime());
+        ri.setType("income");
+        ri.setInfo("工资");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
         items.add(ri);
 
 
         de = new Date();
         ri = new RecordItem();
-        ri.setRecord_type("income");
-        ri.setRecord_info("稿酬");
-        ri.setRecord_val(new BigDecimal(12.34));
-        ri.getRecord_ts().setTime(de.getTime());
+        ri.setType("income");
+        ri.setInfo("稿酬");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
         items.add(ri);
 
         mDbManger.add(items);

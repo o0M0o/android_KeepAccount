@@ -187,7 +187,7 @@ public class ACRecord
                 record_type = AppGobalDef.CNSTR_RECORD_INCOME;
             }
             else    {
-                record_type = old_item.getRecord_type();
+                record_type = old_item.getType();
             }
         }
 
@@ -261,15 +261,15 @@ public class ACRecord
         }
 
         if(null != old_item)    {
-            if(!old_item.getRecord_info().isEmpty())
-                et_info.setText(old_item.getRecord_info());
+            if(!old_item.getInfo().isEmpty())
+                et_info.setText(old_item.getInfo());
 
-            if(!old_item.getRecord_note().isEmpty())
-                et_note.setText(old_item.getRecord_note());
+            if(!old_item.getNote().isEmpty())
+                et_note.setText(old_item.getNote());
 
-            et_date.setText(old_item.getRecord_ts().toString().substring(0, 10));
+            et_date.setText(old_item.getTs().toString().substring(0, 10));
 
-            String oldval = old_item.getRecord_val().toString();
+            String oldval = old_item.getVal().toString();
             int pos = oldval.indexOf(".");
             if(pos >= 0)    {
                 et_amount.setText(oldval.substring(0, pos + 3));
@@ -397,25 +397,25 @@ public class ACRecord
 
         Intent data=new Intent();
         RecordItem ri = new RecordItem();
-        ri.setRecord_type(retype);
-        ri.setRecord_note(str_note);
-        ri.setRecord_info(str_info);
-        ri.setRecord_val(new BigDecimal(str_val));
+        ri.setType(retype);
+        ri.setNote(str_note);
+        ri.setInfo(str_info);
+        ri.setVal(new BigDecimal(str_val));
 
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            ri.getRecord_ts().setTime(df.parse(str_date).getTime());
+            ri.getTs().setTime(df.parse(str_date).getTime());
         }
         catch(Exception ex)
         {
             Log.e(TAG, String.format("解析'%s'到日期失败", str_date));
 
             Date dt = new Date();
-            ri.getRecord_ts().setTime(dt.getTime());
+            ri.getTs().setTime(dt.getTime());
         }
 
         if(null != old_item)    {
-            ri.set_id(old_item.get_id());
+            ri.setId(old_item.getId());
         }
 
         data.putExtra(AppGobalDef.STR_RECORD, ri);

@@ -18,37 +18,42 @@ import java.util.Locale;
  * 数据类
  * Created by 123 on 2016/5/3.
  */
-@DatabaseTable(tableName = "tb_KeepAccount")
+@DatabaseTable(tableName = "tbRecord")
 public class RecordItem implements Parcelable {
-    public final static String FIELD_RECORD_TS      = "record_ts";
-    public final static String FIELD_RECORD_TYPE    = "record_type";
+    public final static String FIELD_TS     = "ts";
+    public final static String FIELD_TYPE   = "type";
+    public final static String FIELD_USR    = "usr";
 
 
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     private int _id;
 
-    @DatabaseField(columnName = "record_type", dataType = DataType.STRING)
-    private String record_type;
+    @DatabaseField(columnName = "usr", foreign = true, foreignColumnName = UsrItem.FIELD_ID,
+                    canBeNull = false)
+    private UsrItem usr;
 
-    @DatabaseField(columnName = "record_info", dataType = DataType.STRING)
-    private String record_info;
+    @DatabaseField(columnName = "type", canBeNull = false, dataType = DataType.STRING)
+    private String type;
 
-    @DatabaseField(columnName = "record_note", dataType = DataType.STRING)
-    private String record_note;
+    @DatabaseField(columnName = "info", canBeNull = false, dataType = DataType.STRING)
+    private String info;
 
-    @DatabaseField(columnName = "record_val", dataType = DataType.BIG_DECIMAL)
-    private BigDecimal record_val;
+    @DatabaseField(columnName = "note", dataType = DataType.STRING)
+    private String note;
 
-    @DatabaseField(columnName = "record_ts", dataType = DataType.TIME_STAMP)
-    private Timestamp record_ts;
+    @DatabaseField(columnName = "val", dataType = DataType.BIG_DECIMAL)
+    private BigDecimal val;
+
+    @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
+    private Timestamp ts;
 
     public RecordItem()
     {
         setRecord_ts(new Timestamp(0));
-        setRecord_val(BigDecimal.ZERO);
-        setRecord_type("");
-        setRecord_info("");
-        setRecord_note("");
+        setVal(BigDecimal.ZERO);
+        setType("");
+        setInfo("");
+        setNote("");
     }
 
     @Override
@@ -56,8 +61,8 @@ public class RecordItem implements Parcelable {
     {
         return String.format(Locale.CHINA
                             ,"type : %s, info : %s, val : %f, timestamp : %s\nnote : %s"
-                            , getRecord_type(), getRecord_info(), getRecord_val(),
-                            getRecord_ts().toString(), getRecord_note());
+                            , getType(), getInfo(), getVal(),
+                            getTs().toString(), getNote());
     }
 
     public int describeContents() {
@@ -65,12 +70,12 @@ public class RecordItem implements Parcelable {
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(get_id());
-        out.writeString(getRecord_type());
-        out.writeString(getRecord_info());
-        out.writeString(getRecord_note());
-        out.writeString(getRecord_val().toString());
-        out.writeString(getRecord_ts().toString());
+        out.writeInt(getId());
+        out.writeString(getType());
+        out.writeString(getInfo());
+        out.writeString(getNote());
+        out.writeString(getVal().toString());
+        out.writeString(getTs().toString());
 
     }
 
@@ -86,18 +91,18 @@ public class RecordItem implements Parcelable {
     };
 
     private RecordItem(Parcel in)   {
-        set_id(in.readInt());
-        setRecord_type(in.readString());
-        setRecord_info(in.readString());
-        setRecord_note(in.readString());
-        setRecord_val(new BigDecimal(in.readString()));
+        setId(in.readInt());
+        setType(in.readString());
+        setInfo(in.readString());
+        setNote(in.readString());
+        setVal(new BigDecimal(in.readString()));
 
         try {
             setRecord_ts(new Timestamp(0));
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
             Date date = format.parse(in.readString());
-            getRecord_ts().setTime(date.getTime());
+            getTs().setTime(date.getTime());
         }
         catch (ParseException ex)
         {
@@ -105,51 +110,59 @@ public class RecordItem implements Parcelable {
         }
     }
 
-    public int get_id() {
+    public int getId() {
         return _id;
     }
 
-    public void set_id(int _id) {
+    public void setId(int _id) {
         this._id = _id;
     }
 
-    public String getRecord_type() {
-        return record_type;
+    public String getType() {
+        return type;
     }
 
-    public void setRecord_type(String record_type) {
-        this.record_type = record_type;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getRecord_info() {
-        return record_info;
+    public String getInfo() {
+        return info;
     }
 
-    public void setRecord_info(String record_info) {
-        this.record_info = record_info;
+    public void setInfo(String info) {
+        this.info = info;
     }
 
-    public String getRecord_note() {
-        return record_note;
+    public String getNote() {
+        return note;
     }
 
-    public void setRecord_note(String record_note) {
-        this.record_note = record_note;
+    public void setNote(String note) {
+        this.note = note;
     }
 
-    public BigDecimal getRecord_val() {
-        return record_val;
+    public BigDecimal getVal() {
+        return val;
     }
 
-    public void setRecord_val(BigDecimal record_val) {
-        this.record_val = record_val;
+    public void setVal(BigDecimal val) {
+        this.val = val;
     }
 
-    public Timestamp getRecord_ts() {
-        return record_ts;
+    public Timestamp getTs() {
+        return ts;
     }
 
-    public void setRecord_ts(Timestamp record_ts) {
-        this.record_ts = record_ts;
+    public void setRecord_ts(Timestamp tsval) {
+        this.ts = tsval;
+    }
+
+    public UsrItem getUsr() {
+        return usr;
+    }
+
+    public void setUsr(UsrItem usr) {
+        this.usr = usr;
     }
 }

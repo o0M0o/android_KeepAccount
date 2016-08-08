@@ -51,7 +51,7 @@ public class YeaylyCharts extends ChartsBase {
         ArrayList<String> ls_date = new ArrayList<>();
         HashMap<String, ArrayList<RecordItem>> rimap = new HashMap<>();
         for (RecordItem ri: ls_data) {
-            String day = ri.getRecord_ts().toString().substring(0, 4);
+            String day = ri.getTs().toString().substring(0, 4);
 
             if(!ls_date.contains(day))  {
                 ls_date.add(day);
@@ -76,11 +76,11 @@ public class YeaylyCharts extends ChartsBase {
             Double retB = 0d;
 
             for(RecordItem ri : rimap.get(day)) {
-                if(ri.getRecord_type().equals(AppGobalDef.CNSTR_RECORD_INCOME))  {
-                    retA += ri.getRecord_val().doubleValue();
+                if(ri.getType().equals(AppGobalDef.CNSTR_RECORD_INCOME))  {
+                    retA += ri.getVal().doubleValue();
                 }
                 else    {
-                    retB += ri.getRecord_val().doubleValue();
+                    retB += ri.getVal().doubleValue();
                 }
             }
 
@@ -89,16 +89,10 @@ public class YeaylyCharts extends ChartsBase {
         }
 
 
-        //当只有一个数据时，若加入的首数据为0，则该数据不会显示,所以要做下面的workaround
-        if(0.01 < Collections.max(dsA)) {
-            BarDataset.add(new BarData(AppGobalDef.CNSTR_RECORD_INCOME, dsA,
-                    Color.BLUE));
-        }
-
-        if(0.01 < Collections.max(dsB)) {
-            BarDataset.add(new BarData(AppGobalDef.CNSTR_RECORD_PAY, dsB,
-                    Color.RED));
-        }
+        BarDataset.add(new BarData(AppGobalDef.CNSTR_RECORD_INCOME, dsA,
+                Color.BLUE));
+        BarDataset.add(new BarData(AppGobalDef.CNSTR_RECORD_PAY, dsB,
+                Color.RED));
 
         chartRender();
     }

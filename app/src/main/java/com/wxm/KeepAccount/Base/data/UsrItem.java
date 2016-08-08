@@ -8,35 +8,48 @@ import com.j256.ormlite.table.DatabaseTable;
  * 用户数据
  * Created by 123 on 2016/8/5.
  */
-@DatabaseTable(tableName = "tb_Usr")
+@DatabaseTable(tableName = "tbUsr")
 public class UsrItem {
-    public final static String FIELD_USR_NAME   = "usr_name";
-    public final static String FIELD_USR_PWD    = "usr_pwd";
+    public final static String FIELD_ID = "_id";
+    public final static String FIELD_NAME = "name";
+    public final static String FIELD_PWD = "pwd";
 
-    @DatabaseField(id = true, columnName = "usr_name", dataType = DataType.STRING)
-    private String usr_name;
+    @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
+    private int _id;
 
-    @DatabaseField(columnName = "usr_pwd", dataType = DataType.STRING)
-    private String usr_pwd;
+    @DatabaseField(columnName = "name", unique = true, dataType = DataType.STRING)
+    private String name;
+
+    @DatabaseField(columnName = "pwd", dataType = DataType.STRING)
+    private String pwd;
 
     public UsrItem()    {
-        setUsr_name("");
-        setUsr_pwd("");
+        setName("");
+        setPwd("");
+        setId(-1);
     }
 
-    public String getUsr_name() {
-        return usr_name;
+    public String getName() {
+        return name;
     }
 
-    public void setUsr_name(String usr_name) {
-        this.usr_name = usr_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getUsr_pwd() {
-        return usr_pwd;
+    public String getPwd() {
+        return pwd;
     }
 
-    public void setUsr_pwd(String usr_pwd) {
-        this.usr_pwd = usr_pwd;
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public int getId() {
+        return _id;
+    }
+
+    public void setId(int _id) {
+        this._id = _id;
     }
 }

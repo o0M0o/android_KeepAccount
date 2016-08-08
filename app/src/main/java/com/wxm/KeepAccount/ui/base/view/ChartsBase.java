@@ -160,6 +160,17 @@ public abstract class ChartsBase extends ChartView {
             chart.showRoundBorder();
 
             //数据源
+            //当只有一个数据时，若加入的首数据为0，则该数据不会显示,所以要做下面的workaround
+            int lc = BarDataset.size();
+            for(int i = 0; i < lc; i++) {
+                if(0.01 > Collections.max(BarDataset.get(i).getDataSet()))  {
+                    BarDataset.remove(i);
+
+                    lc--;
+                    i = 0;
+                }
+            }
+
             chart.setDataSource(BarDataset);
             chart.setCategories(chartLabels);
             chart.getPlotLegend().getPaint().setTextSize(24);

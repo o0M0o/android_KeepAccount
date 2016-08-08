@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
+import com.wxm.KeepAccount.Base.data.UsrItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
 import com.wxm.KeepAccount.Base.utility.ToolUtil;
 import com.wxm.KeepAccount.R;
@@ -454,8 +455,8 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
 
             Resources res = getResources();
             Intent data = new Intent();
-            data.putExtra(res.getString(R.string.usr_name), mEmail);
-            data.putExtra(res.getString(R.string.usr_pwd), mPassword);
+            data.putExtra(UsrItem.FIELD_NAME, mEmail);
+            data.putExtra(UsrItem.FIELD_PWD, mPassword);
 
             Message m = Message.obtain(ContextUtil.getMsgHandler(),
                             AppMsgDef.MSG_USR_LOGIN);

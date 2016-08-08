@@ -46,8 +46,8 @@
     <string name="cn_new_account_repeat_pwd">请重复输入密码</string>
     <string name="error_repeatpwd_notmatch">两次输入密码不一样</string>
 
-    <string name="usr_name">usr_name</string>
-    <string name="usr_pwd">usr_pwd</string>
+    <string name="name">name</string>
+    <string name="pwd">pwd</string>
 
     <string name="tab_cn_daily">日统计</string>
     <string name="tab_cn_monthly">月统计</string>

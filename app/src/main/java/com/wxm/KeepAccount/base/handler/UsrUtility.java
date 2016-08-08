@@ -7,9 +7,9 @@ import android.os.Message;
 
 import com.wxm.KeepAccount.Base.data.AppModel;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
-import com.wxm.KeepAccount.Base.utility.ToolUtil;
-import com.wxm.KeepAccount.R;
+import com.wxm.KeepAccount.Base.data.UsrItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
+import com.wxm.KeepAccount.Base.utility.ToolUtil;
 
 /**
  * 处理用户登录的辅助类
@@ -26,8 +26,8 @@ public class UsrUtility {
 
                 Intent data = ToolUtil.cast(arr[0]);
                 Handler h = ToolUtil.cast(arr[1]);
-                String usr = data.getStringExtra(res.getString(R.string.usr_name));
-                String pwd = data.getStringExtra(res.getString(R.string.usr_pwd));
+                String usr = data.getStringExtra(UsrItem.FIELD_NAME);
+                String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
 
                 Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
                 if(AppModel.getInstance().hasUsr(usr))  {
@@ -35,7 +35,7 @@ public class UsrUtility {
                     m.arg1 = AppMsgDef.MSG_USR_ADDUSR;
                     m.sendToTarget();
                 } else {
-                    boolean ret = AppModel.getInstance().addUsr(usr, pwd);
+                    boolean ret = (null != AppModel.getInstance().addUsr(usr, pwd));
 
                     m.obj = new Object[]{ret, data};
                     m.arg1 = AppMsgDef.MSG_USR_ADDUSR;
@@ -48,13 +48,11 @@ public class UsrUtility {
                 Object[] arr = ToolUtil.cast(msg.obj);
 
                 Intent data = ToolUtil.cast(arr[0]);
-                String usr = data.getStringExtra(res.getString(R.string.usr_name));
-                String pwd = data.getStringExtra(res.getString(R.string.usr_pwd));
+                String usr = data.getStringExtra(UsrItem.FIELD_NAME);
+                String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
 
-                boolean ret = AppModel.getInstance().checkUsr(usr, pwd);
-                if(ret)   {
-                    AppModel.getInstance().cur_usr = usr;
-                }
+                AppModel.getInstance().setCurUsr(AppModel.getInstance().CheckAndGetUsr(usr, pwd));
+                boolean ret = (null != AppModel.getInstance().getCurUsr());
 
                 Handler h = ToolUtil.cast(arr[1]);
                 Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
@@ -65,13 +63,13 @@ public class UsrUtility {
             break;
 
             case AppMsgDef.MSG_USR_LOGOUT : {
-                AppModel.getInstance().cur_usr = "";
+                AppModel.getInstance().setCurUsr(null);
             }
             break;
 
             case AppMsgDef.MSG_USR_HASUSR : {
                 Intent data = (Intent) msg.obj;
-                String usr = data.getStringExtra(res.getString(R.string.usr_name));
+                String usr = data.getStringExtra(UsrItem.FIELD_NAME);
                 AppModel.getInstance().hasUsr(usr);
             }
             break;
