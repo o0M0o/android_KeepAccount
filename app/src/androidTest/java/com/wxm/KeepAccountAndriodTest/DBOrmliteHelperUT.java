@@ -5,8 +5,8 @@ import android.test.RenamingDelegatingContext;
 import android.test.suitebuilder.annotation.Suppress;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
-import com.wxm.KeepAccount.Base.data.RecordItem;
-import com.wxm.KeepAccount.Base.data.UsrItem;
+import com.wxm.KeepAccount.Base.db.RecordItem;
+import com.wxm.KeepAccount.Base.db.UsrItem;
 import com.wxm.KeepAccount.Base.db.DBOrmliteHelper;
 
 import java.math.BigDecimal;
@@ -37,7 +37,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         assertNotNull(sdao);
         sdao.deleteBuilder().delete();
 
-        RuntimeExceptionDao<UsrItem, String> sdao1 = mHelper.getUsrItemREDao();
+        RuntimeExceptionDao<UsrItem, Integer> sdao1 = mHelper.getUsrItemREDao();
         assertNotNull(sdao1);
         sdao1.deleteBuilder().delete();
     }
@@ -50,7 +50,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         assertNotNull(sdao);
         sdao.deleteBuilder().delete();
 
-        RuntimeExceptionDao<UsrItem, String> sdao1 = mHelper.getUsrItemREDao();
+        RuntimeExceptionDao<UsrItem, Integer> sdao1 = mHelper.getUsrItemREDao();
         assertNotNull(sdao1);
         sdao1.deleteBuilder().delete();
 
@@ -59,7 +59,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
 
     public void testRecordItemAdd()  {
         RuntimeExceptionDao<RecordItem, Integer> sdao = mHelper.getRecordItemREDao();
-        RuntimeExceptionDao<UsrItem, String> sdao1 = mHelper.getUsrItemREDao();
+        RuntimeExceptionDao<UsrItem, Integer> sdao1 = mHelper.getUsrItemREDao();
         assertNotNull(sdao);
         assertNotNull(sdao1);
 
@@ -134,7 +134,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
 
 
     public void testUsrItemAdd()    {
-        RuntimeExceptionDao<UsrItem, String> sdao = mHelper.getUsrItemREDao();
+        RuntimeExceptionDao<UsrItem, Integer> sdao = mHelper.getUsrItemREDao();
         assertNotNull(sdao);
 
         UsrItem ui = new UsrItem();
@@ -161,7 +161,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
 
     @Suppress
     public void testUsrItemGet() {
-        RuntimeExceptionDao<UsrItem, String> sdao = mHelper.getUsrItemREDao();
+        RuntimeExceptionDao<UsrItem, Integer> sdao = mHelper.getUsrItemREDao();
         assertNotNull(sdao);
 
         List<UsrItem> rets = sdao.queryForAll();

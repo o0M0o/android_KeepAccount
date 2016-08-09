@@ -1,6 +1,7 @@
 package com.wxm.KeepAccount.Base.db;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -10,8 +11,8 @@ import com.j256.ormlite.dao.ReferenceObjectCache;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import com.wxm.KeepAccount.Base.data.RecordItem;
-import com.wxm.KeepAccount.Base.data.UsrItem;
+import com.wxm.KeepAccount.Base.utility.ContextUtil;
+import com.wxm.KeepAccount.R;
 
 import java.sql.SQLException;
 
@@ -32,8 +33,11 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
     private Dao<RecordItem, Integer> simpleRecordItemDao = null;
     private RuntimeExceptionDao<RecordItem, Integer> simpleRecordItemRuntimeDao = null;
 
-    private Dao<UsrItem, String> simpleUsrItemDao = null;
-    private RuntimeExceptionDao<UsrItem, String> simpleUsrItemRuntimeDao = null;
+    private Dao<UsrItem, Integer> simpleUsrItemDao = null;
+    private RuntimeExceptionDao<UsrItem, Integer> simpleUsrItemRuntimeDao = null;
+
+    private Dao<RecordTypeItem, Integer> simpleRTItemDao = null;
+    private RuntimeExceptionDao<RecordTypeItem, Integer> simpleRTItemRuntimeDao = null;
 
     public DBOrmliteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -45,14 +49,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db, ConnectionSource connectionSource) {
-        try {
-            Log.i(TAG, "onCreate");
-            TableUtils.createTable(connectionSource, RecordItem.class);
-            TableUtils.createTable(connectionSource, UsrItem.class);
-        } catch (SQLException e) {
-            Log.e(TAG, "Can't create database", e);
-            throw new RuntimeException(e);
-        }
+        CreateAndInitTable();
     }
 
     /**
@@ -63,14 +60,15 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
             Log.i(TAG, "onUpgrade");
-
             TableUtils.dropTable(connectionSource, RecordItem.class, true);
-            // after we drop the old databases, we create the new ones
-            onCreate(db, connectionSource);
+            TableUtils.dropTable(connectionSource, UsrItem.class, true);
         } catch (SQLException e) {
             Log.e(TAG, "Can't drop databases", e);
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
+
+        // after we drop the old databases, we create the new ones
+        onCreate(db, connectionSource);
     }
 
     /**
@@ -86,13 +84,23 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         return simpleRecordItemDao;
     }
 
-    public Dao<UsrItem, String> getUsrItemDao() throws SQLException {
+    public Dao<UsrItem, Integer> getUsrItemDao() throws SQLException {
         if (simpleUsrItemDao == null) {
             simpleUsrItemDao = getDao(UsrItem.class);
         }
 
         return simpleUsrItemDao;
     }
+
+
+    public Dao<RecordTypeItem, Integer> getRTItemDao() throws SQLException {
+        if (simpleRTItemDao == null) {
+            simpleRTItemDao = getDao(RecordTypeItem.class);
+        }
+
+        return simpleRTItemDao;
+    }
+
 
     /**
      * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our SimpleData class. It will
@@ -107,11 +115,18 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         return simpleRecordItemRuntimeDao;
     }
 
-    public RuntimeExceptionDao<UsrItem, String> getUsrItemREDao() {
+    public RuntimeExceptionDao<UsrItem, Integer> getUsrItemREDao() {
         if (simpleUsrItemRuntimeDao == null) {
             simpleUsrItemRuntimeDao = getRuntimeExceptionDao(UsrItem.class);
         }
         return simpleUsrItemRuntimeDao;
+    }
+
+    public RuntimeExceptionDao<RecordTypeItem, Integer> getRTItemREDao() {
+        if (simpleRTItemRuntimeDao == null) {
+            simpleRTItemRuntimeDao = getRuntimeExceptionDao(RecordTypeItem.class);
+        }
+        return simpleRTItemRuntimeDao;
     }
 
     /**
@@ -122,8 +137,43 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         super.close();
         simpleRecordItemDao = null;
         simpleRecordItemRuntimeDao = null;
+        simpleRTItemDao = null;
 
         simpleUsrItemDao = null;
         simpleUsrItemRuntimeDao = null;
+        simpleRTItemRuntimeDao = null;
+    }
+
+
+    private void CreateAndInitTable()   {
+        try {
+            TableUtils.createTable(connectionSource, RecordItem.class);
+            TableUtils.createTable(connectionSource, UsrItem.class);
+            TableUtils.createTable(connectionSource, RecordTypeItem.class);
+        } catch (SQLException e) {
+            Log.e(TAG, "Can't create database", e);
+            throw new RuntimeException(e);
+        }
+
+        // 添加recordtype
+        RuntimeExceptionDao<RecordTypeItem, Integer> redao = getRTItemREDao();
+        Resources res = ContextUtil.getInstance().getResources();
+        String[] type = res.getStringArray(R.array.payinfo);
+        for(String ln : type)   {
+            RecordTypeItem ri = new RecordTypeItem();
+            ri.setItemType(RecordTypeItem.DEF_PAY);
+            ri.setType(ln);
+
+            redao.create(ri);
+        }
+
+        type = res.getStringArray(R.array.incomeinfo);
+        for(String ln : type)   {
+            RecordTypeItem ri = new RecordTypeItem();
+            ri.setItemType(RecordTypeItem.DEF_INCOME);
+            ri.setType(ln);
+
+            redao.create(ri);
+        }
     }
 }

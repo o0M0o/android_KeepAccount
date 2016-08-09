@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.wxm.KeepAccount.Base.data.RecordItem;
+import com.wxm.KeepAccount.Base.db.RecordItem;
 
 import org.xclcharts.chart.BarChart3D;
 import org.xclcharts.chart.BarData;

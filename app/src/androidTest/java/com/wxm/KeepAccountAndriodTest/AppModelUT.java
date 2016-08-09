@@ -5,8 +5,8 @@ import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
 
 import com.wxm.KeepAccount.Base.data.AppModel;
-import com.wxm.KeepAccount.Base.data.RecordItem;
-import com.wxm.KeepAccount.Base.data.UsrItem;
+import com.wxm.KeepAccount.Base.db.RecordItem;
+import com.wxm.KeepAccount.Base.db.UsrItem;
 import com.wxm.KeepAccount.Base.utility.ToolUtil;
 
 import java.math.BigDecimal;
@@ -31,18 +31,19 @@ public class AppModelUT extends AndroidTestCase {
         assertNotNull(mMockContext);
 
         AppModel.SetContext(mMockContext);
+        AppModel.getInstance().SetUp();
         AppModel.getInstance().ClearDB();
     }
 
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
-        AppModel.Release();
+        AppModel.getInstance().Release();
     }
 
 
     public void testRecordItem()    {
-        UsrItem ui = AppModel.getInstance().addUsr("wxm", "123456");
+        UsrItem ui = AppModel.getUsrUtility().addUsr("wxm", "123456");
         assertNotNull(ui);
 
         LinkedList<RecordItem> lsit = new LinkedList<>();
@@ -79,16 +80,17 @@ public class AppModelUT extends AndroidTestCase {
         ri.getTs().setTime(de.getTime());
         lsit.add(ri);
 
-        AppModel.getInstance().AddRecords(lsit);
-        assertNull(AppModel.getInstance().GetAllRecords());
+        assertEquals(0, AppModel.getRecordUtility().AddRecords(lsit));
+        assertNull(AppModel.getRecordUtility().GetAllRecords());
 
         AppModel.getInstance().setCurUsr(ui);
-        List<RecordItem> rets = AppModel.getInstance().GetAllRecords();
+        assertEquals(4, AppModel.getRecordUtility().AddRecords(lsit));
+        List<RecordItem> rets = AppModel.getRecordUtility().GetAllRecords();
         assertEquals(rets.size(), 4);
 
         String dtstr = ToolUtil.TimestampToString(ri.getTs())
                             .substring(0, "yyyy-MM-dd".length());
-        List<RecordItem> rets1 = AppModel.getInstance().GetRecordsByDay(dtstr);
+        List<RecordItem> rets1 = AppModel.getRecordUtility().GetRecordsByDay(dtstr);
         assertEquals(rets1.size(), 4);
 
         String ni = "eat some thing";
@@ -96,20 +98,20 @@ public class AppModelUT extends AndroidTestCase {
         mri.setInfo(ni);
         LinkedList<RecordItem> lsmri = new LinkedList<>();
         lsmri.add(mri);
-        AppModel.getInstance().ModifyRecords(lsmri);
+        AppModel.getRecordUtility().ModifyRecords(lsmri);
 
-        RecordItem nmri = AppModel.getInstance().GetRecordById(mri.getId());
+        RecordItem nmri = AppModel.getRecordUtility().GetRecordById(mri.getId());
         assertEquals(mri.getInfo(), nmri.getInfo());
     }
 
 
     public void testUsrItem()    {
-        assertFalse(AppModel.getInstance().hasUsr("hugo"));
-        assertNotNull(AppModel.getInstance().addUsr("hugo", "123456"));
-        assertNotNull(AppModel.getInstance().addUsr("hugo", "654321"));
-        assertTrue(AppModel.getInstance().hasUsr("hugo"));
+        assertFalse(AppModel.getUsrUtility().hasUsr("hugo"));
+        assertNotNull(AppModel.getUsrUtility().addUsr("hugo", "123456"));
+        assertNotNull(AppModel.getUsrUtility().addUsr("hugo", "654321"));
+        assertTrue(AppModel.getUsrUtility().hasUsr("hugo"));
 
-        assertFalse(AppModel.getInstance().checkUsr("hugo", "123456"));
-        assertTrue(AppModel.getInstance().checkUsr("hugo", "654321"));
+        assertFalse(AppModel.getUsrUtility().checkUsr("hugo", "123456"));
+        assertTrue(AppModel.getUsrUtility().checkUsr("hugo", "654321"));
     }
 }

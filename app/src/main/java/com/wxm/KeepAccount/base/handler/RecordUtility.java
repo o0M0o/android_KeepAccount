@@ -8,7 +8,7 @@ import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppModel;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
 import com.wxm.KeepAccount.Base.utility.ToolUtil;
-import com.wxm.KeepAccount.Base.data.RecordItem;
+import com.wxm.KeepAccount.Base.db.RecordItem;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class RecordUtility {
         Object[] arr = ToolUtil.cast(am.obj);
         List<Integer> ls_del = ToolUtil.cast(arr[0]);
         assert null != ls_del;
-        boolean ret = AppModel.getInstance().DeleteRecords(ls_del);
+        boolean ret = AppModel.getRecordUtility().DeleteRecords(ls_del);
 
         // reply message
         Handler h = ToolUtil.cast(arr[1]);
@@ -84,7 +84,7 @@ public class RecordUtility {
 
         String date_str = ToolUtil.cast(arr[0]);
         // load record & format output
-        List<RecordItem> lr = AppModel.getInstance().GetRecordsByDay(date_str);
+        List<RecordItem> lr = AppModel.getRecordUtility().GetRecordsByDay(date_str);
         ArrayList<HashMap<String, String>> mylist = new ArrayList<>();
         for (RecordItem r : lr) {
             String tit = r.getType();
@@ -124,13 +124,13 @@ public class RecordUtility {
 
     private static void LoadAllRecords(Message am)
     {
-        List<RecordItem> ret = AppModel.getInstance().GetAllRecords();
+        List<RecordItem> ret = AppModel.getRecordUtility().GetAllRecords();
     }
 
     private static void AllRecordsToYearReport(Message am)
     {
         // get year info from record
-        List<RecordItem> lr = AppModel.getInstance().GetAllRecords();
+        List<RecordItem> lr = AppModel.getRecordUtility().GetAllRecords();
         HashMap<String, ArrayList<RecordItem>> hm_data = new HashMap<>();
         for (RecordItem record : lr) {
             String h_k = record.getTs().toString().substring(0, 4);
@@ -194,7 +194,7 @@ public class RecordUtility {
     private static void AllRecordsToMonthReport(Message am)
     {
         // get months info from record
-        List<RecordItem> lr = AppModel.getInstance().GetAllRecords();
+        List<RecordItem> lr = AppModel.getRecordUtility().GetAllRecords();
         HashMap<String, ArrayList<RecordItem>> hm_data = new HashMap<>();
         for (RecordItem record : lr) {
             String h_k = record.getTs().toString().substring(0, 7);
@@ -258,7 +258,7 @@ public class RecordUtility {
     private static void AllRecordsToDayReport(Message am)
     {
         // get days info from record
-        List<RecordItem> lr = AppModel.getInstance().GetAllRecords();
+        List<RecordItem> lr = AppModel.getRecordUtility().GetAllRecords();
         HashMap<String, ArrayList<RecordItem>> hm_data = new HashMap<>();
         for (RecordItem record : lr) {
             String h_k = record.getTs().toString().substring(0, 10);
@@ -326,7 +326,7 @@ public class RecordUtility {
         RecordItem ri = data.getParcelableExtra(AppGobalDef.STR_RECORD);
         ArrayList<RecordItem> items = new ArrayList<>();
         items.add(ri);
-        AppModel.getInstance().AddRecords(items);
+        AppModel.getRecordUtility().AddRecords(items);
 
         Handler h = ToolUtil.cast(arr[1]);
         Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
@@ -342,7 +342,7 @@ public class RecordUtility {
         RecordItem ri = data.getParcelableExtra(AppGobalDef.STR_RECORD);
         ArrayList<RecordItem> items = new ArrayList<>();
         items.add(ri);
-        AppModel.getInstance().ModifyRecords(items);
+        AppModel.getRecordUtility().ModifyRecords(items);
 
         Handler h = ToolUtil.cast(arr[1]);
         Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
@@ -355,7 +355,7 @@ public class RecordUtility {
         Object[] arr = ToolUtil.cast(am.obj);
 
         Integer tag = ToolUtil.cast(arr[0]);
-        RecordItem ri = AppModel.getInstance().GetRecordById(tag);
+        RecordItem ri = AppModel.getRecordUtility().GetRecordById(tag);
 
         Handler h = ToolUtil.cast(arr[1]);
         Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);

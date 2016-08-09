@@ -109,7 +109,7 @@ public class GVContentFragment extends Fragment {
      */
     public void updateView() {
         if(null != cur_view)
-            cur_view.RenderChart(AppModel.getInstance().GetAllRecords());
+            cur_view.RenderChart(AppModel.getRecordUtility().GetAllRecords());
     }
 }
 

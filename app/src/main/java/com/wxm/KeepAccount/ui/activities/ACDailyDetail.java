@@ -19,7 +19,7 @@ import android.widget.SimpleAdapter;
 
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
-import com.wxm.KeepAccount.Base.data.RecordItem;
+import com.wxm.KeepAccount.Base.db.RecordItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
 import com.wxm.KeepAccount.Base.utility.ToolUtil;
 import com.wxm.KeepAccount.R;

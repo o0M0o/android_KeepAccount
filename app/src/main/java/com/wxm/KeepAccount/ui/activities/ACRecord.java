@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
-import com.wxm.KeepAccount.Base.data.RecordItem;
+import com.wxm.KeepAccount.Base.db.RecordItem;
 import com.wxm.KeepAccount.R;
 
 import java.math.BigDecimal;

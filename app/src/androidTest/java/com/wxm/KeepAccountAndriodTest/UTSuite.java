@@ -9,6 +9,6 @@ import org.junit.runners.Suite;
  */
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({SqliteUT.class})
+@Suite.SuiteClasses({DBOrmliteHelperUT.class})
 public class UTSuite {
 }

@@ -2,7 +2,6 @@ package com.wxm.KeepAccount.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,6 +18,8 @@ import android.widget.SimpleAdapter;
 import android.widget.ViewSwitcher;
 
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
+import com.wxm.KeepAccount.Base.data.AppModel;
+import com.wxm.KeepAccount.Base.db.RecordTypeItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
 import com.wxm.KeepAccount.Base.utility.ToolUtil;
 import com.wxm.KeepAccount.BuildConfig;
@@ -171,23 +172,20 @@ public class ACRecordType extends AppCompatActivity
      * @param ty 数据类型
      */
     private void load_type(String ty)   {
-        Resources res =getResources();
-        String[] type;
+        List<RecordTypeItem> ls;
         if(ty.equals(AppGobalDef.STR_RECORD_PAY))   {
-            type = res.getStringArray(R.array.payinfo);
+            ls = AppModel.getRecordTypeUtility().getAllPayItem();
             this.setTitle(R.string.title_acrt_pay);
         }
         else    {
-            type = res.getStringArray(R.array.incomeinfo);
+            ls = AppModel.getRecordTypeUtility().getAllIncomeItem();
             this.setTitle(R.string.title_acrt_income);
         }
 
-        assert null != type;
-
         mLHData.clear();
         HashMap<String, String> hm;
-        for(String ln : type)   {
-            hm = line2hm(ln);
+        for(RecordTypeItem ln : ls)   {
+            hm = line2hm(ln.getType());
             mLHData.add(hm);
         }
 

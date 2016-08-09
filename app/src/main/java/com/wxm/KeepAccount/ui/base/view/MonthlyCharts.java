@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
-import com.wxm.KeepAccount.Base.data.RecordItem;
+import com.wxm.KeepAccount.Base.db.RecordItem;
 
 import org.xclcharts.chart.BarData;
 

@@ -1,4 +1,4 @@
-package com.wxm.KeepAccount.Base.data;
+package com.wxm.KeepAccount.Base.db;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;

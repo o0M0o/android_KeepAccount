@@ -38,7 +38,7 @@ import android.widget.Toast;
 
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
-import com.wxm.KeepAccount.Base.data.UsrItem;
+import com.wxm.KeepAccount.Base.db.UsrItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
 import com.wxm.KeepAccount.Base.utility.ToolUtil;
 import com.wxm.KeepAccount.R;

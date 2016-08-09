@@ -153,7 +153,7 @@ public class ACStart
 
                     bt_view_switch.setText(GV_VIEW_TXT);
                     bt_view_switch.setCompoundDrawablesWithIntrinsicBounds(null
-                                ,getResources().getDrawable(R.drawable.ic_graphview)
+                                ,getResources().getDrawable(R.drawable.ic_listview)
                                 ,null ,null);
                 } else {
                     mTabFragment = lvTabFragment;
@@ -161,7 +161,7 @@ public class ACStart
 
                     bt_view_switch.setText(LV_VIEW_TXT);
                     bt_view_switch.setCompoundDrawablesWithIntrinsicBounds(null
-                            ,getResources().getDrawable(R.drawable.ic_listview)
+                            ,getResources().getDrawable(R.drawable.ic_graphview)
                             ,null ,null);
                 }
 

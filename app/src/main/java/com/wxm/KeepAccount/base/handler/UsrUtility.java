@@ -7,7 +7,7 @@ import android.os.Message;
 
 import com.wxm.KeepAccount.Base.data.AppModel;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
-import com.wxm.KeepAccount.Base.data.UsrItem;
+import com.wxm.KeepAccount.Base.db.UsrItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
 import com.wxm.KeepAccount.Base.utility.ToolUtil;
 
@@ -30,12 +30,12 @@ public class UsrUtility {
                 String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
 
                 Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
-                if(AppModel.getInstance().hasUsr(usr))  {
+                if(AppModel.getUsrUtility().hasUsr(usr))  {
                     m.obj = new Object[]{false, data, "用户已经存在！"};
                     m.arg1 = AppMsgDef.MSG_USR_ADDUSR;
                     m.sendToTarget();
                 } else {
-                    boolean ret = (null != AppModel.getInstance().addUsr(usr, pwd));
+                    boolean ret = (null != AppModel.getUsrUtility().addUsr(usr, pwd));
 
                     m.obj = new Object[]{ret, data};
                     m.arg1 = AppMsgDef.MSG_USR_ADDUSR;
@@ -51,7 +51,7 @@ public class UsrUtility {
                 String usr = data.getStringExtra(UsrItem.FIELD_NAME);
                 String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
 
-                AppModel.getInstance().setCurUsr(AppModel.getInstance().CheckAndGetUsr(usr, pwd));
+                AppModel.getInstance().setCurUsr(AppModel.getUsrUtility().CheckAndGetUsr(usr, pwd));
                 boolean ret = (null != AppModel.getInstance().getCurUsr());
 
                 Handler h = ToolUtil.cast(arr[1]);
@@ -70,7 +70,7 @@ public class UsrUtility {
             case AppMsgDef.MSG_USR_HASUSR : {
                 Intent data = (Intent) msg.obj;
                 String usr = data.getStringExtra(UsrItem.FIELD_NAME);
-                AppModel.getInstance().hasUsr(usr);
+                AppModel.getUsrUtility().hasUsr(usr);
             }
             break;
         }
