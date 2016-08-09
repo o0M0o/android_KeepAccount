@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text="@string/cn_record_pay"
         android:id="@+id/tabbt_record_pay"
-        android:drawableTop="@drawable/abc_ic_menu_paste_mtrl_am_alpha"
+        android:drawableTop="@drawable/ic_pay"
         android:layout_marginRight="6dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:text="@string/cn_record_income"
         android:id="@+id/tabbt_record_income"
-        android:drawableTop="@drawable/abc_ic_menu_paste_mtrl_am_alpha"
+        android:drawableTop="@drawable/ic_income"
         android:layout_alignTop="@+id/tabbt_record_pay"
         android:layout_toLeftOf="@+id/tabbt_record_pay"
         android:layout_marginRight="12dp" />
