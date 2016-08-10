@@ -21,7 +21,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
     private RenamingDelegatingContext   mMockContext;
     private DBOrmliteHelper             mHelper;
 
-    public DBOrmliteHelperUT()   {
+    public DBOrmliteHelperUT()    {
     }
 
     @Override
