@@ -37,6 +37,8 @@ import java.util.Map;
 public class ACRecordTypeEdit extends AppCompatActivity
         implements View.OnClickListener, AdapterView.OnItemClickListener {
     private static final String TAG = "ACRecordTypeEdit";
+    private static final String NEWITEM_PAY     = "新支出类型-tv-新支出类型说明";
+    private static final String NEWITEM_INCOME  = "新收入类型-tv-新收入类型说明";
 
     private static final String TEXTVIEW_CHILD = "TEXTVIEW_CHILD";
     private static final String EDITTEXT_CHILD = "EDITTEXT_CHILD";
@@ -52,6 +54,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
     private MenuItem                mMISure;
     private MenuItem                mMIEdit;
 
+    private String                  mType;
     private boolean                 mBEditModel;
 
     @Override
@@ -67,10 +70,10 @@ public class ACRecordTypeEdit extends AppCompatActivity
             setResult(AppGobalDef.INTRET_ERROR, data);
             finish();
         }   else {
-            String rty = it.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
-            if (ToolUtil.StringIsNullOrEmpty(rty) ||
-                    (!rty.equals(AppGobalDef.STR_RECORD_INCOME)
-                            && !rty.equals(AppGobalDef.STR_RECORD_PAY))) {
+            mType = it.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
+            if (ToolUtil.StringIsNullOrEmpty(mType) ||
+                    (!mType.equals(AppGobalDef.STR_RECORD_INCOME)
+                            && !mType.equals(AppGobalDef.STR_RECORD_PAY))) {
                 Log.e(TAG, "intent参数不正确");
 
                 Intent data = new Intent();
@@ -90,8 +93,16 @@ public class ACRecordTypeEdit extends AppCompatActivity
             mFABAddition.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, "新添加类型", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+
+                    if(mType.equals(AppGobalDef.STR_RECORD_PAY))   {
+                        mLHData.add(line2hm(NEWITEM_PAY));
+                    } else  {
+                        mLHData.add(line2hm(NEWITEM_INCOME));
+                    }
+
+                    mMAAdapter.notifyDataSetChanged();
                 }
             });
 
@@ -104,7 +115,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
             mLVRecordType.setAdapter(mMAAdapter);
             mLVRecordType.setOnItemClickListener(this);
 
-            load_type(rty);
+            load_type(mType);
         }
     }
 

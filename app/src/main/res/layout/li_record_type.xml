@@ -60,22 +60,24 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/lvet_title"
                 android:textColor="@color/abc_primary_text_disable_only_material_light"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:layout_alignParentTop="true"
                 android:elegantTextHeight="true"
                 android:focusable="true"
                 android:enabled="true"
-                android:focusableInTouchMode="true" />
+                android:focusableInTouchMode="true"
+                android:background="@color/darkgrey" />
 
             <EditText
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lvet_explain"
                 android:textColor="@color/abc_primary_text_disable_only_material_light"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 android:elegantTextHeight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_alignLeft="@+id/lvet_title" />
+                android:layout_alignLeft="@+id/lvet_title"
+                android:background="@color/darkgrey" />
         </RelativeLayout>
 
 
