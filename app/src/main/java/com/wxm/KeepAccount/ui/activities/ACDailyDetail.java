@@ -171,7 +171,7 @@ public class ACDailyDetail extends AppCompatActivity {
 
         lv_adapter= new SimpleAdapter(this,
                 lv_datalist,
-                R.layout.daily_detail_listitem,
+                R.layout.li_daily_detail,
                 new String[]{AppGobalDef.ITEM_TITLE, AppGobalDef.ITEM_TEXT},
                 new int[]{R.id.DailyDetailTitle, R.id.DailyDetailText}) {
             @Override

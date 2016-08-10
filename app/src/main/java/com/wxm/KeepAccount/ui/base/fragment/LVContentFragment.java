@@ -82,7 +82,7 @@ public class LVContentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        cur_view =  inflater.inflate(R.layout.pager_item, container, false);
+        cur_view =  inflater.inflate(R.layout.lv_pager, container, false);
 
         Bundle args = getArguments();
         String title = args.getCharSequence(KEY_TITLE).toString();
@@ -111,7 +111,7 @@ public class LVContentFragment extends Fragment {
         // 设置listview adapter
         lv_adapter= new SimpleAdapter(ContextUtil.getInstance(),
                 lv_list,
-                R.layout.main_listitem,
+                R.layout.li_main,
                 new String[]{AppGobalDef.ITEM_TITLE, AppGobalDef.ITEM_TEXT},
                 new int[]{R.id.ItemTitle, R.id.ItemText}) {
             @Override

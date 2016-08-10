@@ -3,7 +3,10 @@ package com.wxm.KeepAccount.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,9 +33,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ACRecordType extends AppCompatActivity
-    implements View.OnClickListener, AdapterView.OnItemClickListener {
-    private static final String TAG = "ACRecordType";
+
+public class ACRecordTypeEdit extends AppCompatActivity
+        implements View.OnClickListener, AdapterView.OnItemClickListener {
+    private static final String TAG = "ACRecordTypeEdit";
 
     private static final String TEXTVIEW_CHILD = "TEXTVIEW_CHILD";
     private static final String EDITTEXT_CHILD = "EDITTEXT_CHILD";
@@ -41,17 +45,20 @@ public class ACRecordType extends AppCompatActivity
     private static final String EXPLAIN        = "EXPLAIN";
 
     private ArrayList<HashMap<String, String>> mLHData = new ArrayList<>();
-    private ListView                        mLVRecordType;
-    private MySimpleAdapter                 mMAAdapter;
+    private ListView                mLVRecordType;
+    private MySimpleAdapter         mMAAdapter;
 
-    private MenuItem        mMISure;
-    private MenuItem        mMIEdit;
+    private FloatingActionButton    mFABAddition;
+    private MenuItem                mMISure;
+    private MenuItem                mMIEdit;
+
+    private boolean                 mBEditModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_record_type);
 
+        // check intent
         Intent it = getIntent();
         if(null == it)  {
             Log.e(TAG, "没有intent");
@@ -59,31 +66,48 @@ public class ACRecordType extends AppCompatActivity
             Intent data = new Intent();
             setResult(AppGobalDef.INTRET_ERROR, data);
             finish();
+        }   else {
+            String rty = it.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
+            if (ToolUtil.StringIsNullOrEmpty(rty) ||
+                    (!rty.equals(AppGobalDef.STR_RECORD_INCOME)
+                            && !rty.equals(AppGobalDef.STR_RECORD_PAY))) {
+                Log.e(TAG, "intent参数不正确");
+
+                Intent data = new Intent();
+                setResult(AppGobalDef.INTRET_ERROR, data);
+                finish();
+            }
+
+            // init component
+            setContentView(R.layout.ac_record_type_edit);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+
+            mBEditModel = false;
+            mFABAddition = (FloatingActionButton) findViewById(R.id.fab);
+            assert null != mFABAddition;
+            mFABAddition.setVisibility(View.INVISIBLE);
+            mFABAddition.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+
+            mLVRecordType = (ListView)findViewById(R.id.aclv_record_type_edit);
+            mMAAdapter = new MySimpleAdapter(this,
+                    ContextUtil.getInstance(),
+                    mLHData,
+                    new String[] {TITLE, EXPLAIN},
+                    new int[] {R.id.lvtv_title, R.id.lvtv_explain});
+            mLVRecordType.setAdapter(mMAAdapter);
+            mLVRecordType.setOnItemClickListener(this);
+
+            load_type(rty);
         }
-
-        String rty = it.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
-        if(ToolUtil.StringIsNullOrEmpty(rty) ||
-                (!rty.equals(AppGobalDef.STR_RECORD_INCOME)
-                        && !rty.equals(AppGobalDef.STR_RECORD_PAY)))    {
-            Log.e(TAG, "intent参数不正确");
-
-            Intent data = new Intent();
-            setResult(AppGobalDef.INTRET_ERROR, data);
-            finish();
-        }
-
-        mLVRecordType = (ListView)findViewById(R.id.aclv_record_type);
-        mMAAdapter = new MySimpleAdapter(this,
-                                    ContextUtil.getInstance(),
-                                    mLHData,
-                                    new String[] {TITLE, EXPLAIN},
-                                    new int[] {R.id.lvtv_title, R.id.lvtv_explain});
-        mLVRecordType.setAdapter(mMAAdapter);
-        mLVRecordType.setOnItemClickListener(this);
-
-
-        load_type(rty);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -128,16 +152,32 @@ public class ACRecordType extends AppCompatActivity
             break;
 
             case R.id.recordtype_menu_giveup: {
-                Intent data = new Intent();
-                setResult(AppGobalDef.INTRET_GIVEUP, data);
-                finish();
+                if(mBEditModel) {
+                    mBEditModel = false;
+
+                    mMIEdit.setVisible(true);
+                    mFABAddition.setVisibility(View.INVISIBLE);
+
+                    mMAAdapter.notifyDataSetChanged();
+                } else  {
+                    Intent data = new Intent();
+                    setResult(AppGobalDef.INTRET_GIVEUP, data);
+                    finish();
+                }
             }
             break;
 
-
             case R.id.recordtype_menu_edit :    {
+                if(!mBEditModel) {
+                    mBEditModel = true;
+                    mFABAddition.setVisibility(View.VISIBLE);
 
+                    mMIEdit.setVisible(false);
+
+                    mMAAdapter.notifyDataSetChanged();
+                }
             }
+            break;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -147,33 +187,6 @@ public class ACRecordType extends AppCompatActivity
         return true;
     }
 
-
-    /**
-     * only for test
-     */
-    private void forTest()  {
-        mLHData.clear();
-
-        HashMap<String, String> hm = new HashMap<>();
-        hm.put(TITLE, "test 1");
-        hm.put(EXPLAIN, "for test 1");
-        hm.put(CHILD_TYPE, TEXTVIEW_CHILD);
-        mLHData.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "test 2");
-        hm.put(EXPLAIN, "for test 2");
-        hm.put(CHILD_TYPE, TEXTVIEW_CHILD);
-        mLHData.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "test 3");
-        hm.put(EXPLAIN, "其它类型（可以编辑此项）");
-        hm.put(CHILD_TYPE, EDITTEXT_CHILD);
-        mLHData.add(hm);
-
-        mMAAdapter.notifyDataSetChanged();
-    }
 
     /**
      * 加载数据
@@ -235,6 +248,12 @@ public class ACRecordType extends AppCompatActivity
     }
 
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        activeItem(position);
+    }
+
+
     /**
      * 选中指定位置的节点
      * @param pos 节点的位置
@@ -258,21 +277,17 @@ public class ACRecordType extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        activeItem(position);
-    }
 
 
     /**
      * 此adapter混合显示'textview'和'edittext'
      */
     public class MySimpleAdapter
-            extends SimpleAdapter   {
-        private ACRecordType mHome;
+            extends SimpleAdapter {
+        private ACRecordTypeEdit mHome;
         private List<? extends Map<String, ?>> mSelfData;
 
-        public MySimpleAdapter(ACRecordType home,
+        public MySimpleAdapter(ACRecordTypeEdit home,
                                Context context, List<? extends Map<String, ?>> data,
                                String[] from,
                                int[] to) {
@@ -296,22 +311,32 @@ public class ACRecordType extends AppCompatActivity
 
                 Map<String, ?> hm = mSelfData.get(position);
                 String tp = ToolUtil.cast(hm.get(CHILD_TYPE));
-                if(tp.equals(TEXTVIEW_CHILD)) {
+                if(tp.equals(TEXTVIEW_CHILD) && (!mBEditModel)) {
                     vs.setDisplayedChild(0);
                 } else {
                     vs.setDisplayedChild(1);
                     String info = ToolUtil.cast(hm.get(TITLE));
                     EditText et = (EditText)vs.getCurrentView().findViewById(R.id.lvet_title);
                     et.setText(info);
+
+                    String explain = ToolUtil.cast(hm.get(EXPLAIN));
+                    EditText exet = (EditText)vs.getCurrentView().findViewById(R.id.lvet_explain);
+                    exet.setText(explain);
                 }
 
                 CheckBox cb = (CheckBox)v.findViewById(R.id.lvcb_selected);
                 assert null != cb;
 
-                cb.setOnClickListener(mHome);
+                if(!mBEditModel) {
+                    cb.setOnClickListener(mHome);
+                    cb.setVisibility(View.VISIBLE);
+                } else    {
+                    cb.setVisibility(View.INVISIBLE);
+                }
             }
 
             return v;
         }
     }
+
 }

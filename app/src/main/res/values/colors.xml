@@ -75,7 +75,7 @@
     <color name="rosybrown">#BC8F8F</color> <!--褐玫瑰红 -->
     <color name="mediumorchid">#BA55D3</color><!--中粉紫色 -->
     <color name="darkgoldenrod">#B8860B</color><!--暗金黄色 -->
-    <color name="firebrick">#B22222</color><!--火砖色 -->
+    <color name="firebrick">#b22222</color><!--火砖色 -->
     <color name="powderblue">#B0E0E6</color><!--粉蓝色 -->
     <color name="lightsteelblue">#B0C4DE</color><!--亮钢兰色 -->
     <color name="paleturquoise">#AFEEEE</color><!--苍宝石绿 -->

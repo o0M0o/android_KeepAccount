@@ -282,7 +282,7 @@ public class ACRecord
 
 
     private void onTouchType(MotionEvent event) {
-        Intent it = new Intent(this, ACRecordType.class);
+        Intent it = new Intent(this, ACRecordTypeEdit.class);
         if(record_type.equals(AppGobalDef.CNSTR_RECORD_INCOME)) {
             it.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.STR_RECORD_INCOME);
         }
