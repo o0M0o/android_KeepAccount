@@ -12,6 +12,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
+import com.wxm.KeepAccount.BuildConfig;
 import com.wxm.KeepAccount.R;
 
 import java.sql.SQLException;
@@ -160,18 +161,30 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         Resources res = ContextUtil.getInstance().getResources();
         String[] type = res.getStringArray(R.array.payinfo);
         for(String ln : type)   {
+            String[] sln =  ln.split("-", 4);
+            if(BuildConfig.DEBUG && (2 != sln.length)) {
+                throw new AssertionError();
+            }
+
             RecordTypeItem ri = new RecordTypeItem();
             ri.setItemType(RecordTypeItem.DEF_PAY);
-            ri.setType(ln);
+            ri.setType(sln[0]);
+            ri.setNote(sln[1]);
 
             redao.create(ri);
         }
 
         type = res.getStringArray(R.array.incomeinfo);
         for(String ln : type)   {
+            String[] sln =  ln.split("-", 4);
+            if(BuildConfig.DEBUG && (2 != sln.length)) {
+                throw new AssertionError();
+            }
+
             RecordTypeItem ri = new RecordTypeItem();
             ri.setItemType(RecordTypeItem.DEF_INCOME);
-            ri.setType(ln);
+            ri.setType(sln[0]);
+            ri.setNote(sln[1]);
 
             redao.create(ri);
         }

@@ -37,14 +37,13 @@ import java.util.Map;
 public class ACRecordTypeEdit extends AppCompatActivity
         implements View.OnClickListener, AdapterView.OnItemClickListener {
     private static final String TAG = "ACRecordTypeEdit";
-    private static final String NEWITEM_PAY     = "新支出类型-tv-新支出类型说明";
-    private static final String NEWITEM_INCOME  = "新收入类型-tv-新收入类型说明";
+    private static final String NEWITEM_PAY     = "新支出类型-新支出类型说明";
+    private static final String NEWITEM_INCOME  = "新收入类型-新收入类型说明";
 
-    private static final String TEXTVIEW_CHILD = "TEXTVIEW_CHILD";
-    private static final String EDITTEXT_CHILD = "EDITTEXT_CHILD";
-    private static final String CHILD_TYPE     = "CHILD_TYPE";
-    private static final String TITLE          = "TITLE";
-    private static final String EXPLAIN        = "EXPLAIN";
+    private static final String TITLE     = "TITLE";
+    private static final String EXPLAIN   = "EXPLAIN";
+    private static final String ITEMID    = "ITEMID";
+    private static final String ITEMALL   = "ITEMALL";
 
     private ArrayList<HashMap<String, String>> mLHData = new ArrayList<>();
     private ListView                mLVRecordType;
@@ -96,11 +95,14 @@ public class ACRecordTypeEdit extends AppCompatActivity
                     Snackbar.make(view, "新添加类型", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
+                    HashMap<String, String> hm;
                     if(mType.equals(AppGobalDef.STR_RECORD_PAY))   {
-                        mLHData.add(line2hm(NEWITEM_PAY));
+                        hm = line2hm(NEWITEM_PAY);
                     } else  {
-                        mLHData.add(line2hm(NEWITEM_INCOME));
+                        hm = line2hm(NEWITEM_INCOME);
                     }
+                    hm.put(ITEMID, Integer.toString(-1));
+                    mLHData.add(hm);
 
                     mMAAdapter.notifyDataSetChanged();
                 }
@@ -138,27 +140,38 @@ public class ACRecordTypeEdit extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.recordtype_menu_sure: {
-                String ty = "";
-                int cc = mLVRecordType.getChildCount();
-                for(int i = 0; i < cc; i++) {
-                    View vo = mLVRecordType.getChildAt(i);
-                    CheckBox cb = (CheckBox)vo.findViewById(R.id.lvcb_selected);
-                    assert null != cb;
+                if(mBEditModel) {
+                    modify_types();
+                    load_type(mType);
 
-                    if(cb.isChecked())  {
-                        ty = mLHData.get(i).get(TITLE);
+                    mBEditModel = false;
+
+                    mMISure.setVisible(false);
+                    mMIEdit.setVisible(true);
+                    mFABAddition.setVisibility(View.INVISIBLE);
+                    mMAAdapter.notifyDataSetChanged();
+                } else {
+                    String ty = "";
+                    int cc = mLVRecordType.getChildCount();
+                    for (int i = 0; i < cc; i++) {
+                        View vo = mLVRecordType.getChildAt(i);
+                        CheckBox cb = (CheckBox) vo.findViewById(R.id.lvcb_selected);
+                        assert null != cb;
+
+                        if (cb.isChecked()) {
+                            ty = mLHData.get(i).get(TITLE);
+                        }
                     }
-                }
 
-                Intent data = new Intent();
-                if(!ToolUtil.StringIsNullOrEmpty(ty)) {
-                    data.putExtra(AppGobalDef.STR_RECORD_TYPE, ty);
-                    setResult(AppGobalDef.INTRET_SURE, data);
+                    Intent data = new Intent();
+                    if (!ToolUtil.StringIsNullOrEmpty(ty)) {
+                        data.putExtra(AppGobalDef.STR_RECORD_TYPE, ty);
+                        setResult(AppGobalDef.INTRET_SURE, data);
+                    } else {
+                        setResult(AppGobalDef.INTRET_GIVEUP, data);
+                    }
+                    finish();
                 }
-                else    {
-                    setResult(AppGobalDef.INTRET_GIVEUP, data);
-                }
-                finish();
             }
             break;
 
@@ -166,6 +179,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
                 if(mBEditModel) {
                     mBEditModel = false;
 
+                    mMISure.setVisible(false);
                     mMIEdit.setVisible(true);
                     mFABAddition.setVisibility(View.INVISIBLE);
 
@@ -184,6 +198,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
                     mFABAddition.setVisibility(View.VISIBLE);
 
                     mMIEdit.setVisible(false);
+                    mMISure.setVisible(true);
 
                     mMAAdapter.notifyDataSetChanged();
                 }
@@ -198,6 +213,61 @@ public class ACRecordTypeEdit extends AppCompatActivity
         return true;
     }
 
+
+    private void modify_types() {
+        if(mBEditModel) {
+            ArrayList<HashMap<String, String>> ndata = new ArrayList<>();
+            int cu = mLVRecordType.getChildCount();
+            for (int i = 0; i < cu; i++) {
+                View curv = mLVRecordType.getChildAt(i);
+                assert null != curv;
+
+                EditText ettitle = (EditText)curv.findViewById(R.id.lvet_title);
+                EditText etexplain = (EditText)curv.findViewById(R.id.lvet_explain);
+                assert null != ettitle && null != etexplain;
+
+                String title = ettitle.getText().toString();
+                String explain = etexplain.getText().toString();
+                String ckln = title + "-" + explain;
+
+                HashMap<String, String> hm = mLHData.get(i);
+                int id = Integer.parseInt(hm.get(ITEMID));
+                if(-1 != id) {
+                    if(!ckln.equals(hm.get(ITEMALL)))    {
+                        RecordTypeItem mr = new RecordTypeItem();
+                        mr.set_id(id);
+
+                        if(mType.equals(AppGobalDef.STR_RECORD_INCOME))
+                            mr.setItemType(RecordTypeItem.DEF_INCOME);
+                        else
+                            mr.setItemType(RecordTypeItem.DEF_PAY);
+
+                        mr.setType(title);
+                        mr.setNote(explain);
+
+                        AppModel.getRecordTypeUtility().modifyItem(mr);
+                    }
+
+                } else {
+                    if ((mType.equals(AppGobalDef.STR_RECORD_PAY) && ckln.equals(NEWITEM_PAY))
+                            || (mType.equals(AppGobalDef.STR_RECORD_INCOME) && ckln.equals(NEWITEM_INCOME))) {
+                        continue;
+                    }
+
+                    RecordTypeItem mr = new RecordTypeItem();
+                    if(mType.equals(AppGobalDef.STR_RECORD_INCOME))
+                        mr.setItemType(RecordTypeItem.DEF_INCOME);
+                    else
+                        mr.setItemType(RecordTypeItem.DEF_PAY);
+
+                    mr.setType(title);
+                    mr.setNote(explain);
+
+                    AppModel.getRecordTypeUtility().addItem(mr);
+                }
+            }
+        }
+    }
 
     /**
      * 加载数据
@@ -215,9 +285,13 @@ public class ACRecordTypeEdit extends AppCompatActivity
         }
 
         mLHData.clear();
-        HashMap<String, String> hm;
         for(RecordTypeItem ln : ls)   {
-            hm = line2hm(ln.getType());
+            HashMap<String, String> hm = new HashMap<>();
+            hm.put(TITLE, ln.getType());
+            hm.put(EXPLAIN, ln.getNote());
+            hm.put(ITEMALL, ln.getType() + "-" + ln.getNote());
+            hm.put(ITEMID, Integer.toString(ln.get_id()));
+
             mLHData.add(hm);
         }
 
@@ -226,25 +300,20 @@ public class ACRecordTypeEdit extends AppCompatActivity
 
 
     /**
-     * 把字符串(生活费-tv-生活开销)转换为item
+     * 把字符串(生活费-生活开销)转换为item
      * @param ln 待转换字符串
      * @return item信息
      */
     private HashMap<String, String> line2hm(String ln)  {
-        String[] sln =  ln.split("-", 5);
-        if(BuildConfig.DEBUG && (3 != sln.length)) {
+        String[] sln =  ln.split("-", 4);
+        if(BuildConfig.DEBUG && (2 != sln.length)) {
             throw new AssertionError();
         }
 
         HashMap<String, String> hm = new HashMap<>();
         hm.put(TITLE, sln[0]);
-        hm.put(EXPLAIN, sln[2]);
-
-        if(sln[1].equals("tv"))
-            hm.put(CHILD_TYPE, TEXTVIEW_CHILD);
-        else
-            hm.put(CHILD_TYPE, EDITTEXT_CHILD);
-
+        hm.put(EXPLAIN, sln[1]);
+        hm.put(ITEMALL, ln);
         return hm;
     }
 
@@ -321,8 +390,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
                 assert vs != null;
 
                 Map<String, ?> hm = mSelfData.get(position);
-                String tp = ToolUtil.cast(hm.get(CHILD_TYPE));
-                if(tp.equals(TEXTVIEW_CHILD) && (!mBEditModel)) {
+                if(!mBEditModel) {
                     vs.setDisplayedChild(0);
                 } else {
                     vs.setDisplayedChild(1);

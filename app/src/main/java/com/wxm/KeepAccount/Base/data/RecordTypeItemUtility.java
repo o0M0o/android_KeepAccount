@@ -31,4 +31,25 @@ public class RecordTypeItemUtility {
         return AppModel.getDBHelper().getRTItemREDao()
                 .queryForEq(RecordTypeItem.FIELD_ITEMTYPE, RecordTypeItem.DEF_INCOME);
     }
+
+    /**
+     * 添加一个新数据
+     * @param ri    待添加数据
+     * @return  如果添加成功返回true, 否则返回false
+     */
+    public boolean addItem(RecordTypeItem ri)   {
+        return 1 == AppModel.getDBHelper().getRTItemREDao()
+                .create(ri);
+    }
+
+
+    /**
+     *   更新数据
+     * @param ri    待修改数据
+     * @return  如果修改成功返回true, 否则返回false
+     */
+    public boolean modifyItem(RecordTypeItem ri)    {
+        return 1== AppModel.getDBHelper().getRTItemREDao()
+                    .update(ri);
+    }
 }
