@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_ed"
+    android:layout_width="match_parent" android:layout_height="64dp">
+
+    <EditText
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/lvet_title"
+        android:textColor="@color/abc_primary_text_disable_only_material_light"
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:elegantTextHeight="true"
+        android:focusable="true"
+        android:enabled="true"
+        android:focusableInTouchMode="true"
+        android:editable="true"
+        style="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+    <EditText
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/lvet_explain"
+        android:textColor="@color/abc_primary_text_disable_only_material_light"
+        android:textSize="14sp"
+        android:elegantTextHeight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/lvet_title" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cn_delete"
+        android:id="@+id/lvbt_delete"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="24dp" />
+
+</RelativeLayout>

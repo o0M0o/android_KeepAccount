@@ -392,6 +392,10 @@ public class ACRecordTypeEdit extends AppCompatActivity
                 Map<String, ?> hm = mSelfData.get(position);
                 if(!mBEditModel) {
                     vs.setDisplayedChild(0);
+
+                    CheckBox cb = (CheckBox)v.findViewById(R.id.lvcb_selected);
+                    assert null != cb;
+                    cb.setOnClickListener(mHome);
                 } else {
                     vs.setDisplayedChild(1);
                     String info = ToolUtil.cast(hm.get(TITLE));
@@ -401,16 +405,6 @@ public class ACRecordTypeEdit extends AppCompatActivity
                     String explain = ToolUtil.cast(hm.get(EXPLAIN));
                     EditText exet = (EditText)vs.getCurrentView().findViewById(R.id.lvet_explain);
                     exet.setText(explain);
-                }
-
-                CheckBox cb = (CheckBox)v.findViewById(R.id.lvcb_selected);
-                assert null != cb;
-
-                if(!mBEditModel) {
-                    cb.setOnClickListener(mHome);
-                    cb.setVisibility(View.VISIBLE);
-                } else    {
-                    cb.setVisibility(View.INVISIBLE);
                 }
             }
 
