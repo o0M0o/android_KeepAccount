@@ -9,7 +9,7 @@
     <application
         android:name=".Base.utility.ContextUtil"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_app"
+        android:icon="@mipmap/ic_keepaccount_launcher"
         android:label="@string/cn_applabel"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
