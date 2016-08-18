@@ -2,10 +2,11 @@ package com.wxm.KeepAccount.Base.data;
 
 import com.wxm.KeepAccount.Base.db.DBOrmliteHelper;
 import com.wxm.KeepAccount.Base.db.UsrItem;
-import com.wxm.KeepAccount.Base.utility.MD5Util;
-import com.wxm.KeepAccount.Base.utility.ToolUtil;
 
 import java.util.List;
+
+import cn.wxm.andriodutillib.util.MD5Util;
+import cn.wxm.andriodutillib.util.UtilFun;
 
 /**
  * usr数据处理类
@@ -24,7 +25,7 @@ public class UsrItemUtility {
      * @return  如果存在返回true,否则返回false
      */
     public boolean hasUsr(String usr) {
-        if(ToolUtil.StringIsNullOrEmpty(usr))
+        if(UtilFun.StringIsNullOrEmpty(usr))
             return false;
 
         DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
@@ -41,7 +42,7 @@ public class UsrItemUtility {
      * @return  添加成功返回添加后的数据, 否则返回null
      */
     public UsrItem addUsr(String usr, String pwd)   {
-        if(ToolUtil.StringIsNullOrEmpty(usr) || ToolUtil.StringIsNullOrEmpty(pwd))
+        if(UtilFun.StringIsNullOrEmpty(usr) || UtilFun.StringIsNullOrEmpty(pwd))
             return null;
 
         String pwdpad = pwd;

@@ -27,6 +27,8 @@ import com.wxm.KeepAccount.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cn.wxm.andriodutillib.util.UtilFun;
+
 
 public class ACDailyDetail extends AppCompatActivity {
     private static final String TAG = "ACDailyDetail";
@@ -338,7 +340,7 @@ public class ACDailyDetail extends AppCompatActivity {
         }
 
         private void reloadView(Message msg) {
-            ArrayList<HashMap<String, String>> up_ls = ToolUtil.cast(msg.obj);
+            ArrayList<HashMap<String, String>> up_ls = UtilFun.cast(msg.obj);
             assert null != up_ls;
 
             mACCur.loadView(up_ls);
@@ -349,7 +351,7 @@ public class ACDailyDetail extends AppCompatActivity {
          * @param msg  消息
          */
         private void switchActivity(Message msg) {
-            RecordItem ri = ToolUtil.cast(msg.obj);
+            RecordItem ri = UtilFun.cast(msg.obj);
             if(null != ri)  {
                 Intent intent = new Intent(mACCur, ACRecord.class);
                 intent.putExtra(AppGobalDef.STR_RECORD_ACTION,
@@ -365,7 +367,7 @@ public class ACDailyDetail extends AppCompatActivity {
         }
 
         private void updateActivity(Message msg) {
-            boolean ret = ToolUtil.cast(msg.obj);
+            boolean ret = UtilFun.cast(msg.obj);
             if(ret) {
                 mACCur.updateListView();
             }

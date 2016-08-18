@@ -21,7 +21,6 @@ import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppModel;
 import com.wxm.KeepAccount.Base.db.RecordTypeItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
-import com.wxm.KeepAccount.Base.utility.ToolUtil;
 import com.wxm.KeepAccount.BuildConfig;
 import com.wxm.KeepAccount.R;
 
@@ -29,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 
 public class ACRecordType extends AppCompatActivity
     implements View.OnClickListener, AdapterView.OnItemClickListener {
@@ -53,36 +54,37 @@ public class ACRecordType extends AppCompatActivity
         setContentView(R.layout.ac_record_type);
 
         Intent it = getIntent();
-        if(null == it)  {
+        if( null != it) {
+            String rty = it.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
+            if(UtilFun.StringIsNullOrEmpty(rty) ||
+                    (!rty.equals(AppGobalDef.STR_RECORD_INCOME)
+                            && !rty.equals(AppGobalDef.STR_RECORD_PAY)))    {
+                Log.e(TAG, "intent参数不正确");
+
+                Intent data = new Intent();
+                setResult(AppGobalDef.INTRET_ERROR, data);
+                finish();
+            }
+
+            mLVRecordType = (ListView)findViewById(R.id.aclv_record_type);
+            mMAAdapter = new MySimpleAdapter(this,
+                    ContextUtil.getInstance(),
+                    mLHData,
+                    new String[] {TITLE, EXPLAIN},
+                    new int[] {R.id.lvtv_title, R.id.lvtv_explain});
+            mLVRecordType.setAdapter(mMAAdapter);
+            mLVRecordType.setOnItemClickListener(this);
+
+
+            load_type(rty);
+
+        } else  {
             Log.e(TAG, "没有intent");
 
             Intent data = new Intent();
             setResult(AppGobalDef.INTRET_ERROR, data);
             finish();
         }
-
-        String rty = it.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
-        if(ToolUtil.StringIsNullOrEmpty(rty) ||
-                (!rty.equals(AppGobalDef.STR_RECORD_INCOME)
-                        && !rty.equals(AppGobalDef.STR_RECORD_PAY)))    {
-            Log.e(TAG, "intent参数不正确");
-
-            Intent data = new Intent();
-            setResult(AppGobalDef.INTRET_ERROR, data);
-            finish();
-        }
-
-        mLVRecordType = (ListView)findViewById(R.id.aclv_record_type);
-        mMAAdapter = new MySimpleAdapter(this,
-                                    ContextUtil.getInstance(),
-                                    mLHData,
-                                    new String[] {TITLE, EXPLAIN},
-                                    new int[] {R.id.lvtv_title, R.id.lvtv_explain});
-        mLVRecordType.setAdapter(mMAAdapter);
-        mLVRecordType.setOnItemClickListener(this);
-
-
-        load_type(rty);
     }
 
     @Override
@@ -116,7 +118,7 @@ public class ACRecordType extends AppCompatActivity
                 }
 
                 Intent data = new Intent();
-                if(!ToolUtil.StringIsNullOrEmpty(ty)) {
+                if(!UtilFun.StringIsNullOrEmpty(ty)) {
                     data.putExtra(AppGobalDef.STR_RECORD_TYPE, ty);
                     setResult(AppGobalDef.INTRET_SURE, data);
                 }
@@ -295,12 +297,12 @@ public class ACRecordType extends AppCompatActivity
                 assert vs != null;
 
                 Map<String, ?> hm = mSelfData.get(position);
-                String tp = ToolUtil.cast(hm.get(CHILD_TYPE));
+                String tp = UtilFun.cast(hm.get(CHILD_TYPE));
                 if(tp.equals(TEXTVIEW_CHILD)) {
                     vs.setDisplayedChild(0);
                 } else {
                     vs.setDisplayedChild(1);
-                    String info = ToolUtil.cast(hm.get(TITLE));
+                    String info = UtilFun.cast(hm.get(TITLE));
                     EditText et = (EditText)vs.getCurrentView().findViewById(R.id.lvet_title);
                     et.setText(info);
                 }

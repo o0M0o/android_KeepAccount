@@ -18,8 +18,9 @@ import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
 import com.wxm.KeepAccount.Base.db.UsrItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
-import com.wxm.KeepAccount.Base.utility.ToolUtil;
 import com.wxm.KeepAccount.R;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 
 public class ACAddUsr
         extends AppCompatActivity
@@ -218,7 +219,7 @@ public class ACAddUsr
                 } else  {
                     String sstr = "添加用户失败!";
                     if(2 < arr.length)
-                        sstr = ToolUtil.cast(arr[2]);
+                        sstr = UtilFun.cast(arr[2]);
 
                     Toast.makeText(ContextUtil.getInstance(),
                             sstr, Toast.LENGTH_LONG).show();

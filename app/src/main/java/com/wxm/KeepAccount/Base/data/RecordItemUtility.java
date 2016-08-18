@@ -12,6 +12,8 @@ import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
+import cn.wxm.andriodutillib.util.UtilFun;
+
 /**
  * record数据辅助类
  * Created by 123 on 2016/8/9.
@@ -59,7 +61,7 @@ public class RecordItemUtility {
             ret = mDBHelper.getRecordItemREDao().queryBuilder()
                     .where().between(RecordItem.FIELD_TS, tsb, tse).query();
         }catch (SQLException e) {
-            Log.e(TAG, ToolUtil.ExceptionToString(e));
+            Log.e(TAG, UtilFun.ExceptionToString(e));
             ret = new LinkedList<>();
         }
 

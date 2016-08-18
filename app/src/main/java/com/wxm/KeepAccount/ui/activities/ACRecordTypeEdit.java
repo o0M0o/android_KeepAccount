@@ -24,7 +24,6 @@ import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppModel;
 import com.wxm.KeepAccount.Base.db.RecordTypeItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
-import com.wxm.KeepAccount.Base.utility.ToolUtil;
 import com.wxm.KeepAccount.BuildConfig;
 import com.wxm.KeepAccount.R;
 
@@ -32,6 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 
 
 public class ACRecordTypeEdit extends AppCompatActivity
@@ -71,7 +72,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
             finish();
         }   else {
             mType = it.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
-            if (ToolUtil.StringIsNullOrEmpty(mType) ||
+            if (UtilFun.StringIsNullOrEmpty(mType) ||
                     (!mType.equals(AppGobalDef.STR_RECORD_INCOME)
                             && !mType.equals(AppGobalDef.STR_RECORD_PAY))) {
                 Log.e(TAG, "intent参数不正确");
@@ -151,7 +152,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
                 }
 
                 Intent data = new Intent();
-                if(!ToolUtil.StringIsNullOrEmpty(ty)) {
+                if(!UtilFun.StringIsNullOrEmpty(ty)) {
                     data.putExtra(AppGobalDef.STR_RECORD_TYPE, ty);
                     setResult(AppGobalDef.INTRET_SURE, data);
                 }
@@ -321,16 +322,16 @@ public class ACRecordTypeEdit extends AppCompatActivity
                 assert vs != null;
 
                 Map<String, ?> hm = mSelfData.get(position);
-                String tp = ToolUtil.cast(hm.get(CHILD_TYPE));
+                String tp = UtilFun.cast(hm.get(CHILD_TYPE));
                 if(tp.equals(TEXTVIEW_CHILD) && (!mBEditModel)) {
                     vs.setDisplayedChild(0);
                 } else {
                     vs.setDisplayedChild(1);
-                    String info = ToolUtil.cast(hm.get(TITLE));
+                    String info = UtilFun.cast(hm.get(TITLE));
                     EditText et = (EditText)vs.getCurrentView().findViewById(R.id.lvet_title);
                     et.setText(info);
 
-                    String explain = ToolUtil.cast(hm.get(EXPLAIN));
+                    String explain = UtilFun.cast(hm.get(EXPLAIN));
                     EditText exet = (EditText)vs.getCurrentView().findViewById(R.id.lvet_explain);
                     exet.setText(explain);
                 }

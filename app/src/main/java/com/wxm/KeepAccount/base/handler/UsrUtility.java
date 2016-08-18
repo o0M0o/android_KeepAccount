@@ -9,7 +9,8 @@ import com.wxm.KeepAccount.Base.data.AppModel;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
 import com.wxm.KeepAccount.Base.db.UsrItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
-import com.wxm.KeepAccount.Base.utility.ToolUtil;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 
 /**
  * 处理用户登录的辅助类
@@ -22,10 +23,10 @@ public class UsrUtility {
         Resources res = ContextUtil.getInstance().getResources();
         switch (msg.what) {
             case AppMsgDef.MSG_USR_ADDUSR : {
-                Object[] arr = ToolUtil.cast(msg.obj);
+                Object[] arr = UtilFun.cast(msg.obj);
 
-                Intent data = ToolUtil.cast(arr[0]);
-                Handler h = ToolUtil.cast(arr[1]);
+                Intent data = UtilFun.cast(arr[0]);
+                Handler h = UtilFun.cast(arr[1]);
                 String usr = data.getStringExtra(UsrItem.FIELD_NAME);
                 String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
 
@@ -45,16 +46,16 @@ public class UsrUtility {
             break;
 
             case AppMsgDef.MSG_USR_LOGIN: {
-                Object[] arr = ToolUtil.cast(msg.obj);
+                Object[] arr = UtilFun.cast(msg.obj);
 
-                Intent data = ToolUtil.cast(arr[0]);
+                Intent data = UtilFun.cast(arr[0]);
                 String usr = data.getStringExtra(UsrItem.FIELD_NAME);
                 String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
 
                 AppModel.getInstance().setCurUsr(AppModel.getUsrUtility().CheckAndGetUsr(usr, pwd));
                 boolean ret = (null != AppModel.getInstance().getCurUsr());
 
-                Handler h = ToolUtil.cast(arr[1]);
+                Handler h = UtilFun.cast(arr[1]);
                 Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
                 m.obj = ret;
                 m.arg1 = AppMsgDef.MSG_USR_LOGIN;

@@ -24,14 +24,15 @@ import android.widget.Toast;
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
-import com.wxm.KeepAccount.Base.utility.ToolUtil;
+import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 import com.wxm.KeepAccount.ui.fragment.GraphViewSlidingTabsFragment;
 import com.wxm.KeepAccount.ui.fragment.ListViewSlidingTabsFragment;
-import com.wxm.KeepAccount.R;
 
 import java.util.Calendar;
 import java.util.Locale;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 
 /**
  * tab版本的main activity
@@ -340,7 +341,7 @@ public class ACStart
         }
 
         private void updateActivity(Message msg) {
-            boolean ret = ToolUtil.cast(msg.obj);
+            boolean ret = UtilFun.cast(msg.obj);
             if(ret) {
                 mACCur.updateView();
             }

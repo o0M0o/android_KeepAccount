@@ -1,12 +1,8 @@
 package com.wxm.KeepAccount.Base.utility;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
 
 /**
@@ -16,90 +12,6 @@ import java.util.Locale;
 public class ToolUtil {
     private static final String TAG = "ToolUtil";
 
-    @SuppressWarnings("unchecked")
-    public static <T> T cast(Object obj) {
-        /*
-        try {
-            return (T) obj;
-        }catch (ClassCastException | NullPointerException e)   {
-            Log.e(TAG, ToolUtil.ExceptionToString(e));
-        }
-
-        return null;
-        */
-        return (T) obj;
-    }
-
-    /**
-     * 可抛出类打印字符串
-     * @param e 可抛出类
-     * @return 字符串
-     */
-    public static String ThrowableToString(Throwable e) {
-        StringWriter sw = null;
-        PrintWriter pw = null;
-        try {
-            sw = new StringWriter();
-            pw =  new PrintWriter(sw);
-            //pw.append(e.getMessage());
-            e.printStackTrace(pw);
-            pw.flush();
-            sw.flush();
-        } finally {
-            if (sw != null) {
-                try {
-                    sw.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-            if (pw != null) {
-                pw.close();
-            }
-        }
-
-        return sw.toString();
-    }
-
-    /**
-     * 异常 --> 字符串
-     * @param e 异常
-     * @return 字符串
-     */
-    public static String ExceptionToString(Exception e) {
-        StringWriter sw = null;
-        PrintWriter pw = null;
-        try {
-            sw = new StringWriter();
-            pw =  new PrintWriter(sw);
-            //将出错的栈信息输出到printWriter中
-            e.printStackTrace(pw);
-            pw.flush();
-            sw.flush();
-        } finally {
-            if (sw != null) {
-                try {
-                    sw.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-            if (pw != null) {
-                pw.close();
-            }
-        }
-
-        return sw.toString();
-    }
-
-    /**
-     * 检查字符串是否空或者null
-     * @param cstr  待检查字符串
-     * @return   检查结果
-     */
-    public static boolean StringIsNullOrEmpty(String cstr)      {
-        return null == cstr || cstr.isEmpty();
-    }
 
     /**
      * 把"2016-01-14"转换为"2016年01月14日"
@@ -159,44 +71,6 @@ public class ToolUtil {
     }
 
 
-    /**
-     * 日历类到字符串
-     * @param cl 日历类
-     * @return 结果
-     */
-    public static String CalenderToString(Calendar cl)  {
-        String ret = String.format(Locale.CHINA,
-                "%d-%02d-%02d %02d:%02d:%02d"
-                ,cl.get(Calendar.YEAR)
-                ,cl.get(Calendar.MONTH) + 1
-                ,cl.get(Calendar.DAY_OF_MONTH)
-                ,cl.get(Calendar.HOUR_OF_DAY)
-                ,cl.get(Calendar.MINUTE)
-                ,cl.get(Calendar.SECOND));
-        return ret;
-    }
-
-    /**
-     * 毫秒数到字符串
-     * @param ms 1970年以来的毫秒数
-     * @return 结果
-     */
-    public static String MilliSecsToString(long ms) {
-        Calendar cl = Calendar.getInstance();
-        cl.setTimeInMillis(ms);
-        return CalenderToString(cl);
-    }
-
-    /**
-     * 时间戳转换到字符串
-     * @param ts 时间戳
-     * @return 结果
-     */
-    public static String TimestampToString(Timestamp ts)    {
-        Calendar cl = Calendar.getInstance();
-        cl.setTimeInMillis(ts.getTime());
-        return CalenderToString(cl);
-    }
 
     /**
      * 时间字符串转换到时间戳

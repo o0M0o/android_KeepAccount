@@ -40,11 +40,12 @@ import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
 import com.wxm.KeepAccount.Base.db.UsrItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
-import com.wxm.KeepAccount.Base.utility.ToolUtil;
 import com.wxm.KeepAccount.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -506,7 +507,7 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
         }
 
         private void afterLogin(Message msg) {
-            boolean ret = ToolUtil.cast(msg.obj);
+            boolean ret = UtilFun.cast(msg.obj);
             mACCur.afterLoginExecute(ret);
         }
     }

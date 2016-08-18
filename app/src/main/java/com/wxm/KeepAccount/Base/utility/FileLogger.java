@@ -11,6 +11,8 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import cn.wxm.andriodutillib.util.UtilFun;
+
 /**
  * 写在文件中的日志
  * Created by 123 on 2016/6/18.
@@ -18,22 +20,13 @@ import java.util.logging.SimpleFormatter;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class FileLogger {
     private final static String LOG_NAME = "KeepAccount_run_%g.log";
+    private static FileLogger instance = new FileLogger();
 
     private String mLogTag;
     private Logger mLoger;
 
-    private static FileLogger instance;
-
-    private static FileLogger getInstance() {
-        if (null == instance) {
-            instance = new FileLogger();
-        }
-
-        return instance;
-    }
-
-    public static Logger getLogger() {
-        return getInstance().mLoger;
+    public static Logger getLogger(){
+        return instance.mLoger;
     }
 
     private FileLogger() {
@@ -66,7 +59,7 @@ public class FileLogger {
 
                     String ret = String.format(Locale.CHINA
                             ,"%s|%s|%s-%d|%s:%s|%s"
-                            , ToolUtil.MilliSecsToString(record.getMillis())
+                            , UtilFun.MilliSecsToString(record.getMillis())
                             , record.getLevel().getName()
                             , mLogTag ,record.getThreadID()
                             , record.getSourceClassName(), record.getSourceMethodName()

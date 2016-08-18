@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import cn.wxm.andriodutillib.util.UtilFun;
+
 /**
  * 处理数据辅助类
  * Created by 123 on 2016/5/15.
@@ -66,13 +68,13 @@ public class RecordUtility {
     }
 
     private static void DeleteRecords(Message am)    {
-        Object[] arr = ToolUtil.cast(am.obj);
-        List<Integer> ls_del = ToolUtil.cast(arr[0]);
+        Object[] arr = UtilFun.cast(am.obj);
+        List<Integer> ls_del = UtilFun.cast(arr[0]);
         assert null != ls_del;
         boolean ret = AppModel.getRecordUtility().DeleteRecords(ls_del);
 
         // reply message
-        Handler h = ToolUtil.cast(arr[1]);
+        Handler h = UtilFun.cast(arr[1]);
         Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
         m.arg1 = AppMsgDef.MSG_DELETE_RECORDS;
         m.obj = ret;
@@ -80,16 +82,16 @@ public class RecordUtility {
     }
 
     private static void DailyRecordsToDetailReport(Message am)    {
-        Object[] arr = ToolUtil.cast(am.obj);
+        Object[] arr = UtilFun.cast(am.obj);
 
-        String date_str = ToolUtil.cast(arr[0]);
+        String date_str = UtilFun.cast(arr[0]);
         // load record & format output
         List<RecordItem> lr = AppModel.getRecordUtility().GetRecordsByDay(date_str);
         ArrayList<HashMap<String, String>> mylist = new ArrayList<>();
         for (RecordItem r : lr) {
             String tit = r.getType();
             String show_str;
-            if(ToolUtil.StringIsNullOrEmpty(r.getNote())) {
+            if(UtilFun.StringIsNullOrEmpty(r.getNote())) {
                 show_str = String.format(Locale.CHINA,
                         "原因 : %s\n金额 : %.02f",
                         r.getInfo(), r.getVal());
@@ -115,7 +117,7 @@ public class RecordUtility {
         });
 
         // reply message
-        Handler h = ToolUtil.cast(arr[1]);
+        Handler h = UtilFun.cast(arr[1]);
         Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
         m.arg1 = AppMsgDef.MSG_TO_DAILY_DETAILREPORT;
         m.obj = mylist;
@@ -184,7 +186,7 @@ public class RecordUtility {
             }
         });
 
-        Handler h = ToolUtil.cast(am.obj);
+        Handler h = UtilFun.cast(am.obj);
         Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
         m.arg1 = AppMsgDef.MSG_TO_YEARREPORT;
         m.obj = mylist;
@@ -248,7 +250,7 @@ public class RecordUtility {
             }
         });
 
-        Handler h = ToolUtil.cast(am.obj);
+        Handler h = UtilFun.cast(am.obj);
         Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
         m.arg1 = AppMsgDef.MSG_TO_MONTHREPORT;
         m.obj = mylist;
@@ -312,7 +314,7 @@ public class RecordUtility {
             }
         });
 
-        Handler h = ToolUtil.cast(am.obj);
+        Handler h = UtilFun.cast(am.obj);
         Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
         m.arg1 = AppMsgDef.MSG_TO_DAYREPORT;
         m.obj = mylist;
@@ -320,15 +322,15 @@ public class RecordUtility {
     }
 
     private static void AddRecord(Message am) {
-        Object[] arr = ToolUtil.cast(am.obj);
+        Object[] arr = UtilFun.cast(am.obj);
 
-        Intent data = ToolUtil.cast(arr[0]);
+        Intent data = UtilFun.cast(arr[0]);
         RecordItem ri = data.getParcelableExtra(AppGobalDef.STR_RECORD);
         ArrayList<RecordItem> items = new ArrayList<>();
         items.add(ri);
         AppModel.getRecordUtility().AddRecords(items);
 
-        Handler h = ToolUtil.cast(arr[1]);
+        Handler h = UtilFun.cast(arr[1]);
         Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
         m.arg1 = AppMsgDef.MSG_RECORD_ADD;
         m.obj = true;
@@ -336,15 +338,15 @@ public class RecordUtility {
     }
 
     private static void ModifyRecord(Message am)   {
-        Object[] arr = ToolUtil.cast(am.obj);
+        Object[] arr = UtilFun.cast(am.obj);
 
-        Intent data = ToolUtil.cast(arr[0]);
+        Intent data = UtilFun.cast(arr[0]);
         RecordItem ri = data.getParcelableExtra(AppGobalDef.STR_RECORD);
         ArrayList<RecordItem> items = new ArrayList<>();
         items.add(ri);
         AppModel.getRecordUtility().ModifyRecords(items);
 
-        Handler h = ToolUtil.cast(arr[1]);
+        Handler h = UtilFun.cast(arr[1]);
         Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
         m.arg1 = AppMsgDef.MSG_RECORD_MODIFY;
         m.obj = true;
@@ -352,12 +354,12 @@ public class RecordUtility {
     }
 
     private static void GetRecord(Message am)  {
-        Object[] arr = ToolUtil.cast(am.obj);
+        Object[] arr = UtilFun.cast(am.obj);
 
-        Integer tag = ToolUtil.cast(arr[0]);
+        Integer tag = UtilFun.cast(arr[0]);
         RecordItem ri = AppModel.getRecordUtility().GetRecordById(tag);
 
-        Handler h = ToolUtil.cast(arr[1]);
+        Handler h = UtilFun.cast(arr[1]);
         Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
         m.obj = ri;
         m.arg1 = AppMsgDef.MSG_RECORD_GET;

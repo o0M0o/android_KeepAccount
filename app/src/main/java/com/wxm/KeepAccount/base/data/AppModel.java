@@ -6,9 +6,10 @@ import android.util.Log;
 import com.wxm.KeepAccount.Base.db.DBOrmliteHelper;
 import com.wxm.KeepAccount.Base.db.UsrItem;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
-import com.wxm.KeepAccount.Base.utility.ToolUtil;
 
 import java.sql.SQLException;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 
 /**
  * Created by 123 on 2016/5/7.
@@ -84,7 +85,7 @@ public class AppModel {
             mDBHelper.getRecordItemREDao().deleteBuilder().delete();
             mDBHelper.getUsrItemREDao().deleteBuilder().delete();
         }catch (SQLException e) {
-            Log.e(TAG, ToolUtil.ExceptionToString(e));
+            Log.e(TAG, UtilFun.ExceptionToString(e));
         }
     }
 

@@ -33,8 +33,26 @@ android {
             debuggable true
         }
     }
+
     productFlavors {
+        yyb_keepaccount{}
     }
+
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                //这里修改apk文件名
+                def fileName = "${variant.productFlavors[0].name}-${defaultConfig.versionName}-${releaseTime() }.apk"
+                output.outputFile = new File(outputFile.parent, fileName)
+            }
+        }
+    }
+}
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
 }
 
 dependencies {
@@ -61,6 +79,7 @@ dependencies {
     compile files('libs/extend_lib/ormlite/ormlite-android-5.0.jar')
     compile files('libs/extend_lib/ormlite/ormlite-core-5.0.jar')
     compile files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
+    compile project(':AndriodUtillib')
 }
 
 

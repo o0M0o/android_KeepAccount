@@ -33,12 +33,13 @@ import android.widget.SimpleAdapter;
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
-import com.wxm.KeepAccount.Base.utility.ToolUtil;
 import com.wxm.KeepAccount.R;
 import com.wxm.KeepAccount.ui.activities.ACDailyDetail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 
 /**
  * Simple Fragment used to display some meaningful content for each page in the sample's
@@ -173,7 +174,7 @@ public class LVContentFragment extends Fragment {
             title = args.getCharSequence(KEY_TITLE).toString();
         } catch (NullPointerException e)    {
             title = "";
-            Log.e(TAG, ToolUtil.ExceptionToString(e));
+            Log.e(TAG, UtilFun.ExceptionToString(e));
         }
 
         Message m = Message.obtain(ContextUtil.getMsgHandler());
@@ -216,7 +217,7 @@ public class LVContentFragment extends Fragment {
                         case AppMsgDef.MSG_TO_DAYREPORT :
                         case AppMsgDef.MSG_TO_MONTHREPORT :
                         case AppMsgDef.MSG_TO_YEARREPORT :
-                            ArrayList<HashMap<String, String>> data = ToolUtil.cast(msg.obj);
+                            ArrayList<HashMap<String, String>> data = UtilFun.cast(msg.obj);
                             mLVFCur.reloadView(data);
                             break;
 
