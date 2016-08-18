@@ -67,6 +67,7 @@ public class RecordUtility {
         }
     }
 
+
     private static void DeleteRecords(Message am)    {
         Object[] arr = UtilFun.cast(am.obj);
         List<Integer> ls_del = UtilFun.cast(arr[0]);
@@ -75,10 +76,7 @@ public class RecordUtility {
 
         // reply message
         Handler h = UtilFun.cast(arr[1]);
-        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
-        m.arg1 = AppMsgDef.MSG_DELETE_RECORDS;
-        m.obj = ret;
-        m.sendToTarget();
+        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_DELETE_RECORDS, ret);
     }
 
     private static void DailyRecordsToDetailReport(Message am)    {
@@ -118,15 +116,17 @@ public class RecordUtility {
 
         // reply message
         Handler h = UtilFun.cast(arr[1]);
-        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
-        m.arg1 = AppMsgDef.MSG_TO_DAILY_DETAILREPORT;
-        m.obj = mylist;
-        m.sendToTarget();
+        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_TO_DAILY_DETAILREPORT, mylist);
     }
 
     private static void LoadAllRecords(Message am)
     {
         List<RecordItem> ret = AppModel.getRecordUtility().GetAllRecords();
+
+        // reply message
+        Object[] arr = UtilFun.cast(am.obj);
+        Handler h = UtilFun.cast(arr[0]);
+        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_LOAD_ALL_RECORDS, new Object[] {ret});
     }
 
     private static void AllRecordsToYearReport(Message am)
@@ -187,10 +187,7 @@ public class RecordUtility {
         });
 
         Handler h = UtilFun.cast(am.obj);
-        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
-        m.arg1 = AppMsgDef.MSG_TO_YEARREPORT;
-        m.obj = mylist;
-        m.sendToTarget();
+        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_TO_YEARREPORT, mylist);
     }
 
     private static void AllRecordsToMonthReport(Message am)
@@ -251,10 +248,7 @@ public class RecordUtility {
         });
 
         Handler h = UtilFun.cast(am.obj);
-        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
-        m.arg1 = AppMsgDef.MSG_TO_MONTHREPORT;
-        m.obj = mylist;
-        m.sendToTarget();
+        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_TO_MONTHREPORT, mylist);
     }
 
     private static void AllRecordsToDayReport(Message am)
@@ -315,10 +309,7 @@ public class RecordUtility {
         });
 
         Handler h = UtilFun.cast(am.obj);
-        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
-        m.arg1 = AppMsgDef.MSG_TO_DAYREPORT;
-        m.obj = mylist;
-        m.sendToTarget();
+        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_TO_DAYREPORT, mylist);
     }
 
     private static void AddRecord(Message am) {
@@ -331,10 +322,7 @@ public class RecordUtility {
         AppModel.getRecordUtility().AddRecords(items);
 
         Handler h = UtilFun.cast(arr[1]);
-        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
-        m.arg1 = AppMsgDef.MSG_RECORD_ADD;
-        m.obj = true;
-        m.sendToTarget();
+        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_RECORD_ADD, true);
     }
 
     private static void ModifyRecord(Message am)   {
@@ -347,10 +335,7 @@ public class RecordUtility {
         AppModel.getRecordUtility().ModifyRecords(items);
 
         Handler h = UtilFun.cast(arr[1]);
-        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
-        m.arg1 = AppMsgDef.MSG_RECORD_MODIFY;
-        m.obj = true;
-        m.sendToTarget();
+        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_RECORD_MODIFY, true);
     }
 
     private static void GetRecord(Message am)  {
@@ -360,9 +345,6 @@ public class RecordUtility {
         RecordItem ri = AppModel.getRecordUtility().GetRecordById(tag);
 
         Handler h = UtilFun.cast(arr[1]);
-        Message m = Message.obtain(h, AppMsgDef.MSG_REPLY);
-        m.obj = ri;
-        m.arg1 = AppMsgDef.MSG_RECORD_GET;
-        m.sendToTarget();
+        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_RECORD_GET, ri);
     }
 }

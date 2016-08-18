@@ -7,12 +7,13 @@ import android.test.RenamingDelegatingContext;
 import com.wxm.KeepAccount.Base.data.AppModel;
 import com.wxm.KeepAccount.Base.db.RecordItem;
 import com.wxm.KeepAccount.Base.db.UsrItem;
-import com.wxm.KeepAccount.Base.utility.ToolUtil;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 
 /**
  * unittest for AppModel
@@ -88,7 +89,7 @@ public class AppModelUT extends AndroidTestCase {
         List<RecordItem> rets = AppModel.getRecordUtility().GetAllRecords();
         assertEquals(rets.size(), 4);
 
-        String dtstr = ToolUtil.TimestampToString(ri.getTs())
+        String dtstr = UtilFun.TimestampToString(ri.getTs())
                             .substring(0, "yyyy-MM-dd".length());
         List<RecordItem> rets1 = AppModel.getRecordUtility().GetRecordsByDay(dtstr);
         assertEquals(rets1.size(), 4);

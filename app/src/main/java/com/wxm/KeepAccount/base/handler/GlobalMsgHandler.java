@@ -39,4 +39,18 @@ public class GlobalMsgHandler extends Handler {
             break;
         }
     }
+
+
+    /**
+     * 回复消息
+     * @param mh            接收回复消息的句柄
+     * @param rmsgtype      原消息类型（{@code arg1}）
+     * @param msgobj        回复消息的参数{@code obj}
+     */
+    public static void ReplyMsg(Handler mh, int rmsgtype, Object msgobj) {
+        Message m = Message.obtain(mh, AppMsgDef.MSG_REPLY);
+        m.arg1 = rmsgtype;
+        m.obj = msgobj;
+        m.sendToTarget();
+    }
 }

@@ -2,17 +2,26 @@ package com.wxm.KeepAccount.ui.base.fragment;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wxm.KeepAccount.Base.data.AppModel;
-import com.wxm.KeepAccount.ui.base.view.ChartsBase;
-import com.wxm.KeepAccount.ui.base.view.MonthlyCharts;
+import com.wxm.KeepAccount.Base.data.AppMsgDef;
+import com.wxm.KeepAccount.Base.db.RecordItem;
+import com.wxm.KeepAccount.Base.utility.ContextUtil;
 import com.wxm.KeepAccount.R;
+import com.wxm.KeepAccount.ui.base.view.ChartsBase;
 import com.wxm.KeepAccount.ui.base.view.DailyCharts;
+import com.wxm.KeepAccount.ui.base.view.MonthlyCharts;
 import com.wxm.KeepAccount.ui.base.view.YeaylyCharts;
+
+import java.util.List;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 
 /**
  * Simple Fragment used to display some meaningful content for each page in the sample's
@@ -24,7 +33,8 @@ public class GVContentFragment extends Fragment {
     private static final String KEY_INDICATOR_COLOR = "indicator_color";
     private static final String KEY_DIVIDER_COLOR = "divider_color";
 
-    private ChartsBase cur_view;
+    private ChartsBase      cur_view;
+    private FRMsgHandler    mMsgHandlder = new FRMsgHandler();
 
     /**
      * @return a new instance of {@link LVContentFragment}, adding the parameters into a bundle and
@@ -108,8 +118,48 @@ public class GVContentFragment extends Fragment {
      * 加载并显示数据
      */
     public void updateView() {
-        if(null != cur_view)
-            cur_view.RenderChart(AppModel.getRecordUtility().GetAllRecords());
+        if(null != cur_view) {
+            Message m = Message.obtain(ContextUtil.getMsgHandler(),
+                            AppMsgDef.MSG_LOAD_ALL_RECORDS);
+            m.obj = new Object[]    {mMsgHandlder};
+            m.sendToTarget();
+        }
+    }
+
+
+    public class FRMsgHandler extends Handler {
+        private static final String TAG = "FRMsgHandler";
+        //private GVContentFragment   mACCur;
+
+        public FRMsgHandler() {
+            super();
+            //mACCur = cur;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case AppMsgDef.MSG_REPLY: {
+                    switch (msg.arg1) {
+                        case AppMsgDef.MSG_LOAD_ALL_RECORDS:
+                            Object[] rets = UtilFun.cast(msg.obj);
+                            List<RecordItem> lsret = UtilFun.cast(rets[0]);
+
+                            cur_view.RenderChart(lsret);
+                            break;
+
+                        default:
+                            Log.e(TAG, String.format("msg(%s) can not process", msg.toString()));
+                            break;
+                    }
+                }
+                break;
+
+                default:
+                    Log.e(TAG, String.format("msg(%s) can not process", msg.toString()));
+                    break;
+            }
+        }
     }
 }
 
