@@ -11,10 +11,15 @@ import com.j256.ormlite.dao.ReferenceObjectCache;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.wxm.KeepAccount.Base.data.AppModel;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
+import com.wxm.KeepAccount.BuildConfig;
 import com.wxm.KeepAccount.R;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.LinkedList;
 
 /**
  * db ormlite helper
@@ -178,5 +183,91 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
 
             redao.create(ri);
         }
+
+        if(BuildConfig.FILL_TESTDATA)
+            AddTestData();
+    }
+
+
+    /**
+     * 填充测试数据
+     */
+    private void AddTestData()  {
+        UsrItem ui_wxm  = AppModel.getUsrUtility().addUsr("wxm", "123456");
+        UsrItem ui_hugo = AppModel.getUsrUtility().addUsr("hugo", "123456");
+
+        // for wxm
+        LinkedList<RecordItem> lsit = new LinkedList<>();
+        Date de = new Date();
+        RecordItem ri = new RecordItem();
+        ri.setUsr(ui_wxm);
+        ri.setType("pay");
+        ri.setInfo("tax");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
+        lsit.add(ri);
+
+        ri = new RecordItem();
+        ri.setUsr(ui_wxm);
+        ri.setType("pay");
+        ri.setInfo("water cost");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
+        lsit.add(ri);
+
+        ri = new RecordItem();
+        ri.setUsr(ui_wxm);
+        ri.setType("pay");
+        ri.setInfo("electrcity cost");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
+        lsit.add(ri);
+
+        ri = new RecordItem();
+        ri.setUsr(ui_wxm);
+        ri.setType("income");
+        ri.setInfo("工资");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
+        lsit.add(ri);
+
+        AppModel.getRecordUtility().AddRecords(lsit);
+
+        // for hugo
+        lsit.clear();
+        ri = new RecordItem();
+        ri.setUsr(ui_hugo);
+        ri.setType("pay");
+        ri.setInfo("water cost");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
+        lsit.add(ri);
+
+
+        ri = new RecordItem();
+        ri.setUsr(ui_hugo);
+        ri.setType("pay");
+        ri.setInfo("tax");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
+        lsit.add(ri);
+
+        ri = new RecordItem();
+        ri.setUsr(ui_hugo);
+        ri.setType("pay");
+        ri.setInfo("electrcity cost");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
+        lsit.add(ri);
+
+        ri = new RecordItem();
+        ri.setUsr(ui_hugo);
+        ri.setType("income");
+        ri.setInfo("工资");
+        ri.setVal(new BigDecimal(12.34));
+        ri.getTs().setTime(de.getTime());
+        lsit.add(ri);
+
+        AppModel.getRecordUtility().AddRecords(lsit);
     }
 }

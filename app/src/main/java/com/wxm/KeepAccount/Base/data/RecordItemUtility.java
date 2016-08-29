@@ -83,6 +83,18 @@ public class RecordItemUtility {
 
             return mDBHelper.getRecordItemREDao().create(lsi);
         }
+        else    {
+            boolean nousr = false;
+            for(RecordItem i : lsi) {
+                if(null == i.getUsr())  {
+                    nousr = true;
+                    break;
+                }
+            }
+
+            if(!nousr)
+                return mDBHelper.getRecordItemREDao().create(lsi);
+        }
 
         return 0;
     }

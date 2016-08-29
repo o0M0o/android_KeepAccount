@@ -30,12 +30,19 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+
+            buildConfigField "Boolean", "FILL_TESTDATA", "false"
+        }
+        debug {
             debuggable true
+            buildConfigField "Boolean", "FILL_TESTDATA", "true"
         }
     }
 
     productFlavors {
-        yyb_keepaccount{}
+        yyb_keepaccount{
+        }
     }
 
 
