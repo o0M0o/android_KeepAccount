@@ -1,25 +1,17 @@
 package com.wxm.KeepAccount.ui.activities;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
@@ -40,7 +32,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
  */
 public class ACShowRecord
         extends AppCompatActivity
-        implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+        implements View.OnClickListener  {
 
     private static final String TAG = "ACShowRecord";
     private static final String GV_VIEW_TXT = "切换列表";
@@ -48,8 +40,6 @@ public class ACShowRecord
 
     private ACSMsgHandler mMHHandler;
 
-    private Button bt_add_pay = null;
-    private Button bt_add_income = null;
     private Button bt_view_switch = null;
 
     private SlidingTabsColorsFragment mTabFragment;
@@ -77,17 +67,6 @@ public class ACShowRecord
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.acm_start_actbar, menu);
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);
-        assert drawer != null;
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
 
@@ -210,23 +189,6 @@ public class ACShowRecord
      * @param savedInstanceState activity创建参数
      */
     private void initView(Bundle savedInstanceState) {
-        // set nav view
-        Toolbar tb = (Toolbar) findViewById(R.id.ac_navw_toolbar);
-        setSupportActionBar(tb);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, tb,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView nv = (NavigationView) findViewById(R.id.start_nav_view);
-        nv.setNavigationItemSelectedListener(this);
-        //nv.findViewById(R.id.nav_setting).setVisibility(View.INVISIBLE);
-        //nv.findViewById(R.id.nav_share_app).setVisibility(View.INVISIBLE);
-
         // set fragment for tab
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -237,9 +199,11 @@ public class ACShowRecord
         }
 
         // set button
-        bt_add_pay = (Button) findViewById(R.id.tabbt_record_pay);
-        bt_add_income = (Button) findViewById(R.id.tabbt_record_income);
+        Button bt_add_pay = (Button) findViewById(R.id.tabbt_record_pay);
+        Button bt_add_income = (Button) findViewById(R.id.tabbt_record_income);
         bt_view_switch = (Button) findViewById(R.id.tabbt_view_switch);
+        assert null != bt_add_income && null != bt_add_pay && null != bt_view_switch;
+
         bt_add_pay.setOnClickListener(this);
         bt_add_income.setOnClickListener(this);
         bt_view_switch.setOnClickListener(this);
@@ -247,66 +211,6 @@ public class ACShowRecord
         bt_view_switch.setText(LV_VIEW_TXT);
     }
 
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.nav_help: {
-                /*Toast.makeText(getApplicationContext(),
-                        "invoke help!",
-                        Toast.LENGTH_SHORT).show();*/
-
-                Intent intent = new Intent(this, ACHelp.class);
-                intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_START);
-
-                startActivityForResult(intent, 1);
-            }
-            break;
-
-            case R.id.nav_setting: {
-                Toast.makeText(getApplicationContext(),
-                        "invoke setting!",
-                        Toast.LENGTH_SHORT).show();
-            }
-            break;
-
-            case R.id.nav_share_app: {
-                Toast.makeText(getApplicationContext(),
-                        "invoke share!",
-                        Toast.LENGTH_SHORT).show();
-            }
-            break;
-
-            case R.id.nav_contact_writer: {
-                /*Toast.makeText(getApplicationContext(),
-                        "invoke contact!",
-                        Toast.LENGTH_SHORT).show();*/
-                contactWriter();
-            }
-            break;
-        }
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_start_outerlayout);
-        assert null != drawer;
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private void contactWriter() {
-        Resources res = getResources();
-
-        Intent data = new Intent(Intent.ACTION_SENDTO);
-        data.setData(
-                Uri.parse(
-                        String.format("mailto:%s", res.getString(R.string.contact_email))));
-        //data.putExtra(Intent.EXTRA_SUBJECT, "这是标题");
-        //data.putExtra(Intent.EXTRA_TEXT, "这是内容");
-        startActivity(data);
-    }
 
 
     public class ACSMsgHandler extends Handler {
