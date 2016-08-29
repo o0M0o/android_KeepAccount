@@ -34,7 +34,9 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 
-
+/**
+ * 记录类型编辑界面
+ */
 public class ACRecordTypeEdit extends AppCompatActivity
         implements View.OnClickListener, AdapterView.OnItemClickListener {
     private static final String TAG = "ACRecordTypeEdit";

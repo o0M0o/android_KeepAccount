@@ -10,11 +10,11 @@
     <application
         android:name=".Base.utility.ContextUtil"
         android:allowBackup="true"
-        tools:replace="android:label"
         android:icon="@mipmap/ic_keepaccount_launcher"
         android:label="@string/cn_applabel"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:label">
 
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
@@ -27,7 +27,7 @@
         <activity android:name=".ui.activities.ACDailyDetail" />
         <activity android:name=".ui.activities.ACRecord" />
         <activity
-            android:name=".ui.activities.ACStart"
+            android:name=".ui.activities.ACShowRecord"
             android:label="@string/title_activity_start"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -47,7 +47,8 @@
         <activity
             android:name=".ui.activities.ACRecordTypeEdit"
             android:label="@string/title_activity_acrecord_type_edit"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.activities.ACWelcome"></activity>
     </application>
 
 </manifest>

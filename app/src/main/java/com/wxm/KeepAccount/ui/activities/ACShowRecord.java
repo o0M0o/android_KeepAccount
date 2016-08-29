@@ -38,11 +38,11 @@ import cn.wxm.andriodutillib.util.UtilFun;
  * tab版本的main activity
  * Created by 123 on 2016/5/16.
  */
-public class ACStart
+public class ACShowRecord
         extends AppCompatActivity
         implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "ACStart";
+    private static final String TAG = "ACShowRecord";
     private static final String GV_VIEW_TXT = "切换列表";
     private static final String LV_VIEW_TXT = "切换图表";
 
@@ -60,7 +60,7 @@ public class ACStart
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_start);
+        setContentView(R.layout.ac_showrecord);
 
         mMHHandler = new ACSMsgHandler(this);
         initView(savedInstanceState);
@@ -311,9 +311,9 @@ public class ACStart
 
     public class ACSMsgHandler extends Handler {
         private static final String TAG = "ACSMsgHandler";
-        private ACStart mACCur;
+        private ACShowRecord mACCur;
 
-        public ACSMsgHandler(ACStart cur) {
+        public ACSMsgHandler(ACShowRecord cur) {
             super();
             mACCur = cur;
         }

@@ -31,6 +31,10 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 
+
+/**
+ * 选择记录类型界面
+ */
 public class ACRecordType extends AppCompatActivity
     implements View.OnClickListener, AdapterView.OnItemClickListener {
     private static final String TAG = "ACRecordType";
