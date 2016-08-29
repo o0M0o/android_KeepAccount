@@ -1,10 +1,20 @@
 package com.wxm.KeepAccount.ui.activities;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,7 +30,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 /**
  * 用户登陆后首页面
  */
-public class ACWelcome extends AppCompatActivity implements View.OnClickListener {
+public class ACWelcome extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "ACWelcome";
     private static final int    BTDRAW_WIDTH    = 96;
     private static final int    BTDRAW_HEIGHT   = 96;
@@ -33,8 +43,66 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
         init_component();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.acm_start_actbar, menu);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_welcome);
+        assert drawer != null;
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.am_bi_logout: {
+                int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
+
+                Intent data = new Intent();
+                setResult(ret_data, data);
+                finish();
+            }
+            break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+
+        return true;
+    }
+
 
     private void init_component() {
+        // set nav view
+        Toolbar tb = UtilFun.cast(findViewById(R.id.ac_navw_toolbar));
+        setSupportActionBar(tb);
+
+        DrawerLayout drawer = UtilFun.cast(findViewById(R.id.ac_welcome));
+        assert null != drawer;
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, tb,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView nv = UtilFun.cast(findViewById(R.id.start_nav_view));
+        assert null != nv;
+        nv.setNavigationItemSelectedListener(this);
+
+
         // init datashow
         Button bt_datashow = UtilFun.cast(findViewById(R.id.bt_lookdata));
         assert null != bt_datashow;
@@ -130,5 +198,62 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
             default:
                 Log.e(TAG, "view(id :" + id + ")的click未处理");
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.nav_help: {
+                /*Toast.makeText(getApplicationContext(),
+                        "invoke help!",
+                        Toast.LENGTH_SHORT).show();*/
+
+                Intent intent = new Intent(this, ACHelp.class);
+                intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_START);
+
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+            case R.id.nav_setting: {
+                Toast.makeText(getApplicationContext(),
+                        "invoke setting!",
+                        Toast.LENGTH_SHORT).show();
+            }
+            break;
+
+            case R.id.nav_share_app: {
+                Toast.makeText(getApplicationContext(),
+                        "invoke share!",
+                        Toast.LENGTH_SHORT).show();
+            }
+            break;
+
+            case R.id.nav_contact_writer: {
+                /*Toast.makeText(getApplicationContext(),
+                        "invoke contact!",
+                        Toast.LENGTH_SHORT).show();*/
+                contactWriter();
+            }
+            break;
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_welcome);
+        assert null != drawer;
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void contactWriter() {
+        Resources res = getResources();
+
+        Intent data = new Intent(Intent.ACTION_SENDTO);
+        data.setData(
+                Uri.parse(
+                        String.format("mailto:%s", res.getString(R.string.contact_email))));
+        //data.putExtra(Intent.EXTRA_SUBJECT, "这是标题");
+        //data.putExtra(Intent.EXTRA_TEXT, "这是内容");
+        startActivity(data);
     }
 }

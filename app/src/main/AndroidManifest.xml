@@ -48,7 +48,8 @@
             android:name=".ui.activities.ACRecordTypeEdit"
             android:label="@string/title_activity_acrecord_type_edit"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.activities.ACWelcome"></activity>
+        <activity android:name=".ui.activities.ACWelcome"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

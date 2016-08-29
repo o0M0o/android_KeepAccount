@@ -11,6 +11,7 @@ import com.j256.ormlite.dao.ReferenceObjectCache;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppModel;
 import com.wxm.KeepAccount.Base.utility.ContextUtil;
 import com.wxm.KeepAccount.BuildConfig;
@@ -201,7 +202,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         Date de = new Date();
         RecordItem ri = new RecordItem();
         ri.setUsr(ui_wxm);
-        ri.setType("pay");
+        ri.setType(AppGobalDef.CNSTR_RECORD_PAY);
         ri.setInfo("tax");
         ri.setVal(new BigDecimal(12.34));
         ri.getTs().setTime(de.getTime());
@@ -209,7 +210,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
 
         ri = new RecordItem();
         ri.setUsr(ui_wxm);
-        ri.setType("pay");
+        ri.setType(AppGobalDef.CNSTR_RECORD_PAY);
         ri.setInfo("water cost");
         ri.setVal(new BigDecimal(12.34));
         ri.getTs().setTime(de.getTime());
@@ -217,7 +218,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
 
         ri = new RecordItem();
         ri.setUsr(ui_wxm);
-        ri.setType("pay");
+        ri.setType(AppGobalDef.CNSTR_RECORD_PAY);
         ri.setInfo("electrcity cost");
         ri.setVal(new BigDecimal(12.34));
         ri.getTs().setTime(de.getTime());
@@ -225,7 +226,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
 
         ri = new RecordItem();
         ri.setUsr(ui_wxm);
-        ri.setType("income");
+        ri.setType(AppGobalDef.CNSTR_RECORD_INCOME);
         ri.setInfo("工资");
         ri.setVal(new BigDecimal(12.34));
         ri.getTs().setTime(de.getTime());
@@ -237,7 +238,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         lsit.clear();
         ri = new RecordItem();
         ri.setUsr(ui_hugo);
-        ri.setType("pay");
+        ri.setType(AppGobalDef.CNSTR_RECORD_PAY);
         ri.setInfo("water cost");
         ri.setVal(new BigDecimal(12.34));
         ri.getTs().setTime(de.getTime());
@@ -246,7 +247,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
 
         ri = new RecordItem();
         ri.setUsr(ui_hugo);
-        ri.setType("pay");
+        ri.setType(AppGobalDef.CNSTR_RECORD_PAY);
         ri.setInfo("tax");
         ri.setVal(new BigDecimal(12.34));
         ri.getTs().setTime(de.getTime());
@@ -254,7 +255,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
 
         ri = new RecordItem();
         ri.setUsr(ui_hugo);
-        ri.setType("pay");
+        ri.setType(AppGobalDef.CNSTR_RECORD_PAY);
         ri.setInfo("electrcity cost");
         ri.setVal(new BigDecimal(12.34));
         ri.getTs().setTime(de.getTime());
@@ -262,7 +263,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
 
         ri = new RecordItem();
         ri.setUsr(ui_hugo);
-        ri.setType("income");
+        ri.setType(AppGobalDef.CNSTR_RECORD_INCOME);
         ri.setInfo("工资");
         ri.setVal(new BigDecimal(12.34));
         ri.getTs().setTime(de.getTime());
