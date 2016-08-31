@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import com.wxm.KeepAccount.Base.data.AppGobalDef;
 import com.wxm.KeepAccount.Base.data.AppMsgDef;
@@ -24,6 +24,7 @@ import com.wxm.KeepAccount.ui.fragment.ListViewSlidingTabsFragment;
 import java.util.Calendar;
 import java.util.Locale;
 
+import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 
 /**
@@ -31,21 +32,18 @@ import cn.wxm.andriodutillib.util.UtilFun;
  * Created by 123 on 2016/5/16.
  */
 public class ACShowRecord
-        extends AppCompatActivity
-        implements View.OnClickListener  {
+        extends AppCompatActivity   {
+    private static final int[] ITEM_DRAWABLES = {
+            R.drawable.ic_leave
+            ,R.drawable.ic_switch
+            ,R.drawable.ic_add};
 
     private static final String TAG = "ACShowRecord";
-    private static final String GV_VIEW_TXT = "切换列表";
-    private static final String LV_VIEW_TXT = "切换图表";
-
     private ACSMsgHandler mMHHandler;
-
-    private Button bt_view_switch = null;
 
     private SlidingTabsColorsFragment mTabFragment;
     private GraphViewSlidingTabsFragment gvTabFragment = new GraphViewSlidingTabsFragment();
     private ListViewSlidingTabsFragment lvTabFragment = new ListViewSlidingTabsFragment();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,67 +88,6 @@ public class ACShowRecord
         return true;
     }
 
-    /**
-     * 处理按键
-     *
-     * @param v 被点击
-     */
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tabbt_record_pay:
-            case R.id.tabbt_record_income: {
-                Intent intent = new Intent(v.getContext(), ACRecord.class);
-                intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
-
-                if (v.getId() == R.id.tabbt_record_income) {
-                    intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_INCOME);
-                } else {
-                    intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_PAY);
-                }
-
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(System.currentTimeMillis());
-                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
-                        String.format(Locale.CHINA
-                                ,"%d-%02d-%02d"
-                                ,cal.get(Calendar.YEAR)
-                                ,cal.get(Calendar.MONTH) + 1
-                                ,cal.get(Calendar.DAY_OF_MONTH)));
-
-                startActivityForResult(intent, 1);
-            }
-            break;
-
-            case R.id.tabbt_view_switch: {
-                Log.i(TAG, "切换视图");
-
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-                if (mTabFragment instanceof ListViewSlidingTabsFragment) {
-                    mTabFragment = gvTabFragment;
-                    //mTabFragment = new GraphViewSlidingTabsFragment();
-
-                    bt_view_switch.setText(GV_VIEW_TXT);
-                    bt_view_switch.setCompoundDrawablesWithIntrinsicBounds(null
-                                ,getResources().getDrawable(R.drawable.ic_listview)
-                                ,null ,null);
-                } else {
-                    mTabFragment = lvTabFragment;
-                    //mTabFragment = new ListViewSlidingTabsFragment();
-
-                    bt_view_switch.setText(LV_VIEW_TXT);
-                    bt_view_switch.setCompoundDrawablesWithIntrinsicBounds(null
-                            ,getResources().getDrawable(R.drawable.ic_graphview)
-                            ,null ,null);
-                }
-
-                transaction.replace(R.id.tabfl_content, mTabFragment);
-                transaction.commit();
-            }
-            break;
-        }
-    }
 
 
     @Override
@@ -198,17 +135,76 @@ public class ACShowRecord
             transaction.commit();
         }
 
-        // set button
-        Button bt_add_pay = (Button) findViewById(R.id.tabbt_record_pay);
-        Button bt_add_income = (Button) findViewById(R.id.tabbt_record_income);
-        bt_view_switch = (Button) findViewById(R.id.tabbt_view_switch);
-        assert null != bt_add_income && null != bt_add_pay && null != bt_view_switch;
 
-        bt_add_pay.setOnClickListener(this);
-        bt_add_income.setOnClickListener(this);
-        bt_view_switch.setOnClickListener(this);
+        RayMenu rayMenu = UtilFun.cast(findViewById(R.id.ray_menu));
+        assert null != rayMenu;
+        final int itemCount = ITEM_DRAWABLES.length;
+        for (int i = 0; i < itemCount; i++) {
+            ImageView item = new ImageView(this);
+            item.setImageResource(ITEM_DRAWABLES[i]);
 
-        bt_view_switch.setText(LV_VIEW_TXT);
+            final int position = ITEM_DRAWABLES[i];
+            rayMenu.addItem(item, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OnRayMenuClick(position);
+                }
+            });// Add a menu item
+        }
+    }
+
+    /**
+     * raymenu点击事件
+     * @param resid 点击发生的资源ID
+     */
+    private void OnRayMenuClick(int resid)  {
+        switch (resid)  {
+            case R.drawable.ic_add :    {
+                Intent intent = new Intent(this, ACRecord.class);
+                intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
+
+                intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_INCOME);
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
+                        String.format(Locale.CHINA
+                                ,"%d-%02d-%02d"
+                                ,cal.get(Calendar.YEAR)
+                                ,cal.get(Calendar.MONTH) + 1
+                                ,cal.get(Calendar.DAY_OF_MONTH)));
+
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+            case R.drawable.ic_switch :     {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+                if (mTabFragment instanceof ListViewSlidingTabsFragment) {
+                    mTabFragment = gvTabFragment;
+                } else {
+                    mTabFragment = lvTabFragment;
+                }
+
+                transaction.replace(R.id.tabfl_content, mTabFragment);
+                transaction.commit();
+            }
+            break;
+
+            case R.drawable.ic_leave :  {
+                int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
+
+                Intent data = new Intent();
+                setResult(ret_data, data);
+                finish();
+            }
+            break;
+
+            default:
+                Log.e(TAG, "未处理的resid : " + resid);
+                break;
+        }
     }
 
 

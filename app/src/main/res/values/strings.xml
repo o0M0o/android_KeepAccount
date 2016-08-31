@@ -81,4 +81,5 @@
     <string name="cn_hint_recordtype_add">添加新纪录类型</string>
     <string name="cn_lookdata">查看数据</string>
     <string name="cn_leave_login">退出登录</string>
+    <string name="cn_hint_more_button">浮动按钮</string>
 </resources>

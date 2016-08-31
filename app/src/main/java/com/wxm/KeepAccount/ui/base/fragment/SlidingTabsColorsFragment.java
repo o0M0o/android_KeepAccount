@@ -27,10 +27,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wxm.KeepAccount.R;
-import com.wxm.KeepAccount.ui.base.view.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.wxm.andriodutillib.SlidingTab.*;
 
 /**
  * A basic sample which shows how to use {}
@@ -38,7 +39,7 @@ import java.util.List;
  * when scrolling.
  */
 public class SlidingTabsColorsFragment extends Fragment {
-    private static final String TAG = "LVSlidingTabsFragment ";
+    private static final String TAG = "SlidingTabsFragment";
 
     /**
      * This class represents a tab to be displayed by {@link ViewPager} and it's associated
@@ -85,8 +86,6 @@ public class SlidingTabsColorsFragment extends Fragment {
             return null;
         }*/
     }
-
-    static final String LOG_TAG = "SlidingTabsColorsFragment";
 
     /**
      * A {@link ViewPager} which will be used in conjunction with the {@link SlidingTabLayout} above.
