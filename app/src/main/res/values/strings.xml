@@ -82,4 +82,12 @@
     <string name="cn_lookdata">查看数据</string>
     <string name="cn_leave_login">退出登录</string>
     <string name="cn_hint_more_button">浮动按钮</string>
+    <string name="cn_edit_remind">编辑提醒</string>
+    <string name="cn_edit_budget">编辑预算</string>
+    <string name="cn_hint_budget_name">请输入预算名</string>
+    <string name="cn_hint_budget_amount">请输入预算金额</string>
+    <string name="cn_hint_budget_note">请输入预算备注(200字以内)</string>
+    <string name="ac_label_budget_manager">预算管理</string>
+    <string name="cn_hint_budget_start_date">请输入预算开始日期</string>
+    <string name="cn_hint_budget_end_date">请输入预算结束日期</string>
 </resources>
