@@ -143,6 +143,11 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
         dr = bt_leave_login.getCompoundDrawables()[1];
         dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
         bt_leave_login.setCompoundDrawables(null, dr, null, null);
+
+        // init edit budget
+        Button bt_edit_budget = UtilFun.cast(findViewById(R.id.bt_edit_budget));
+        assert null != bt_edit_budget;
+        bt_edit_budget.setOnClickListener(this);
     }
 
     @Override
@@ -155,10 +160,14 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
             }
             break;
 
+            case R.id.bt_edit_budget: {
+                Intent intent = new Intent(this, ACBudgetManager.class);
+                startActivityForResult(intent, 1);
+            }
+            break;
+
             case R.id.bt_setting : {
-                Toast.makeText(getApplicationContext(),
-                        "invoke setting!",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "invoke setting!", Toast.LENGTH_SHORT).show();
             }
             break;
 

@@ -71,6 +71,13 @@ public class RecordItem implements Parcelable {
 
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(getId());
+
+        int usrid = -1;
+        UsrItem ui = getUsr();
+        if(null != ui)
+            usrid = ui.getId();
+        out.writeInt(usrid);
+
         out.writeString(getType());
         out.writeString(getInfo());
         out.writeString(getNote());
@@ -92,6 +99,10 @@ public class RecordItem implements Parcelable {
 
     private RecordItem(Parcel in)   {
         setId(in.readInt());
+
+        setUsr(new UsrItem());
+        getUsr().setId(in.readInt());
+
         setType(in.readString());
         setInfo(in.readString());
         setNote(in.readString());

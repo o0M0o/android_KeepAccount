@@ -248,7 +248,7 @@ public class ACRecord
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.length() > MAX_NOTELEN)    {
-                    et_note.setError(String.format("超过最大长度(%d)!", MAX_NOTELEN));
+                    et_note.setError(String.format(Locale.CHINA, "超过最大长度(%d)!", MAX_NOTELEN));
                     et_note.setText(s.subSequence(0, MAX_NOTELEN));
                 }
             }
@@ -316,13 +316,10 @@ public class ACRecord
         builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                StringBuffer sb = new StringBuffer();
-                sb.append(String.format("%d-%02d-%02d",
+                et_date.setText(String.format(Locale.CHINA, "%d-%02d-%02d",
                         datePicker.getYear(),
                         datePicker.getMonth() + 1,
                         datePicker.getDayOfMonth()));
-
-                et_date.setText(sb);
                 et_date.requestFocus();
 
                 dialog.cancel();

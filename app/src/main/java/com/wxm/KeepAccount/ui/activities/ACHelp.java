@@ -17,6 +17,9 @@ import com.wxm.KeepAccount.R;
  * 为优化代码架构，activity启动时根据intent参数加载不同帮助信息
  */
 public class ACHelp extends AppCompatActivity {
+    public static final String STR_HELP_BUDGET = "budget";
+
+
     //private static String TAG = "ACHelp";
     private static final String ENCODING = "utf-8";
     //private static final String MIMETYPE = "text/html; charset=UTF-8";

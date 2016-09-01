@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/et_budget_name"
@@ -35,7 +35,7 @@
         android:layout_below="@+id/til_name"
         android:layout_marginTop="5dp">
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/et_budget_amount"
@@ -55,7 +55,7 @@
         android:layout_below="@+id/til_amount"
         android:layout_marginTop="5dp">
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/et_budget_start_date"
@@ -76,7 +76,7 @@
         android:layout_below="@+id/til_start_date"
         android:layout_marginTop="5dp">
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/et_budget_end_date"
@@ -98,7 +98,7 @@
         android:layout_marginTop="5dp"
         android:layout_alignParentEnd="false">
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/et_budget_note"

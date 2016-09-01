@@ -26,6 +26,7 @@ public class AppModel {
     private UsrItemUtility          mUsru;
     private RecordItemUtility       mRecordu;
     private RecordTypeItemUtility   mRecordTypeu;
+    private BudgetItemUtility       mBudgetu;
 
     public static void SetContext(Context ct)   {
         mMockContext = ct;
@@ -59,6 +60,9 @@ public class AppModel {
 
         if(null == mRecordTypeu)
             mRecordTypeu = new RecordTypeItemUtility();
+
+        if(null == mBudgetu)
+            mBudgetu = new BudgetItemUtility();
     }
 
 
@@ -74,6 +78,7 @@ public class AppModel {
         mUsru           = null;
         mRecordu        = null;
         mRecordTypeu    = null;
+        mBudgetu        = null;
     }
 
     /**
@@ -136,5 +141,13 @@ public class AppModel {
      */
     public static RecordTypeItemUtility getRecordTypeUtility()  {
         return getInstance().mRecordTypeu;
+    }
+
+    /**
+     * 获得预算辅助类
+     * @return  辅助类
+     */
+    public static BudgetItemUtility getBudgetUtility()  {
+        return  getInstance().mBudgetu;
     }
 }
