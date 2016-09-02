@@ -5,9 +5,9 @@ import android.test.RenamingDelegatingContext;
 import android.test.suitebuilder.annotation.Suppress;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
-import com.wxm.KeepAccount.Base.db.RecordItem;
-import com.wxm.KeepAccount.Base.db.UsrItem;
-import com.wxm.KeepAccount.Base.db.DBOrmliteHelper;
+import wxm.KeepAccount.Base.db.RecordItem;
+import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.db.DBOrmliteHelper;
 
 import java.math.BigDecimal;
 import java.util.Date;

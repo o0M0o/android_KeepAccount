@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.wxm.KeepAccount">
+    package="wxm.KeepAccount">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -24,13 +24,13 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".ui.activities.ACDailyDetail" />
-        <activity android:name=".ui.activities.ACRecord" />
+        <activity android:name=".ui.acutility.ACDailyDetail" />
+        <activity android:name=".ui.acutility.ACRecord" />
         <activity
-            android:name=".ui.activities.ACShowRecord"
+            android:name=".ui.acinterface.ACShowRecord"
             android:label="@string/title_activity_start" />
         <activity
-            android:name=".ui.activities.ACLogin"
+            android:name=".ui.acinterface.ACLogin"
             android:label="@string/cn_applabel">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,19 +39,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.ACAddUsr"
+            android:name=".ui.acutility.ACAddUsr"
             android:label="@string/title_activity_add_account" />
-        <activity android:name=".ui.activities.ACHelp" />
-        <activity android:name=".ui.activities.ACRecordType" />
+        <activity android:name=".ui.acinterface.ACHelp" />
+        <activity android:name=".ui.acutility.ACRecordType" />
         <activity
-            android:name=".ui.activities.ACRecordTypeEdit"
+            android:name=".ui.acutility.ACRecordTypeEdit"
             android:label="@string/title_activity_acrecord_type_edit"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.activities.ACWelcome"
+            android:name=".ui.acinterface.ACWelcome"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.activities.ACBudgetManager"
-            android:label= "@string/ac_label_budget_manager" />
+        <activity
+            android:name=".ui.acutility.ACBudgetEdit"
+            android:label="@string/ac_label_budget_manager" />
+        <activity android:name=".ui.acinterface.ACShowBudget"></activity>
     </application>
 
 </manifest>

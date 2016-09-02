@@ -4,9 +4,9 @@ import android.content.Context;
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
 
-import com.wxm.KeepAccount.Base.data.AppModel;
-import com.wxm.KeepAccount.Base.db.RecordItem;
-import com.wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.db.RecordItem;
+import wxm.KeepAccount.Base.db.UsrItem;
 
 import java.math.BigDecimal;
 import java.util.Date;
