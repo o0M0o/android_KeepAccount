@@ -1,9 +1,9 @@
 package wxm.KeepAccount.Base.data;
 
+import java.util.List;
+
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.UsrItem;
-
-import java.util.List;
 
 /**
  * 预算数据工具类
@@ -16,10 +16,10 @@ public class BudgetItemUtility {
     }
 
     /**
-     * 根据ID查找RecordItem数据
+     * 根据当前用户查找BudgetItem数据
      * @return 查找到的数据,没有数据时返回{@code NULL}
      */
-    public BudgetItem GetBudget()  {
+    public List<BudgetItem> GetBudget()  {
         UsrItem cur_usr = AppModel.getInstance().getCurUsr();
         if(null == cur_usr)
             return null;
@@ -29,8 +29,20 @@ public class BudgetItemUtility {
         if((null == lsret) || (0 == lsret.size()))
             return null;
 
-        return lsret.get(0);
+        return lsret;
     }
+
+
+    /**
+     * 根据ID查找BudgetItem数据
+     * @return 查找到的数据,没有数据时返回{@code NULL}
+     */
+    public BudgetItem GetBudgetById(int biid)  {
+        return AppModel.getDBHelper().getBudgetItemREDao()
+                .queryForId(biid);
+    }
+
+
 
     /**
      * 添加预算数据
@@ -62,10 +74,20 @@ public class BudgetItemUtility {
 
     /**
      * 删除预算数据
-     * @param bi 待修改数据
+     * @param bi 待删除数据
      * @return 成功返回{@code true}
      */
     public boolean DeleteBudget(BudgetItem bi)  {
         return 1 == AppModel.getDBHelper().getBudgetItemREDao().delete(bi);
+    }
+
+
+    /**
+     * 删除预算数据
+     * @param biid 待删除数据id
+     * @return 成功返回{@code true}
+     */
+    public boolean DeleteBudgetById(int biid)  {
+        return 1 == AppModel.getDBHelper().getBudgetItemREDao().deleteById(biid);
     }
 }

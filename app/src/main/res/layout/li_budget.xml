@@ -6,7 +6,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ib_edit"
+        android:id="@+id/ib_budget_edit"
         android:layout_gravity="right"
         android:src="@drawable/ic_edit"
         android:layout_alignParentRight="true"
@@ -43,10 +43,10 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ib_delete"
+        android:id="@+id/ib_budget_delete"
         android:layout_alignParentTop="false"
-        android:layout_alignTop="@+id/ib_edit"
-        android:layout_toLeftOf="@+id/ib_edit"
+        android:layout_alignTop="@+id/ib_budget_edit"
+        android:layout_toLeftOf="@+id/ib_budget_edit"
         android:layout_marginRight="12dp"
         android:src="@drawable/ic_delete" />
 </RelativeLayout>

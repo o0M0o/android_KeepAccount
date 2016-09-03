@@ -19,14 +19,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.R;
-
 import java.util.Calendar;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
+import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACRecord;
 
 /**
@@ -163,7 +161,7 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
             break;
 
             case R.id.bt_edit_budget: {
-                Intent intent = new Intent(this, ACBudgetEdit.class);
+                Intent intent = new Intent(this, ACShowBudget.class);
                 startActivityForResult(intent, 1);
             }
             break;

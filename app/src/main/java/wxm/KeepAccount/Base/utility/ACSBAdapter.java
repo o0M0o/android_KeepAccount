@@ -3,6 +3,7 @@ package wxm.KeepAccount.Base.utility;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
@@ -37,6 +38,28 @@ public class ACSBAdapter extends SimpleAdapter {
     public View getView(final int position, View view, ViewGroup arg2) {
         View v = super.getView(position, view, arg2);
         if(null != v)   {
+            ImageButton ibedit = UtilFun.cast(v.findViewById(R.id.ib_budget_edit));
+            ImageButton ibdelete = UtilFun.cast(v.findViewById(R.id.ib_budget_delete));
+            assert null != ibedit && null != ibdelete;
+
+            HashMap<String, String> map = mLVList.get(position);
+            String editst = map.get(ACShowBudget.FIELD_EDIT_STATUS);
+            String delst = map.get(ACShowBudget.FIELD_DELETE_STATUS);
+            assert null != editst && null != delst;
+
+            if(editst.equals(ACShowBudget.FIELD_VAL_ENABLE))    {
+                ibedit.setVisibility(View.VISIBLE);
+                ibedit.setOnClickListener(mHome);
+            }   else    {
+                ibedit.setVisibility(View.INVISIBLE);
+            }
+
+            if(delst.equals(ACShowBudget.FIELD_VAL_ENABLE))    {
+                ibdelete.setVisibility(View.VISIBLE);
+                ibdelete.setOnClickListener(mHome);
+            }   else    {
+                ibdelete.setVisibility(View.INVISIBLE);
+            }
         }
 
         return v;

@@ -10,11 +10,13 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.utility.ToolUtil;
 
 /**
  * 预算类
@@ -23,6 +25,7 @@ import java.util.Locale;
 @DatabaseTable(tableName = "tbBudget")
 public class BudgetItem implements Parcelable {
     private static final String TAG = "BudgetItem";
+    private static final String NULL_ID = "NULL";
 
     public final static String FIELD_USR    = "usr";
 
@@ -125,8 +128,12 @@ public class BudgetItem implements Parcelable {
         dest.writeString(getName());
         dest.writeString(getNote());
         dest.writeString(getAmount().toString());
-        dest.writeString(getStartDate().toString());
-        dest.writeString(getEndDate().toString());
+        dest.writeString(null == getStartDate() ?
+                NULL_ID
+                : ToolUtil.DateToSerializetr(getStartDate()));
+        dest.writeString(null == getEndDate() ?
+                NULL_ID
+                : ToolUtil.DateToSerializetr(getEndDate()));
         dest.writeString(getTs().toString());
     }
 
@@ -158,8 +165,15 @@ public class BudgetItem implements Parcelable {
         setAmount(new BigDecimal(in.readString()));
 
         try {
-            setStartDate(DateFormat.getDateInstance().parse(in.readString()));
-            setEndDate(DateFormat.getDateInstance().parse(in.readString()));
+            String sdt = in.readString();
+            if(!sdt.equals(NULL_ID))    {
+                setStartDate(ToolUtil.SerializeStrToDate(sdt));
+            }
+
+            String edt = in.readString();
+            if(!edt.equals(NULL_ID))    {
+                setEndDate(ToolUtil.SerializeStrToDate(edt));
+            }
 
             setTs(new Timestamp(0));
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
@@ -168,7 +182,7 @@ public class BudgetItem implements Parcelable {
         }
         catch (ParseException ex)
         {
-            Log.e(TAG, "get budgetItem from parcel fall!");
+            Log.e(TAG, "get budgetItem from parcel fall!, ex = " + UtilFun.ExceptionToString(ex));
         }
     }
 

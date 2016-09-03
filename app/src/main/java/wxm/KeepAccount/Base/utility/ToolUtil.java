@@ -1,9 +1,15 @@
 package wxm.KeepAccount.Base.utility;
 
+import android.util.Log;
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 
 /**
  * 工具类
@@ -85,7 +91,7 @@ public class ToolUtil {
                 && (slen != "yyyy-MM-dd".length()))
             return ts;
 
-        String valstr = str;
+        String valstr = str.replace("年", "-").replace("月", "-").replace("日", "");
         if(slen == "yyyy-MM-dd".length())
             valstr += " 00:00:00";
 
@@ -98,5 +104,37 @@ public class ToolUtil {
         }
 
         return  ts;
+    }
+
+
+    public static String DateToDateStr(Date dt) {
+        Calendar cd = Calendar.getInstance();
+        cd.setTimeInMillis(dt.getTime());
+        return String.format(Locale.CHINA  ,"%d年%02d月%02d日"
+                    ,cd.get(Calendar.YEAR) ,cd.get(Calendar.MONTH) ,cd.get(Calendar.DAY_OF_MONTH));
+    }
+
+
+    public static String DateToSerializetr(Date dt) {
+        Calendar cd = Calendar.getInstance();
+        cd.setTimeInMillis(dt.getTime());
+
+        return String.format(Locale.CHINA  ,"%d-%02d-%02d %02d:%02d:%02d.%03d"
+                ,cd.get(Calendar.YEAR) ,cd.get(Calendar.MONTH) ,cd.get(Calendar.DAY_OF_MONTH)
+                ,cd.get(Calendar.HOUR_OF_DAY) ,cd.get(Calendar.MINUTE) ,cd.get(Calendar.SECOND)
+                ,cd.get(Calendar.MILLISECOND));
+    }
+
+    public static Date SerializeStrToDate(String str_dt)    {
+        Timestamp ts = new Timestamp(0);
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.CHINA);
+            java.util.Date date = format.parse(str_dt);
+            ts.setTime(date.getTime());
+        } catch (ParseException ex)     {
+            Log.e(TAG, "转换'" + str_dt + "'失败，ex : " + UtilFun.ExceptionToString(ex));
+        }
+
+        return new Date(ts.getTime());
     }
 }

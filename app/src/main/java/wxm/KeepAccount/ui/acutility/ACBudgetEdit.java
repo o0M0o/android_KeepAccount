@@ -22,6 +22,7 @@ import android.widget.EditText;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
@@ -31,6 +32,7 @@ import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
+import wxm.KeepAccount.ui.acinterface.ACShowBudget;
 
 
 /**
@@ -69,6 +71,11 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
         switch (item.getItemId()) {
             case R.id.mu_budget_save: {
                 if(setResult()) {
+                    int ret_data = AppGobalDef.INTRET_SURE;
+
+                    Intent data = new Intent();
+                    setResult(ret_data, data);
+
                     finish();
                 }
             }
@@ -116,6 +123,33 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
             mETName.requestFocus();
             return false;
         }
+
+        List<BudgetItem> bils = AppModel.getBudgetUtility().GetBudget();
+        if(null != bils)    {
+            int matchid = -1;
+            boolean bmatch = false;
+            for(BudgetItem i : bils)    {
+                if(name.equals(i.getName()))    {
+                    bmatch = true;
+                    matchid = i.get_id();
+                    break;
+                }
+            }
+
+            if(bmatch &&
+                    ((null == mCurBudget)
+                    || (mCurBudget.get_id() != matchid)))  {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("预算名已经存在!").setTitle("警告");
+
+                AlertDialog dlg = builder.create();
+                dlg.show();
+
+                mETName.requestFocus();
+                return false;
+            }
+        }
+
 
         if(UtilFun.StringIsNullOrEmpty(amount))   {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -168,8 +202,6 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
 
 
     private void init_component()   {
-        mCurBudget = AppModel.getBudgetUtility().GetBudget();
-
         // for name
         mETName = UtilFun.cast(findViewById(R.id.et_budget_name));
         assert null != mETName;
@@ -231,23 +263,18 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
             }
         });
 
+        // init budget
+        Intent it = getIntent();
+        mCurBudget = it.getParcelableExtra(ACShowBudget.INTENT_LOAD_BUDGET);
         if(null != mCurBudget)  {
             mETName.setText(mCurBudget.getName());
             mETAmount.setText(mCurBudget.getAmount().toPlainString());
 
             Date sdt = mCurBudget.getStartDate();
-            mETStartDate.setText(
-                        String.format(Locale.CHINA, "%d-%02d-%02d"
-                                ,sdt.getYear() + 1900
-                                ,sdt.getMonth()
-                                ,sdt.getDay()));
+            mETStartDate.setText(ToolUtil.DateToDateStr(sdt));
 
             Date edt = mCurBudget.getEndDate();
-            mETEndDate.setText(
-                    String.format(Locale.CHINA, "%d-%02d-%02d"
-                            ,edt.getYear() + 1900
-                            ,edt.getMonth()
-                            ,edt.getDay()));
+            mETEndDate.setText(ToolUtil.DateToDateStr(edt));
 
             mETNote.setText(mCurBudget.getNote());
         }
@@ -297,7 +324,7 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
         builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                et_date.setText(String.format(Locale.CHINA, "%d-%02d-%02d",
+                et_date.setText(String.format(Locale.CHINA, "%d年%02d月%02d日",
                         datePicker.getYear(),
                         datePicker.getMonth() + 1,
                         datePicker.getDayOfMonth()));

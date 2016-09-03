@@ -19,7 +19,7 @@
 
 
     <cn.wxm.andriodutillib.capricorn.RayMenu
-        android:id="@+id/ray_menu"
+        android:id="@+id/rm_budget_show"
         app:childSize="36dp"
         android:layout_width="fill_parent"
         android:layout_height="60dp"
