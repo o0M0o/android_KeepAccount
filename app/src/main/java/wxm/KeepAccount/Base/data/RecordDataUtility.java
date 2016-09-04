@@ -2,26 +2,25 @@ package wxm.KeepAccount.Base.data;
 
 import android.util.Log;
 
-import wxm.KeepAccount.Base.db.DBOrmliteHelper;
-import wxm.KeepAccount.Base.db.RecordItem;
-import wxm.KeepAccount.Base.db.UsrItem;
-import wxm.KeepAccount.Base.utility.ToolUtil;
-
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.db.RecordItem;
+import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
+import wxm.KeepAccount.Base.utility.ToolUtil;
 
 /**
  * record数据辅助类
  * Created by 123 on 2016/8/9.
  */
-public class RecordItemUtility {
-    private final String    TAG = "RecordItemUtility";
+public class RecordDataUtility {
+    private final String    TAG = "RecordDataUtility";
 
-    public RecordItemUtility()  {
+    public RecordDataUtility()  {
     }
 
     /**

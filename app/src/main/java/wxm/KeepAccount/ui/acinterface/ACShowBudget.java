@@ -20,7 +20,6 @@ import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.utility.ACSBAdapter;
 import wxm.KeepAccount.Base.utility.ContextUtil;
-import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
 
@@ -40,7 +39,7 @@ public class ACShowBudget extends AppCompatActivity implements View.OnClickListe
     public static final String FIELD_BUDGET_ID      = "BUDGET_ID";
     public static final String FIELD_BUDGET_NAME    = "BUDGET_NAME";
     public static final String FIELD_BUDGET_AMOUNT  = "BUDGET_AMOUNT";
-    public static final String FIELD_BUDGET_DATE    = "BUDGET_DATE";
+    public static final String FIELD_BUDGET_NOTE    = "BUDGET_NOTE";
 
 
     private static final String TAG = "ACShowBudget";
@@ -91,8 +90,8 @@ public class ACShowBudget extends AppCompatActivity implements View.OnClickListe
         mLVAdapter= new ACSBAdapter(this,
                 ContextUtil.getInstance(),
                 mLVListData,
-                new String[]{FIELD_BUDGET_NAME, FIELD_BUDGET_AMOUNT, FIELD_BUDGET_DATE},
-                new int[]{R.id.tv_budget_name, R.id.tv_budget_amount, R.id.tv_budget_date});
+                new String[]{FIELD_BUDGET_NAME, FIELD_BUDGET_AMOUNT, FIELD_BUDGET_NOTE},
+                new int[]{R.id.tv_budget_name, R.id.tv_budget_amount, R.id.tv_budget_note});
 
         mLVBudget.setAdapter(mLVAdapter);
     }
@@ -110,11 +109,11 @@ public class ACShowBudget extends AppCompatActivity implements View.OnClickListe
                 hm.put(FIELD_BUDGET_ID, String.valueOf(i.get_id()));
                 hm.put(FIELD_BUDGET_NAME, i.getName());
                 hm.put(FIELD_BUDGET_AMOUNT
-                        ,String.format(Locale.CHINA ,"预算金额 : %.02f" ,i.getAmount()));
-                hm.put(FIELD_BUDGET_DATE
-                        ,String.format(Locale.CHINA ,"开始时间 : %s\n结束时间 : %s"
-                                ,ToolUtil.DateToDateStr(i.getStartDate())
-                                ,ToolUtil.DateToDateStr(i.getEndDate())));
+                        ,String.format(Locale.CHINA
+                                ,"预算金额 : %.02f\n预算余额 : %.02f"
+                                ,i.getAmount() ,i.getAmount()));
+
+                hm.put(FIELD_BUDGET_NOTE ,"备注 : " + i.getNote());
 
                 hm.put(FIELD_EDIT_STATUS, FIELD_VAL_DISABLE);
                 hm.put(FIELD_DELETE_STATUS, FIELD_VAL_DISABLE);
@@ -206,6 +205,7 @@ public class ACShowBudget extends AppCompatActivity implements View.OnClickListe
 
                 case R.id.ib_budget_delete: {
                     AppModel.getBudgetUtility().DeleteBudgetById(it_id);
+                    loadBudget();
                 }
                 break;
 

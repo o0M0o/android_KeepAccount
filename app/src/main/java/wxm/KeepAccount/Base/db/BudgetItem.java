@@ -12,11 +12,9 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.utility.ToolUtil;
 
 /**
  * 预算类
@@ -25,9 +23,9 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 @DatabaseTable(tableName = "tbBudget")
 public class BudgetItem implements Parcelable {
     private static final String TAG = "BudgetItem";
-    private static final String NULL_ID = "NULL";
 
-    public final static String FIELD_USR    = "usr";
+    public final static String FIELD_USR    = "usr_id";
+    public final static String FIELD_ID     = "_id";
 
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     private int _id;
@@ -35,7 +33,7 @@ public class BudgetItem implements Parcelable {
     @DatabaseField(columnName = "name", canBeNull = false, dataType = DataType.STRING)
     private String name;
 
-    @DatabaseField(columnName = "usr", foreign = true, foreignColumnName = UsrItem.FIELD_ID,
+    @DatabaseField(columnName = "usr_id", foreign = true, foreignColumnName = UsrItem.FIELD_ID,
             canBeNull = false)
     private UsrItem usr;
 
@@ -45,11 +43,6 @@ public class BudgetItem implements Parcelable {
     @DatabaseField(columnName = "note", canBeNull = false, dataType = DataType.STRING)
     private String note;
 
-    @DatabaseField(columnName = "start_date", dataType = DataType.DATE)
-    private Date startDate;
-
-    @DatabaseField(columnName = "end_date", dataType = DataType.DATE)
-    private Date endDate;
 
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
     private Timestamp ts;
@@ -86,22 +79,6 @@ public class BudgetItem implements Parcelable {
         this.note = note;
     }
 
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
     public Timestamp getTs() {
         return ts;
     }
@@ -109,6 +86,15 @@ public class BudgetItem implements Parcelable {
     public void setTs(Timestamp ts) {
         this.ts = ts;
     }
+
+    public UsrItem getUsr() {
+        return usr;
+    }
+
+    public void setUsr(UsrItem usr) {
+        this.usr = usr;
+    }
+
 
     @Override
     public int describeContents() {
@@ -128,12 +114,6 @@ public class BudgetItem implements Parcelable {
         dest.writeString(getName());
         dest.writeString(getNote());
         dest.writeString(getAmount().toString());
-        dest.writeString(null == getStartDate() ?
-                NULL_ID
-                : ToolUtil.DateToSerializetr(getStartDate()));
-        dest.writeString(null == getEndDate() ?
-                NULL_ID
-                : ToolUtil.DateToSerializetr(getEndDate()));
         dest.writeString(getTs().toString());
     }
 
@@ -165,16 +145,6 @@ public class BudgetItem implements Parcelable {
         setAmount(new BigDecimal(in.readString()));
 
         try {
-            String sdt = in.readString();
-            if(!sdt.equals(NULL_ID))    {
-                setStartDate(ToolUtil.SerializeStrToDate(sdt));
-            }
-
-            String edt = in.readString();
-            if(!edt.equals(NULL_ID))    {
-                setEndDate(ToolUtil.SerializeStrToDate(edt));
-            }
-
             setTs(new Timestamp(0));
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
             java.util.Date date = format.parse(in.readString());
@@ -184,13 +154,5 @@ public class BudgetItem implements Parcelable {
         {
             Log.e(TAG, "get budgetItem from parcel fall!, ex = " + UtilFun.ExceptionToString(ex));
         }
-    }
-
-    public UsrItem getUsr() {
-        return usr;
-    }
-
-    public void setUsr(UsrItem usr) {
-        this.usr = usr;
     }
 }

@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.db;
+package wxm.KeepAccount.Base.utility;
 
 import com.j256.ormlite.android.apptools.OrmLiteConfigUtil;
 

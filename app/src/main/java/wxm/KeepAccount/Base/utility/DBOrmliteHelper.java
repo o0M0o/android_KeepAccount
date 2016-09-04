@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.db;
+package wxm.KeepAccount.Base.utility;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -10,16 +10,22 @@ import com.j256.ormlite.dao.ReferenceObjectCache;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
-import wxm.KeepAccount.Base.utility.ContextUtil;
-import wxm.KeepAccount.BuildConfig;
-import wxm.KeepAccount.R;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.LinkedList;
+
+import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.db.BudgetItem;
+import wxm.KeepAccount.Base.db.IncomeNoteItem;
+import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.db.RecordItem;
+import wxm.KeepAccount.Base.db.RecordTypeItem;
+import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.BuildConfig;
+import wxm.KeepAccount.R;
 
 /**
  * db ormlite helper
@@ -35,16 +41,12 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 6;
 
     // the DAO object we use to access the SimpleData table
-    //private Dao<RecordItem, Integer> simpleRecordItemDao = null;
-    private RuntimeExceptionDao<RecordItem, Integer> simpleRecordItemRuntimeDao = null;
-
-    //private Dao<UsrItem, Integer> simpleUsrItemDao = null;
-    private RuntimeExceptionDao<UsrItem, Integer> simpleUsrItemRuntimeDao = null;
-
-    //private Dao<RecordTypeItem, Integer> simpleRTItemDao = null;
-    private RuntimeExceptionDao<RecordTypeItem, Integer> simpleRTItemRuntimeDao = null;
-
-    private RuntimeExceptionDao<BudgetItem, Integer> simpleBudgetItemRuntimeDao = null;
+    private RuntimeExceptionDao<RecordItem, Integer>        mRecordNoteRDao = null;
+    private RuntimeExceptionDao<UsrItem, Integer>           mUsrNoteRDao = null;
+    private RuntimeExceptionDao<RecordTypeItem, Integer>    mRTNoteRDao = null;
+    private RuntimeExceptionDao<BudgetItem, Integer>        mBudgetNoteRDao = null;
+    private RuntimeExceptionDao<PayNoteItem, Integer>       mPayNoteRDao = null;
+    private RuntimeExceptionDao<IncomeNoteItem, Integer>    mIncomeNoteRDao = null;
 
     public DBOrmliteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -70,20 +72,23 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
             if(5 == newVersion) {
                 TableUtils.dropTable(connectionSource, RecordItem.class, true);
                 TableUtils.dropTable(connectionSource, UsrItem.class, true);
+
+                onCreate(db, connectionSource);
             }
 
             if(6 == newVersion)     {
                 TableUtils.dropTable(connectionSource, RecordItem.class, true);
                 TableUtils.dropTable(connectionSource, UsrItem.class, true);
                 TableUtils.dropTable(connectionSource, RecordTypeItem.class, true);
+                TableUtils.dropTable(connectionSource, PayNoteItem.class, true);
+                TableUtils.dropTable(connectionSource, IncomeNoteItem.class, true);
+
+                onCreate(db, connectionSource);
             }
         } catch (SQLException e) {
-            Log.e(TAG, "Can't drop databases", e);
-            //throw new RuntimeException(e);
+            Log.e(TAG, "Can't upgrade databases", e);
+            throw new RuntimeException(e);
         }
-
-        // after we drop the old databases, we create the new ones
-        onCreate(db, connectionSource);
     }
 
     /**
@@ -91,33 +96,47 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
      * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
      */
     public RuntimeExceptionDao<RecordItem, Integer> getRecordItemREDao() {
-        if (simpleRecordItemRuntimeDao == null) {
-            simpleRecordItemRuntimeDao = getRuntimeExceptionDao(RecordItem.class);
+        if (mRecordNoteRDao == null) {
+            mRecordNoteRDao = getRuntimeExceptionDao(RecordItem.class);
         }
 
-        simpleRecordItemRuntimeDao.setObjectCache(ReferenceObjectCache.makeSoftCache());
-        return simpleRecordItemRuntimeDao;
+        mRecordNoteRDao.setObjectCache(ReferenceObjectCache.makeSoftCache());
+        return mRecordNoteRDao;
     }
 
     public RuntimeExceptionDao<UsrItem, Integer> getUsrItemREDao() {
-        if (simpleUsrItemRuntimeDao == null) {
-            simpleUsrItemRuntimeDao = getRuntimeExceptionDao(UsrItem.class);
+        if (mUsrNoteRDao == null) {
+            mUsrNoteRDao = getRuntimeExceptionDao(UsrItem.class);
         }
-        return simpleUsrItemRuntimeDao;
+        return mUsrNoteRDao;
     }
 
     public RuntimeExceptionDao<RecordTypeItem, Integer> getRTItemREDao() {
-        if (simpleRTItemRuntimeDao == null) {
-            simpleRTItemRuntimeDao = getRuntimeExceptionDao(RecordTypeItem.class);
+        if (mRTNoteRDao == null) {
+            mRTNoteRDao = getRuntimeExceptionDao(RecordTypeItem.class);
         }
-        return simpleRTItemRuntimeDao;
+        return mRTNoteRDao;
     }
 
-    public RuntimeExceptionDao<BudgetItem, Integer> getBudgetItemREDao() {
-        if (simpleBudgetItemRuntimeDao == null) {
-            simpleBudgetItemRuntimeDao = getRuntimeExceptionDao(BudgetItem.class);
+    public RuntimeExceptionDao<BudgetItem, Integer> getBudgetDataREDao() {
+        if (mBudgetNoteRDao == null) {
+            mBudgetNoteRDao = getRuntimeExceptionDao(BudgetItem.class);
         }
-        return simpleBudgetItemRuntimeDao;
+        return mBudgetNoteRDao;
+    }
+
+    public RuntimeExceptionDao<PayNoteItem, Integer> getPayDataREDao() {
+        if (mPayNoteRDao == null) {
+            mPayNoteRDao = getRuntimeExceptionDao(PayNoteItem.class);
+        }
+        return mPayNoteRDao;
+    }
+
+    public RuntimeExceptionDao<IncomeNoteItem, Integer> getIncomeDataREDao() {
+        if (mIncomeNoteRDao == null) {
+            mIncomeNoteRDao = getRuntimeExceptionDao(IncomeNoteItem.class);
+        }
+        return mIncomeNoteRDao;
     }
 
     /**
@@ -126,10 +145,12 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void close() {
         super.close();
-        simpleRecordItemRuntimeDao = null;
-        simpleUsrItemRuntimeDao = null;
-        simpleRTItemRuntimeDao = null;
-        simpleBudgetItemRuntimeDao = null;
+        mRecordNoteRDao = null;
+        mUsrNoteRDao = null;
+        mRTNoteRDao = null;
+        mBudgetNoteRDao = null;
+        mPayNoteRDao = null;
+        mIncomeNoteRDao = null;
     }
 
 
@@ -139,6 +160,8 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, UsrItem.class);
             TableUtils.createTable(connectionSource, RecordTypeItem.class);
             TableUtils.createTable(connectionSource, BudgetItem.class);
+            TableUtils.createTable(connectionSource, PayNoteItem.class);
+            TableUtils.createTable(connectionSource, IncomeNoteItem.class);
         } catch (SQLException e) {
             Log.e(TAG, "Can't create database", e);
             throw new RuntimeException(e);

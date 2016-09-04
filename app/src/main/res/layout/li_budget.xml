@@ -18,7 +18,8 @@
         android:text="budget name"
         android:id="@+id/tv_budget_name"
         android:textColor="@color/abc_primary_text_material_light"
-        android:textSize="18sp" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="fill_parent"
@@ -26,17 +27,17 @@
         android:text="budget amount"
         android:id="@+id/tv_budget_amount"
         android:layout_marginTop="4dp"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:textColor="@color/abc_primary_text_material_light"
         android:layout_below="@+id/tv_budget_name" />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="budget date"
-        android:id="@+id/tv_budget_date"
+        android:text="budget note"
+        android:id="@+id/tv_budget_note"
         android:layout_marginTop="4dp"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:textColor="@color/abc_primary_text_material_light"
         android:layout_below="@+id/tv_budget_amount" />
 

@@ -11,8 +11,6 @@ import org.junit.runner.RunWith;
  */
 @RunWith(AndroidJUnit4.class)
 public class ApplicationTest extends ApplicationTestCase<Application> {
-    private static final String DBFINE_PATH = "ApplocalTest.db";
-
     public ApplicationTest() {
         super(Application.class);
     }

@@ -15,13 +15,12 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * 数据类
+ * 支出记录数据
  * Created by 123 on 2016/5/3.
  */
-@DatabaseTable(tableName = "tbRecord")
-public class RecordItem implements Parcelable {
+@DatabaseTable(tableName = "tbPayNote")
+public class PayNoteItem implements Parcelable {
     public final static String FIELD_TS     = "ts";
-    public final static String FIELD_TYPE   = "type";
     public final static String FIELD_USR    = "usr_id";
 
 
@@ -29,11 +28,8 @@ public class RecordItem implements Parcelable {
     private int _id;
 
     @DatabaseField(columnName = "usr_id", foreign = true, foreignColumnName = UsrItem.FIELD_ID,
-                    canBeNull = false)
+            canBeNull = false)
     private UsrItem usr;
-
-    @DatabaseField(columnName = "type", canBeNull = false, dataType = DataType.STRING)
-    private String type;
 
     @DatabaseField(columnName = "info", canBeNull = false, dataType = DataType.STRING)
     private String info;
@@ -47,94 +43,12 @@ public class RecordItem implements Parcelable {
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
     private Timestamp ts;
 
-    public RecordItem()
-    {
-        setRecord_ts(new Timestamp(0));
-        setVal(BigDecimal.ZERO);
-        setType("");
-        setInfo("");
-        setNote("");
-    }
-
-    @Override
-    public String toString()
-    {
-        return String.format(Locale.CHINA
-                            ,"type : %s, info : %s, val : %f, timestamp : %s\nnote : %s"
-                            , getType(), getInfo(), getVal(),
-                            getTs().toString(), getNote());
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(getId());
-
-        int usrid = -1;
-        UsrItem ui = getUsr();
-        if(null != ui)
-            usrid = ui.getId();
-        out.writeInt(usrid);
-
-        out.writeString(getType());
-        out.writeString(getInfo());
-        out.writeString(getNote());
-        out.writeString(getVal().toString());
-        out.writeString(getTs().toString());
-
-    }
-
-    public static final Parcelable.Creator<RecordItem> CREATOR
-            = new Parcelable.Creator<RecordItem>() {
-        public RecordItem createFromParcel(Parcel in) {
-            return new RecordItem(in);
-        }
-
-        public RecordItem[] newArray(int size) {
-            return new RecordItem[size];
-        }
-    };
-
-    private RecordItem(Parcel in)   {
-        setId(in.readInt());
-
-        setUsr(new UsrItem());
-        getUsr().setId(in.readInt());
-
-        setType(in.readString());
-        setInfo(in.readString());
-        setNote(in.readString());
-        setVal(new BigDecimal(in.readString()));
-
-        try {
-            setRecord_ts(new Timestamp(0));
-
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-            Date date = format.parse(in.readString());
-            getTs().setTime(date.getTime());
-        }
-        catch (ParseException ex)
-        {
-            setRecord_ts(new Timestamp(0));
-        }
-    }
-
     public int getId() {
         return _id;
     }
 
     public void setId(int _id) {
         this._id = _id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getInfo() {
@@ -165,7 +79,7 @@ public class RecordItem implements Parcelable {
         return ts;
     }
 
-    public void setRecord_ts(Timestamp tsval) {
+    public void setTs(Timestamp tsval) {
         this.ts = tsval;
     }
 
@@ -176,4 +90,76 @@ public class RecordItem implements Parcelable {
     public void setUsr(UsrItem usr) {
         this.usr = usr;
     }
+
+
+    public PayNoteItem()
+    {
+        setTs(new Timestamp(0));
+        setVal(BigDecimal.ZERO);
+        setInfo("");
+        setNote("");
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format(Locale.CHINA
+                ,"info : %s, val : %f, timestamp : %s\nnote : %s"
+                ,getInfo() ,getVal() ,getTs().toString() ,getNote());
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(getId());
+
+        int usrid = -1;
+        UsrItem ui = getUsr();
+        if(null != ui)
+            usrid = ui.getId();
+        out.writeInt(usrid);
+
+        out.writeString(getInfo());
+        out.writeString(getNote());
+        out.writeString(getVal().toString());
+        out.writeString(getTs().toString());
+
+    }
+
+    public static final Parcelable.Creator<PayNoteItem> CREATOR
+            = new Parcelable.Creator<PayNoteItem>() {
+        public PayNoteItem createFromParcel(Parcel in) {
+            return new PayNoteItem(in);
+        }
+
+        public PayNoteItem[] newArray(int size) {
+            return new PayNoteItem[size];
+        }
+    };
+
+    private PayNoteItem(Parcel in)   {
+        setId(in.readInt());
+
+        setUsr(new UsrItem());
+        getUsr().setId(in.readInt());
+
+        setInfo(in.readString());
+        setNote(in.readString());
+        setVal(new BigDecimal(in.readString()));
+
+        try {
+            setTs(new Timestamp(0));
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+            Date date = format.parse(in.readString());
+            getTs().setTime(date.getTime());
+        }
+        catch (ParseException ex)
+        {
+            setTs(new Timestamp(0));
+        }
+    }
 }
+

@@ -8,8 +8,8 @@ import java.util.List;
  * recordtype数据辅助类
  * Created by 123 on 2016/8/9.
  */
-public class RecordTypeItemUtility {
-    public RecordTypeItemUtility()  {
+public class RecordTypeDataUtility {
+    public RecordTypeDataUtility()  {
     }
 
 

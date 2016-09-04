@@ -1,21 +1,20 @@
 package wxm.KeepAccount.Base.data;
 
-import wxm.KeepAccount.Base.db.DBOrmliteHelper;
-import wxm.KeepAccount.Base.db.UsrItem;
-
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.MD5Util;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
 
 /**
  * usr数据处理类
  * Created by 123 on 2016/8/9.
  */
-public class UsrItemUtility {
-    private final String    TAG = "UsrItemUtility";
+public class UsrDataUtility {
+    private final String    TAG = "UsrDataUtility";
 
-    public UsrItemUtility()  {
+    public UsrDataUtility()  {
     }
 
 

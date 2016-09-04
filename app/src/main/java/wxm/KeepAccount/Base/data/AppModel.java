@@ -3,13 +3,12 @@ package wxm.KeepAccount.Base.data;
 import android.content.Context;
 import android.util.Log;
 
-import wxm.KeepAccount.Base.db.DBOrmliteHelper;
-import wxm.KeepAccount.Base.db.UsrItem;
-import wxm.KeepAccount.Base.utility.ContextUtil;
-
 import java.sql.SQLException;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
 
 /**
  * Created by 123 on 2016/5/7.
@@ -23,10 +22,11 @@ public class AppModel {
 
     private static Context          mMockContext = null;
     private DBOrmliteHelper         mDBHelper;
-    private UsrItemUtility          mUsru;
-    private RecordItemUtility       mRecordu;
-    private RecordTypeItemUtility   mRecordTypeu;
-    private BudgetItemUtility       mBudgetu;
+    private UsrDataUtility          mUsru;
+    private RecordDataUtility       mRecordu;
+    private RecordTypeDataUtility   mRecordTypeu;
+    private BudgetDataUtility       mBudgetu;
+    private PayIncomeDataUtility    mPayIncomeu;
 
     public static void SetContext(Context ct)   {
         mMockContext = ct;
@@ -53,16 +53,19 @@ public class AppModel {
         }
 
         if(null == mUsru)
-            mUsru = new UsrItemUtility();
+            mUsru = new UsrDataUtility();
 
         if(null == mRecordu)
-            mRecordu = new RecordItemUtility();
+            mRecordu = new RecordDataUtility();
 
         if(null == mRecordTypeu)
-            mRecordTypeu = new RecordTypeItemUtility();
+            mRecordTypeu = new RecordTypeDataUtility();
 
         if(null == mBudgetu)
-            mBudgetu = new BudgetItemUtility();
+            mBudgetu = new BudgetDataUtility();
+
+        if(null == mPayIncomeu)
+            mPayIncomeu = new PayIncomeDataUtility();
     }
 
 
@@ -79,6 +82,7 @@ public class AppModel {
         mRecordu        = null;
         mRecordTypeu    = null;
         mBudgetu        = null;
+        mPayIncomeu     = null;
     }
 
     /**
@@ -123,7 +127,7 @@ public class AppModel {
      * 获得用户数据辅助类
      * @return 用户数据辅助类
      */
-    public static UsrItemUtility getUsrUtility()   {
+    public static UsrDataUtility getUsrUtility()   {
         return getInstance().mUsru;
     }
 
@@ -131,7 +135,7 @@ public class AppModel {
      * 获得record数据辅助类
      * @return record数据辅助类
      */
-    public static RecordItemUtility getRecordUtility()  {
+    public static RecordDataUtility getRecordUtility()  {
         return getInstance().mRecordu;
     }
 
@@ -139,7 +143,7 @@ public class AppModel {
      * 获得recordtype数据辅助类
      * @return 辅助类
      */
-    public static RecordTypeItemUtility getRecordTypeUtility()  {
+    public static RecordTypeDataUtility getRecordTypeUtility()  {
         return getInstance().mRecordTypeu;
     }
 
@@ -147,7 +151,15 @@ public class AppModel {
      * 获得预算辅助类
      * @return  辅助类
      */
-    public static BudgetItemUtility getBudgetUtility()  {
+    public static BudgetDataUtility getBudgetUtility()  {
         return  getInstance().mBudgetu;
+    }
+
+    /**
+     * 获得收支数据辅助类
+     * @return  辅助类
+     */
+    public static PayIncomeDataUtility getPayIncomeUtility()  {
+        return  getInstance().mPayIncomeu;
     }
 }

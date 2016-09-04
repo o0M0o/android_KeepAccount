@@ -9,10 +9,10 @@ import wxm.KeepAccount.Base.db.UsrItem;
  * 预算数据工具类
  * Created by 123 on 2016/9/1.
  */
-public class BudgetItemUtility {
-    private final String    TAG = "RecordItemUtility";
+public class BudgetDataUtility {
+    private final String    TAG = "RecordDataUtility";
 
-    public BudgetItemUtility()  {
+    public BudgetDataUtility()  {
     }
 
     /**
@@ -24,7 +24,7 @@ public class BudgetItemUtility {
         if(null == cur_usr)
             return null;
 
-        List<BudgetItem> lsret = AppModel.getDBHelper().getBudgetItemREDao()
+        List<BudgetItem> lsret = AppModel.getDBHelper().getBudgetDataREDao()
                                     .queryForEq(BudgetItem.FIELD_USR, cur_usr);
         if((null == lsret) || (0 == lsret.size()))
             return null;
@@ -38,7 +38,7 @@ public class BudgetItemUtility {
      * @return 查找到的数据,没有数据时返回{@code NULL}
      */
     public BudgetItem GetBudgetById(int biid)  {
-        return AppModel.getDBHelper().getBudgetItemREDao()
+        return AppModel.getDBHelper().getBudgetDataREDao()
                 .queryForId(biid);
     }
 
@@ -59,7 +59,7 @@ public class BudgetItemUtility {
         }
 
 
-        return 1 == AppModel.getDBHelper().getBudgetItemREDao()
+        return 1 == AppModel.getDBHelper().getBudgetDataREDao()
                         .create(bi);
     }
 
@@ -69,7 +69,7 @@ public class BudgetItemUtility {
      * @return 成功返回{@code true}
      */
     public boolean ModifyBudget(BudgetItem bi)  {
-        return 1 == AppModel.getDBHelper().getBudgetItemREDao().update(bi);
+        return 1 == AppModel.getDBHelper().getBudgetDataREDao().update(bi);
     }
 
     /**
@@ -78,7 +78,7 @@ public class BudgetItemUtility {
      * @return 成功返回{@code true}
      */
     public boolean DeleteBudget(BudgetItem bi)  {
-        return 1 == AppModel.getDBHelper().getBudgetItemREDao().delete(bi);
+        return 1 == AppModel.getDBHelper().getBudgetDataREDao().delete(bi);
     }
 
 
@@ -88,6 +88,6 @@ public class BudgetItemUtility {
      * @return 成功返回{@code true}
      */
     public boolean DeleteBudgetById(int biid)  {
-        return 1 == AppModel.getDBHelper().getBudgetItemREDao().deleteById(biid);
+        return 1 == AppModel.getDBHelper().getBudgetDataREDao().deleteById(biid);
     }
 }
