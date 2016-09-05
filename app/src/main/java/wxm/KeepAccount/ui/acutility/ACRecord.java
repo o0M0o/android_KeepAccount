@@ -23,10 +23,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,19 +33,30 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
-import wxm.KeepAccount.Base.db.RecordItem;
+import wxm.KeepAccount.Base.db.IncomeNoteItem;
+import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
 
 public class ACRecord
         extends AppCompatActivity
         implements View.OnTouchListener, View.OnClickListener     {
+    public static final String  PARA_ACTION          = "para_action";
+    public static final String  PARA_NOTE_PAY        = "note_pay";
+    public static final String  PARA_NOTE_INCOME     = "note_income";
+
+    public static final String  LOAD_NOTE_ADD        = "note_add";
+    public static final String  LOAD_NOTE_MODIFY     = "note_modify";
+
     private static final String TAG = "ACRecord";
     private static final int MAX_NOTELEN = 200;
 
     private String action;
     private String record_type;
-    private RecordItem old_item = null;
+    private PayNoteItem     mOLDPayNote;
+    private IncomeNoteItem  mOLDIncomeNote;
+
 
     private EditText et_info;
     private EditText et_date;
@@ -64,13 +74,30 @@ public class ACRecord
         setContentView(R.layout.ac_record_add);
 
         Intent it = getIntent();
-        action = it.getStringExtra(AppGobalDef.STR_RECORD_ACTION);
-        if((null == action) || (action.isEmpty()))  {
-            action = AppGobalDef.STR_RECORD_ACTION_ADD;
+        action = it.getStringExtra(PARA_ACTION);
+        if(UtilFun.StringIsNullOrEmpty(action)) {
+            Log.e(TAG, "调用intent缺少'PARA_ACTION'参数");
+            assert false;
+            finish();
         }
 
-        if(action.equals(AppGobalDef.STR_RECORD_ACTION_MODIFY)) {
-            old_item = it.getParcelableExtra(AppGobalDef.STR_RECORD);
+        if(!action.equals(LOAD_NOTE_ADD) && !action.equals(LOAD_NOTE_MODIFY))   {
+            Log.e(TAG, "调用intent中'PARA_ACTION'参数不正确, cur_val = " + action);
+            assert false;
+            finish();
+        }
+
+        if(action.equals(LOAD_NOTE_MODIFY)) {
+            mOLDPayNote = it.getParcelableExtra(PARA_NOTE_PAY);
+
+            if(null == mOLDPayNote)
+                mOLDIncomeNote = it.getParcelableExtra(PARA_NOTE_INCOME);
+
+            assert null != mOLDIncomeNote || null != mOLDPayNote;
+            if(null == mOLDIncomeNote && null == mOLDPayNote)   {
+                Log.e(TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");
+                finish();
+            }
         }
 
         initView();
@@ -89,7 +116,7 @@ public class ACRecord
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.record_memenu_save: {
-                if(setResult(record_type)) {
+                if(checkResult() && fillResult()) {
                     finish();
                 }
             }
@@ -141,42 +168,51 @@ public class ACRecord
 
     @Override
     public void onClick(View v) {
-        switch(v.getId())    {
-            case R.id.ar_rb_income :    {
-                if(!record_type.equals(AppGobalDef.CNSTR_RECORD_INCOME))  {
-                    et_info.clearComposingText();
-                    et_info.setText("");
-                }
-
-                record_type = AppGobalDef.CNSTR_RECORD_INCOME;
-
-                //et_info.setHint(R.string.cn_hint_income_info);
-                //et_date.setHint(R.string.cn_hint_income_date);
-                //et_amount.setHint(R.string.cn_hint_income_amount);
-                mTVBudget.setVisibility(View.INVISIBLE);
-                mSPBudget.setVisibility(View.INVISIBLE);
-
+        int vid = v.getId();
+        if(action.equals(LOAD_NOTE_MODIFY)
+                && (R.id.ar_rb_income == vid || R.id.ar_rb_pay == vid)) {
+            if(record_type.equals(AppGobalDef.STR_RECORD_INCOME)) {
+                rb_income.setChecked(true);
                 rb_pay.setChecked(false);
             }
-            break;
-
-            case R.id.ar_rb_pay:    {
-                if(!record_type.equals(AppGobalDef.CNSTR_RECORD_PAY))  {
-                    et_info.clearComposingText();
-                    et_info.setText("");
-                }
-
-                record_type = AppGobalDef.CNSTR_RECORD_PAY;
-
-                //et_info.setHint(R.string.cn_hint_pay_info);
-                //et_date.setHint(R.string.cn_hint_pay_date);
-                //et_amount.setHint(R.string.cn_hint_pay_amount);
-                mTVBudget.setVisibility(View.VISIBLE);
-                mSPBudget.setVisibility(View.VISIBLE);
-
+            else    {
                 rb_income.setChecked(false);
+                rb_pay.setChecked(true);
             }
-            break;
+        } else  {
+            switch(vid)    {
+                case R.id.ar_rb_income :    {
+                    rb_pay.setChecked(false);
+                    if(!record_type.equals(AppGobalDef.STR_RECORD_INCOME))  {
+                        et_info.clearComposingText();
+                        et_info.setText("");
+                    }
+
+                    mTVBudget.setVisibility(View.INVISIBLE);
+                    mSPBudget.setVisibility(View.INVISIBLE);
+
+                    record_type = AppGobalDef.STR_RECORD_INCOME;
+                }
+                break;
+
+                case R.id.ar_rb_pay:    {
+                    rb_income.setChecked(false);
+                    if(!record_type.equals(AppGobalDef.STR_RECORD_PAY))  {
+                        et_info.clearComposingText();
+                        et_info.setText("");
+                    }
+
+                    mTVBudget.setVisibility(View.VISIBLE);
+                    mSPBudget.setVisibility(View.VISIBLE);
+
+                    record_type = AppGobalDef.STR_RECORD_PAY;
+                }
+                break;
+
+                default:
+                    Log.e(TAG, "not process onclick on view(view id = " + vid + ")");
+                    break;
+            }
         }
     }
 
@@ -196,21 +232,14 @@ public class ACRecord
         rb_income.setSelected(true);
         rb_pay.setSelected(false);
 
-        Intent it = getIntent();
-        String ad_type = it.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
-        if(null != ad_type)     {
-            record_type = ad_type;
-        }
-        else    {
-            if(null == old_item) {
-                record_type = AppGobalDef.CNSTR_RECORD_INCOME;
-            }
-            else    {
-                record_type = old_item.getType();
-            }
+        if(action.equals(LOAD_NOTE_ADD))    {
+            record_type = AppGobalDef.STR_RECORD_PAY;
+        }   else    {
+            record_type = (null != mOLDPayNote) ? AppGobalDef.STR_RECORD_PAY
+                                : AppGobalDef.STR_RECORD_INCOME;
         }
 
-        if(record_type.equals(AppGobalDef.CNSTR_RECORD_INCOME)) {
+        if(record_type.equals(AppGobalDef.STR_RECORD_INCOME)) {
             rb_income.setChecked(true);
             rb_pay.setChecked(false);
 
@@ -279,28 +308,50 @@ public class ACRecord
             }
         });
 
-        // 填充其它预定值
-        String ad_date = it.getStringExtra(AppGobalDef.STR_RECORD_DATE);
-        if((null != ad_date) && (!ad_date.isEmpty())) {
-            et_date.setText(ad_date);
-        }
 
-        if(null != old_item)    {
-            if(!old_item.getInfo().isEmpty())
-                et_info.setText(old_item.getInfo());
+        if(action.equals(LOAD_NOTE_MODIFY))    {
+            String info;
+            String note;
+            String date;
+            String amount;
+            if(null != mOLDPayNote) {
+                info = mOLDPayNote.getInfo();
+                note = mOLDPayNote.getNote();
+                date = mOLDPayNote.getTs().toString().substring(0, 10);
+                amount = mOLDPayNote.getVal().toPlainString();
+            } else  {
+                info = mOLDIncomeNote.getInfo();
+                note = mOLDIncomeNote.getNote();
+                date = mOLDIncomeNote.getTs().toString().substring(0, 10);
+                amount = mOLDIncomeNote.getVal().toPlainString();
+            }
 
-            if(!old_item.getNote().isEmpty())
-                et_note.setText(old_item.getNote());
+            if(!UtilFun.StringIsNullOrEmpty(date))
+                et_date.setText(date);
 
-            et_date.setText(old_item.getTs().toString().substring(0, 10));
+            if(!UtilFun.StringIsNullOrEmpty(info))
+                et_info.setText(info);
 
+            if(!UtilFun.StringIsNullOrEmpty(note))
+                et_note.setText(note);
+
+            if(!UtilFun.StringIsNullOrEmpty(amount))
+                et_amount.setText(amount);
+
+            /*
             String oldval = old_item.getVal().toString();
             int pos = oldval.indexOf(".");
-            if(pos >= 0)    {
+            if (pos >= 0) {
                 et_amount.setText(oldval.substring(0, pos + 3));
-            }
-            else    {
+            } else {
                 et_amount.setText(oldval);
+            }
+            */
+        }   else    {
+            Intent it = getIntent();
+            String ad_date = it.getStringExtra(AppGobalDef.STR_RECORD_DATE);
+            if(!UtilFun.StringIsNullOrEmpty(ad_date)) {
+                et_date.setText(ad_date);
             }
         }
 
@@ -322,13 +373,7 @@ public class ACRecord
 
     private void onTouchType(MotionEvent event) {
         Intent it = new Intent(this, ACRecordTypeEdit.class);
-        if(record_type.equals(AppGobalDef.CNSTR_RECORD_INCOME)) {
-            it.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.STR_RECORD_INCOME);
-        }
-        else    {
-            it.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.STR_RECORD_PAY);
-        }
-
+        it.putExtra(AppGobalDef.STR_RECORD_TYPE, record_type);
         startActivityForResult(it, 1);
     }
 
@@ -351,7 +396,8 @@ public class ACRecord
         et_date.setInputType(inType);
         et_date.setSelection(et_date.getText().length());
 
-        builder.setTitle("选取收入日期");
+        builder.setTitle(record_type.equals(AppGobalDef.STR_RECORD_PAY) ?
+                            "选取支出日期" : "选取收入日期");
         builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -369,16 +415,16 @@ public class ACRecord
         dialog.show();
     }
 
-    private boolean setResult(String retype)    {
+
+    private boolean checkResult()   {
         String str_val = et_amount.getText().toString();
         String str_info = et_info.getText().toString();
         String str_date = et_date.getText().toString();
-        String str_note = et_note.getText().toString();
 
-        if(str_val.isEmpty())
+        if(UtilFun.StringIsNullOrEmpty(str_val))
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            if(retype.equals(AppGobalDef.CNSTR_RECORD_PAY)) {
+            if(record_type.equals(AppGobalDef.STR_RECORD_PAY)) {
                 Log.i(TAG, "支出数值为空");
                 builder.setMessage("请输入支出数值!").setTitle("警告");
             }
@@ -392,10 +438,10 @@ public class ACRecord
             return false;
         }
 
-        if(str_info.isEmpty())
+        if(UtilFun.StringIsNullOrEmpty(str_info))
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            if(retype.equals(AppGobalDef.CNSTR_RECORD_PAY)) {
+            if(record_type.equals(AppGobalDef.STR_RECORD_PAY)) {
                 Log.i(TAG, "支出信息为空");
                 builder.setMessage("请输入支出信息!").setTitle("警告");
             }
@@ -409,10 +455,10 @@ public class ACRecord
             return false;
         }
 
-        if(str_date.isEmpty())
+        if(UtilFun.StringIsNullOrEmpty(str_date))
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            if(retype.equals(AppGobalDef.CNSTR_RECORD_PAY)) {
+            if(record_type.equals(AppGobalDef.STR_RECORD_PAY)) {
                 Log.i(TAG, "支出日期为空");
                 builder.setMessage("请输入支出日期!").setTitle("警告");
             }
@@ -426,36 +472,59 @@ public class ACRecord
             return false;
         }
 
-        /* send intent */
-        int ret_data = action.equals(AppGobalDef.STR_RECORD_ACTION_ADD) ?
-                            AppGobalDef.INTRET_RECORD_ADD
-                            : AppGobalDef.INTRET_RECORD_MODIFY;
+        return true;
+    }
 
-        Intent data=new Intent();
-        RecordItem ri = new RecordItem();
-        ri.setType(retype);
-        ri.setNote(str_note);
-        ri.setInfo(str_info);
-        ri.setVal(new BigDecimal(str_val));
 
+    private boolean fillResult()       {
+        String str_val = et_amount.getText().toString();
+        String str_info = et_info.getText().toString();
+        String str_date = et_date.getText().toString();
+        String str_note = et_note.getText().toString();
+
+        Timestamp tsDT;
         try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            ri.getTs().setTime(df.parse(str_date).getTime());
+            tsDT = ToolUtil.StringToTimestamp(str_date);
         }
         catch(Exception ex)
         {
-            Log.e(TAG, String.format("解析'%s'到日期失败", str_date));
-
-            Date dt = new Date();
-            ri.getTs().setTime(dt.getTime());
+            Log.e(TAG, String.format(Locale.CHINA
+                            ,"解析'%s'到日期失败" ,str_date));
+            return false;
         }
 
-        if(null != old_item)    {
-            ri.setId(old_item.getId());
+        Intent data=new Intent();
+        if(record_type.equals(AppGobalDef.STR_RECORD_PAY))  {
+            PayNoteItem pi = new PayNoteItem();
+            if(null != mOLDPayNote) {
+                pi.setId(mOLDPayNote.getId());
+                pi.setUsr(mOLDPayNote.getUsr());
+            }
+
+            pi.setInfo(str_info);
+            pi.setTs(tsDT);
+            pi.setVal(new BigDecimal(str_val));
+            pi.setNote(str_note);
+
+            data.putExtra(PARA_NOTE_PAY, pi);
+        } else  {
+            IncomeNoteItem ii = new IncomeNoteItem();
+            if(null != mOLDIncomeNote)  {
+                ii.setId(mOLDIncomeNote.getId());
+                ii.setUsr(mOLDIncomeNote.getUsr());
+            }
+
+            ii.setInfo(str_info);
+            ii.setTs(tsDT);
+            ii.setVal(new BigDecimal(str_val));
+            ii.setNote(str_note);
+
+            data.putExtra(PARA_NOTE_INCOME, ii);
         }
 
-        data.putExtra(AppGobalDef.STR_RECORD, ri);
-        setResult(ret_data, data);
+        setResult(action.equals(LOAD_NOTE_ADD) ?
+                    AppGobalDef.INTRET_RECORD_ADD  : AppGobalDef.INTRET_RECORD_MODIFY
+                ,data);
         return true;
     }
 

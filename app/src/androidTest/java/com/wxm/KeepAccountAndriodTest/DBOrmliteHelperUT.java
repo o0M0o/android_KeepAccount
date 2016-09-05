@@ -43,6 +43,14 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         RuntimeExceptionDao<UsrItem, Integer> sdao1 = mHelper.getUsrItemREDao();
         assertNotNull(sdao1);
         sdao1.deleteBuilder().delete();
+
+        RuntimeExceptionDao<PayNoteItem, Integer> sdao2 = mHelper.getPayDataREDao();
+        assertNotNull(sdao2);
+        sdao2.deleteBuilder().delete();
+
+        RuntimeExceptionDao<IncomeNoteItem, Integer> sdao3 = mHelper.getIncomeDataREDao();
+        assertNotNull(sdao3);
+        sdao3.deleteBuilder().delete();
     }
 
     @Override
@@ -56,6 +64,14 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         RuntimeExceptionDao<UsrItem, Integer> sdao1 = mHelper.getUsrItemREDao();
         assertNotNull(sdao1);
         sdao1.deleteBuilder().delete();
+
+        RuntimeExceptionDao<PayNoteItem, Integer> sdao2 = mHelper.getPayDataREDao();
+        assertNotNull(sdao2);
+        sdao2.deleteBuilder().delete();
+
+        RuntimeExceptionDao<IncomeNoteItem, Integer> sdao3 = mHelper.getIncomeDataREDao();
+        assertNotNull(sdao3);
+        sdao3.deleteBuilder().delete();
 
         mHelper.close();
     }

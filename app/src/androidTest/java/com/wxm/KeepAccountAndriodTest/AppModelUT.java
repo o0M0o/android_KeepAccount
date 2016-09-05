@@ -98,7 +98,7 @@ public class AppModelUT extends AndroidTestCase {
 
         dtstr = UtilFun.TimestampToString(income_it.getTs())
                 .substring(0, "yyyy-MM-dd".length());
-        income_ret = AppModel.getPayIncomeUtility().GetIcomeNotesByDay(dtstr);
+        income_ret = AppModel.getPayIncomeUtility().GetIncomeNotesByDay(dtstr);
         assertEquals(1, income_ret.size());
 
         // test modify

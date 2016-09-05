@@ -161,9 +161,7 @@ public class ACShowRecord
         switch (resid)  {
             case R.drawable.ic_add :    {
                 Intent intent = new Intent(this, ACRecord.class);
-                intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
-
-                intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_INCOME);
+                intent.putExtra(ACRecord.PARA_ACTION, ACRecord.LOAD_NOTE_ADD);
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());

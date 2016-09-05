@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,10 +52,18 @@ public class RecordDataUtility {
      * @return  满足日期条件的记录
      */
     public List<RecordItem> GetRecordsByDay(String day_str)   {
-        Timestamp tsb = ToolUtil.StringToTimestamp(day_str);
-        Timestamp tse = ToolUtil.StringToTimestamp(day_str + " 23:59:59");
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+        Timestamp tsb = null;
+        Timestamp tse = null;
+        try {
+            tsb = ToolUtil.StringToTimestamp(day_str);
+            tse = ToolUtil.StringToTimestamp(day_str + " 23:59:59");
+        } catch (ParseException e) {
+            Log.e(TAG, UtilFun.ExceptionToString(e));
+            e.printStackTrace();
+            return null;
+        }
 
+        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
         List<RecordItem> ret;
         try {
             ret = mDBHelper.getRecordItemREDao().queryBuilder()

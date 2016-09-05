@@ -4,12 +4,12 @@ import android.util.Log;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
-import wxm.KeepAccount.Base.db.RecordItem;
 import wxm.KeepAccount.Base.db.UsrItem;
 import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
 import wxm.KeepAccount.Base.utility.ToolUtil;
@@ -77,14 +77,27 @@ public class PayIncomeDataUtility {
      * @return  满足日期条件的记录
      */
     public List<PayNoteItem> GetPayNotesByDay(String day_str)   {
-        Timestamp tsb = ToolUtil.StringToTimestamp(day_str);
-        Timestamp tse = ToolUtil.StringToTimestamp(day_str + " 23:59:59");
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        if(null == cur_usr)
+            return null;
 
+        Timestamp tsb = null;
+        Timestamp tse = null;
+        try {
+            tsb = ToolUtil.StringToTimestamp(day_str);
+            tse = ToolUtil.StringToTimestamp(day_str + " 23:59:59");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e(TAG, UtilFun.ExceptionToString(e));
+            return null;
+        }
+
+        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
         List<PayNoteItem> ret;
         try {
             ret = mDBHelper.getPayDataREDao().queryBuilder()
-                    .where().between(RecordItem.FIELD_TS, tsb, tse).query();
+                    .where().eq(PayNoteItem.FIELD_USR, cur_usr.getId())
+                            .and().between(PayNoteItem.FIELD_TS, tsb, tse).query();
         }catch (SQLException e) {
             Log.e(TAG, UtilFun.ExceptionToString(e));
             ret = null;
@@ -99,15 +112,28 @@ public class PayIncomeDataUtility {
      * @param day_str   日期条件
      * @return  满足日期条件的记录
      */
-    public List<IncomeNoteItem> GetIcomeNotesByDay(String day_str)   {
-        Timestamp tsb = ToolUtil.StringToTimestamp(day_str);
-        Timestamp tse = ToolUtil.StringToTimestamp(day_str + " 23:59:59");
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+    public List<IncomeNoteItem> GetIncomeNotesByDay(String day_str)   {
+        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        if(null == cur_usr)
+            return null;
 
+        Timestamp tsb = null;
+        Timestamp tse = null;
+        try {
+            tsb = ToolUtil.StringToTimestamp(day_str);
+            tse = ToolUtil.StringToTimestamp(day_str + " 23:59:59");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e(TAG, UtilFun.ExceptionToString(e));
+            return null;
+        }
+
+        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
         List<IncomeNoteItem> ret;
         try {
             ret = mDBHelper.getIncomeDataREDao().queryBuilder()
-                    .where().between(RecordItem.FIELD_TS, tsb, tse).query();
+                    .where().eq(IncomeNoteItem.FIELD_USR, cur_usr.getId())
+                            .and().between(IncomeNoteItem.FIELD_TS, tsb, tse).query();
         }catch (SQLException e) {
             Log.e(TAG, UtilFun.ExceptionToString(e));
             ret = null;
@@ -186,51 +212,53 @@ public class PayIncomeDataUtility {
     /**
      * 修改支出记录
      * @param lsi 待修改数据
-     * @return  修改成功返回true
+     * @return  修改成功的记录数
      */
-    public boolean ModifyPayNotes(List<PayNoteItem> lsi)  {
+    public int ModifyPayNotes(List<PayNoteItem> lsi)  {
+        int ret = 0;
         DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
         for(PayNoteItem i : lsi) {
-            mDBHelper.getPayDataREDao().update(i);
+            ret += mDBHelper.getPayDataREDao().update(i);
         }
-        return true;
+
+        return ret;
     }
 
 
     /**
      * 修改收入记录
      * @param lsi 待修改数据
-     * @return  修改成功返回true
+     * @return  修改成功的记录数
      */
-    public boolean ModifyIncomeNotes(List<IncomeNoteItem> lsi)  {
+    public int ModifyIncomeNotes(List<IncomeNoteItem> lsi)  {
+        int ret = 0;
         DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
         for(IncomeNoteItem i : lsi) {
-            mDBHelper.getIncomeDataREDao().update(i);
+            ret += mDBHelper.getIncomeDataREDao().update(i);
         }
-        return true;
+
+        return ret;
     }
 
 
     /**
      * 删除支出记录
      * @param lsi 待删除的记录集合的id值
-     * @return  操作成功返回true
+     * @return  删除的记录数
      */
-    public boolean DeletePayNotes(List<Integer> lsi)  {
+    public int DeletePayNotes(List<Integer> lsi)  {
         DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
-        mDBHelper.getPayDataREDao().deleteIds(lsi);
-        return true;
+        return mDBHelper.getPayDataREDao().deleteIds(lsi);
     }
 
 
     /**
      * 删除支出记录
      * @param lsi 待删除的记录集合的id值
-     * @return  操作成功返回true
+     * @return  删除的记录数
      */
-    public boolean DeleteIncomeNotes(List<Integer> lsi)  {
+    public int DeleteIncomeNotes(List<Integer> lsi)  {
         DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
-        mDBHelper.getIncomeDataREDao().deleteIds(lsi);
-        return true;
+        return mDBHelper.getIncomeDataREDao().deleteIds(lsi);
     }
 }

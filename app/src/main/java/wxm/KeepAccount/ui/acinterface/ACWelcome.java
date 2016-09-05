@@ -174,13 +174,7 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
             case R.id.bt_add_income :
             case R.id.bt_add_pay : {
                 Intent intent = new Intent(v.getContext(), ACRecord.class);
-                intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
-
-                if (R.id.bt_add_income == id) {
-                    intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_INCOME);
-                } else {
-                    intent.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.CNSTR_RECORD_PAY);
-                }
+                intent.putExtra(ACRecord.PARA_ACTION, ACRecord.LOAD_NOTE_ADD);
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());

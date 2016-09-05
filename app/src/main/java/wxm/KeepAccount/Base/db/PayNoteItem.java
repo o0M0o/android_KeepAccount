@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import wxm.KeepAccount.Base.data.AppGobalDef;
+
 /**
  * 支出记录数据
  * Created by 123 on 2016/5/3.
@@ -98,6 +100,8 @@ public class PayNoteItem implements Parcelable {
         setVal(BigDecimal.ZERO);
         setInfo("");
         setNote("");
+
+        setId(AppGobalDef.INVALID_ID);
     }
 
     @Override

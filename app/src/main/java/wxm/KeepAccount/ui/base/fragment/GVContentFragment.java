@@ -143,7 +143,7 @@ public class GVContentFragment extends Fragment {
                     switch (msg.arg1) {
                         case AppMsgDef.MSG_LOAD_ALL_RECORDS:
                             Object[] rets = UtilFun.cast(msg.obj);
-                            List<RecordItem> lsret = UtilFun.cast(rets[0]);
+                            List<Object> lsret = UtilFun.cast(rets[0]);
 
                             cur_view.RenderChart(lsret);
                             break;

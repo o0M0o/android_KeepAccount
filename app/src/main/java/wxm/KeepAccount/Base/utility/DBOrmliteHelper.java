@@ -201,77 +201,50 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         UsrItem ui_hugo = AppModel.getUsrUtility().addUsr("hugo", "123456");
 
         // for wxm
-        LinkedList<RecordItem> lsit = new LinkedList<>();
+        LinkedList<PayNoteItem> ls_pay = new LinkedList<>();
         Date de = new Date();
-        RecordItem ri = new RecordItem();
-        ri.setUsr(ui_wxm);
-        ri.setType(AppGobalDef.CNSTR_RECORD_PAY);
-        ri.setInfo("tax");
-        ri.setVal(new BigDecimal(12.34));
-        ri.getTs().setTime(de.getTime());
-        lsit.add(ri);
+        PayNoteItem pay_it = new PayNoteItem();
+        pay_it.setUsr(ui_wxm);
+        pay_it.setInfo("tax");
+        pay_it.setVal(new BigDecimal(12.34));
+        pay_it.getTs().setTime(de.getTime());
+        ls_pay.add(pay_it);
 
-        ri = new RecordItem();
-        ri.setUsr(ui_wxm);
-        ri.setType(AppGobalDef.CNSTR_RECORD_PAY);
-        ri.setInfo("water cost");
-        ri.setVal(new BigDecimal(12.34));
-        ri.getTs().setTime(de.getTime());
-        lsit.add(ri);
+        pay_it = new PayNoteItem();
+        pay_it.setUsr(ui_wxm);
+        pay_it.setInfo("water cost");
+        pay_it.setVal(new BigDecimal(12.34));
+        pay_it.getTs().setTime(de.getTime());
+        ls_pay.add(pay_it);
 
-        ri = new RecordItem();
-        ri.setUsr(ui_wxm);
-        ri.setType(AppGobalDef.CNSTR_RECORD_PAY);
-        ri.setInfo("electrcity cost");
-        ri.setVal(new BigDecimal(12.34));
-        ri.getTs().setTime(de.getTime());
-        lsit.add(ri);
+        pay_it = new PayNoteItem();
+        pay_it.setUsr(ui_wxm);
+        pay_it.setInfo("electrcity  cost");
+        pay_it.setVal(new BigDecimal(12.34));
+        pay_it.getTs().setTime(de.getTime());
+        ls_pay.add(pay_it);
+        AppModel.getPayIncomeUtility().AddPayNotes(ls_pay);
 
-        ri = new RecordItem();
-        ri.setUsr(ui_wxm);
-        ri.setType(AppGobalDef.CNSTR_RECORD_INCOME);
-        ri.setInfo("工资");
-        ri.setVal(new BigDecimal(12.34));
-        ri.getTs().setTime(de.getTime());
-        lsit.add(ri);
-
-        AppModel.getRecordUtility().AddRecords(lsit);
+        LinkedList<IncomeNoteItem> ls_income = new LinkedList<>();
+        IncomeNoteItem income_it = new IncomeNoteItem();
+        income_it.setUsr(ui_wxm);
+        income_it.setInfo("工资");
+        income_it.setVal(new BigDecimal(12.34));
+        income_it.getTs().setTime(de.getTime());
+        ls_income.add(income_it);
+        AppModel.getPayIncomeUtility().AddIncomeNotes(ls_income);
 
         // for hugo
-        lsit.clear();
-        ri = new RecordItem();
-        ri.setUsr(ui_hugo);
-        ri.setType(AppGobalDef.CNSTR_RECORD_PAY);
-        ri.setInfo("water cost");
-        ri.setVal(new BigDecimal(12.34));
-        ri.getTs().setTime(de.getTime());
-        lsit.add(ri);
+        for(PayNoteItem i : ls_pay)     {
+            i.setId(AppGobalDef.INVALID_ID);
+            i.setUsr(ui_hugo);
+        }
+        AppModel.getPayIncomeUtility().AddPayNotes(ls_pay);
 
-
-        ri = new RecordItem();
-        ri.setUsr(ui_hugo);
-        ri.setType(AppGobalDef.CNSTR_RECORD_PAY);
-        ri.setInfo("tax");
-        ri.setVal(new BigDecimal(12.34));
-        ri.getTs().setTime(de.getTime());
-        lsit.add(ri);
-
-        ri = new RecordItem();
-        ri.setUsr(ui_hugo);
-        ri.setType(AppGobalDef.CNSTR_RECORD_PAY);
-        ri.setInfo("electrcity cost");
-        ri.setVal(new BigDecimal(12.34));
-        ri.getTs().setTime(de.getTime());
-        lsit.add(ri);
-
-        ri = new RecordItem();
-        ri.setUsr(ui_hugo);
-        ri.setType(AppGobalDef.CNSTR_RECORD_INCOME);
-        ri.setInfo("工资");
-        ri.setVal(new BigDecimal(12.34));
-        ri.getTs().setTime(de.getTime());
-        lsit.add(ri);
-
-        AppModel.getRecordUtility().AddRecords(lsit);
+        for(IncomeNoteItem i : ls_income)     {
+            i.setId(AppGobalDef.INVALID_ID);
+            i.setUsr(ui_hugo);
+        }
+        AppModel.getPayIncomeUtility().AddIncomeNotes(ls_income);
     }
 }

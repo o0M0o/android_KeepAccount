@@ -1,24 +1,23 @@
 package wxm.KeepAccount.Base.handler;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
-import wxm.KeepAccount.Base.data.AppMsgDef;
-import wxm.KeepAccount.Base.utility.ToolUtil;
-import wxm.KeepAccount.Base.db.RecordItem;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.data.AppMsgDef;
+import wxm.KeepAccount.Base.db.IncomeNoteItem;
+import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.utility.ToolUtil;
 
 /**
  * 处理数据辅助类
@@ -70,12 +69,22 @@ public class RecordUtility {
 
     private static void DeleteRecords(Message am)    {
         Object[] arr = UtilFun.cast(am.obj);
-        List<Integer> ls_del = UtilFun.cast(arr[0]);
-        assert null != ls_del;
-        boolean ret = AppModel.getRecordUtility().DeleteRecords(ls_del);
+        List<Integer> pay_ls = UtilFun.cast(arr[0]);
+        List<Integer> income_ls = UtilFun.cast(arr[1]);
+
+        boolean ret = false;
+        if(null != pay_ls && 0 < pay_ls.size())     {
+            int lssz = pay_ls.size();
+            ret = lssz == AppModel.getPayIncomeUtility().DeletePayNotes(pay_ls);
+        }
+
+        if(null != income_ls && 0 < income_ls.size())     {
+            int lssz = income_ls.size();
+            ret &= lssz == AppModel.getPayIncomeUtility().DeleteIncomeNotes(income_ls);
+        }
 
         // reply message
-        Handler h = UtilFun.cast(arr[1]);
+        Handler h = UtilFun.cast(arr[2]);
         GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_DELETE_RECORDS, ret);
     }
 
@@ -84,35 +93,53 @@ public class RecordUtility {
 
         String date_str = UtilFun.cast(arr[0]);
         // load record & format output
-        List<RecordItem> lr = AppModel.getRecordUtility().GetRecordsByDay(date_str);
+        List<PayNoteItem> payls = AppModel.getPayIncomeUtility().GetPayNotesByDay(date_str);
+        List<IncomeNoteItem> incomels = AppModel.getPayIncomeUtility().GetIncomeNotesByDay(date_str);
+        List<Object> objls = new LinkedList<>();
+        if(null != payls)
+            objls.addAll(payls);
+
+        if(null != incomels)
+            objls.addAll(incomels);
+
         ArrayList<HashMap<String, String>> mylist = new ArrayList<>();
-        for (RecordItem r : lr) {
-            String tit = r.getType();
+        for(Object i : objls)   {
+            boolean ispay = i instanceof PayNoteItem;
+            PayNoteItem pi = ispay ? (PayNoteItem)i : null;
+            IncomeNoteItem ii = ispay ? null : (IncomeNoteItem)i;
+
             String show_str;
-            if(UtilFun.StringIsNullOrEmpty(r.getNote())) {
+            String note = ispay ? pi.getNote() : ii.getNote();
+            if(UtilFun.StringIsNullOrEmpty(note)) {
                 show_str = String.format(Locale.CHINA,
                         "原因 : %s\n金额 : %.02f",
-                        r.getInfo(), r.getVal());
+                        ispay ? pi.getInfo() : ii.getInfo()
+                        ,ispay ? pi.getVal() : ii.getVal());
             }
             else    {
                 show_str = String.format(Locale.CHINA,
                         "原因 : %s\n金额 : %.02f\n备注 : %s",
-                        r.getInfo(), r.getVal(), r.getNote());
+                        ispay ? pi.getInfo() : ii.getInfo()
+                        ,ispay ? pi.getVal() : ii.getVal()
+                        ,note);
             }
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(AppGobalDef.ITEM_TITLE, tit);
+            map.put(AppGobalDef.ITEM_TITLE, ispay ? AppGobalDef.CNSTR_RECORD_PAY
+                                                : AppGobalDef.CNSTR_RECORD_INCOME);
+            map.put(AppGobalDef.ITEM_TYPE, ispay ? AppGobalDef.CNSTR_RECORD_PAY
+                                                : AppGobalDef.CNSTR_RECORD_INCOME);
             map.put(AppGobalDef.ITEM_TEXT, show_str);
-            map.put(AppGobalDef.ITEM_ID, String.format(Locale.CHINA, "%d", r.getId()));
+            map.put(AppGobalDef.ITEM_ID, String.valueOf(ispay ? pi.getId() : ii.getId()));
             mylist.add(map);
         }
 
-        Collections.sort(mylist, new Comparator<HashMap<String, String>>() {
+        /* Collections.sort(mylist, new Comparator<HashMap<String, String>>() {
             @Override
             public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
                 return lhs.get(AppGobalDef.ITEM_TITLE).compareTo(rhs.get(AppGobalDef.ITEM_TITLE));
             }
-        });
+        }); */
 
         // reply message
         Handler h = UtilFun.cast(arr[1]);
@@ -121,28 +148,47 @@ public class RecordUtility {
 
     private static void LoadAllRecords(Message am)
     {
-        List<RecordItem> ret = AppModel.getRecordUtility().GetAllRecords();
+        List<PayNoteItem> payls = AppModel.getPayIncomeUtility().GetAllPayNotes();
+        List<IncomeNoteItem> incomels = AppModel.getPayIncomeUtility().GetAllIncomeNotes();
+        List<Object> objls = new LinkedList<>();
+        if(null != payls)
+            objls.addAll(payls);
+
+        if(null != incomels)
+            objls.addAll(incomels);
 
         // reply message
         Object[] arr = UtilFun.cast(am.obj);
         Handler h = UtilFun.cast(arr[0]);
-        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_LOAD_ALL_RECORDS, new Object[] {ret});
+        GlobalMsgHandler.ReplyMsg(h ,AppMsgDef.MSG_LOAD_ALL_RECORDS
+                ,new Object[] { objls });
     }
 
     private static void AllRecordsToYearReport(Message am)
     {
         // get year info from record
-        List<RecordItem> lr = AppModel.getRecordUtility().GetAllRecords();
-        HashMap<String, ArrayList<RecordItem>> hm_data = new HashMap<>();
-        for (RecordItem record : lr) {
-            String h_k = record.getTs().toString().substring(0, 4);
-            ArrayList<RecordItem> h_v = hm_data.get(h_k);
+        List<PayNoteItem> payls = AppModel.getPayIncomeUtility().GetAllPayNotes();
+        List<IncomeNoteItem> incomels = AppModel.getPayIncomeUtility().GetAllIncomeNotes();
+        List<Object> objls = new LinkedList<>();
+        if(null != payls)
+            objls.addAll(payls);
+
+        if(null != incomels)
+            objls.addAll(incomels);
+
+        HashMap<String, ArrayList<Object>> hm_data = new HashMap<>();
+        for(Object i : objls)   {
+            String h_k = i instanceof PayNoteItem ?
+                            ((PayNoteItem)i).getTs().toString().substring(0, 4)
+                            : ((IncomeNoteItem)i).getTs().toString().substring(0, 4);
+
+            ArrayList<Object> h_v = hm_data.get(h_k);
             if (null == h_v) {
-                ArrayList<RecordItem> v = new ArrayList<>();
-                v.add(record);
+                ArrayList<Object> v = new ArrayList<>();
+                v.add(i);
                 hm_data.put(h_k, v);
             } else {
-                h_v.add(record);
+                h_v.add(i);
             }
         }
 
@@ -151,20 +197,20 @@ public class RecordUtility {
         ArrayList<String> set_k = new ArrayList<String>(hm_data.keySet());
         Collections.sort(set_k);
         for (String k : set_k) {
-            ArrayList<RecordItem> v = hm_data.get(k);
+            ArrayList<Object> v = hm_data.get(k);
 
             int pay_cout = 0;
             int income_cout = 0;
             BigDecimal pay_amount = BigDecimal.ZERO;
             BigDecimal income_amount = BigDecimal.ZERO;
 
-            for (RecordItem r : v) {
-                if(AppGobalDef.CNSTR_RECORD_PAY.equals(r.getType()))  {
+            for (Object r : v) {
+                if(r instanceof PayNoteItem)  {
                     pay_cout += 1;
-                    pay_amount = pay_amount.add(r.getVal());
+                    pay_amount = pay_amount.add(((PayNoteItem)r).getVal());
                 } else {
                     income_cout += 1;
-                    income_amount = income_amount.add(r.getVal());
+                    income_amount = income_amount.add(((IncomeNoteItem)r).getVal());
                 }
             }
 
@@ -179,12 +225,12 @@ public class RecordUtility {
             mylist.add(map);
         }
 
-        Collections.sort(mylist, new Comparator<HashMap<String, String>>() {
+        /*  Collections.sort(mylist, new Comparator<HashMap<String, String>>() {
             @Override
             public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
                 return lhs.get(AppGobalDef.ITEM_TITLE).compareTo(rhs.get(AppGobalDef.ITEM_TITLE));
             }
-        });
+        });  */
 
         Handler h = UtilFun.cast(am.obj);
         GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_TO_YEARREPORT, mylist);
@@ -193,17 +239,28 @@ public class RecordUtility {
     private static void AllRecordsToMonthReport(Message am)
     {
         // get months info from record
-        List<RecordItem> lr = AppModel.getRecordUtility().GetAllRecords();
-        HashMap<String, ArrayList<RecordItem>> hm_data = new HashMap<>();
-        for (RecordItem record : lr) {
-            String h_k = record.getTs().toString().substring(0, 7);
-            ArrayList<RecordItem> h_v = hm_data.get(h_k);
+        List<PayNoteItem> payls = AppModel.getPayIncomeUtility().GetAllPayNotes();
+        List<IncomeNoteItem> incomels = AppModel.getPayIncomeUtility().GetAllIncomeNotes();
+        List<Object> objls = new LinkedList<>();
+        if(null != payls)
+            objls.addAll(payls);
+
+        if(null != incomels)
+            objls.addAll(incomels);
+
+        HashMap<String, ArrayList<Object>> hm_data = new HashMap<>();
+        for(Object i : objls)   {
+            String h_k = i instanceof PayNoteItem ?
+                    ((PayNoteItem)i).getTs().toString().substring(0, 7)
+                    : ((IncomeNoteItem)i).getTs().toString().substring(0, 7);
+
+            ArrayList<Object> h_v = hm_data.get(h_k);
             if (null == h_v) {
-                ArrayList<RecordItem> v = new ArrayList<>();
-                v.add(record);
+                ArrayList<Object> v = new ArrayList<>();
+                v.add(i);
                 hm_data.put(h_k, v);
             } else {
-                h_v.add(record);
+                h_v.add(i);
             }
         }
 
@@ -212,20 +269,20 @@ public class RecordUtility {
         ArrayList<String> set_k = new ArrayList<String>(hm_data.keySet());
         Collections.sort(set_k);
         for (String k : set_k) {
-            ArrayList<RecordItem> v = hm_data.get(k);
+            ArrayList<Object> v = hm_data.get(k);
 
             int pay_cout = 0;
             int income_cout = 0;
             BigDecimal pay_amount = BigDecimal.ZERO;
             BigDecimal income_amount = BigDecimal.ZERO;
 
-            for (RecordItem r : v) {
-                if(AppGobalDef.CNSTR_RECORD_PAY.equals(r.getType()))  {
+            for (Object r : v) {
+                if(r instanceof PayNoteItem)  {
                     pay_cout += 1;
-                    pay_amount = pay_amount.add(r.getVal());
+                    pay_amount = pay_amount.add(((PayNoteItem)r).getVal());
                 } else {
                     income_cout += 1;
-                    income_amount = income_amount.add(r.getVal());
+                    income_amount = income_amount.add(((IncomeNoteItem)r).getVal());
                 }
             }
 
@@ -240,12 +297,12 @@ public class RecordUtility {
             mylist.add(map);
         }
 
-        Collections.sort(mylist, new Comparator<HashMap<String, String>>() {
+        /* Collections.sort(mylist, new Comparator<HashMap<String, String>>() {
             @Override
             public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
                 return lhs.get(AppGobalDef.ITEM_TITLE).compareTo(rhs.get(AppGobalDef.ITEM_TITLE));
             }
-        });
+        }); */
 
         Handler h = UtilFun.cast(am.obj);
         GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_TO_MONTHREPORT, mylist);
@@ -254,17 +311,28 @@ public class RecordUtility {
     private static void AllRecordsToDayReport(Message am)
     {
         // get days info from record
-        List<RecordItem> lr = AppModel.getRecordUtility().GetAllRecords();
-        HashMap<String, ArrayList<RecordItem>> hm_data = new HashMap<>();
-        for (RecordItem record : lr) {
-            String h_k = record.getTs().toString().substring(0, 10);
-            ArrayList<RecordItem> h_v = hm_data.get(h_k);
+        List<PayNoteItem> payls = AppModel.getPayIncomeUtility().GetAllPayNotes();
+        List<IncomeNoteItem> incomels = AppModel.getPayIncomeUtility().GetAllIncomeNotes();
+        List<Object> objls = new LinkedList<>();
+        if(null != payls)
+            objls.addAll(payls);
+
+        if(null != incomels)
+            objls.addAll(incomels);
+
+        HashMap<String, ArrayList<Object>> hm_data = new HashMap<>();
+        for(Object i : objls)   {
+            String h_k = i instanceof PayNoteItem ?
+                    ((PayNoteItem)i).getTs().toString().substring(0, 10)
+                    : ((IncomeNoteItem)i).getTs().toString().substring(0, 10);
+
+            ArrayList<Object> h_v = hm_data.get(h_k);
             if (null == h_v) {
-                ArrayList<RecordItem> v = new ArrayList<>();
-                v.add(record);
+                ArrayList<Object> v = new ArrayList<>();
+                v.add(i);
                 hm_data.put(h_k, v);
             } else {
-                h_v.add(record);
+                h_v.add(i);
             }
         }
 
@@ -273,20 +341,20 @@ public class RecordUtility {
         ArrayList<String> set_k = new ArrayList<String>(hm_data.keySet());
         Collections.sort(set_k);
         for (String k : set_k) {
-            ArrayList<RecordItem> v = hm_data.get(k);
+            ArrayList<Object> v = hm_data.get(k);
 
             int pay_cout = 0;
             int income_cout = 0;
             BigDecimal pay_amount = BigDecimal.ZERO;
             BigDecimal income_amount = BigDecimal.ZERO;
 
-            for (RecordItem r : v) {
-                if(AppGobalDef.CNSTR_RECORD_PAY.equals(r.getType()))  {
+            for (Object r : v) {
+                if(r instanceof PayNoteItem)  {
                     pay_cout += 1;
-                    pay_amount = pay_amount.add(r.getVal());
+                    pay_amount = pay_amount.add(((PayNoteItem)r).getVal());
                 } else {
                     income_cout += 1;
-                    income_amount = income_amount.add(r.getVal());
+                    income_amount = income_amount.add(((IncomeNoteItem)r).getVal());
                 }
             }
 
@@ -301,12 +369,12 @@ public class RecordUtility {
             mylist.add(map);
         }
 
-        Collections.sort(mylist, new Comparator<HashMap<String, String>>() {
+        /* Collections.sort(mylist, new Comparator<HashMap<String, String>>() {
             @Override
             public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
                 return lhs.get(AppGobalDef.ITEM_TITLE).compareTo(rhs.get(AppGobalDef.ITEM_TITLE));
             }
-        });
+        }); */
 
         Handler h = UtilFun.cast(am.obj);
         GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_TO_DAYREPORT, mylist);
@@ -314,37 +382,57 @@ public class RecordUtility {
 
     private static void AddRecord(Message am) {
         Object[] arr = UtilFun.cast(am.obj);
+        Object ri = arr[0];
+        boolean ret;
+        if(ri instanceof PayNoteItem)   {
+            ArrayList<PayNoteItem> pis = new ArrayList<>(1);
+            pis.add((PayNoteItem)ri);
 
-        Intent data = UtilFun.cast(arr[0]);
-        RecordItem ri = data.getParcelableExtra(AppGobalDef.STR_RECORD);
-        ArrayList<RecordItem> items = new ArrayList<>();
-        items.add(ri);
-        AppModel.getRecordUtility().AddRecords(items);
+            ret = 1 == AppModel.getPayIncomeUtility().AddPayNotes(pis);
+        }   else    {
+            ArrayList<IncomeNoteItem> iis = new ArrayList<>(1);
+            iis.add((IncomeNoteItem)ri);
+
+            ret = 1 == AppModel.getPayIncomeUtility().AddIncomeNotes(iis);
+        }
 
         Handler h = UtilFun.cast(arr[1]);
-        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_RECORD_ADD, true);
+        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_RECORD_ADD, ret);
     }
 
     private static void ModifyRecord(Message am)   {
         Object[] arr = UtilFun.cast(am.obj);
+        Object ri = arr[0];
+        boolean ret;
+        if(ri instanceof PayNoteItem)   {
+            ArrayList<PayNoteItem> pis = new ArrayList<>(1);
+            pis.add((PayNoteItem)ri);
 
-        Intent data = UtilFun.cast(arr[0]);
-        RecordItem ri = data.getParcelableExtra(AppGobalDef.STR_RECORD);
-        ArrayList<RecordItem> items = new ArrayList<>();
-        items.add(ri);
-        AppModel.getRecordUtility().ModifyRecords(items);
+            ret = 1 == AppModel.getPayIncomeUtility().ModifyPayNotes(pis);
+        }   else    {
+            ArrayList<IncomeNoteItem> iis = new ArrayList<>(1);
+            iis.add((IncomeNoteItem)ri);
+
+            ret = 1 == AppModel.getPayIncomeUtility().ModifyIncomeNotes(iis);
+        }
 
         Handler h = UtilFun.cast(arr[1]);
-        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_RECORD_MODIFY, true);
+        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_RECORD_MODIFY, ret);
     }
 
     private static void GetRecord(Message am)  {
         Object[] arr = UtilFun.cast(am.obj);
+        String ty = UtilFun.cast(arr[0]);
+        Integer tag = UtilFun.cast(arr[1]);
 
-        Integer tag = UtilFun.cast(arr[0]);
-        RecordItem ri = AppModel.getRecordUtility().GetRecordById(tag);
+        Object objret;
+        if(ty.equals(AppGobalDef.CNSTR_RECORD_PAY))     {
+            objret = AppModel.getPayIncomeUtility().GetPayNoteById(tag);
+        }   else    {
+            objret = AppModel.getPayIncomeUtility().GetIncomeNoteById(tag);
+        }
 
         Handler h = UtilFun.cast(arr[1]);
-        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_RECORD_GET, ri);
+        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_RECORD_GET, new Object[] { ty, objret });
     }
 }

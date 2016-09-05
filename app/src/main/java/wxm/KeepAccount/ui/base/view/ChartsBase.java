@@ -8,8 +8,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import wxm.KeepAccount.Base.db.RecordItem;
-
 import org.xclcharts.chart.BarChart3D;
 import org.xclcharts.chart.BarData;
 import org.xclcharts.common.DensityUtil;
@@ -61,7 +59,7 @@ public abstract class ChartsBase extends ChartView {
      * 重新绘制chart
      * @param ls_data
      */
-    public abstract void RenderChart(List<RecordItem> ls_data);
+    public abstract void RenderChart(List<Object> ls_data);
 
     private void initView()
     {

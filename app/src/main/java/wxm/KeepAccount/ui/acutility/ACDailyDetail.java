@@ -23,7 +23,8 @@ import java.util.HashMap;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppMsgDef;
-import wxm.KeepAccount.Base.db.RecordItem;
+import wxm.KeepAccount.Base.db.IncomeNoteItem;
+import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -91,24 +92,28 @@ public class ACDailyDetail extends AppCompatActivity {
 
             case R.id.dailydetailmenu_add : {
                 Intent intent = new Intent(this, ACRecord.class);
-                intent.putExtra(AppGobalDef.STR_RECORD_ACTION, AppGobalDef.STR_RECORD_ACTION_ADD);
+                intent.putExtra(ACRecord.PARA_ACTION, ACRecord.LOAD_NOTE_ADD);
                 intent.putExtra(AppGobalDef.STR_RECORD_DATE, invoke_str);
                 startActivityForResult(intent, 1);
             }
             break;
 
             case R.id.dailydetailmenu_delete :  {
-                ArrayList<Integer> str_ls = new ArrayList<>();
+                ArrayList<Integer> pay_ls = new ArrayList<>();
+                ArrayList<Integer> income_ls = new ArrayList<>();
                 for(HashMap<String, String> i : lv_datalist)    {
                     if(i.get(CHECKBOX_STATUS).equals(CHECKBOX_STATUS_SELECTED)) {
-                        str_ls.add(Integer.parseInt(i.get(AppGobalDef.ITEM_ID)));
+                        if(i.get(AppGobalDef.ITEM_TYPE).equals(AppGobalDef.CNSTR_RECORD_PAY))
+                            pay_ls.add(Integer.valueOf(i.get(AppGobalDef.ITEM_ID)));
+                        else
+                            income_ls.add(Integer.valueOf(i.get(AppGobalDef.ITEM_ID)));
                     }
                 }
 
-                if(0 < str_ls.size()) {
+                if(0 < pay_ls.size() || 0 < income_ls.size()) {
                     Message m = Message.obtain(ContextUtil.getMsgHandler(),
                                        AppMsgDef.MSG_DELETE_RECORDS);
-                    m.obj = new Object[] {str_ls, mMHHandler};
+                    m.obj = new Object[] {pay_ls, income_ls, mMHHandler};
                     m.sendToTarget();
                     updateListView();
                 }
@@ -248,9 +253,10 @@ public class ACDailyDetail extends AppCompatActivity {
 
         HashMap<String, String> hm = lv_datalist.get(pos);
         String str_id = hm.get(AppGobalDef.ITEM_ID);
+        String str_type = hm.get(AppGobalDef.ITEM_TYPE);
 
         Message m = Message.obtain(ContextUtil.getMsgHandler(), AppMsgDef.MSG_RECORD_GET);
-        m.obj = new Object[] {Integer.parseInt(str_id), mMHHandler};
+        m.obj = new Object[] { str_type, Integer.parseInt(str_id), mMHHandler};
         m.sendToTarget();
     }
 
@@ -351,14 +357,18 @@ public class ACDailyDetail extends AppCompatActivity {
          * @param msg  消息
          */
         private void switchActivity(Message msg) {
-            RecordItem ri = UtilFun.cast(msg.obj);
-            if(null != ri)  {
+            Object[] objarr = UtilFun.cast(msg.obj);
+            String ty = UtilFun.cast(objarr[0]);
+            Object ret = objarr[1];
+            if(null != ret) {
                 Intent intent = new Intent(mACCur, ACRecord.class);
-                intent.putExtra(AppGobalDef.STR_RECORD_ACTION,
-                        AppGobalDef.STR_RECORD_ACTION_MODIFY);
+                intent.putExtra(ACRecord.PARA_ACTION, ACRecord.LOAD_NOTE_MODIFY);
+                if (ty.equals(AppGobalDef.CNSTR_RECORD_PAY)) {
+                    intent.putExtra(ACRecord.PARA_NOTE_PAY, (PayNoteItem)ret);
+                } else  {
+                    intent.putExtra(ACRecord.PARA_NOTE_INCOME, (IncomeNoteItem)ret);
+                }
 
-                intent.putExtra(AppGobalDef.STR_RECORD_DATE, invoke_str);
-                intent.putExtra(AppGobalDef.STR_RECORD, ri);
                 startActivityForResult(intent, 1);
             }
             else   {
