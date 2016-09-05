@@ -3,9 +3,9 @@ package wxm.KeepAccount.ui.acutility;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -15,20 +15,28 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
-
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.db.RecordItem;
-import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acinterface.ACHelp;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.db.BudgetItem;
+import wxm.KeepAccount.Base.db.RecordItem;
+import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.acinterface.ACHelp;
 
 public class ACRecord
         extends AppCompatActivity
@@ -47,6 +55,8 @@ public class ACRecord
 
     private RadioButton rb_income;
     private RadioButton rb_pay;
+    private Spinner     mSPBudget;
+    private TextView    mTVBudget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,9 +150,11 @@ public class ACRecord
 
                 record_type = AppGobalDef.CNSTR_RECORD_INCOME;
 
-                et_info.setHint(R.string.cn_hint_income_info);
-                et_date.setHint(R.string.cn_hint_income_date);
-                et_amount.setHint(R.string.cn_hint_income_amount);
+                //et_info.setHint(R.string.cn_hint_income_info);
+                //et_date.setHint(R.string.cn_hint_income_date);
+                //et_amount.setHint(R.string.cn_hint_income_amount);
+                mTVBudget.setVisibility(View.INVISIBLE);
+                mSPBudget.setVisibility(View.INVISIBLE);
 
                 rb_pay.setChecked(false);
             }
@@ -156,9 +168,11 @@ public class ACRecord
 
                 record_type = AppGobalDef.CNSTR_RECORD_PAY;
 
-                et_info.setHint(R.string.cn_hint_pay_info);
-                et_date.setHint(R.string.cn_hint_pay_date);
-                et_amount.setHint(R.string.cn_hint_pay_amount);
+                //et_info.setHint(R.string.cn_hint_pay_info);
+                //et_date.setHint(R.string.cn_hint_pay_date);
+                //et_amount.setHint(R.string.cn_hint_pay_amount);
+                mTVBudget.setVisibility(View.VISIBLE);
+                mSPBudget.setVisibility(View.VISIBLE);
 
                 rb_income.setChecked(false);
             }
@@ -174,6 +188,10 @@ public class ACRecord
         et_date = (EditText)findViewById(R.id.ar_et_date);
         et_amount = (EditText)findViewById(R.id.ar_et_amount);
         et_note = (EditText)findViewById(R.id.ar_et_note);
+        mSPBudget = UtilFun.cast(findViewById(R.id.ar_sp_budget));
+        mTVBudget = UtilFun.cast(findViewById(R.id.ar_tv_budget));
+        assert null != mSPBudget && null != rb_income && null != rb_pay && null != et_info
+                && null != et_date && null != et_amount && null != et_note && null != mTVBudget;
 
         rb_income.setSelected(true);
         rb_pay.setSelected(false);
@@ -196,17 +214,23 @@ public class ACRecord
             rb_income.setChecked(true);
             rb_pay.setChecked(false);
 
-            et_info.setHint(R.string.cn_hint_income_info);
+            //et_info.setHint(R.string.cn_hint_income_info);
             //et_date.setHint(R.string.cn_hint_income_date);
-            et_amount.setHint(R.string.cn_hint_income_amount);
+            //et_amount.setHint(R.string.cn_hint_income_amount);
+
+            mTVBudget.setVisibility(View.INVISIBLE);
+            mSPBudget.setVisibility(View.INVISIBLE);
         }
         else    {
             rb_income.setChecked(false);
             rb_pay.setChecked(true);
 
-            et_info.setHint(R.string.cn_hint_pay_info);
+            //et_info.setHint(R.string.cn_hint_pay_info);
             //et_date.setHint(R.string.cn_hint_pay_date);
-            et_amount.setHint(R.string.cn_hint_pay_amount);
+            //et_amount.setHint(R.string.cn_hint_pay_amount);
+
+            mTVBudget.setVisibility(View.VISIBLE);
+            mSPBudget.setVisibility(View.VISIBLE);
         }
 
         et_date.setOnTouchListener(this);
@@ -278,6 +302,20 @@ public class ACRecord
             else    {
                 et_amount.setText(oldval);
             }
+        }
+
+        // 填充预算数据
+        ArrayList<String> data_ls = new ArrayList<>();
+        List<BudgetItem> bils = AppModel.getBudgetUtility().GetBudget();
+        for(BudgetItem i : bils)    {
+            data_ls.add(i.getName());
+        }
+
+        if(!data_ls.isEmpty())  {
+            ArrayAdapter<String> spAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, data_ls);
+            spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mSPBudget.setAdapter(spAdapter);
         }
     }
 

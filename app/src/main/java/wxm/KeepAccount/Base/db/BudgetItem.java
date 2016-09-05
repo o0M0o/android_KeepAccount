@@ -37,8 +37,13 @@ public class BudgetItem implements Parcelable {
             canBeNull = false)
     private UsrItem usr;
 
-    @DatabaseField(columnName = "amount", dataType = DataType.BIG_DECIMAL)
+    @DatabaseField(columnName = "amount", dataType = DataType.BIG_DECIMAL,
+            canBeNull = false)
     private BigDecimal amount;
+
+    @DatabaseField(columnName = "remainder_amount", dataType = DataType.BIG_DECIMAL,
+            canBeNull = false)
+    private BigDecimal remainder_amount;
 
     @DatabaseField(columnName = "note", canBeNull = false, dataType = DataType.STRING)
     private String note;
@@ -67,8 +72,21 @@ public class BudgetItem implements Parcelable {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setAmount(BigDecimal new_amount)
+    {
+        if(null != amount) {
+            if (!amount.equals(new_amount)) {
+                if(null != remainder_amount) {
+                    remainder_amount = remainder_amount.add(new_amount.subtract(amount));
+                } else  {
+                    remainder_amount = new_amount;
+                }
+
+                amount = new_amount;
+            }
+        } else  {
+            amount = new_amount;
+        }
     }
 
     public String getNote() {
@@ -95,6 +113,22 @@ public class BudgetItem implements Parcelable {
         this.usr = usr;
     }
 
+    public BigDecimal getRemainderAmount() {
+        return remainder_amount;
+    }
+
+    private void setRemainderAmount(BigDecimal remainder_amount) {
+        this.remainder_amount = remainder_amount;
+    }
+
+    /**
+     * 使用预算
+     * @param use_val 使用预算金额,为总使用预算金额
+     */
+    public void useBudget(BigDecimal use_val)   {
+        remainder_amount = amount.subtract(use_val);
+    }
+
 
     @Override
     public int describeContents() {
@@ -114,6 +148,7 @@ public class BudgetItem implements Parcelable {
         dest.writeString(getName());
         dest.writeString(getNote());
         dest.writeString(getAmount().toString());
+        dest.writeString(getRemainderAmount().toString());
         dest.writeString(getTs().toString());
     }
 
@@ -131,6 +166,7 @@ public class BudgetItem implements Parcelable {
     public BudgetItem() {
         set_id(-1);
         setAmount(BigDecimal.ZERO);
+        setRemainderAmount(BigDecimal.ZERO);
         setTs(new Timestamp(System.currentTimeMillis()));
     }
 
@@ -143,6 +179,7 @@ public class BudgetItem implements Parcelable {
         setName(in.readString());
         setNote(in.readString());
         setAmount(new BigDecimal(in.readString()));
+        setRemainderAmount(new BigDecimal(in.readString()));
 
         try {
             setTs(new Timestamp(0));
@@ -155,4 +192,6 @@ public class BudgetItem implements Parcelable {
             Log.e(TAG, "get budgetItem from parcel fall!, ex = " + UtilFun.ExceptionToString(ex));
         }
     }
+
+
 }

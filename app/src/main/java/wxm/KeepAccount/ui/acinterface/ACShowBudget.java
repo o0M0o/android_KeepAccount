@@ -110,8 +110,9 @@ public class ACShowBudget extends AppCompatActivity implements View.OnClickListe
                 hm.put(FIELD_BUDGET_NAME, i.getName());
                 hm.put(FIELD_BUDGET_AMOUNT
                         ,String.format(Locale.CHINA
-                                ,"预算金额 : %.02f\n预算余额 : %.02f"
-                                ,i.getAmount() ,i.getAmount()));
+                                ,"预算金额 : %.02f(已使用 : %.02f)\n预算余额 : %.02f"
+                                ,i.getAmount() ,i.getAmount().subtract(i.getRemainderAmount())
+                                ,i.getRemainderAmount()));
 
                 hm.put(FIELD_BUDGET_NOTE ,"备注 : " + i.getNote());
 
