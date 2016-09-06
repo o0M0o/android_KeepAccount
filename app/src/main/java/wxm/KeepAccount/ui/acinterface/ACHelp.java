@@ -1,15 +1,14 @@
 package wxm.KeepAccount.ui.acinterface;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
 
 /**
@@ -17,7 +16,13 @@ import wxm.KeepAccount.R;
  * 为优化代码架构，activity启动时根据intent参数加载不同帮助信息
  */
 public class ACHelp extends AppCompatActivity {
-    public static final String STR_HELP_BUDGET = "budget";
+    static public final String STR_HELP_TYPE            = "HELP_TYPE";
+
+    static public final String STR_HELP_MAIN            = "help_main";
+    static public final String STR_HELP_START           = "help_start";
+    static public final String STR_HELP_DAILYDETAIL     = "help_dailydetail";
+    static public final String STR_HELP_RECORD          = "help_record";
+    public static final String STR_HELP_BUDGET          = "budget";
 
 
     //private static String TAG = "ACHelp";
@@ -31,23 +36,27 @@ public class ACHelp extends AppCompatActivity {
 
         // load help html
         Intent it = getIntent();
-        String help_type = it.getStringExtra(AppGobalDef.STR_HELP_TYPE);
+        String help_type = it.getStringExtra(STR_HELP_TYPE);
         if(null != help_type)   {
             switch (help_type)  {
-                case AppGobalDef.STR_HELP_MAIN :
+                case STR_HELP_MAIN :
                     load_help("file:///android_asset/help_main.html");
                     break;
 
-                case AppGobalDef.STR_HELP_START :
+                case STR_HELP_START :
                     load_help("file:///android_asset/help_start.html");
                     break;
 
-                case AppGobalDef.STR_HELP_DAILYDETAIL :
+                case STR_HELP_DAILYDETAIL :
                     load_help("file:///android_asset/help_dailydetail.html");
                     break;
 
-                case AppGobalDef.STR_HELP_RECORD :
+                case STR_HELP_RECORD :
                     load_help("file:///android_asset/help_record.html");
+                    break;
+
+                default:
+                    load_help("file:///android_asset/help_main.html");
                     break;
             }
         }
@@ -59,9 +68,12 @@ public class ACHelp extends AppCompatActivity {
      */
     private void load_help(String url)  {
         WebView wv = (WebView) findViewById(R.id.ac_help_webvw);
-        WebSettings wSet = wv.getSettings();
-        wSet.setDefaultTextEncodingName(ENCODING);
-        wv.loadUrl(url);
+        if(null != wv) {
+            WebSettings wSet = wv.getSettings();
+            wSet.setDefaultTextEncodingName(ENCODING);
+
+            wv.loadUrl(url);
+        }
     }
 
     @Override

@@ -17,8 +17,6 @@ public class AppMsgDef {
 
     static final public int MSG_CHANGE_ACTIVITY             = 2000;
     static final public int MSG_LOAD_ALL_RECORDS            = 2001;
-    static final public int MSG_RECORD_ADD                  = 2002;
-    static final public int MSG_RECORD_MODIFY               = 2003;
     static final public int MSG_RECORD_GET                  = 2004;
     static final public int MSG_DELETE_RECORDS              = 2005;
 

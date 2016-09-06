@@ -2,8 +2,6 @@ package wxm.KeepAccount.ui.acinterface;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,8 +17,6 @@ import java.util.Locale;
 import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppMsgDef;
-import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACRecord;
 import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
@@ -39,7 +35,6 @@ public class ACShowRecord
             ,R.drawable.ic_add};
 
     private static final String TAG = "ACShowRecord";
-    private ACSMsgHandler mMHHandler;
 
     private SlidingTabsColorsFragment mTabFragment;
     private GraphViewSlidingTabsFragment gvTabFragment = new GraphViewSlidingTabsFragment();
@@ -50,7 +45,6 @@ public class ACShowRecord
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_showrecord);
 
-        mMHHandler = new ACSMsgHandler(this);
         initView(savedInstanceState);
     }
 
@@ -71,12 +65,11 @@ public class ACShowRecord
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.am_bi_logout: {
-                int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
+            case R.id.am_bi_help : {
+                Intent intent = new Intent(this, ACHelp.class);
+                intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_RECORD);
 
-                Intent data = new Intent();
-                setResult(ret_data, data);
-                finish();
+                startActivityForResult(intent, 1);
             }
             break;
 
@@ -97,14 +90,9 @@ public class ACShowRecord
         Boolean bModify = false;
         if (AppGobalDef.INTRET_RECORD_ADD == resultCode) {
             Log.i(TAG, "从'添加记录'页面返回");
-
-            Message m = Message.obtain(ContextUtil.getMsgHandler(),
-                    AppMsgDef.MSG_RECORD_ADD);
-            m.obj = new Object[] {data, mMHHandler};
-            m.sendToTarget();
+            bModify = true;
         } else if (AppGobalDef.INTRET_DAILY_DETAIL == resultCode) {
             Log.i(TAG, "从详情页面返回");
-
             bModify = true;
         } else {
             Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
@@ -202,47 +190,6 @@ public class ACShowRecord
             default:
                 Log.e(TAG, "未处理的resid : " + resid);
                 break;
-        }
-    }
-
-
-
-    public class ACSMsgHandler extends Handler {
-        private static final String TAG = "ACSMsgHandler";
-        private ACShowRecord mACCur;
-
-        public ACSMsgHandler(ACShowRecord cur) {
-            super();
-            mACCur = cur;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case AppMsgDef.MSG_REPLY: {
-                    switch (msg.arg1) {
-                        case AppMsgDef.MSG_RECORD_ADD:
-                            updateActivity(msg);
-                            break;
-
-                        default:
-                            Log.e(TAG, String.format("msg(%s) can not process", msg.toString()));
-                            break;
-                    }
-                }
-                break;
-
-                default:
-                    Log.e(TAG, String.format("msg(%s) can not process", msg.toString()));
-                    break;
-            }
-        }
-
-        private void updateActivity(Message msg) {
-            boolean ret = UtilFun.cast(msg.obj);
-            if(ret) {
-                mACCur.updateView();
-            }
         }
     }
 }

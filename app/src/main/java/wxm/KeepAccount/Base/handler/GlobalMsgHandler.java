@@ -18,9 +18,7 @@ public class GlobalMsgHandler extends Handler {
         Log.i(TAG, "receive msg : " + msg.toString());
         switch (msg.what)   {
             case AppMsgDef.MSG_LOAD_ALL_RECORDS:
-            case AppMsgDef.MSG_RECORD_ADD:
             case AppMsgDef.MSG_RECORD_GET:
-            case AppMsgDef.MSG_RECORD_MODIFY:
             case AppMsgDef.MSG_TO_DAILY_DETAILREPORT:
             case AppMsgDef.MSG_DELETE_RECORDS:
             case AppMsgDef.MSG_TO_DAYREPORT:

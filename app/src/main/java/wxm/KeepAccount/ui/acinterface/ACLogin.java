@@ -36,16 +36,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppMsgDef;
 import wxm.KeepAccount.Base.db.UsrItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.ui.acutility.ACAddUsr;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -156,7 +155,7 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
 
             case R.id.acm_mi_help : {
                 Intent intent = new Intent(this, ACHelp.class);
-                intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_MAIN);
+                intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_MAIN);
 
                 startActivityForResult(intent, 1);
             }

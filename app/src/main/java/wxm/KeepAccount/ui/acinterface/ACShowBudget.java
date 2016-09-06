@@ -20,6 +20,7 @@ import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.utility.ACSBAdapter;
 import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
 
@@ -103,7 +104,7 @@ public class ACShowBudget extends AppCompatActivity implements View.OnClickListe
         mLVListData.clear();
 
         List<BudgetItem> bils = AppModel.getBudgetUtility().GetBudget();
-        if(null != bils)    {
+        if(!ToolUtil.ListIsNullOrEmpty(bils))    {
             for(BudgetItem i : bils)    {
                 HashMap<String, String> hm = new HashMap<>();
                 hm.put(FIELD_BUDGET_ID, String.valueOf(i.get_id()));

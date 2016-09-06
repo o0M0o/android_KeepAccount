@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import wxm.KeepAccount.Base.data.AppMsgDef;
-import wxm.KeepAccount.Base.db.RecordItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.base.view.ChartsBase;

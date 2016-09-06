@@ -24,12 +24,6 @@ public class AppGobalDef {
     static public final String STR_RECORD_AMOUNT    = "record_amount";
     static public final String STR_RECORD_NOTE      = "record_note";
 
-    static public final String STR_HELP_TYPE            = "HELP_TYPE";
-    static public final String STR_HELP_MAIN            = "help_main";
-    static public final String STR_HELP_START           = "help_start";
-    static public final String STR_HELP_DAILYDETAIL     = "help_dailydetail";
-    static public final String STR_HELP_RECORD          = "help_record";
-
     static public final String STR_PWD_PAD = "JkpYkhiayh@#$_)(";
 
     static public final int INTRET_RECORD_ADD       = 1000;

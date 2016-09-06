@@ -28,6 +28,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
+import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
 import wxm.KeepAccount.ui.acinterface.ACShowBudget;
@@ -89,7 +90,7 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
 
             case R.id.mu_budget_help : {
                 Intent intent = new Intent(this, ACHelp.class);
-                intent.putExtra(AppGobalDef.STR_HELP_TYPE, ACHelp.STR_HELP_BUDGET);
+                intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_BUDGET);
 
                 startActivityForResult(intent, 1);
             }
@@ -119,7 +120,7 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
         }
 
         List<BudgetItem> bils = AppModel.getBudgetUtility().GetBudget();
-        if(null != bils)    {
+        if(!ToolUtil.ListIsNullOrEmpty(bils))    {
             int matchid = -1;
             boolean bmatch = false;
             for(BudgetItem i : bils)    {

@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.ReferenceObjectCache;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -21,7 +20,6 @@ import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
-import wxm.KeepAccount.Base.db.RecordItem;
 import wxm.KeepAccount.Base.db.RecordTypeItem;
 import wxm.KeepAccount.Base.db.UsrItem;
 import wxm.KeepAccount.BuildConfig;
@@ -41,7 +39,6 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 6;
 
     // the DAO object we use to access the SimpleData table
-    private RuntimeExceptionDao<RecordItem, Integer>        mRecordNoteRDao = null;
     private RuntimeExceptionDao<UsrItem, Integer>           mUsrNoteRDao = null;
     private RuntimeExceptionDao<RecordTypeItem, Integer>    mRTNoteRDao = null;
     private RuntimeExceptionDao<BudgetItem, Integer>        mBudgetNoteRDao = null;
@@ -70,14 +67,12 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         Log.i(TAG, "onUpgrade");
         try {
             if(5 == newVersion) {
-                TableUtils.dropTable(connectionSource, RecordItem.class, true);
                 TableUtils.dropTable(connectionSource, UsrItem.class, true);
 
                 onCreate(db, connectionSource);
             }
 
             if(6 == newVersion)     {
-                TableUtils.dropTable(connectionSource, RecordItem.class, true);
                 TableUtils.dropTable(connectionSource, UsrItem.class, true);
                 TableUtils.dropTable(connectionSource, RecordTypeItem.class, true);
                 TableUtils.dropTable(connectionSource, PayNoteItem.class, true);
@@ -95,15 +90,6 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
      * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our SimpleData class. It will
      * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
      */
-    public RuntimeExceptionDao<RecordItem, Integer> getRecordItemREDao() {
-        if (mRecordNoteRDao == null) {
-            mRecordNoteRDao = getRuntimeExceptionDao(RecordItem.class);
-        }
-
-        mRecordNoteRDao.setObjectCache(ReferenceObjectCache.makeSoftCache());
-        return mRecordNoteRDao;
-    }
-
     public RuntimeExceptionDao<UsrItem, Integer> getUsrItemREDao() {
         if (mUsrNoteRDao == null) {
             mUsrNoteRDao = getRuntimeExceptionDao(UsrItem.class);
@@ -145,7 +131,6 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void close() {
         super.close();
-        mRecordNoteRDao = null;
         mUsrNoteRDao = null;
         mRTNoteRDao = null;
         mBudgetNoteRDao = null;
@@ -156,7 +141,6 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
 
     private void CreateAndInitTable()   {
         try {
-            TableUtils.createTable(connectionSource, RecordItem.class);
             TableUtils.createTable(connectionSource, UsrItem.class);
             TableUtils.createTable(connectionSource, RecordTypeItem.class);
             TableUtils.createTable(connectionSource, BudgetItem.class);

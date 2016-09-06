@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -71,7 +72,7 @@ public class ACRecord
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_record_add);
+        setContentView(R.layout.ac_record_edit);
 
         Intent it = getIntent();
         action = it.getStringExtra(PARA_ACTION);
@@ -117,6 +118,10 @@ public class ACRecord
         switch (item.getItemId()) {
             case R.id.record_memenu_save: {
                 if(checkResult() && fillResult()) {
+                    Intent data=new Intent();
+                    setResult(action.equals(ACRecord.LOAD_NOTE_ADD) ?
+                                    AppGobalDef.INTRET_RECORD_ADD
+                                    : AppGobalDef.INTRET_RECORD_MODIFY, data);
                     finish();
                 }
             }
@@ -127,14 +132,13 @@ public class ACRecord
 
                 Intent data = new Intent();
                 setResult(ret_data, data);
-
                 finish();
             }
             break;
 
             case R.id.recordmenu_help : {
                 Intent intent = new Intent(this, ACHelp.class);
-                intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_RECORD);
+                intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_RECORD);
 
                 startActivityForResult(intent, 1);
             }
@@ -202,8 +206,10 @@ public class ACRecord
                         et_info.setText("");
                     }
 
-                    mTVBudget.setVisibility(View.VISIBLE);
-                    mSPBudget.setVisibility(View.VISIBLE);
+                    if(0 < mSPBudget.getChildCount()) {
+                        mTVBudget.setVisibility(View.VISIBLE);
+                        mSPBudget.setVisibility(View.VISIBLE);
+                    }
 
                     record_type = AppGobalDef.STR_RECORD_PAY;
                 }
@@ -242,24 +248,10 @@ public class ACRecord
         if(record_type.equals(AppGobalDef.STR_RECORD_INCOME)) {
             rb_income.setChecked(true);
             rb_pay.setChecked(false);
-
-            //et_info.setHint(R.string.cn_hint_income_info);
-            //et_date.setHint(R.string.cn_hint_income_date);
-            //et_amount.setHint(R.string.cn_hint_income_amount);
-
-            mTVBudget.setVisibility(View.INVISIBLE);
-            mSPBudget.setVisibility(View.INVISIBLE);
         }
         else    {
             rb_income.setChecked(false);
             rb_pay.setChecked(true);
-
-            //et_info.setHint(R.string.cn_hint_pay_info);
-            //et_date.setHint(R.string.cn_hint_pay_date);
-            //et_amount.setHint(R.string.cn_hint_pay_amount);
-
-            mTVBudget.setVisibility(View.VISIBLE);
-            mSPBudget.setVisibility(View.VISIBLE);
         }
 
         et_date.setOnTouchListener(this);
@@ -358,15 +350,24 @@ public class ACRecord
         // 填充预算数据
         ArrayList<String> data_ls = new ArrayList<>();
         List<BudgetItem> bils = AppModel.getBudgetUtility().GetBudget();
-        for(BudgetItem i : bils)    {
-            data_ls.add(i.getName());
+        if(!ToolUtil.ListIsNullOrEmpty(bils)) {
+            for (BudgetItem i : bils) {
+                data_ls.add(i.getName());
+            }
         }
 
-        if(!data_ls.isEmpty())  {
-            ArrayAdapter<String> spAdapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_spinner_item, data_ls);
-            spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            mSPBudget.setAdapter(spAdapter);
+        ArrayAdapter<String> spAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, data_ls);
+        spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSPBudget.setAdapter(spAdapter);
+
+        if(record_type.equals(AppGobalDef.STR_RECORD_PAY)
+                && (0 < mSPBudget.getChildCount())) {
+            mTVBudget.setVisibility(View.VISIBLE);
+            mSPBudget.setVisibility(View.VISIBLE);
+        } else  {
+            mTVBudget.setVisibility(View.INVISIBLE);
+            mSPBudget.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -493,7 +494,6 @@ public class ACRecord
             return false;
         }
 
-        Intent data=new Intent();
         if(record_type.equals(AppGobalDef.STR_RECORD_PAY))  {
             PayNoteItem pi = new PayNoteItem();
             if(null != mOLDPayNote) {
@@ -506,7 +506,14 @@ public class ACRecord
             pi.setVal(new BigDecimal(str_val));
             pi.setNote(str_note);
 
-            data.putExtra(PARA_NOTE_PAY, pi);
+            if(action.equals(LOAD_NOTE_ADD))    {
+                return 1 == AppModel.getPayIncomeUtility()
+                                .AddPayNotes(Collections.singletonList(pi));
+            } else  {
+                return 1 == AppModel.getPayIncomeUtility()
+                                .ModifyPayNotes(Collections.singletonList(pi));
+            }
+
         } else  {
             IncomeNoteItem ii = new IncomeNoteItem();
             if(null != mOLDIncomeNote)  {
@@ -519,13 +526,14 @@ public class ACRecord
             ii.setVal(new BigDecimal(str_val));
             ii.setNote(str_note);
 
-            data.putExtra(PARA_NOTE_INCOME, ii);
+            if(action.equals(LOAD_NOTE_ADD))    {
+                return 1 == AppModel.getPayIncomeUtility()
+                        .AddIncomeNotes(Collections.singletonList(ii));
+            } else  {
+                return 1 == AppModel.getPayIncomeUtility()
+                        .ModifyIncomeNotes(Collections.singletonList(ii));
+            }
         }
-
-        setResult(action.equals(LOAD_NOTE_ADD) ?
-                    AppGobalDef.INTRET_RECORD_ADD  : AppGobalDef.INTRET_RECORD_MODIFY
-                ,data);
-        return true;
     }
 
 

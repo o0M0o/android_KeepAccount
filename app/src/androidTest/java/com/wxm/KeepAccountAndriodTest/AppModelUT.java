@@ -13,7 +13,6 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
-import wxm.KeepAccount.Base.db.RecordItem;
 import wxm.KeepAccount.Base.db.UsrItem;
 
 /**
@@ -112,69 +111,6 @@ public class AppModelUT extends AndroidTestCase {
         PayNoteItem nmri = AppModel.getPayIncomeUtility().GetPayNoteById(mri.getId());
         assertNotNull(nmri);
         assertEquals(ni, nmri.getInfo());
-    }
-
-
-    public void testRecordItem()    {
-        UsrItem ui = AppModel.getUsrUtility().addUsr("wxm", "123456");
-        assertNotNull(ui);
-
-        LinkedList<RecordItem> lsit = new LinkedList<>();
-        Date de = new Date();
-        RecordItem ri = new RecordItem();
-        ri.setUsr(ui);
-        ri.setType("pay");
-        ri.setInfo("tax");
-        ri.setVal(new BigDecimal(12.34));
-        ri.getTs().setTime(de.getTime());
-        lsit.add(ri);
-
-        ri = new RecordItem();
-        ri.setUsr(ui);
-        ri.setType("pay");
-        ri.setInfo("water cost");
-        ri.setVal(new BigDecimal(12.34));
-        ri.getTs().setTime(de.getTime());
-        lsit.add(ri);
-
-        ri = new RecordItem();
-        ri.setUsr(ui);
-        ri.setType("pay");
-        ri.setInfo("electrcity cost");
-        ri.setVal(new BigDecimal(12.34));
-        ri.getTs().setTime(de.getTime());
-        lsit.add(ri);
-
-        ri = new RecordItem();
-        ri.setUsr(ui);
-        ri.setType("income");
-        ri.setInfo("工资");
-        ri.setVal(new BigDecimal(12.34));
-        ri.getTs().setTime(de.getTime());
-        lsit.add(ri);
-
-//        assertEquals(0, AppModel.getRecordUtility().AddRecords(lsit));
-//        assertNull(AppModel.getRecordUtility().GetAllRecords());
-
-        AppModel.getInstance().setCurUsr(ui);
-        assertEquals(4, AppModel.getRecordUtility().AddRecords(lsit));
-        List<RecordItem> rets = AppModel.getRecordUtility().GetAllRecords();
-        assertEquals(rets.size(), 4);
-
-        String dtstr = UtilFun.TimestampToString(ri.getTs())
-                            .substring(0, "yyyy-MM-dd".length());
-        List<RecordItem> rets1 = AppModel.getRecordUtility().GetRecordsByDay(dtstr);
-        assertEquals(rets1.size(), 4);
-
-        String ni = "eat some thing";
-        RecordItem mri = rets1.get(0);
-        mri.setInfo(ni);
-        LinkedList<RecordItem> lsmri = new LinkedList<>();
-        lsmri.add(mri);
-        AppModel.getRecordUtility().ModifyRecords(lsmri);
-
-        RecordItem nmri = AppModel.getRecordUtility().GetRecordById(mri.getId());
-        assertEquals(mri.getInfo(), nmri.getInfo());
     }
 
 

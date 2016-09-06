@@ -23,7 +23,6 @@ public class AppModel {
     private static Context          mMockContext = null;
     private DBOrmliteHelper         mDBHelper;
     private UsrDataUtility          mUsru;
-    private RecordDataUtility       mRecordu;
     private RecordTypeDataUtility   mRecordTypeu;
     private BudgetDataUtility       mBudgetu;
     private PayIncomeDataUtility    mPayIncomeu;
@@ -55,9 +54,6 @@ public class AppModel {
         if(null == mUsru)
             mUsru = new UsrDataUtility();
 
-        if(null == mRecordu)
-            mRecordu = new RecordDataUtility();
-
         if(null == mRecordTypeu)
             mRecordTypeu = new RecordTypeDataUtility();
 
@@ -79,7 +75,6 @@ public class AppModel {
         }
 
         mUsru           = null;
-        mRecordu        = null;
         mRecordTypeu    = null;
         mBudgetu        = null;
         mPayIncomeu     = null;
@@ -91,8 +86,10 @@ public class AppModel {
      */
     public void ClearDB()   {
         try {
-            mDBHelper.getRecordItemREDao().deleteBuilder().delete();
             mDBHelper.getUsrItemREDao().deleteBuilder().delete();
+            mDBHelper.getPayDataREDao().deleteBuilder().delete();
+            mDBHelper.getIncomeDataREDao().deleteBuilder().delete();
+            mDBHelper.getRTItemREDao().deleteBuilder().delete();
         }catch (SQLException e) {
             Log.e(TAG, UtilFun.ExceptionToString(e));
         }
@@ -129,14 +126,6 @@ public class AppModel {
      */
     public static UsrDataUtility getUsrUtility()   {
         return getInstance().mUsru;
-    }
-
-    /**
-     * 获得record数据辅助类
-     * @return record数据辅助类
-     */
-    public static RecordDataUtility getRecordUtility()  {
-        return getInstance().mRecordu;
     }
 
     /**

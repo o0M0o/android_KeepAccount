@@ -47,7 +47,7 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.acm_start_actbar, menu);
+        inflater.inflate(R.menu.acm_welcome_actbar, menu);
         return true;
     }
 
@@ -213,7 +213,7 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
                         Toast.LENGTH_SHORT).show();*/
 
                 Intent intent = new Intent(this, ACHelp.class);
-                intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_START);
+                intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_START);
 
                 startActivityForResult(intent, 1);
             }

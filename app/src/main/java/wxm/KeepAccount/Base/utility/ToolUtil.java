@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
@@ -98,6 +99,11 @@ public class ToolUtil {
     }
 
 
+    /**
+     * 转换Date到字符串
+     * @param dt  待转换日期
+     * @return 日期字符串,格式"****年**月**日"
+     */
     public static String DateToDateStr(Date dt) {
         Calendar cd = Calendar.getInstance();
         cd.setTimeInMillis(dt.getTime());
@@ -106,6 +112,11 @@ public class ToolUtil {
     }
 
 
+    /**
+     * 转换Date到序列化字符串
+     * @param dt 待转换日期
+     * @return 序列化字符串
+     */
     public static String DateToSerializetr(Date dt) {
         Calendar cd = Calendar.getInstance();
         cd.setTimeInMillis(dt.getTime());
@@ -116,6 +127,11 @@ public class ToolUtil {
                 ,cd.get(Calendar.MILLISECOND));
     }
 
+    /**
+     * 序列化日期字符串转换到日期数据
+     * @param str_dt 序列化日期字符串
+     * @return 转换的日期数据
+     */
     public static Date SerializeStrToDate(String str_dt)    {
         Timestamp ts = new Timestamp(0);
         try {
@@ -127,5 +143,17 @@ public class ToolUtil {
         }
 
         return new Date(ts.getTime());
+    }
+
+    /**
+     * 检查链表是否为NULL或者空
+     * @param lst 待检查链表
+     * @return 若链表为NULL或者空则返回true,否则返回false
+     */
+    public static boolean ListIsNullOrEmpty(List lst)    {
+        if((null == lst) || lst.isEmpty())
+            return true;
+
+        return false;
     }
 }

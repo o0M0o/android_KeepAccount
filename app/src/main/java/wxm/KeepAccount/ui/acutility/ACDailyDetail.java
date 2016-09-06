@@ -11,15 +11,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppMsgDef;
@@ -39,6 +40,11 @@ public class ACDailyDetail extends AppCompatActivity {
     private static final String CHECKBOX_STATUS_NOSELECTED = "no_selected";
     private static final String CHECKBOX_VISIBLE_SHOW = "show";
     private static final String CHECKBOX_VISIBLE_NOSHOW = "no_show";
+
+    private static final int[] ITEM_DRAWABLES = {
+            R.drawable.ic_leave
+            ,R.drawable.ic_edit
+            ,R.drawable.ic_add};
 
     private ListView        lv_show;
     private String          invoke_str;
@@ -80,49 +86,9 @@ public class ACDailyDetail extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.home :
-            case R.id.dailydetailmenu_goback: {
-                int ret_data = AppGobalDef.INTRET_DAILY_DETAIL;
-
-                Intent data = new Intent();
-                setResult(ret_data, data);
-                finish();
-            }
-            break;
-
-            case R.id.dailydetailmenu_add : {
-                Intent intent = new Intent(this, ACRecord.class);
-                intent.putExtra(ACRecord.PARA_ACTION, ACRecord.LOAD_NOTE_ADD);
-                intent.putExtra(AppGobalDef.STR_RECORD_DATE, invoke_str);
-                startActivityForResult(intent, 1);
-            }
-            break;
-
-            case R.id.dailydetailmenu_delete :  {
-                ArrayList<Integer> pay_ls = new ArrayList<>();
-                ArrayList<Integer> income_ls = new ArrayList<>();
-                for(HashMap<String, String> i : lv_datalist)    {
-                    if(i.get(CHECKBOX_STATUS).equals(CHECKBOX_STATUS_SELECTED)) {
-                        if(i.get(AppGobalDef.ITEM_TYPE).equals(AppGobalDef.CNSTR_RECORD_PAY))
-                            pay_ls.add(Integer.valueOf(i.get(AppGobalDef.ITEM_ID)));
-                        else
-                            income_ls.add(Integer.valueOf(i.get(AppGobalDef.ITEM_ID)));
-                    }
-                }
-
-                if(0 < pay_ls.size() || 0 < income_ls.size()) {
-                    Message m = Message.obtain(ContextUtil.getMsgHandler(),
-                                       AppMsgDef.MSG_DELETE_RECORDS);
-                    m.obj = new Object[] {pay_ls, income_ls, mMHHandler};
-                    m.sendToTarget();
-                    updateListView();
-                }
-            }
-            break;
-
             case R.id.dailydetailmenu_help : {
                 Intent intent = new Intent(this, ACHelp.class);
-                intent.putExtra(AppGobalDef.STR_HELP_TYPE, AppGobalDef.STR_HELP_DAILYDETAIL);
+                intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_DAILYDETAIL);
 
                 startActivityForResult(intent, 1);
             }
@@ -151,31 +117,31 @@ public class ACDailyDetail extends AppCompatActivity {
     }
 
     private void initViews()    {
+        // init ray menu
+        RayMenu rayMenu = UtilFun.cast(findViewById(R.id.rm_record_dailydetail));
+        assert null != rayMenu;
+        final int itemCount = ITEM_DRAWABLES.length;
+        for (int i = 0; i < itemCount; i++) {
+            ImageView item = new ImageView(this);
+            item.setImageResource(ITEM_DRAWABLES[i]);
+
+            final int position = ITEM_DRAWABLES[i];
+            rayMenu.addItem(item, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        OnRayMenuClick(position);
+                    }
+                });
+        }
+
         // set title
         String tt = String.format("%s详情", ToolUtil.FormatDateString(invoke_str));
         setTitle(tt);
 
         // set listview
         lv_show = (ListView)findViewById(R.id.lv_daily_detail);
-        lv_show.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                switchCheckbox();
-                return false;
-            }
-        });
-
-        lv_show.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, String.format("get click : %s", view.toString()));
-                //view.setBackgroundResource(R.color.wheat);
-                switchCheckbox();
-            }
-        });
 
         lv_datalist.clear();
-
         lv_adapter= new SimpleAdapter(this,
                 lv_datalist,
                 R.layout.li_daily_detail,
@@ -281,6 +247,41 @@ public class ACDailyDetail extends AppCompatActivity {
     }
 
 
+    /**
+     * raymenu点击事件
+     * @param resid 点击发生的资源ID
+     */
+    private void OnRayMenuClick(int resid)  {
+        switch (resid)  {
+            case R.drawable.ic_add :    {
+                Intent intent = new Intent(this, ACRecord.class);
+                intent.putExtra(ACRecord.PARA_ACTION, ACRecord.LOAD_NOTE_ADD);
+                intent.putExtra(AppGobalDef.STR_RECORD_DATE, invoke_str);
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+            case R.drawable.ic_edit :     {
+                switchCheckbox();
+            }
+            break;
+
+            case R.drawable.ic_leave :  {
+                int ret_data = AppGobalDef.INTRET_DAILY_DETAIL;
+
+                Intent data = new Intent();
+                setResult(ret_data, data);
+                finish();
+            }
+            break;
+
+            default:
+                Log.e(TAG, "未处理的resid : " + resid);
+                break;
+        }
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
         super.onActivityResult(requestCode, resultCode, data);
@@ -289,13 +290,11 @@ public class ACDailyDetail extends AppCompatActivity {
         m.obj = new Object[] {data, mMHHandler};
         if(AppGobalDef.INTRET_RECORD_ADD ==  resultCode)  {
             //Log.i(TAG, "从'添加记录'页面返回");
-            m.what = AppMsgDef.MSG_RECORD_ADD;
-            m.sendToTarget();
+            updateListView();
         }
         else if(AppGobalDef.INTRET_RECORD_MODIFY == resultCode)   {
             //Log.i(TAG, "从'修改记录'页面返回");
-            m.what = AppMsgDef.MSG_RECORD_MODIFY;
-            m.sendToTarget();
+            updateListView();
         }
         else    {
             Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
@@ -318,8 +317,6 @@ public class ACDailyDetail extends AppCompatActivity {
             switch (msg.what) {
                 case AppMsgDef.MSG_REPLY: {
                     switch (msg.arg1)   {
-                        case AppMsgDef.MSG_RECORD_ADD :
-                        case AppMsgDef.MSG_RECORD_MODIFY :
                         case AppMsgDef.MSG_DELETE_RECORDS :
                             updateActivity(msg);
                             break;

@@ -52,14 +52,6 @@ public class RecordUtility {
                 DeleteRecords(msg);
                 break;
 
-            case AppMsgDef.MSG_RECORD_ADD:
-                AddRecord(msg);
-                break;
-
-            case AppMsgDef.MSG_RECORD_MODIFY:
-                ModifyRecord(msg);
-                break;
-
             case AppMsgDef.MSG_RECORD_GET:
                 GetRecord(msg);
                 break;
@@ -380,46 +372,6 @@ public class RecordUtility {
         GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_TO_DAYREPORT, mylist);
     }
 
-    private static void AddRecord(Message am) {
-        Object[] arr = UtilFun.cast(am.obj);
-        Object ri = arr[0];
-        boolean ret;
-        if(ri instanceof PayNoteItem)   {
-            ArrayList<PayNoteItem> pis = new ArrayList<>(1);
-            pis.add((PayNoteItem)ri);
-
-            ret = 1 == AppModel.getPayIncomeUtility().AddPayNotes(pis);
-        }   else    {
-            ArrayList<IncomeNoteItem> iis = new ArrayList<>(1);
-            iis.add((IncomeNoteItem)ri);
-
-            ret = 1 == AppModel.getPayIncomeUtility().AddIncomeNotes(iis);
-        }
-
-        Handler h = UtilFun.cast(arr[1]);
-        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_RECORD_ADD, ret);
-    }
-
-    private static void ModifyRecord(Message am)   {
-        Object[] arr = UtilFun.cast(am.obj);
-        Object ri = arr[0];
-        boolean ret;
-        if(ri instanceof PayNoteItem)   {
-            ArrayList<PayNoteItem> pis = new ArrayList<>(1);
-            pis.add((PayNoteItem)ri);
-
-            ret = 1 == AppModel.getPayIncomeUtility().ModifyPayNotes(pis);
-        }   else    {
-            ArrayList<IncomeNoteItem> iis = new ArrayList<>(1);
-            iis.add((IncomeNoteItem)ri);
-
-            ret = 1 == AppModel.getPayIncomeUtility().ModifyIncomeNotes(iis);
-        }
-
-        Handler h = UtilFun.cast(arr[1]);
-        GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_RECORD_MODIFY, ret);
-    }
-
     private static void GetRecord(Message am)  {
         Object[] arr = UtilFun.cast(am.obj);
         String ty = UtilFun.cast(arr[0]);
@@ -432,7 +384,7 @@ public class RecordUtility {
             objret = AppModel.getPayIncomeUtility().GetIncomeNoteById(tag);
         }
 
-        Handler h = UtilFun.cast(arr[1]);
+        Handler h = UtilFun.cast(arr[2]);
         GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_RECORD_GET, new Object[] { ty, objret });
     }
 }
