@@ -53,7 +53,8 @@
         <activity
             android:name=".ui.acutility.ACBudgetEdit"
             android:label="@string/ac_label_budget_manager" />
-        <activity android:name=".ui.acinterface.ACShowBudget"></activity>
+        <activity android:name=".ui.acinterface.ACShowBudget" />
+        <activity android:name=".ui.acutility.ACNoteEdit"></activity>
     </application>
 
 </manifest>

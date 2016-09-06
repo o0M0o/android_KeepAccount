@@ -26,12 +26,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import wxm.KeepAccount.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.wxm.andriodutillib.SlidingTab.*;
+import cn.wxm.andriodutillib.SlidingTab.SlidingTabLayout;
+import wxm.KeepAccount.R;
 
 /**
  * A basic sample which shows how to use {}

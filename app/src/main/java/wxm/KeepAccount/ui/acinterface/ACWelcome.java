@@ -19,13 +19,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.Calendar;
-import java.util.Locale;
-
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acutility.ACRecord;
+import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 
 /**
  * 用户登陆后首页面
@@ -173,6 +170,7 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
 
             case R.id.bt_add_income :
             case R.id.bt_add_pay : {
+                /*
                 Intent intent = new Intent(v.getContext(), ACRecord.class);
                 intent.putExtra(ACRecord.PARA_ACTION, ACRecord.LOAD_NOTE_ADD);
 
@@ -185,6 +183,10 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
                                 ,cal.get(Calendar.MONTH) + 1
                                 ,cal.get(Calendar.DAY_OF_MONTH)));
 
+                startActivityForResult(intent, 1);
+                */
+
+                Intent intent = new Intent(v.getContext(), ACNoteEdit.class);
                 startActivityForResult(intent, 1);
             }
             break;
