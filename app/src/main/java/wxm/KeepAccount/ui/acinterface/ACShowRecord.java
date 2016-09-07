@@ -18,7 +18,7 @@ import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acutility.ACRecord;
+import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 import wxm.KeepAccount.ui.fragment.GraphViewSlidingTabsFragment;
 import wxm.KeepAccount.ui.fragment.ListViewSlidingTabsFragment;
@@ -148,8 +148,8 @@ public class ACShowRecord
     private void OnRayMenuClick(int resid)  {
         switch (resid)  {
             case R.drawable.ic_add :    {
-                Intent intent = new Intent(this, ACRecord.class);
-                intent.putExtra(ACRecord.PARA_ACTION, ACRecord.LOAD_NOTE_ADD);
+                Intent intent = new Intent(this, ACNoteEdit.class);
+                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());

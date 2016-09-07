@@ -25,7 +25,6 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".ui.acutility.ACDailyDetail" />
-        <activity android:name=".ui.acutility.ACRecord" />
         <activity
             android:name=".ui.acinterface.ACShowRecord"
             android:label="@string/title_activity_start" />

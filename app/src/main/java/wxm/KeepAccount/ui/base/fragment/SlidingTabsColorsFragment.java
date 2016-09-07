@@ -59,7 +59,7 @@ public class SlidingTabsColorsFragment extends Fragment {
          * @return the title which represents this tab. In this sample this is used directly by
          * {@link android.support.v4.view.PagerAdapter#getPageTitle(int)}
          */
-        CharSequence getTitle() {
+        public CharSequence getTitle() {
             return mTitle;
         }
 
@@ -107,6 +107,7 @@ public class SlidingTabsColorsFragment extends Fragment {
         return inflater.inflate(R.layout.fm_main, container, false);
     }
     */
+
 
     // BEGIN_INCLUDE (fragment_onviewcreated)
     /**

@@ -254,8 +254,8 @@ public class ACDailyDetail extends AppCompatActivity {
     private void OnRayMenuClick(int resid)  {
         switch (resid)  {
             case R.drawable.ic_add :    {
-                Intent intent = new Intent(this, ACRecord.class);
-                intent.putExtra(ACRecord.PARA_ACTION, ACRecord.LOAD_NOTE_ADD);
+                Intent intent = new Intent(this, ACNoteEdit.class);
+                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
                 intent.putExtra(AppGobalDef.STR_RECORD_DATE, invoke_str);
                 startActivityForResult(intent, 1);
             }
@@ -358,12 +358,12 @@ public class ACDailyDetail extends AppCompatActivity {
             String ty = UtilFun.cast(objarr[0]);
             Object ret = objarr[1];
             if(null != ret) {
-                Intent intent = new Intent(mACCur, ACRecord.class);
-                intent.putExtra(ACRecord.PARA_ACTION, ACRecord.LOAD_NOTE_MODIFY);
+                Intent intent = new Intent(mACCur, ACNoteEdit.class);
+                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
                 if (ty.equals(AppGobalDef.CNSTR_RECORD_PAY)) {
-                    intent.putExtra(ACRecord.PARA_NOTE_PAY, (PayNoteItem)ret);
+                    intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, (PayNoteItem)ret);
                 } else  {
-                    intent.putExtra(ACRecord.PARA_NOTE_INCOME, (IncomeNoteItem)ret);
+                    intent.putExtra(ACNoteEdit.PARA_NOTE_INCOME, (IncomeNoteItem)ret);
                 }
 
                 startActivityForResult(intent, 1);

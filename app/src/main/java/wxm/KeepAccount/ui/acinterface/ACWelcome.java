@@ -19,6 +19,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
@@ -187,6 +190,17 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
                 */
 
                 Intent intent = new Intent(v.getContext(), ACNoteEdit.class);
+                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
+                        String.format(Locale.CHINA
+                                ,"%d-%02d-%02d"
+                                ,cal.get(Calendar.YEAR)
+                                ,cal.get(Calendar.MONTH) + 1
+                                ,cal.get(Calendar.DAY_OF_MONTH)));
+
                 startActivityForResult(intent, 1);
             }
             break;
