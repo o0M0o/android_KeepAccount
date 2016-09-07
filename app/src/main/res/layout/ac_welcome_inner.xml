@@ -124,7 +124,7 @@
         android:background="@color/antiquewhite"
         android:paddingTop="12dp"
         android:textSize="14sp"
-        android:drawableTop="@drawable/ic_income_record"
+        android:drawableTop="@drawable/ic_remaind"
         android:layout_alignLeft="@+id/tv_remind"
         android:layout_below="@+id/bt_add_income"
         android:layout_marginTop="@dimen/bigbutton_top_margin" />
@@ -138,7 +138,7 @@
         android:background="@color/antiquewhite"
         android:paddingTop="12dp"
         android:textSize="14sp"
-        android:drawableTop="@drawable/ic_income_record"
+        android:drawableTop="@drawable/ic_budget"
         android:layout_alignLeft="@+id/tv_budget"
         android:layout_below="@+id/bt_add_pay"
         android:layout_marginTop="@dimen/bigbutton_top_margin" />
