@@ -24,8 +24,9 @@ import cn.wxm.andriodutillib.util.UtilFun;
 public class BudgetItem implements Parcelable {
     private static final String TAG = "BudgetItem";
 
-    public final static String FIELD_USR    = "usr_id";
-    public final static String FIELD_ID     = "_id";
+    public final static String FIELD_USR        = "usr_id";
+    public final static String FIELD_NAME       = "name";
+    public final static String FIELD_ID         = "_id";
 
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     private int _id;
@@ -47,7 +48,6 @@ public class BudgetItem implements Parcelable {
 
     @DatabaseField(columnName = "note", canBeNull = false, dataType = DataType.STRING)
     private String note;
-
 
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
     private Timestamp ts;

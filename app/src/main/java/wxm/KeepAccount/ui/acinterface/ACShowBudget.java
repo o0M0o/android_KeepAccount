@@ -106,21 +106,28 @@ public class ACShowBudget extends AppCompatActivity implements View.OnClickListe
         List<BudgetItem> bils = AppModel.getBudgetUtility().GetBudget();
         if(!ToolUtil.ListIsNullOrEmpty(bils))    {
             for(BudgetItem i : bils)    {
-                HashMap<String, String> hm = new HashMap<>();
-                hm.put(FIELD_BUDGET_ID, String.valueOf(i.get_id()));
-                hm.put(FIELD_BUDGET_NAME, i.getName());
-                hm.put(FIELD_BUDGET_AMOUNT
-                        ,String.format(Locale.CHINA
-                                ,"预算金额 : %.02f(已使用 : %.02f)\n预算余额 : %.02f"
-                                ,i.getAmount() ,i.getAmount().subtract(i.getRemainderAmount())
-                                ,i.getRemainderAmount()));
+                AppModel.getBudgetUtility().RefrashBudgetById(i.get_id());
+            }
 
-                hm.put(FIELD_BUDGET_NOTE ,"备注 : " + i.getNote());
+            bils = AppModel.getBudgetUtility().GetBudget();
+            if(!ToolUtil.ListIsNullOrEmpty(bils)) {
+                for (BudgetItem i : bils) {
+                    HashMap<String, String> hm = new HashMap<>();
+                    hm.put(FIELD_BUDGET_ID, String.valueOf(i.get_id()));
+                    hm.put(FIELD_BUDGET_NAME, i.getName());
+                    hm.put(FIELD_BUDGET_AMOUNT
+                            , String.format(Locale.CHINA
+                                    , "预算金额 : %.02f(已使用 : %.02f)\n预算余额 : %.02f"
+                                    , i.getAmount(), i.getAmount().subtract(i.getRemainderAmount())
+                                    , i.getRemainderAmount()));
 
-                hm.put(FIELD_EDIT_STATUS, FIELD_VAL_DISABLE);
-                hm.put(FIELD_DELETE_STATUS, FIELD_VAL_DISABLE);
+                    hm.put(FIELD_BUDGET_NOTE, "备注 : " + i.getNote());
 
-                mLVListData.add(hm);
+                    hm.put(FIELD_EDIT_STATUS, FIELD_VAL_DISABLE);
+                    hm.put(FIELD_DELETE_STATUS, FIELD_VAL_DISABLE);
+
+                    mLVListData.add(hm);
+                }
             }
         }
 

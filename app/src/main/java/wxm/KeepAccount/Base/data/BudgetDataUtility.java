@@ -1,9 +1,19 @@
 package wxm.KeepAccount.Base.data;
 
+import android.util.Log;
+
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+
+import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.List;
 
+import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.db.BudgetItem;
+import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
+import wxm.KeepAccount.Base.utility.ToolUtil;
 
 /**
  * 预算数据工具类
@@ -34,7 +44,32 @@ public class BudgetDataUtility {
 
 
     /**
+     * 根据ID更新并获取预算数据
+     * @param biid 预算ID
+     * @return 查找到的数据,没有数据时返回{@code NULL}
+     */
+    public boolean RefrashBudgetById(int biid) {
+        BudgetItem bi = AppModel.getBudgetUtility().GetBudgetById(biid);
+        if(null == bi)
+            return false;
+
+        RuntimeExceptionDao<PayNoteItem, Integer> pired = AppModel.getDBHelper().getPayDataREDao();
+        List<PayNoteItem> pis = pired.queryForEq(PayNoteItem.FIELD_BUDGET, bi.get_id());
+
+        BigDecimal all_use = BigDecimal.ZERO;
+        if(!ToolUtil.ListIsNullOrEmpty(pis)) {
+            for(PayNoteItem i : pis)    {
+                all_use = all_use.add(i.getVal());
+            }
+        }
+
+        bi.useBudget(all_use);
+        return AppModel.getBudgetUtility().ModifyBudget(bi);
+    }
+
+    /**
      * 根据ID查找BudgetItem数据
+     * @param biid 预算ID
      * @return 查找到的数据,没有数据时返回{@code NULL}
      */
     public BudgetItem GetBudgetById(int biid)  {
@@ -42,6 +77,31 @@ public class BudgetDataUtility {
                 .queryForId(biid);
     }
 
+    /**
+     * 根据预算名查找当前用户下的BudgetItem数据
+     * @return 查找到的数据,没有数据时返回{@code NULL}
+     */
+    public BudgetItem GetBudgetByName(String bn)  {
+        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        if(null == cur_usr)
+            return null;
+
+        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+        List<BudgetItem> ret;
+        try {
+            ret = mDBHelper.getBudgetDataREDao().queryBuilder()
+                    .where().eq(BudgetItem.FIELD_USR, cur_usr.getId())
+                    .and().eq(BudgetItem.FIELD_NAME, bn).query();
+        }catch (SQLException e) {
+            Log.e(TAG, UtilFun.ExceptionToString(e));
+            ret = null;
+        }
+
+        if(ToolUtil.ListIsNullOrEmpty(ret))
+            return null;
+
+        return ret.get(0);
+    }
 
 
     /**

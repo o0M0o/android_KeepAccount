@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -21,6 +22,7 @@ import cn.wxm.andriodutillib.SlidingTab.SlidingTabLayout;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
@@ -255,6 +257,16 @@ public class EditNoteSlidingTabsFragment extends SlidingTabsColorsFragment {
             pi.setTs(tsDT);
             pi.setVal(new BigDecimal(str_val));
             pi.setNote(str_note);
+
+            Spinner spbi = UtilFun.cast(mCurView.findViewById(R.id.ar_sp_budget));
+            assert null != spbi;
+            String bn = UtilFun.cast(spbi.getSelectedItem());
+            if(null != bn)  {
+                BudgetItem bi = AppModel.getBudgetUtility().GetBudgetByName(bn);
+                if(null != bi)  {
+                    pi.setBudget(bi);
+                }
+            }
 
             if(mAction.equals(ACNoteEdit.LOAD_NOTE_ADD))    {
                 return 1 == AppModel.getPayIncomeUtility()

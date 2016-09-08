@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.data.AppModel;
 
 /**
  * 支出记录数据
@@ -22,9 +23,9 @@ import wxm.KeepAccount.Base.data.AppGobalDef;
  */
 @DatabaseTable(tableName = "tbPayNote")
 public class PayNoteItem implements Parcelable {
-    public final static String FIELD_TS     = "ts";
-    public final static String FIELD_USR    = "usr_id";
-
+    public final static String FIELD_TS         = "ts";
+    public final static String FIELD_USR        = "usr_id";
+    public final static String FIELD_BUDGET     = "budget_id";
 
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     private int _id;
@@ -32,6 +33,9 @@ public class PayNoteItem implements Parcelable {
     @DatabaseField(columnName = "usr_id", foreign = true, foreignColumnName = UsrItem.FIELD_ID,
             canBeNull = false)
     private UsrItem usr;
+
+    @DatabaseField(columnName = "budget_id", foreign = true, foreignColumnName = BudgetItem.FIELD_ID)
+    private BudgetItem budget;
 
     @DatabaseField(columnName = "info", canBeNull = false, dataType = DataType.STRING)
     private String info;
@@ -119,11 +123,8 @@ public class PayNoteItem implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(getId());
 
-        int usrid = -1;
-        UsrItem ui = getUsr();
-        if(null != ui)
-            usrid = ui.getId();
-        out.writeInt(usrid);
+        out.writeInt(null == getUsr() ? AppGobalDef.INVALID_ID : getUsr().getId());
+        out.writeInt(null == getBudget() ? AppGobalDef.INVALID_ID : getBudget().get_id());
 
         out.writeString(getInfo());
         out.writeString(getNote());
@@ -146,8 +147,15 @@ public class PayNoteItem implements Parcelable {
     private PayNoteItem(Parcel in)   {
         setId(in.readInt());
 
-        setUsr(new UsrItem());
-        getUsr().setId(in.readInt());
+        int uid = in.readInt();
+        if(AppGobalDef.INVALID_ID != uid)   {
+            setUsr(AppModel.getUsrUtility().GetUsrById(uid));
+        }
+
+        int bid = in.readInt();
+        if(AppGobalDef.INVALID_ID != bid)   {
+            setBudget(AppModel.getBudgetUtility().GetBudgetById(bid));
+        }
 
         setInfo(in.readString());
         setNote(in.readString());
@@ -164,6 +172,14 @@ public class PayNoteItem implements Parcelable {
         {
             setTs(new Timestamp(0));
         }
+    }
+
+    public BudgetItem getBudget() {
+        return budget;
+    }
+
+    public void setBudget(BudgetItem bi) {
+        this.budget = bi;
     }
 }
 

@@ -124,4 +124,13 @@ public class UsrDataUtility {
 
         return null;
     }
+
+    /**
+     * 根据用户ID获取用户数据
+     * @param uid 用户ID
+     * @return  用户数据，或者返回NULL
+     */
+    public UsrItem GetUsrById(int uid)  {
+        return AppModel.getDBHelper().getUsrItemREDao().queryForId(uid);
+    }
 }

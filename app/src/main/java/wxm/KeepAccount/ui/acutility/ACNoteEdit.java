@@ -16,6 +16,9 @@ import wxm.KeepAccount.ui.acinterface.ACHelp;
 import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 import wxm.KeepAccount.ui.fragment.EditNoteSlidingTabsFragment;
 
+/**
+ * 支出/收入数据编辑UI
+ */
 public class ACNoteEdit extends AppCompatActivity {
     private static final String TAG = "ACNoteEdit";
 
@@ -26,7 +29,7 @@ public class ACNoteEdit extends AppCompatActivity {
     public static final String  LOAD_NOTE_ADD        = "note_add";
     public static final String  LOAD_NOTE_MODIFY     = "note_modify";
 
-    private static final int MAX_NOTELEN = 200;
+    public static final int DEF_NOTE_MAXLEN = 200;
 
     private String mAction;
     private SlidingTabsColorsFragment mTabFragment;

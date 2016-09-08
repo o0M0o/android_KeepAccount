@@ -42,7 +42,6 @@ import wxm.KeepAccount.ui.acutility.ACRecordType;
  */
 public class NoteContentFragment extends Fragment implements View.OnTouchListener  {
     private static final String TAG = "NoteContentFragment";
-    private static final int MAX_NOTELEN = 200;
 
     private static final String KEY_TITLE = "title";
     private static final String KEY_INDICATOR_COLOR = "indicator_color";
@@ -151,8 +150,6 @@ public class NoteContentFragment extends Fragment implements View.OnTouchListene
     }
 
     private void init_view_pay(View vw) {
-        init_view(vw);
-
         // 填充预算数据
         mSPBudget = UtilFun.cast(vw.findViewById(R.id.ar_sp_budget));
         TextView mTVBudget = UtilFun.cast(vw.findViewById(R.id.ar_tv_budget));
@@ -171,13 +168,15 @@ public class NoteContentFragment extends Fragment implements View.OnTouchListene
         spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSPBudget.setAdapter(spAdapter);
 
-        if(0 < mSPBudget.getChildCount()) {
+        if(0 < spAdapter.getCount()) {
             mTVBudget.setVisibility(View.VISIBLE);
             mSPBudget.setVisibility(View.VISIBLE);
         } else  {
             mTVBudget.setVisibility(View.INVISIBLE);
             mSPBudget.setVisibility(View.INVISIBLE);
         }
+
+        init_view(vw);
     }
 
     private void init_view_income(View vw) {
@@ -227,9 +226,9 @@ public class NoteContentFragment extends Fragment implements View.OnTouchListene
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length() > MAX_NOTELEN)    {
-                    mETNote.setError(String.format(Locale.CHINA, "超过最大长度(%d)!", MAX_NOTELEN));
-                    mETNote.setText(s.subSequence(0, MAX_NOTELEN));
+                if(s.length() > ACNoteEdit.DEF_NOTE_MAXLEN)    {
+                    mETNote.setError(String.format(Locale.CHINA, "超过最大长度(%d)!", ACNoteEdit.DEF_NOTE_MAXLEN));
+                    mETNote.setText(s.subSequence(0, ACNoteEdit.DEF_NOTE_MAXLEN));
                 }
             }
         });
@@ -244,6 +243,18 @@ public class NoteContentFragment extends Fragment implements View.OnTouchListene
                 note     = mOldPayNote.getNote();
                 date     = mOldPayNote.getTs().toString().substring(0, 10);
                 amount   = mOldPayNote.getVal().toPlainString();
+
+                BudgetItem bi = mOldPayNote.getBudget();
+                if(null != bi)  {
+                    String bn = bi.getName();
+                    for(int i = 0; i < mSPBudget.getChildCount(); ++i)  {
+                        String bni = UtilFun.cast(mSPBudget.getAdapter().getItem(i));
+                        if(bn.equals(bni))  {
+                            mSPBudget.setSelection(i);
+                            break;
+                        }
+                    }
+                }
             } else  {
                 info     = mOldIncomeNote.getInfo();
                 note     = mOldIncomeNote.getNote();

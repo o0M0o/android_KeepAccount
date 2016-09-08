@@ -27,14 +27,14 @@ import wxm.KeepAccount.ui.fragment.ListViewSlidingTabsFragment;
  * tab版本的main activity
  * Created by 123 on 2016/5/16.
  */
-public class ACShowRecord
+public class ACShowNote
         extends AppCompatActivity   {
     private static final int[] ITEM_DRAWABLES = {
             R.drawable.ic_leave
             ,R.drawable.ic_switch
             ,R.drawable.ic_add};
 
-    private static final String TAG = "ACShowRecord";
+    private static final String TAG = "ACShowNote";
 
     private SlidingTabsColorsFragment mTabFragment;
     private GraphViewSlidingTabsFragment gvTabFragment = new GraphViewSlidingTabsFragment();
@@ -43,7 +43,7 @@ public class ACShowRecord
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_showrecord);
+        setContentView(R.layout.ac_note_show);
 
         initView(savedInstanceState);
     }

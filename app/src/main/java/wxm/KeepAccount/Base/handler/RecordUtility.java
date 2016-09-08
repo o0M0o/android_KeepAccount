@@ -100,20 +100,23 @@ public class RecordUtility {
             PayNoteItem pi = ispay ? (PayNoteItem)i : null;
             IncomeNoteItem ii = ispay ? null : (IncomeNoteItem)i;
 
-            String show_str;
+            String show_str = String.format(Locale.CHINA,
+                                    "原因 : %s\n金额 : %.02f",
+                                    ispay ? pi.getInfo() : ii.getInfo()
+                                    ,ispay ? pi.getVal() : ii.getVal());
             String note = ispay ? pi.getNote() : ii.getNote();
-            if(UtilFun.StringIsNullOrEmpty(note)) {
-                show_str = String.format(Locale.CHINA,
-                        "原因 : %s\n金额 : %.02f",
-                        ispay ? pi.getInfo() : ii.getInfo()
-                        ,ispay ? pi.getVal() : ii.getVal());
+            String bn = ispay ?
+                            (null == pi.getBudget() ? null : pi.getBudget().getName())
+                            : null;
+
+            if(!UtilFun.StringIsNullOrEmpty(bn)) {
+                show_str = String.format(Locale.CHINA, "%s\n使用预算 : %s"
+                        ,show_str ,bn);
             }
-            else    {
-                show_str = String.format(Locale.CHINA,
-                        "原因 : %s\n金额 : %.02f\n备注 : %s",
-                        ispay ? pi.getInfo() : ii.getInfo()
-                        ,ispay ? pi.getVal() : ii.getVal()
-                        ,note);
+
+            if(!UtilFun.StringIsNullOrEmpty(note)) {
+                show_str = String.format(Locale.CHINA, "%s\n备注 : %s"
+                                ,show_str ,note);
             }
 
             HashMap<String, String> map = new HashMap<>();

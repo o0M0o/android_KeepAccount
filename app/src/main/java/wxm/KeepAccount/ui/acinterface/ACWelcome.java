@@ -155,7 +155,7 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
         int id = v.getId();
         switch (id) {
             case R.id.bt_lookdata : {
-                Intent intent = new Intent(this, ACShowRecord.class);
+                Intent intent = new Intent(this, ACShowNote.class);
                 startActivityForResult(intent, 1);
             }
             break;
