@@ -158,6 +158,7 @@ public class NoteContentFragment extends Fragment implements View.OnTouchListene
         ArrayList<String> data_ls = new ArrayList<>();
         List<BudgetItem> bils = AppModel.getBudgetUtility().GetBudget();
         if(!ToolUtil.ListIsNullOrEmpty(bils)) {
+            data_ls.add("无预算(不使用预算)");
             for (BudgetItem i : bils) {
                 data_ls.add(i.getName());
             }
@@ -171,6 +172,8 @@ public class NoteContentFragment extends Fragment implements View.OnTouchListene
         if(0 < spAdapter.getCount()) {
             mTVBudget.setVisibility(View.VISIBLE);
             mSPBudget.setVisibility(View.VISIBLE);
+
+            mSPBudget.setSelection(0);
         } else  {
             mTVBudget.setVisibility(View.INVISIBLE);
             mSPBudget.setVisibility(View.INVISIBLE);
@@ -247,7 +250,8 @@ public class NoteContentFragment extends Fragment implements View.OnTouchListene
                 BudgetItem bi = mOldPayNote.getBudget();
                 if(null != bi)  {
                     String bn = bi.getName();
-                    for(int i = 0; i < mSPBudget.getChildCount(); ++i)  {
+                    int cc = mSPBudget.getAdapter().getCount();
+                    for(int i = 0; i < cc; ++i)  {
                         String bni = UtilFun.cast(mSPBudget.getAdapter().getItem(i));
                         if(bn.equals(bni))  {
                             mSPBudget.setSelection(i);

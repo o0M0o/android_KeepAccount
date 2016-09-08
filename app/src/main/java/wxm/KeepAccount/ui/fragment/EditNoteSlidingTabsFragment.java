@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -258,12 +259,16 @@ public class EditNoteSlidingTabsFragment extends SlidingTabsColorsFragment {
             pi.setVal(new BigDecimal(str_val));
             pi.setNote(str_note);
 
+            // set budget
             Spinner spbi = UtilFun.cast(mCurView.findViewById(R.id.ar_sp_budget));
             assert null != spbi;
-            String bn = UtilFun.cast(spbi.getSelectedItem());
-            if(null != bn)  {
-                BudgetItem bi = AppModel.getBudgetUtility().GetBudgetByName(bn);
-                if(null != bi)  {
+            pi.setBudget(null);
+            int pos = spbi.getSelectedItemPosition();
+            if(View.VISIBLE == spbi.getVisibility()
+                    && AdapterView.INVALID_POSITION != pos && 0 != pos) {
+                BudgetItem bi = AppModel.getBudgetUtility()
+                                    .GetBudgetByName((String)spbi.getSelectedItem());
+                if (null != bi) {
                     pi.setBudget(bi);
                 }
             }

@@ -82,6 +82,9 @@ public class BudgetDataUtility {
      * @return 查找到的数据,没有数据时返回{@code NULL}
      */
     public BudgetItem GetBudgetByName(String bn)  {
+        if(UtilFun.StringIsNullOrEmpty(bn))
+            return null;
+
         UsrItem cur_usr = AppModel.getInstance().getCurUsr();
         if(null == cur_usr)
             return null;
