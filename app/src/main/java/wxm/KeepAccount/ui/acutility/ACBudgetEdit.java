@@ -30,8 +30,8 @@ import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.acinterface.ACBudgetShow;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
-import wxm.KeepAccount.ui.acinterface.ACShowBudget;
 
 
 /**
@@ -226,7 +226,7 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
 
         // init budget
         Intent it = getIntent();
-        mCurBudget = it.getParcelableExtra(ACShowBudget.INTENT_LOAD_BUDGET);
+        mCurBudget = it.getParcelableExtra(ACBudgetShow.INTENT_LOAD_BUDGET);
         if(null != mCurBudget)  {
             mETName.setText(mCurBudget.getName());
             mETAmount.setText(mCurBudget.getAmount().toPlainString());

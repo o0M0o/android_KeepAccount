@@ -12,8 +12,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -43,13 +41,13 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
         init_component();
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.acm_welcome_actbar, menu);
+        inflater.inflate(R.menu.acbar_back_help, menu);
         return true;
-    }
+    } */
 
     @Override
     public void onBackPressed() {
@@ -63,15 +61,23 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
     }
 
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.am_bi_logout: {
+            case R.id.acb_mi_leave : {
                 int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
 
                 Intent data = new Intent();
                 setResult(ret_data, data);
                 finish();
+            }
+            break;
+
+            case R.id.acb_mi_help : {
+                Intent intent = new Intent(this, ACHelp.class);
+                intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_MAIN);
+
+                startActivityForResult(intent, 1);
             }
             break;
 
@@ -81,7 +87,7 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
         }
 
         return true;
-    }
+    } */
 
 
     private void init_component() {
@@ -101,7 +107,6 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
         NavigationView nv = UtilFun.cast(findViewById(R.id.start_nav_view));
         assert null != nv;
         nv.setNavigationItemSelectedListener(this);
-
 
         // init datashow
         Button bt_datashow = UtilFun.cast(findViewById(R.id.bt_lookdata));
@@ -148,6 +153,19 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
         Button bt_edit_budget = UtilFun.cast(findViewById(R.id.bt_edit_budget));
         assert null != bt_edit_budget;
         bt_edit_budget.setOnClickListener(this);
+
+        dr = bt_edit_budget.getCompoundDrawables()[1];
+        dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
+        bt_edit_budget.setCompoundDrawables(null, dr, null, null);
+
+        // init edit remind
+        Button bt_edit_remind = UtilFun.cast(findViewById(R.id.bt_edit_remind));
+        assert null != bt_edit_remind;
+        bt_edit_remind.setOnClickListener(this);
+
+        dr = bt_edit_remind.getCompoundDrawables()[1];
+        dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
+        bt_edit_remind.setCompoundDrawables(null, dr, null, null);
     }
 
     @Override
@@ -155,13 +173,19 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
         int id = v.getId();
         switch (id) {
             case R.id.bt_lookdata : {
-                Intent intent = new Intent(this, ACShowNote.class);
+                Intent intent = new Intent(this, ACNoteShow.class);
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+            case R.id.bt_edit_remind :  {
+                Intent intent = new Intent(this, ACRemindShow.class);
                 startActivityForResult(intent, 1);
             }
             break;
 
             case R.id.bt_edit_budget: {
-                Intent intent = new Intent(this, ACShowBudget.class);
+                Intent intent = new Intent(this, ACBudgetShow.class);
                 startActivityForResult(intent, 1);
             }
             break;
@@ -173,22 +197,6 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
 
             case R.id.bt_add_income :
             case R.id.bt_add_pay : {
-                /*
-                Intent intent = new Intent(v.getContext(), ACRecord.class);
-                intent.putExtra(ACRecord.PARA_ACTION, ACRecord.LOAD_NOTE_ADD);
-
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(System.currentTimeMillis());
-                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
-                        String.format(Locale.CHINA
-                                ,"%d-%02d-%02d"
-                                ,cal.get(Calendar.YEAR)
-                                ,cal.get(Calendar.MONTH) + 1
-                                ,cal.get(Calendar.DAY_OF_MONTH)));
-
-                startActivityForResult(intent, 1);
-                */
-
                 Intent intent = new Intent(v.getContext(), ACNoteEdit.class);
                 intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
 

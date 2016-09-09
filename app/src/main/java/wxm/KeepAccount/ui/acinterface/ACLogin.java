@@ -411,7 +411,7 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
      * 切换到工作主activity
      */
     private void SwitchToWorkActivity()  {
-        //Intent intent = new Intent(this, ACShowNote.class);
+        //Intent intent = new Intent(this, ACNoteShow.class);
         Intent intent = new Intent(this, ACWelcome.class);
         startActivityForResult(intent, 1);
     }

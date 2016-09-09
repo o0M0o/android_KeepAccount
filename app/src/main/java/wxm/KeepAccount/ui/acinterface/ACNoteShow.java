@@ -27,14 +27,14 @@ import wxm.KeepAccount.ui.fragment.ListViewSlidingTabsFragment;
  * tab版本的main activity
  * Created by 123 on 2016/5/16.
  */
-public class ACShowNote
+public class ACNoteShow
         extends AppCompatActivity   {
     private static final int[] ITEM_DRAWABLES = {
             R.drawable.ic_leave
             ,R.drawable.ic_switch
             ,R.drawable.ic_add};
 
-    private static final String TAG = "ACShowNote";
+    private static final String TAG = "ACNoteShow";
 
     private SlidingTabsColorsFragment mTabFragment;
     private GraphViewSlidingTabsFragment gvTabFragment = new GraphViewSlidingTabsFragment();
@@ -57,7 +57,7 @@ public class ACShowNote
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.acm_start_actbar, menu);
+        inflater.inflate(R.menu.acbar_back_help, menu);
         return true;
     }
 
@@ -65,11 +65,20 @@ public class ACShowNote
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.am_bi_help : {
+            case R.id.acb_mi_help : {
                 Intent intent = new Intent(this, ACHelp.class);
                 intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_RECORD);
 
                 startActivityForResult(intent, 1);
+            }
+            break;
+
+            case R.id.acb_mi_leave :    {
+                int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
+
+                Intent data = new Intent();
+                setResult(ret_data, data);
+                finish();
             }
             break;
 

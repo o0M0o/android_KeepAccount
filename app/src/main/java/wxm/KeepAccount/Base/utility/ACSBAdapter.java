@@ -1,6 +1,7 @@
 package wxm.KeepAccount.Base.utility;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acinterface.ACShowBudget;
+import wxm.KeepAccount.ui.acinterface.ACBudgetShow;
 
 
 /**
@@ -21,10 +22,13 @@ import wxm.KeepAccount.ui.acinterface.ACShowBudget;
  * Created by wxm on 2016/8/13.
  */
 public class ACSBAdapter extends SimpleAdapter {
-    private ACShowBudget mHome;
+    private ACBudgetShow mHome;
     private ArrayList<HashMap<String, String>> mLVList;
 
-    public ACSBAdapter(ACShowBudget home,
+    private static final int    BTDRAW_WIDTH    = 48;
+    private static final int    BTDRAW_HEIGHT   = 48;
+
+    public ACSBAdapter(ACBudgetShow home,
                              Context context, List<? extends Map<String, ?>> data,
                              String[] from,
                              int[] to) {
@@ -43,20 +47,33 @@ public class ACSBAdapter extends SimpleAdapter {
             assert null != ibedit && null != ibdelete;
 
             HashMap<String, String> map = mLVList.get(position);
-            String editst = map.get(ACShowBudget.FIELD_EDIT_STATUS);
-            String delst = map.get(ACShowBudget.FIELD_DELETE_STATUS);
+            String editst = map.get(ACBudgetShow.FIELD_EDIT_STATUS);
+            String delst = map.get(ACBudgetShow.FIELD_DELETE_STATUS);
             assert null != editst && null != delst;
 
-            if(editst.equals(ACShowBudget.FIELD_VAL_ENABLE))    {
+            if(editst.equals(ACBudgetShow.FIELD_VAL_ENABLE))    {
                 ibedit.setVisibility(View.VISIBLE);
                 ibedit.setOnClickListener(mHome);
+
+                Drawable dr = ibedit.getDrawable();
+                dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
+                ibedit.setImageDrawable(dr);
+
+                ibedit.setMaxWidth(BTDRAW_WIDTH);
+                ibedit.setMinimumWidth(BTDRAW_WIDTH);
+                ibedit.setMaxHeight(BTDRAW_HEIGHT);
+                ibedit.setMinimumHeight(BTDRAW_HEIGHT);
             }   else    {
                 ibedit.setVisibility(View.INVISIBLE);
             }
 
-            if(delst.equals(ACShowBudget.FIELD_VAL_ENABLE))    {
+            if(delst.equals(ACBudgetShow.FIELD_VAL_ENABLE))    {
                 ibdelete.setVisibility(View.VISIBLE);
                 ibdelete.setOnClickListener(mHome);
+
+                Drawable dr = ibdelete.getDrawable();
+                dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
+                ibdelete.setImageDrawable(dr);
             }   else    {
                 ibdelete.setVisibility(View.INVISIBLE);
             }

@@ -10,7 +10,7 @@
         android:layout_gravity="right"
         android:src="@drawable/ic_edit"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="8dp" />
 
     <TextView
         android:layout_width="fill_parent"
@@ -48,6 +48,6 @@
         android:layout_alignParentTop="false"
         android:layout_alignTop="@+id/ib_budget_edit"
         android:layout_toLeftOf="@+id/ib_budget_edit"
-        android:layout_marginRight="12dp"
+        android:layout_marginRight="6dp"
         android:src="@drawable/ic_delete" />
 </RelativeLayout>

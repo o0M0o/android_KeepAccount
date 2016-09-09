@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,7 +31,7 @@ import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
 /**
  * 显示预算数据
  */
-public class ACShowBudget extends AppCompatActivity implements View.OnClickListener {
+public class ACBudgetShow extends AppCompatActivity implements View.OnClickListener {
     public static final String INTENT_LOAD_BUDGET   = "LOAD_BUDGET";
 
     public static final String FIELD_VAL_ENABLE     = "ENABLE";
@@ -43,7 +46,7 @@ public class ACShowBudget extends AppCompatActivity implements View.OnClickListe
     public static final String FIELD_BUDGET_NOTE    = "BUDGET_NOTE";
 
 
-    private static final String TAG = "ACShowBudget";
+    private static final String TAG = "ACBudgetShow";
     private static final int[] ITEM_DRAWABLES = {
             R.drawable.ic_leave
             ,R.drawable.ic_edit
@@ -61,6 +64,44 @@ public class ACShowBudget extends AppCompatActivity implements View.OnClickListe
 
         initView(savedInstanceState);
         loadBudget();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.acbar_back_help, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.acb_mi_help : {
+                Intent intent = new Intent(this, ACHelp.class);
+                intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_RECORD);
+
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+            case R.id.acb_mi_leave: {
+                int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
+
+                Intent data = new Intent();
+                setResult(ret_data, data);
+                finish();
+            }
+            break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+
+        return true;
     }
 
 

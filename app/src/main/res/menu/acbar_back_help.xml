@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:orderInCategory="9000"
+        android:id="@+id/acb_mi_leave"
+        app:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_action_leave"
+        android:title="@string/cn_leave"/>
+
+    <item
+        android:orderInCategory="9001"
+        android:id="@+id/acb_mi_help"
+        app:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_action_help"
+        android:title="@string/cn_help"/>
+</menu>
