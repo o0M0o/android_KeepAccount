@@ -40,22 +40,16 @@ public class DailyViewHelper implements ILVViewHelper {
     private View    mSelfView;
 
     private LinkedList<HashMap<String, String>>                     mMainPara;
-    private LinkedList<HashMap<String, String>>                     mLLHMapPara;
     private HashMap<String, LinkedList<HashMap<String, String>>>    mHMSubPara;
 
     public DailyViewHelper()    {
         mMainPara = new LinkedList<>();
-        mLLHMapPara = new LinkedList<>();
         mHMSubPara = new HashMap<>();
     }
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
         mSelfView = inflater.inflate(R.layout.lv_pager, container, false);
-
-        ImageButton ib = UtilFun.cast(mSelfView.findViewById(R.id.ib_hide_show));
-        assert null != ib;
-
         return mSelfView;
     }
 
@@ -67,7 +61,8 @@ public class DailyViewHelper implements ILVViewHelper {
     @Override
     public void loadView() {
         // get days info from record
-        HashMap<String, ArrayList<Object>> hm_data = getNoteByDayly();
+        HashMap<String, ArrayList<Object>> hm_data =
+                AppModel.getPayIncomeUtility().GetAllNotesToDay();
 
         // format output
         parseNotes(hm_data);
@@ -81,32 +76,8 @@ public class DailyViewHelper implements ILVViewHelper {
         mSNAdapter.notifyDataSetChanged();
     }
 
-
-    private HashMap<String, ArrayList<Object>> getNoteByDayly() {
-        List<Object> objls = AppModel.getPayIncomeUtility().GetAllNotes();
-        HashMap<String, ArrayList<Object>> hm_data = new HashMap<>();
-        for (Object i : objls) {
-            String h_k = i instanceof PayNoteItem ?
-                    ((PayNoteItem) i).getTs().toString().substring(0, 10)
-                    : ((IncomeNoteItem) i).getTs().toString().substring(0, 10);
-
-            ArrayList<Object> h_v = hm_data.get(h_k);
-            if (null == h_v) {
-                ArrayList<Object> v = new ArrayList<>();
-                v.add(i);
-                hm_data.put(h_k, v);
-            } else {
-                h_v.add(i);
-            }
-        }
-
-        return hm_data;
-    }
-
-
     private void parseNotes(HashMap<String, ArrayList<Object>> notes)   {
         mMainPara.clear();
-        mLLHMapPara.clear();
         mHMSubPara.clear();
 
         ArrayList<String> set_k = new ArrayList<String>(notes.keySet());
@@ -143,7 +114,6 @@ public class DailyViewHelper implements ILVViewHelper {
 
                 map.put(LVFRGContent.SPARA_SHOW, show);
                 map.put(LVFRGContent.MPARA_TAG, title);
-                mLLHMapPara.add(map);
                 cur_llhm.add(map);
             }
 
@@ -164,8 +134,7 @@ public class DailyViewHelper implements ILVViewHelper {
     }
 
     protected void onIbClick(View vw, int pos) {
-        Log.i(TAG, "onIbClick at pos = " + pos);
-
+        //Log.i(TAG, "onIbClick at pos = " + pos);
         Resources res = vw.getResources();
         ImageButton ib = UtilFun.cast(vw.findViewById(R.id.ib_hide_show));
         HashMap<String, String> hm = mMainPara.get(pos);
@@ -237,7 +206,7 @@ public class DailyViewHelper implements ILVViewHelper {
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
-                Log.i(TAG, "create view at pos = " + position);
+                //Log.i(TAG, "create view at pos = " + position);
 
                 final View pv = v;
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));

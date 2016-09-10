@@ -5,6 +5,8 @@ import android.util.Log;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,6 +61,84 @@ public class PayIncomeDataUtility {
             objls.addAll(incomels);
 
         return objls;
+    }
+
+    /**
+     * 获得当前用户所有日度支出/收入数据
+     * 并以 日期 --->  数据链表 方式返回数据
+     * @return 日期 --->  数据链表
+     */
+    public HashMap<String, ArrayList<Object>> GetAllNotesToDay()    {
+        List<Object> ret = GetAllNotes();
+        HashMap<String, ArrayList<Object>> hm_data = new HashMap<>();
+        for (Object i : ret) {
+            String h_k = i instanceof PayNoteItem ?
+                    ((PayNoteItem) i).getTs().toString().substring(0, 10)
+                    : ((IncomeNoteItem) i).getTs().toString().substring(0, 10);
+
+            ArrayList<Object> h_v = hm_data.get(h_k);
+            if (null == h_v) {
+                ArrayList<Object> v = new ArrayList<>();
+                v.add(i);
+                hm_data.put(h_k, v);
+            } else {
+                h_v.add(i);
+            }
+        }
+
+        return hm_data;
+    }
+
+    /**
+     * 获得当前用户所有月度支出/收入数据
+     * 并以 日期 --->  数据链表 方式返回数据
+     * @return 日期 --->  数据链表
+     */
+    public HashMap<String, ArrayList<Object>> GetAllNotesToMonth()    {
+        List<Object> ret = GetAllNotes();
+        HashMap<String, ArrayList<Object>> hm_data = new HashMap<>();
+        for (Object i : ret) {
+            String h_k = i instanceof PayNoteItem ?
+                    ((PayNoteItem) i).getTs().toString().substring(0, 7)
+                    : ((IncomeNoteItem) i).getTs().toString().substring(0, 7);
+
+            ArrayList<Object> h_v = hm_data.get(h_k);
+            if (null == h_v) {
+                ArrayList<Object> v = new ArrayList<>();
+                v.add(i);
+                hm_data.put(h_k, v);
+            } else {
+                h_v.add(i);
+            }
+        }
+
+        return hm_data;
+    }
+
+    /**
+     * 获得当前用户所有年度支出/收入数据
+     * 并以 日期 --->  数据链表 方式返回数据
+     * @return 日期 --->  数据链表
+     */
+    public HashMap<String, ArrayList<Object>> GetAllNotesToYear()    {
+        List<Object> ret = GetAllNotes();
+        HashMap<String, ArrayList<Object>> hm_data = new HashMap<>();
+        for (Object i : ret) {
+            String h_k = i instanceof PayNoteItem ?
+                    ((PayNoteItem) i).getTs().toString().substring(0, 4)
+                    : ((IncomeNoteItem) i).getTs().toString().substring(0, 4);
+
+            ArrayList<Object> h_v = hm_data.get(h_k);
+            if (null == h_v) {
+                ArrayList<Object> v = new ArrayList<>();
+                v.add(i);
+                hm_data.put(h_k, v);
+            } else {
+                h_v.add(i);
+            }
+        }
+
+        return hm_data;
     }
 
     /**
