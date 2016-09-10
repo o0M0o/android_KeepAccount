@@ -299,7 +299,7 @@ public class NoteContentFragment extends Fragment implements View.OnTouchListene
 
     private void onTouchDate(MotionEvent event) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View view = View.inflate(getActivity(), R.layout.date_dialog, null);
+        View view = View.inflate(getActivity(), R.layout.dlg_date, null);
         final DatePicker datePicker = (DatePicker) view.findViewById(R.id.date_picker);
         builder.setView(view);
 

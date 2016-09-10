@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/AndriodUtillib/AndriodUtillib.iml" filepath="$PROJECT_DIR$/AndriodUtillib/AndriodUtillib.iml" />
       <module fileurl="file://$PROJECT_DIR$/KeepAccount.iml" filepath="$PROJECT_DIR$/KeepAccount.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/datashow/datashow.iml" filepath="$PROJECT_DIR$/datashow/datashow.iml" />
     </modules>
   </component>
 </project>

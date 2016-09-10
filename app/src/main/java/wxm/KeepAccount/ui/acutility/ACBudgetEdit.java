@@ -251,7 +251,7 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
 
     private void onTouchDate(MotionEvent event, int vid) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = View.inflate(this, R.layout.date_dialog, null);
+        View view = View.inflate(this, R.layout.dlg_date, null);
         final DatePicker datePicker = (DatePicker) view.findViewById(R.id.date_picker);
         builder.setView(view);
 
