@@ -39,6 +39,8 @@ import wxm.KeepAccount.Base.data.AppMsgDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACDailyDetail;
+import wxm.KeepAccount.ui.fragment.STGraphViewFragment;
+import wxm.KeepAccount.ui.fragment.STListViewFragment;
 
 /**
  * Simple Fragment used to display some meaningful content for each page in the sample's
@@ -87,7 +89,7 @@ public class LVContentFragment extends Fragment {
         String title = args.getCharSequence(KEY_TITLE).toString();
         ListView lv = (ListView) cur_view.findViewById(R.id.tabvp_lv_main);
         Resources res =  getResources();
-        if(title.equals(res.getString(R.string.tab_cn_daily)))  {
+        if(title.equals(STListViewFragment.TAB_TITLE_DAILY))  {
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -177,15 +179,15 @@ public class LVContentFragment extends Fragment {
 
         Message m = Message.obtain(ContextUtil.getMsgHandler());
         m.obj = mMHHandler;
-        if(res.getString(R.string.tab_cn_daily).equals(title)) {
+        if(STGraphViewFragment.TAB_TITLE_DAILY.equals(title)) {
             m.what = AppMsgDef.MSG_TO_DAYREPORT;
             m.sendToTarget();
         }
-        else if(res.getString(R.string.tab_cn_monthly).equals(title)) {
+        else if(STGraphViewFragment.TAB_TITLE_MONTHLY.equals(title)) {
             m.what = AppMsgDef.MSG_TO_MONTHREPORT;
             m.sendToTarget();
         }
-        else if(res.getString(R.string.tab_cn_yearly).equals(title)) {
+        else if(STGraphViewFragment.TAB_TITLE_YEARLY.equals(title)) {
             m.what = AppMsgDef.MSG_TO_YEARREPORT;
             m.sendToTarget();
         }

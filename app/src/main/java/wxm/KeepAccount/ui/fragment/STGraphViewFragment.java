@@ -3,20 +3,27 @@ package wxm.KeepAccount.ui.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import wxm.KeepAccount.ui.base.fragment.LVContentFragment;
-import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
+import java.util.List;
+
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.base.fragment.GVContentFragment;
+import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
 
 /**
- * 列表视图方式显示数据
+ * 图表视图表现数据
  * Created by wxm on 2016/5/30.
  */
-public class ListViewSlidingTabsFragment extends SlidingTabsColorsFragment {
-    private static final String TAG = "LVSlidingTabsFragment ";
+public class STGraphViewFragment extends SlidingTabsColorsFragment {
+    private static final String TAG = "GVSlidingTabsFragment ";
+
+    public static final String TAB_TITLE_DAILY      = "日统计";
+    public static final String TAB_TITLE_MONTHLY    = "月统计";
+    public static final String TAB_TITLE_YEARLY     = "年统计";
 
     protected static class ListViewPagerItem extends SamplePagerItem {
         public ListViewPagerItem(CharSequence title, int indicatorColor, int dividerColor) {
@@ -25,7 +32,7 @@ public class ListViewSlidingTabsFragment extends SlidingTabsColorsFragment {
 
         @Override
         protected Fragment createFragment() {
-            return LVContentFragment.newInstance(mTitle, mIndicatorColor, mDividerColor);
+            return GVContentFragment.newInstance(mTitle, mIndicatorColor, mDividerColor);
         }
     }
 
@@ -34,28 +41,25 @@ public class ListViewSlidingTabsFragment extends SlidingTabsColorsFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // BEGIN_INCLUDE (populate_tabs)
         if(mTabs.isEmpty()) {
             mTabs.add(new ListViewPagerItem(
-                    getString(R.string.tab_cn_daily), // Title
+                    TAB_TITLE_DAILY, // Title
                     Color.GREEN, // Indicator color
                     Color.GRAY// Divider color
             ));
 
             mTabs.add(new ListViewPagerItem(
-                    getString(R.string.tab_cn_monthly), // Title
+                    TAB_TITLE_MONTHLY, // Title
                     Color.GREEN, // Indicator color
                     Color.GRAY// Divider color
             ));
 
             mTabs.add(new ListViewPagerItem(
-                    getString(R.string.tab_cn_yearly), // Title
+                    TAB_TITLE_YEARLY, // Title
                     Color.GREEN, // Indicator color
                     Color.GRAY// Divider color
             ));
         }
-
-        // END_INCLUDE (populate_tabs)
     }
 
     @Override
@@ -63,4 +67,18 @@ public class ListViewSlidingTabsFragment extends SlidingTabsColorsFragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fm_main, container, false);
     }
+
+
+    @Override
+    public void notifyDataChange()  {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        //FragmentTransaction transaction = fragmentManager.beginTransaction();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        for (Fragment f : fragments) {
+            GVContentFragment gvf = (GVContentFragment)f;
+            gvf.updateView();
+        }
+        //transaction.commit();
+    }
 }
+

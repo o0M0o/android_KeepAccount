@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Locale;
 
-import cn.wxm.andriodutillib.SlidingTab.SlidingTabLayout;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
@@ -36,15 +34,12 @@ import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
  * 编辑收支数据的视图
  * Created by 123 on 2016/9/6.
  */
-public class EditNoteSlidingTabsFragment extends SlidingTabsColorsFragment {
+public class STEditNoteFragment extends SlidingTabsColorsFragment {
     private static final String TAG = "EditNoteSTFragment ";
 
     private static String          mAction;
     private static PayNoteItem     mPayNote;
     private static IncomeNoteItem  mIncomeNote;
-
-    private int     mCurTabPos = AppGobalDef.INVALID_ID;
-    private View    mCurView;
 
     protected static class ListViewPagerItem extends SamplePagerItem {
         public ListViewPagerItem(CharSequence title, int indicatorColor, int dividerColor) {
@@ -131,26 +126,6 @@ public class EditNoteSlidingTabsFragment extends SlidingTabsColorsFragment {
                              Bundle savedInstanceState) {
 
         View vw = inflater.inflate(R.layout.fm_main, container, false);
-
-        SlidingTabLayout stl = UtilFun.cast(vw.findViewById(R.id.sliding_tabs));
-        stl.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mCurTabPos = position;
-                mCurView = mViewPager.getChildAt(position);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                mCurTabPos = position;
-                mCurView = mViewPager.getChildAt(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-
         return vw;
     }
 

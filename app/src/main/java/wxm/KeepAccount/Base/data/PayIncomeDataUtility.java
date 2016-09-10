@@ -5,6 +5,7 @@ import android.util.Log;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.LinkedList;
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
@@ -40,6 +41,24 @@ public class PayIncomeDataUtility {
      */
     public IncomeNoteItem GetIncomeNoteById(int id)  {
         return AppModel.getDBHelper().getIncomeDataREDao().queryForId(id);
+    }
+
+
+    /**
+     * 获得当前用户所有支出/收入数据
+     * @return 当前用户的所有记录
+     */
+    public List<Object> GetAllNotes()   {
+        List<PayNoteItem> payls = GetAllPayNotes();
+        List<IncomeNoteItem> incomels = GetAllIncomeNotes();
+        List<Object> objls = new LinkedList<>();
+        if(null != payls)
+            objls.addAll(payls);
+
+        if(null != incomels)
+            objls.addAll(incomels);
+
+        return objls;
     }
 
     /**

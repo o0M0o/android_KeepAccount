@@ -90,36 +90,36 @@ public class NoteContentFragment extends Fragment implements View.OnTouchListene
         CharSequence cs = args.getCharSequence(KEY_TITLE);
         assert null != cs;
 
-        View cur_view;
         String title = cs.toString();
         Log.i(TAG, "onCreateView, cur title = " + cs.toString());
         if(title.equals(AppGobalDef.CNSTR_RECORD_PAY))  {
-            cur_view = inflater.inflate(R.layout.vw_edit_pay, container, false);
-            init_view_pay(cur_view);
+            mCurView = inflater.inflate(R.layout.vw_edit_pay, container, false);
         }   else    {
-            cur_view = inflater.inflate(R.layout.vw_edit_income, container, false);
-            init_view_income(cur_view);
+            mCurView = inflater.inflate(R.layout.vw_edit_income, container, false);
         }
 
-        //if(null != mCurView)    {
-        //}
-
         mNoteType = title;
-        mCurView = cur_view;
-        return cur_view;
+        return mCurView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        switch (mNoteType)  {
+            case AppGobalDef.CNSTR_RECORD_PAY :
+                init_view_pay(mCurView);
 
-        if(null != savedInstanceState) {
+            case AppGobalDef.CNSTR_RECORD_INCOME:
+                init_view_income(mCurView);
+        }
+
+        /*if(null != savedInstanceState) {
             CharSequence cs = savedInstanceState.getCharSequence(KEY_TITLE);
             if(null != cs)
                 Log.i(TAG, "cur title = " + cs.toString());
         }
 
-        /*Bundle args = getArguments();
+        Bundle args = getArguments();
         if (args != null) {
         }*/
     }

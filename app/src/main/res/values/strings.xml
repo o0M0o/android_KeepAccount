@@ -49,9 +49,6 @@
     <string name="name">name</string>
     <string name="pwd">pwd</string>
 
-    <string name="tab_cn_daily">日统计</string>
-    <string name="tab_cn_monthly">月统计</string>
-    <string name="tab_cn_yearly">年统计</string>
 
     <string name="navigation_drawer_open">打开导航绘图</string>
     <string name="navigation_drawer_close">关闭导航绘图</string>

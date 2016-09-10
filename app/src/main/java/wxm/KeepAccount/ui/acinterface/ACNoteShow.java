@@ -20,8 +20,8 @@ import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
-import wxm.KeepAccount.ui.fragment.GraphViewSlidingTabsFragment;
-import wxm.KeepAccount.ui.fragment.ListViewSlidingTabsFragment;
+import wxm.KeepAccount.ui.fragment.STGraphViewFragment;
+import wxm.KeepAccount.ui.fragment.STListViewFragment;
 
 /**
  * tab版本的main activity
@@ -37,8 +37,8 @@ public class ACNoteShow
     private static final String TAG = "ACNoteShow";
 
     private SlidingTabsColorsFragment mTabFragment;
-    private GraphViewSlidingTabsFragment gvTabFragment = new GraphViewSlidingTabsFragment();
-    private ListViewSlidingTabsFragment lvTabFragment = new ListViewSlidingTabsFragment();
+    private STGraphViewFragment gvTabFragment = new STGraphViewFragment();
+    private STListViewFragment lvTabFragment = new STListViewFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +126,7 @@ public class ACNoteShow
         // set fragment for tab
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            //mTabFragment = new ListViewSlidingTabsFragment();
+            //mTabFragment = new STListViewFragment();
             mTabFragment = lvTabFragment;
             transaction.replace(R.id.tabfl_content, mTabFragment);
             transaction.commit();
@@ -176,7 +176,7 @@ public class ACNoteShow
             case R.drawable.ic_switch :     {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-                if (mTabFragment instanceof ListViewSlidingTabsFragment) {
+                if (mTabFragment instanceof STListViewFragment) {
                     mTabFragment = gvTabFragment;
                 } else {
                     mTabFragment = lvTabFragment;

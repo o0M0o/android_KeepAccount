@@ -10,17 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppMsgDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
-import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.base.view.ChartsBase;
 import wxm.KeepAccount.ui.base.view.DailyCharts;
 import wxm.KeepAccount.ui.base.view.MonthlyCharts;
 import wxm.KeepAccount.ui.base.view.YeaylyCharts;
-
-import java.util.List;
-
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.ui.fragment.STGraphViewFragment;
 
 /**
  * Simple Fragment used to display some meaningful content for each page in the sample's
@@ -77,21 +76,21 @@ public class GVContentFragment extends Fragment {
         Bundle args = getArguments();
         String title = args.getCharSequence(KEY_TITLE).toString();
         Resources res =  getResources();
-        if(title.equals(res.getString(R.string.tab_cn_daily)))  {
+        if(title.equals(STGraphViewFragment.TAB_TITLE_DAILY))  {
             cur_view = new DailyCharts(this.getContext());
 
             //chartLayout.addView(cur_view, layoutParams);
             //((ViewGroup) content).addView(chartLayout);
             //this.getActivity().setContentView(content);
         }
-        else if(title.equals(res.getString(R.string.tab_cn_monthly)))   {
+        else if(title.equals(STGraphViewFragment.TAB_TITLE_MONTHLY))   {
             cur_view = new MonthlyCharts(this.getContext());
 
             //chartLayout.addView(cur_view, layoutParams);
             //((ViewGroup) content).addView(chartLayout);
             //this.getActivity().setContentView(content);
         }
-        else if(title.equals(res.getString(R.string.tab_cn_yearly)))    {
+        else if(title.equals(STGraphViewFragment.TAB_TITLE_YEARLY))    {
             cur_view = new YeaylyCharts(this.getContext());
 
             //chartLayout.addView(cur_view, layoutParams);

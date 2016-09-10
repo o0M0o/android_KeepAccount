@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.wxm.andriodutillib.SlidingTab.SlidingTabLayout;
+import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
 
 /**
@@ -39,6 +40,9 @@ import wxm.KeepAccount.R;
  */
 public class SlidingTabsColorsFragment extends Fragment {
     private static final String TAG = "SlidingTabsFragment";
+
+    protected int     mCurTabPos = AppGobalDef.INVALID_ID;
+    protected View    mCurView;
 
     /**
      * This class represents a tab to be displayed by {@link ViewPager} and it's associated
@@ -140,6 +144,24 @@ public class SlidingTabsColorsFragment extends Fragment {
      */
         SlidingTabLayout mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
+
+        mSlidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                mCurTabPos = position;
+                mCurView = mViewPager.getChildAt(position);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mCurTabPos = position;
+                mCurView = mViewPager.getChildAt(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
 
         // BEGIN_INCLUDE (tab_colorizer)
         // Set a TabColorizer to customize the indicator and divider colors. Here we just retrieve

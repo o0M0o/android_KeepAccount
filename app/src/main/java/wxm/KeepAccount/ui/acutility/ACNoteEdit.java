@@ -14,7 +14,7 @@ import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
 import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
-import wxm.KeepAccount.ui.fragment.EditNoteSlidingTabsFragment;
+import wxm.KeepAccount.ui.fragment.STEditNoteFragment;
 
 /**
  * 支出/收入数据编辑UI
@@ -55,8 +55,8 @@ public class ACNoteEdit extends AppCompatActivity {
         // set fragment for tab
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            //mTabFragment = new ListViewSlidingTabsFragment();
-            mTabFragment = new EditNoteSlidingTabsFragment();
+            //mTabFragment = new STListViewFragment();
+            mTabFragment = new STEditNoteFragment();
 
             transaction.replace(R.id.tabfl_note_edit_content, mTabFragment);
             transaction.commit();
@@ -77,7 +77,7 @@ public class ACNoteEdit extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.record_memenu_save: {
                 if(null != mTabFragment) {
-                    EditNoteSlidingTabsFragment etf = UtilFun.cast(mTabFragment);
+                    STEditNoteFragment etf = UtilFun.cast(mTabFragment);
                     if(etf.onAccpet()) {
                         Intent data = new Intent();
                         setResult(mAction.equals(LOAD_NOTE_ADD) ?
