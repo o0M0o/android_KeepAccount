@@ -234,7 +234,7 @@ public class YearlyViewHelper  implements ILVViewHelper {
         public SelfAdapter(Context context,
                            List<? extends Map<String, ?>> mdata,
                            String[] from, int[] to) {
-            super(context, mdata, R.layout.li_show, from, to);
+            super(context, mdata, R.layout.li_daily_show, from, to);
         }
 
         @Override
@@ -273,7 +273,7 @@ public class YearlyViewHelper  implements ILVViewHelper {
         public SelfSubAdapter(Context context,
                               List<? extends Map<String, ?>> sdata,
                               String[] from, int[] to) {
-            super(context, sdata, R.layout.li_show_detail, from, to);
+            super(context, sdata, R.layout.li_daily_show_detail, from, to);
             //mLVSubList = UtilFun.cast(sdata);
         }
 

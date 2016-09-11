@@ -43,6 +43,7 @@ public class SlidingTabsColorsFragment extends Fragment {
 
     protected int     mCurTabPos = AppGobalDef.INVALID_ID;
     protected View    mCurView;
+    protected SlidingTabLayout mSlidingTabLayout;
 
     /**
      * This class represents a tab to be displayed by {@link ViewPager} and it's associated
@@ -142,7 +143,7 @@ public class SlidingTabsColorsFragment extends Fragment {
       A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
       above, but is designed to give continuous feedback to the user when scrolling.
      */
-        SlidingTabLayout mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
 
         mSlidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -184,6 +185,19 @@ public class SlidingTabsColorsFragment extends Fragment {
     }
     // END_INCLUDE (fragment_onviewcreated)
 
+    public void jumpToTabName(String tabname)   {
+        if(null != mSlidingTabLayout) {
+            int c = mTabs.size();
+            for(int i = 0; i < c; ++i)  {
+                SamplePagerItem si = mTabs.get(i);
+                if(i != mCurTabPos && si.getTitle().toString().equals(tabname)) {
+                   //mSlidingTabLayout.scrollToTab(i, 0);
+                    mViewPager.setCurrentItem(i, true);
+                    break;
+                }
+            }
+        }
+    }
 
     public void notifyDataChange()  {
 /*        FragmentManager fragmentManager = getChildFragmentManager();

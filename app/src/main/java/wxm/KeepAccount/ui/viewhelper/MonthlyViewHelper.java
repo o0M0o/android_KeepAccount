@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -19,13 +18,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.base.fragment.LVFRGContent;
+import wxm.KeepAccount.ui.fragment.STListViewFragment;
 
 /**
  * 月数据辅助类
@@ -46,6 +48,12 @@ public class MonthlyViewHelper implements ILVViewHelper {
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
         mSelfView = inflater.inflate(R.layout.lv_pager, container, false);
+
+        // init ray menu
+        RayMenu rayMenu = UtilFun.cast(mSelfView.findViewById(R.id.rm_show_record));
+        assert null != rayMenu;
+        rayMenu.setVisibility(View.INVISIBLE);
+
         return mSelfView;
     }
 
@@ -235,7 +243,7 @@ public class MonthlyViewHelper implements ILVViewHelper {
         public SelfAdapter(Context context,
                            List<? extends Map<String, ?>> mdata,
                            String[] from, int[] to) {
-            super(context, mdata, R.layout.li_show, from, to);
+            super(context, mdata, R.layout.li_monthly_show, from, to);
         }
 
         @Override
@@ -274,7 +282,7 @@ public class MonthlyViewHelper implements ILVViewHelper {
         public SelfSubAdapter(Context context,
                               List<? extends Map<String, ?>> sdata,
                               String[] from, int[] to) {
-            super(context, sdata, R.layout.li_show_detail, from, to);
+            super(context, sdata, R.layout.li_monthly_show_detail, from, to);
             //mLVSubList = UtilFun.cast(sdata);
         }
 
@@ -282,8 +290,18 @@ public class MonthlyViewHelper implements ILVViewHelper {
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
-                ImageView iv = UtilFun.cast(v.findViewById(R.id.iv_show));
-                iv.setVisibility(View.INVISIBLE);
+                ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_delete));
+                ib.getBackground().setAlpha(0);
+                ib.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Context ct = mSelfView.getContext();
+                        if(ct instanceof ACNoteShow)    {
+                            ACNoteShow as = UtilFun.cast(ct);
+                            as.jumpByTabName(STListViewFragment.TAB_TITLE_DAILY);
+                        }
+                    }
+                });
 
                 Resources res = v.getResources();
                 if(0 == position % 2)   {

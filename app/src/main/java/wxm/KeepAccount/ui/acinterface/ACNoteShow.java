@@ -89,6 +89,10 @@ public class ACNoteShow
         transaction.commit();
     }
 
+    public void jumpByTabName(String tabname)  {
+        mTabFragment.jumpToTabName(tabname);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
