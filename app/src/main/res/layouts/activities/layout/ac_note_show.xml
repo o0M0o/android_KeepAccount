@@ -16,6 +16,7 @@
         android:layout_alignParentRight="true">
     </FrameLayout>
 
+    <!--
     <cn.wxm.andriodutillib.capricorn.RayMenu
         android:id="@+id/rm_show_record"
         app:childSize="36dp"
@@ -25,5 +26,6 @@
         android:paddingRight="120dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="30dp" />
+        -->
 
 </RelativeLayout>

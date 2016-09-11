@@ -167,7 +167,9 @@ public class ACBudgetShow extends AppCompatActivity implements View.OnClickListe
                                     , i.getAmount(), i.getAmount().subtract(i.getRemainderAmount())
                                     , i.getRemainderAmount()));
 
-                    hm.put(FIELD_BUDGET_NOTE, "备注 : " + i.getNote());
+                    String note = i.getNote();
+                    if(!UtilFun.StringIsNullOrEmpty(note))
+                        hm.put(FIELD_BUDGET_NOTE, "备注 : " + note);
 
                     hm.put(FIELD_EDIT_STATUS, FIELD_VAL_DISABLE);
                     hm.put(FIELD_DELETE_STATUS, FIELD_VAL_DISABLE);
@@ -214,12 +216,18 @@ public class ACBudgetShow extends AppCompatActivity implements View.OnClickListe
             break;
 
             case R.drawable.ic_edit:     {
-                for(HashMap<String, String> imap : mLVListData) {
-                    imap.put(FIELD_DELETE_STATUS, FIELD_VAL_ENABLE);
-                    imap.put(FIELD_EDIT_STATUS, FIELD_VAL_ENABLE);
-                }
+                if(0 < mLVListData.size()) {
+                    HashMap<String, String> mp = mLVListData.get(0);
+                    String nv = mp.get(FIELD_EDIT_STATUS).equals(FIELD_VAL_ENABLE) ?
+                                    FIELD_VAL_DISABLE : FIELD_VAL_ENABLE;
 
-                mLVAdapter.notifyDataSetChanged();
+                    for (HashMap<String, String> imap : mLVListData) {
+                        imap.put(FIELD_DELETE_STATUS, nv);
+                        imap.put(FIELD_EDIT_STATUS, nv);
+                    }
+
+                    mLVAdapter.notifyDataSetChanged();
+                }
             }
             break;
 

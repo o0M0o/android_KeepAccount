@@ -24,6 +24,7 @@ public class LVFRGContent  extends Fragment {
 
     public final static String SPARA_SHOW   = "SPARA_SHOW";
     public final static String SPARA_TAG    = "SPARA_TAG";
+    public final static String SPARA_ID     = "SPARA_ID";
 
     public final static String MPARA_TAG_SHOW = "TAG_SHOW";
     public final static String MPARA_TAG_HIDE = "TAG_Hide";
@@ -43,7 +44,7 @@ public class LVFRGContent  extends Fragment {
 
 
     /**
-     * @return a new instance of {@link LVContentFragment}, adding the parameters into a bundle and
+     * @return a new instance of {@link LVFRGContent}, adding the parameters into a bundle and
      * setting them as arguments.
      */
     public static LVFRGContent newInstance(CharSequence title, int indicatorColor,
