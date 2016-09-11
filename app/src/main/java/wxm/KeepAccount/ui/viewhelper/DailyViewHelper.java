@@ -47,6 +47,7 @@ public class DailyViewHelper implements ILVViewHelper {
     private final static String TAG = "DailyViewHelper";
     private View    mSelfView;
     private boolean mBShowDelete;
+    private boolean mBShowEdit;
 
     private LinkedList<HashMap<String, String>>                     mMainPara;
     private HashMap<String, LinkedList<HashMap<String, String>>>    mHMSubPara;
@@ -54,6 +55,7 @@ public class DailyViewHelper implements ILVViewHelper {
     private static final int[] ITEM_DRAWABLES = {
                                     R.drawable.ic_leave
                                     ,R.drawable.ic_switch
+                                    ,R.drawable.ic_edit
                                     ,R.drawable.ic_delete
                                     ,R.drawable.ic_add};
 
@@ -66,6 +68,7 @@ public class DailyViewHelper implements ILVViewHelper {
     public View createView(LayoutInflater inflater, ViewGroup container) {
         mSelfView = inflater.inflate(R.layout.lv_pager, container, false);
         mBShowDelete = false;
+        mBShowEdit = false;
 
         // init ray menu
         RayMenu rayMenu = UtilFun.cast(mSelfView.findViewById(R.id.rm_show_record));
@@ -157,14 +160,35 @@ public class DailyViewHelper implements ILVViewHelper {
                 if(0 < cc)  {
                     mBShowDelete = !mBShowDelete;
                     for(int i = 0; i < cc; ++i) {
-                        HashMap<String, String> hm = mMainPara.get(i);
+                        View vv = lv.getChildAt(i);
+                        int pos = lv.getPositionForView(vv);
+
+                        HashMap<String, String> hm = mMainPara.get(pos);
                         if(LVFRGContent.MPARA_TAG_SHOW.equals(hm.get(LVFRGContent.MPARA_STATUS)))    {
-                            init_detail_view(lv.getChildAt(i), hm);
+                            init_detail_view(vv, hm);
                         }
                     }
 
                     if(!mBShowDelete)
                         loadView();
+                }
+            }
+            break;
+
+            case R.drawable.ic_edit:     {
+                ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
+                int cc = lv.getChildCount();
+                if(0 < cc)  {
+                    mBShowEdit = !mBShowEdit;
+                    for(int i = 0; i < cc; ++i) {
+                        View vv = lv.getChildAt(i);
+                        int pos = lv.getPositionForView(vv);
+
+                        HashMap<String, String> hm = mMainPara.get(pos);
+                        if(LVFRGContent.MPARA_TAG_SHOW.equals(hm.get(LVFRGContent.MPARA_STATUS)))    {
+                            init_detail_view(vv, hm);
+                        }
+                    }
                 }
             }
             break;
@@ -389,6 +413,11 @@ public class DailyViewHelper implements ILVViewHelper {
                         }
                     });
                 }
+
+                ib = UtilFun.cast(v.findViewById(R.id.ib_edit));
+                assert null != ib;
+                ib.getBackground().setAlpha(0);
+                ib.setVisibility(mBShowEdit ? View.VISIBLE : View.INVISIBLE);
 
                 // for image
                 Bitmap nicon = null;
