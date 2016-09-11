@@ -1,6 +1,8 @@
 package wxm.KeepAccount.ui.acinterface;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,20 +10,23 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
-import wxm.KeepAccount.ui.helper.ACSBAdapter;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -263,6 +268,73 @@ public class ACBudgetShow extends AppCompatActivity implements View.OnClickListe
                     Log.e(TAG, "未支持的点击，view id = " + vid);
                     break;
             }
+        }
+    }
+
+    /**
+     * 本activity用的列表adapter
+     */
+    public class ACSBAdapter extends SimpleAdapter {
+        private ACBudgetShow mHome;
+        private ArrayList<HashMap<String, String>> mLVList;
+
+        private static final int    BTDRAW_WIDTH    = 48;
+        private static final int    BTDRAW_HEIGHT   = 48;
+
+        public ACSBAdapter(ACBudgetShow home,
+                           Context context, List<? extends Map<String, ?>> data,
+                           String[] from,
+                           int[] to) {
+            super(context, data, R.layout.li_budget, from, to);
+
+            mHome = home;
+            mLVList = UtilFun.cast(data);
+        }
+
+        @Override
+        public View getView(final int position, View view, ViewGroup arg2) {
+            View v = super.getView(position, view, arg2);
+            if(null != v)   {
+                ImageButton ibedit = UtilFun.cast(v.findViewById(R.id.ib_budget_edit));
+                ImageButton ibdelete = UtilFun.cast(v.findViewById(R.id.ib_budget_delete));
+                assert null != ibedit && null != ibdelete;
+
+                HashMap<String, String> map = mLVList.get(position);
+                String editst = map.get(ACBudgetShow.FIELD_EDIT_STATUS);
+                String delst = map.get(ACBudgetShow.FIELD_DELETE_STATUS);
+                assert null != editst && null != delst;
+
+                if(editst.equals(ACBudgetShow.FIELD_VAL_ENABLE))    {
+                    ibedit.setVisibility(View.VISIBLE);
+                    ibedit.getBackground().setAlpha(0);
+                    ibedit.setOnClickListener(mHome);
+
+                    Drawable dr = ibedit.getDrawable();
+                    dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
+                    ibedit.setImageDrawable(dr);
+
+                    ibedit.setMaxWidth(BTDRAW_WIDTH);
+                    ibedit.setMinimumWidth(BTDRAW_WIDTH);
+                    ibedit.setMaxHeight(BTDRAW_HEIGHT);
+                    ibedit.setMinimumHeight(BTDRAW_HEIGHT);
+                }   else    {
+                    ibedit.setVisibility(View.INVISIBLE);
+                }
+
+                if(delst.equals(ACBudgetShow.FIELD_VAL_ENABLE))    {
+                    ibdelete.setVisibility(View.VISIBLE);
+                    ibdelete.getBackground().setAlpha(0);
+                    ibdelete.setOnClickListener(mHome);
+
+                    Drawable dr = ibdelete.getDrawable();
+                    dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
+                    ibdelete.setImageDrawable(dr);
+                }   else    {
+                    ibdelete.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            return v;
         }
     }
 }

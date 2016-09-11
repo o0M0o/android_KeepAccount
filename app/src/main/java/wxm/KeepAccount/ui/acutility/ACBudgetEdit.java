@@ -1,14 +1,11 @@
 package wxm.KeepAccount.ui.acutility;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -16,11 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.DatePicker;
-import android.widget.EditText;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -248,7 +242,7 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
         return false;
     }
 
-
+    /*
     private void onTouchDate(MotionEvent event, int vid) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = View.inflate(this, R.layout.dlg_date, null);
@@ -284,5 +278,5 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
 
         Dialog dialog = builder.create();
         dialog.show();
-    }
+    }   */
 }

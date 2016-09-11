@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Random;
 
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
@@ -172,6 +173,9 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
             redao.create(ri);
         }
 
+        // 添加默认用户
+        AppModel.getUsrUtility().addUsr(AppGobalDef.DEF_USR_NAME, AppGobalDef.DEF_USR_PWD);
+
         if(BuildConfig.FILL_TESTDATA)
             AddTestData();
     }
@@ -230,5 +234,67 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
             i.setUsr(ui_hugo);
         }
         AppModel.getPayIncomeUtility().AddIncomeNotes(ls_income);
+
+        AddTestDataForDefualtUsr();
+    }
+
+
+    private void AddTestDataForDefualtUsr() {
+        UsrItem def_ui = AppModel.getUsrUtility()
+                            .CheckAndGetUsr(AppGobalDef.DEF_USR_NAME, AppGobalDef.DEF_USR_PWD);
+        if(null != def_ui)  {
+            long one_day_msecs = 1000 * 3600 * 24;
+            long before_msecs = one_day_msecs * 500;
+
+            Date cur_dt = new Date();
+            Date start_dt = new Date(cur_dt.getTime() - before_msecs);
+            Date end_dt = new Date();
+
+            for(; start_dt.before(end_dt);
+                    start_dt.setTime(start_dt.getTime() + one_day_msecs))  {
+                Random rand = new Random();
+                int r = rand.nextInt(99);
+                if(0 == r % 3)     {
+                    Random rand1 = new Random();
+                    int pay = rand1.nextInt(3);
+                    if(0 < pay) {
+                        int pay_max = 500;
+                        LinkedList<PayNoteItem> ls_pay = new LinkedList<>();
+                        for (int i = 0; i < pay; ++i) {
+                            Random randp = new Random();
+
+                            PayNoteItem pay_it = new PayNoteItem();
+                            pay_it.setUsr(def_ui);
+                            pay_it.setInfo("tax");
+                            pay_it.setVal(new BigDecimal(randp.nextFloat() * pay_max + 0.1));
+                            pay_it.getTs().setTime(start_dt.getTime());
+                            ls_pay.add(pay_it);
+                        }
+
+                        AppModel.getPayIncomeUtility().AddPayNotes(ls_pay);
+                    }
+
+
+                    Random rand2 = new Random();
+                    int income = rand2.nextInt(3);
+                    if(0 < income) {
+                        int income_max = 500;
+                        LinkedList<IncomeNoteItem> ls_pay = new LinkedList<>();
+                        for (int i = 0; i < income; ++i) {
+                            Random randp = new Random();
+
+                            IncomeNoteItem pay_it = new IncomeNoteItem();
+                            pay_it.setUsr(def_ui);
+                            pay_it.setInfo("tip");
+                            pay_it.setVal(new BigDecimal(randp.nextFloat() * income_max + 0.1));
+                            pay_it.getTs().setTime(start_dt.getTime());
+                            ls_pay.add(pay_it);
+                        }
+
+                        AppModel.getPayIncomeUtility().AddIncomeNotes(ls_pay);
+                    }
+                }
+            }
+        }
     }
 }

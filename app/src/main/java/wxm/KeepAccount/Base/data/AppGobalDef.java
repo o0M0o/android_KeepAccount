@@ -39,4 +39,7 @@ public class AppGobalDef {
 
 
     static public final int INVALID_ID          = -1;
+
+    public final static String DEF_USR_NAME = "default";
+    public final static String DEF_USR_PWD  = "123456";
 }

@@ -120,6 +120,22 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
             }
         });
 
+        Button mDefUsrLogin = UtilFun.cast(findViewById(R.id.bt_def_usr_login));
+        assert null != mDefUsrLogin;
+        mDefUsrLogin.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent data = new Intent();
+                data.putExtra(UsrItem.FIELD_NAME, AppGobalDef.DEF_USR_NAME);
+                data.putExtra(UsrItem.FIELD_PWD, AppGobalDef.DEF_USR_PWD);
+
+                Message m = Message.obtain(ContextUtil.getMsgHandler(),
+                        AppMsgDef.MSG_USR_LOGIN);
+                m.obj = new Object[] {data, mMHHandler};
+                m.sendToTarget();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
