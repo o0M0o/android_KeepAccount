@@ -111,6 +111,9 @@ public class ACNoteShow
         if (AppGobalDef.INTRET_RECORD_ADD == resultCode) {
             Log.i(TAG, "从'添加记录'页面返回");
             bModify = true;
+        } else if (AppGobalDef.INTRET_RECORD_MODIFY == resultCode) {
+            Log.i(TAG, "从'修改记录'页面返回");
+            bModify = true;
         } else if (AppGobalDef.INTRET_DAILY_DETAIL == resultCode) {
             Log.i(TAG, "从详情页面返回");
             bModify = true;
@@ -141,6 +144,9 @@ public class ACNoteShow
             mTabFragment = lvTabFragment;
             transaction.replace(R.id.tabfl_content, mTabFragment);
             transaction.commit();
+        } else  {
+            if(null == mTabFragment)
+                mTabFragment = lvTabFragment;
         }
     }
 }

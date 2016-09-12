@@ -75,11 +75,15 @@ public class STEditNoteFragment extends SlidingTabsColorsFragment {
         }
 
         if(mAction.equals(ACNoteEdit.LOAD_NOTE_MODIFY)) {
-            mPayNote = it.getParcelableExtra(ACNoteEdit.PARA_NOTE_PAY);
-            if(null == mPayNote)
-                mIncomeNote = it.getParcelableExtra(ACNoteEdit.PARA_NOTE_INCOME);
+            int pid = it.getIntExtra(ACNoteEdit.PARA_NOTE_PAY, AppGobalDef.INVALID_ID);
+            int iid = it.getIntExtra(ACNoteEdit.PARA_NOTE_INCOME, AppGobalDef.INVALID_ID);
 
-            if(null == mIncomeNote && null == mPayNote)   {
+            if(AppGobalDef.INVALID_ID != pid)
+                mPayNote = AppModel.getPayIncomeUtility().GetPayNoteById(pid);
+            else if(AppGobalDef.INVALID_ID != iid)
+                mIncomeNote = AppModel.getPayIncomeUtility().GetIncomeNoteById(iid);
+
+            if(null == mPayNote && null == mIncomeNote)   {
                 Log.e(TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");
                 return ;
             }

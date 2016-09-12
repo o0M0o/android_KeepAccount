@@ -226,7 +226,7 @@ public class DailyViewHelper implements ILVViewHelper {
                         View vv = lv.getChildAt(i);
                         int pos = lv.getPositionForView(vv);
 
-                        HashMap<String, String> hm = mMainPara.get(pos);
+                        HashMap<String, String> hm = UtilFun.cast(lv.getAdapter().getItem(pos));
                         if(STListViewFragment.MPARA_TAG_SHOW.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
                             init_detail_view(vv, hm);
                         }
@@ -247,7 +247,7 @@ public class DailyViewHelper implements ILVViewHelper {
                         View vv = lv.getChildAt(i);
                         int pos = lv.getPositionForView(vv);
 
-                        HashMap<String, String> hm = mMainPara.get(pos);
+                        HashMap<String, String> hm = UtilFun.cast(lv.getAdapter().getItem(pos));
                         if(STListViewFragment.MPARA_TAG_SHOW.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
                             init_detail_view(vv, hm);
                         }
@@ -439,6 +439,28 @@ public class DailyViewHelper implements ILVViewHelper {
                 assert null != ib;
                 ib.getBackground().setAlpha(0);
                 ib.setVisibility(mBShowEdit ? View.VISIBLE : View.INVISIBLE);
+                if(mBShowEdit)  {
+                    final int did = Integer.parseInt(hm.get(STListViewFragment.SPARA_ID));
+                    final String tp = hm.get(STListViewFragment.SPARA_TAG);
+                    ib.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Context ct = mSelfView.getContext();
+                            if(ct instanceof Activity) {
+                                Activity ac = UtilFun.cast(ct);
+                                Intent intent = new Intent(ac, ACNoteEdit.class);
+                                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
+                                if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
+                                    intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, did);
+                                } else {
+                                    intent.putExtra(ACNoteEdit.PARA_NOTE_INCOME, did);
+                                }
+
+                                ac.startActivityForResult(intent, 1);
+                            }
+                        }
+                    });
+                }
 
                 // for image
                 Bitmap nicon = null;
