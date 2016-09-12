@@ -9,6 +9,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.util.List;
+
+import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
@@ -91,6 +94,13 @@ public class ACNoteShow
 
     public void jumpByTabName(String tabname)  {
         mTabFragment.jumpToTabName(tabname);
+    }
+
+    public void filterView(List<String> ls_tag) {
+        if(mTabFragment instanceof STListViewFragment)  {
+            STListViewFragment sf = UtilFun.cast(mTabFragment);
+            sf.filterView(ls_tag);
+        }
     }
 
     @Override

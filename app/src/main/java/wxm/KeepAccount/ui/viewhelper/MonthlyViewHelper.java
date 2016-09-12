@@ -26,7 +26,6 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
-import wxm.KeepAccount.ui.base.fragment.LVFRGContent;
 import wxm.KeepAccount.ui.fragment.STListViewFragment;
 
 /**
@@ -74,11 +73,34 @@ public class MonthlyViewHelper implements ILVViewHelper {
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), mMainPara,
-                new String[]{LVFRGContent.MPARA_TITLE, LVFRGContent.MPARA_ABSTRACT},
+                new String[]{STListViewFragment.MPARA_TITLE, STListViewFragment.MPARA_ABSTRACT},
                 new int[]{R.id.tv_title, R.id.tv_abstract});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void filterView(List<String> ls_tag) {
+        LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
+        for(HashMap<String, String> i : mMainPara)  {
+            String cur_tag = i.get(STListViewFragment.MPARA_TAG);
+            for(String ii : ls_tag) {
+                if (cur_tag.equals(ii)) {
+                    n_mainpara.add(i);
+                    break;
+                }
+            }
+        }
+
+        // 设置listview adapter
+        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
+        SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
+                new String[]{STListViewFragment.MPARA_TITLE, STListViewFragment.MPARA_ABSTRACT},
+                new int[]{R.id.tv_title, R.id.tv_abstract});
+        lv.setAdapter(mSNAdapter);
+        mSNAdapter.notifyDataSetChanged();
+    }
+
 
     private void parseNotes(HashMap<String, ArrayList<Object>> notes)   {
         mMainPara.clear();
@@ -129,10 +151,10 @@ public class MonthlyViewHelper implements ILVViewHelper {
                         pay_cout, pay_amount, income_cout, income_amount);
 
         HashMap<String, String> map = new HashMap<>();
-        map.put(LVFRGContent.MPARA_TITLE, tag);
-        map.put(LVFRGContent.MPARA_ABSTRACT, show_str);
-        map.put(LVFRGContent.MPARA_STATUS, LVFRGContent.MPARA_TAG_HIDE);
-        map.put(LVFRGContent.MPARA_TAG, tag);
+        map.put(STListViewFragment.MPARA_TITLE, tag);
+        map.put(STListViewFragment.MPARA_ABSTRACT, show_str);
+        map.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
+        map.put(STListViewFragment.MPARA_TAG, tag);
         mMainPara.add(map);
 
         parseDays(tag, hm_data);
@@ -162,15 +184,17 @@ public class MonthlyViewHelper implements ILVViewHelper {
 
             }
 
+            String sub_tag = ToolUtil.FormatDateString(k);
             String show =
                     String.format(Locale.CHINA,
                             "%s\n支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
-                            ToolUtil.FormatDateString(k),
+                            sub_tag,
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(LVFRGContent.SPARA_SHOW, show);
-            map.put(LVFRGContent.MPARA_TAG, tag);
+            map.put(STListViewFragment.SPARA_SHOW, show);
+            map.put(STListViewFragment.MPARA_TAG, tag);
+            map.put(STListViewFragment.SPARA_TAG, sub_tag);
             cur_llhm.add(map);
         }
 
@@ -182,12 +206,12 @@ public class MonthlyViewHelper implements ILVViewHelper {
         Resources res = vw.getResources();
         ImageButton ib = UtilFun.cast(vw.findViewById(R.id.ib_hide_show));
         HashMap<String, String> hm = mMainPara.get(pos);
-        if(LVFRGContent.MPARA_TAG_HIDE.equals(hm.get(LVFRGContent.MPARA_STATUS)))    {
-            hm.put(LVFRGContent.MPARA_STATUS, LVFRGContent.MPARA_TAG_SHOW);
+        if(STListViewFragment.MPARA_TAG_HIDE.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
+            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_SHOW);
             init_detail_view(vw, hm);
             ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
         }   else    {
-            hm.put(LVFRGContent.MPARA_STATUS, LVFRGContent.MPARA_TAG_HIDE);
+            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
             init_detail_view(vw, hm);
             ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
         }
@@ -197,8 +221,8 @@ public class MonthlyViewHelper implements ILVViewHelper {
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(LVFRGContent.MPARA_TAG_SHOW.equals(hm.get(LVFRGContent.MPARA_STATUS))) {
-            llhm = mHMSubPara.get(hm.get(LVFRGContent.MPARA_TAG));
+        if(STListViewFragment.MPARA_TAG_SHOW.equals(hm.get(STListViewFragment.MPARA_STATUS))) {
+            llhm = mHMSubPara.get(hm.get(STListViewFragment.MPARA_TAG));
         }
 
         if(null == llhm) {
@@ -209,7 +233,7 @@ public class MonthlyViewHelper implements ILVViewHelper {
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
         SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), llhm,
-                new String[]{LVFRGContent.SPARA_SHOW},
+                new String[]{STListViewFragment.SPARA_SHOW},
                 new int[]{R.id.tv_show});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -277,13 +301,13 @@ public class MonthlyViewHelper implements ILVViewHelper {
 
     public class SelfSubAdapter  extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
-        //private LinkedList<HashMap<String, String>> mLVSubList;
+        private LinkedList<HashMap<String, String>> mLVSubList;
 
         public SelfSubAdapter(Context context,
                               List<? extends Map<String, ?>> sdata,
                               String[] from, int[] to) {
             super(context, sdata, R.layout.li_monthly_show_detail, from, to);
-            //mLVSubList = UtilFun.cast(sdata);
+            mLVSubList = UtilFun.cast(sdata);
         }
 
         @Override
@@ -299,6 +323,10 @@ public class MonthlyViewHelper implements ILVViewHelper {
                         if(ct instanceof ACNoteShow)    {
                             ACNoteShow as = UtilFun.cast(ct);
                             as.jumpByTabName(STListViewFragment.TAB_TITLE_DAILY);
+
+                            HashMap<String, String> hp = mLVSubList.get(position);
+                            final String hp_tag = hp.get(STListViewFragment.SPARA_TAG);
+                            as.filterView(Collections.singletonList(hp_tag));
                         }
                     }
                 });

@@ -26,7 +26,6 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
-import wxm.KeepAccount.ui.base.fragment.LVFRGContent;
 import wxm.KeepAccount.ui.fragment.STListViewFragment;
 
 /**
@@ -73,7 +72,29 @@ public class YearlyViewHelper  implements ILVViewHelper {
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), mMainPara,
-                new String[]{LVFRGContent.MPARA_TITLE, LVFRGContent.MPARA_ABSTRACT},
+                new String[]{STListViewFragment.MPARA_TITLE, STListViewFragment.MPARA_ABSTRACT},
+                new int[]{R.id.tv_title, R.id.tv_abstract});
+        lv.setAdapter(mSNAdapter);
+        mSNAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void filterView(List<String> ls_tag) {
+        LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
+        for(HashMap<String, String> i : mMainPara)  {
+            String cur_tag = i.get(STListViewFragment.MPARA_TAG);
+            for(String ii : ls_tag) {
+                if (cur_tag.equals(ii)) {
+                    n_mainpara.add(i);
+                    break;
+                }
+            }
+        }
+
+        // 设置listview adapter
+        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
+        SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
+                new String[]{STListViewFragment.MPARA_TITLE, STListViewFragment.MPARA_ABSTRACT},
                 new int[]{R.id.tv_title, R.id.tv_abstract});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
@@ -128,10 +149,10 @@ public class YearlyViewHelper  implements ILVViewHelper {
                         pay_cout, pay_amount, income_cout, income_amount);
 
         HashMap<String, String> map = new HashMap<>();
-        map.put(LVFRGContent.MPARA_TITLE, tag);
-        map.put(LVFRGContent.MPARA_ABSTRACT, show_str);
-        map.put(LVFRGContent.MPARA_STATUS, LVFRGContent.MPARA_TAG_HIDE);
-        map.put(LVFRGContent.MPARA_TAG, tag);
+        map.put(STListViewFragment.MPARA_TITLE, tag);
+        map.put(STListViewFragment.MPARA_ABSTRACT, show_str);
+        map.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
+        map.put(STListViewFragment.MPARA_TAG, tag);
         mMainPara.add(map);
 
         parseMonths(tag, hm_data);
@@ -167,8 +188,8 @@ public class YearlyViewHelper  implements ILVViewHelper {
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(LVFRGContent.SPARA_SHOW, show);
-            map.put(LVFRGContent.MPARA_TAG, tag);
+            map.put(STListViewFragment.SPARA_SHOW, show);
+            map.put(STListViewFragment.MPARA_TAG, tag);
             cur_llhm.add(map);
         }
 
@@ -180,12 +201,12 @@ public class YearlyViewHelper  implements ILVViewHelper {
         Resources res = vw.getResources();
         ImageButton ib = UtilFun.cast(vw.findViewById(R.id.ib_hide_show));
         HashMap<String, String> hm = mMainPara.get(pos);
-        if(LVFRGContent.MPARA_TAG_HIDE.equals(hm.get(LVFRGContent.MPARA_STATUS)))    {
-            hm.put(LVFRGContent.MPARA_STATUS, LVFRGContent.MPARA_TAG_SHOW);
+        if(STListViewFragment.MPARA_TAG_HIDE.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
+            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_SHOW);
             init_detail_view(vw, hm);
             ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
         }   else    {
-            hm.put(LVFRGContent.MPARA_STATUS, LVFRGContent.MPARA_TAG_HIDE);
+            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
             init_detail_view(vw, hm);
             ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
         }
@@ -195,8 +216,8 @@ public class YearlyViewHelper  implements ILVViewHelper {
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(LVFRGContent.MPARA_TAG_SHOW.equals(hm.get(LVFRGContent.MPARA_STATUS))) {
-            llhm = mHMSubPara.get(hm.get(LVFRGContent.MPARA_TAG));
+        if(STListViewFragment.MPARA_TAG_SHOW.equals(hm.get(STListViewFragment.MPARA_STATUS))) {
+            llhm = mHMSubPara.get(hm.get(STListViewFragment.MPARA_TAG));
         }
 
         if(null == llhm) {
@@ -207,7 +228,7 @@ public class YearlyViewHelper  implements ILVViewHelper {
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
         SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), llhm,
-                new String[]{LVFRGContent.SPARA_SHOW},
+                new String[]{STListViewFragment.SPARA_SHOW},
                 new int[]{R.id.tv_show});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
