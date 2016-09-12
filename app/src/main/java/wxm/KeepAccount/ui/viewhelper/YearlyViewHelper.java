@@ -181,15 +181,17 @@ public class YearlyViewHelper  implements ILVViewHelper {
                 }
             }
 
+            String sub_tag = ToolUtil.FormatDateString(k);
             String show =
                     String.format(Locale.CHINA,
                             "%s\n支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
-                            ToolUtil.FormatDateString(k),
+                            sub_tag,
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
             map.put(STListViewFragment.SPARA_SHOW, show);
             map.put(STListViewFragment.MPARA_TAG, tag);
+            map.put(STListViewFragment.SPARA_TAG, sub_tag);
             cur_llhm.add(map);
         }
 
@@ -296,13 +298,13 @@ public class YearlyViewHelper  implements ILVViewHelper {
 
     public class SelfSubAdapter  extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
-        //private LinkedList<HashMap<String, String>> mLVSubList;
+        private LinkedList<HashMap<String, String>> mLVSubList;
 
         public SelfSubAdapter(Context context,
                               List<? extends Map<String, ?>> sdata,
                               String[] from, int[] to) {
             super(context, sdata, R.layout.li_yearly_show_detail, from, to);
-            //mLVSubList = UtilFun.cast(sdata);
+            mLVSubList = UtilFun.cast(sdata);
         }
 
         @Override
@@ -318,6 +320,10 @@ public class YearlyViewHelper  implements ILVViewHelper {
                         if(ct instanceof ACNoteShow)    {
                             ACNoteShow as = UtilFun.cast(ct);
                             as.jumpByTabName(STListViewFragment.TAB_TITLE_MONTHLY);
+
+                            HashMap<String, String> hp = mLVSubList.get(position);
+                            final String hp_tag = hp.get(STListViewFragment.SPARA_TAG);
+                            as.filterView(Collections.singletonList(hp_tag));
                         }
                     }
                 });

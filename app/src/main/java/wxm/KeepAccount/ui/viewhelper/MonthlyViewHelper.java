@@ -263,11 +263,13 @@ public class MonthlyViewHelper implements ILVViewHelper {
 
     public class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
+        private LinkedList<HashMap<String, String>>  mSelfData;
 
         public SelfAdapter(Context context,
                            List<? extends Map<String, ?>> mdata,
                            String[] from, int[] to) {
             super(context, mdata, R.layout.li_monthly_show, from, to);
+            mSelfData = UtilFun.cast(mdata);
         }
 
         @Override
@@ -276,13 +278,24 @@ public class MonthlyViewHelper implements ILVViewHelper {
             if(null != v)   {
                 //Log.i(TAG, "create view at pos = " + position);
 
-                final View pv = v;
+                final View fv = v;
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
                 ib.getBackground().setAlpha(0);
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onIbClick(pv, position);
+                        Resources res = v.getResources();
+                        ImageButton ib = UtilFun.cast(v);
+                        HashMap<String, String> hm = mSelfData.get(position);
+                        if(STListViewFragment.MPARA_TAG_HIDE.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
+                            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_SHOW);
+                            init_detail_view(fv, hm);
+                            ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
+                        }   else    {
+                            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
+                            init_detail_view(fv, hm);
+                            ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
+                        }
                     }
                 });
 
