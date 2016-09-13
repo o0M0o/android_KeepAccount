@@ -26,24 +26,19 @@ import wxm.KeepAccount.ui.fragment.STGraphViewFragment;
  * {@link android.support.v4.view.ViewPager}.
  */
 public class GVContentFragment extends Fragment {
-
-    private static final String KEY_TITLE = "title";
-    private static final String KEY_INDICATOR_COLOR = "indicator_color";
-    private static final String KEY_DIVIDER_COLOR = "divider_color";
-
     private ChartsBase      cur_view;
     private FRMsgHandler    mMsgHandlder = new FRMsgHandler();
 
     /**
-     * @return a new instance of {@link LVContentFragment}, adding the parameters into a bundle and
+     * @return a new instance of {@link GVContentFragment}, adding the parameters into a bundle and
      * setting them as arguments.
      */
     public static GVContentFragment newInstance(CharSequence title, int indicatorColor,
                                                 int dividerColor) {
         Bundle bundle = new Bundle();
-        bundle.putCharSequence(KEY_TITLE, title);
-        bundle.putInt(KEY_INDICATOR_COLOR, indicatorColor);
-        bundle.putInt(KEY_DIVIDER_COLOR, dividerColor);
+        bundle.putCharSequence(SlidingTabsColorsFragment.KEY_TITLE, title);
+        bundle.putInt(SlidingTabsColorsFragment.KEY_INDICATOR_COLOR, indicatorColor);
+        bundle.putInt(SlidingTabsColorsFragment.KEY_DIVIDER_COLOR, dividerColor);
 
         GVContentFragment fragment = new GVContentFragment();
         fragment.setArguments(bundle);
@@ -74,7 +69,10 @@ public class GVContentFragment extends Fragment {
 
         // 根据页签选择视图
         Bundle args = getArguments();
-        String title = args.getCharSequence(KEY_TITLE).toString();
+        CharSequence cs = args.getCharSequence(SlidingTabsColorsFragment.KEY_TITLE);
+        assert null != cs;
+
+        String title = cs.toString();
         Resources res =  getResources();
         if(title.equals(STGraphViewFragment.TAB_TITLE_DAILY))  {
             cur_view = new DailyCharts(this.getContext());

@@ -41,6 +41,10 @@ import wxm.KeepAccount.R;
 public class SlidingTabsColorsFragment extends Fragment {
     private static final String TAG = "SlidingTabsFragment";
 
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_INDICATOR_COLOR = "indicator_color";
+    public static final String KEY_DIVIDER_COLOR = "divider_color";
+
     protected int     mCurTabPos = AppGobalDef.INVALID_ID;
     protected View    mCurView;
     protected SlidingTabLayout mSlidingTabLayout;

@@ -112,13 +112,8 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
     public static class LVFRGContent  extends Fragment {
         private static final String TAG = "LVFRGContent";
 
-        private static final String KEY_TITLE = "title";
-        private static final String KEY_INDICATOR_COLOR = "indicator_color";
-        private static final String KEY_DIVIDER_COLOR = "divider_color";
-
-        private String              mCurTitle;
+        //private String      mCurTitle;
         private ILVViewHelper mViewHelper;
-
 
         /**
          * @return a new instance of {@link LVFRGContent}, adding the parameters into a bundle and
@@ -149,7 +144,7 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
             CharSequence cs = args.getCharSequence(KEY_TITLE);
             assert null != cs;
 
-            mCurTitle = cs.toString();
+            String mCurTitle = cs.toString();
             switch(mCurTitle)   {
                 case STListViewFragment.TAB_TITLE_DAILY :
                     mViewHelper = new DailyViewHelper();

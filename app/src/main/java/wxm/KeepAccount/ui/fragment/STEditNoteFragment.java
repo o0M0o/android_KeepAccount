@@ -4,31 +4,22 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.Spinner;
-
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
-import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
-import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
-import wxm.KeepAccount.ui.base.fragment.NoteContentFragment;
 import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
+import wxm.KeepAccount.ui.viewhelper.EditIncomeNoteViewHelper;
+import wxm.KeepAccount.ui.viewhelper.EditPayNoteViewHelper;
+import wxm.KeepAccount.ui.viewhelper.IEditNoteViewHelper;
 
 /**
  * 编辑收支数据的视图
@@ -42,14 +33,17 @@ public class STEditNoteFragment extends SlidingTabsColorsFragment {
     private static IncomeNoteItem  mIncomeNote;
 
     protected static class ListViewPagerItem extends SamplePagerItem {
+        protected NoteContentFragment  mContent;
+
         public ListViewPagerItem(CharSequence title, int indicatorColor, int dividerColor) {
             super(title, indicatorColor, dividerColor);
         }
 
         @Override
         protected Fragment createFragment() {
-            return NoteContentFragment.newInstance(mTitle, mIndicatorColor,
+            mContent =  NoteContentFragment.newInstance(mTitle, mIndicatorColor,
                             mDividerColor, new Object[]{mAction, mPayNote, mIncomeNote});
+            return mContent;
         }
     }
 
@@ -133,152 +127,96 @@ public class STEditNoteFragment extends SlidingTabsColorsFragment {
         return vw;
     }
 
-
     public boolean onAccpet()    {
-        return checkResult() && fillResult();
-    }
-
-    private boolean checkResult()   {
         if(AppGobalDef.INVALID_ID == mCurTabPos || null == mCurView)
             return false;
 
-        String record_type = mTabs.get(mCurTabPos).getTitle()
-                                    .toString().equals(AppGobalDef.CNSTR_RECORD_PAY) ?
-                                AppGobalDef.STR_RECORD_PAY : AppGobalDef.STR_RECORD_INCOME;
-
-        String str_val = ((EditText)mCurView.findViewById(R.id.ar_et_amount)).getText().toString();
-        String str_info = ((EditText)mCurView.findViewById(R.id.ar_et_info)).getText().toString();
-        String str_date = ((EditText)mCurView.findViewById(R.id.ar_et_date)).getText().toString();
-
-        if(UtilFun.StringIsNullOrEmpty(str_val))
-        {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            if(record_type.equals(AppGobalDef.STR_RECORD_PAY)) {
-                Log.i(TAG, "支出数值为空");
-                builder.setMessage("请输入支出数值!").setTitle("警告");
-            }
-            else    {
-                Log.i(TAG, "收入数值为空");
-                builder.setMessage("请输入收入数值!").setTitle("警告");
-            }
-
-            AlertDialog dlg = builder.create();
-            dlg.show();
-            return false;
-        }
-
-        if(UtilFun.StringIsNullOrEmpty(str_info))
-        {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            if(record_type.equals(AppGobalDef.STR_RECORD_PAY)) {
-                Log.i(TAG, "支出信息为空");
-                builder.setMessage("请输入支出信息!").setTitle("警告");
-            }
-            else    {
-                Log.i(TAG, "收入信息为空");
-                builder.setMessage("请输入收入信息!").setTitle("警告");
-            }
-
-            AlertDialog dlg = builder.create();
-            dlg.show();
-            return false;
-        }
-
-        if(UtilFun.StringIsNullOrEmpty(str_date))
-        {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            if(record_type.equals(AppGobalDef.STR_RECORD_PAY)) {
-                Log.i(TAG, "支出日期为空");
-                builder.setMessage("请输入支出日期!").setTitle("警告");
-            }
-            else    {
-                Log.i(TAG, "收入日期为空");
-                builder.setMessage("请输入收入日期!").setTitle("警告");
-            }
-
-            AlertDialog dlg = builder.create();
-            dlg.show();
-            return false;
-        }
-
-        return true;
+        NoteContentFragment nf = ((ListViewPagerItem)mTabs.get(mCurTabPos)).mContent;
+        return nf.onAccept();
     }
 
 
-    private boolean fillResult()       {
-        String record_type = mTabs.get(mCurTabPos).getTitle()
-                .toString().equals(AppGobalDef.CNSTR_RECORD_PAY) ?
-                AppGobalDef.STR_RECORD_PAY : AppGobalDef.STR_RECORD_INCOME;
+    /**
+     * 记录内容编辑块
+     * Created by 123 on 2016/9/6.
+     */
+    public static class NoteContentFragment extends Fragment  {
+        private static final String TAG = "NoteContentFragment";
 
-        String str_val = ((EditText)mCurView.findViewById(R.id.ar_et_amount)).getText().toString();
-        String str_info = ((EditText)mCurView.findViewById(R.id.ar_et_info)).getText().toString();
-        String str_date = ((EditText)mCurView.findViewById(R.id.ar_et_date)).getText().toString();
-        String str_note = ((EditText)mCurView.findViewById(R.id.ar_et_note)).getText().toString();
+        private String          mAction;
+        private String          mNoteType;
+        private PayNoteItem     mOldPayNote;
+        private IncomeNoteItem  mOldIncomeNote;
 
-        Timestamp tsDT;
-        try {
-            tsDT = ToolUtil.StringToTimestamp(str_date);
-        }
-        catch(Exception ex)
-        {
-            Log.e(TAG, String.format(Locale.CHINA
-                    ,"解析'%s'到日期失败" ,str_date));
-            return false;
+        private IEditNoteViewHelper mViewHelper;
+
+        public NoteContentFragment()    {
+            super();
         }
 
-        if(record_type.equals(AppGobalDef.STR_RECORD_PAY))  {
-            PayNoteItem pi = new PayNoteItem();
-            if(null != mPayNote) {
-                pi.setId(mPayNote.getId());
-                pi.setUsr(mPayNote.getUsr());
+        /**
+         * @return a new instance of {@link NoteContentFragment}, adding the parameters into a bundle and
+         * setting them as arguments.
+         */
+        public static NoteContentFragment newInstance(CharSequence title, int indicatorColor,
+                                                      int dividerColor, Object[] para_arr) {
+            Bundle bundle = new Bundle();
+            bundle.putCharSequence(KEY_TITLE, title);
+            bundle.putInt(KEY_INDICATOR_COLOR, indicatorColor);
+            bundle.putInt(KEY_DIVIDER_COLOR, dividerColor);
+
+            NoteContentFragment fragment = new NoteContentFragment();
+            fragment.setArguments(bundle);
+            fragment.mAction         = UtilFun.cast(para_arr[0]);
+            fragment.mOldPayNote     = UtilFun.cast(para_arr[1]);
+            fragment.mOldIncomeNote  = UtilFun.cast(para_arr[2]);
+
+            return fragment;
+        }
+
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            Bundle args = getArguments();
+            CharSequence cs = args.getCharSequence(KEY_TITLE);
+            assert null != cs;
+
+            String title = cs.toString();
+            Log.i(TAG, "onCreateView, cur title = " + cs.toString());
+            if(title.equals(AppGobalDef.CNSTR_RECORD_PAY))  {
+                mViewHelper = new EditPayNoteViewHelper();
+                mViewHelper.setPara(mAction, mOldPayNote);
+            }   else    {
+                mViewHelper = new EditIncomeNoteViewHelper();
+                mViewHelper.setPara(mAction, mOldIncomeNote);
             }
 
-            pi.setInfo(str_info);
-            pi.setTs(tsDT);
-            pi.setVal(new BigDecimal(str_val));
-            pi.setNote(str_note);
+            mNoteType = title;
+            return mViewHelper.createView(inflater, container);
+        }
 
-            // set budget
-            Spinner spbi = UtilFun.cast(mCurView.findViewById(R.id.ar_sp_budget));
-            assert null != spbi;
-            pi.setBudget(null);
-            int pos = spbi.getSelectedItemPosition();
-            if(View.VISIBLE == spbi.getVisibility()
-                    && AdapterView.INVALID_POSITION != pos && 0 != pos) {
-                BudgetItem bi = AppModel.getBudgetUtility()
-                                    .GetBudgetByName((String)spbi.getSelectedItem());
-                if (null != bi) {
-                    pi.setBudget(bi);
-                }
+        @Override
+        public void onViewCreated(View view, Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            mViewHelper.loadView();
+            /*if(null != savedInstanceState) {
             }
 
-            if(mAction.equals(ACNoteEdit.LOAD_NOTE_ADD))    {
-                return 1 == AppModel.getPayIncomeUtility()
-                        .AddPayNotes(Collections.singletonList(pi));
-            } else  {
-                return 1 == AppModel.getPayIncomeUtility()
-                        .ModifyPayNotes(Collections.singletonList(pi));
-            }
+            Bundle args = getArguments();
+            if (args != null) {
+            }*/
+        }
 
-        } else  {
-            IncomeNoteItem ii = new IncomeNoteItem();
-            if(null != mIncomeNote)  {
-                ii.setId(mIncomeNote.getId());
-                ii.setUsr(mIncomeNote.getUsr());
-            }
 
-            ii.setInfo(str_info);
-            ii.setTs(tsDT);
-            ii.setVal(new BigDecimal(str_val));
-            ii.setNote(str_note);
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data)   {
+            super.onActivityResult(requestCode, resultCode, data);
+            mViewHelper.onActivityResult(requestCode, resultCode, data);
+        }
 
-            if(mAction.equals(ACNoteEdit.LOAD_NOTE_ADD))    {
-                return 1 == AppModel.getPayIncomeUtility()
-                        .AddIncomeNotes(Collections.singletonList(ii));
-            } else  {
-                return 1 == AppModel.getPayIncomeUtility()
-                        .ModifyIncomeNotes(Collections.singletonList(ii));
-            }
+        public boolean onAccept()   {
+            return mViewHelper.onAccept();
         }
     }
 }
