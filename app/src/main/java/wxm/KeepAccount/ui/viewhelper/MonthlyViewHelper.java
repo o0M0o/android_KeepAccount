@@ -37,7 +37,6 @@ import wxm.KeepAccount.ui.fragment.STListViewFragment;
  */
 public class MonthlyViewHelper extends LVViewHelperBase implements ILVViewHelper {
     private final static String TAG = "MonthlyViewHelper";
-    private boolean mBFilter;
 
     public MonthlyViewHelper()    {
         super();
@@ -116,7 +115,8 @@ public class MonthlyViewHelper extends LVViewHelperBase implements ILVViewHelper
     /**
      * 不重新加载数据，仅更新视图
      */
-    private void refreshView()  {
+    @Override
+    protected void refreshView()  {
         // set layout
         setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);

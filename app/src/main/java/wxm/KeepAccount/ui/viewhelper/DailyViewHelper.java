@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -43,11 +44,14 @@ import wxm.KeepAccount.ui.fragment.STListViewFragment;
  * 日数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class DailyViewHelper extends LVViewHelperBase implements ILVViewHelper {
+public class DailyViewHelper extends LVViewHelperBase
+        implements ILVViewHelper, OnClickListener {
     private final static String TAG = "DailyViewHelper";
     private boolean mBShowDelete;
     private boolean mBShowEdit;
-    private boolean mBFilter;
+
+    LinkedList<Integer> mDelPay;
+    LinkedList<Integer> mDelIncome;
 
     private static final int[] ITEM_DRAWABLES = {
                                     R.drawable.ic_leave
@@ -58,6 +62,9 @@ public class DailyViewHelper extends LVViewHelperBase implements ILVViewHelper {
 
     public DailyViewHelper()    {
         super();
+
+        mDelPay    = new LinkedList<>();
+        mDelIncome = new LinkedList<>();
     }
 
     @Override
@@ -76,7 +83,7 @@ public class DailyViewHelper extends LVViewHelperBase implements ILVViewHelper {
             item.setImageResource(ITEM_DRAWABLES[i]);
 
             final int position = ITEM_DRAWABLES[i];
-            rayMenu.addItem(item, new View.OnClickListener() {
+            rayMenu.addItem(item, new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     OnRayMenuClick(position);
@@ -131,6 +138,36 @@ public class DailyViewHelper extends LVViewHelperBase implements ILVViewHelper {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+
+        int vid = v.getId();
+        switch (vid)    {
+            case R.id.bt_accpet :
+                if(mBShowDelete) {
+                    if(!ToolUtil.ListIsNullOrEmpty(mDelPay)) {
+                        AppModel.getPayIncomeUtility().DeletePayNotes(mDelPay);
+                        mDelPay.clear();
+                    }
+
+                    if(!ToolUtil.ListIsNullOrEmpty(mDelIncome)) {
+                        AppModel.getPayIncomeUtility().DeleteIncomeNotes(mDelIncome);
+                        mDelIncome.clear();
+                    }
+                }
+
+                loadView();
+                break;
+
+            case R.id.bt_giveup :
+                mBShowDelete = false;
+                mBShowEdit = false;
+                refreshView();
+                break;
+        }
+    }
+
     /**
      * 重新加载数据
      */
@@ -146,7 +183,10 @@ public class DailyViewHelper extends LVViewHelperBase implements ILVViewHelper {
     /**
      * 不重新加载数据，仅更新视图
      */
-    private void refreshView()  {
+    @Override
+    protected void refreshView()  {
+        super.refreshView();
+
         // set layout
         setAttachLayoutVisible(mBFilter || mBShowDelete || mBShowEdit ?
                                 View.VISIBLE : View.INVISIBLE);
@@ -247,6 +287,11 @@ public class DailyViewHelper extends LVViewHelperBase implements ILVViewHelper {
                 ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
                 int cc = lv.getChildCount();
                 if(0 < cc)  {
+                    if(!mBShowDelete)    {
+                        mDelIncome.clear();
+                        mDelPay.clear();
+                    }
+
                     mBShowDelete = !mBShowDelete;
                     mBShowEdit = !mBShowDelete && mBShowEdit;
                     if(mBShowDelete)
@@ -371,7 +416,7 @@ public class DailyViewHelper extends LVViewHelperBase implements ILVViewHelper {
                 final View fv = v;
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
                 ib.getBackground().setAlpha(0);
-                ib.setOnClickListener(new View.OnClickListener() {
+                ib.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //Log.i(TAG, "onIbClick at pos = " + pos);
@@ -406,7 +451,7 @@ public class DailyViewHelper extends LVViewHelperBase implements ILVViewHelper {
     /**
      * 次级列表adapter
      */
-    public class SelfSubAdapter  extends SimpleAdapter implements View.OnClickListener {
+    public class SelfSubAdapter  extends SimpleAdapter implements OnClickListener {
         private final static String TAG = "SelfSubAdapter";
         private ListView        mRootView;
 
@@ -473,17 +518,25 @@ public class DailyViewHelper extends LVViewHelperBase implements ILVViewHelper {
             switch (vid)    {
                 case R.id.ib_delete :       {
                     if(!v.isSelected()) {
-                        List<Integer> ls = Collections.singletonList(did);
                         if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
-                            AppModel.getPayIncomeUtility().DeletePayNotes(ls);
+                            mDelPay.add(did);
                         } else {
-                            AppModel.getPayIncomeUtility().DeleteIncomeNotes(ls);
+                            mDelIncome.add(did);
                         }
 
-                        v.setSelected(true);
                         v.getBackground().setAlpha(255);
                         v.setBackgroundColor(res.getColor(R.color.red));
+                    } else  {
+                        if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
+                            mDelPay.removeFirstOccurrence(did);
+                        } else {
+                            mDelIncome.removeFirstOccurrence(did);
+                        }
+
+                        v.getBackground().setAlpha(0);
                     }
+
+                    v.setSelected(!v.isSelected());
                 }
                 break;
 
