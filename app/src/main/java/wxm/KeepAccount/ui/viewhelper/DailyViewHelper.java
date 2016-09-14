@@ -43,16 +43,11 @@ import wxm.KeepAccount.ui.fragment.STListViewFragment;
  * 日数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class DailyViewHelper implements ILVViewHelper {
+public class DailyViewHelper extends LVViewHelperBase implements ILVViewHelper {
     private final static String TAG = "DailyViewHelper";
-    private View    mSelfView;
     private boolean mBShowDelete;
     private boolean mBShowEdit;
     private boolean mBFilter;
-
-    private LinkedList<HashMap<String, String>>                     mMainPara;
-    private HashMap<String, LinkedList<HashMap<String, String>>>    mHMSubPara;
-    private LinkedList<String>                                      mFilterPara;
 
     private static final int[] ITEM_DRAWABLES = {
                                     R.drawable.ic_leave
@@ -62,9 +57,7 @@ public class DailyViewHelper implements ILVViewHelper {
                                     ,R.drawable.ic_add};
 
     public DailyViewHelper()    {
-        mMainPara   = new LinkedList<>();
-        mHMSubPara  = new HashMap<>();
-        mFilterPara = new LinkedList<>();
+        super();
     }
 
     @Override
@@ -101,6 +94,10 @@ public class DailyViewHelper implements ILVViewHelper {
 
     @Override
     public void loadView() {
+        setAttachLayoutVisible(View.INVISIBLE);
+        setFilterLayoutVisible(View.INVISIBLE);
+        setAttachLayoutVisible(View.INVISIBLE);
+
         reloadData();
         refreshView();
     }
@@ -150,6 +147,14 @@ public class DailyViewHelper implements ILVViewHelper {
      * 不重新加载数据，仅更新视图
      */
     private void refreshView()  {
+        // set layout
+        setAttachLayoutVisible(mBFilter || mBShowDelete || mBShowEdit ?
+                                View.VISIBLE : View.INVISIBLE);
+        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
+        setAccpetGiveupLayoutVisible(mBShowDelete || mBShowEdit ?
+                                View.VISIBLE : View.INVISIBLE);
+
+        // update data
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
         if(mBFilter) {
             for (HashMap<String, String> i : mMainPara) {
@@ -244,17 +249,9 @@ public class DailyViewHelper implements ILVViewHelper {
                 if(0 < cc)  {
                     mBShowDelete = !mBShowDelete;
                     mBShowEdit = !mBShowDelete && mBShowEdit;
-                    for(int i = 0; i < cc; ++i) {
-                        View vv = lv.getChildAt(i);
-                        int pos = lv.getPositionForView(vv);
-
-                        HashMap<String, String> hm = UtilFun.cast(lv.getAdapter().getItem(pos));
-                        if(STListViewFragment.MPARA_TAG_SHOW.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
-                            init_detail_view(vv, hm);
-                        }
-                    }
-
-                    if(!mBShowDelete)
+                    if(mBShowDelete)
+                        refreshView();
+                    else
                         loadView();
                 }
             }
@@ -268,17 +265,8 @@ public class DailyViewHelper implements ILVViewHelper {
                     if(mBShowEdit && mBShowDelete)  {
                         mBShowDelete = false;
                         loadView();
-                    }
-
-                    cc = lv.getChildCount();
-                    for(int i = 0; i < cc; ++i) {
-                        View vv = lv.getChildAt(i);
-                        int pos = lv.getPositionForView(vv);
-
-                        HashMap<String, String> hm = UtilFun.cast(lv.getAdapter().getItem(pos));
-                        if(STListViewFragment.MPARA_TAG_SHOW.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
-                            init_detail_view(vv, hm);
-                        }
+                    } else  {
+                        refreshView();
                     }
                 }
             }

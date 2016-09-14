@@ -7,12 +7,61 @@
     android:clickable="true"
     android:longClickable="true">
 
+    <RelativeLayout
+        android:id="@+id/rl_attach_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible">
+        <RelativeLayout
+            android:id="@+id/rl_filter"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/giveup_filter"
+                android:id="@+id/bt_giveup_filter"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_accpet_giveup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_filter">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cn_giveup"
+                android:id="@+id/bt_giveup"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cn_accpet"
+                android:id="@+id/bt_accpet"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/bt_giveup"
+                android:layout_marginRight="6dp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/tabvp_lv_main"
         android:background="#80ffffff"
-        android:longClickable="true" />
+        android:longClickable="true"
+        android:layout_below="@+id/rl_attach_button" />
 
     <cn.wxm.andriodutillib.capricorn.RayMenu
         android:id="@+id/rm_show_record"

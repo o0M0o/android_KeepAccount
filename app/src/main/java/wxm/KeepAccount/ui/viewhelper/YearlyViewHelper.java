@@ -35,24 +35,18 @@ import wxm.KeepAccount.ui.fragment.STListViewFragment;
  * 年数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class YearlyViewHelper  implements ILVViewHelper {
+public class YearlyViewHelper extends LVViewHelperBase  implements ILVViewHelper {
     private final static String TAG = "YearlyViewHelper";
-    private View    mSelfView;
     private boolean mBFilter;
 
-    private LinkedList<HashMap<String, String>> mMainPara;
-    private HashMap<String, LinkedList<HashMap<String, String>>>    mHMSubPara;
-    private LinkedList<String>                                      mFilterPara;
-
     public YearlyViewHelper()    {
-        mMainPara = new LinkedList<>();
-        mHMSubPara = new HashMap<>();
-        mFilterPara = new LinkedList<>();
+        super();
     }
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
         mSelfView = inflater.inflate(R.layout.lv_pager, container, false);
+
         // init ray menu
         RayMenu rayMenu = UtilFun.cast(mSelfView.findViewById(R.id.rm_show_record));
         assert null != rayMenu;
@@ -68,6 +62,10 @@ public class YearlyViewHelper  implements ILVViewHelper {
 
     @Override
     public void loadView() {
+        setAttachLayoutVisible(View.INVISIBLE);
+        setFilterLayoutVisible(View.INVISIBLE);
+        setAttachLayoutVisible(View.INVISIBLE);
+
         reloadData();
         refreshView();
     }
@@ -118,6 +116,12 @@ public class YearlyViewHelper  implements ILVViewHelper {
      * 不重新加载数据，仅更新视图
      */
     private void refreshView()  {
+        // set layout
+        setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
+        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
+        setAccpetGiveupLayoutVisible(View.INVISIBLE);
+
+        // update data
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
         if(mBFilter) {
             for (HashMap<String, String> i : mMainPara) {

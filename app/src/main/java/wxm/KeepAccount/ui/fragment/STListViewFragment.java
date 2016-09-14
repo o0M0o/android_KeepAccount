@@ -100,10 +100,12 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
      * @param ls_tag     待过滤的tag
      */
     public void filterView(List<String> ls_tag)     {
-        int cur_pos = mViewPager.getCurrentItem();
-        if(AppGobalDef.INVALID_ID != cur_pos) {
-            ListViewPagerItem hot_it = UtilFun.cast(mTabs.get(cur_pos));
-            hot_it.mContent.doFilter(ls_tag);
+        if(null != mViewPager) {
+            int cur_pos = mViewPager.getCurrentItem();
+            if (AppGobalDef.INVALID_ID != cur_pos) {
+                ListViewPagerItem hot_it = UtilFun.cast(mTabs.get(cur_pos));
+                hot_it.mContent.doFilter(ls_tag);
+            }
         }
     }
 

@@ -35,19 +35,12 @@ import wxm.KeepAccount.ui.fragment.STListViewFragment;
  * 月数据辅助类
  * Created by 123 on 2016/9/10.
  */
-public class MonthlyViewHelper implements ILVViewHelper {
+public class MonthlyViewHelper extends LVViewHelperBase implements ILVViewHelper {
     private final static String TAG = "MonthlyViewHelper";
-    private View    mSelfView;
     private boolean mBFilter;
 
-    private LinkedList<HashMap<String, String>> mMainPara;
-    private HashMap<String, LinkedList<HashMap<String, String>>>    mHMSubPara;
-    private LinkedList<String>                                      mFilterPara;
-
     public MonthlyViewHelper()    {
-        mMainPara = new LinkedList<>();
-        mHMSubPara = new HashMap<>();
-        mFilterPara = new LinkedList<>();
+        super();
     }
 
     @Override
@@ -69,6 +62,10 @@ public class MonthlyViewHelper implements ILVViewHelper {
 
     @Override
     public void loadView() {
+        setAttachLayoutVisible(View.INVISIBLE);
+        setFilterLayoutVisible(View.INVISIBLE);
+        setAttachLayoutVisible(View.INVISIBLE);
+
         reloadData();
         refreshView();
     }
@@ -120,6 +117,12 @@ public class MonthlyViewHelper implements ILVViewHelper {
      * 不重新加载数据，仅更新视图
      */
     private void refreshView()  {
+        // set layout
+        setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
+        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
+        setAccpetGiveupLayoutVisible(View.INVISIBLE);
+
+        // update data
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
         if(mBFilter) {
             for (HashMap<String, String> i : mMainPara) {
