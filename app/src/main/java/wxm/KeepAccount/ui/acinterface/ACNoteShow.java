@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -106,7 +105,12 @@ public class ACNoteShow
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(mTabFragment instanceof STListViewFragment)  {
+            STListViewFragment sf = UtilFun.cast(mTabFragment);
+            sf.onActivityResult(requestCode, resultCode, data);
+        }
 
+        /*
         Boolean bModify = false;
         if (AppGobalDef.INTRET_RECORD_ADD == resultCode) {
             Log.i(TAG, "从'添加记录'页面返回");
@@ -124,6 +128,7 @@ public class ACNoteShow
         if (bModify) {
             updateView();
         }
+        */
     }
 
     private void updateView() {

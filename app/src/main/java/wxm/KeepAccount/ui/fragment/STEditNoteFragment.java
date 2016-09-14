@@ -128,10 +128,8 @@ public class STEditNoteFragment extends SlidingTabsColorsFragment {
     }
 
     public boolean onAccpet()    {
-        if(AppGobalDef.INVALID_ID == mCurTabPos || null == mCurView)
-            return false;
-
-        NoteContentFragment nf = ((ListViewPagerItem)mTabs.get(mCurTabPos)).mContent;
+        int cur_pos = mViewPager.getCurrentItem();
+        NoteContentFragment nf = ((ListViewPagerItem)mTabs.get(cur_pos)).mContent;
         return nf.onAccept();
     }
 

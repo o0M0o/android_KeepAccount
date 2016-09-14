@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -99,11 +100,22 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
      * @param ls_tag     待过滤的tag
      */
     public void filterView(List<String> ls_tag)     {
-        if(AppGobalDef.INVALID_ID != mCurTabPos) {
-            ListViewPagerItem hot_it = UtilFun.cast(mTabs.get(mCurTabPos));
+        int cur_pos = mViewPager.getCurrentItem();
+        if(AppGobalDef.INVALID_ID != cur_pos) {
+            ListViewPagerItem hot_it = UtilFun.cast(mTabs.get(cur_pos));
             hot_it.mContent.doFilter(ls_tag);
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        int cur_pos = mViewPager.getCurrentItem();
+        if(AppGobalDef.INVALID_ID != cur_pos) {
+            ListViewPagerItem hot_it = UtilFun.cast(mTabs.get(cur_pos));
+            hot_it.mContent.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
 
 
     /**
@@ -173,6 +185,11 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
 
         public void doFilter(List<String> ls_tag)   {
             mViewHelper.filterView(ls_tag);
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            mViewHelper.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

@@ -1,7 +1,9 @@
 package wxm.KeepAccount.ui.viewhelper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
@@ -35,13 +38,16 @@ import wxm.KeepAccount.ui.fragment.STListViewFragment;
 public class YearlyViewHelper  implements ILVViewHelper {
     private final static String TAG = "YearlyViewHelper";
     private View    mSelfView;
+    private boolean mBFilter;
 
     private LinkedList<HashMap<String, String>> mMainPara;
     private HashMap<String, LinkedList<HashMap<String, String>>>    mHMSubPara;
+    private LinkedList<String>                                      mFilterPara;
 
     public YearlyViewHelper()    {
         mMainPara = new LinkedList<>();
         mHMSubPara = new HashMap<>();
+        mFilterPara = new LinkedList<>();
     }
 
     @Override
@@ -62,33 +68,69 @@ public class YearlyViewHelper  implements ILVViewHelper {
 
     @Override
     public void loadView() {
-        // get days info from record
-        HashMap<String, ArrayList<Object>> hm_data =
-                AppModel.getPayIncomeUtility().GetAllNotesToYear();
-
-        // format output
-        parseNotes(hm_data);
-
-        // 设置listview adapter
-        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
-        SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), mMainPara,
-                new String[]{STListViewFragment.MPARA_TITLE, STListViewFragment.MPARA_ABSTRACT},
-                new int[]{R.id.tv_title, R.id.tv_abstract});
-        lv.setAdapter(mSNAdapter);
-        mSNAdapter.notifyDataSetChanged();
+        reloadData();
+        refreshView();
     }
 
     @Override
     public void filterView(List<String> ls_tag) {
+        if(null != ls_tag) {
+            mBFilter = true;
+            mFilterPara.clear();
+            mFilterPara.addAll(ls_tag);
+            refreshView();
+        } else  {
+            mBFilter = false;
+            refreshView();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(resultCode)  {
+            case AppGobalDef.INTRET_RECORD_ADD    :
+            case AppGobalDef.INTRET_RECORD_MODIFY :
+            case AppGobalDef.INTRET_DAILY_DETAIL :
+                reloadData();
+                break;
+
+            default:
+                Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
+                break;
+        }
+    }
+
+    /**
+     * 重新加载数据
+     */
+    private void reloadData() {
+        mMainPara.clear();
+        mHMSubPara.clear();
+
+        // format output
+        HashMap<String, ArrayList<Object>> hm_data =
+                AppModel.getPayIncomeUtility().GetAllNotesToYear();
+
+        parseNotes(hm_data);
+    }
+
+    /**
+     * 不重新加载数据，仅更新视图
+     */
+    private void refreshView()  {
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
-        for(HashMap<String, String> i : mMainPara)  {
-            String cur_tag = i.get(STListViewFragment.MPARA_TAG);
-            for(String ii : ls_tag) {
-                if (cur_tag.equals(ii)) {
-                    n_mainpara.add(i);
-                    break;
+        if(mBFilter) {
+            for (HashMap<String, String> i : mMainPara) {
+                String cur_tag = i.get(STListViewFragment.MPARA_TAG);
+                for (String ii : mFilterPara) {
+                    if (cur_tag.equals(ii)) {
+                        n_mainpara.add(i);
+                        break;
+                    }
                 }
             }
+        } else  {
+            n_mainpara.addAll(mMainPara);
         }
 
         // 设置listview adapter
@@ -100,6 +142,10 @@ public class YearlyViewHelper  implements ILVViewHelper {
         mSNAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * 解析数据
+     * @param notes  待解析数据
+     */
     private void parseNotes(HashMap<String, ArrayList<Object>> notes)   {
         mMainPara.clear();
         mHMSubPara.clear();
@@ -113,6 +159,11 @@ public class YearlyViewHelper  implements ILVViewHelper {
         }
     }
 
+    /**
+     * 解析一年的数据
+     * @param tag       此年数据的tag
+     * @param notes     此年数据
+     */
     private void parseOneYear(String tag, List<Object> notes)    {
         int pay_cout = 0;
         int income_cout = 0;
@@ -158,6 +209,11 @@ public class YearlyViewHelper  implements ILVViewHelper {
         parseMonths(tag, hm_data);
     }
 
+    /**
+     * 解析一个月的数据
+     * @param tag       此月数据的tag
+     * @param hm_data   此月数据
+     */
     private void parseMonths(String tag, HashMap<String, ArrayList<Object>> hm_data)    {
         ArrayList<String> set_k = new ArrayList<>(hm_data.keySet());
         Collections.sort(set_k);
@@ -198,21 +254,6 @@ public class YearlyViewHelper  implements ILVViewHelper {
         mHMSubPara.put(tag, cur_llhm);
     }
 
-    protected void onIbClick(View vw, int pos) {
-        //Log.i(TAG, "onIbClick at pos = " + pos);
-        Resources res = vw.getResources();
-        ImageButton ib = UtilFun.cast(vw.findViewById(R.id.ib_hide_show));
-        HashMap<String, String> hm = mMainPara.get(pos);
-        if(STListViewFragment.MPARA_TAG_HIDE.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
-            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_SHOW);
-            init_detail_view(vw, hm);
-            ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
-        }   else    {
-            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
-            init_detail_view(vw, hm);
-            ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
-        }
-    }
 
 
     private void init_detail_view(View v, HashMap<String, String> hm) {
@@ -234,30 +275,13 @@ public class YearlyViewHelper  implements ILVViewHelper {
                 new int[]{R.id.tv_show});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
-        setListViewHeightBasedOnChildren(mLVShowDetail, mAdapter);
+        ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
     }
 
 
-    private void setListViewHeightBasedOnChildren(ListView listView, SelfSubAdapter sap) {
-        int totalHeight = 0;
-        for (int i = 0, len = sap.getCount(); i < len; i++) {
-            // listAdapter.getCount()返回数据项的数目
-            View listItem = sap.getView(i, null, listView);
-            // 计算子项View 的宽高
-            listItem.measure(0, 0);
-            // 统计所有子项的总高度
-            totalHeight += listItem.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight+ (listView.getDividerHeight() * (sap.getCount() - 1));
-        // listView.getDividerHeight()获取子项间分隔符占用的高度
-        // params.height最后得到整个ListView完整显示需要的高度
-        listView.setLayoutParams(params);
-    }
-
-
-
+    /**
+     * 首级adapter
+     */
     public class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
 
@@ -279,7 +303,19 @@ public class YearlyViewHelper  implements ILVViewHelper {
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onIbClick(pv, position);
+                        //Log.i(TAG, "onIbClick at pos = " + pos);
+                        Resources res = pv.getResources();
+                        ImageButton ib = UtilFun.cast(pv.findViewById(R.id.ib_hide_show));
+                        HashMap<String, String> hm = UtilFun.cast(getItem(position));
+                        if(STListViewFragment.MPARA_TAG_HIDE.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
+                            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_SHOW);
+                            init_detail_view(pv, hm);
+                            ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
+                        }   else    {
+                            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
+                            init_detail_view(pv, hm);
+                            ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
+                        }
                     }
                 });
 
@@ -296,15 +332,16 @@ public class YearlyViewHelper  implements ILVViewHelper {
     }
 
 
+    /**
+     * 次级adapter
+     */
     public class SelfSubAdapter  extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
-        private LinkedList<HashMap<String, String>> mLVSubList;
 
         public SelfSubAdapter(Context context,
                               List<? extends Map<String, ?>> sdata,
                               String[] from, int[] to) {
             super(context, sdata, R.layout.li_yearly_show_detail, from, to);
-            mLVSubList = UtilFun.cast(sdata);
         }
 
         @Override
@@ -321,7 +358,7 @@ public class YearlyViewHelper  implements ILVViewHelper {
                             ACNoteShow as = UtilFun.cast(ct);
                             as.jumpByTabName(STListViewFragment.TAB_TITLE_MONTHLY);
 
-                            HashMap<String, String> hp = mLVSubList.get(position);
+                            HashMap<String, String> hp = UtilFun.cast(getItem(position));
                             final String hp_tag = hp.get(STListViewFragment.SPARA_TAG);
                             as.filterView(Collections.singletonList(hp_tag));
                         }

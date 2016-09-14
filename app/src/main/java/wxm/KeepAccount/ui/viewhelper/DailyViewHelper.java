@@ -48,9 +48,11 @@ public class DailyViewHelper implements ILVViewHelper {
     private View    mSelfView;
     private boolean mBShowDelete;
     private boolean mBShowEdit;
+    private boolean mBFilter;
 
     private LinkedList<HashMap<String, String>>                     mMainPara;
     private HashMap<String, LinkedList<HashMap<String, String>>>    mHMSubPara;
+    private LinkedList<String>                                      mFilterPara;
 
     private static final int[] ITEM_DRAWABLES = {
                                     R.drawable.ic_leave
@@ -60,15 +62,17 @@ public class DailyViewHelper implements ILVViewHelper {
                                     ,R.drawable.ic_add};
 
     public DailyViewHelper()    {
-        mMainPara = new LinkedList<>();
-        mHMSubPara = new HashMap<>();
+        mMainPara   = new LinkedList<>();
+        mHMSubPara  = new HashMap<>();
+        mFilterPara = new LinkedList<>();
     }
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
-        mSelfView = inflater.inflate(R.layout.lv_pager, container, false);
-        mBShowDelete = false;
-        mBShowEdit = false;
+        mSelfView       = inflater.inflate(R.layout.lv_pager, container, false);
+        mBShowDelete    = false;
+        mBShowEdit      = false;
+        mBFilter        = false;
 
         // init ray menu
         RayMenu rayMenu = UtilFun.cast(mSelfView.findViewById(R.id.rm_show_record));
@@ -97,36 +101,68 @@ public class DailyViewHelper implements ILVViewHelper {
 
     @Override
     public void loadView() {
-        mMainPara.clear();
-        mHMSubPara.clear();
-
-        // get days info from record
-        HashMap<String, ArrayList<Object>> hm_data =
-                AppModel.getPayIncomeUtility().GetAllNotesToDay();
-
-        // format output
-        parseNotes(hm_data);
-
-        // 设置listview adapter
-        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
-        SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), mMainPara,
-                                    new String[]{STListViewFragment.MPARA_TITLE, STListViewFragment.MPARA_ABSTRACT},
-                                    new int[]{R.id.tv_title, R.id.tv_abstract});
-        lv.setAdapter(mSNAdapter);
-        mSNAdapter.notifyDataSetChanged();
+        reloadData();
+        refreshView();
     }
 
     @Override
     public void filterView(List<String> ls_tag) {
+        if(null != ls_tag) {
+            mBFilter = true;
+            mFilterPara.clear();
+            mFilterPara.addAll(ls_tag);
+            refreshView();
+        } else  {
+            mBFilter = false;
+            refreshView();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(resultCode)  {
+            case AppGobalDef.INTRET_RECORD_ADD    :
+            case AppGobalDef.INTRET_RECORD_MODIFY :
+            case AppGobalDef.INTRET_DAILY_DETAIL :
+                reloadData();
+                refreshView();
+                break;
+
+            default:
+                Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
+                break;
+        }
+    }
+
+    /**
+     * 重新加载数据
+     */
+    private void reloadData() {
+        mMainPara.clear();
+        mHMSubPara.clear();
+
+        HashMap<String, ArrayList<Object>> hm_data =
+                AppModel.getPayIncomeUtility().GetAllNotesToDay();
+        parseNotes(hm_data);
+    }
+
+    /**
+     * 不重新加载数据，仅更新视图
+     */
+    private void refreshView()  {
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
-        for(HashMap<String, String> i : mMainPara)  {
-            String cur_tag = i.get(STListViewFragment.MPARA_TAG);
-            for(String ii : ls_tag) {
-                if (cur_tag.equals(ii)) {
-                    n_mainpara.add(i);
-                    break;
+        if(mBFilter) {
+            for (HashMap<String, String> i : mMainPara) {
+                String cur_tag = i.get(STListViewFragment.MPARA_TAG);
+                for (String ii : mFilterPara) {
+                    if (cur_tag.equals(ii)) {
+                        n_mainpara.add(i);
+                        break;
+                    }
                 }
             }
+        } else  {
+            n_mainpara.addAll(mMainPara);
         }
 
         // 设置listview adapter
@@ -138,6 +174,11 @@ public class DailyViewHelper implements ILVViewHelper {
         mSNAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * 初始化次级(详细数据)视图
+     * @param v         主级视图
+     * @param hm        主级视图附带数据
+     */
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
@@ -152,33 +193,13 @@ public class DailyViewHelper implements ILVViewHelper {
         // init sub adapter
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
-        SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), v,
+        SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), mLVShowDetail,
                 llhm, new String[]{STListViewFragment.SPARA_SHOW},
                 new int[]{R.id.tv_show});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
-        setListViewHeightBasedOnChildren(mLVShowDetail, mAdapter);
+        ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
     }
-
-
-    private void setListViewHeightBasedOnChildren(ListView listView, SelfSubAdapter sap) {
-        int totalHeight = 0;
-        for (int i = 0, len = sap.getCount(); i < len; i++) {
-            // listAdapter.getCount()返回数据项的数目
-            View listItem = sap.getView(i, null, listView);
-            // 计算子项View 的宽高
-            listItem.measure(0, 0);
-            // 统计所有子项的总高度
-            totalHeight += listItem.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight+ (listView.getDividerHeight() * (sap.getCount() - 1));
-        // listView.getDividerHeight()获取子项间分隔符占用的高度
-        // params.height最后得到整个ListView完整显示需要的高度
-        listView.setLayoutParams(params);
-    }
-
 
     /**
      * raymenu点击事件
@@ -222,6 +243,7 @@ public class DailyViewHelper implements ILVViewHelper {
                 int cc = lv.getChildCount();
                 if(0 < cc)  {
                     mBShowDelete = !mBShowDelete;
+                    mBShowEdit = !mBShowDelete && mBShowEdit;
                     for(int i = 0; i < cc; ++i) {
                         View vv = lv.getChildAt(i);
                         int pos = lv.getPositionForView(vv);
@@ -243,6 +265,12 @@ public class DailyViewHelper implements ILVViewHelper {
                 int cc = lv.getChildCount();
                 if(0 < cc)  {
                     mBShowEdit = !mBShowEdit;
+                    if(mBShowEdit && mBShowDelete)  {
+                        mBShowDelete = false;
+                        loadView();
+                    }
+
+                    cc = lv.getChildCount();
                     for(int i = 0; i < cc; ++i) {
                         View vv = lv.getChildAt(i);
                         int pos = lv.getPositionForView(vv);
@@ -274,6 +302,10 @@ public class DailyViewHelper implements ILVViewHelper {
     }
 
 
+    /**
+     * 解析支出/收入数据
+     * @param notes   待解析数据（日期---数据HashMap）
+     */
     private void parseNotes(HashMap<String, ArrayList<Object>> notes)   {
         ArrayList<String> set_k = new ArrayList<>(notes.keySet());
         Collections.sort(set_k);
@@ -331,19 +363,16 @@ public class DailyViewHelper implements ILVViewHelper {
     }
 
 
-
-
-
-
+    /**
+     * 首级列表adapter
+     */
     public class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
-        private LinkedList<HashMap<String, String>>  mSelfData;
 
         public SelfAdapter(Context context,
                          List<? extends Map<String, ?>> mdata,
                          String[] from, int[] to) {
             super(context, mdata, R.layout.li_daily_show, from, to);
-            mSelfData = UtilFun.cast(mdata);
         }
 
         @Override
@@ -360,7 +389,7 @@ public class DailyViewHelper implements ILVViewHelper {
                         //Log.i(TAG, "onIbClick at pos = " + pos);
                         Resources res = v.getResources();
                         ImageButton ib = UtilFun.cast(v);
-                        HashMap<String, String> hm = mSelfData.get(position);
+                        HashMap<String, String> hm = UtilFun.cast(getItem(position));
                         if(STListViewFragment.MPARA_TAG_HIDE.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
                             hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_SHOW);
                             init_detail_view(fv, hm);
@@ -386,18 +415,18 @@ public class DailyViewHelper implements ILVViewHelper {
     }
 
 
-    public class SelfSubAdapter  extends SimpleAdapter {
+    /**
+     * 次级列表adapter
+     */
+    public class SelfSubAdapter  extends SimpleAdapter implements View.OnClickListener {
         private final static String TAG = "SelfSubAdapter";
+        private ListView        mRootView;
 
-        private LinkedList<HashMap<String, String>> mLVSubList;
-        private View        mFatherView;
-
-        public SelfSubAdapter(Context context, View fv,
+        public SelfSubAdapter(Context context, ListView fv,
                              List<? extends Map<String, ?>> sdata,
                              String[] from, int[] to) {
             super(context, sdata, R.layout.li_daily_show_detail, from, to);
-            mLVSubList = UtilFun.cast(sdata);
-            mFatherView = fv;
+            mRootView = fv;
         }
 
         @Override
@@ -405,7 +434,7 @@ public class DailyViewHelper implements ILVViewHelper {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
                 //Log.i(TAG, "create view at pos = " + position);
-                HashMap<String, String> hm = mLVSubList.get(position);
+                HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 final Resources res = v.getResources();
 
                 // for button
@@ -414,25 +443,7 @@ public class DailyViewHelper implements ILVViewHelper {
                 ib.getBackground().setAlpha(0);
                 ib.setVisibility(mBShowDelete ? View.VISIBLE : View.INVISIBLE);
                 if(mBShowDelete)    {
-                    final int did = Integer.parseInt(hm.get(STListViewFragment.SPARA_ID));
-                    final String tp = hm.get(STListViewFragment.SPARA_TAG);
-                    ib.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if(!v.isSelected()) {
-                                List<Integer> ls = Collections.singletonList(did);
-                                if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
-                                    AppModel.getPayIncomeUtility().DeletePayNotes(ls);
-                                } else {
-                                    AppModel.getPayIncomeUtility().DeleteIncomeNotes(ls);
-                                }
-
-                                v.setSelected(true);
-                                v.getBackground().setAlpha(255);
-                                v.setBackgroundColor(res.getColor(R.color.red));
-                            }
-                        }
-                    });
+                    ib.setOnClickListener(this);
                 }
 
                 ib = UtilFun.cast(v.findViewById(R.id.ib_edit));
@@ -440,30 +451,11 @@ public class DailyViewHelper implements ILVViewHelper {
                 ib.getBackground().setAlpha(0);
                 ib.setVisibility(mBShowEdit ? View.VISIBLE : View.INVISIBLE);
                 if(mBShowEdit)  {
-                    final int did = Integer.parseInt(hm.get(STListViewFragment.SPARA_ID));
-                    final String tp = hm.get(STListViewFragment.SPARA_TAG);
-                    ib.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Context ct = mSelfView.getContext();
-                            if(ct instanceof Activity) {
-                                Activity ac = UtilFun.cast(ct);
-                                Intent intent = new Intent(ac, ACNoteEdit.class);
-                                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
-                                if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
-                                    intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, did);
-                                } else {
-                                    intent.putExtra(ACNoteEdit.PARA_NOTE_INCOME, did);
-                                }
-
-                                ac.startActivityForResult(intent, 1);
-                            }
-                        }
-                    });
+                    ib.setOnClickListener(this);
                 }
 
-                // for image
-                Bitmap nicon = null;
+                // for image & background
+                Bitmap nicon;
                 if(STListViewFragment.SPARA_TAG_PAY.equals(hm.get(STListViewFragment.SPARA_TAG)))   {
                     v.setBackgroundColor(res.getColor(R.color.burlywood));
                     nicon = BitmapFactory.decodeResource(res, R.drawable.ic_show_pay);
@@ -478,6 +470,52 @@ public class DailyViewHelper implements ILVViewHelper {
             }
 
             return v;
+        }
+
+        @Override
+        public void onClick(View v) {
+            int vid = v.getId();
+            Resources res = v.getResources();
+
+            int pos = mRootView.getPositionForView(v);
+            HashMap<String, String> hm = UtilFun.cast(getItem(pos));
+            String tp = hm.get(STListViewFragment.SPARA_TAG);
+            int did = Integer.parseInt(hm.get(STListViewFragment.SPARA_ID));
+
+            switch (vid)    {
+                case R.id.ib_delete :       {
+                    if(!v.isSelected()) {
+                        List<Integer> ls = Collections.singletonList(did);
+                        if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
+                            AppModel.getPayIncomeUtility().DeletePayNotes(ls);
+                        } else {
+                            AppModel.getPayIncomeUtility().DeleteIncomeNotes(ls);
+                        }
+
+                        v.setSelected(true);
+                        v.getBackground().setAlpha(255);
+                        v.setBackgroundColor(res.getColor(R.color.red));
+                    }
+                }
+                break;
+
+                case R.id.ib_edit : {
+                    Context ct = mSelfView.getContext();
+                    if(ct instanceof Activity) {
+                        Activity ac = UtilFun.cast(ct);
+                        Intent intent = new Intent(ac, ACNoteEdit.class);
+                        intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
+                        if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
+                            intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, did);
+                        } else {
+                            intent.putExtra(ACNoteEdit.PARA_NOTE_INCOME, did);
+                        }
+
+                        ac.startActivityForResult(intent, 1);
+                    }
+                }
+                break;
+            }
         }
     }
 }

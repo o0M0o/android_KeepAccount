@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.wxm.andriodutillib.SlidingTab.SlidingTabLayout;
-import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
 
 /**
@@ -45,8 +44,6 @@ public class SlidingTabsColorsFragment extends Fragment {
     public static final String KEY_INDICATOR_COLOR = "indicator_color";
     public static final String KEY_DIVIDER_COLOR = "divider_color";
 
-    protected int     mCurTabPos = AppGobalDef.INVALID_ID;
-    protected View    mCurView;
     protected SlidingTabLayout mSlidingTabLayout;
 
     /**
@@ -150,6 +147,7 @@ public class SlidingTabsColorsFragment extends Fragment {
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
 
+        /*
         mSlidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -167,6 +165,7 @@ public class SlidingTabsColorsFragment extends Fragment {
             public void onPageScrollStateChanged(int state) {
             }
         });
+        */
 
         // BEGIN_INCLUDE (tab_colorizer)
         // Set a TabColorizer to customize the indicator and divider colors. Here we just retrieve
@@ -191,10 +190,11 @@ public class SlidingTabsColorsFragment extends Fragment {
 
     public void jumpToTabName(String tabname)   {
         if(null != mSlidingTabLayout) {
+            int cur_pos = mViewPager.getCurrentItem();
             int c = mTabs.size();
             for(int i = 0; i < c; ++i)  {
                 SamplePagerItem si = mTabs.get(i);
-                if(i != mCurTabPos && si.getTitle().toString().equals(tabname)) {
+                if(i != cur_pos && si.getTitle().toString().equals(tabname)) {
                    //mSlidingTabLayout.scrollToTab(i, 0);
                     mViewPager.setCurrentItem(i, true);
                     break;
@@ -217,7 +217,7 @@ public class SlidingTabsColorsFragment extends Fragment {
 
     /**
      * The {@link FragmentPagerAdapter} used to display pages in this sample. The individual pages
-     * are instances of {@link LVContentFragment} which just display three lines of text. Each page is
+     * are instances of {@link Fragment} which just display three lines of text. Each page is
      * created by the relevant {@link SamplePagerItem} for the requested position.
      * <p>
      * The important section of this class is the {@link #getPageTitle(int)} method which controls
