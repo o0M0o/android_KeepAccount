@@ -1,5 +1,7 @@
-package wxm.KeepAccount.ui.viewhelper;
+package wxm.KeepAccount.ui.fragment.ShowData;
 
+import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -7,6 +9,7 @@ import android.widget.RelativeLayout;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -15,9 +18,10 @@ import wxm.KeepAccount.R;
  * viewhelper基础类
  * Created by 123 on 2016/9/14.
  */
-public class LVViewHelperBase implements View.OnClickListener {
-    protected boolean mBFilter;
-    protected View mSelfView;
+public abstract class LVViewHelperBase implements View.OnClickListener {
+    protected boolean   mBFilter;
+    protected View      mSelfView;
+
 
     protected LinkedList<HashMap<String, String>> mMainPara;
     protected HashMap<String, LinkedList<HashMap<String, String>>>    mHMSubPara;
@@ -31,6 +35,42 @@ public class LVViewHelperBase implements View.OnClickListener {
         mFilterPara = new LinkedList<>();
     }
 
+    /**
+     *  创建视图
+     * @param inflater      视图加载参数
+     * @param container     视图所在group参数
+     * @return              若成功，返回所创建视图
+     */
+    public abstract View createView(LayoutInflater inflater, ViewGroup container);
+
+    /**
+     * 获得视图
+     * @return   返回已经创建的视图
+     */
+    public abstract View getView();
+
+    /**
+     * 加载视图
+     * 在这里进行视图初始化
+     */
+    public abstract void loadView();
+
+    /**
+     * 过滤视图
+     * @param ls_tag   过滤参数 :
+     *                 1. 如果为null则不过滤
+     *                 2. 如果不为null, 但为空则过滤（不显示任何数据)
+     */
+    public abstract void filterView(List<String> ls_tag);
+
+    /**
+     * 处理activity返回结果
+     * @param requestCode   返回参数
+     * @param resultCode    返回参数
+     * @param data          返回参数
+     */
+    public abstract void onActivityResult(int requestCode, int resultCode, Intent data);
+
 
     @Override
     public void onClick(View v) {
@@ -43,10 +83,10 @@ public class LVViewHelperBase implements View.OnClickListener {
         }
     }
 
-
-    protected void refreshView()    {
-
-    }
+    /**
+     * 仅更新视图
+     */
+    protected abstract void refreshView();
 
     /**
      * 设置附加layout可见性

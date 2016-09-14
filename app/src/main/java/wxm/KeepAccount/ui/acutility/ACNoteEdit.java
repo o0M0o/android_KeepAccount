@@ -13,8 +13,8 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
-import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
-import wxm.KeepAccount.ui.fragment.STEditNoteFragment;
+import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
+import wxm.KeepAccount.ui.fragment.EditData.STEditNoteFragment;
 
 /**
  * 支出/收入数据编辑UI

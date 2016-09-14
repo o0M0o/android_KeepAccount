@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.fragment;
+package wxm.KeepAccount.ui.fragment.EditData;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,10 +16,7 @@ import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
-import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
-import wxm.KeepAccount.ui.viewhelper.EditIncomeNoteViewHelper;
-import wxm.KeepAccount.ui.viewhelper.EditPayNoteViewHelper;
-import wxm.KeepAccount.ui.viewhelper.IEditNoteViewHelper;
+import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
 
 /**
  * 编辑收支数据的视图

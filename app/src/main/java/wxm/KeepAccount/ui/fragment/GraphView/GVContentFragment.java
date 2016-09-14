@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.base.fragment;
+package wxm.KeepAccount.ui.fragment.GraphView;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -15,11 +15,7 @@ import java.util.List;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppMsgDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
-import wxm.KeepAccount.ui.base.view.ChartsBase;
-import wxm.KeepAccount.ui.base.view.DailyCharts;
-import wxm.KeepAccount.ui.base.view.MonthlyCharts;
-import wxm.KeepAccount.ui.base.view.YeaylyCharts;
-import wxm.KeepAccount.ui.fragment.STGraphViewFragment;
+import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
 
 /**
  * Simple Fragment used to display some meaningful content for each page in the sample's

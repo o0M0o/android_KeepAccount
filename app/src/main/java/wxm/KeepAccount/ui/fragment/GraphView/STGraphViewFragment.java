@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.fragment;
+package wxm.KeepAccount.ui.fragment.GraphView;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,8 +11,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.base.fragment.GVContentFragment;
-import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
+import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
 
 /**
  * 图表视图表现数据

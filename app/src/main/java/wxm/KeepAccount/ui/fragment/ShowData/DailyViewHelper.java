@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.viewhelper;
+package wxm.KeepAccount.ui.fragment.ShowData;
 
 import android.app.Activity;
 import android.content.Context;
@@ -38,14 +38,13 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
-import wxm.KeepAccount.ui.fragment.STListViewFragment;
 
 /**
  * 日数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
 public class DailyViewHelper extends LVViewHelperBase
-        implements ILVViewHelper, OnClickListener {
+        implements OnClickListener {
     private final static String TAG = "DailyViewHelper";
     private boolean mBShowDelete;
     private boolean mBShowEdit;
@@ -127,7 +126,6 @@ public class DailyViewHelper extends LVViewHelperBase
         switch(resultCode)  {
             case AppGobalDef.INTRET_RECORD_ADD    :
             case AppGobalDef.INTRET_RECORD_MODIFY :
-            case AppGobalDef.INTRET_DAILY_DETAIL :
                 reloadData();
                 refreshView();
                 break;
@@ -185,8 +183,6 @@ public class DailyViewHelper extends LVViewHelperBase
      */
     @Override
     protected void refreshView()  {
-        super.refreshView();
-
         // set layout
         setAttachLayoutVisible(mBFilter || mBShowDelete || mBShowEdit ?
                                 View.VISIBLE : View.INVISIBLE);

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package wxm.KeepAccount.ui.base.fragment;
+package wxm.KeepAccount.ui.fragment.base;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

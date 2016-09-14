@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.viewhelper;
+package wxm.KeepAccount.ui.fragment.ShowData;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,13 +29,12 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
-import wxm.KeepAccount.ui.fragment.STListViewFragment;
 
 /**
  * 月数据辅助类
  * Created by 123 on 2016/9/10.
  */
-public class MonthlyViewHelper extends LVViewHelperBase implements ILVViewHelper {
+public class MonthlyViewHelper extends LVViewHelperBase {
     private final static String TAG = "MonthlyViewHelper";
 
     public MonthlyViewHelper()    {

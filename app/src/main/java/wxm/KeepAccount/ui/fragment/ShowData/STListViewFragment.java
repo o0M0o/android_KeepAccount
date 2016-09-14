@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.fragment;
+package wxm.KeepAccount.ui.fragment.ShowData;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,11 +13,7 @@ import java.util.List;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
-import wxm.KeepAccount.ui.viewhelper.DailyViewHelper;
-import wxm.KeepAccount.ui.viewhelper.ILVViewHelper;
-import wxm.KeepAccount.ui.viewhelper.MonthlyViewHelper;
-import wxm.KeepAccount.ui.viewhelper.YearlyViewHelper;
+import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
 
 /**
  * 列表视图方式显示数据
@@ -59,6 +55,7 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
             return mContent;
         }
     }
+
 
 
     @Override
@@ -119,7 +116,6 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
     }
 
 
-
     /**
      * listview fragment的内容类
      */
@@ -127,14 +123,14 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
         private static final String TAG = "LVFRGContent";
 
         //private String      mCurTitle;
-        private ILVViewHelper mViewHelper;
+        private LVViewHelperBase    mViewHelper;
 
         /**
          * @return a new instance of {@link LVFRGContent}, adding the parameters into a bundle and
          * setting them as arguments.
          */
-        public static LVFRGContent newInstance(CharSequence title, int indicatorColor,
-                                               int dividerColor) {
+        public static LVFRGContent newInstance(CharSequence title,
+                                               int indicatorColor, int dividerColor) {
             Bundle bundle = new Bundle();
             bundle.putCharSequence(KEY_TITLE, title);
             bundle.putInt(KEY_INDICATOR_COLOR, indicatorColor);

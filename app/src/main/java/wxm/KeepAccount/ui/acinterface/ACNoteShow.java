@@ -8,14 +8,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.base.fragment.SlidingTabsColorsFragment;
-import wxm.KeepAccount.ui.fragment.STGraphViewFragment;
-import wxm.KeepAccount.ui.fragment.STListViewFragment;
+import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
+import wxm.KeepAccount.ui.fragment.GraphView.STGraphViewFragment;
+import wxm.KeepAccount.ui.fragment.ShowData.STListViewFragment;
 
 /**
  * tab版本的main activity
@@ -25,9 +28,13 @@ public class ACNoteShow
         extends AppCompatActivity   {
     private static final String TAG = "ACNoteShow";
 
+    private boolean     mBNoteModify = true;
+    private HashMap<String, ArrayList<Object>>   mHMNoteData;
+
+
     private SlidingTabsColorsFragment mTabFragment;
     private STGraphViewFragment gvTabFragment = new STGraphViewFragment();
-    private STListViewFragment lvTabFragment = new STListViewFragment();
+    private STListViewFragment  lvTabFragment = new STListViewFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,38 +109,35 @@ public class ACNoteShow
         }
     }
 
+    public HashMap<String, ArrayList<Object>> getNotesByDay()   {
+        if(mBNoteModify) {
+            mHMNoteData = AppModel.getPayIncomeUtility().GetAllNotesToDay();
+            mBNoteModify = false;
+        }
+
+        return mHMNoteData;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if(AppGobalDef.INTRET_RECORD_ADD == resultCode
+                || AppGobalDef.INTRET_RECORD_MODIFY == resultCode)  {
+            mBNoteModify = true;
+        }
+
         if(mTabFragment instanceof STListViewFragment)  {
             STListViewFragment sf = UtilFun.cast(mTabFragment);
             sf.onActivityResult(requestCode, resultCode, data);
         }
-
-        /*
-        Boolean bModify = false;
-        if (AppGobalDef.INTRET_RECORD_ADD == resultCode) {
-            Log.i(TAG, "从'添加记录'页面返回");
-            bModify = true;
-        } else if (AppGobalDef.INTRET_RECORD_MODIFY == resultCode) {
-            Log.i(TAG, "从'修改记录'页面返回");
-            bModify = true;
-        } else if (AppGobalDef.INTRET_DAILY_DETAIL == resultCode) {
-            Log.i(TAG, "从详情页面返回");
-            bModify = true;
-        } else {
-            Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
-        }
-
-        if (bModify) {
-            updateView();
-        }
-        */
     }
 
+    /*
     private void updateView() {
         mTabFragment.notifyDataChange();
     }
+    */
 
 
     /**

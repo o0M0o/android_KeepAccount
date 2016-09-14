@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.base.view;
+package wxm.KeepAccount.ui.fragment.GraphView;
 
 import android.content.Context;
 import android.graphics.Canvas;

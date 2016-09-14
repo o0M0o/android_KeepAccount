@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.viewhelper;
+package wxm.KeepAccount.ui.fragment.EditData;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
