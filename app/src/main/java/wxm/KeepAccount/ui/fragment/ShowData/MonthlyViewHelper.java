@@ -57,15 +57,8 @@ public class MonthlyViewHelper extends LVViewHelperBase {
     }
 
     @Override
-    public View getView() {
-        return mSelfView;
-    }
-
-    @Override
     public void loadView() {
-        setAttachLayoutVisible(View.INVISIBLE);
-        setFilterLayoutVisible(View.INVISIBLE);
-        setAttachLayoutVisible(View.INVISIBLE);
+        refreshAttachLayout();
 
         reloadData();
         refreshView();

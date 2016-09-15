@@ -41,6 +41,7 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
     public static final String TAB_TITLE_DAILY      = "日统计";
     public static final String TAB_TITLE_MONTHLY    = "月统计";
     public static final String TAB_TITLE_YEARLY     = "年统计";
+    public static final String TAB_TITLE_BUDGET     = "预算";
 
 
     protected static class ListViewPagerItem extends SamplePagerItem {
@@ -65,6 +66,12 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
 
         // BEGIN_INCLUDE (populate_tabs)
         if(mTabs.isEmpty()) {
+            mTabs.add(new ListViewPagerItem(
+                    TAB_TITLE_BUDGET, // Title
+                    Color.GREEN, // Indicator color
+                    Color.GRAY// Divider color
+            ));
+
             mTabs.add(new ListViewPagerItem(
                     TAB_TITLE_DAILY, // Title
                     Color.GREEN, // Indicator color
@@ -167,6 +174,10 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
 
                 case STListViewFragment.TAB_TITLE_YEARLY :
                     mViewHelper = new YearlyViewHelper();
+                    break;
+
+                case STListViewFragment.TAB_TITLE_BUDGET :
+                    mViewHelper = new BudgetViewHelper();
                     break;
             }
 

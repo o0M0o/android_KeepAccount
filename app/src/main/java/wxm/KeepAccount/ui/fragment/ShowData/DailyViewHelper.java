@@ -31,6 +31,7 @@ import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
@@ -89,11 +90,6 @@ public class DailyViewHelper extends LVViewHelperBase
             });// Add a menu item
         }
 
-        return mSelfView;
-    }
-
-    @Override
-    public View getView() {
         return mSelfView;
     }
 
@@ -348,7 +344,13 @@ public class DailyViewHelper extends LVViewHelperBase
                     map.put(STListViewFragment.SPARA_TITLE, pi.getInfo());
                     map.put(STListViewFragment.SPARA_ID, String.valueOf(pi.getId()));
                     map.put(STListViewFragment.SPARA_TAG, STListViewFragment.SPARA_TAG_PAY);
-                    show = String.format(Locale.CHINA, "金额 : %.02f", pi.getVal());
+
+                    BudgetItem bi = pi.getBudget();
+                    if(null != bi)
+                        show = String.format(Locale.CHINA, "金额 : %.02f\n使用预算 : %s",
+                                    pi.getVal(), bi.getName());
+                    else
+                        show = String.format(Locale.CHINA, "金额 : %.02f", pi.getVal());
 
                     nt = pi.getNote();
                 } else {

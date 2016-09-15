@@ -6,6 +6,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
@@ -23,6 +24,23 @@ public class BudgetDataUtility {
     private final String    TAG = "RecordDataUtility";
 
     public BudgetDataUtility()  {
+    }
+
+    /**
+     * 根据当前用户查找BudgetItem数据,且附带支出数据
+     * @return 查找到的数据,没有数据时返回{@code NULL}
+     */
+    public HashMap<BudgetItem, List<PayNoteItem>> GetBudgetWithPayNote()  {
+        HashMap<BudgetItem, List<PayNoteItem>>  bret = new HashMap<>();
+        List<BudgetItem> ls_bi = GetBudget();
+        if(null != ls_bi)   {
+            for(BudgetItem bi : ls_bi)  {
+                List<PayNoteItem> pi = AppModel.getPayIncomeUtility().GetPayNoteByBudget(bi);
+                bret.put(bi, pi);
+            }
+        }
+
+        return bret;
     }
 
     /**

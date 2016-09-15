@@ -24,7 +24,6 @@ import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acinterface.ACBudgetShow;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
 
 
@@ -32,6 +31,8 @@ import wxm.KeepAccount.ui.acinterface.ACHelp;
  * 编辑或者新建预算数据
  */
 public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListener {
+    public final static String INTENT_LOAD_BUDGETID = "BUDGET_ID";
+
     private final static String TAG = "ACBudgetEdit";
     private final static int  MAX_NOTELEN = 200;
 
@@ -220,11 +221,14 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
 
         // init budget
         Intent it = getIntent();
-        mCurBudget = it.getParcelableExtra(ACBudgetShow.INTENT_LOAD_BUDGET);
-        if(null != mCurBudget)  {
-            mETName.setText(mCurBudget.getName());
-            mETAmount.setText(mCurBudget.getAmount().toPlainString());
-            mETNote.setText(mCurBudget.getNote());
+        int id = it.getIntExtra(INTENT_LOAD_BUDGETID, -1);
+        if(-1 != id)    {
+            mCurBudget = AppModel.getBudgetUtility().GetBudgetById(id);
+            if(null != mCurBudget)  {
+                mETName.setText(mCurBudget.getName());
+                mETAmount.setText(mCurBudget.getAmount().toPlainString());
+                mETNote.setText(mCurBudget.getNote());
+            }
         }
     }
 

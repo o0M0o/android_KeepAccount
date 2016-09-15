@@ -193,5 +193,8 @@ public class BudgetItem implements Parcelable {
         }
     }
 
-
+    @Override
+    public int hashCode()   {
+        return getName().hashCode() + getAmount().hashCode() + get_id();
+    }
 }

@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.db.UsrItem;
@@ -25,6 +26,16 @@ public class PayIncomeDataUtility {
     private final String    TAG = "PayIncomeDataUtility";
 
     public PayIncomeDataUtility()  {
+    }
+
+    /**
+     * 根据预算查找支出数据
+     * @param bi  待匹配预算
+     * @return 查找到的数据
+     */
+    public List<PayNoteItem> GetPayNoteByBudget(BudgetItem bi)  {
+        return AppModel.getDBHelper().getPayDataREDao()
+                    .queryForEq(PayNoteItem.FIELD_BUDGET, bi.get_id());
     }
 
 

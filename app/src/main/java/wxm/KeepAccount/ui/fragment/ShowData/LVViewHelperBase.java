@@ -50,7 +50,9 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      * 获得视图
      * @return   返回已经创建的视图
      */
-    public abstract View getView();
+    public View getView()   {
+        return mSelfView;
+    }
 
     /**
      * 加载视图
