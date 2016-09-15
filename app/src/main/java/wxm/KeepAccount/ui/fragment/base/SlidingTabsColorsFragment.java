@@ -189,13 +189,13 @@ public class SlidingTabsColorsFragment extends Fragment {
     // END_INCLUDE (fragment_onviewcreated)
 
     public void jumpToTabName(String tabname)   {
-        if(null != mSlidingTabLayout) {
+        if(null != mViewPager) {
             int cur_pos = mViewPager.getCurrentItem();
             int c = mTabs.size();
-            for(int i = 0; i < c; ++i)  {
+            for (int i = 0; i < c; ++i) {
                 SamplePagerItem si = mTabs.get(i);
-                if(i != cur_pos && si.getTitle().toString().equals(tabname)) {
-                   //mSlidingTabLayout.scrollToTab(i, 0);
+                if (i != cur_pos && si.getTitle().toString().equals(tabname)) {
+                    //mSlidingTabLayout.scrollToTab(i, 0);
                     mViewPager.setCurrentItem(i, true);
                     break;
                 }
@@ -204,7 +204,7 @@ public class SlidingTabsColorsFragment extends Fragment {
     }
 
     public void notifyDataChange()  {
-/*        FragmentManager fragmentManager = getChildFragmentManager();
+        /* FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         List<Fragment> fragments = fragmentManager.getFragments();
         for (Fragment f : fragments) {

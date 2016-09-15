@@ -15,7 +15,8 @@
         <RelativeLayout
             android:id="@+id/rl_filter"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/beige">
 
 
             <Button
@@ -27,12 +28,23 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="点击取消过滤"
+                android:layout_centerVertical="true"
+                android:id="@+id/textView"
+                android:layout_alignParentLeft="true" />
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/rl_accpet_giveup"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_filter">
+            android:layout_below="@+id/rl_filter"
+            android:background="@color/antiquewhite">
 
             <Button
                 style="?android:attr/buttonStyleSmall"
@@ -52,6 +64,14 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/bt_giveup"
                 android:layout_marginRight="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="放弃或者确认选择"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true" />
         </RelativeLayout>
     </RelativeLayout>
 

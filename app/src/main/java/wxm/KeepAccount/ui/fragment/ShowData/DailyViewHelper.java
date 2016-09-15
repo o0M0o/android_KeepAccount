@@ -233,8 +233,8 @@ public class DailyViewHelper extends LVViewHelperBase
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
         SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), mLVShowDetail,
-                llhm, new String[]{STListViewFragment.SPARA_SHOW},
-                new int[]{R.id.tv_show});
+                llhm, new String[]{STListViewFragment.SPARA_TITLE, STListViewFragment.SPARA_DETAIL},
+                new int[]{R.id.tv_title, R.id.tv_detail});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
@@ -339,27 +339,36 @@ public class DailyViewHelper extends LVViewHelperBase
             for (Object r : v) {
                 HashMap<String, String> map = new HashMap<>();
                 String show;
+                String nt;
                 if (r instanceof PayNoteItem) {
                     PayNoteItem pi = UtilFun.cast(r);
                     pay_cout += 1;
                     pay_amount = pay_amount.add(pi.getVal());
 
+                    map.put(STListViewFragment.SPARA_TITLE, pi.getInfo());
                     map.put(STListViewFragment.SPARA_ID, String.valueOf(pi.getId()));
                     map.put(STListViewFragment.SPARA_TAG, STListViewFragment.SPARA_TAG_PAY);
-                    show = String.format(Locale.CHINA, "%s\n金额 : %.02f"
-                                        ,pi.getInfo() ,pi.getVal());
+                    show = String.format(Locale.CHINA, "金额 : %.02f", pi.getVal());
+
+                    nt = pi.getNote();
                 } else {
                     IncomeNoteItem ii = UtilFun.cast(r);
                     income_cout += 1;
                     income_amount = income_amount.add(ii.getVal());
 
+                    map.put(STListViewFragment.SPARA_TITLE, ii.getInfo());
                     map.put(STListViewFragment.SPARA_ID, String.valueOf(ii.getId()));
                     map.put(STListViewFragment.SPARA_TAG, STListViewFragment.SPARA_TAG_INCOME);
-                    show = String.format(Locale.CHINA, "%s\n金额 : %.02f"
-                            ,ii.getInfo() ,ii.getVal());
+                    show = String.format(Locale.CHINA, "金额 : %.02f", ii.getVal());
+
+                    nt = ii.getNote();
                 }
 
-                map.put(STListViewFragment.SPARA_SHOW, show);
+                if(!UtilFun.StringIsNullOrEmpty(nt)) {
+                    show = String.format(Locale.CHINA, "%s\n备注 : %s", show ,nt);
+                }
+
+                map.put(STListViewFragment.SPARA_DETAIL, show);
                 map.put(STListViewFragment.MPARA_TAG, title);
                 cur_llhm.add(map);
             }

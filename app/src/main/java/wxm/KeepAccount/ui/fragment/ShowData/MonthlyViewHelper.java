@@ -294,12 +294,12 @@ public class MonthlyViewHelper extends LVViewHelperBase {
             String sub_tag = ToolUtil.FormatDateString(k);
             String show =
                     String.format(Locale.CHINA,
-                            "%s\n支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
-                            sub_tag,
+                            "支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(STListViewFragment.SPARA_SHOW, show);
+            map.put(STListViewFragment.SPARA_TITLE, sub_tag);
+            map.put(STListViewFragment.SPARA_DETAIL, show);
             map.put(STListViewFragment.MPARA_TAG, tag);
             map.put(STListViewFragment.SPARA_TAG, sub_tag);
             cur_llhm.add(map);
@@ -324,8 +324,8 @@ public class MonthlyViewHelper extends LVViewHelperBase {
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
         SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), llhm,
-                new String[]{STListViewFragment.SPARA_SHOW},
-                new int[]{R.id.tv_show});
+                new String[]{STListViewFragment.SPARA_TITLE, STListViewFragment.SPARA_DETAIL},
+                new int[]{R.id.tv_title, R.id.tv_detail});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);

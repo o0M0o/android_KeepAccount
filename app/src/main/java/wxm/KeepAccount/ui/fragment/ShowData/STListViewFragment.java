@@ -27,7 +27,8 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
     public final static String MPARA_TAG    = "MPARA_TAG";
     public final static String MPARA_STATUS = "MPARA_STATUS";
 
-    public final static String SPARA_SHOW   = "SPARA_SHOW";
+    public final static String SPARA_TITLE  = "SPARA_TITLE";
+    public final static String SPARA_DETAIL = "SPARA_DETAIL";
     public final static String SPARA_TAG    = "SPARA_TAG";
     public final static String SPARA_ID     = "SPARA_ID";
 

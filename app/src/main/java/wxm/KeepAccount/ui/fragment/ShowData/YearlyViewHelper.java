@@ -36,6 +36,10 @@ import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 public class YearlyViewHelper extends LVViewHelperBase  {
     private final static String TAG = "YearlyViewHelper";
 
+    private boolean mBSelectSubFilter = false;
+    private LinkedList<String> mLLSubFilter = new LinkedList<>();
+    private LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
+
     public YearlyViewHelper()    {
         super();
     }
@@ -95,6 +99,49 @@ public class YearlyViewHelper extends LVViewHelperBase  {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+
+        int vid = v.getId();
+        switch (vid)    {
+            case R.id.bt_accpet :
+                if(mBSelectSubFilter) {
+                    if(!ToolUtil.ListIsNullOrEmpty(mLLSubFilter)) {
+                        ACNoteShow ac = getRootActivity();
+                        ac.jumpByTabName(STListViewFragment.TAB_TITLE_MONTHLY);
+                        ac.filterView(mLLSubFilter);
+
+                        mLLSubFilter.clear();
+                    }
+
+                    for(View i : mLLSubFilterVW)    {
+                        i.setSelected(false);
+                        i.getBackground().setAlpha(0);
+                    }
+                    mLLSubFilterVW.clear();
+
+                    mBSelectSubFilter = false;
+                    refreshAttachLayout();
+                }
+                break;
+
+            case R.id.bt_giveup :
+                mBSelectSubFilter = false;
+                mLLSubFilter.clear();
+
+                for(View i : mLLSubFilterVW)    {
+                    i.setSelected(false);
+                    i.getBackground().setAlpha(0);
+                }
+                mLLSubFilterVW.clear();
+
+                refreshAttachLayout();
+                break;
+        }
+    }
+
+
     /**
      * 重新加载数据
      */
@@ -112,10 +159,7 @@ public class YearlyViewHelper extends LVViewHelperBase  {
      */
     @Override
     protected void refreshView()  {
-        // set layout
-        setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
-        setAccpetGiveupLayoutVisible(View.INVISIBLE);
+        refreshAttachLayout();
 
         // update data
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
@@ -140,6 +184,12 @@ public class YearlyViewHelper extends LVViewHelperBase  {
                 new int[]{R.id.tv_title, R.id.tv_abstract});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
+    }
+
+    protected void refreshAttachLayout()    {
+        setAttachLayoutVisible(mBFilter || mBSelectSubFilter ? View.VISIBLE : View.INVISIBLE);
+        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
+        setAccpetGiveupLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.INVISIBLE);
     }
 
     /**
@@ -240,12 +290,12 @@ public class YearlyViewHelper extends LVViewHelperBase  {
             String sub_tag = ToolUtil.FormatDateString(k);
             String show =
                     String.format(Locale.CHINA,
-                            "%s\n支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
-                            sub_tag,
+                            "支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(STListViewFragment.SPARA_SHOW, show);
+            map.put(STListViewFragment.SPARA_TITLE, sub_tag);
+            map.put(STListViewFragment.SPARA_DETAIL, show);
             map.put(STListViewFragment.MPARA_TAG, tag);
             map.put(STListViewFragment.SPARA_TAG, sub_tag);
             cur_llhm.add(map);
@@ -271,8 +321,8 @@ public class YearlyViewHelper extends LVViewHelperBase  {
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
         SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), llhm,
-                new String[]{STListViewFragment.SPARA_SHOW},
-                new int[]{R.id.tv_show});
+                new String[]{STListViewFragment.SPARA_TITLE, STListViewFragment.SPARA_DETAIL},
+                new int[]{R.id.tv_title, R.id.tv_detail});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
@@ -353,14 +403,34 @@ public class YearlyViewHelper extends LVViewHelperBase  {
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Context ct = mSelfView.getContext();
-                        if(ct instanceof ACNoteShow)    {
-                            ACNoteShow as = UtilFun.cast(ct);
-                            as.jumpByTabName(STListViewFragment.TAB_TITLE_MONTHLY);
+                        if(!mBSelectSubFilter) {
+                            mLLSubFilter.clear();
+                            mLLSubFilterVW.clear();
+                        }
 
-                            HashMap<String, String> hp = UtilFun.cast(getItem(position));
-                            final String hp_tag = hp.get(STListViewFragment.SPARA_TAG);
-                            as.filterView(Collections.singletonList(hp_tag));
+                        HashMap<String, String> hp = UtilFun.cast(getItem(position));
+                        final String hp_tag = hp.get(STListViewFragment.SPARA_TAG);
+                        Resources res = v.getResources();
+                        if(!v.isSelected()) {
+                            mLLSubFilter.add(hp_tag);
+                            mLLSubFilterVW.add(v);
+
+                            if(!mBSelectSubFilter) {
+                                mBSelectSubFilter = true;
+                                refreshAttachLayout();
+                            }
+
+                            v.getBackground().setAlpha(255);
+                            v.setBackgroundColor(res.getColor(R.color.red));
+                        }   else    {
+                            mLLSubFilter.removeFirstOccurrence(hp_tag);
+                            mLLSubFilterVW.removeFirstOccurrence(v);
+                            v.getBackground().setAlpha(0);
+
+                            if(mLLSubFilter.isEmpty()) {
+                                mBSelectSubFilter = false;
+                                refreshAttachLayout();
+                            }
                         }
                     }
                 });
