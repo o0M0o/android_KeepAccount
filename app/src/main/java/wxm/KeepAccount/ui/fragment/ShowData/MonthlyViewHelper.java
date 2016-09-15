@@ -23,7 +23,6 @@ import java.util.Map;
 import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
@@ -36,6 +35,10 @@ import wxm.KeepAccount.ui.acinterface.ACNoteShow;
  */
 public class MonthlyViewHelper extends LVViewHelperBase {
     private final static String TAG = "MonthlyViewHelper";
+
+    private boolean mBSelectSubFilter = false;
+    private LinkedList<String> mLLSubFilter = new LinkedList<>();
+    private LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
 
     public MonthlyViewHelper()    {
         super();
@@ -96,6 +99,48 @@ public class MonthlyViewHelper extends LVViewHelperBase {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+
+        int vid = v.getId();
+        switch (vid)    {
+            case R.id.bt_accpet :
+                if(mBSelectSubFilter) {
+                    if(!ToolUtil.ListIsNullOrEmpty(mLLSubFilter)) {
+                        ACNoteShow ac = getRootActivity();
+                        ac.jumpByTabName(STListViewFragment.TAB_TITLE_DAILY);
+                        ac.filterView(mLLSubFilter);
+
+                        mLLSubFilter.clear();
+                    }
+
+                    for(View i : mLLSubFilterVW)    {
+                        i.setSelected(false);
+                        i.getBackground().setAlpha(0);
+                    }
+                    mLLSubFilterVW.clear();
+
+                    mBSelectSubFilter = false;
+                    refreshAttachLayout();
+                }
+                break;
+
+            case R.id.bt_giveup :
+                mBSelectSubFilter = false;
+                mLLSubFilter.clear();
+
+                for(View i : mLLSubFilterVW)    {
+                    i.setSelected(false);
+                    i.getBackground().setAlpha(0);
+                }
+                mLLSubFilterVW.clear();
+
+                refreshAttachLayout();
+                break;
+        }
+    }
+
 
     /**
      * 重新加载数据
@@ -105,9 +150,7 @@ public class MonthlyViewHelper extends LVViewHelperBase {
         mHMSubPara.clear();
 
         // format output
-        HashMap<String, ArrayList<Object>> hm_data =
-                AppModel.getPayIncomeUtility().GetAllNotesToMonth();
-
+        HashMap<String, ArrayList<Object>> hm_data = getRootActivity().getNotesByMonth();
         parseNotes(hm_data);
     }
 
@@ -117,9 +160,7 @@ public class MonthlyViewHelper extends LVViewHelperBase {
     @Override
     protected void refreshView()  {
         // set layout
-        setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
-        setAccpetGiveupLayoutVisible(View.INVISIBLE);
+        refreshAttachLayout();
 
         // update data
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
@@ -144,6 +185,13 @@ public class MonthlyViewHelper extends LVViewHelperBase {
                 new int[]{R.id.tv_title, R.id.tv_abstract});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
+    }
+
+
+    protected void refreshAttachLayout()    {
+        setAttachLayoutVisible(mBFilter || mBSelectSubFilter ? View.VISIBLE : View.INVISIBLE);
+        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
+        setAccpetGiveupLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.INVISIBLE);
     }
 
 
@@ -357,15 +405,45 @@ public class MonthlyViewHelper extends LVViewHelperBase {
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Context ct = mSelfView.getContext();
-                        if(ct instanceof ACNoteShow)    {
-                            ACNoteShow as = UtilFun.cast(ct);
-                            as.jumpByTabName(STListViewFragment.TAB_TITLE_DAILY);
-
-                            HashMap<String, String> hp = UtilFun.cast(getItem(position));
-                            final String hp_tag = hp.get(STListViewFragment.SPARA_TAG);
-                            as.filterView(Collections.singletonList(hp_tag));
+                        if(!mBSelectSubFilter) {
+                            mLLSubFilter.clear();
+                            mLLSubFilterVW.clear();
                         }
+
+                        HashMap<String, String> hp = UtilFun.cast(getItem(position));
+                        final String hp_tag = hp.get(STListViewFragment.SPARA_TAG);
+                        Resources res = v.getResources();
+                        if(!v.isSelected()) {
+                            mLLSubFilter.add(hp_tag);
+                            mLLSubFilterVW.add(v);
+
+                            if(!mBSelectSubFilter) {
+                                mBSelectSubFilter = true;
+                                refreshAttachLayout();
+                            }
+
+                            v.getBackground().setAlpha(255);
+                            v.setBackgroundColor(res.getColor(R.color.red));
+                        }   else    {
+                            mLLSubFilter.removeFirstOccurrence(hp_tag);
+                            mLLSubFilterVW.removeFirstOccurrence(v);
+                            v.getBackground().setAlpha(0);
+
+                            if(mLLSubFilter.isEmpty()) {
+                                mBSelectSubFilter = false;
+                                refreshAttachLayout();
+                            }
+                        }
+
+                        v.setSelected(!v.isSelected());
+                        /*
+                        ACNoteShow as = getRootActivity();
+                        as.jumpByTabName(STListViewFragment.TAB_TITLE_DAILY);
+
+                        HashMap<String, String> hp = UtilFun.cast(getItem(position));
+                        final String hp_tag = hp.get(STListViewFragment.SPARA_TAG);
+                        as.filterView(Collections.singletonList(hp_tag));
+                        */
                     }
                 });
 

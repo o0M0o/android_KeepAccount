@@ -61,7 +61,9 @@
         android:id="@+id/tabvp_lv_main"
         android:background="#80ffffff"
         android:longClickable="true"
-        android:layout_below="@+id/rl_attach_button" />
+        android:layout_below="@+id/rl_attach_button"
+        android:dividerHeight="2dp"
+        android:divider="@android:color/transparent" />
 
     <cn.wxm.andriodutillib.capricorn.RayMenu
         android:id="@+id/rm_show_record"

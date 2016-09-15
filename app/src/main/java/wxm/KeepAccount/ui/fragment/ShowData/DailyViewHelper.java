@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -173,8 +172,7 @@ public class DailyViewHelper extends LVViewHelperBase
         mMainPara.clear();
         mHMSubPara.clear();
 
-        HashMap<String, ArrayList<Object>> hm_data =
-                AppModel.getPayIncomeUtility().GetAllNotesToDay();
+        HashMap<String, ArrayList<Object>> hm_data = getRootActivity().getNotesByDay();
         parseNotes(hm_data);
     }
 
@@ -249,33 +247,27 @@ public class DailyViewHelper extends LVViewHelperBase
     private void OnRayMenuClick(int resid)  {
         switch (resid)  {
             case R.drawable.ic_add :    {
-                Context ct = mSelfView.getContext();
-                if(ct instanceof FragmentActivity) {
-                    FragmentActivity fa = UtilFun.cast(ct);
+                ACNoteShow ac = getRootActivity();
+                Intent intent = new Intent(ac, ACNoteEdit.class);
+                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
 
-                    Intent intent = new Intent(ct, ACNoteEdit.class);
-                    intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
+                        String.format(Locale.CHINA
+                                , "%d-%02d-%02d"
+                                , cal.get(Calendar.YEAR)
+                                , cal.get(Calendar.MONTH) + 1
+                                , cal.get(Calendar.DAY_OF_MONTH)));
 
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTimeInMillis(System.currentTimeMillis());
-                    intent.putExtra(AppGobalDef.STR_RECORD_DATE,
-                            String.format(Locale.CHINA
-                                    , "%d-%02d-%02d"
-                                    , cal.get(Calendar.YEAR)
-                                    , cal.get(Calendar.MONTH) + 1
-                                    , cal.get(Calendar.DAY_OF_MONTH)));
+                ac.startActivityForResult(intent, 1);
 
-                    fa.startActivityForResult(intent, 1);
-                }
             }
             break;
 
             case R.drawable.ic_switch :     {
-                Context ct = mSelfView.getContext();
-                if(ct instanceof ACNoteShow)    {
-                    ACNoteShow as = UtilFun.cast(ct);
-                    as.switchShow();
-                }
+                ACNoteShow ac = getRootActivity();
+                ac.switchShow();
             }
             break;
 
@@ -315,12 +307,9 @@ public class DailyViewHelper extends LVViewHelperBase
 
 
             case R.drawable.ic_leave :  {
-                Context ct = mSelfView.getContext();
-                if(ct instanceof Activity) {
-                    Activity ac = UtilFun.cast(ct);
-                    ac.setResult(AppGobalDef.INTRET_USR_LOGOUT);
-                    ac.finish();
-                }
+                Activity ac = getRootActivity();
+                ac.setResult(AppGobalDef.INTRET_USR_LOGOUT);
+                ac.finish();
             }
             break;
 
@@ -537,19 +526,16 @@ public class DailyViewHelper extends LVViewHelperBase
                 break;
 
                 case R.id.ib_edit : {
-                    Context ct = mSelfView.getContext();
-                    if(ct instanceof Activity) {
-                        Activity ac = UtilFun.cast(ct);
-                        Intent intent = new Intent(ac, ACNoteEdit.class);
-                        intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
-                        if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
-                            intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, did);
-                        } else {
-                            intent.putExtra(ACNoteEdit.PARA_NOTE_INCOME, did);
-                        }
-
-                        ac.startActivityForResult(intent, 1);
+                    ACNoteShow ac = getRootActivity();
+                    Intent intent = new Intent(ac, ACNoteEdit.class);
+                    intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
+                    if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
+                        intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, did);
+                    } else {
+                        intent.putExtra(ACNoteEdit.PARA_NOTE_INCOME, did);
                     }
+
+                    ac.startActivityForResult(intent, 1);
                 }
                 break;
             }

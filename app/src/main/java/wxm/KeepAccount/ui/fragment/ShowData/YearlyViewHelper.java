@@ -23,7 +23,6 @@ import java.util.Map;
 import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
@@ -104,9 +103,7 @@ public class YearlyViewHelper extends LVViewHelperBase  {
         mHMSubPara.clear();
 
         // format output
-        HashMap<String, ArrayList<Object>> hm_data =
-                AppModel.getPayIncomeUtility().GetAllNotesToYear();
-
+        HashMap<String, ArrayList<Object>> hm_data = getRootActivity().getNotesByYear();
         parseNotes(hm_data);
     }
 

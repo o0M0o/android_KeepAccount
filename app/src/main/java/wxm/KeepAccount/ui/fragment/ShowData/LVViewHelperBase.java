@@ -1,5 +1,7 @@
 package wxm.KeepAccount.ui.fragment.ShowData;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 
 /**
  * viewhelper基础类
@@ -87,6 +90,19 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      * 仅更新视图
      */
     protected abstract void refreshView();
+
+    /**
+     * 获取视图所在的activity
+     * @return  若成功返回activity，失败返回null;
+     */
+    protected ACNoteShow getRootActivity()  {
+        Context ct = mSelfView.getContext();
+        if(ct instanceof Activity) {
+            return UtilFun.cast(ct);
+        }
+
+        return null;
+    }
 
     /**
      * 设置附加layout可见性

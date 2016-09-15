@@ -16,9 +16,9 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
 import wxm.KeepAccount.ui.fragment.GraphView.STGraphViewFragment;
 import wxm.KeepAccount.ui.fragment.ShowData.STListViewFragment;
+import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
 
 /**
  * tab版本的main activity
@@ -28,10 +28,23 @@ public class ACNoteShow
         extends AppCompatActivity   {
     private static final String TAG = "ACNoteShow";
 
-    private boolean     mBNoteModify = true;
-    private HashMap<String, ArrayList<Object>>   mHMNoteData;
+    // for notes data
+    private boolean     mBDayNoteModify = true;
+    private boolean     mBMonthNoteModify = true;
+    private boolean     mBYearNoteModify = true;
+    private HashMap<String, ArrayList<Object>> mHMNoteDataByDay;
+    private HashMap<String, ArrayList<Object>> mHMNoteDataByMonth;
+    private HashMap<String, ArrayList<Object>> mHMNoteDataByYear;
+    /*
+    private LinkedList<HashMap<String, Object>>     mHMNoteDataTags;
 
+    public static final String NDTAG_YEAR   = "year";
+    public static final String NDTAG_MONTH  = "month";
+    public static final String NDTAG_DAY    = "day";
+    public static final String NDTAG_LOAD   = "load";
+    */
 
+    // for tab colors fragment
     private SlidingTabsColorsFragment mTabFragment;
     private STGraphViewFragment gvTabFragment = new STGraphViewFragment();
     private STListViewFragment  lvTabFragment = new STListViewFragment();
@@ -110,12 +123,30 @@ public class ACNoteShow
     }
 
     public HashMap<String, ArrayList<Object>> getNotesByDay()   {
-        if(mBNoteModify) {
-            mHMNoteData = AppModel.getPayIncomeUtility().GetAllNotesToDay();
-            mBNoteModify = false;
+        if(mBDayNoteModify) {
+            mHMNoteDataByDay = AppModel.getPayIncomeUtility().GetAllNotesToDay();
+            mBDayNoteModify = false;
         }
 
-        return mHMNoteData;
+        return mHMNoteDataByDay;
+    }
+
+    public HashMap<String, ArrayList<Object>> getNotesByMonth()   {
+        if(mBMonthNoteModify) {
+            mHMNoteDataByMonth = AppModel.getPayIncomeUtility().GetAllNotesToMonth();
+            mBMonthNoteModify = false;
+        }
+
+        return mHMNoteDataByMonth;
+    }
+
+    public HashMap<String, ArrayList<Object>> getNotesByYear()   {
+        if(mBYearNoteModify) {
+            mHMNoteDataByYear = AppModel.getPayIncomeUtility().GetAllNotesToYear();
+            mBYearNoteModify = false;
+        }
+
+        return mHMNoteDataByYear;
     }
 
     @Override
@@ -124,7 +155,9 @@ public class ACNoteShow
 
         if(AppGobalDef.INTRET_RECORD_ADD == resultCode
                 || AppGobalDef.INTRET_RECORD_MODIFY == resultCode)  {
-            mBNoteModify = true;
+            mBDayNoteModify = true;
+            mBMonthNoteModify = true;
+            mBYearNoteModify = true;
         }
 
         if(mTabFragment instanceof STListViewFragment)  {
