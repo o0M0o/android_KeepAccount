@@ -36,7 +36,9 @@ public class BudgetDataUtility {
         if(null != ls_bi)   {
             for(BudgetItem bi : ls_bi)  {
                 List<PayNoteItem> pi = AppModel.getPayIncomeUtility().GetPayNoteByBudget(bi);
-                bret.put(bi, pi);
+                
+                BudgetItem nbi = GetBudgetById(bi.get_id());
+                bret.put(nbi, pi);
             }
         }
 

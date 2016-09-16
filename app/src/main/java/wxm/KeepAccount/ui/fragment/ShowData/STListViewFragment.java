@@ -24,16 +24,16 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
 
     public final static String MPARA_TITLE      = "MPARA_TITLE";
     public final static String MPARA_ABSTRACT   = "MPARA_ABSTRACT";
-    public final static String MPARA_TAG    = "MPARA_TAG";
-    public final static String MPARA_STATUS = "MPARA_STATUS";
+    public final static String MPARA_TAG        = "MPARA_TAG";
 
     public final static String SPARA_TITLE  = "SPARA_TITLE";
     public final static String SPARA_DETAIL = "SPARA_DETAIL";
     public final static String SPARA_TAG    = "SPARA_TAG";
     public final static String SPARA_ID     = "SPARA_ID";
 
-    public final static String MPARA_TAG_SHOW = "TAG_SHOW";
-    public final static String MPARA_TAG_HIDE = "TAG_Hide";
+    public final static String MPARA_SHOW           = "MPARA_SHOW";
+    public final static String MPARA_SHOW_UNFOLD    = "SHOW_UNFOLD";
+    public final static String MPARA_SHOW_FOLD      = "SHOW_FOLD";
 
     public final static String SPARA_TAG_PAY    = "TAG_PAY";
     public final static String SPARA_TAG_INCOME = "TAG_INCOME";
@@ -101,22 +101,20 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
     }
 
     /**
-     * 过来视图
+     * 过滤视图
      * @param ls_tag     待过滤的tag
      */
     public void filterView(List<String> ls_tag)     {
-        if(null != mViewPager) {
-            int cur_pos = mViewPager.getCurrentItem();
-            if (AppGobalDef.INVALID_ID != cur_pos) {
-                ListViewPagerItem hot_it = UtilFun.cast(mTabs.get(cur_pos));
-                hot_it.mContent.doFilter(ls_tag);
-            }
+        int cur_pos = getCurViewPostion();
+        if (AppGobalDef.INVALID_ID != cur_pos) {
+            ListViewPagerItem hot_it = UtilFun.cast(mTabs.get(cur_pos));
+            hot_it.mContent.doFilter(ls_tag);
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int cur_pos = mViewPager.getCurrentItem();
+        int cur_pos = getCurViewPostion();
         if(AppGobalDef.INVALID_ID != cur_pos) {
             ListViewPagerItem hot_it = UtilFun.cast(mTabs.get(cur_pos));
             hot_it.mContent.onActivityResult(requestCode, resultCode, data);

@@ -245,7 +245,7 @@ public class YearlyViewHelper extends LVViewHelperBase  {
         HashMap<String, String> map = new HashMap<>();
         map.put(STListViewFragment.MPARA_TITLE, tag);
         map.put(STListViewFragment.MPARA_ABSTRACT, show_str);
-        map.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
+        map.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
         map.put(STListViewFragment.MPARA_TAG, tag);
         mMainPara.add(map);
 
@@ -302,7 +302,7 @@ public class YearlyViewHelper extends LVViewHelperBase  {
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(STListViewFragment.MPARA_TAG_SHOW.equals(hm.get(STListViewFragment.MPARA_STATUS))) {
+        if(STListViewFragment.MPARA_SHOW_UNFOLD.equals(hm.get(STListViewFragment.MPARA_SHOW))) {
             llhm = mHMSubPara.get(hm.get(STListViewFragment.MPARA_TAG));
         }
 
@@ -335,6 +335,17 @@ public class YearlyViewHelper extends LVViewHelperBase  {
         }
 
         @Override
+        public int getViewTypeCount() {
+            int org_ct = getCount();
+            return org_ct < 1 ? 1 : org_ct;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
+        @Override
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
@@ -350,12 +361,12 @@ public class YearlyViewHelper extends LVViewHelperBase  {
                         Resources res = pv.getResources();
                         ImageButton ib = UtilFun.cast(pv.findViewById(R.id.ib_hide_show));
                         HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                        if(STListViewFragment.MPARA_TAG_HIDE.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
-                            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_SHOW);
+                        if(STListViewFragment.MPARA_SHOW_FOLD.equals(hm.get(STListViewFragment.MPARA_SHOW)))    {
+                            hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_UNFOLD);
                             init_detail_view(pv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
                         }   else    {
-                            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
+                            hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
                             init_detail_view(pv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
                         }
@@ -385,6 +396,17 @@ public class YearlyViewHelper extends LVViewHelperBase  {
                               List<? extends Map<String, ?>> sdata,
                               String[] from, int[] to) {
             super(context, sdata, R.layout.li_yearly_show_detail, from, to);
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            int org_ct = getCount();
+            return org_ct < 1 ? 1 : org_ct;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
         }
 
         @Override

@@ -149,6 +149,12 @@ public class ACNoteShow
         return mHMNoteDataByYear;
     }
 
+    public void setNotesDirty() {
+        mBDayNoteModify = true;
+        mBMonthNoteModify = true;
+        mBYearNoteModify = true;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

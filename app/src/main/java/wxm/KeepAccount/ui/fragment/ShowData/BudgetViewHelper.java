@@ -206,7 +206,7 @@ public class BudgetViewHelper  extends LVViewHelperBase {
             HashMap<String, String> map = new HashMap<>();
             map.put(STListViewFragment.MPARA_TITLE, i.getName());
             map.put(STListViewFragment.MPARA_ABSTRACT, show_str);
-            map.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
+            map.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
             map.put(STListViewFragment.MPARA_TAG, tag);
             mMainPara.add(map);
 
@@ -250,7 +250,7 @@ public class BudgetViewHelper  extends LVViewHelperBase {
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(STListViewFragment.MPARA_TAG_SHOW.equals(hm.get(STListViewFragment.MPARA_STATUS))) {
+        if(STListViewFragment.MPARA_SHOW_UNFOLD.equals(hm.get(STListViewFragment.MPARA_SHOW))) {
             llhm = mHMSubPara.get(hm.get(STListViewFragment.MPARA_TAG));
         }
 
@@ -348,12 +348,12 @@ public class BudgetViewHelper  extends LVViewHelperBase {
                         Resources res = v.getResources();
                         ImageButton ib = UtilFun.cast(v);
                         HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                        if(STListViewFragment.MPARA_TAG_HIDE.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
-                            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_SHOW);
+                        if(STListViewFragment.MPARA_SHOW_FOLD.equals(hm.get(STListViewFragment.MPARA_SHOW)))    {
+                            hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_UNFOLD);
                             init_detail_view(fv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
                         }   else    {
-                            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
+                            hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
                             init_detail_view(fv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
                         }

@@ -139,18 +139,26 @@ public class DailyViewHelper extends LVViewHelperBase
         switch (vid)    {
             case R.id.bt_accpet :
                 if(mBShowDelete) {
+                    boolean dirty = false;
                     if(!ToolUtil.ListIsNullOrEmpty(mDelPay)) {
                         AppModel.getPayIncomeUtility().DeletePayNotes(mDelPay);
                         mDelPay.clear();
+                        dirty = true;
                     }
 
                     if(!ToolUtil.ListIsNullOrEmpty(mDelIncome)) {
                         AppModel.getPayIncomeUtility().DeleteIncomeNotes(mDelIncome);
                         mDelIncome.clear();
+                        dirty = true;
                     }
+
+                    getRootActivity().setNotesDirty();
+
+                    mBShowDelete = false;
+                    reloadData();
+                    refreshView();
                 }
 
-                loadView();
                 break;
 
             case R.id.bt_giveup :
@@ -217,8 +225,11 @@ public class DailyViewHelper extends LVViewHelperBase
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(STListViewFragment.MPARA_TAG_SHOW.equals(hm.get(STListViewFragment.MPARA_STATUS))) {
+        if(STListViewFragment.MPARA_SHOW_UNFOLD.equals(hm.get(STListViewFragment.MPARA_SHOW))) {
             llhm = mHMSubPara.get(hm.get(STListViewFragment.MPARA_TAG));
+            addUnfoldItem(hm.get(STListViewFragment.MPARA_TAG));
+        } else  {
+            removeUnfoldItem(hm.get(STListViewFragment.MPARA_TAG));
         }
 
         if(null == llhm) {
@@ -383,8 +394,12 @@ public class DailyViewHelper extends LVViewHelperBase
             HashMap<String, String> map = new HashMap<>();
             map.put(STListViewFragment.MPARA_TITLE, title);
             map.put(STListViewFragment.MPARA_ABSTRACT, show_str);
-            map.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
             map.put(STListViewFragment.MPARA_TAG, title);
+            if(checkUnfoldItem(title))
+                map.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_UNFOLD);
+            else
+                map.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
+
             mMainPara.add(map);
 
             mHMSubPara.put(title, cur_llhm);
@@ -398,10 +413,20 @@ public class DailyViewHelper extends LVViewHelperBase
     public class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
 
-        public SelfAdapter(Context context,
-                         List<? extends Map<String, ?>> mdata,
+        public SelfAdapter(Context context, List<? extends Map<String, ?>> mdata,
                          String[] from, int[] to) {
             super(context, mdata, R.layout.li_daily_show, from, to);
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            int org_ct = getCount();
+            return org_ct < 1 ? 1 : org_ct;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
         }
 
         @Override
@@ -409,7 +434,9 @@ public class DailyViewHelper extends LVViewHelperBase
             View v = super.getView(position, view, arg2);
             if(null != v)   {
                 //Log.i(TAG, "create view at pos = " + position);
+                final HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 final View fv = v;
+                final Resources res = v.getResources();
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
                 ib.getBackground().setAlpha(0);
                 ib.setOnClickListener(new OnClickListener() {
@@ -418,20 +445,26 @@ public class DailyViewHelper extends LVViewHelperBase
                         //Log.i(TAG, "onIbClick at pos = " + pos);
                         Resources res = v.getResources();
                         ImageButton ib = UtilFun.cast(v);
-                        HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                        if(STListViewFragment.MPARA_TAG_HIDE.equals(hm.get(STListViewFragment.MPARA_STATUS)))    {
-                            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_SHOW);
+                        if(STListViewFragment.MPARA_SHOW_FOLD.equals(hm.get(STListViewFragment.MPARA_SHOW)))    {
+                            hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_UNFOLD);
                             init_detail_view(fv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
                         }   else    {
-                            hm.put(STListViewFragment.MPARA_STATUS, STListViewFragment.MPARA_TAG_HIDE);
+                            hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
                             init_detail_view(fv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
                         }
                     }
                 });
 
-                Resources res = v.getResources();
+                if(STListViewFragment.MPARA_SHOW_FOLD.equals(hm.get(STListViewFragment.MPARA_SHOW)))    {
+                    //init_detail_view(fv, hm);
+                    ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
+                }   else    {
+                    init_detail_view(fv, hm);
+                    ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
+                }
+
                 if(0 == position % 2)   {
                     v.setBackgroundColor(res.getColor(R.color.lightsteelblue));
                 } else  {
@@ -456,6 +489,17 @@ public class DailyViewHelper extends LVViewHelperBase
                              String[] from, int[] to) {
             super(context, sdata, R.layout.li_daily_show_detail, from, to);
             mRootView = fv;
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            int org_ct = getCount();
+            return org_ct < 1 ? 1 : org_ct;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
         }
 
         @Override

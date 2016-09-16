@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.wxm.andriodutillib.SlidingTab.SlidingTabLayout;
+import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 
 /**
@@ -213,6 +214,11 @@ public class SlidingTabsColorsFragment extends Fragment {
         transaction.commit();*/
 
         mViewPager.setAdapter(new SampleFragmentPagerAdapter(getChildFragmentManager()));
+    }
+
+    public int getCurViewPostion()  {
+        ViewPager vp = UtilFun.cast(getActivity().findViewById(R.id.viewpager));
+        return vp.getCurrentItem();
     }
 
     /**

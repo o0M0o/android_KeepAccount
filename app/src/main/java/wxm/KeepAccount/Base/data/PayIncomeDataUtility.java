@@ -2,6 +2,7 @@ package wxm.KeepAccount.Base.data;
 
 import android.util.Log;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -30,12 +31,26 @@ public class PayIncomeDataUtility {
 
     /**
      * 根据预算查找支出数据
+     * 并根据支出数据更新预算
      * @param bi  待匹配预算
      * @return 查找到的数据
      */
     public List<PayNoteItem> GetPayNoteByBudget(BudgetItem bi)  {
-        return AppModel.getDBHelper().getPayDataREDao()
-                    .queryForEq(PayNoteItem.FIELD_BUDGET, bi.get_id());
+        List<PayNoteItem> ls_pay =  AppModel.getDBHelper().getPayDataREDao()
+                                .queryForEq(PayNoteItem.FIELD_BUDGET, bi.get_id());
+
+        bi.useBudget(BigDecimal.ZERO);
+        if(!ToolUtil.ListIsNullOrEmpty(ls_pay)) {
+            BigDecimal all_pay = BigDecimal.ZERO;
+            for(PayNoteItem i : ls_pay) {
+                all_pay = all_pay.add(i.getVal());
+            }
+
+            bi.useBudget(all_pay);
+        }
+
+        AppModel.getDBHelper().getBudgetDataREDao().update(bi);
+        return ls_pay;
     }
 
 

@@ -3,6 +3,7 @@ package wxm.KeepAccount.ui.fragment.ShowData;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,20 +23,27 @@ import wxm.KeepAccount.ui.acinterface.ACNoteShow;
  * Created by 123 on 2016/9/14.
  */
 public abstract class LVViewHelperBase implements View.OnClickListener {
-    protected boolean   mBFilter;
+    private final static String TAG = "LVViewHelperBase";
     protected View      mSelfView;
 
+    // 视图数据
+    protected LinkedList<HashMap<String, String>>                       mMainPara;
+    protected HashMap<String, LinkedList<HashMap<String, String>>>      mHMSubPara;
 
-    protected LinkedList<HashMap<String, String>> mMainPara;
-    protected HashMap<String, LinkedList<HashMap<String, String>>>    mHMSubPara;
-    protected LinkedList<String>                                      mFilterPara;
+    // 视图过滤数据
+    protected boolean               mBFilter;
+    protected LinkedList<String>    mFilterPara;
+
+    // 存放展开节点的数据
+    private LinkedList<String>    mUnfoldItems;
 
     public LVViewHelperBase()   {
-        mBFilter = false;
-        mSelfView   = null;
-        mMainPara   = new LinkedList<>();
-        mHMSubPara  = new HashMap<>();
-        mFilterPara = new LinkedList<>();
+        mBFilter        = false;
+        mSelfView       = null;
+        mMainPara       = new LinkedList<>();
+        mHMSubPara      = new HashMap<>();
+        mFilterPara     = new LinkedList<>();
+        mUnfoldItems    = new LinkedList<>();
     }
 
     /**
@@ -76,6 +84,39 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      */
     public abstract void onActivityResult(int requestCode, int resultCode, Intent data);
 
+
+    /**
+     * 添加一个展开节点
+     * 只记录20个展开节点, 超过数量后将移除最早记录的节点
+     * @param tag   展开节点tag
+     */
+    public void addUnfoldItem(String tag)   {
+        if(!mUnfoldItems.contains(tag)) {
+            if(20 < mUnfoldItems.size())
+                mUnfoldItems.removeFirst();
+
+            Log.i(TAG, "addUnfoldItem, tag = " + tag);
+            mUnfoldItems.addLast(tag);
+        }
+    }
+
+    /**
+     * 移除一个展开节点
+     * @param tag   移除节点tag
+     */
+    public void removeUnfoldItem(String tag)   {
+        mUnfoldItems.remove(tag);
+    }
+
+
+    /**
+     * 检查一个节点是否是展开节点
+     * @param tag   待检查节点tag
+     * @return  如果此节点是展开节点，返回true, 否则返回false
+     */
+    public boolean checkUnfoldItem(String tag)  {
+        return mUnfoldItems.contains(tag);
+    }
 
     @Override
     public void onClick(View v) {
