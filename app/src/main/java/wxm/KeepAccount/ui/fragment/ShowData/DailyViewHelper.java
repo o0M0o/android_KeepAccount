@@ -152,10 +152,12 @@ public class DailyViewHelper extends LVViewHelperBase
                         dirty = true;
                     }
 
-                    getRootActivity().setNotesDirty();
+                    if(dirty) {
+                        getRootActivity().setNotesDirty();
+                        reloadData();
+                    }
 
                     mBShowDelete = false;
-                    reloadData();
                     refreshView();
                 }
 
