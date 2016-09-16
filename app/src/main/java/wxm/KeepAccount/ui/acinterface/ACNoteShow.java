@@ -35,14 +35,6 @@ public class ACNoteShow
     private HashMap<String, ArrayList<Object>> mHMNoteDataByDay;
     private HashMap<String, ArrayList<Object>> mHMNoteDataByMonth;
     private HashMap<String, ArrayList<Object>> mHMNoteDataByYear;
-    /*
-    private LinkedList<HashMap<String, Object>>     mHMNoteDataTags;
-
-    public static final String NDTAG_YEAR   = "year";
-    public static final String NDTAG_MONTH  = "month";
-    public static final String NDTAG_DAY    = "day";
-    public static final String NDTAG_LOAD   = "load";
-    */
 
     // for tab colors fragment
     private SlidingTabsColorsFragment mTabFragment;
@@ -67,6 +59,9 @@ public class ACNoteShow
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.acbar_back_help, menu);
+
+        // 开启"switch view"选项
+        menu.getItem(0).setVisible(true);
         return true;
     }
 
@@ -88,6 +83,11 @@ public class ACNoteShow
                 Intent data = new Intent();
                 setResult(ret_data, data);
                 finish();
+            }
+            break;
+
+            case R.id.acb_mi_switch :   {
+                switchShow();
             }
             break;
 

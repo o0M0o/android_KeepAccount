@@ -30,6 +30,12 @@ public abstract class ChartsBase extends ChartView {
     private final String TAG = "ChartsBase";
     protected final BarChart3D chart = new BarChart3D();
 
+    /*
+    private static final int[] ITEM_DRAWABLES = {
+            R.drawable.ic_leave
+            ,R.drawable.ic_switch};
+     */
+
     //标签轴
     protected final List<String> chartLabels = new LinkedList<>();
     //数据轴
@@ -69,6 +75,20 @@ public abstract class ChartsBase extends ChartView {
 
         //綁定手势滑动事件
         this.bindTouch(this,chart);
+
+        /*
+        //for raymenu
+        Activity ac = (Activity)getContext();
+        RelativeLayout rl = UtilFun.cast(ac.getLayoutInflater()
+                                                .inflate(R.layout.rl_raymenu, null));
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        lp.bottomMargin = 30;
+        rl.setLayoutParams(lp);
+        ac.setContentView(rl);
+        */
     }
 
     //Demo中bar chart所使用的默认偏移值。

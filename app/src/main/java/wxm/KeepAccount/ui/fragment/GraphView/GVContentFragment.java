@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.fragment.GraphView;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -69,27 +68,14 @@ public class GVContentFragment extends Fragment {
         assert null != cs;
 
         String title = cs.toString();
-        Resources res =  getResources();
         if(title.equals(STGraphViewFragment.TAB_TITLE_DAILY))  {
             cur_view = new DailyCharts(this.getContext());
-
-            //chartLayout.addView(cur_view, layoutParams);
-            //((ViewGroup) content).addView(chartLayout);
-            //this.getActivity().setContentView(content);
         }
         else if(title.equals(STGraphViewFragment.TAB_TITLE_MONTHLY))   {
             cur_view = new MonthlyCharts(this.getContext());
-
-            //chartLayout.addView(cur_view, layoutParams);
-            //((ViewGroup) content).addView(chartLayout);
-            //this.getActivity().setContentView(content);
         }
         else if(title.equals(STGraphViewFragment.TAB_TITLE_YEARLY))    {
             cur_view = new YeaylyCharts(this.getContext());
-
-            //chartLayout.addView(cur_view, layoutParams);
-            //((ViewGroup) content).addView(chartLayout);
-            //this.getActivity().setContentView(content);
         }
 
         return cur_view;
