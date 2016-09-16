@@ -160,7 +160,7 @@ public class EditPayNoteViewHelper implements IEditNoteViewHelper, View.OnTouchL
             String info = mOldPayNote.getInfo();
             String note = mOldPayNote.getNote();
             String date = mOldPayNote.getTs().toString().substring(0, 10);
-            String amount = mOldPayNote.getVal().toPlainString();
+            String amount = String.format(Locale.CHINA, "%.02f", mOldPayNote.getVal());
 
             BudgetItem bi = mOldPayNote.getBudget();
             if (null != bi) {
@@ -188,13 +188,11 @@ public class EditPayNoteViewHelper implements IEditNoteViewHelper, View.OnTouchL
                 mETAmount.setText(amount);
         } else {
             Activity ac = getActivity();
-            if (null != ac) {
-                Intent it = ac.getIntent();
-                if (null != it) {
-                    String ad_date = it.getStringExtra(AppGobalDef.STR_RECORD_DATE);
-                    if (!UtilFun.StringIsNullOrEmpty(ad_date)) {
-                        mETDate.setText(ad_date);
-                    }
+            Intent it = ac.getIntent();
+            if (null != it) {
+                String ad_date = it.getStringExtra(AppGobalDef.STR_RECORD_DATE);
+                if (!UtilFun.StringIsNullOrEmpty(ad_date)) {
+                    mETDate.setText(ad_date);
                 }
             }
         }

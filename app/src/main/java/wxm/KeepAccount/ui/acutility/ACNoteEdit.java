@@ -13,8 +13,8 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
-import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
 import wxm.KeepAccount.ui.fragment.EditData.STEditNoteFragment;
+import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
 
 /**
  * 支出/收入数据编辑UI
@@ -111,5 +111,14 @@ public class ACNoteEdit extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(mTabFragment instanceof STEditNoteFragment)  {
+            STEditNoteFragment sf = UtilFun.cast(mTabFragment);
+            sf.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

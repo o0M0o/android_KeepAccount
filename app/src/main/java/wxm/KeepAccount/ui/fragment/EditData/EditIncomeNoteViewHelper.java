@@ -121,7 +121,7 @@ public class EditIncomeNoteViewHelper implements IEditNoteViewHelper, View.OnTou
             String info = mOldIncomeNote.getInfo();
             String note = mOldIncomeNote.getNote();
             String date = mOldIncomeNote.getTs().toString().substring(0, 10);
-            String amount = mOldIncomeNote.getVal().toPlainString();
+            String amount = String.format(Locale.CHINA, "%.02f", mOldIncomeNote.getVal());
 
             if (!UtilFun.StringIsNullOrEmpty(date))
                 mETDate.setText(date);
