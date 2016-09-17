@@ -283,13 +283,17 @@ public class BudgetViewHelper  extends LVViewHelperBase {
                 break;
 
             case R.drawable.ic_delete:
-                mActionType = ACTION_DELETE;
-                refreshView();
+                if(ACTION_DELETE != mActionType) {
+                    mActionType = ACTION_DELETE;
+                    refreshView();
+                }
                 break;
 
             case R.drawable.ic_edit:
-                mActionType = ACTION_EDIT;
-                refreshView();
+                if(ACTION_EDIT != mActionType) {
+                    mActionType = ACTION_EDIT;
+                    refreshView();
+                }
                 break;
 
             case R.drawable.ic_refrash :

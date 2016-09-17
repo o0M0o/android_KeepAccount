@@ -46,12 +46,18 @@ import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 public class DailyViewHelper extends LVViewHelperBase
         implements OnClickListener {
     private final static String TAG = "DailyViewHelper";
-    private boolean mBShowDelete;
-    private boolean mBShowEdit;
 
-    LinkedList<Integer> mDelPay;
-    LinkedList<Integer> mDelIncome;
+    // for action
+    private final static int ACTION_NONE    = 0;
+    private final static int ACTION_DELETE  = 1;
+    private final static int ACTION_EDIT    = 2;
+    private int mActionType = ACTION_NONE;
 
+    // delete data
+    private LinkedList<Integer> mDelPay;
+    private LinkedList<Integer> mDelIncome;
+
+    // for raymenu
     private static final int[] ITEM_DRAWABLES = {
                                     R.drawable.ic_leave
                                     ,R.drawable.ic_switch
@@ -69,8 +75,6 @@ public class DailyViewHelper extends LVViewHelperBase
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
         mSelfView       = inflater.inflate(R.layout.lv_pager, container, false);
-        mBShowDelete    = false;
-        mBShowEdit      = false;
         mBFilter        = false;
 
         // init ray menu
@@ -140,7 +144,7 @@ public class DailyViewHelper extends LVViewHelperBase
         int vid = v.getId();
         switch (vid)    {
             case R.id.bt_accpet :
-                if(mBShowDelete) {
+                if(ACTION_DELETE == mActionType) {
                     boolean dirty = false;
                     if(!ToolUtil.ListIsNullOrEmpty(mDelPay)) {
                         AppModel.getPayIncomeUtility().DeletePayNotes(mDelPay);
@@ -159,16 +163,17 @@ public class DailyViewHelper extends LVViewHelperBase
                         reloadData();
                     }
 
-                    mBShowDelete = false;
+                    mActionType = ACTION_NONE;
                     refreshView();
                 }
 
                 break;
 
             case R.id.bt_giveup :
-                mBShowDelete = false;
-                mBShowEdit = false;
-                refreshView();
+                mActionType = ACTION_NONE;
+                mDelPay.clear();
+                mDelIncome.clear();
+                refreshAttachLayout();
                 break;
         }
     }
@@ -185,18 +190,13 @@ public class DailyViewHelper extends LVViewHelperBase
     }
 
     /**
-     * 不重新加载数据，仅更新视图
+     * 仅更新视图
      */
     @Override
     protected void refreshView()  {
-        // set layout
-        setAttachLayoutVisible(mBFilter || mBShowDelete || mBShowEdit ?
-                                View.VISIBLE : View.INVISIBLE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
-        setAccpetGiveupLayoutVisible(mBShowDelete || mBShowEdit ?
-                                View.VISIBLE : View.INVISIBLE);
+        refreshAttachLayout();
 
-        // update data
+        // load show data
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
         if(mBFilter) {
             for (HashMap<String, String> i : mMainPara) {
@@ -221,6 +221,13 @@ public class DailyViewHelper extends LVViewHelperBase
         mSNAdapter.notifyDataSetChanged();
     }
 
+    protected void refreshAttachLayout()    {
+        setAttachLayoutVisible(ACTION_NONE != mActionType || mBFilter ?
+                                View.VISIBLE : View.INVISIBLE);
+        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
+        setAccpetGiveupLayoutVisible(ACTION_NONE != mActionType ? View.VISIBLE : View.INVISIBLE);
+    }
+
     /**
      * 初始化次级(详细数据)视图
      * @param v         主级视图
@@ -231,9 +238,6 @@ public class DailyViewHelper extends LVViewHelperBase
         LinkedList<HashMap<String, String>> llhm = null;
         if(STListViewFragment.MPARA_SHOW_UNFOLD.equals(hm.get(STListViewFragment.MPARA_SHOW))) {
             llhm = mHMSubPara.get(hm.get(STListViewFragment.MPARA_TAG));
-            addUnfoldItem(hm.get(STListViewFragment.MPARA_TAG));
-        } else  {
-            removeUnfoldItem(hm.get(STListViewFragment.MPARA_TAG));
         }
 
         if(null == llhm) {
@@ -257,7 +261,7 @@ public class DailyViewHelper extends LVViewHelperBase
      */
     private void OnRayMenuClick(int resid)  {
         switch (resid)  {
-            case R.drawable.ic_add :    {
+            case R.drawable.ic_add : {
                 ACNoteShow ac = getRootActivity();
                 Intent intent = new Intent(ac, ACNoteEdit.class);
                 intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
@@ -272,46 +276,26 @@ public class DailyViewHelper extends LVViewHelperBase
                                 , cal.get(Calendar.DAY_OF_MONTH)));
 
                 ac.startActivityForResult(intent, 1);
-
             }
             break;
 
-            case R.drawable.ic_switch :     {
-                ACNoteShow ac = getRootActivity();
-                ac.switchShow();
+            case R.drawable.ic_switch : {
+                getRootActivity().switchShow();
             }
             break;
 
-            case R.drawable.ic_delete:     {
-                ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
-                int cc = lv.getChildCount();
-                if(0 < cc)  {
-                    if(!mBShowDelete)    {
-                        mDelIncome.clear();
-                        mDelPay.clear();
-                    }
-
-                    mBShowDelete = !mBShowDelete;
-                    mBShowEdit = !mBShowDelete && mBShowEdit;
-                    if(mBShowDelete)
-                        refreshView();
-                    else
-                        loadView();
+            case R.drawable.ic_delete: {
+                if (ACTION_DELETE != mActionType) {
+                    mActionType = ACTION_DELETE;
+                    refreshView();
                 }
+                break;
             }
-            break;
 
             case R.drawable.ic_edit:     {
-                ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
-                int cc = lv.getChildCount();
-                if(0 < cc)  {
-                    mBShowEdit = !mBShowEdit;
-                    if(mBShowEdit && mBShowDelete)  {
-                        mBShowDelete = false;
-                        loadView();
-                    } else  {
-                        refreshView();
-                    }
+                if (ACTION_EDIT != mActionType) {
+                    mActionType = ACTION_EDIT;
+                    refreshView();
                 }
             }
             break;
@@ -453,10 +437,12 @@ public class DailyViewHelper extends LVViewHelperBase
                             hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_UNFOLD);
                             init_detail_view(fv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
+                            addUnfoldItem(hm.get(STListViewFragment.MPARA_TAG));
                         }   else    {
                             hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
                             init_detail_view(fv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
+                            removeUnfoldItem(hm.get(STListViewFragment.MPARA_TAG));
                         }
                     }
                 });
@@ -514,21 +500,21 @@ public class DailyViewHelper extends LVViewHelperBase
                 HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 final Resources res = v.getResources();
 
-                // for button
-                ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
-                assert null != ib;
-                ib.getBackground().setAlpha(0);
-                ib.setVisibility(mBShowDelete ? View.VISIBLE : View.INVISIBLE);
-                if(mBShowDelete)    {
-                    ib.setOnClickListener(this);
-                }
+                // for action
+                ImageButton ib_action = UtilFun.cast(v.findViewById(R.id.ib_action));
+                assert null != ib_action;
+                if(ACTION_NONE == mActionType)    {
+                    ib_action.setVisibility(View.INVISIBLE);
+                }   else    {
+                    ib_action.setVisibility(View.VISIBLE);
 
-                ib = UtilFun.cast(v.findViewById(R.id.ib_edit));
-                assert null != ib;
-                ib.getBackground().setAlpha(0);
-                ib.setVisibility(mBShowEdit ? View.VISIBLE : View.INVISIBLE);
-                if(mBShowEdit)  {
-                    ib.setOnClickListener(this);
+                    if(ACTION_DELETE == mActionType)
+                        ib_action.setImageDrawable(res.getDrawable(R.drawable.ic_delete));
+                    else
+                        ib_action.setImageDrawable(res.getDrawable(R.drawable.ic_edit));
+
+                    ib_action.getBackground().setAlpha(0);
+                    ib_action.setOnClickListener(this);
                 }
 
                 // for image & background
@@ -561,40 +547,40 @@ public class DailyViewHelper extends LVViewHelperBase
 
             switch (vid)    {
                 case R.id.ib_action:       {
-                    if(!v.isSelected()) {
-                        if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
-                            mDelPay.add(did);
-                        } else {
-                            mDelIncome.add(did);
+                    ImageButton ib_action = UtilFun.cast(v);
+                    if(ACTION_DELETE == mActionType)    {
+                        if(ib_action.isSelected())  {
+                            if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
+                                mDelPay.removeFirstOccurrence(did);
+                            } else {
+                                mDelIncome.removeFirstOccurrence(did);
+                            }
+
+                            ib_action.getBackground().setAlpha(0);
+                        }   else    {
+                            if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
+                                mDelPay.add(did);
+                            } else {
+                                mDelIncome.add(did);
+                            }
+
+                            ib_action.getBackground().setAlpha(255);
+                            ib_action.setBackgroundColor(res.getColor(R.color.red));
                         }
 
-                        v.getBackground().setAlpha(255);
-                        v.setBackgroundColor(res.getColor(R.color.red));
+                        ib_action.setSelected(!ib_action.isSelected());
                     } else  {
+                        ACNoteShow ac = getRootActivity();
+                        Intent intent = new Intent(ac, ACNoteEdit.class);
+                        intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
                         if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
-                            mDelPay.removeFirstOccurrence(did);
+                            intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, did);
                         } else {
-                            mDelIncome.removeFirstOccurrence(did);
+                            intent.putExtra(ACNoteEdit.PARA_NOTE_INCOME, did);
                         }
 
-                        v.getBackground().setAlpha(0);
+                        ac.startActivityForResult(intent, 1);
                     }
-
-                    v.setSelected(!v.isSelected());
-                }
-                break;
-
-                case R.id.ib_edit : {
-                    ACNoteShow ac = getRootActivity();
-                    Intent intent = new Intent(ac, ACNoteEdit.class);
-                    intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
-                    if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
-                        intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, did);
-                    } else {
-                        intent.putExtra(ACNoteEdit.PARA_NOTE_INCOME, did);
-                    }
-
-                    ac.startActivityForResult(intent, 1);
                 }
                 break;
             }
