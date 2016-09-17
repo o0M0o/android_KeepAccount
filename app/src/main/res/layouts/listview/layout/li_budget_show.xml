@@ -35,6 +35,18 @@
             android:layout_marginEnd="6dp"
             android:src="@drawable/ic_show"
             android:layout_centerVertical="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ib_action"
+            android:layout_alignParentEnd="false"
+            android:src="@drawable/ic_delete"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/ib_hide_show"
+            android:layout_marginRight="4dp"
+            android:visibility="visible" />
+
     </RelativeLayout>
 
     <ListView

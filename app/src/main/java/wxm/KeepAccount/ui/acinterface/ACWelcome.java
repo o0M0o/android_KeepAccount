@@ -184,11 +184,13 @@ public class ACWelcome extends AppCompatActivity implements View.OnClickListener
             }
             break;
 
+            /*
             case R.id.bt_edit_budget: {
                 Intent intent = new Intent(this, ACBudgetShow.class);
                 startActivityForResult(intent, 1);
             }
             break;
+            */
 
             case R.id.bt_setting : {
                 Toast.makeText(getApplicationContext(), "invoke setting!", Toast.LENGTH_SHORT).show();

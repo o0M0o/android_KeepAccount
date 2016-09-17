@@ -27,25 +27,6 @@
         android:layout_marginLeft="16dp"
         android:layout_centerVertical="true" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ib_edit"
-        android:layout_alignParentEnd="false"
-        android:layout_marginEnd="6dp"
-        android:src="@drawable/ic_edit"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/ib_delete" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ib_delete"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="6dp"
-        android:src="@drawable/ic_delete"
-        android:layout_centerVertical="true" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,5 +36,14 @@
         android:layout_alignLeft="@+id/tv_title"
         android:layout_below="@+id/tv_title"
         android:textSize="15sp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ib_look"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="6dp"
+        android:src="@drawable/ic_look"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

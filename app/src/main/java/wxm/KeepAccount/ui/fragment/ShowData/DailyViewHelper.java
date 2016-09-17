@@ -513,7 +513,7 @@ public class DailyViewHelper extends LVViewHelperBase
                 final Resources res = v.getResources();
 
                 // for button
-                ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_delete));
+                ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
                 assert null != ib;
                 ib.getBackground().setAlpha(0);
                 ib.setVisibility(mBShowDelete ? View.VISIBLE : View.INVISIBLE);
@@ -558,7 +558,7 @@ public class DailyViewHelper extends LVViewHelperBase
             int did = Integer.parseInt(hm.get(STListViewFragment.SPARA_ID));
 
             switch (vid)    {
-                case R.id.ib_delete :       {
+                case R.id.ib_action:       {
                     if(!v.isSelected()) {
                         if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
                             mDelPay.add(did);

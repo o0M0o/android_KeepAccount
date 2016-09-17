@@ -413,7 +413,7 @@ public class YearlyViewHelper extends LVViewHelperBase  {
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
-                ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_look));
+                ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
                 ib.getBackground().setAlpha(0);
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override

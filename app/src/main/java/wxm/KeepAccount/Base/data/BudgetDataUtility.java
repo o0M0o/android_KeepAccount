@@ -167,10 +167,32 @@ public class BudgetDataUtility {
 
     /**
      * 删除预算数据
-     * @param biid 待删除数据id
+     * 删除预算关联的支出数据
+     * @param ls_biid 待删除数据id
      * @return 成功返回{@code true}
      */
-    public boolean DeleteBudgetById(int biid)  {
-        return 1 == AppModel.getDBHelper().getBudgetDataREDao().deleteById(biid);
+    public boolean DeleteBudgetById(List<Integer> ls_biid)  {
+        if(!ToolUtil.ListIsNullOrEmpty(ls_biid)) {
+            int w_s = ls_biid.size();
+            int r_s = 0;
+            for(Integer id : ls_biid) {
+                List<PayNoteItem> ls_pay = AppModel.getDBHelper().getPayDataREDao()
+                                            .queryForEq(PayNoteItem.FIELD_BUDGET, id);
+                if (!ToolUtil.ListIsNullOrEmpty(ls_pay)) {
+                    for (PayNoteItem i : ls_pay) {
+                        i.setBudget(null);
+                        AppModel.getDBHelper().getPayDataREDao().update(i);
+                    }
+                }
+
+                if(1 == AppModel.getDBHelper().getBudgetDataREDao().deleteById(id)) {
+                    r_s += 1;
+                }
+            }
+
+            return  w_s == r_s;
+        }
+
+        return true;
     }
 }
