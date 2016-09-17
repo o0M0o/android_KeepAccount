@@ -155,29 +155,33 @@ public class ACNoteShow
         mBYearNoteModify = true;
     }
 
+    public boolean getDayNotesDirty()   {
+        return  mBDayNoteModify;
+    }
+
+    public boolean getMonthNotesDirty()   {
+        return  mBMonthNoteModify;
+    }
+
+    public boolean getYearNotesDirty()   {
+        return  mBYearNoteModify;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(AppGobalDef.INTRET_RECORD_ADD == resultCode
-                || AppGobalDef.INTRET_RECORD_MODIFY == resultCode)  {
-            mBDayNoteModify = true;
-            mBMonthNoteModify = true;
-            mBYearNoteModify = true;
+                || AppGobalDef.INTRET_RECORD_MODIFY == resultCode
+                || AppGobalDef.INTRET_SURE == resultCode)  {
+            setNotesDirty();
         }
 
-        if(mTabFragment instanceof STListViewFragment)  {
+        if (mTabFragment instanceof STListViewFragment) {
             STListViewFragment sf = UtilFun.cast(mTabFragment);
             sf.onActivityResult(requestCode, resultCode, data);
         }
     }
-
-    /*
-    private void updateView() {
-        mTabFragment.notifyDataChange();
-    }
-    */
-
 
     /**
      * 初始化

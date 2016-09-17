@@ -107,14 +107,12 @@ public class SlidingTabsColorsFragment extends Fragment {
      * Inflates the {@link View} which will be displayed by this {@link Fragment}, from the app's
      * resources.
      */
-    /*
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fm_main, container, false);
+        View v = inflater.inflate(R.layout.fm_main, container, false);
+        return v;
     }
-    */
-
 
     // BEGIN_INCLUDE (fragment_onviewcreated)
     /**
@@ -133,7 +131,6 @@ public class SlidingTabsColorsFragment extends Fragment {
                             null == savedInstanceState ? "null" : savedInstanceState.toString()));
 
         // BEGIN_INCLUDE (setup_viewpager)
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mViewPager.setAdapter(new SampleFragmentPagerAdapter(getChildFragmentManager()));
         // END_INCLUDE (setup_viewpager)
@@ -142,31 +139,11 @@ public class SlidingTabsColorsFragment extends Fragment {
         // Give the SlidingTabLayout the ViewPager, this must be done AFTER the ViewPager has had
         // it's PagerAdapter set.
         /*
-      A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
-      above, but is designed to give continuous feedback to the user when scrolling.
-     */
+          A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
+          above, but is designed to give continuous feedback to the user when scrolling.
+         */
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
-
-        /*
-        mSlidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mCurTabPos = position;
-                mCurView = mViewPager.getChildAt(position);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                mCurTabPos = position;
-                mCurView = mViewPager.getChildAt(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-        */
 
         // BEGIN_INCLUDE (tab_colorizer)
         // Set a TabColorizer to customize the indicator and divider colors. Here we just retrieve
@@ -190,16 +167,20 @@ public class SlidingTabsColorsFragment extends Fragment {
     // END_INCLUDE (fragment_onviewcreated)
 
     public void jumpToTabName(String tabname)   {
-        if(null != mViewPager) {
-            int cur_pos = mViewPager.getCurrentItem();
-            int c = mTabs.size();
-            for (int i = 0; i < c; ++i) {
-                SamplePagerItem si = mTabs.get(i);
-                if (i != cur_pos && si.getTitle().toString().equals(tabname)) {
-                    //mSlidingTabLayout.scrollToTab(i, 0);
-                    mViewPager.setCurrentItem(i, true);
-                    break;
-                }
+        int cur_pos = getCurViewPostion();
+        int c = mTabs.size();
+        for (int i = 0; i < c; ++i) {
+            SamplePagerItem si = mTabs.get(i);
+            if (i != cur_pos && si.getTitle().toString().equals(tabname)) {
+                View v = this.getView();
+                assert null != v;
+
+                View vv = v.findViewById(R.id.viewpager);
+                assert null != vv;
+
+                ViewPager vp = UtilFun.cast(vv);
+                vp.setCurrentItem(i, true);
+                break;
             }
         }
     }
@@ -212,12 +193,24 @@ public class SlidingTabsColorsFragment extends Fragment {
             transaction.remove(f);
         }
         transaction.commit();*/
+        View v = this.getView();
+        assert null != v;
 
-        mViewPager.setAdapter(new SampleFragmentPagerAdapter(getChildFragmentManager()));
+        View vv = v.findViewById(R.id.viewpager);
+        assert null != vv;
+
+        ViewPager vp = UtilFun.cast(vv);
+        vp.setAdapter(new SampleFragmentPagerAdapter(getChildFragmentManager()));
     }
 
     public int getCurViewPostion()  {
-        ViewPager vp = UtilFun.cast(getActivity().findViewById(R.id.viewpager));
+        View v = this.getView();
+        assert null != v;
+
+        View vv = v.findViewById(R.id.viewpager);
+        assert null != vv;
+
+        ViewPager vp = UtilFun.cast(vv);
         return vp.getCurrentItem();
     }
 

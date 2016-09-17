@@ -96,6 +96,11 @@ public class BudgetViewHelper  extends LVViewHelperBase {
     }
 
     @Override
+    public void checkView() {
+        loadView();
+    }
+
+    @Override
     public void filterView(List<String> ls_tag) {
     }
 

@@ -58,10 +58,14 @@ public class YearlyViewHelper extends LVViewHelperBase  {
 
     @Override
     public void loadView() {
-        refreshAttachLayout();
-
         reloadData();
         refreshView();
+    }
+
+    @Override
+    public void checkView() {
+        if(getRootActivity().getYearNotesDirty())
+            loadView();
     }
 
     @Override

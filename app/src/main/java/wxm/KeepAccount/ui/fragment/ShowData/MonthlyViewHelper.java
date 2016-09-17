@@ -58,10 +58,14 @@ public class MonthlyViewHelper extends LVViewHelperBase {
 
     @Override
     public void loadView() {
-        refreshAttachLayout();
-
         reloadData();
         refreshView();
+    }
+
+    @Override
+    public void checkView() {
+        if(getRootActivity().getMonthNotesDirty())
+            loadView();
     }
 
     @Override

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,6 @@ import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
 
 /**
@@ -97,8 +98,10 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fm_main, container, false);
+        View org = super.onCreateView(inflater, container, savedInstanceState);
+        return org;
     }
+
 
     /**
      * 过滤视图
@@ -112,6 +115,12 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
         }
     }
 
+    /**
+     * 处理activity返回的结果
+     * @param requestCode  activity结果
+     * @param resultCode   activity结果
+     * @param data         activity结果
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         int cur_pos = getCurViewPostion();
@@ -121,6 +130,41 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
         }
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mSlidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                /*
+                //String l = String.format(Locale.CHINA,
+                //        "onPageScrolled, pos = %d, positionOffset = %f, positionOffsetPixels = %d"
+                //        , position, positionOffset, positionOffsetPixels);
+                String l = "onPageScrolled, pos = " + position +
+                        ", positionOffsetPixels = " + positionOffsetPixels;
+                Log.i(TAG, l); */
+
+                if(0 == positionOffsetPixels)
+                    refrashView(position);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.i(TAG, "onPageSelected, pos = " + position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                Log.i(TAG, "onPageScrollStateChanged, state = " + state);
+            }
+
+
+            private void refrashView(int postion)  {
+                ListViewPagerItem hot_it = UtilFun.cast(mTabs.get(postion));
+                hot_it.mContent.checkView();
+            }
+        });
+    }
 
     /**
      * listview fragment的内容类
@@ -188,11 +232,17 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
             /* Bundle args = getArguments();
             if (args != null) {
             }*/
+
+            Log.i(TAG, "onViewCreated");
             mViewHelper.loadView();
         }
 
         public void doFilter(List<String> ls_tag)   {
             mViewHelper.filterView(ls_tag);
+        }
+
+        public void checkView()  {
+            mViewHelper.checkView();
         }
 
         @Override

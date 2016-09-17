@@ -95,12 +95,14 @@ public class DailyViewHelper extends LVViewHelperBase
 
     @Override
     public void loadView() {
-        setAttachLayoutVisible(View.INVISIBLE);
-        setFilterLayoutVisible(View.INVISIBLE);
-        setAttachLayoutVisible(View.INVISIBLE);
-
         reloadData();
         refreshView();
+    }
+
+    @Override
+    public void checkView() {
+        if(getRootActivity().getDayNotesDirty())
+            loadView();
     }
 
     @Override

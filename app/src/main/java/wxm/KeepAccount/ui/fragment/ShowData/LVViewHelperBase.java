@@ -69,6 +69,11 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
     public abstract void loadView();
 
     /**
+     * 检查数据是否更新，然后决定是否重新加载视图
+     */
+    public abstract void checkView();
+
+    /**
      * 过滤视图
      * @param ls_tag   过滤参数 :
      *                 1. 如果为null则不过滤
