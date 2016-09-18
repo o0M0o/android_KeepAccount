@@ -155,10 +155,8 @@ public class ToolUtil {
      * @return 若链表为NULL或者空则返回true,否则返回false
      */
     public static boolean ListIsNullOrEmpty(List lst)    {
-        if((null == lst) || lst.isEmpty())
-            return true;
+        return (null == lst) || lst.isEmpty();
 
-        return false;
     }
 
 

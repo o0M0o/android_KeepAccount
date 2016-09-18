@@ -37,8 +37,8 @@ public class MonthlyViewHelper extends LVViewHelperBase {
     private final static String TAG = "MonthlyViewHelper";
 
     private boolean mBSelectSubFilter = false;
-    private LinkedList<String> mLLSubFilter = new LinkedList<>();
-    private LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
+    private final LinkedList<String> mLLSubFilter = new LinkedList<>();
+    private final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
 
     public MonthlyViewHelper()    {
         super();
@@ -185,7 +185,7 @@ public class MonthlyViewHelper extends LVViewHelperBase {
     }
 
 
-    protected void refreshAttachLayout()    {
+    private void refreshAttachLayout()    {
         setAttachLayoutVisible(mBFilter || mBSelectSubFilter ? View.VISIBLE : View.INVISIBLE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
         setAccpetGiveupLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.INVISIBLE);

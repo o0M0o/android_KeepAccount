@@ -46,7 +46,7 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
 
 
     protected static class ListViewPagerItem extends SamplePagerItem {
-        protected LVFRGContent  mContent;
+        LVFRGContent  mContent;
 
         public ListViewPagerItem(CharSequence title, int indicatorColor, int dividerColor) {
             super(title, indicatorColor, dividerColor);
@@ -68,12 +68,6 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
         // BEGIN_INCLUDE (populate_tabs)
         if(mTabs.isEmpty()) {
             mTabs.add(new ListViewPagerItem(
-                    TAB_TITLE_BUDGET, // Title
-                    Color.GREEN, // Indicator color
-                    Color.GRAY// Divider color
-            ));
-
-            mTabs.add(new ListViewPagerItem(
                     TAB_TITLE_DAILY, // Title
                     Color.GREEN, // Indicator color
                     Color.GRAY// Divider color
@@ -90,6 +84,12 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
                     Color.GREEN, // Indicator color
                     Color.GRAY// Divider color
             ));
+
+            mTabs.add(new ListViewPagerItem(
+                    TAB_TITLE_BUDGET, // Title
+                    Color.GREEN, // Indicator color
+                    Color.GRAY// Divider color
+            ));
         }
 
         // END_INCLUDE (populate_tabs)
@@ -98,8 +98,7 @@ public class STListViewFragment extends SlidingTabsColorsFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View org = super.onCreateView(inflater, container, savedInstanceState);
-        return org;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
 

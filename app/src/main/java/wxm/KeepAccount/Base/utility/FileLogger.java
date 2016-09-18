@@ -20,9 +20,9 @@ import cn.wxm.andriodutillib.util.UtilFun;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class FileLogger {
     private final static String LOG_NAME = "KeepAccount_run_%g.log";
-    private static FileLogger instance = new FileLogger();
+    private static final FileLogger instance = new FileLogger();
 
-    private String mLogTag;
+    private final String mLogTag;
     private Logger mLoger;
 
     public static Logger getLogger(){
@@ -57,18 +57,17 @@ public class FileLogger {
                 @Override
                 public String format(LogRecord record) {
 
-                    String ret = String.format(Locale.CHINA
+                    return String.format(Locale.CHINA
                             ,"%s|%s|%s-%d|%s:%s|%s"
                             , UtilFun.MilliSecsToString(record.getMillis())
                             , record.getLevel().getName()
                             , mLogTag ,record.getThreadID()
                             , record.getSourceClassName(), record.getSourceMethodName()
                             , formatMessage(record)) + (System.lineSeparator());
-                    return ret;
                 }
             });
 
-            mLoger = Logger.getLogger("camerajob_runlog");
+            mLoger = Logger.getLogger("keepaccount_runlog");
             mLoger.addHandler(mLogFH);
             mLoger.setLevel(Level.WARNING);
         } catch (IOException e) {

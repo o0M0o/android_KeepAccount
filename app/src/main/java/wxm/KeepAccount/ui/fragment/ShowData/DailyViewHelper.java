@@ -54,8 +54,8 @@ public class DailyViewHelper extends LVViewHelperBase
     private int mActionType = ACTION_NONE;
 
     // delete data
-    private LinkedList<Integer> mDelPay;
-    private LinkedList<Integer> mDelIncome;
+    private final LinkedList<Integer> mDelPay;
+    private final LinkedList<Integer> mDelIncome;
 
     // for raymenu
     private static final int[] ITEM_DRAWABLES = {
@@ -80,12 +80,11 @@ public class DailyViewHelper extends LVViewHelperBase
         // init ray menu
         RayMenu rayMenu = UtilFun.cast(mSelfView.findViewById(R.id.rm_show_record));
         assert null != rayMenu;
-        final int itemCount = ITEM_DRAWABLES.length;
-        for (int i = 0; i < itemCount; i++) {
+        for (int ITEM_DRAWABLE : ITEM_DRAWABLES) {
             ImageView item = new ImageView(mSelfView.getContext());
-            item.setImageResource(ITEM_DRAWABLES[i]);
+            item.setImageResource(ITEM_DRAWABLE);
 
-            final int position = ITEM_DRAWABLES[i];
+            final int position = ITEM_DRAWABLE;
             rayMenu.addItem(item, new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -221,7 +220,7 @@ public class DailyViewHelper extends LVViewHelperBase
         mSNAdapter.notifyDataSetChanged();
     }
 
-    protected void refreshAttachLayout()    {
+    private void refreshAttachLayout()    {
         setAttachLayoutVisible(ACTION_NONE != mActionType || mBFilter ?
                                 View.VISIBLE : View.INVISIBLE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
@@ -472,7 +471,7 @@ public class DailyViewHelper extends LVViewHelperBase
      */
     public class SelfSubAdapter  extends SimpleAdapter implements OnClickListener {
         private final static String TAG = "SelfSubAdapter";
-        private ListView        mRootView;
+        private final ListView        mRootView;
 
         public SelfSubAdapter(Context context, ListView fv,
                              List<? extends Map<String, ?>> sdata,

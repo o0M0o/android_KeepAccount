@@ -23,21 +23,22 @@ import java.util.Locale;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 
 /**
- * 用户登陆后首页面
+ * 用户登录后简单首页面
  */
-public class ACWelcome extends AppCompatActivity
+public class ACWelcomeSimple extends AppCompatActivity
         implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG = "ACWelcome";
+    private static final String TAG = "ACWelcomeSimple";
     private static final int    BTDRAW_WIDTH    = 96;
     private static final int    BTDRAW_HEIGHT   = 96;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_welcome);
+        setContentView(R.layout.ac_welcome_simple);
 
         init_component();
     }
@@ -48,21 +49,9 @@ public class ACWelcome extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.acbar_back_help, menu);
         return true;
-    } */
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_welcome);
-        assert drawer != null;
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
-
-    /*@Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.acb_mi_leave : {
@@ -90,13 +79,23 @@ public class ACWelcome extends AppCompatActivity
         return true;
     } */
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_welcome_simple);
+        assert drawer != null;
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     private void init_component() {
         // set nav view
         Toolbar tb = UtilFun.cast(findViewById(R.id.ac_navw_toolbar));
         setSupportActionBar(tb);
 
-        DrawerLayout drawer = UtilFun.cast(findViewById(R.id.ac_welcome));
+        DrawerLayout drawer = UtilFun.cast(findViewById(R.id.ac_welcome_simple));
         assert null != drawer;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, tb,
@@ -118,37 +117,14 @@ public class ACWelcome extends AppCompatActivity
         dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
         bt_datashow.setCompoundDrawables(null, dr, null, null);
 
-        // init setting
-        Button bt_setting = UtilFun.cast(findViewById(R.id.bt_setting));
-        assert null != bt_setting;
-        bt_setting.setOnClickListener(this);
+        // init add note
+        Button bt_add = UtilFun.cast(findViewById(R.id.bt_add_note));
+        assert null != bt_add;
+        bt_add.setOnClickListener(this);
 
-        // init add income
-        Button bt_addincome = UtilFun.cast(findViewById(R.id.bt_add_income));
-        assert null != bt_addincome;
-        bt_addincome.setOnClickListener(this);
-
-        dr = bt_addincome.getCompoundDrawables()[1];
+        dr = bt_add.getCompoundDrawables()[1];
         dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
-        bt_addincome.setCompoundDrawables(null, dr, null, null);
-
-        // init add pay
-        Button bt_addpay = UtilFun.cast(findViewById(R.id.bt_add_pay));
-        assert null != bt_addpay;
-        bt_addpay.setOnClickListener(this);
-
-        dr = bt_addpay.getCompoundDrawables()[1];
-        dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
-        bt_addpay.setCompoundDrawables(null, dr, null, null);
-
-        // init leave login
-        Button bt_leave_login = UtilFun.cast(findViewById(R.id.bt_leave_login));
-        assert null != bt_leave_login;
-        bt_leave_login.setOnClickListener(this);
-
-        dr = bt_leave_login.getCompoundDrawables()[1];
-        dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
-        bt_leave_login.setCompoundDrawables(null, dr, null, null);
+        bt_add.setCompoundDrawables(null, dr, null, null);
 
         // init edit budget
         Button bt_edit_budget = UtilFun.cast(findViewById(R.id.bt_edit_budget));
@@ -162,11 +138,21 @@ public class ACWelcome extends AppCompatActivity
         // init edit remind
         Button bt_edit_remind = UtilFun.cast(findViewById(R.id.bt_edit_remind));
         assert null != bt_edit_remind;
-        bt_edit_remind.setOnClickListener(this);
+        //bt_edit_remind.setOnClickListener(this);
 
         dr = bt_edit_remind.getCompoundDrawables()[1];
         dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
         bt_edit_remind.setCompoundDrawables(null, dr, null, null);
+        bt_edit_remind.setVisibility(View.INVISIBLE);
+
+        // init leave login
+        Button bt_leave_login = UtilFun.cast(findViewById(R.id.bt_leave_login));
+        assert null != bt_leave_login;
+        bt_leave_login.setOnClickListener(this);
+
+        dr = bt_leave_login.getCompoundDrawables()[1];
+        dr.setBounds(0, 0, BTDRAW_WIDTH, BTDRAW_HEIGHT);
+        bt_leave_login.setCompoundDrawables(null, dr, null, null);
     }
 
     @Override
@@ -179,27 +165,27 @@ public class ACWelcome extends AppCompatActivity
             }
             break;
 
+            /*
             case R.id.bt_edit_remind :  {
                 Intent intent = new Intent(this, ACRemindShow.class);
                 startActivityForResult(intent, 1);
             }
             break;
 
-            /*
-            case R.id.bt_edit_budget: {
-                Intent intent = new Intent(this, ACBudgetShow.class);
-                startActivityForResult(intent, 1);
-            }
-            break;
-            */
-
             case R.id.bt_setting : {
                 Toast.makeText(getApplicationContext(), "invoke setting!", Toast.LENGTH_SHORT).show();
             }
             break;
+            */
 
-            case R.id.bt_add_income :
-            case R.id.bt_add_pay : {
+            case R.id.bt_edit_budget: {
+                Intent intent = new Intent(this, ACBudgetEdit.class);
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+
+            case R.id.bt_add_note: {
                 Intent intent = new Intent(v.getContext(), ACNoteEdit.class);
                 intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
 

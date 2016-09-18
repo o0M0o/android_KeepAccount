@@ -20,7 +20,6 @@ import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
  * Created by 123 on 2016/8/5.
  */
 public class DBOrmliteHelperUT extends AndroidTestCase {
-    private RenamingDelegatingContext   mMockContext;
     private DBOrmliteHelper             mHelper;
 
     public DBOrmliteHelperUT()     {
@@ -30,7 +29,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        mMockContext = new RenamingDelegatingContext(getContext(), "test1_");
+        RenamingDelegatingContext mMockContext = new RenamingDelegatingContext(getContext(), "test1_");
         assertNotNull(mMockContext);
         mHelper = new DBOrmliteHelper(mMockContext);
         assertNotNull(mHelper);

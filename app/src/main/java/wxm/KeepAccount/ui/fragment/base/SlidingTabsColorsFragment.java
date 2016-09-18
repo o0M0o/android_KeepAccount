@@ -101,7 +101,7 @@ public class SlidingTabsColorsFragment extends Fragment {
     /**
      * List of {@link SamplePagerItem} which represent this sample's tabs.
      */
-    protected List<SamplePagerItem> mTabs = new ArrayList<SamplePagerItem>();
+    protected final List<SamplePagerItem> mTabs = new ArrayList<>();
 
     /**
      * Inflates the {@link View} which will be displayed by this {@link Fragment}, from the app's
@@ -110,8 +110,7 @@ public class SlidingTabsColorsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fm_main, container, false);
-        return v;
+        return inflater.inflate(R.layout.fm_main, container, false);
     }
 
     // BEGIN_INCLUDE (fragment_onviewcreated)
@@ -203,7 +202,7 @@ public class SlidingTabsColorsFragment extends Fragment {
         vp.setAdapter(new SampleFragmentPagerAdapter(getChildFragmentManager()));
     }
 
-    public int getCurViewPostion()  {
+    protected int getCurViewPostion()  {
         View v = this.getView();
         assert null != v;
 

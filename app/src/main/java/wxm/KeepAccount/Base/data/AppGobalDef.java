@@ -15,14 +15,8 @@ public class AppGobalDef {
     static public final String CNSTR_RECORD_PAY       = "支出";
     static public final String CNSTR_RECORD_INCOME    = "收入";
 
-	static public final String STR_SELECT_ITEM      = "select_item";
-    static public final String STR_RECORD           = "record";
-    static public final String STR_RECORD_ID        = "record_id";
     static public final String STR_RECORD_DATE      = "record_date";
     static public final String STR_RECORD_TYPE      = "record_type";
-    static public final String STR_RECORD_INFO      = "record_info";
-    static public final String STR_RECORD_AMOUNT    = "record_amount";
-    static public final String STR_RECORD_NOTE      = "record_note";
 
     static public final String STR_PWD_PAD = "JkpYkhiayh@#$_)(";
 

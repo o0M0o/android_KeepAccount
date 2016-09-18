@@ -53,7 +53,10 @@
             android:label="@string/ac_label_budget_manager" />
         <activity android:name=".ui.acutility.ACNoteEdit" />
         <activity android:name=".ui.acutility.ACRemindEdit" />
-        <activity android:name=".ui.acinterface.ACRemindShow"></activity>
+        <activity android:name=".ui.acinterface.ACRemindShow" />
+        <activity
+            android:name=".ui.acinterface.ACWelcomeSimple"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

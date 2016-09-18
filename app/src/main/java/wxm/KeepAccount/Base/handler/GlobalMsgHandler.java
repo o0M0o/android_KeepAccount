@@ -17,18 +17,6 @@ public class GlobalMsgHandler extends Handler {
     public void handleMessage(Message msg) {
         Log.i(TAG, "receive msg : " + msg.toString());
         switch (msg.what)   {
-            case AppMsgDef.MSG_LOAD_ALL_RECORDS:
-            case AppMsgDef.MSG_RECORD_GET:
-            case AppMsgDef.MSG_TO_DAILY_DETAILREPORT:
-            case AppMsgDef.MSG_DELETE_RECORDS:
-            case AppMsgDef.MSG_TO_DAYREPORT:
-            case AppMsgDef.MSG_TO_MONTHREPORT:
-            case AppMsgDef.MSG_TO_YEARREPORT:   {
-                RecordUtility.doMsg(msg);
-            }
-            break;
-
-            case AppMsgDef.MSG_USR_HASUSR :
             case AppMsgDef.MSG_USR_ADDUSR :
             case AppMsgDef.MSG_USR_LOGOUT :
             case AppMsgDef.MSG_USR_LOGIN: {

@@ -25,7 +25,6 @@ import wxm.KeepAccount.Base.data.AppGobalDef;
 public class IncomeNoteItem implements Parcelable {
     public final static String FIELD_TS         = "ts";
     public final static String FIELD_USR        = "usr_id";
-    public final static String FIELD_BUDGET     = "budget_id";
 
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     private int _id;

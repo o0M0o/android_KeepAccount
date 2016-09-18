@@ -8,7 +8,6 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -17,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -64,13 +62,6 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
     private ACLMsgHandler   mMHHandler;
 
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
@@ -113,6 +104,7 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
         });
 
         Button mEmailRegisterButton = (Button) findViewById(R.id.email_register_button);
+        assert mEmailRegisterButton != null;
         mEmailRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -195,13 +187,15 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
         startActivityForResult(intent, 1);
     }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }
+// --Commented out by Inspection START (2016/9/18 12:53):
+//    private void populateAutoComplete() {
+//        if (!mayRequestContacts()) {
+//            return;
+//        }
+//
+//        getLoaderManager().initLoader(0, null, this);
+//    }
+// --Commented out by Inspection STOP (2016/9/18 12:53)
 
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -225,18 +219,18 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
         return false;
     }
 
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //populateAutoComplete();
-            }
-        }
-    }
+//    /**
+//     * Callback received when a permissions request has been completed.
+//     */
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+//                                           @NonNull int[] grantResults) {
+//        if (requestCode == REQUEST_READ_CONTACTS) {
+//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                //populateAutoComplete();
+//            }
+//        }
+//    }
 
 
     /**
@@ -379,15 +373,14 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
         };
 
         int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
 
 
     /**
      * 其它activity返回结果
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode   request param
+     * @param resultCode    result param
+     * @param data          data param
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)   {
@@ -428,7 +421,7 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
      */
     private void SwitchToWorkActivity()  {
         //Intent intent = new Intent(this, ACNoteShow.class);
-        Intent intent = new Intent(this, ACWelcome.class);
+        Intent intent = new Intent(this, ACWelcomeSimple.class);
         startActivityForResult(intent, 1);
     }
 
@@ -471,7 +464,6 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
                 return false;
             }
 
-            Resources res = getResources();
             Intent data = new Intent();
             data.putExtra(UsrItem.FIELD_NAME, mEmail);
             data.putExtra(UsrItem.FIELD_PWD, mPassword);
@@ -492,9 +484,9 @@ public class ACLogin extends AppCompatActivity implements LoaderCallbacks<Cursor
         }
     }
 
-    public class ACLMsgHandler extends Handler {
+    public static class ACLMsgHandler extends Handler {
         private static final String TAG = "ACLMsgHandler";
-        private ACLogin mACCur;
+        private final ACLogin mACCur;
 
         public ACLMsgHandler(ACLogin cur) {
             super();

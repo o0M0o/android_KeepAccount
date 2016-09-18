@@ -30,7 +30,7 @@ public class STEditNoteFragment extends SlidingTabsColorsFragment {
     private static IncomeNoteItem  mIncomeNote;
 
     protected static class ListViewPagerItem extends SamplePagerItem {
-        protected NoteContentFragment  mContent;
+        NoteContentFragment  mContent;
 
         public ListViewPagerItem(CharSequence title, int indicatorColor, int dividerColor) {
             super(title, indicatorColor, dividerColor);
@@ -120,8 +120,7 @@ public class STEditNoteFragment extends SlidingTabsColorsFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View vw = inflater.inflate(R.layout.fm_main, container, false);
-        return vw;
+        return inflater.inflate(R.layout.fm_main, container, false);
     }
 
     public boolean onAccpet()    {
@@ -152,7 +151,6 @@ public class STEditNoteFragment extends SlidingTabsColorsFragment {
         private static final String TAG = "NoteContentFragment";
 
         private String          mAction;
-        private String          mNoteType;
         private PayNoteItem     mOldPayNote;
         private IncomeNoteItem  mOldIncomeNote;
 
@@ -200,7 +198,6 @@ public class STEditNoteFragment extends SlidingTabsColorsFragment {
                 mViewHelper.setPara(mAction, mOldIncomeNote);
             }
 
-            mNoteType = title;
             return mViewHelper.createView(inflater, container);
         }
 

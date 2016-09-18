@@ -94,10 +94,8 @@ public class UsrDataUtility {
             return false;
 
         String checkPwd = MD5Util.string2MD5(pwdpad);
-        if(checkPwd.equals(lsui.get(0).getPwd()))
-            return true;
+        return checkPwd.equals(lsui.get(0).getPwd());
 
-        return false;
     }
 
 

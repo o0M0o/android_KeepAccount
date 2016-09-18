@@ -63,7 +63,6 @@ public class ACAddUsr
                     EditText et_pwd = (EditText)findViewById(R.id.ac_naet_accountpwd);
                     assert et_usrname != null && et_pwd != null;
 
-                    Resources res = getResources();
                     Intent data = new Intent();
                     data.putExtra(UsrItem.FIELD_NAME,
                                     et_usrname.getText().toString());
@@ -121,7 +120,7 @@ public class ACAddUsr
     /**
      * 清空已经存在的数据
      */
-    public void repeatInput()   {
+    private void repeatInput()   {
         EditText et_usrname = (EditText)findViewById(R.id.ac_naet_accountname);
         EditText et_pwd = (EditText)findViewById(R.id.ac_naet_accountpwd);
         EditText et_repeatpwd = (EditText)findViewById(R.id.ac_naet_repeatpwd);
@@ -170,9 +169,9 @@ public class ACAddUsr
         return true;
     }
 
-    public class ACAUMsgHandler extends Handler {
+    public static class ACAUMsgHandler extends Handler {
         private static final String TAG = "ACAUMsgHandler";
-        private ACAddUsr mActivity;
+        private final ACAddUsr mActivity;
 
         public ACAUMsgHandler(ACAddUsr acstart) {
             super();

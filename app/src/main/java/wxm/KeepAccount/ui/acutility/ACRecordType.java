@@ -17,19 +17,18 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.ViewSwitcher;
 
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
-import wxm.KeepAccount.Base.db.RecordTypeItem;
-import wxm.KeepAccount.Base.utility.ContextUtil;
-import wxm.KeepAccount.BuildConfig;
-import wxm.KeepAccount.R;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.db.RecordTypeItem;
+import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.BuildConfig;
+import wxm.KeepAccount.R;
 
 
 /**
@@ -45,7 +44,7 @@ public class ACRecordType extends AppCompatActivity
     private static final String TITLE          = "TITLE";
     private static final String EXPLAIN        = "EXPLAIN";
 
-    private ArrayList<HashMap<String, String>> mLHData = new ArrayList<>();
+    private final ArrayList<HashMap<String, String>> mLHData = new ArrayList<>();
     private ListView                        mLVRecordType;
     private MySimpleAdapter                 mMAAdapter;
 
@@ -155,33 +154,6 @@ public class ACRecordType extends AppCompatActivity
 
 
     /**
-     * only for test
-     */
-    private void forTest()  {
-        mLHData.clear();
-
-        HashMap<String, String> hm = new HashMap<>();
-        hm.put(TITLE, "test 1");
-        hm.put(EXPLAIN, "for test 1");
-        hm.put(CHILD_TYPE, TEXTVIEW_CHILD);
-        mLHData.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "test 2");
-        hm.put(EXPLAIN, "for test 2");
-        hm.put(CHILD_TYPE, TEXTVIEW_CHILD);
-        mLHData.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "test 3");
-        hm.put(EXPLAIN, "其它类型（可以编辑此项）");
-        hm.put(CHILD_TYPE, EDITTEXT_CHILD);
-        mLHData.add(hm);
-
-        mMAAdapter.notifyDataSetChanged();
-    }
-
-    /**
      * 加载数据
      * @param ty 数据类型
      */
@@ -275,8 +247,8 @@ public class ACRecordType extends AppCompatActivity
      */
     public class MySimpleAdapter
             extends SimpleAdapter   {
-        private ACRecordType mHome;
-        private List<? extends Map<String, ?>> mSelfData;
+        private final ACRecordType mHome;
+        private final List<? extends Map<String, ?>> mSelfData;
 
         public MySimpleAdapter(ACRecordType home,
                                Context context, List<? extends Map<String, ?>> data,
@@ -285,11 +257,6 @@ public class ACRecordType extends AppCompatActivity
             super(context, data, R.layout.li_record_type, from, to);
             mHome = home;
             mSelfData = data;
-        }
-
-        @Override
-        public void notifyDataSetChanged() {
-            super.notifyDataSetChanged();
         }
 
         @Override

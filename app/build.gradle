@@ -17,12 +17,12 @@ android {
     }
 
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "24.0.2"
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationId "com.wxm.keepaccount"
         minSdkVersion 19
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 5
         versionName "1.05"
         signingConfig signingConfigs.defkey
@@ -59,8 +59,7 @@ android {
     }
 
     productFlavors {
-        yyb_keepaccount{
-        }
+        yyb_keepaccount{}
     }
 
 
@@ -88,7 +87,7 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.4'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'com.google.android.gms:play-services-appindexing:9.4.0'
     compile 'com.android.support:design:23.3.0'
     compile files('libs/extend_lib/httpcomponents-core-4.4.4/lib/httpcore-4.4.4.jar')
     compile files('libs/extend_lib/xcl/xcl-charts.jar')

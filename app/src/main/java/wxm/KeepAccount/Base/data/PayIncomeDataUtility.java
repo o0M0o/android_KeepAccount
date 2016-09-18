@@ -207,8 +207,8 @@ public class PayIncomeDataUtility {
         if(null == cur_usr)
             return null;
 
-        Timestamp tsb = null;
-        Timestamp tse = null;
+        Timestamp tsb ;
+        Timestamp tse;
         try {
             tsb = ToolUtil.StringToTimestamp(day_str);
             tse = ToolUtil.StringToTimestamp(day_str + " 23:59:59");
@@ -243,8 +243,8 @@ public class PayIncomeDataUtility {
         if(null == cur_usr)
             return null;
 
-        Timestamp tsb = null;
-        Timestamp tse = null;
+        Timestamp tsb;
+        Timestamp tse;
         try {
             tsb = ToolUtil.StringToTimestamp(day_str);
             tse = ToolUtil.StringToTimestamp(day_str + " 23:59:59");

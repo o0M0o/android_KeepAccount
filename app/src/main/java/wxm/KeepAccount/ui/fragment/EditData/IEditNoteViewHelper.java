@@ -9,7 +9,7 @@ import android.view.ViewGroup;
  * 编辑数据的视图辅助类
  * Created by 123 on 2016/9/13.
  */
-public interface IEditNoteViewHelper {
+interface IEditNoteViewHelper {
     /**
      *  创建视图
      * @param inflater      视图加载参数

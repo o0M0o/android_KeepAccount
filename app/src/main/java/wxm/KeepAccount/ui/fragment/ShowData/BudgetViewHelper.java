@@ -47,7 +47,7 @@ public class BudgetViewHelper  extends LVViewHelperBase {
     private int mActionType = ACTION_NONE;
 
     // for delete
-    private LinkedList<Integer> mLLDelBudget    = new LinkedList<>();
+    private final LinkedList<Integer> mLLDelBudget    = new LinkedList<>();
     //private LinkedList<View>    mLLDelVW        = new LinkedList<>();
 
     // original data
@@ -71,12 +71,11 @@ public class BudgetViewHelper  extends LVViewHelperBase {
         // init ray menu
         RayMenu rayMenu = UtilFun.cast(mSelfView.findViewById(R.id.rm_show_record));
         assert null != rayMenu;
-        final int itemCount = ITEM_DRAWABLES.length;
-        for (int i = 0; i < itemCount; i++) {
+        for (int ITEM_DRAWABLE : ITEM_DRAWABLES) {
             ImageView item = new ImageView(mSelfView.getContext());
-            item.setImageResource(ITEM_DRAWABLES[i]);
+            item.setImageResource(ITEM_DRAWABLE);
 
-            final int position = ITEM_DRAWABLES[i];
+            final int position = ITEM_DRAWABLE;
             rayMenu.addItem(item, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -160,7 +159,7 @@ public class BudgetViewHelper  extends LVViewHelperBase {
     }
 
 
-    protected void refreshAttachLayout()    {
+    private void refreshAttachLayout()    {
         setAttachLayoutVisible(ACTION_NONE != mActionType ? View.VISIBLE : View.INVISIBLE);
         setFilterLayoutVisible(View.INVISIBLE);
         setAccpetGiveupLayoutVisible(ACTION_NONE != mActionType ? View.VISIBLE : View.INVISIBLE);
@@ -313,7 +312,7 @@ public class BudgetViewHelper  extends LVViewHelperBase {
      */
     public class SelfAdapter extends SimpleAdapter implements View.OnClickListener {
         private final static String TAG = "SelfAdapter";
-        private ListView        mRootView;
+        private final ListView        mRootView;
 
         public SelfAdapter(Context context, ListView fv,
                            List<? extends Map<String, ?>> mdata,
@@ -346,7 +345,6 @@ public class BudgetViewHelper  extends LVViewHelperBase {
                 }
 
                 // for fold/unfold
-                final View fv = v;
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
                 ib.getBackground().setAlpha(0);
                 ib.setOnClickListener(this);
@@ -356,7 +354,7 @@ public class BudgetViewHelper  extends LVViewHelperBase {
                     //init_detail_view(fv, hm);
                     ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
                 }   else    {
-                    init_detail_view(fv, hm);
+                    init_detail_view(v, hm);
                     ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
                 }
 
@@ -436,7 +434,7 @@ public class BudgetViewHelper  extends LVViewHelperBase {
      */
     public class SelfSubAdapter  extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
-        private ListView        mRootView;
+        private final ListView        mRootView;
 
         public SelfSubAdapter(Context context, ListView fv,
                               List<? extends Map<String, ?>> sdata,

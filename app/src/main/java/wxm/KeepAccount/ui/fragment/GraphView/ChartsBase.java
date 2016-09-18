@@ -27,8 +27,8 @@ import java.util.List;
  * Created by 123 on 2016/6/1.
  */
 public abstract class ChartsBase extends ChartView {
-    private final String TAG = "ChartsBase";
-    protected final BarChart3D chart = new BarChart3D();
+    private static final String TAG = "ChartsBase";
+    private final BarChart3D chart = new BarChart3D();
 
     /*
     private static final int[] ITEM_DRAWABLES = {
@@ -37,14 +37,14 @@ public abstract class ChartsBase extends ChartView {
      */
 
     //标签轴
-    protected final List<String> chartLabels = new LinkedList<>();
+    final List<String> chartLabels = new LinkedList<>();
     //数据轴
-    protected final List<BarData> BarDataset = new LinkedList<>();
+    final List<BarData> BarDataset = new LinkedList<>();
 
-    protected String chartTitle = "";
-    protected String subChartTitle = "";
+    String chartTitle = "";
+    String subChartTitle = "";
 
-    final Paint mPaintToolTip = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint mPaintToolTip = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public ChartsBase(Context context)  {
         super(context);
@@ -63,7 +63,7 @@ public abstract class ChartsBase extends ChartView {
 
     /**
      * 重新绘制chart
-     * @param ls_data
+     * @param ls_data   待绘制数据
      */
     public abstract void RenderChart(List<Object> ls_data);
 
@@ -93,7 +93,7 @@ public abstract class ChartsBase extends ChartView {
 
     //Demo中bar chart所使用的默认偏移值。
     //偏移出来的空间用于显示tick,axistitle....
-    protected int[] getBarLnDefaultSpadding()
+    private int[] getBarLnDefaultSpadding()
     {
         int [] ltrb = new int[4];
         ltrb[0] = DensityUtil.dip2px(getContext(), 40); //left
@@ -103,15 +103,17 @@ public abstract class ChartsBase extends ChartView {
         return ltrb;
     }
 
-    protected int[] getPieDefaultSpadding()
-    {
-        int [] ltrb = new int[4];
-        ltrb[0] = DensityUtil.dip2px(getContext(), 20); //left
-        ltrb[1] = DensityUtil.dip2px(getContext(), 65); //top
-        ltrb[2] = DensityUtil.dip2px(getContext(), 20); //right
-        ltrb[3] = DensityUtil.dip2px(getContext(), 20); //bottom
-        return ltrb;
-    }
+// --Commented out by Inspection START (2016/9/18 12:56):
+//    protected int[] getPieDefaultSpadding()
+//    {
+//        int [] ltrb = new int[4];
+//        ltrb[0] = DensityUtil.dip2px(getContext(), 20); //left
+//        ltrb[1] = DensityUtil.dip2px(getContext(), 65); //top
+//        ltrb[2] = DensityUtil.dip2px(getContext(), 20); //right
+//        ltrb[3] = DensityUtil.dip2px(getContext(), 20); //bottom
+//        return ltrb;
+//    }
+// --Commented out by Inspection STOP (2016/9/18 12:56)
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -166,7 +168,7 @@ public abstract class ChartsBase extends ChartView {
         this.invalidate();
     }
 
-    protected void chartRender()
+    void chartRender()
     {
         try {
             //设置绘图区默认缩进px值,留置空间显示Axis,Axistitle....
@@ -258,7 +260,7 @@ public abstract class ChartsBase extends ChartView {
                 public String doubleFormatter(Double value) {
                     // TODO Auto-generated method stub
                     DecimalFormat df=new DecimalFormat("#0.00");
-                    return df.format(value).toString();
+                    return df.format(value);
                 }});
 
             //激活点击监听

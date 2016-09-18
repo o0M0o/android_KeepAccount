@@ -22,22 +22,22 @@ import wxm.KeepAccount.ui.acinterface.ACNoteShow;
  * viewhelper基础类
  * Created by 123 on 2016/9/14.
  */
-public abstract class LVViewHelperBase implements View.OnClickListener {
+abstract class LVViewHelperBase implements View.OnClickListener {
     private final static String TAG = "LVViewHelperBase";
-    protected View      mSelfView;
+    View      mSelfView;
 
     // 视图数据
-    protected LinkedList<HashMap<String, String>>                       mMainPara;
-    protected HashMap<String, LinkedList<HashMap<String, String>>>      mHMSubPara;
+    final LinkedList<HashMap<String, String>>                       mMainPara;
+    final HashMap<String, LinkedList<HashMap<String, String>>>      mHMSubPara;
 
     // 视图过滤数据
-    protected boolean               mBFilter;
-    protected LinkedList<String>    mFilterPara;
+    boolean               mBFilter;
+    final LinkedList<String>    mFilterPara;
 
     // 存放展开节点的数据
-    private LinkedList<String>    mUnfoldItems;
+    private final LinkedList<String>    mUnfoldItems;
 
-    public LVViewHelperBase()   {
+    LVViewHelperBase()   {
         mBFilter        = false;
         mSelfView       = null;
         mMainPara       = new LinkedList<>();
@@ -95,7 +95,7 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      * 只记录20个展开节点, 超过数量后将移除最早记录的节点
      * @param tag   展开节点tag
      */
-    public void addUnfoldItem(String tag)   {
+    void addUnfoldItem(String tag)   {
         if(!mUnfoldItems.contains(tag)) {
             if(20 < mUnfoldItems.size())
                 mUnfoldItems.removeFirst();
@@ -109,7 +109,7 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      * 移除一个展开节点
      * @param tag   移除节点tag
      */
-    public void removeUnfoldItem(String tag)   {
+    void removeUnfoldItem(String tag)   {
         mUnfoldItems.remove(tag);
     }
 
@@ -119,7 +119,7 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      * @param tag   待检查节点tag
      * @return  如果此节点是展开节点，返回true, 否则返回false
      */
-    public boolean checkUnfoldItem(String tag)  {
+    boolean checkUnfoldItem(String tag)  {
         return mUnfoldItems.contains(tag);
     }
 
@@ -143,7 +143,7 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      * 获取视图所在的activity
      * @return  若成功返回activity，失败返回null;
      */
-    protected ACNoteShow getRootActivity()  {
+    ACNoteShow getRootActivity()  {
         Context ct = mSelfView.getContext();
         if(ct instanceof Activity) {
             return UtilFun.cast(ct);
@@ -158,7 +158,7 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      *                  1. {@code View.INVISIBLE}, 不可见
      *                  2. {@code View.VISIBLE}, 可见
      */
-    protected void setAttachLayoutVisible(int visible)   {
+    void setAttachLayoutVisible(int visible)   {
         RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_attach_button));
         assert null != rl;
         setLayoutVisible(rl, visible);
@@ -171,7 +171,7 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      *                  1. {@code View.INVISIBLE}, 不可见
      *                  2. {@code View.VISIBLE}, 可见
      */
-    protected void setFilterLayoutVisible(int visible)   {
+    void setFilterLayoutVisible(int visible)   {
         if(View.VISIBLE == visible)
             setAttachLayoutVisible(View.VISIBLE);
 
@@ -191,7 +191,7 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      *                  1. {@code View.INVISIBLE}, 不可见
      *                  2. {@code View.VISIBLE}, 可见
      */
-    protected void setAccpetGiveupLayoutVisible(int visible)   {
+    void setAccpetGiveupLayoutVisible(int visible)   {
         if(View.VISIBLE == visible)
             setAttachLayoutVisible(View.VISIBLE);
 

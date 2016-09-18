@@ -11,7 +11,7 @@ import java.sql.SQLException;
  *
  * The configuration file is written to /res/raw/ by default. More info at: http://ormlite.com/docs/table-config
  */
-public class DatabaseConfigUtil extends OrmLiteConfigUtil {
+class DatabaseConfigUtil extends OrmLiteConfigUtil {
 
     public static void main(String[] args) throws SQLException, IOException {
         writeConfigFile("ormlite_config.txt");

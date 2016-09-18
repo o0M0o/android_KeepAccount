@@ -34,8 +34,7 @@
                 android:text="title"
                 android:id="@+id/lvtv_title"
                 android:textColor="@color/abc_primary_text_disable_only_material_light"
-                android:textSize="26sp"
-                android:editable="false" />
+                android:textSize="26sp"/>
 
             <TextView
                 android:layout_width="wrap_content"

@@ -38,8 +38,8 @@ public class ACNoteShow
 
     // for tab colors fragment
     private SlidingTabsColorsFragment mTabFragment;
-    private STGraphViewFragment gvTabFragment = new STGraphViewFragment();
-    private STListViewFragment  lvTabFragment = new STListViewFragment();
+    private final STGraphViewFragment gvTabFragment = new STGraphViewFragment();
+    private final STListViewFragment  lvTabFragment = new STListViewFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +47,6 @@ public class ACNoteShow
         setContentView(R.layout.ac_note_show);
 
         initView(savedInstanceState);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override

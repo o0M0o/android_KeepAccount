@@ -2,9 +2,6 @@ package wxm.KeepAccount.Base.data;
 
 import android.util.Log;
 
-import com.j256.ormlite.dao.RuntimeExceptionDao;
-
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +18,7 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
  * Created by 123 on 2016/9/1.
  */
 public class BudgetDataUtility {
-    private final String    TAG = "RecordDataUtility";
+    private final static String  TAG = "BudgetDataUtility";
 
     public BudgetDataUtility()  {
     }
@@ -63,29 +60,31 @@ public class BudgetDataUtility {
     }
 
 
-    /**
-     * 根据ID更新并获取预算数据
-     * @param biid 预算ID
-     * @return 查找到的数据,没有数据时返回{@code NULL}
-     */
-    public boolean RefrashBudgetById(int biid) {
-        BudgetItem bi = AppModel.getBudgetUtility().GetBudgetById(biid);
-        if(null == bi)
-            return false;
-
-        RuntimeExceptionDao<PayNoteItem, Integer> pired = AppModel.getDBHelper().getPayDataREDao();
-        List<PayNoteItem> pis = pired.queryForEq(PayNoteItem.FIELD_BUDGET, bi.get_id());
-
-        BigDecimal all_use = BigDecimal.ZERO;
-        if(!ToolUtil.ListIsNullOrEmpty(pis)) {
-            for(PayNoteItem i : pis)    {
-                all_use = all_use.add(i.getVal());
-            }
-        }
-
-        bi.useBudget(all_use);
-        return AppModel.getBudgetUtility().ModifyBudget(bi);
-    }
+// --Commented out by Inspection START (2016/9/18 12:55):
+//    /**
+//     * 根据ID更新并获取预算数据
+//     * @param biid 预算ID
+//     * @return 查找到的数据,没有数据时返回{@code NULL}
+//     */
+//    public boolean RefrashBudgetById(int biid) {
+//        BudgetItem bi = AppModel.getBudgetUtility().GetBudgetById(biid);
+//        if(null == bi)
+//            return false;
+//
+//        RuntimeExceptionDao<PayNoteItem, Integer> pired = AppModel.getDBHelper().getPayDataREDao();
+//        List<PayNoteItem> pis = pired.queryForEq(PayNoteItem.FIELD_BUDGET, bi.get_id());
+//
+//        BigDecimal all_use = BigDecimal.ZERO;
+//        if(!ToolUtil.ListIsNullOrEmpty(pis)) {
+//            for(PayNoteItem i : pis)    {
+//                all_use = all_use.add(i.getVal());
+//            }
+//        }
+//
+//        bi.useBudget(all_use);
+//        return AppModel.getBudgetUtility().ModifyBudget(bi);
+//    }
+// --Commented out by Inspection STOP (2016/9/18 12:55)
 
     /**
      * 根据ID查找BudgetItem数据
@@ -153,15 +152,6 @@ public class BudgetDataUtility {
      */
     public boolean ModifyBudget(BudgetItem bi)  {
         return 1 == AppModel.getDBHelper().getBudgetDataREDao().update(bi);
-    }
-
-    /**
-     * 删除预算数据
-     * @param bi 待删除数据
-     * @return 成功返回{@code true}
-     */
-    public boolean DeleteBudget(BudgetItem bi)  {
-        return 1 == AppModel.getDBHelper().getBudgetDataREDao().delete(bi);
     }
 
 

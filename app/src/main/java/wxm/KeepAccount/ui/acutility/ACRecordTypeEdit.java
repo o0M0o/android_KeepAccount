@@ -48,7 +48,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
     private static final String TITLE          = "TITLE";
     private static final String EXPLAIN        = "EXPLAIN";
 
-    private ArrayList<HashMap<String, String>> mLHData = new ArrayList<>();
+    private final ArrayList<HashMap<String, String>> mLHData = new ArrayList<>();
     private ListView                mLVRecordType;
     private MySimpleAdapter         mMAAdapter;
 
@@ -297,8 +297,8 @@ public class ACRecordTypeEdit extends AppCompatActivity
      */
     public class MySimpleAdapter
             extends SimpleAdapter {
-        private ACRecordTypeEdit mHome;
-        private List<? extends Map<String, ?>> mSelfData;
+        private final ACRecordTypeEdit mHome;
+        private final List<? extends Map<String, ?>> mSelfData;
 
         public MySimpleAdapter(ACRecordTypeEdit home,
                                Context context, List<? extends Map<String, ?>> data,
@@ -307,11 +307,6 @@ public class ACRecordTypeEdit extends AppCompatActivity
             super(context, data, R.layout.li_record_type, from, to);
             mHome = home;
             mSelfData = data;
-        }
-
-        @Override
-        public void notifyDataSetChanged() {
-            super.notifyDataSetChanged();
         }
 
         @Override
