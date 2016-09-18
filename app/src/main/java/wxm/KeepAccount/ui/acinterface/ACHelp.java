@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.acinterface;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -33,7 +32,8 @@ public class ACHelp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_help);
-
+        load_help("file:///android_asset/help_main.html");
+        /*
         // load help html
         Intent it = getIntent();
         String help_type = it.getStringExtra(STR_HELP_TYPE);
@@ -60,6 +60,7 @@ public class ACHelp extends AppCompatActivity {
                     break;
             }
         }
+        */
     }
 
     /**
