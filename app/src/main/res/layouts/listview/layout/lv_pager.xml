@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="点击取消过滤"
+                android:text="取消筛选"
                 android:layout_centerVertical="true"
                 android:id="@+id/textView"
                 android:layout_alignParentLeft="true" />
@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="放弃或者确认选择"
+                android:text="放弃或确认"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true" />
         </RelativeLayout>
