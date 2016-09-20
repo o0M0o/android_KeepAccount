@@ -30,12 +30,14 @@ import wxm.KeepAccount.Base.utility.DGVButtonAdapter;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
+import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
 
 /**
  * 用户登陆后首页面
  */
 public class ACWelcome extends AppCompatActivity
-        implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+        implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,
+                    DlgSelectChannel.NoticeDialogListener  {
     private static final String TAG = "ACWelcome";
     //private static final int    BTDRAW_WIDTH    = 96;
     //private static final int    BTDRAW_HEIGHT   = 96;
@@ -112,7 +114,6 @@ public class ACWelcome extends AppCompatActivity
                     }
                 }
 
-
                 mLSData.set(to, temp);
                 apt.notifyDataSetChanged();
             }
@@ -177,12 +178,14 @@ public class ACWelcome extends AppCompatActivity
                 break;
 
                 case CN_SETTING :  {
-                    Toast.makeText(this, CN_SETTING, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, CN_SETTING, Toast.LENGTH_SHORT).show();
                 }
                 break;
 
                 case CN_CHANNEL :  {
-                    Toast.makeText(this, CN_CHANNEL, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, CN_CHANNEL, Toast.LENGTH_SHORT).show();
+                    DlgSelectChannel dlg = new DlgSelectChannel();
+                    dlg.show(getFragmentManager(), "选择频道");
                 }
                 break;
 
@@ -235,6 +238,19 @@ public class ACWelcome extends AppCompatActivity
         return true;
     }
 
+    // BEGIN FOR DIALOG
+    @Override
+    public void onDialogPositiveClick(android.app.DialogFragment dialog) {
+        Toast.makeText(this, "you chose fire", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDialogNegativeClick(android.app.DialogFragment dialog) {
+        Toast.makeText(this, "you chose cancle", Toast.LENGTH_SHORT).show();
+    }
+    // END FOR DIALOG
+
+
     private void contactWriter() {
         Resources res = getResources();
 
@@ -246,4 +262,6 @@ public class ACWelcome extends AppCompatActivity
         //data.putExtra(Intent.EXTRA_TEXT, "这是内容");
         startActivity(data);
     }
+
+
 }
