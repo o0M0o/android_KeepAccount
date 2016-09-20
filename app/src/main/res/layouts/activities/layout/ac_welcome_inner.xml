@@ -49,9 +49,23 @@
             android:text="@string/cn_setting"
             android:textSize="12sp"
             android:layout_gravity="center_horizontal"
-            android:paddingTop="4dp"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="80dp" />
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/bt_channel"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentEnd="false"
+            android:background="@color/antiquewhite"
+            android:drawableTop="@drawable/ic_channel"
+            android:text="@string/cn_channel"
+            android:textSize="12sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="36dp"
+            android:layout_above="@+id/bt_setting" />
     </RelativeLayout>
 
 </RelativeLayout>

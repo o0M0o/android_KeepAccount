@@ -4,4 +4,5 @@
     <string name="giveup_filter">取消筛选</string>
     <string name="cn_accpet">确认</string>
     <string name="cn_add_note">添加记录</string>
+    <string name="cn_channel">关注</string>
 </resources>
