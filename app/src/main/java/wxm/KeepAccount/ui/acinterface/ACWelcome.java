@@ -10,12 +10,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import cn.wxm.andriodutillib.DragGrid.DragGridView;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.utility.DGVButtonAdapter;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
+import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 
 /**
  * 用户登陆后首页面
@@ -23,8 +37,10 @@ import wxm.KeepAccount.R;
 public class ACWelcome extends AppCompatActivity
         implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "ACWelcome";
-    private static final int    BTDRAW_WIDTH    = 96;
-    private static final int    BTDRAW_HEIGHT   = 96;
+    //private static final int    BTDRAW_WIDTH    = 96;
+    //private static final int    BTDRAW_HEIGHT   = 96;
+
+    private List<HashMap<String, Object>> mLSData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +80,87 @@ public class ACWelcome extends AppCompatActivity
         assert null != nv;
         nv.setNavigationItemSelectedListener(this);
 
+        // init data
+        for(String i : DGVButtonAdapter.ACTION_NAMES)  {
+            HashMap<String, Object> ihm = new HashMap<>();
+            ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
+            mLSData.add(ihm);
+        }
+
+        // init adapter
+        final DragGridView dgv = UtilFun.cast(findViewById(R.id.dgv_buttons));
+        assert null != dgv;
+        final DGVButtonAdapter apt = new DGVButtonAdapter(this, mLSData,
+                                new String[] {}, new int[] { });
+
+        dgv.setAdapter(apt);
+        dgv.setOnChangeListener(new DragGridView.OnChanageListener() {
+            @Override
+            public void onChange(int from, int to) {
+                HashMap<String, Object> temp = mLSData.get(from);
+                if(from < to){
+                    for(int i=from; i<to; i++){
+                        Collections.swap(mLSData, i, i+1);
+                    }
+                }else if(from > to){
+                    for(int i=from; i>to; i--){
+                        Collections.swap(mLSData, i, i-1);
+                    }
+                }
+
+                mLSData.set(to, temp);
+                apt.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        if(v instanceof Button)     {
+            Button vb = UtilFun.cast(v);
+            String hv = vb.getText().toString();
+            Log.i(TAG, "onClick, view_id = " + id + ", button name = " + hv);
+            switch (hv)     {
+                case DGVButtonAdapter.ACT_LOOK_BUDGET :
+                case DGVButtonAdapter.ACT_LOOK_DATA :   {
+                    Intent intent = new Intent(this, ACNoteShow.class);
+                    startActivityForResult(intent, 1);
+                }
+                break;
+
+                case DGVButtonAdapter.ACT_ADD_BUDGET :  {
+                    Intent intent = new Intent(this, ACBudgetEdit.class);
+                    startActivityForResult(intent, 1);
+                }
+                break;
+
+                case DGVButtonAdapter.ACT_ADD_DATA: {
+                    Intent intent = new Intent(v.getContext(), ACNoteEdit.class);
+                    intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(System.currentTimeMillis());
+                    intent.putExtra(AppGobalDef.STR_RECORD_DATE,
+                            String.format(Locale.CHINA ,"%d-%02d-%02d"
+                                    ,cal.get(Calendar.YEAR)
+                                    ,cal.get(Calendar.MONTH) + 1
+                                    ,cal.get(Calendar.DAY_OF_MONTH)));
+
+                    startActivityForResult(intent, 1);
+                }
+                break;
+
+                case DGVButtonAdapter.ACT_LOGOUT :      {
+                    int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
+
+                    Intent data = new Intent();
+                    setResult(ret_data, data);
+                    finish();
+                }
+                break;
+            }
+        }
     }
 
     @Override

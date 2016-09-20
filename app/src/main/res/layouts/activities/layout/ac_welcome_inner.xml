@@ -21,34 +21,37 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/ll_button">
+        android:layout_toLeftOf="@+id/ll_button"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="12dp">
     </cn.wxm.andriodutillib.DragGrid.DragGridView>
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="vertical"
-        android:layout_width="75dp"
+        android:layout_width="70dp"
         android:layout_height="fill_parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:id="@+id/ll_button">
+        android:id="@+id/ll_button"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="12dp">
 
         <Button
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:id="@+id/bt_setting"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentEnd="false"
             android:background="@color/antiquewhite"
             android:drawableTop="@drawable/ic_menu_setting"
-            android:paddingTop="4dp"
-            android:layout_marginBottom="40dp"
-            android:layout_marginRight="4dp"
             android:text="@string/cn_setting"
             android:textSize="12sp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp" />
-    </LinearLayout>
+            android:paddingTop="4dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="80dp" />
+    </RelativeLayout>
 
 </RelativeLayout>

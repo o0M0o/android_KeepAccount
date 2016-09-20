@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/gi_button"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_image"
+        android:scaleType="centerCrop"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:contentDescription="action hint"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp">
+    </ImageView>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:text="New Button"
+        android:id="@+id/bt_action"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/iv_image"
+        android:background="@color/antiquewhite"
+        android:textSize="14sp"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
+        android:layout_marginBottom="8dp" />
+
+</RelativeLayout>
