@@ -40,6 +40,9 @@ public class ACWelcome extends AppCompatActivity
     //private static final int    BTDRAW_WIDTH    = 96;
     //private static final int    BTDRAW_HEIGHT   = 96;
 
+    private static final String CN_SETTING = "设定";
+    private static final String CN_CHANNEL = "关注";
+
     private List<HashMap<String, Object>> mLSData = new ArrayList<>();
 
     @Override
@@ -80,14 +83,15 @@ public class ACWelcome extends AppCompatActivity
         assert null != nv;
         nv.setNavigationItemSelectedListener(this);
 
-        // init data
+        // init drag grid view
+        // frist init data
         for(String i : DGVButtonAdapter.ACTION_NAMES)  {
             HashMap<String, Object> ihm = new HashMap<>();
             ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
             mLSData.add(ihm);
         }
 
-        // init adapter
+        // then init adapter & view
         final DragGridView dgv = UtilFun.cast(findViewById(R.id.dgv_buttons));
         assert null != dgv;
         final DGVButtonAdapter apt = new DGVButtonAdapter(this, mLSData,
@@ -112,6 +116,17 @@ public class ACWelcome extends AppCompatActivity
                 apt.notifyDataSetChanged();
             }
         });
+
+        // init other button
+        Button bt = UtilFun.cast(findViewById(R.id.bt_setting));
+        assert null != bt;
+        bt.setText(CN_SETTING);
+        bt.setOnClickListener(this);
+
+        bt = UtilFun.cast(findViewById(R.id.bt_channel));
+        assert null != bt;
+        bt.setText(CN_CHANNEL);
+        bt.setOnClickListener(this);
     }
 
     @Override
@@ -159,6 +174,17 @@ public class ACWelcome extends AppCompatActivity
                     finish();
                 }
                 break;
+
+                case CN_SETTING :  {
+                    Toast.makeText(this, CN_SETTING, Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+                case CN_CHANNEL :  {
+                    Toast.makeText(this, CN_CHANNEL, Toast.LENGTH_SHORT).show();
+                }
+                break;
+
             }
         }
     }
