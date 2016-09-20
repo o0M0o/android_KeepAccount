@@ -112,6 +112,7 @@ public class ACWelcome extends AppCompatActivity
                     }
                 }
 
+
                 mLSData.set(to, temp);
                 apt.notifyDataSetChanged();
             }
