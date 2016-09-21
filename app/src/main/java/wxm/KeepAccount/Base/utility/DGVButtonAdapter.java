@@ -1,9 +1,7 @@
 package wxm.KeepAccount.Base.utility;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,22 +24,7 @@ import wxm.KeepAccount.R;
 public class DGVButtonAdapter extends SimpleAdapter {
     public final static String HKEY_ACT_NAME = "HKEY_ACT_NAME";
 
-    public final static String ACT_LOOK_DATA    = "查看数据";
-    public final static String ACT_LOOK_BUDGET  = "查看预算";
-    public final static String ACT_ADD_BUDGET   = "添加预算";
-    public final static String ACT_ADD_DATA     = "添加记录";
-    public final static String ACT_LOGOUT       = "退出登录";
-
-    public final static String[] ACTION_NAMES   =   {
-            ACT_LOOK_DATA
-            ,ACT_LOOK_BUDGET
-            ,ACT_ADD_BUDGET
-            ,ACT_ADD_DATA
-            ,ACT_LOGOUT
-    };
-
     private Context             mCTContext;
-
 
     public DGVButtonAdapter(Context context, List<? extends Map<String, ?>> data,
                             String[] from, int[] to) {
@@ -84,7 +67,7 @@ public class DGVButtonAdapter extends SimpleAdapter {
             // for image
             ImageView iv = UtilFun.cast(v.findViewById(R.id.iv_image));
             assert null != iv;
-            Bitmap bm = getBitMapFromName(hv);
+            Bitmap bm = ActionHelper.getBitMapFromName(hv);
             if(null != bm) {
                 iv.setImageBitmap(bm);
                 iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -93,13 +76,6 @@ public class DGVButtonAdapter extends SimpleAdapter {
 
         return v;
     }
-
-    /**
-     * 设置动作
-     * @param ls_act  设置参数
-    public void setCurAction(List<String> ls_act)      {
-    }
-     */
 
     /**
      * 获取当前动作
@@ -115,38 +91,5 @@ public class DGVButtonAdapter extends SimpleAdapter {
         }
 
         return ret_ls;
-    }
-
-    /**
-     * 根据动作的名字得到其对应的bitmap
-     * @param act_name  动作名
-     * @return  对应的bitmap
-     */
-    public static Bitmap getBitMapFromName(String act_name)    {
-        Resources res = ContextUtil.getInstance().getResources();
-        Bitmap bm = null;
-        switch (act_name)     {
-            case ACT_LOOK_DATA :
-                bm = BitmapFactory.decodeResource(res, R.drawable.ic_act_look_data);
-                break;
-
-            case ACT_LOOK_BUDGET :
-                bm = BitmapFactory.decodeResource(res, R.drawable.ic_act_look_budget);
-                break;
-
-            case ACT_ADD_BUDGET :
-                bm = BitmapFactory.decodeResource(res, R.drawable.ic_act_add_budget);
-                break;
-
-            case ACT_ADD_DATA:
-                bm = BitmapFactory.decodeResource(res, R.drawable.ic_bt_add);
-                break;
-
-            case ACT_LOGOUT :
-                bm = BitmapFactory.decodeResource(res, R.drawable.ic_bt_logout);
-                break;
-        }
-
-        return bm;
     }
 }

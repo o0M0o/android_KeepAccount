@@ -26,7 +26,9 @@ import java.util.Locale;
 import cn.wxm.andriodutillib.DragGrid.DragGridView;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.utility.ActionHelper;
 import wxm.KeepAccount.Base.utility.DGVButtonAdapter;
+import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
@@ -69,71 +71,6 @@ public class ACWelcome extends AppCompatActivity
         }
     }
 
-    private void init_component() {
-        // set nav view
-        Toolbar tb = UtilFun.cast(findViewById(R.id.ac_navw_toolbar));
-        setSupportActionBar(tb);
-
-        DrawerLayout drawer = UtilFun.cast(findViewById(R.id.ac_welcome));
-        assert null != drawer;
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, tb,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView nv = UtilFun.cast(findViewById(R.id.start_nav_view));
-        assert null != nv;
-        nv.setNavigationItemSelectedListener(this);
-
-        // init drag grid view
-        // frist init data
-        for(String i : DGVButtonAdapter.ACTION_NAMES)  {
-            HashMap<String, Object> ihm = new HashMap<>();
-            ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
-            mLSData.add(ihm);
-        }
-
-        // then init adapter & view
-        mDGVActions = UtilFun.cast(findViewById(R.id.dgv_buttons));
-        assert null != mDGVActions;
-        final DGVButtonAdapter apt = new DGVButtonAdapter(this, mLSData,
-                                new String[] {}, new int[] { });
-
-        mDGVActions.setAdapter(apt);
-        mDGVActions.setOnChangeListener(new DragGridView.OnChanageListener() {
-            @Override
-            public void onChange(int from, int to) {
-                HashMap<String, Object> temp = mLSData.get(from);
-                if(from < to){
-                    for(int i=from; i<to; i++){
-                        Collections.swap(mLSData, i, i+1);
-                    }
-                }else if(from > to){
-                    for(int i=from; i>to; i--){
-                        Collections.swap(mLSData, i, i-1);
-                    }
-                }
-
-                mLSData.set(to, temp);
-                apt.notifyDataSetChanged();
-            }
-        });
-        apt.notifyDataSetChanged();
-
-        // init other button
-        Button bt = UtilFun.cast(findViewById(R.id.bt_setting));
-        assert null != bt;
-        bt.setText(CN_SETTING);
-        bt.setOnClickListener(this);
-
-        bt = UtilFun.cast(findViewById(R.id.bt_channel));
-        assert null != bt;
-        bt.setText(CN_CHANNEL);
-        bt.setOnClickListener(this);
-    }
-
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -142,20 +79,20 @@ public class ACWelcome extends AppCompatActivity
             String hv = vb.getText().toString();
             Log.i(TAG, "onClick, view_id = " + id + ", button name = " + hv);
             switch (hv)     {
-                case DGVButtonAdapter.ACT_LOOK_BUDGET :
-                case DGVButtonAdapter.ACT_LOOK_DATA :   {
+                case ActionHelper.ACT_LOOK_BUDGET :
+                case ActionHelper.ACT_LOOK_DATA :   {
                     Intent intent = new Intent(this, ACNoteShow.class);
                     startActivityForResult(intent, 1);
                 }
                 break;
 
-                case DGVButtonAdapter.ACT_ADD_BUDGET :  {
+                case ActionHelper.ACT_ADD_BUDGET :  {
                     Intent intent = new Intent(this, ACBudgetEdit.class);
                     startActivityForResult(intent, 1);
                 }
                 break;
 
-                case DGVButtonAdapter.ACT_ADD_DATA: {
+                case ActionHelper.ACT_ADD_DATA: {
                     Intent intent = new Intent(v.getContext(), ACNoteEdit.class);
                     intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
 
@@ -171,7 +108,7 @@ public class ACWelcome extends AppCompatActivity
                 }
                 break;
 
-                case DGVButtonAdapter.ACT_LOGOUT :      {
+                case ActionHelper.ACT_LOGOUT :      {
                     int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
 
                     Intent data = new Intent();
@@ -248,8 +185,10 @@ public class ACWelcome extends AppCompatActivity
     public void onDialogPositiveClick(android.app.DialogFragment dialog) {
         //Toast.makeText(this, "you chose fire", Toast.LENGTH_SHORT).show();
         DlgSelectChannel dsc = UtilFun.cast(dialog);
+        PreferencesUtil.saveHotAction(dsc.getHotChannel());
+
         mLSData.clear();
-        for(String i : dsc.getHotChannel())     {
+        for(String i : PreferencesUtil.loadHotAction())     {
             HashMap<String, Object> ihm = new HashMap<>();
             ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
             mLSData.add(ihm);
@@ -265,7 +204,77 @@ public class ACWelcome extends AppCompatActivity
     }
     // END FOR DIALOG
 
+    /**
+     * 初始化activity
+     */
+    private void init_component() {
+        // set nav view
+        Toolbar tb = UtilFun.cast(findViewById(R.id.ac_navw_toolbar));
+        setSupportActionBar(tb);
 
+        DrawerLayout drawer = UtilFun.cast(findViewById(R.id.ac_welcome));
+        assert null != drawer;
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, tb,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView nv = UtilFun.cast(findViewById(R.id.start_nav_view));
+        assert null != nv;
+        nv.setNavigationItemSelectedListener(this);
+
+        // init drag grid view
+        // frist init data
+        for(String i : PreferencesUtil.loadHotAction())  {
+            HashMap<String, Object> ihm = new HashMap<>();
+            ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
+            mLSData.add(ihm);
+        }
+
+        // then init adapter & view
+        mDGVActions = UtilFun.cast(findViewById(R.id.dgv_buttons));
+        assert null != mDGVActions;
+        final DGVButtonAdapter apt = new DGVButtonAdapter(this, mLSData,
+                new String[] {}, new int[] { });
+
+        mDGVActions.setAdapter(apt);
+        mDGVActions.setOnChangeListener(new DragGridView.OnChanageListener() {
+            @Override
+            public void onChange(int from, int to) {
+                HashMap<String, Object> temp = mLSData.get(from);
+                if(from < to){
+                    for(int i=from; i<to; i++){
+                        Collections.swap(mLSData, i, i+1);
+                    }
+                }else if(from > to){
+                    for(int i=from; i>to; i--){
+                        Collections.swap(mLSData, i, i-1);
+                    }
+                }
+
+                mLSData.set(to, temp);
+                apt.notifyDataSetChanged();
+            }
+        });
+        apt.notifyDataSetChanged();
+
+        // init other button
+        Button bt = UtilFun.cast(findViewById(R.id.bt_setting));
+        assert null != bt;
+        bt.setText(CN_SETTING);
+        bt.setOnClickListener(this);
+
+        bt = UtilFun.cast(findViewById(R.id.bt_channel));
+        assert null != bt;
+        bt.setText(CN_CHANNEL);
+        bt.setOnClickListener(this);
+    }
+
+    /**
+     * 激活手机邮件客户端，往设定的地址发送邮件
+     */
     private void contactWriter() {
         Resources res = getResources();
 

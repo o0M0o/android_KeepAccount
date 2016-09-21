@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.utility.ActionHelper;
 import wxm.KeepAccount.Base.utility.DGVButtonAdapter;
 import wxm.KeepAccount.R;
 
@@ -144,7 +145,7 @@ public class DlgSelectChannel extends DialogFragment implements AdapterView.OnIt
         gv.setOnItemClickListener(this);
 
         ArrayList<HashMap<String, Object>> ls_data = new ArrayList<>();
-        for(String i : DGVButtonAdapter.ACTION_NAMES)   {
+        for(String i : ActionHelper.ACTION_NAMES)   {
             HashMap<String, Object> hm = new HashMap<>();
             hm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
 
@@ -195,7 +196,7 @@ public class DlgSelectChannel extends DialogFragment implements AdapterView.OnIt
                 // for image
                 ImageView iv = UtilFun.cast(v.findViewById(R.id.iv_act));
                 assert null != iv;
-                Bitmap bm = DGVButtonAdapter.getBitMapFromName(hv);
+                Bitmap bm = ActionHelper.getBitMapFromName(hv);
                 if (null != bm) {
                     iv.setImageBitmap(bm);
                     iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
