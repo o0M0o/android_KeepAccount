@@ -45,7 +45,9 @@ public class ACWelcome extends AppCompatActivity
     private static final String CN_SETTING = "设定";
     private static final String CN_CHANNEL = "关注";
 
+    // for DragGridView
     private List<HashMap<String, Object>> mLSData = new ArrayList<>();
+    private DragGridView        mDGVActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,13 +96,13 @@ public class ACWelcome extends AppCompatActivity
         }
 
         // then init adapter & view
-        final DragGridView dgv = UtilFun.cast(findViewById(R.id.dgv_buttons));
-        assert null != dgv;
+        mDGVActions = UtilFun.cast(findViewById(R.id.dgv_buttons));
+        assert null != mDGVActions;
         final DGVButtonAdapter apt = new DGVButtonAdapter(this, mLSData,
                                 new String[] {}, new int[] { });
 
-        dgv.setAdapter(apt);
-        dgv.setOnChangeListener(new DragGridView.OnChanageListener() {
+        mDGVActions.setAdapter(apt);
+        mDGVActions.setOnChangeListener(new DragGridView.OnChanageListener() {
             @Override
             public void onChange(int from, int to) {
                 HashMap<String, Object> temp = mLSData.get(from);
@@ -118,6 +120,7 @@ public class ACWelcome extends AppCompatActivity
                 apt.notifyDataSetChanged();
             }
         });
+        apt.notifyDataSetChanged();
 
         // init other button
         Button bt = UtilFun.cast(findViewById(R.id.bt_setting));
@@ -184,7 +187,9 @@ public class ACWelcome extends AppCompatActivity
 
                 case CN_CHANNEL :  {
                     //Toast.makeText(this, CN_CHANNEL, Toast.LENGTH_SHORT).show();
+                    DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
                     DlgSelectChannel dlg = new DlgSelectChannel();
+                    dlg.setHotChannel(dapt.getCurAction());
                     dlg.show(getFragmentManager(), "选择频道");
                 }
                 break;
@@ -241,12 +246,22 @@ public class ACWelcome extends AppCompatActivity
     // BEGIN FOR DIALOG
     @Override
     public void onDialogPositiveClick(android.app.DialogFragment dialog) {
-        Toast.makeText(this, "you chose fire", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "you chose fire", Toast.LENGTH_SHORT).show();
+        DlgSelectChannel dsc = UtilFun.cast(dialog);
+        mLSData.clear();
+        for(String i : dsc.getHotChannel())     {
+            HashMap<String, Object> ihm = new HashMap<>();
+            ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
+            mLSData.add(ihm);
+        }
+
+        DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
+        dapt.notifyDataSetChanged();
     }
 
     @Override
     public void onDialogNegativeClick(android.app.DialogFragment dialog) {
-        Toast.makeText(this, "you chose cancle", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "you chose cancle", Toast.LENGTH_SHORT).show();
     }
     // END FOR DIALOG
 

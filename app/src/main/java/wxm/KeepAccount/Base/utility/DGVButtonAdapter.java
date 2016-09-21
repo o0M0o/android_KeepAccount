@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class DGVButtonAdapter extends SimpleAdapter {
             ,ACT_LOGOUT
     };
 
-    private Context  mCTContext;
+    private Context             mCTContext;
 
 
     public DGVButtonAdapter(Context context, List<? extends Map<String, ?>> data,
@@ -93,6 +94,28 @@ public class DGVButtonAdapter extends SimpleAdapter {
         return v;
     }
 
+    /**
+     * 设置动作
+     * @param ls_act  设置参数
+    public void setCurAction(List<String> ls_act)      {
+    }
+     */
+
+    /**
+     * 获取当前动作
+     * @return  当前动作
+     */
+    public List<String> getCurAction()  {
+        ArrayList<String> ret_ls = new ArrayList<>();
+        int ic = getCount();
+        for(int i = 0; i < ic; ++i) {
+            HashMap<String, Object> hmd = UtilFun.cast(getItem(i));
+            String hv = UtilFun.cast(hmd.get(HKEY_ACT_NAME));
+            ret_ls.add(hv);
+        }
+
+        return ret_ls;
+    }
 
     /**
      * 根据动作的名字得到其对应的bitmap
