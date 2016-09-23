@@ -269,7 +269,6 @@ public abstract class ChartsBase extends ChartView {
             //仅能竖向移动
             chart.setPlotPanMode(XEnum.PanMode.VERTICAL);
 
-
             //扩展横向显示范围
             //	chart.getPlotArea().extWidth(200f);
 
