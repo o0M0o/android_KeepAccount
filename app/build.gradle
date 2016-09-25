@@ -5,7 +5,7 @@ android {
         defkey {
             keyAlias 'defkey'
             keyPassword 'hugo99505'
-            storeFile file('E:/backup/appkey/andriodapp-key.jks')
+            storeFile file('G:/backup/appkey/andriodapp-key.jks')
             storePassword 'hugo99505'
         }
         longTimeKey {
