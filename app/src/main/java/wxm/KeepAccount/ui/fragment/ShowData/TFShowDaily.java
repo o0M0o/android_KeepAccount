@@ -9,13 +9,14 @@ import android.widget.ViewSwitcher;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
 
 /**
  * fragment for daily data show
  * Created by wxm on 2016/9/25.
  */
 
-public class TFShowDaily extends Fragment {
+public class TFShowDaily extends Fragment implements ACNoteShowNew.IFShowUtil {
     private final static String TAG = "TFShowDaily";
 
     private ViewSwitcher    mVSSwitcher;
@@ -29,5 +30,10 @@ public class TFShowDaily extends Fragment {
             mVSSwitcher.setDisplayedChild(0);
         }
         return v;
+    }
+
+    @Override
+    public void switchPage() {
+        mVSSwitcher.setDisplayedChild(mVSSwitcher.getDisplayedChild() == 0 ? 1 : 0);
     }
 }
