@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lvit_record_type"
+    android:descendantFocusability="beforeDescendants"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:id="@+id/lvcb_selected"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:clickable="true"
+        android:layout_marginTop="12dp"
+        android:buttonTint="@color/accent_material_dark" />
+
+    <ViewSwitcher
+        android:layout_width="fill_parent"
+        android:layout_height="64dp"
+        android:id="@+id/lvvs_switcher"
+        android:layout_alignTop="@+id/lvcb_selected"
+        android:layout_toRightOf="@+id/lvcb_selected"
+        android:layout_marginLeft="16dp">
+
+        <RelativeLayout
+            android:id = "@+id/rl_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="title"
+                android:id="@+id/lvtv_title"
+                android:textColor="@color/abc_primary_text_disable_only_material_light"
+                android:textSize="26sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="explain"
+                android:id="@+id/lvtv_explain"
+                android:textSize="16sp"
+                android:textColor="@color/background_floating_material_dark"
+                android:layout_marginTop="8dp"
+                android:layout_below="@+id/lvtv_title"
+                android:layout_alignLeft="@+id/lvtv_title" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id = "@+id/rl_ed"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lvet_title"
+                android:textColor="@color/abc_primary_text_disable_only_material_light"
+                android:textSize="20sp"
+                android:layout_alignParentTop="true"
+                android:elegantTextHeight="true"
+                android:focusable="true"
+                android:enabled="true"
+                android:focusableInTouchMode="true"
+                android:background="@color/darkgrey" />
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lvet_explain"
+                android:textColor="@color/abc_primary_text_disable_only_material_light"
+                android:textSize="16sp"
+                android:elegantTextHeight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignLeft="@+id/lvet_title"
+                android:background="@color/darkgrey" />
+        </RelativeLayout>
+
+
+    </ViewSwitcher>
+
+
+</RelativeLayout>

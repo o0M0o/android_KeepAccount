@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <item
-        android:id="@+id/dailydetailmenu_goback"
-        android:orderInCategory="100"
-        app:showAsAction="always"
-        android:title="@string/cn_goback"/>
-
     <item
         android:id="@+id/dailydetailmenu_delete"
         android:orderInCategory="101"
@@ -15,14 +8,8 @@
         android:title="@string/cn_delete"/>
 
     <item
-        android:id="@+id/dailydetailmenu_add"
-        android:orderInCategory="102"
-        app:showAsAction="ifRoom|withText"
-        android:title="@string/cn_add"/>
-
-    <item
         android:id="@+id/dailydetailmenu_help"
         android:orderInCategory="103"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom|withText"
         android:title="@string/cn_help"/>
 </menu>

@@ -37,7 +37,7 @@
     <color name="oldlace">#FDF5E6</color><!--老花色 -->
     <color name="lightgoldenrodyellow">#FAFAD2</color><!--亮金黄色 -->
     <color name="linen">#FAF0E6</color><!--亚麻色 -->
-    <color name="antiquewhite">#FAEBD7</color><!--古董白 -->
+    <color name="antiquewhite">#faebd7</color><!--古董白 -->
     <color name="salmon">#FA8072</color><!--鲜肉色 -->
     <color name="ghostwhite">#F8F8FF</color><!--幽灵白 -->
     <color name="mintcream">#F5FFFA</color><!--薄荷色 -->

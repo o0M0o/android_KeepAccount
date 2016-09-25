@@ -8,26 +8,77 @@ android {
             storeFile file('E:/backup/appkey/andriodapp-key.jks')
             storePassword 'hugo99505'
         }
+        longTimeKey {
+            keyAlias 'andriodapp-key-longtime'
+            keyPassword 'w789065'
+            storeFile file('G:/backup/appkey/andriodapp-key-longtime.jks')
+            storePassword 'w127865'
+        }
     }
+
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "24.0.2"
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationId "com.wxm.keepaccount"
         minSdkVersion 19
-        targetSdkVersion 23
-        versionCode 2
-        versionName "1.01"
+        targetSdkVersion 24
+        versionCode 6
+        versionName "1.06"
         signingConfig signingConfigs.defkey
     }
+
+
+    sourceSets {
+        main {
+            res.srcDirs =
+                [
+                    'src/main/res/layouts/activities',
+                    'src/main/res/layouts/listview',
+                    'src/main/res/layouts/fragment',
+                    'src/main/res/layouts/gridview',
+                    'src/main/res/layouts',
+                    'src/main/res'
+                ]
+        }
+    }
+
+
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+
+            buildConfigField "Boolean", "FILL_TESTDATA", "false"
+        }
+        debug {
+            debuggable true
+            buildConfigField "Boolean", "FILL_TESTDATA", "true"
         }
     }
+
     productFlavors {
+        yyb_keepaccount{}
     }
+
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                //这里修改apk文件名
+                def fileName = "${variant.productFlavors[0].name}-${defaultConfig.versionName}-${releaseTime() }.apk"
+                output.outputFile = new File(outputFile.parent, fileName)
+            }
+        }
+    }
+}
+
+def releaseTime() {
+    //return new Date().format("yyyyMMDD", TimeZone.getTimeZone("PRC"))
+    return "any";
 }
 
 dependencies {
@@ -37,23 +88,16 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.4'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'com.google.android.gms:play-services-appindexing:9.4.0'
     compile 'com.android.support:design:23.3.0'
     compile files('libs/extend_lib/httpcomponents-core-4.4.4/lib/httpcore-4.4.4.jar')
     compile files('libs/extend_lib/xcl/xcl-charts.jar')
     compile files('libs/extend_lib/junit/junit-4.12.jar')
-    compile files('libs/extend_lib/mybatis/mybatis-3.3.0.jar')
     compile files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
-    compile files('libs/extend_lib/mybatis/lib/asm-4.2.jar')
-    compile files('libs/extend_lib/mybatis/lib/cglib-3.1.jar')
-    compile files('libs/extend_lib/mybatis/lib/commons-logging-1.2.jar')
-    compile files('libs/extend_lib/mybatis/lib/log4j-1.2.17.jar')
-    compile files('libs/extend_lib/mybatis/lib/log4j-core-2.2.jar')
-    compile files('libs/extend_lib/mybatis/lib/slf4j-api-1.7.12.jar')
-    compile files('libs/extend_lib/mybatis/lib/slf4j-log4j12-1.7.12.jar')
     compile files('libs/extend_lib/ormlite/ormlite-android-5.0.jar')
     compile files('libs/extend_lib/ormlite/ormlite-core-5.0.jar')
     compile files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
+    compile project(':AndriodUtillib')
 }
 
 

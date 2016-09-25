@@ -9,7 +9,7 @@
 
     <item
         android:orderInCategory="9000"
-        android:id="@+id/am_bi_logout"
+        android:id="@+id/am_bi_help"
         app:showAsAction="ifRoom|withText"
-        android:title="@string/cn_logout"/>
+        android:title="@string/cn_help"/>
 </menu>

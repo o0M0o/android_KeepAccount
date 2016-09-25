@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="wxm.KeepAccount.ui.acinterface.ACWelcome"
+    android:background="@color/lightgray"
+    android:id="@+id/rl_welcome">
+
+    <cn.wxm.andriodutillib.DragGrid.DragGridView
+        android:id="@+id/dgv_buttons"
+        android:listSelector="@android:color/transparent"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:verticalSpacing="10dip"
+        android:horizontalSpacing="10dip"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:numColumns="3"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/ll_button"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="12dp">
+    </cn.wxm.andriodutillib.DragGrid.DragGridView>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="70dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/ll_button"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="12dp">
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/bt_setting"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="false"
+            android:background="@color/antiquewhite"
+            android:drawableTop="@drawable/ic_menu_setting"
+            android:text="@string/cn_setting"
+            android:textSize="12sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="80dp" />
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/bt_channel"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentEnd="false"
+            android:background="@color/antiquewhite"
+            android:drawableTop="@drawable/ic_channel"
+            android:text="@string/cn_channel"
+            android:textSize="12sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="36dp"
+            android:layout_above="@+id/bt_setting" />
+    </RelativeLayout>
+
+</RelativeLayout>

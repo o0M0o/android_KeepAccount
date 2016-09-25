@@ -49,9 +49,6 @@
     <string name="name">name</string>
     <string name="pwd">pwd</string>
 
-    <string name="tab_cn_daily">日统计</string>
-    <string name="tab_cn_monthly">月统计</string>
-    <string name="tab_cn_yearly">年统计</string>
 
     <string name="navigation_drawer_open">打开导航绘图</string>
     <string name="navigation_drawer_close">关闭导航绘图</string>
@@ -79,4 +76,17 @@
     <string name="cn_contact_writer">联系作者</string>
     <string name="title_activity_acrecord_type_edit">ACRecordTypeEdit</string>
     <string name="cn_hint_recordtype_add">添加新纪录类型</string>
+    <string name="cn_lookdata">查看数据</string>
+    <string name="cn_leave_login">退出登录</string>
+    <string name="cn_hint_more_button">浮动按钮</string>
+    <string name="cn_edit_remind">编辑提醒</string>
+    <string name="cn_edit_budget">编辑预算</string>
+    <string name="cn_hint_budget_name">请输入预算名</string>
+    <string name="cn_hint_budget_amount">请输入预算金额</string>
+    <string name="cn_hint_budget_note">请输入预算备注(200字以内)</string>
+    <string name="ac_label_budget_manager">预算管理</string>
+    <string name="cn_hint_budget_start_date">请输入预算开始日期</string>
+    <string name="cn_hint_budget_end_date">请输入预算结束日期</string>
+    <string name="cn_use_budget">使用预算 :</string>
+    <string name="ac_title_noteshow">查看流水</string>
 </resources>
