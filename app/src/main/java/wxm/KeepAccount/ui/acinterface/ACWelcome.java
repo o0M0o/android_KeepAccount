@@ -81,7 +81,7 @@ public class ACWelcome extends AppCompatActivity
             switch (hv)     {
                 case ActionHelper.ACT_LOOK_BUDGET :
                 case ActionHelper.ACT_LOOK_DATA :   {
-                    Intent intent = new Intent(this, ACNoteShow.class);
+                    Intent intent = new Intent(this, ACNoteShowNew.class);
                     startActivityForResult(intent, 1);
                 }
                 break;

@@ -28,6 +28,7 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
 
 /**
  * 月数据辅助类
@@ -105,7 +106,7 @@ public class MonthlyViewHelper extends LVViewHelperBase {
             case R.id.bt_accpet :
                 if(mBSelectSubFilter) {
                     if(!ToolUtil.ListIsNullOrEmpty(mLLSubFilter)) {
-                        ACNoteShow ac = getRootActivity();
+                        ACNoteShowNew ac = getRootActivity();
                         ac.jumpByTabName(STListViewFragment.TAB_TITLE_DAILY);
                         ac.filterView(mLLSubFilter);
 

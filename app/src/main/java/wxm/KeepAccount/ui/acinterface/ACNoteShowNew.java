@@ -6,18 +6,27 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.test.AndroidTestRunner;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.fragment.ShowData.STListViewFragment;
+import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowYearly;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowMonthly;
@@ -32,9 +41,13 @@ public class ACNoteShowNew extends AppCompatActivity {
     private TabLayout   mTLTabs;
     private ViewPager   mVPTabs;
 
-    public interface IFShowUtil {
-        void switchPage();
-    }
+    // for notes data
+    private boolean     mBDayNoteModify = true;
+    private boolean     mBMonthNoteModify = true;
+    private boolean     mBYearNoteModify = true;
+    private HashMap<String, ArrayList<Object>> mHMNoteDataByDay;
+    private HashMap<String, ArrayList<Object>> mHMNoteDataByMonth;
+    private HashMap<String, ArrayList<Object>> mHMNoteDataByYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +90,9 @@ public class ACNoteShowNew extends AppCompatActivity {
             break;
 
             case R.id.acb_mi_switch :   {
+                int pos = mTLTabs.getSelectedTabPosition();
                 PagerAdapter pa = UtilFun.cast(mVPTabs.getAdapter());
-                IFShowUtil hot = UtilFun.cast(pa.getItemInArr(mTLTabs.getSelectedTabPosition()));
+                TFShowBase hot = UtilFun.cast(pa.getItem(pos));
                 if(null != hot)  {
                     hot.switchPage();
                 }
@@ -94,7 +108,9 @@ public class ACNoteShowNew extends AppCompatActivity {
     }
 
 
-
+    /**
+     * 初始化tab页控件组
+     */
     private void init_tabs() {
         mTLTabs = (TabLayout) findViewById(R.id.tl_tabs);
         assert null != mTLTabs;
@@ -126,53 +142,119 @@ public class ACNoteShowNew extends AppCompatActivity {
         });
     }
 
+    public HashMap<String, ArrayList<Object>> getNotesByDay()   {
+        if(mBDayNoteModify) {
+            mHMNoteDataByDay = AppModel.getPayIncomeUtility().GetAllNotesToDay();
+            mBDayNoteModify = false;
+        }
 
+        return mHMNoteDataByDay;
+    }
+
+    public HashMap<String, ArrayList<Object>> getNotesByMonth()   {
+        if(mBMonthNoteModify) {
+            mHMNoteDataByMonth = AppModel.getPayIncomeUtility().GetAllNotesToMonth();
+            mBMonthNoteModify = false;
+        }
+
+        return mHMNoteDataByMonth;
+    }
+
+    public HashMap<String, ArrayList<Object>> getNotesByYear()   {
+        if(mBYearNoteModify) {
+            mHMNoteDataByYear = AppModel.getPayIncomeUtility().GetAllNotesToYear();
+            mBYearNoteModify = false;
+        }
+
+        return mHMNoteDataByYear;
+    }
+
+    public void setNotesDirty() {
+        mBDayNoteModify = true;
+        mBMonthNoteModify = true;
+        mBYearNoteModify = true;
+    }
+
+    public boolean getDayNotesDirty()   {
+        return  mBDayNoteModify;
+    }
+
+    public boolean getMonthNotesDirty()   {
+        return  mBMonthNoteModify;
+    }
+
+    public boolean getYearNotesDirty()   {
+        return  mBYearNoteModify;
+    }
+
+
+    public void switchShow()    {
+        int pos = mTLTabs.getSelectedTabPosition();
+        PagerAdapter pa = UtilFun.cast(mVPTabs.getAdapter());
+        TFShowBase hot = UtilFun.cast(pa.getItem(pos));
+        if(null != hot)  {
+            hot.switchPage();
+        }
+    }
+
+    public void jumpByTabName(String tabname)  {
+        int pos = -1;
+        int tc = mTLTabs.getTabCount();
+        for(int i = 0; i < tc; ++i)     {
+            TabLayout.Tab t = mTLTabs.getTabAt(i);
+            assert  null != t;
+
+            CharSequence t_cs = t.getText();
+            assert null != t_cs;
+
+            if(tabname.equals(t_cs.toString())) {
+                pos = i;
+                break;
+            }
+        }
+
+        if((-1 != pos) && (pos != mTLTabs.getSelectedTabPosition()))   {
+            mTLTabs.setScrollPosition(pos, 0, true);
+        }
+    }
+
+    public void filterView(List<String> ls_tag) {
+        int pos = mTLTabs.getSelectedTabPosition();
+        PagerAdapter pa = UtilFun.cast(mVPTabs.getAdapter());
+        TFShowBase hot = UtilFun.cast(pa.getItem(pos));
+        hot.filterView(ls_tag);
+    }
+
+
+    /**
+     * fragment adapter
+     */
     public class PagerAdapter extends FragmentStatePagerAdapter {
         int mNumOfTabs;
-        private android.support.v4.app.Fragment[]   mFrArr;
+        HashMap<String, android.support.v4.app.Fragment>   mHMFra;
 
         PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm);
             this.mNumOfTabs = NumOfTabs;
-            mFrArr = new android.support.v4.app.Fragment[NumOfTabs];
+
+            mHMFra = new HashMap<>();
+            mHMFra.put(TAB_DAILY, new TFShowDaily());
+            mHMFra.put(TAB_MONTHLY, new TFShowMonthly());
+            mHMFra.put(TAB_YEARLY, new TFShowYearly());
         }
 
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
-            android.support.v4.app.Fragment fr;
             TabLayout.Tab t = mTLTabs.getTabAt(position);
             assert null != t;
             CharSequence t_cs = t.getText();
             assert null != t_cs;
-            switch (t_cs.toString()) {
-                case TAB_DAILY:
-                    fr = new TFShowDaily();
-                    break;
-
-                case TAB_MONTHLY:
-                    fr = new TFShowMonthly();
-                    break;
-
-                case TAB_YEARLY:
-                    fr = new TFShowYearly();
-                    break;
-
-                default:
-                    fr = null;
-                    break;
-            }
-
-            mFrArr[position] = fr;
-            return fr;
+            return mHMFra.get(t_cs.toString());
         }
 
         @Override
         public int getCount() {
             return mNumOfTabs;
-        }
-
-        public android.support.v4.app.Fragment  getItemInArr(int pos)   {
-            return mFrArr[pos];
         }
     }
 }

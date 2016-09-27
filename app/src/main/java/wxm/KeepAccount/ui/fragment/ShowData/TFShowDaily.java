@@ -1,39 +1,41 @@
 package wxm.KeepAccount.ui.fragment.ShowData;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ViewSwitcher;
 
-import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
+import wxm.KeepAccount.ui.fragment.GraphView.DailyCharts;
+
 
 /**
  * fragment for daily data show
  * Created by wxm on 2016/9/25.
  */
 
-public class TFShowDaily extends Fragment implements ACNoteShowNew.IFShowUtil {
+public class TFShowDaily extends TFShowBase {
     private final static String TAG = "TFShowDaily";
 
-    private ViewSwitcher    mVSSwitcher;
+    public TFShowDaily()    {
+        super();
+        Log.i(TAG, "new show daily");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.tf_show_daily, container, false);
-        if(null != v)   {
-            mVSSwitcher = UtilFun.cast(v.findViewById(R.id.vs_page));
-            mVSSwitcher.setDisplayedChild(0);
-        }
-        return v;
+        Log.i(TAG, "onCreateView, hot = " + mHotChild);
+        mListViewHelper = new DailyViewHelper();
+        mChartViewHelper = new DailyCharts(getContext());
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
-    public void switchPage() {
-        mVSSwitcher.setDisplayedChild(mVSSwitcher.getDisplayedChild() == 0 ? 1 : 0);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        Log.i(TAG, "onViewCreated, hot = " + mHotChild);
+        super.onViewCreated(view, savedInstanceState);
     }
+
 }

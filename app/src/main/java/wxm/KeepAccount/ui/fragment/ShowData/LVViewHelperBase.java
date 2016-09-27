@@ -17,6 +17,7 @@ import java.util.List;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
 
 /**
  * viewhelper基础类
@@ -143,7 +144,7 @@ abstract class LVViewHelperBase implements View.OnClickListener {
      * 获取视图所在的activity
      * @return  若成功返回activity，失败返回null;
      */
-    ACNoteShow getRootActivity()  {
+    ACNoteShowNew getRootActivity()  {
         Context ct = mSelfView.getContext();
         if(ct instanceof Activity) {
             return UtilFun.cast(ct);

@@ -37,6 +37,7 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 
 /**
@@ -261,7 +262,7 @@ public class DailyViewHelper extends LVViewHelperBase
     private void OnRayMenuClick(int resid)  {
         switch (resid)  {
             case R.drawable.ic_add : {
-                ACNoteShow ac = getRootActivity();
+                ACNoteShowNew ac = getRootActivity();
                 Intent intent = new Intent(ac, ACNoteEdit.class);
                 intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
 
@@ -569,7 +570,7 @@ public class DailyViewHelper extends LVViewHelperBase
 
                         ib_action.setSelected(!ib_action.isSelected());
                     } else  {
-                        ACNoteShow ac = getRootActivity();
+                        ACNoteShowNew ac = getRootActivity();
                         Intent intent = new Intent(ac, ACNoteEdit.class);
                         intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
                         if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {

@@ -31,6 +31,7 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
 
 /**
@@ -276,7 +277,7 @@ public class BudgetViewHelper  extends LVViewHelperBase {
     private void OnRayMenuClick(int resid)  {
         switch (resid)  {
             case R.drawable.ic_add :
-                ACNoteShow ac = getRootActivity();
+                ACNoteShowNew ac = getRootActivity();
                 Intent intent = new Intent(ac, ACBudgetEdit.class);
                 ac.startActivityForResult(intent, 1);
                 break;
