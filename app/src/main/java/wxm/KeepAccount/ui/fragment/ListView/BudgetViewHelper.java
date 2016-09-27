@@ -32,7 +32,7 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
-import wxm.KeepAccount.ui.fragment.ShowData.STListViewFragment;
+import wxm.KeepAccount.ui.fragment.base.DefForListView;
 
 /**
  * 预算数据视图辅助类
@@ -153,7 +153,7 @@ public class BudgetViewHelper  extends LVViewHelperBase {
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), lv, mMainPara,
-                new String[]{STListViewFragment.MPARA_TITLE, STListViewFragment.MPARA_ABSTRACT},
+                new String[]{DefForListView.MPARA_TITLE, DefForListView.MPARA_ABSTRACT},
                 new int[]{R.id.tv_title, R.id.tv_abstract});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
@@ -201,13 +201,13 @@ public class BudgetViewHelper  extends LVViewHelperBase {
             }
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(STListViewFragment.MPARA_TITLE, i.getName());
-            map.put(STListViewFragment.MPARA_ABSTRACT, show_str);
-            map.put(STListViewFragment.MPARA_TAG, tag);
+            map.put(DefForListView.MPARA_TITLE, i.getName());
+            map.put(DefForListView.MPARA_ABSTRACT, show_str);
+            map.put(DefForListView.MPARA_TAG, tag);
             if(checkUnfoldItem(tag))
-                map.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_UNFOLD);
+                map.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_UNFOLD);
             else
-                map.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
+                map.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_FOLD);
             mMainPara.add(map);
 
             parseSub(tag, ls_pay);
@@ -230,11 +230,11 @@ public class BudgetViewHelper  extends LVViewHelperBase {
                 }
 
                 HashMap<String, String> map = new HashMap<>();
-                map.put(STListViewFragment.SPARA_TITLE, title);
-                map.put(STListViewFragment.SPARA_DETAIL, show);
-                map.put(STListViewFragment.MPARA_TAG, main_tag);
-                map.put(STListViewFragment.SPARA_TAG, sub_tag);
-                map.put(STListViewFragment.SPARA_ID, sub_tag);
+                map.put(DefForListView.SPARA_TITLE, title);
+                map.put(DefForListView.SPARA_DETAIL, show);
+                map.put(DefForListView.MPARA_TAG, main_tag);
+                map.put(DefForListView.SPARA_TAG, sub_tag);
+                map.put(DefForListView.SPARA_ID, sub_tag);
                 cur_llhm.add(map);
             }
         }
@@ -250,8 +250,8 @@ public class BudgetViewHelper  extends LVViewHelperBase {
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(STListViewFragment.MPARA_SHOW_UNFOLD.equals(hm.get(STListViewFragment.MPARA_SHOW))) {
-            llhm = mHMSubPara.get(hm.get(STListViewFragment.MPARA_TAG));
+        if(DefForListView.MPARA_SHOW_UNFOLD.equals(hm.get(DefForListView.MPARA_SHOW))) {
+            llhm = mHMSubPara.get(hm.get(DefForListView.MPARA_TAG));
         }
 
         if(null == llhm) {
@@ -262,7 +262,7 @@ public class BudgetViewHelper  extends LVViewHelperBase {
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
         SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), mLVShowDetail,
-                llhm, new String[]{STListViewFragment.SPARA_TITLE, STListViewFragment.SPARA_DETAIL},
+                llhm, new String[]{DefForListView.SPARA_TITLE, DefForListView.SPARA_DETAIL},
                 new int[]{R.id.tv_title, R.id.tv_detail});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -351,7 +351,7 @@ public class BudgetViewHelper  extends LVViewHelperBase {
                 ib.setOnClickListener(this);
 
                 HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                if(STListViewFragment.MPARA_SHOW_FOLD.equals(hm.get(STListViewFragment.MPARA_SHOW)))    {
+                if(DefForListView.MPARA_SHOW_FOLD.equals(hm.get(DefForListView.MPARA_SHOW)))    {
                     //init_detail_view(fv, hm);
                     ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
                 }   else    {
@@ -391,22 +391,22 @@ public class BudgetViewHelper  extends LVViewHelperBase {
             switch (vid)    {
                 case R.id.ib_hide_show :
                     ImageButton ib = UtilFun.cast(v);
-                    if(STListViewFragment.MPARA_SHOW_FOLD.equals(hm.get(STListViewFragment.MPARA_SHOW)))    {
-                        hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_UNFOLD);
+                    if(DefForListView.MPARA_SHOW_FOLD.equals(hm.get(DefForListView.MPARA_SHOW)))    {
+                        hm.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_UNFOLD);
                         init_detail_view(fv, hm);
                         ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
-                        addUnfoldItem(hm.get(STListViewFragment.MPARA_TAG));
+                        addUnfoldItem(hm.get(DefForListView.MPARA_TAG));
                     }   else    {
-                        hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
+                        hm.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_FOLD);
                         init_detail_view(fv, hm);
                         ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
-                        removeUnfoldItem(hm.get(STListViewFragment.MPARA_TAG));
+                        removeUnfoldItem(hm.get(DefForListView.MPARA_TAG));
                     }
                     break;
 
                 case R.id.ib_action :
                     ImageButton ib_action = UtilFun.cast(v);
-                    int tag_id = Integer.parseInt(hm.get(STListViewFragment.MPARA_TAG));
+                    int tag_id = Integer.parseInt(hm.get(DefForListView.MPARA_TAG));
                     if(ACTION_DELETE == mActionType)    {
                         if(ib_action.isSelected())  {
                             mLLDelBudget.removeFirstOccurrence(tag_id);

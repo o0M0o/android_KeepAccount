@@ -28,7 +28,7 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
-import wxm.KeepAccount.ui.fragment.ShowData.STListViewFragment;
+import wxm.KeepAccount.ui.fragment.base.DefForListView;
 
 /**
  * 年数据视图辅助类
@@ -107,7 +107,7 @@ public class YearlyViewHelper extends LVViewHelperBase  {
                 if(mBSelectSubFilter) {
                     if(!ToolUtil.ListIsNullOrEmpty(mLLSubFilter)) {
                         ACNoteShow ac = getRootActivity();
-                        ac.jumpByTabName(STListViewFragment.TAB_TITLE_MONTHLY);
+                        ac.jumpByTabName(DefForListView.TAB_TITLE_MONTHLY);
                         ac.filterView(mLLSubFilter);
 
                         mLLSubFilter.clear();
@@ -163,7 +163,7 @@ public class YearlyViewHelper extends LVViewHelperBase  {
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
         if(mBFilter) {
             for (HashMap<String, String> i : mMainPara) {
-                String cur_tag = i.get(STListViewFragment.MPARA_TAG);
+                String cur_tag = i.get(DefForListView.MPARA_TAG);
                 for (String ii : mFilterPara) {
                     if (cur_tag.equals(ii)) {
                         n_mainpara.add(i);
@@ -178,7 +178,7 @@ public class YearlyViewHelper extends LVViewHelperBase  {
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
-                new String[]{STListViewFragment.MPARA_TITLE, STListViewFragment.MPARA_ABSTRACT},
+                new String[]{DefForListView.MPARA_TITLE, DefForListView.MPARA_ABSTRACT},
                 new int[]{R.id.tv_title, R.id.tv_abstract});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
@@ -248,10 +248,10 @@ public class YearlyViewHelper extends LVViewHelperBase  {
                         pay_cout, pay_amount, income_cout, income_amount);
 
         HashMap<String, String> map = new HashMap<>();
-        map.put(STListViewFragment.MPARA_TITLE, tag);
-        map.put(STListViewFragment.MPARA_ABSTRACT, show_str);
-        map.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
-        map.put(STListViewFragment.MPARA_TAG, tag);
+        map.put(DefForListView.MPARA_TITLE, tag);
+        map.put(DefForListView.MPARA_ABSTRACT, show_str);
+        map.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_FOLD);
+        map.put(DefForListView.MPARA_TAG, tag);
         mMainPara.add(map);
 
         parseMonths(tag, hm_data);
@@ -292,10 +292,10 @@ public class YearlyViewHelper extends LVViewHelperBase  {
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(STListViewFragment.SPARA_TITLE, sub_tag);
-            map.put(STListViewFragment.SPARA_DETAIL, show);
-            map.put(STListViewFragment.MPARA_TAG, tag);
-            map.put(STListViewFragment.SPARA_TAG, sub_tag);
+            map.put(DefForListView.SPARA_TITLE, sub_tag);
+            map.put(DefForListView.SPARA_DETAIL, show);
+            map.put(DefForListView.MPARA_TAG, tag);
+            map.put(DefForListView.SPARA_TAG, sub_tag);
             cur_llhm.add(map);
         }
 
@@ -307,8 +307,8 @@ public class YearlyViewHelper extends LVViewHelperBase  {
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(STListViewFragment.MPARA_SHOW_UNFOLD.equals(hm.get(STListViewFragment.MPARA_SHOW))) {
-            llhm = mHMSubPara.get(hm.get(STListViewFragment.MPARA_TAG));
+        if(DefForListView.MPARA_SHOW_UNFOLD.equals(hm.get(DefForListView.MPARA_SHOW))) {
+            llhm = mHMSubPara.get(hm.get(DefForListView.MPARA_TAG));
         }
 
         if(null == llhm) {
@@ -319,7 +319,7 @@ public class YearlyViewHelper extends LVViewHelperBase  {
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
         SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), llhm,
-                new String[]{STListViewFragment.SPARA_TITLE, STListViewFragment.SPARA_DETAIL},
+                new String[]{DefForListView.SPARA_TITLE, DefForListView.SPARA_DETAIL},
                 new int[]{R.id.tv_title, R.id.tv_detail});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -366,12 +366,12 @@ public class YearlyViewHelper extends LVViewHelperBase  {
                         Resources res = pv.getResources();
                         ImageButton ib = UtilFun.cast(pv.findViewById(R.id.ib_hide_show));
                         HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                        if(STListViewFragment.MPARA_SHOW_FOLD.equals(hm.get(STListViewFragment.MPARA_SHOW)))    {
-                            hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_UNFOLD);
+                        if(DefForListView.MPARA_SHOW_FOLD.equals(hm.get(DefForListView.MPARA_SHOW)))    {
+                            hm.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_UNFOLD);
                             init_detail_view(pv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
                         }   else    {
-                            hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
+                            hm.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_FOLD);
                             init_detail_view(pv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
                         }
@@ -429,7 +429,7 @@ public class YearlyViewHelper extends LVViewHelperBase  {
                         }
 
                         HashMap<String, String> hp = UtilFun.cast(getItem(position));
-                        final String hp_tag = hp.get(STListViewFragment.SPARA_TAG);
+                        final String hp_tag = hp.get(DefForListView.SPARA_TAG);
                         Resources res = v.getResources();
                         if(!v.isSelected()) {
                             mLLSubFilter.add(hp_tag);

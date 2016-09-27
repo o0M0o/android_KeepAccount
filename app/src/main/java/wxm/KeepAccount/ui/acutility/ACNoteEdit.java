@@ -55,7 +55,7 @@ public class ACNoteEdit extends AppCompatActivity {
         // set fragment for tab
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            //mTabFragment = new STListViewFragment();
+            //mTabFragment = new DefForListView();
             mTabFragment = new STEditNoteFragment();
 
             transaction.replace(R.id.tabfl_note_edit_content, mTabFragment);

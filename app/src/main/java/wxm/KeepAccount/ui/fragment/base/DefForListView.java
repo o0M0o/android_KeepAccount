@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.fragment.ShowData;
+package wxm.KeepAccount.ui.fragment.base;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -20,8 +20,8 @@ import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
  * 列表视图方式显示数据
  * Created by wxm on 2016/5/30.
  */
-public class STListViewFragment extends SlidingTabsColorsFragment {
-    private static final String TAG = "STListViewFragment ";
+public class DefForListView {
+    private static final String TAG = "DefForListView ";
 
     public final static String MPARA_TITLE      = "MPARA_TITLE";
     public final static String MPARA_ABSTRACT   = "MPARA_ABSTRACT";

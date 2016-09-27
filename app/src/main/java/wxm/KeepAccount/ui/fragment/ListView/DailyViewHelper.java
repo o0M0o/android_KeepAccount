@@ -38,7 +38,7 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
-import wxm.KeepAccount.ui.fragment.ShowData.STListViewFragment;
+import wxm.KeepAccount.ui.fragment.base.DefForListView;
 
 /**
  * 日数据视图辅助类
@@ -200,7 +200,7 @@ public class DailyViewHelper extends LVViewHelperBase
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
         if(mBFilter) {
             for (HashMap<String, String> i : mMainPara) {
-                String cur_tag = i.get(STListViewFragment.MPARA_TAG);
+                String cur_tag = i.get(DefForListView.MPARA_TAG);
                 for (String ii : mFilterPara) {
                     if (cur_tag.equals(ii)) {
                         n_mainpara.add(i);
@@ -215,7 +215,7 @@ public class DailyViewHelper extends LVViewHelperBase
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
-                new String[]{STListViewFragment.MPARA_TITLE, STListViewFragment.MPARA_ABSTRACT},
+                new String[]{DefForListView.MPARA_TITLE, DefForListView.MPARA_ABSTRACT},
                 new int[]{R.id.tv_title, R.id.tv_abstract});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
@@ -236,8 +236,8 @@ public class DailyViewHelper extends LVViewHelperBase
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(STListViewFragment.MPARA_SHOW_UNFOLD.equals(hm.get(STListViewFragment.MPARA_SHOW))) {
-            llhm = mHMSubPara.get(hm.get(STListViewFragment.MPARA_TAG));
+        if(DefForListView.MPARA_SHOW_UNFOLD.equals(hm.get(DefForListView.MPARA_SHOW))) {
+            llhm = mHMSubPara.get(hm.get(DefForListView.MPARA_TAG));
         }
 
         if(null == llhm) {
@@ -248,7 +248,7 @@ public class DailyViewHelper extends LVViewHelperBase
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
         SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), mLVShowDetail,
-                llhm, new String[]{STListViewFragment.SPARA_TITLE, STListViewFragment.SPARA_DETAIL},
+                llhm, new String[]{DefForListView.SPARA_TITLE, DefForListView.SPARA_DETAIL},
                 new int[]{R.id.tv_title, R.id.tv_detail});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -340,9 +340,9 @@ public class DailyViewHelper extends LVViewHelperBase
                     pay_cout += 1;
                     pay_amount = pay_amount.add(pi.getVal());
 
-                    map.put(STListViewFragment.SPARA_TITLE, pi.getInfo());
-                    map.put(STListViewFragment.SPARA_ID, String.valueOf(pi.getId()));
-                    map.put(STListViewFragment.SPARA_TAG, STListViewFragment.SPARA_TAG_PAY);
+                    map.put(DefForListView.SPARA_TITLE, pi.getInfo());
+                    map.put(DefForListView.SPARA_ID, String.valueOf(pi.getId()));
+                    map.put(DefForListView.SPARA_TAG, DefForListView.SPARA_TAG_PAY);
 
                     BudgetItem bi = pi.getBudget();
                     if(null != bi)
@@ -357,9 +357,9 @@ public class DailyViewHelper extends LVViewHelperBase
                     income_cout += 1;
                     income_amount = income_amount.add(ii.getVal());
 
-                    map.put(STListViewFragment.SPARA_TITLE, ii.getInfo());
-                    map.put(STListViewFragment.SPARA_ID, String.valueOf(ii.getId()));
-                    map.put(STListViewFragment.SPARA_TAG, STListViewFragment.SPARA_TAG_INCOME);
+                    map.put(DefForListView.SPARA_TITLE, ii.getInfo());
+                    map.put(DefForListView.SPARA_ID, String.valueOf(ii.getId()));
+                    map.put(DefForListView.SPARA_TAG, DefForListView.SPARA_TAG_INCOME);
                     show = String.format(Locale.CHINA, "金额 : %.02f", ii.getVal());
 
                     nt = ii.getNote();
@@ -369,8 +369,8 @@ public class DailyViewHelper extends LVViewHelperBase
                     show = String.format(Locale.CHINA, "%s\n备注 : %s", show ,nt);
                 }
 
-                map.put(STListViewFragment.SPARA_DETAIL, show);
-                map.put(STListViewFragment.MPARA_TAG, title);
+                map.put(DefForListView.SPARA_DETAIL, show);
+                map.put(DefForListView.MPARA_TAG, title);
                 cur_llhm.add(map);
             }
 
@@ -380,13 +380,13 @@ public class DailyViewHelper extends LVViewHelperBase
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(STListViewFragment.MPARA_TITLE, title);
-            map.put(STListViewFragment.MPARA_ABSTRACT, show_str);
-            map.put(STListViewFragment.MPARA_TAG, title);
+            map.put(DefForListView.MPARA_TITLE, title);
+            map.put(DefForListView.MPARA_ABSTRACT, show_str);
+            map.put(DefForListView.MPARA_TAG, title);
             if(checkUnfoldItem(title))
-                map.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_UNFOLD);
+                map.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_UNFOLD);
             else
-                map.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
+                map.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_FOLD);
 
             mMainPara.add(map);
 
@@ -433,21 +433,21 @@ public class DailyViewHelper extends LVViewHelperBase
                         //Log.i(TAG, "onIbClick at pos = " + pos);
                         Resources res = v.getResources();
                         ImageButton ib = UtilFun.cast(v);
-                        if(STListViewFragment.MPARA_SHOW_FOLD.equals(hm.get(STListViewFragment.MPARA_SHOW)))    {
-                            hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_UNFOLD);
+                        if(DefForListView.MPARA_SHOW_FOLD.equals(hm.get(DefForListView.MPARA_SHOW)))    {
+                            hm.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_UNFOLD);
                             init_detail_view(fv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
-                            addUnfoldItem(hm.get(STListViewFragment.MPARA_TAG));
+                            addUnfoldItem(hm.get(DefForListView.MPARA_TAG));
                         }   else    {
-                            hm.put(STListViewFragment.MPARA_SHOW, STListViewFragment.MPARA_SHOW_FOLD);
+                            hm.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_FOLD);
                             init_detail_view(fv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
-                            removeUnfoldItem(hm.get(STListViewFragment.MPARA_TAG));
+                            removeUnfoldItem(hm.get(DefForListView.MPARA_TAG));
                         }
                     }
                 });
 
-                if(STListViewFragment.MPARA_SHOW_FOLD.equals(hm.get(STListViewFragment.MPARA_SHOW)))    {
+                if(DefForListView.MPARA_SHOW_FOLD.equals(hm.get(DefForListView.MPARA_SHOW)))    {
                     //init_detail_view(fv, hm);
                     ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
                 }   else    {
@@ -519,7 +519,7 @@ public class DailyViewHelper extends LVViewHelperBase
 
                 // for image & background
                 Bitmap nicon;
-                if(STListViewFragment.SPARA_TAG_PAY.equals(hm.get(STListViewFragment.SPARA_TAG)))   {
+                if(DefForListView.SPARA_TAG_PAY.equals(hm.get(DefForListView.SPARA_TAG)))   {
                     v.setBackgroundColor(res.getColor(R.color.burlywood));
                     nicon = BitmapFactory.decodeResource(res, R.drawable.ic_show_pay);
                 } else  {
@@ -542,15 +542,15 @@ public class DailyViewHelper extends LVViewHelperBase
 
             int pos = mRootView.getPositionForView(v);
             HashMap<String, String> hm = UtilFun.cast(getItem(pos));
-            String tp = hm.get(STListViewFragment.SPARA_TAG);
-            int did = Integer.parseInt(hm.get(STListViewFragment.SPARA_ID));
+            String tp = hm.get(DefForListView.SPARA_TAG);
+            int did = Integer.parseInt(hm.get(DefForListView.SPARA_ID));
 
             switch (vid)    {
                 case R.id.ib_action:       {
                     ImageButton ib_action = UtilFun.cast(v);
                     if(ACTION_DELETE == mActionType)    {
                         if(ib_action.isSelected())  {
-                            if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
+                            if (DefForListView.SPARA_TAG_PAY.equals(tp)) {
                                 mDelPay.removeFirstOccurrence(did);
                             } else {
                                 mDelIncome.removeFirstOccurrence(did);
@@ -558,7 +558,7 @@ public class DailyViewHelper extends LVViewHelperBase
 
                             ib_action.getBackground().setAlpha(0);
                         }   else    {
-                            if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
+                            if (DefForListView.SPARA_TAG_PAY.equals(tp)) {
                                 mDelPay.add(did);
                             } else {
                                 mDelIncome.add(did);
@@ -573,7 +573,7 @@ public class DailyViewHelper extends LVViewHelperBase
                         ACNoteShow ac = getRootActivity();
                         Intent intent = new Intent(ac, ACNoteEdit.class);
                         intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
-                        if (STListViewFragment.SPARA_TAG_PAY.equals(tp)) {
+                        if (DefForListView.SPARA_TAG_PAY.equals(tp)) {
                             intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, did);
                         } else {
                             intent.putExtra(ACNoteEdit.PARA_NOTE_INCOME, did);
