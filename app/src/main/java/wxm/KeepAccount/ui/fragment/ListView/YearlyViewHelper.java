@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.fragment.ShowData;
+package wxm.KeepAccount.ui.fragment.ListView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,7 +28,7 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
-import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
+import wxm.KeepAccount.ui.fragment.ShowData.STListViewFragment;
 
 /**
  * 年数据视图辅助类
@@ -106,7 +106,7 @@ public class YearlyViewHelper extends LVViewHelperBase  {
             case R.id.bt_accpet :
                 if(mBSelectSubFilter) {
                     if(!ToolUtil.ListIsNullOrEmpty(mLLSubFilter)) {
-                        ACNoteShowNew ac = getRootActivity();
+                        ACNoteShow ac = getRootActivity();
                         ac.jumpByTabName(STListViewFragment.TAB_TITLE_MONTHLY);
                         ac.filterView(mLLSubFilter);
 

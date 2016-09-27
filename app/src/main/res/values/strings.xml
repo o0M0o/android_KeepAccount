@@ -14,7 +14,7 @@
     <string name="cn_delete">删除</string>
     <string name="cn_modify">修改</string>
     <string name="cn_add">添加</string>
-    <string name="cn_applabel">随手帐</string>
+    <string name="cn_keepaccount_applabel">随手帐</string>
 
     <string name="cn_hint_income_info">收入原因</string>
     <string name="cn_hint_income_date">收入日期</string>

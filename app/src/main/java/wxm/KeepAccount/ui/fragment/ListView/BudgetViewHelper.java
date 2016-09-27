@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.fragment.ShowData;
+package wxm.KeepAccount.ui.fragment.ListView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,8 +31,8 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
-import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
+import wxm.KeepAccount.ui.fragment.ShowData.STListViewFragment;
 
 /**
  * 预算数据视图辅助类
@@ -277,7 +277,7 @@ public class BudgetViewHelper  extends LVViewHelperBase {
     private void OnRayMenuClick(int resid)  {
         switch (resid)  {
             case R.drawable.ic_add :
-                ACNoteShowNew ac = getRootActivity();
+                ACNoteShow ac = getRootActivity();
                 Intent intent = new Intent(ac, ACBudgetEdit.class);
                 ac.startActivityForResult(intent, 1);
                 break;

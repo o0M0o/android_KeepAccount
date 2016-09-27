@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.fragment.ShowData;
+package wxm.KeepAccount.ui.fragment.util;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,12 +10,12 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import java.util.List;
-import java.util.Objects;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.GraphView.ChartsBase;
+import wxm.KeepAccount.ui.fragment.ListView.LVViewHelperBase;
 
 /**
  * 数据显示fragment基类
@@ -30,7 +30,7 @@ public abstract class TFShowBase extends Fragment {
     private ViewSwitcher    mVSSwitcher;
     protected int           mHotChild = CHILD_LISTVIWE;
 
-    protected LVViewHelperBase      mListViewHelper;
+    protected LVViewHelperBase mListViewHelper;
     protected ChartsBase            mChartViewHelper;
 
     @Override
@@ -57,15 +57,6 @@ public abstract class TFShowBase extends Fragment {
             mVSSwitcher.addView(mListViewHelper.getView(), CHILD_LISTVIWE);
             mVSSwitcher.addView(mChartViewHelper, CHILD_GRAPHVIWE);
         }
-
-        /*
-        View v;
-        if (CHILD_LISTVIWE == mHotChild)    {
-            v = mListViewHelper.createView(inflater, container);
-        } else  {
-            v = inflater.inflate(R.layout.tf_show_base, container, false);
-        }
-        */
 
         return v;
     }
@@ -95,7 +86,7 @@ public abstract class TFShowBase extends Fragment {
             mHotChild = mVSSwitcher.getDisplayedChild() == 0 ? 1 : 0;
             mVSSwitcher.setDisplayedChild(mHotChild);
         }   else    {
-            Toast.makeText(getContext(), "getView is null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "getView is null", Toast.LENGTH_SHORT).show();
         }
     }
 

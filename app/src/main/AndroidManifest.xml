@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="wxm.KeepAccount">
 
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -12,25 +13,18 @@
         android:name=".Base.utility.ContextUtil"
         android:allowBackup="true"
         android:icon="@mipmap/ic_keepaccount_launcher"
-        android:label="@string/cn_applabel"
+        android:label="@string/cn_keepaccount_applabel"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:label">
-
-        <!--
- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
-        -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        tools:replace="android:icon, android:theme, android:label">
 
         <activity
             android:name=".ui.acinterface.ACNoteShow"
-            android:label="@string/ac_title_noteshow" />
+            android:label="@string/ac_title_noteshow"
+            android:exported="true" />
         <activity
             android:name=".ui.acinterface.ACLogin"
-            android:label="@string/cn_applabel">
+            android:label="@string/cn_keepaccount_applabel">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,14 +49,6 @@
         <activity android:name=".ui.acutility.ACNoteEdit" />
         <activity android:name=".ui.acutility.ACRemindEdit" />
         <activity android:name=".ui.acinterface.ACRemindShow" />
-        <activity
-            android:name=".ui.acinterface.ACWelcomeSimple"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.acinterface.ACNoteShowNew"
-            android:exported="true" />
-        <activity android:name=".ui.acutility.ACDailyShow"
-                android:theme="@android:style/Theme.NoTitleBar"/>
     </application>
 
 </manifest>

@@ -2,11 +2,15 @@ package wxm.KeepAccount.ui.acinterface;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,17 +20,20 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.fragment.GraphView.STGraphViewFragment;
-import wxm.KeepAccount.ui.fragment.ShowData.STListViewFragment;
-import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
+import wxm.KeepAccount.ui.fragment.util.TFShowBase;
+import wxm.KeepAccount.ui.fragment.util.TFShowDaily;
+import wxm.KeepAccount.ui.fragment.util.TFShowMonthly;
+import wxm.KeepAccount.ui.fragment.util.TFShowYearly;
 
-/**
- * tab版本的main activity
- * Created by 123 on 2016/5/16.
- */
-public class ACNoteShow
-        extends AppCompatActivity   {
-    private static final String TAG = "ACNoteShow";
+public class ACNoteShow extends AppCompatActivity {
+    private final static String TAG = "ACNoteShow";
+
+    protected final static String TAB_DAILY     = "日统计";
+    protected final static String TAB_MONTHLY   = "月统计";
+    protected final static String TAB_YEARLY    = "年统计";
+
+    private TabLayout   mTLTabs;
+    private ViewPager   mVPTabs;
 
     // for notes data
     private boolean     mBDayNoteModify = true;
@@ -36,17 +43,12 @@ public class ACNoteShow
     private HashMap<String, ArrayList<Object>> mHMNoteDataByMonth;
     private HashMap<String, ArrayList<Object>> mHMNoteDataByYear;
 
-    // for tab colors fragment
-    private SlidingTabsColorsFragment mTabFragment;
-    private final STGraphViewFragment gvTabFragment = new STGraphViewFragment();
-    private final STListViewFragment  lvTabFragment = new STListViewFragment();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_note_show);
+        setContentView(R.layout.ac_note_show_new);
 
-        initView(savedInstanceState);
+        init_tabs();
     }
 
     @Override
@@ -82,7 +84,10 @@ public class ACNoteShow
             break;
 
             case R.id.acb_mi_switch :   {
-                switchShow();
+                TFShowBase hot = getHotTabItem();
+                if(null != hot)  {
+                    hot.switchPage();
+                }
             }
             break;
 
@@ -94,27 +99,49 @@ public class ACNoteShow
         return true;
     }
 
-    public void switchShow()    {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (mTabFragment instanceof STListViewFragment) {
-            mTabFragment = gvTabFragment;
-        } else {
-            mTabFragment = lvTabFragment;
-        }
-
-        transaction.replace(R.id.tabfl_content, mTabFragment);
-        transaction.commit();
+    /**
+     * 得到当前选中的tab item
+     * @return  当前选中的tab item
+     */
+    private TFShowBase getHotTabItem() {
+        int pos = mTLTabs.getSelectedTabPosition();
+        PagerAdapter pa = UtilFun.cast(mVPTabs.getAdapter());
+        return UtilFun.cast(pa.getItem(pos));
     }
 
-    public void jumpByTabName(String tabname)  {
-        mTabFragment.jumpToTabName(tabname);
-    }
 
-    public void filterView(List<String> ls_tag) {
-        if(mTabFragment instanceof STListViewFragment)  {
-            STListViewFragment sf = UtilFun.cast(mTabFragment);
-            sf.filterView(ls_tag);
-        }
+    /**
+     * 初始化tab页控件组
+     */
+    private void init_tabs() {
+        mTLTabs = (TabLayout) findViewById(R.id.tl_tabs);
+        assert null != mTLTabs;
+        mTLTabs.addTab(mTLTabs.newTab().setText(TAB_DAILY));
+        mTLTabs.addTab(mTLTabs.newTab().setText(TAB_MONTHLY));
+        mTLTabs.addTab(mTLTabs.newTab().setText(TAB_YEARLY));
+        mTLTabs.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        mVPTabs = (ViewPager) findViewById(R.id.tab_pager);
+        final PagerAdapter adapter = new PagerAdapter
+                (getSupportFragmentManager(), mTLTabs.getTabCount());
+        mVPTabs.setAdapter(adapter);
+        mVPTabs.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTLTabs));
+        mTLTabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mVPTabs.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     public HashMap<String, ArrayList<Object>> getNotesByDay()   {
@@ -162,6 +189,53 @@ public class ACNoteShow
         return  mBYearNoteModify;
     }
 
+
+    /**
+     * 切换视图类型（列表视图/图表)
+     */
+    public void switchShow()    {
+        TFShowBase hot = getHotTabItem();
+        if(null != hot)  {
+            hot.switchPage();
+        }
+    }
+
+    /**
+     * 跳至对应名称的标签页
+     * @param tabname 需跳转标签页的名字
+     */
+    public void jumpByTabName(String tabname)  {
+        int pos = -1;
+        int tc = mTLTabs.getTabCount();
+        for(int i = 0; i < tc; ++i)     {
+            TabLayout.Tab t = mTLTabs.getTabAt(i);
+            assert  null != t;
+
+            CharSequence t_cs = t.getText();
+            assert null != t_cs;
+
+            if(tabname.equals(t_cs.toString())) {
+                pos = i;
+                break;
+            }
+        }
+
+        if((-1 != pos) && (pos != mTLTabs.getSelectedTabPosition()))   {
+            mTLTabs.setScrollPosition(pos, 0, true);
+            mVPTabs.setCurrentItem(pos);
+
+        }
+    }
+
+    /**
+     * 过滤视图数据
+     * @param ls_tag 过滤数据项
+     */
+    public void filterView(List<String> ls_tag) {
+        TFShowBase hot = getHotTabItem();
+        hot.filterView(ls_tag);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -172,28 +246,39 @@ public class ACNoteShow
             setNotesDirty();
         }
 
-        if (mTabFragment instanceof STListViewFragment) {
-            STListViewFragment sf = UtilFun.cast(mTabFragment);
-            sf.onActivityResult(requestCode, resultCode, data);
-        }
+        getHotTabItem().onActivityResult(requestCode, resultCode, data);
     }
 
+
     /**
-     * 初始化
-     *
-     * @param savedInstanceState activity创建参数
+     * fragment adapter
      */
-    private void initView(Bundle savedInstanceState) {
-        // set fragment for tab
-        if (savedInstanceState == null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            //mTabFragment = new STListViewFragment();
-            mTabFragment = lvTabFragment;
-            transaction.replace(R.id.tabfl_content, mTabFragment);
-            transaction.commit();
-        } else  {
-            if(null == mTabFragment)
-                mTabFragment = lvTabFragment;
+    public class PagerAdapter extends FragmentStatePagerAdapter {
+        int mNumOfTabs;
+        HashMap<String, android.support.v4.app.Fragment>   mHMFra;
+
+        PagerAdapter(FragmentManager fm, int NumOfTabs) {
+            super(fm);
+            this.mNumOfTabs = NumOfTabs;
+
+            mHMFra = new HashMap<>();
+            mHMFra.put(TAB_DAILY, new TFShowDaily());
+            mHMFra.put(TAB_MONTHLY, new TFShowMonthly());
+            mHMFra.put(TAB_YEARLY, new TFShowYearly());
+        }
+
+        @Override
+        public android.support.v4.app.Fragment getItem(int position) {
+            TabLayout.Tab t = mTLTabs.getTabAt(position);
+            assert null != t;
+            CharSequence t_cs = t.getText();
+            assert null != t_cs;
+            return mHMFra.get(t_cs.toString());
+        }
+
+        @Override
+        public int getCount() {
+            return mNumOfTabs;
         }
     }
 }

@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.fragment.ShowData;
+package wxm.KeepAccount.ui.fragment.ListView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,13 +17,12 @@ import java.util.List;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
-import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
 
 /**
  * viewhelper基础类
  * Created by 123 on 2016/9/14.
  */
-abstract class LVViewHelperBase implements View.OnClickListener {
+public abstract class LVViewHelperBase implements View.OnClickListener {
     private final static String TAG = "LVViewHelperBase";
     View      mSelfView;
 
@@ -144,7 +143,7 @@ abstract class LVViewHelperBase implements View.OnClickListener {
      * 获取视图所在的activity
      * @return  若成功返回activity，失败返回null;
      */
-    ACNoteShowNew getRootActivity()  {
+    ACNoteShow getRootActivity()  {
         Context ct = mSelfView.getContext();
         if(ct instanceof Activity) {
             return UtilFun.cast(ct);
