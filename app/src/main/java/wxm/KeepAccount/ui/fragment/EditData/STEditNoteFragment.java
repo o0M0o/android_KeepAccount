@@ -32,7 +32,7 @@ public class STEditNoteFragment extends SlidingTabsColorsFragment {
     protected static class ListViewPagerItem extends SamplePagerItem {
         NoteContentFragment  mContent;
 
-        public ListViewPagerItem(CharSequence title, int indicatorColor, int dividerColor) {
+        ListViewPagerItem(CharSequence title, int indicatorColor, int dividerColor) {
             super(title, indicatorColor, dividerColor);
         }
 

@@ -186,18 +186,21 @@ public class ACRecordType extends AppCompatActivity
      */
     private HashMap<String, String> line2hm(String ln)  {
         String[] sln =  ln.split("-", 5);
-        if(BuildConfig.DEBUG && (3 != sln.length)) {
+        if(BuildConfig.DEBUG && (2 != sln.length)) {
             throw new AssertionError();
         }
 
         HashMap<String, String> hm = new HashMap<>();
         hm.put(TITLE, sln[0]);
-        hm.put(EXPLAIN, sln[2]);
+        hm.put(EXPLAIN, sln[1]);
 
+        hm.put(CHILD_TYPE, TEXTVIEW_CHILD);
+        /*
         if(sln[1].equals("tv"))
             hm.put(CHILD_TYPE, TEXTVIEW_CHILD);
         else
             hm.put(CHILD_TYPE, EDITTEXT_CHILD);
+            */
 
         return hm;
     }

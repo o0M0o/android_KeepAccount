@@ -20,10 +20,10 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.fragment.util.TFShowBase;
-import wxm.KeepAccount.ui.fragment.util.TFShowDaily;
-import wxm.KeepAccount.ui.fragment.util.TFShowMonthly;
-import wxm.KeepAccount.ui.fragment.util.TFShowYearly;
+import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
+import wxm.KeepAccount.ui.fragment.ShowData.TFShowDaily;
+import wxm.KeepAccount.ui.fragment.ShowData.TFShowMonthly;
+import wxm.KeepAccount.ui.fragment.ShowData.TFShowYearly;
 
 public class ACNoteShow extends AppCompatActivity {
     private final static String TAG = "ACNoteShow";
@@ -46,7 +46,7 @@ public class ACNoteShow extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_note_show_new);
+        setContentView(R.layout.ac_note_show);
 
         init_tabs();
     }
@@ -126,7 +126,7 @@ public class ACNoteShow extends AppCompatActivity {
                 (getSupportFragmentManager(), mTLTabs.getTabCount());
         mVPTabs.setAdapter(adapter);
         mVPTabs.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTLTabs));
-        mTLTabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTLTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mVPTabs.setCurrentItem(tab.getPosition());
@@ -223,7 +223,6 @@ public class ACNoteShow extends AppCompatActivity {
         if((-1 != pos) && (pos != mTLTabs.getSelectedTabPosition()))   {
             mTLTabs.setScrollPosition(pos, 0, true);
             mVPTabs.setCurrentItem(pos);
-
         }
     }
 
