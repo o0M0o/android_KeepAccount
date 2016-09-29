@@ -26,13 +26,8 @@ public abstract class TFShowBase extends Fragment {
     private final static String TAG = "TFShowBase";
 
     private final static String CHILD_HOT = "child_hot";
-    protected int             CHILD_LISTVIWE  = 0;
-    protected int             CHILD_GRAPHVIWE = 1;
     private ViewSwitcher    mVSSwitcher;
-    protected int           mHotChild = CHILD_LISTVIWE;
-
-    //protected ShowViewHelperBase mListViewHelper;
-    //protected ChartsBase            mChartViewHelper;
+    protected int           mHotChild;
 
     protected ShowViewHelperBase[]   mViewHelper;
 
@@ -40,7 +35,7 @@ public abstract class TFShowBase extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            mHotChild = savedInstanceState.getInt(CHILD_HOT, CHILD_LISTVIWE);
+            mHotChild = savedInstanceState.getInt(CHILD_HOT, 0);
         }
     }
 
@@ -57,10 +52,12 @@ public abstract class TFShowBase extends Fragment {
         if(null != v) {
             mVSSwitcher = UtilFun.cast(v.findViewById(R.id.vs_page));
 
-            mViewHelper[CHILD_LISTVIWE].createView(inflater, container);
-            mViewHelper[CHILD_GRAPHVIWE].createView(inflater, container);
-            mVSSwitcher.addView(mViewHelper[CHILD_LISTVIWE].getView(), CHILD_LISTVIWE);
-            mVSSwitcher.addView(mViewHelper[CHILD_GRAPHVIWE].getView(), CHILD_GRAPHVIWE);
+            int cc = mViewHelper.length;
+            for(int i = 0; i < cc; ++i)     {
+                ShowViewHelperBase sb = mViewHelper[i];
+                sb.createView(inflater, container);
+                mVSSwitcher.addView(sb.getView(), i);
+            }
         }
 
         return v;
@@ -70,14 +67,10 @@ public abstract class TFShowBase extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(null != view) {
-            /*if(CHILD_GRAPHVIWE == mHotChild) {
-                List<Object> ls_ret = AppModel.getPayIncomeUtility().GetAllNotes();
-                mChartViewHelper.RenderChart(ls_ret);
-            } else  {
-                mListViewHelper.loadView();
-            }*/
-            mViewHelper[CHILD_LISTVIWE].loadView();
-            mViewHelper[CHILD_GRAPHVIWE].loadView();
+            for(ShowViewHelperBase sb : mViewHelper) {
+                sb.loadView();
+            }
+
             mVSSwitcher = UtilFun.cast(view.findViewById(R.id.vs_page));
             mVSSwitcher.setDisplayedChild(mHotChild);
         }
@@ -91,9 +84,8 @@ public abstract class TFShowBase extends Fragment {
         View v = getView();
         if(null != v) {
             mVSSwitcher = UtilFun.cast(v.findViewById(R.id.vs_page));
-
-            mHotChild = mVSSwitcher.getDisplayedChild() == 0 ? 1 : 0;
-            mVSSwitcher.setDisplayedChild(mHotChild);
+            mVSSwitcher.showNext();
+            mHotChild = mVSSwitcher.getDisplayedChild();
         }   else    {
             Toast.makeText(getActivity(), "getView is null", Toast.LENGTH_SHORT).show();
         }
@@ -106,8 +98,7 @@ public abstract class TFShowBase extends Fragment {
      *                 2. 如果不为null, 但为空则过滤（不显示任何数据)
      */
     public void filterView(List<String> ls_tag)     {
-        if(CHILD_LISTVIWE == mHotChild)
-            mViewHelper[mHotChild].filterView(ls_tag);
+        mViewHelper[mHotChild].filterView(ls_tag);
     }
 
     @Override

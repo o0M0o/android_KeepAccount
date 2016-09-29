@@ -77,10 +77,10 @@ public abstract class ChartHelperBase extends ShowViewHelperBase {
         mPreviewChart.setViewportChangeListener(new ViewportListener());
 
         Viewport tempViewport = new Viewport(mChart.getMaximumViewport());
-        float dy = tempViewport.height() / 4;
-        tempViewport.inset(0, dy);
+        float dx = tempViewport.width() / (float)2.3;
+        tempViewport.inset(dx, 0);
         mPreviewChart.setCurrentViewportWithAnimation(tempViewport);
-        mPreviewChart.setZoomType(ZoomType.VERTICAL);
+        mPreviewChart.setZoomType(ZoomType.HORIZONTAL);
     }
 
 

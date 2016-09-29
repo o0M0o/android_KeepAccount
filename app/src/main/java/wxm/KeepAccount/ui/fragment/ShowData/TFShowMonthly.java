@@ -6,9 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import wxm.KeepAccount.ui.fragment.GraphView.MonthlyCharts;
 import wxm.KeepAccount.ui.fragment.HelloChart.MonthlyChartHelper;
-import wxm.KeepAccount.ui.fragment.ListView.MonthlyViewHelper;
+import wxm.KeepAccount.ui.fragment.ListView.MonthlyLVHelper;
 import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
 /**
@@ -23,8 +22,8 @@ public class TFShowMonthly extends TFShowBase {
                              ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView");
         mViewHelper = new ShowViewHelperBase[2];
-        mViewHelper[CHILD_LISTVIWE] = new MonthlyViewHelper();
-        mViewHelper[CHILD_GRAPHVIWE] = new MonthlyChartHelper();
+        mViewHelper[0] = new MonthlyLVHelper();
+        mViewHelper[1] = new MonthlyChartHelper();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 }

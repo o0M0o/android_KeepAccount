@@ -28,21 +28,20 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
-import wxm.KeepAccount.ui.fragment.base.DefForListView;
-import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
+import wxm.KeepAccount.ui.fragment.base.DefForTabLayout;
 
 /**
  * 月数据辅助类
  * Created by 123 on 2016/9/10.
  */
-public class MonthlyViewHelper extends ShowViewHelperBase {
-    private final static String TAG = "MonthlyViewHelper";
+public class MonthlyLVHelper extends ListViewBase {
+    private final static String TAG = "MonthlyLVHelper";
 
     private boolean mBSelectSubFilter = false;
     private final LinkedList<String> mLLSubFilter = new LinkedList<>();
     private final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
 
-    public MonthlyViewHelper()    {
+    public MonthlyLVHelper()    {
         super();
     }
 
@@ -108,7 +107,7 @@ public class MonthlyViewHelper extends ShowViewHelperBase {
                 if(mBSelectSubFilter) {
                     if(!ToolUtil.ListIsNullOrEmpty(mLLSubFilter)) {
                         ACNoteShow ac = getRootActivity();
-                        ac.jumpByTabName(DefForListView.TAB_TITLE_DAILY);
+                        ac.jumpByTabName(DefForTabLayout.TAB_TITLE_DAILY);
                         ac.filterView(mLLSubFilter);
 
                         mLLSubFilter.clear();
@@ -165,7 +164,7 @@ public class MonthlyViewHelper extends ShowViewHelperBase {
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
         if(mBFilter) {
             for (HashMap<String, String> i : mMainPara) {
-                String cur_tag = i.get(DefForListView.MPARA_TAG);
+                String cur_tag = i.get(ListViewBase.MPARA_TAG);
                 for (String ii : mFilterPara) {
                     if (cur_tag.equals(ii)) {
                         n_mainpara.add(i);
@@ -180,7 +179,7 @@ public class MonthlyViewHelper extends ShowViewHelperBase {
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
-                new String[]{DefForListView.MPARA_TITLE, DefForListView.MPARA_ABSTRACT},
+                new String[]{ListViewBase.MPARA_TITLE, ListViewBase.MPARA_ABSTRACT},
                 new int[]{R.id.tv_title, R.id.tv_abstract});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
@@ -252,10 +251,10 @@ public class MonthlyViewHelper extends ShowViewHelperBase {
                         pay_cout, pay_amount, income_cout, income_amount);
 
         HashMap<String, String> map = new HashMap<>();
-        map.put(DefForListView.MPARA_TITLE, tag);
-        map.put(DefForListView.MPARA_ABSTRACT, show_str);
-        map.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_FOLD);
-        map.put(DefForListView.MPARA_TAG, tag);
+        map.put(ListViewBase.MPARA_TITLE, tag);
+        map.put(ListViewBase.MPARA_ABSTRACT, show_str);
+        map.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_FOLD);
+        map.put(ListViewBase.MPARA_TAG, tag);
         mMainPara.add(map);
 
         parseDays(tag, hm_data);
@@ -297,10 +296,10 @@ public class MonthlyViewHelper extends ShowViewHelperBase {
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(DefForListView.SPARA_TITLE, sub_tag);
-            map.put(DefForListView.SPARA_DETAIL, show);
-            map.put(DefForListView.MPARA_TAG, tag);
-            map.put(DefForListView.SPARA_TAG, sub_tag);
+            map.put(ListViewBase.SPARA_TITLE, sub_tag);
+            map.put(ListViewBase.SPARA_DETAIL, show);
+            map.put(ListViewBase.MPARA_TAG, tag);
+            map.put(ListViewBase.SPARA_TAG, sub_tag);
             cur_llhm.add(map);
         }
 
@@ -311,8 +310,8 @@ public class MonthlyViewHelper extends ShowViewHelperBase {
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(DefForListView.MPARA_SHOW_UNFOLD.equals(hm.get(DefForListView.MPARA_SHOW))) {
-            llhm = mHMSubPara.get(hm.get(DefForListView.MPARA_TAG));
+        if(ListViewBase.MPARA_SHOW_UNFOLD.equals(hm.get(ListViewBase.MPARA_SHOW))) {
+            llhm = mHMSubPara.get(hm.get(ListViewBase.MPARA_TAG));
         }
 
         if(null == llhm) {
@@ -323,7 +322,7 @@ public class MonthlyViewHelper extends ShowViewHelperBase {
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
         SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), llhm,
-                new String[]{DefForListView.SPARA_TITLE, DefForListView.SPARA_DETAIL},
+                new String[]{ListViewBase.SPARA_TITLE, ListViewBase.SPARA_DETAIL},
                 new int[]{R.id.tv_title, R.id.tv_detail});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -369,12 +368,12 @@ public class MonthlyViewHelper extends ShowViewHelperBase {
                         Resources res = v.getResources();
                         ImageButton ib = UtilFun.cast(v);
                         HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                        if(DefForListView.MPARA_SHOW_FOLD.equals(hm.get(DefForListView.MPARA_SHOW)))    {
-                            hm.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_UNFOLD);
+                        if(ListViewBase.MPARA_SHOW_FOLD.equals(hm.get(ListViewBase.MPARA_SHOW)))    {
+                            hm.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_UNFOLD);
                             init_detail_view(fv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
                         }   else    {
-                            hm.put(DefForListView.MPARA_SHOW, DefForListView.MPARA_SHOW_FOLD);
+                            hm.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_FOLD);
                             init_detail_view(fv, hm);
                             ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
                         }
@@ -432,7 +431,7 @@ public class MonthlyViewHelper extends ShowViewHelperBase {
                         }
 
                         HashMap<String, String> hp = UtilFun.cast(getItem(position));
-                        final String hp_tag = hp.get(DefForListView.SPARA_TAG);
+                        final String hp_tag = hp.get(ListViewBase.SPARA_TAG);
                         Resources res = v.getResources();
                         if(!v.isSelected()) {
                             mLLSubFilter.add(hp_tag);
@@ -459,10 +458,10 @@ public class MonthlyViewHelper extends ShowViewHelperBase {
                         v.setSelected(!v.isSelected());
                         /*
                         ACNoteShow as = getRootActivity();
-                        as.jumpByTabName(DefForListView.TAB_TITLE_DAILY);
+                        as.jumpByTabName(DefForTabLayout.TAB_TITLE_DAILY);
 
                         HashMap<String, String> hp = UtilFun.cast(getItem(position));
-                        final String hp_tag = hp.get(DefForListView.SPARA_TAG);
+                        final String hp_tag = hp.get(DefForTabLayout.SPARA_TAG);
                         as.filterView(Collections.singletonList(hp_tag));
                         */
                     }

@@ -26,24 +26,14 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
     private final static String TAG = "ShowViewHelperBase";
     protected View      mSelfView;
 
-    // 视图数据
-    protected final LinkedList<HashMap<String, String>>                       mMainPara;
-    protected final HashMap<String, LinkedList<HashMap<String, String>>>      mHMSubPara;
-
     // 视图过滤数据
-    protected boolean               mBFilter;
-    protected final LinkedList<String>    mFilterPara;
-
-    // 存放展开节点的数据
-    private final LinkedList<String>    mUnfoldItems;
+    protected boolean                       mBFilter;
+    protected final LinkedList<String>      mFilterPara;
 
     protected ShowViewHelperBase()   {
         mBFilter        = false;
         mSelfView       = null;
-        mMainPara       = new LinkedList<>();
-        mHMSubPara      = new HashMap<>();
         mFilterPara     = new LinkedList<>();
-        mUnfoldItems    = new LinkedList<>();
     }
 
     /**
@@ -91,39 +81,6 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
 
 
     /**
-     * 添加一个展开节点
-     * 只记录20个展开节点, 超过数量后将移除最早记录的节点
-     * @param tag   展开节点tag
-     */
-    protected void addUnfoldItem(String tag)   {
-        if(!mUnfoldItems.contains(tag)) {
-            if(20 < mUnfoldItems.size())
-                mUnfoldItems.removeFirst();
-
-            Log.i(TAG, "addUnfoldItem, tag = " + tag);
-            mUnfoldItems.addLast(tag);
-        }
-    }
-
-    /**
-     * 移除一个展开节点
-     * @param tag   移除节点tag
-     */
-    protected void removeUnfoldItem(String tag)   {
-        mUnfoldItems.remove(tag);
-    }
-
-
-    /**
-     * 检查一个节点是否是展开节点
-     * @param tag   待检查节点tag
-     * @return  如果此节点是展开节点，返回true, 否则返回false
-     */
-    protected boolean checkUnfoldItem(String tag)  {
-        return mUnfoldItems.contains(tag);
-    }
-
-    /**
      * 仅更新视图
      */
     protected abstract void refreshView();
@@ -146,7 +103,7 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
      */
     protected ACNoteShow getRootActivity()  {
         Context ct = mSelfView.getContext();
-        if(ct instanceof Activity) {
+        if(ct instanceof ACNoteShow) {
             return UtilFun.cast(ct);
         }
 
