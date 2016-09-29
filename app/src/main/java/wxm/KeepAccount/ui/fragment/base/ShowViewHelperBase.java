@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.fragment.ListView;
+package wxm.KeepAccount.ui.fragment.base;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,22 +22,22 @@ import wxm.KeepAccount.ui.acinterface.ACNoteShow;
  * viewhelper基础类
  * Created by 123 on 2016/9/14.
  */
-public abstract class LVViewHelperBase implements View.OnClickListener {
-    private final static String TAG = "LVViewHelperBase";
-    View      mSelfView;
+public abstract class ShowViewHelperBase implements View.OnClickListener {
+    private final static String TAG = "ShowViewHelperBase";
+    protected View      mSelfView;
 
     // 视图数据
-    final LinkedList<HashMap<String, String>>                       mMainPara;
-    final HashMap<String, LinkedList<HashMap<String, String>>>      mHMSubPara;
+    protected final LinkedList<HashMap<String, String>>                       mMainPara;
+    protected final HashMap<String, LinkedList<HashMap<String, String>>>      mHMSubPara;
 
     // 视图过滤数据
-    boolean               mBFilter;
-    final LinkedList<String>    mFilterPara;
+    protected boolean               mBFilter;
+    protected final LinkedList<String>    mFilterPara;
 
     // 存放展开节点的数据
     private final LinkedList<String>    mUnfoldItems;
 
-    LVViewHelperBase()   {
+    protected ShowViewHelperBase()   {
         mBFilter        = false;
         mSelfView       = null;
         mMainPara       = new LinkedList<>();
@@ -95,7 +95,7 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      * 只记录20个展开节点, 超过数量后将移除最早记录的节点
      * @param tag   展开节点tag
      */
-    void addUnfoldItem(String tag)   {
+    protected void addUnfoldItem(String tag)   {
         if(!mUnfoldItems.contains(tag)) {
             if(20 < mUnfoldItems.size())
                 mUnfoldItems.removeFirst();
@@ -109,7 +109,7 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      * 移除一个展开节点
      * @param tag   移除节点tag
      */
-    void removeUnfoldItem(String tag)   {
+    protected void removeUnfoldItem(String tag)   {
         mUnfoldItems.remove(tag);
     }
 
@@ -119,9 +119,14 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      * @param tag   待检查节点tag
      * @return  如果此节点是展开节点，返回true, 否则返回false
      */
-    boolean checkUnfoldItem(String tag)  {
+    protected boolean checkUnfoldItem(String tag)  {
         return mUnfoldItems.contains(tag);
     }
+
+    /**
+     * 仅更新视图
+     */
+    protected abstract void refreshView();
 
     @Override
     public void onClick(View v) {
@@ -134,16 +139,12 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
         }
     }
 
-    /**
-     * 仅更新视图
-     */
-    protected abstract void refreshView();
 
     /**
      * 获取视图所在的activity
      * @return  若成功返回activity，失败返回null;
      */
-    ACNoteShow getRootActivity()  {
+    protected ACNoteShow getRootActivity()  {
         Context ct = mSelfView.getContext();
         if(ct instanceof Activity) {
             return UtilFun.cast(ct);
@@ -158,7 +159,7 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      *                  1. {@code View.INVISIBLE}, 不可见
      *                  2. {@code View.VISIBLE}, 可见
      */
-    void setAttachLayoutVisible(int visible)   {
+    protected void setAttachLayoutVisible(int visible)   {
         RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_attach_button));
         assert null != rl;
         setLayoutVisible(rl, visible);
@@ -171,7 +172,7 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      *                  1. {@code View.INVISIBLE}, 不可见
      *                  2. {@code View.VISIBLE}, 可见
      */
-    void setFilterLayoutVisible(int visible)   {
+    protected void setFilterLayoutVisible(int visible)   {
         if(View.VISIBLE == visible)
             setAttachLayoutVisible(View.VISIBLE);
 
@@ -191,7 +192,7 @@ public abstract class LVViewHelperBase implements View.OnClickListener {
      *                  1. {@code View.INVISIBLE}, 不可见
      *                  2. {@code View.VISIBLE}, 可见
      */
-    void setAccpetGiveupLayoutVisible(int visible)   {
+    protected void setAccpetGiveupLayoutVisible(int visible)   {
         if(View.VISIBLE == visible)
             setAttachLayoutVisible(View.VISIBLE);
 

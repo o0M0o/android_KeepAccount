@@ -39,12 +39,13 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.fragment.base.DefForListView;
+import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
 /**
  * 日数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class DailyViewHelper extends LVViewHelperBase
+public class DailyViewHelper extends ShowViewHelperBase
         implements OnClickListener {
     private final static String TAG = "DailyViewHelper";
 

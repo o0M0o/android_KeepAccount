@@ -1,1 +1,1 @@
-include ':app', ':AndriodUtillib'
+include ':app', ':AndriodUtillib', ':hellocharts-library-release'

@@ -33,12 +33,13 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
 import wxm.KeepAccount.ui.fragment.base.DefForListView;
+import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
 /**
  * 预算数据视图辅助类
  * Created by 123 on 2016/9/15.
  */
-public class BudgetViewHelper  extends LVViewHelperBase {
+public class BudgetViewHelper  extends ShowViewHelperBase {
     private final static String TAG = "BudgetViewHelper";
 
     //for action

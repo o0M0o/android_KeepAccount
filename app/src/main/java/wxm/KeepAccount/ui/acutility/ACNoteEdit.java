@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -26,11 +25,6 @@ import wxm.KeepAccount.ui.acinterface.ACHelp;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditBase;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditIncome;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditPay;
-import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
-import wxm.KeepAccount.ui.fragment.ShowData.TFShowDaily;
-import wxm.KeepAccount.ui.fragment.ShowData.TFShowMonthly;
-import wxm.KeepAccount.ui.fragment.ShowData.TFShowYearly;
-import wxm.KeepAccount.ui.fragment.base.SlidingTabsColorsFragment;
 
 /**
  * 支出/收入数据编辑UI

@@ -29,12 +29,13 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.fragment.base.DefForListView;
+import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
 /**
  * 月数据辅助类
  * Created by 123 on 2016/9/10.
  */
-public class MonthlyViewHelper extends LVViewHelperBase {
+public class MonthlyViewHelper extends ShowViewHelperBase {
     private final static String TAG = "MonthlyViewHelper";
 
     private boolean mBSelectSubFilter = false;

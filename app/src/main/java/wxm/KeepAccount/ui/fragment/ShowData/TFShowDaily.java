@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import wxm.KeepAccount.ui.fragment.GraphView.DailyCharts;
+import wxm.KeepAccount.ui.fragment.HelloChart.DailyChartHelper;
 import wxm.KeepAccount.ui.fragment.ListView.DailyViewHelper;
+import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
 
 /**
@@ -28,15 +30,10 @@ public class TFShowDaily extends TFShowBase {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView, hot = " + mHotChild);
-        mListViewHelper = new DailyViewHelper();
-        mChartViewHelper = new DailyCharts(getActivity());
+        mViewHelper = new ShowViewHelperBase[2];
+        mViewHelper[CHILD_LISTVIWE] = new DailyViewHelper();
+        mViewHelper[CHILD_GRAPHVIWE] = new DailyChartHelper();
         return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Log.i(TAG, "onViewCreated, hot = " + mHotChild);
-        super.onViewCreated(view, savedInstanceState);
     }
 
 }

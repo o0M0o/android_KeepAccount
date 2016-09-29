@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import wxm.KeepAccount.ui.fragment.GraphView.MonthlyCharts;
+import wxm.KeepAccount.ui.fragment.HelloChart.MonthlyChartHelper;
 import wxm.KeepAccount.ui.fragment.ListView.MonthlyViewHelper;
+import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
 /**
  * fragment for monthly show
@@ -20,8 +22,9 @@ public class TFShowMonthly extends TFShowBase {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView");
-        mListViewHelper = new MonthlyViewHelper();
-        mChartViewHelper = new MonthlyCharts(getActivity());
+        mViewHelper = new ShowViewHelperBase[2];
+        mViewHelper[CHILD_LISTVIWE] = new MonthlyViewHelper();
+        mViewHelper[CHILD_GRAPHVIWE] = new MonthlyChartHelper();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 }

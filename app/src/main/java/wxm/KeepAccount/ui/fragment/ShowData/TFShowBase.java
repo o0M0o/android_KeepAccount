@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.fragment.ShowData;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.GraphView.ChartsBase;
-import wxm.KeepAccount.ui.fragment.ListView.LVViewHelperBase;
+import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
 /**
  * 数据显示fragment基类
@@ -25,13 +26,15 @@ public abstract class TFShowBase extends Fragment {
     private final static String TAG = "TFShowBase";
 
     private final static String CHILD_HOT = "child_hot";
-    private int             CHILD_LISTVIWE  = 0;
-    private int             CHILD_GRAPHVIWE = 1;
+    protected int             CHILD_LISTVIWE  = 0;
+    protected int             CHILD_GRAPHVIWE = 1;
     private ViewSwitcher    mVSSwitcher;
     protected int           mHotChild = CHILD_LISTVIWE;
 
-    protected LVViewHelperBase mListViewHelper;
-    protected ChartsBase            mChartViewHelper;
+    //protected ShowViewHelperBase mListViewHelper;
+    //protected ChartsBase            mChartViewHelper;
+
+    protected ShowViewHelperBase[]   mViewHelper;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -53,9 +56,11 @@ public abstract class TFShowBase extends Fragment {
         View v = inflater.inflate(R.layout.tf_show_base, container, false);
         if(null != v) {
             mVSSwitcher = UtilFun.cast(v.findViewById(R.id.vs_page));
-            mListViewHelper.createView(inflater, container);
-            mVSSwitcher.addView(mListViewHelper.getView(), CHILD_LISTVIWE);
-            mVSSwitcher.addView(mChartViewHelper, CHILD_GRAPHVIWE);
+
+            mViewHelper[CHILD_LISTVIWE].createView(inflater, container);
+            mViewHelper[CHILD_GRAPHVIWE].createView(inflater, container);
+            mVSSwitcher.addView(mViewHelper[CHILD_LISTVIWE].getView(), CHILD_LISTVIWE);
+            mVSSwitcher.addView(mViewHelper[CHILD_GRAPHVIWE].getView(), CHILD_GRAPHVIWE);
         }
 
         return v;
@@ -65,10 +70,14 @@ public abstract class TFShowBase extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(null != view) {
-            mListViewHelper.loadView();
-            List<Object> ls_ret = AppModel.getPayIncomeUtility().GetAllNotes();
-            mChartViewHelper.RenderChart(ls_ret);
-
+            /*if(CHILD_GRAPHVIWE == mHotChild) {
+                List<Object> ls_ret = AppModel.getPayIncomeUtility().GetAllNotes();
+                mChartViewHelper.RenderChart(ls_ret);
+            } else  {
+                mListViewHelper.loadView();
+            }*/
+            mViewHelper[CHILD_LISTVIWE].loadView();
+            mViewHelper[CHILD_GRAPHVIWE].loadView();
             mVSSwitcher = UtilFun.cast(view.findViewById(R.id.vs_page));
             mVSSwitcher.setDisplayedChild(mHotChild);
         }
@@ -98,6 +107,11 @@ public abstract class TFShowBase extends Fragment {
      */
     public void filterView(List<String> ls_tag)     {
         if(CHILD_LISTVIWE == mHotChild)
-            mListViewHelper.filterView(ls_tag);
+            mViewHelper[mHotChild].filterView(ls_tag);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)  {
+        mViewHelper[mHotChild].onActivityResult(requestCode, resultCode, data);
     }
 }
