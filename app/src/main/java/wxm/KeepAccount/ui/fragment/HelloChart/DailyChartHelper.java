@@ -4,9 +4,12 @@ import android.content.res.Resources;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import lecho.lib.hellocharts.model.Axis;
@@ -33,7 +36,9 @@ public class DailyChartHelper extends ChartHelperBase {
         int id_col = 0;
         List<AxisValue> axisValues = new ArrayList<>();
         List<Column> columns = new ArrayList<>();
-        for(String k : ret.keySet())    {
+        ArrayList<String> set_k = new ArrayList<>(ret.keySet());
+        Collections.sort(set_k);
+        for(String k : set_k)    {
             BigDecimal pay = BigDecimal.ZERO;
             BigDecimal income = BigDecimal.ZERO;
             for(Object i : ret.get(k))  {

@@ -109,6 +109,10 @@ public class ACNoteShow extends AppCompatActivity {
         return UtilFun.cast(pa.getItem(pos));
     }
 
+    public void disableViewPageTouch(boolean bflag) {
+        mVPTabs.requestDisallowInterceptTouchEvent(bflag);
+    }
+
 
     /**
      * 初始化tab页控件组

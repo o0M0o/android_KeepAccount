@@ -3,7 +3,9 @@ package wxm.KeepAccount.ui.fragment.HelloChart;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,6 +26,8 @@ import lecho.lib.hellocharts.view.ColumnChartView;
  * Created by wxm on 2016/9/29.
  */
 public abstract class ChartHelperBase extends ShowViewHelperBase {
+    private final static String TAG = "ChartHelperBase";
+
     private ColumnChartView         mChart;
     ColumnChartData         mChartData;
     private PreviewColumnChartView  mPreviewChart;
@@ -36,7 +40,74 @@ public abstract class ChartHelperBase extends ShowViewHelperBase {
         mBFilter        = false;
 
         mChart = UtilFun.cast(mSelfView.findViewById(R.id.chart));
+        mChart.setOnTouchListener(new View.OnTouchListener() {
+            private float prv_x = -1;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //Log.i(TAG, "in chart event = " + event.getAction());
+                int act = event.getAction();
+                switch (act) {
+                    case MotionEvent.ACTION_DOWN :
+                        prv_x = event.getX();
+                        break;
+
+                    case MotionEvent.ACTION_UP :
+                        float cur_x = event.getX();
+                        float dif = cur_x - prv_x;
+                        if((1 < dif) || (-1 > dif)) {
+                            Viewport mcp = mPreviewChart.getMaximumViewport();
+                            Viewport cp = mPreviewChart.getCurrentViewport();
+
+                            int cw = mChart.getWidth();
+                            float w = (cp.right - cp.left);
+                            float m = -1 * (dif / cw) * w;
+                            cp.left += m;
+                            cp.right += m;
+                            if(cp.left < mcp.left)  {
+                                cp.left = mcp.left;
+                                cp.right = mcp.left + w;
+                            }
+
+                            if(cp.right > mcp.right)    {
+                                cp.right = mcp.right;
+                                cp.left = cp.right - w;
+                            }
+
+                            mPreviewChart.setCurrentViewportWithAnimation(cp);
+                            prv_x = cur_x;
+                        }
+                        break;
+                }
+
+                return false;
+            }
+        });
+
         mPreviewChart = UtilFun.cast(mSelfView.findViewById(R.id.chart_preview));
+        mPreviewChart.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //Log.i(TAG, "in preview chart event = " + event.getAction());
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        getRootActivity().disableViewPageTouch(true);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        getRootActivity().disableViewPageTouch(false);
+                        break;
+
+                    default:
+                        if(MotionEvent.ACTION_MOVE != event.getAction())
+                            getRootActivity().disableViewPageTouch(false);
+                        break;
+                }
+
+                return false;
+            }
+        });
+
         return mSelfView;
     }
 
@@ -103,6 +174,5 @@ public abstract class ChartHelperBase extends ShowViewHelperBase {
             // happens to often.
             mChart.setCurrentViewport(newViewport);
         }
-
     }
 }
