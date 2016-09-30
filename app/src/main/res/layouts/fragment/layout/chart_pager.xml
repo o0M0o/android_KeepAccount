@@ -31,11 +31,49 @@
             android:layout_marginTop="8dp"
             android:background="@android:color/darker_gray" />
 
-        <lecho.lib.hellocharts.view.PreviewColumnChartView
-            android:id="@+id/chart_preview"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.35" >
-        </lecho.lib.hellocharts.view.PreviewColumnChartView>
+            android:layout_height="128dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:layout_width="64dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp" />
+
+                <ImageButton
+                    android:layout_width="64dp"
+                    android:layout_height="36dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_gravity="bottom|center_horizontal" />
+            </LinearLayout>
+
+            <lecho.lib.hellocharts.view.PreviewColumnChartView
+                android:id="@+id/chart_preview"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+            </lecho.lib.hellocharts.view.PreviewColumnChartView>
+
+            <!--
+            <LinearLayout
+                android:id="@+id/pre_holder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <lecho.lib.hellocharts.view.PreviewColumnChartView
+                    android:id="@+id/chart_preview"
+                    android:layout_height="0dp"
+                    android:layout_width="0dp">
+                </lecho.lib.hellocharts.view.PreviewColumnChartView>
+            </LinearLayout>
+            -->
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
