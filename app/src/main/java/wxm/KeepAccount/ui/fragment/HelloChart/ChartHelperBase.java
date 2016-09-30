@@ -33,6 +33,7 @@ public abstract class ChartHelperBase extends ShowViewHelperBase {
     private PreviewColumnChartView  mPreviewChart;
     ColumnChartData         mPreviewData;
 
+    float   mPrvWidth = 12;
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
@@ -148,8 +149,9 @@ public abstract class ChartHelperBase extends ShowViewHelperBase {
         mPreviewChart.setViewportChangeListener(new ViewportListener());
 
         Viewport tempViewport = new Viewport(mChart.getMaximumViewport());
-        float dx = tempViewport.width() / (float)2.3;
-        tempViewport.inset(dx, 0);
+        //float dx = tempViewport.width() / (float)2.3;
+        //tempViewport.inset(dx, 0);
+        tempViewport.right = tempViewport.left + mPrvWidth;
         mPreviewChart.setCurrentViewportWithAnimation(tempViewport);
         mPreviewChart.setZoomType(ZoomType.HORIZONTAL);
     }

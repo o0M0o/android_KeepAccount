@@ -25,6 +25,11 @@ import wxm.KeepAccount.R;
  * Created by wxm on 2016/9/29.
  */
 public class YearlyChartHelper extends ChartHelperBase {
+    public YearlyChartHelper()   {
+        super();
+        mPrvWidth = 6;
+    }
+
     @Override
     protected void reloadData() {
         Resources res = getRootActivity().getResources();

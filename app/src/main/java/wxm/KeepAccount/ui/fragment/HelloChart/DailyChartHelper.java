@@ -28,6 +28,11 @@ import wxm.KeepAccount.R;
  * Created by wxm on 2016/9/29.
  */
 public class DailyChartHelper extends ChartHelperBase {
+    public DailyChartHelper()   {
+        super();
+        mPrvWidth = 10;
+    }
+
     @Override
     protected void reloadData() {
         Resources res = getRootActivity().getResources();
