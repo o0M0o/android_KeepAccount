@@ -5,4 +5,6 @@
     <string name="cn_accpet">确认</string>
     <string name="cn_add_note">添加记录</string>
     <string name="cn_channel">关注</string>
+    <string name="cn_more_viewport">扩大预览区</string>
+    <string name="cn_less_viewport">缩小预览区</string>
 </resources>

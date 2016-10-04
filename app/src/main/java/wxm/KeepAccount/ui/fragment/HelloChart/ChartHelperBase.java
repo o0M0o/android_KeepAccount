@@ -1,13 +1,11 @@
 package wxm.KeepAccount.ui.fragment.HelloChart;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.List;
 
@@ -16,10 +14,10 @@ import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.listener.ViewportChangeListener;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Viewport;
+import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.PreviewColumnChartView;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
-import lecho.lib.hellocharts.view.ColumnChartView;
 
 /**
  * chart view base helper
@@ -40,6 +38,7 @@ public abstract class ChartHelperBase extends ShowViewHelperBase {
         mSelfView       = inflater.inflate(R.layout.chart_pager, container, false);
         mBFilter        = false;
 
+        // 主chart需要响应触摸滚动事件
         mChart = UtilFun.cast(mSelfView.findViewById(R.id.chart));
         mChart.setOnTouchListener(new View.OnTouchListener() {
             private float prv_x = -1;
@@ -85,6 +84,7 @@ public abstract class ChartHelperBase extends ShowViewHelperBase {
             }
         });
 
+        // 预览chart需要锁定触摸滚屏
         mPreviewChart = UtilFun.cast(mSelfView.findViewById(R.id.chart_preview));
         mPreviewChart.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -106,6 +106,32 @@ public abstract class ChartHelperBase extends ShowViewHelperBase {
                 }
 
                 return false;
+            }
+        });
+
+        // 设置扩大/缩小viewport
+        final Button bt_less = UtilFun.cast(mSelfView.findViewById(R.id.bt_less_viewport));
+        Button bt = UtilFun.cast(mSelfView.findViewById(R.id.bt_more_viewport));
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPrvWidth += 0.2;
+                refreshViewPort();
+
+                if(!bt_less.isClickable() && 1 < mPrvWidth)
+                    bt_less.setClickable(true);
+            }
+        });
+
+        bt_less.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(1 < mPrvWidth) {
+                    mPrvWidth -= 0.2;
+                    refreshViewPort();
+                } else  {
+                    bt_less.setClickable(false);
+                }
             }
         });
 
@@ -144,16 +170,12 @@ public abstract class ChartHelperBase extends ShowViewHelperBase {
         // zoom/scroll is unnecessary.
         mChart.setZoomEnabled(false);
         mChart.setScrollEnabled(false);
+        //mChart.setValueSelectionEnabled(true);
 
         mPreviewChart.setColumnChartData(mPreviewData);
         mPreviewChart.setViewportChangeListener(new ViewportListener());
-
-        Viewport tempViewport = new Viewport(mChart.getMaximumViewport());
-        //float dx = tempViewport.width() / (float)2.3;
-        //tempViewport.inset(dx, 0);
-        tempViewport.right = tempViewport.left + mPrvWidth;
-        mPreviewChart.setCurrentViewportWithAnimation(tempViewport);
         mPreviewChart.setZoomType(ZoomType.HORIZONTAL);
+        refreshViewPort();
     }
 
 
@@ -161,6 +183,13 @@ public abstract class ChartHelperBase extends ShowViewHelperBase {
         setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
         setAccpetGiveupLayoutVisible(View.INVISIBLE);
+    }
+
+
+    private void refreshViewPort()  {
+        Viewport tempViewport = new Viewport(mChart.getMaximumViewport());
+        tempViewport.right = tempViewport.left + mPrvWidth;
+        mPreviewChart.setCurrentViewportWithAnimation(tempViewport);
     }
 
 

@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:paddingRight="6dp"
             android:paddingLeft="12dp">
         </lecho.lib.hellocharts.view.ColumnChartView>
 
@@ -42,7 +43,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
-                <ImageButton
+                <Button
+                    android:id="@+id/bt_more_viewport"
+                    android:text="@string/cn_more_viewport"
                     android:layout_width="64dp"
                     android:layout_height="36dp"
                     android:layout_marginTop="24dp"
@@ -50,7 +53,9 @@
                     android:layout_marginLeft="6dp"
                     android:layout_marginRight="6dp" />
 
-                <ImageButton
+                <Button
+                    android:id="@+id/bt_less_viewport"
+                    android:text="@string/cn_less_viewport"
                     android:layout_width="64dp"
                     android:layout_height="36dp"
                     android:layout_marginBottom="24dp"
@@ -61,21 +66,9 @@
                 android:id="@+id/chart_preview"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
+                android:paddingRight="6dp"
                 android:paddingLeft="12dp">
             </lecho.lib.hellocharts.view.PreviewColumnChartView>
-
-            <!--
-            <LinearLayout
-                android:id="@+id/pre_holder"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <lecho.lib.hellocharts.view.PreviewColumnChartView
-                    android:id="@+id/chart_preview"
-                    android:layout_height="0dp"
-                    android:layout_width="0dp">
-                </lecho.lib.hellocharts.view.PreviewColumnChartView>
-            </LinearLayout>
-            -->
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

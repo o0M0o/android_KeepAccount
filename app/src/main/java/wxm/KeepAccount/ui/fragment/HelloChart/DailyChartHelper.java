@@ -4,12 +4,9 @@ import android.content.res.Resources;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import lecho.lib.hellocharts.model.Axis;
@@ -18,10 +15,10 @@ import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.util.ChartUtils;
-import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 
 /**
  * 加载日chart视图
@@ -30,13 +27,14 @@ import wxm.KeepAccount.R;
 public class DailyChartHelper extends ChartHelperBase {
     public DailyChartHelper()   {
         super();
-        mPrvWidth = 10;
+        mPrvWidth = 4.5f;
     }
 
     @Override
     protected void reloadData() {
         Resources res = getRootActivity().getResources();
-        HashMap<String, ArrayList<Object>> ret = AppModel.getPayIncomeUtility().GetAllNotesToDay();
+        ACNoteShow as = getRootActivity();
+        HashMap<String, ArrayList<Object>> ret = as.getNotesByDay();
 
         int id_col = 0;
         List<AxisValue> axisValues = new ArrayList<>();
@@ -61,6 +59,7 @@ public class DailyChartHelper extends ChartHelperBase {
             values.add(new SubcolumnValue(income.floatValue(), res.getColor(R.color.forestgreen)));
 
             Column cd = new Column(values);
+            cd.setHasLabels(true);
             columns.add(cd);
 
             axisValues.add(new AxisValue(id_col).setLabel(k));
@@ -78,12 +77,20 @@ public class DailyChartHelper extends ChartHelperBase {
             for (SubcolumnValue value : column.getValues()) {
                 value.setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
             }
+
+            column.setHasLabels(false);
         }
 
-        int ic = 0;
+        int cc = 0;
         for(AxisValue i : mPreviewData.getAxisXBottom().getValues())     {
-            i.setLabel(String.valueOf(ic));
-            ic++;
+            if(0 == cc % 5) {
+                String v = new String(i.getLabelAsChars()).substring(0, 7);
+                i.setLabel(v);
+            } else  {
+                i.setLabel("");
+            }
+
+            cc += 1;
         }
     }
 }

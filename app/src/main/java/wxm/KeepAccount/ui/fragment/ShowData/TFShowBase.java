@@ -13,9 +13,7 @@ import android.widget.ViewSwitcher;
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.fragment.GraphView.ChartsBase;
 import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
 /**
@@ -67,12 +65,10 @@ public abstract class TFShowBase extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(null != view) {
-            for(ShowViewHelperBase sb : mViewHelper) {
-                sb.loadView();
-            }
-
             mVSSwitcher = UtilFun.cast(view.findViewById(R.id.vs_page));
             mVSSwitcher.setDisplayedChild(mHotChild);
+
+            mViewHelper[mHotChild].loadView();
         }
     }
 
@@ -86,6 +82,8 @@ public abstract class TFShowBase extends Fragment {
             mVSSwitcher = UtilFun.cast(v.findViewById(R.id.vs_page));
             mVSSwitcher.showNext();
             mHotChild = mVSSwitcher.getDisplayedChild();
+
+            mViewHelper[mHotChild].loadView();
         }   else    {
             Toast.makeText(getActivity(), "getView is null", Toast.LENGTH_SHORT).show();
         }

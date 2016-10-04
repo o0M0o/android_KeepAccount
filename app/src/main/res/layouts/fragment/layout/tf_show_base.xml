@@ -7,10 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/vs_page">
-        <!--
-        <include layout="@layout/lv_pager"/>
-        <include layout="@layout/gf_graph"/>
-        -->
     </ViewSwitcher>
 
 

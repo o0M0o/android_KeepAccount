@@ -15,10 +15,10 @@ import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.util.ChartUtils;
-import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 
 /**
  * 加载阅读chart视图
@@ -27,13 +27,14 @@ import wxm.KeepAccount.R;
 public class MonthlyChartHelper extends ChartHelperBase {
     public MonthlyChartHelper()   {
         super();
-        mPrvWidth = 8;
+        mPrvWidth = 5.5f;
     }
 
     @Override
     protected void reloadData() {
         Resources res = getRootActivity().getResources();
-        HashMap<String, ArrayList<Object>> ret = AppModel.getPayIncomeUtility().GetAllNotesToMonth();
+        ACNoteShow as = getRootActivity();
+        HashMap<String, ArrayList<Object>> ret = as.getNotesByMonth();
 
         int id_col = 0;
         List<AxisValue> axisValues = new ArrayList<>();
@@ -58,6 +59,7 @@ public class MonthlyChartHelper extends ChartHelperBase {
             values.add(new SubcolumnValue(income.floatValue(), res.getColor(R.color.forestgreen)));
 
             Column cd = new Column(values);
+            cd.setHasLabels(true);
             columns.add(cd);
 
             axisValues.add(new AxisValue(id_col).setLabel(k));
@@ -75,11 +77,19 @@ public class MonthlyChartHelper extends ChartHelperBase {
             for (SubcolumnValue value : column.getValues()) {
                 value.setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
             }
+
+            column.setHasLabels(false);
         }
 
         int ic = 0;
         for(AxisValue i : mPreviewData.getAxisXBottom().getValues())     {
-            i.setLabel(String.valueOf(ic));
+            if(0 == ic % 2) {
+                String v = new String(i.getLabelAsChars()).substring(0, 4);
+                i.setLabel(v);
+            } else  {
+                i.setLabel("");
+            }
+
             ic++;
         }
     }

@@ -15,10 +15,10 @@ import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.util.ChartUtils;
-import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 
 /**
  * 加载年度chart视图
@@ -33,7 +33,8 @@ public class YearlyChartHelper extends ChartHelperBase {
     @Override
     protected void reloadData() {
         Resources res = getRootActivity().getResources();
-        HashMap<String, ArrayList<Object>> ret = AppModel.getPayIncomeUtility().GetAllNotesToYear();
+        ACNoteShow as = getRootActivity();
+        HashMap<String, ArrayList<Object>> ret = as.getNotesByYear();
 
         int id_col = 0;
         List<AxisValue> axisValues = new ArrayList<>();
@@ -58,6 +59,7 @@ public class YearlyChartHelper extends ChartHelperBase {
             values.add(new SubcolumnValue(income.floatValue(), res.getColor(R.color.forestgreen)));
 
             Column cd = new Column(values);
+            cd.setHasLabels(true);
             columns.add(cd);
 
             axisValues.add(new AxisValue(id_col).setLabel(k));
@@ -75,12 +77,13 @@ public class YearlyChartHelper extends ChartHelperBase {
             for (SubcolumnValue value : column.getValues()) {
                 value.setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
             }
+
+            column.setHasLabels(false);
         }
 
-        int ic = 0;
         for(AxisValue i : mPreviewData.getAxisXBottom().getValues())     {
-            i.setLabel(String.valueOf(ic));
-            ic++;
+            String v = new String(i.getLabelAsChars()).substring(0, 4);
+            i.setLabel(v);
         }
     }
 }

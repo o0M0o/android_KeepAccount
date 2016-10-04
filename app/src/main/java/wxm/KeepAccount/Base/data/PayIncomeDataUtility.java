@@ -25,9 +25,21 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
  */
 public class PayIncomeDataUtility {
     private final String    TAG = "PayIncomeDataUtility";
+    //private boolean     mPayDirty;
+    //private boolean     mIncomeDirty;
 
-    public PayIncomeDataUtility()  {
+    PayIncomeDataUtility()  {
+        //mPayDirty = true;
+        //mIncomeDirty = true;
     }
+
+    /**
+     * 清除数据脏标签
+    public void ClearDataDirty()    {
+        mPayDirty = false;
+        mIncomeDirty = false;
+    }
+     */
 
     /**
      * 根据预算查找支出数据
