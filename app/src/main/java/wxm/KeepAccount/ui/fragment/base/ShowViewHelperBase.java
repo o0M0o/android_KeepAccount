@@ -82,12 +82,18 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
      */
     protected abstract void refreshView();
 
-
+    /**
+     * 取消过滤
+     */
     protected void giveupFilter()   {
         mBFilter = false;
         refreshView();
     }
 
+    /**
+     * 处理“取消过滤”事件
+     * @param v  param
+     */
     @Override
     public void onClick(View v) {
         int vid = v.getId();
