@@ -111,6 +111,10 @@ public class ACNoteShow extends AppCompatActivity {
         return UtilFun.cast(pa.getItem(pos));
     }
 
+    /**
+     * 关闭/打开触摸功能
+     * @param bflag  若为true则打开触摸功能，否则关闭触摸功能
+     */
     public void disableViewPageTouch(boolean bflag) {
         mVPTabs.requestDisallowInterceptTouchEvent(bflag);
     }
@@ -202,9 +206,8 @@ public class ACNoteShow extends AppCompatActivity {
      */
     public void switchShow()    {
         TFShowBase hot = getHotTabItem();
-        if(null != hot)  {
+        if(null != hot)
             hot.switchPage();
-        }
     }
 
     /**

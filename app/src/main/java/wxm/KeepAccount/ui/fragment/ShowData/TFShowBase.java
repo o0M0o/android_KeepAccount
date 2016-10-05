@@ -96,7 +96,10 @@ public abstract class TFShowBase extends Fragment {
      *                 2. 如果不为null, 但为空则过滤（不显示任何数据)
      */
     public void filterView(List<String> ls_tag)     {
-        mViewHelper[mHotChild].filterView(ls_tag);
+        //mViewHelper[mHotChild].filterView(ls_tag);
+        for(ShowViewHelperBase sb : mViewHelper)    {
+            sb.filterView(ls_tag);
+        }
     }
 
     @Override

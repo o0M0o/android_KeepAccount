@@ -1,7 +1,5 @@
 package wxm.KeepAccount.ui.fragment.HelloChart;
 
-import android.content.res.Resources;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +16,7 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
+import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 
 /**
@@ -32,7 +31,6 @@ public class DailyChartHelper extends ChartHelperBase {
 
     @Override
     protected void reloadData() {
-        Resources res = getRootActivity().getResources();
         ACNoteShow as = getRootActivity();
         HashMap<String, ArrayList<Object>> ret = as.getNotesByDay();
 
@@ -42,30 +40,39 @@ public class DailyChartHelper extends ChartHelperBase {
         ArrayList<String> set_k = new ArrayList<>(ret.keySet());
         Collections.sort(set_k);
         for(String k : set_k)    {
-            BigDecimal pay = BigDecimal.ZERO;
-            BigDecimal income = BigDecimal.ZERO;
-            for(Object i : ret.get(k))  {
-                if(i instanceof PayNoteItem)    {
-                    PayNoteItem pi = UtilFun.cast(i);
-                    pay = pay.add(pi.getVal());
-                }   else    {
-                    IncomeNoteItem ii = UtilFun.cast(i);
-                    income = income.add(ii.getVal());
-                }
+            boolean ba = true;
+            if(mBFilter && !mFilterPara.isEmpty())  {
+                String ck = ToolUtil.FormatDateString(k);
+                if(!mFilterPara.contains(ck))
+                    ba = false;
             }
 
-            List<SubcolumnValue> values = new ArrayList<>();
-            values.add(new SubcolumnValue(pay.floatValue(),
-                    mHMColor.get(PreferencesUtil.SET_PAY_COLOR)));
-            values.add(new SubcolumnValue(income.floatValue(),
-                    mHMColor.get(PreferencesUtil.SET_INCOME_COLOR)));
+            if(ba) {
+                BigDecimal pay = BigDecimal.ZERO;
+                BigDecimal income = BigDecimal.ZERO;
+                for (Object i : ret.get(k)) {
+                    if (i instanceof PayNoteItem) {
+                        PayNoteItem pi = UtilFun.cast(i);
+                        pay = pay.add(pi.getVal());
+                    } else {
+                        IncomeNoteItem ii = UtilFun.cast(i);
+                        income = income.add(ii.getVal());
+                    }
+                }
 
-            Column cd = new Column(values);
-            cd.setHasLabels(true);
-            columns.add(cd);
+                List<SubcolumnValue> values = new ArrayList<>();
+                values.add(new SubcolumnValue(pay.floatValue(),
+                        mHMColor.get(PreferencesUtil.SET_PAY_COLOR)));
+                values.add(new SubcolumnValue(income.floatValue(),
+                        mHMColor.get(PreferencesUtil.SET_INCOME_COLOR)));
 
-            axisValues.add(new AxisValue(id_col).setLabel(k));
-            id_col++;
+                Column cd = new Column(values);
+                cd.setHasLabels(true);
+                columns.add(cd);
+
+                axisValues.add(new AxisValue(id_col).setLabel(k));
+                id_col++;
+            }
         }
 
         mChartData = new ColumnChartData(columns);

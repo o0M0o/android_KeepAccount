@@ -171,7 +171,22 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     }
 
     @Override
+    protected void giveupFilter()   {
+        mBFilter = false;
+        loadView();
+    }
+
+    @Override
     public void filterView(List<String> ls_tag) {
+        if(null != ls_tag) {
+            mBFilter = true;
+            mFilterPara.clear();
+            mFilterPara.addAll(ls_tag);
+            loadView();
+        } else  {
+            mBFilter = false;
+            loadView();
+        }
     }
 
     @Override

@@ -397,11 +397,11 @@ public class DailyLVHelper extends ListViewBase
     /**
      * 首级列表adapter
      */
-    public class SelfAdapter extends SimpleAdapter {
+    private class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
 
-        public SelfAdapter(Context context, List<? extends Map<String, ?>> mdata,
-                         String[] from, int[] to) {
+        SelfAdapter(Context context, List<? extends Map<String, ?>> mdata,
+                    String[] from, int[] to) {
             super(context, mdata, R.layout.li_daily_show, from, to);
         }
 
@@ -469,13 +469,13 @@ public class DailyLVHelper extends ListViewBase
     /**
      * 次级列表adapter
      */
-    public class SelfSubAdapter  extends SimpleAdapter implements OnClickListener {
+    private class SelfSubAdapter  extends SimpleAdapter implements OnClickListener {
         private final static String TAG = "SelfSubAdapter";
         private final ListView        mRootView;
 
-        public SelfSubAdapter(Context context, ListView fv,
-                             List<? extends Map<String, ?>> sdata,
-                             String[] from, int[] to) {
+        SelfSubAdapter(Context context, ListView fv,
+                       List<? extends Map<String, ?>> sdata,
+                       String[] from, int[] to) {
             super(context, sdata, R.layout.li_daily_show_detail, from, to);
             mRootView = fv;
         }

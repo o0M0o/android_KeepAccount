@@ -1,16 +1,13 @@
 package wxm.KeepAccount.ui.fragment.base;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -85,13 +82,18 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
      */
     protected abstract void refreshView();
 
+
+    protected void giveupFilter()   {
+        mBFilter = false;
+        refreshView();
+    }
+
     @Override
     public void onClick(View v) {
         int vid = v.getId();
         switch (vid)    {
             case R.id.bt_giveup_filter :
-                mBFilter = false;
-                refreshView();
+                giveupFilter();
                 break;
         }
     }
