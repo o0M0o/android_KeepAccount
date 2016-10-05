@@ -21,6 +21,7 @@ import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
+import wxm.KeepAccount.ui.fragment.ShowData.TFShowBudget;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowMonthly;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowYearly;
@@ -31,6 +32,7 @@ public class ACNoteShow extends AppCompatActivity {
     protected final static String TAB_DAILY     = "日统计";
     protected final static String TAB_MONTHLY   = "月统计";
     protected final static String TAB_YEARLY    = "年统计";
+    protected final static String TAB_BUDGET    = "预算";
 
     private TabLayout   mTLTabs;
     private ViewPager   mVPTabs;
@@ -123,6 +125,7 @@ public class ACNoteShow extends AppCompatActivity {
         mTLTabs.addTab(mTLTabs.newTab().setText(TAB_DAILY));
         mTLTabs.addTab(mTLTabs.newTab().setText(TAB_MONTHLY));
         mTLTabs.addTab(mTLTabs.newTab().setText(TAB_YEARLY));
+        mTLTabs.addTab(mTLTabs.newTab().setText(TAB_BUDGET));
         mTLTabs.setTabGravity(TabLayout.GRAVITY_FILL);
 
         mVPTabs = (ViewPager) findViewById(R.id.tab_pager);
@@ -268,6 +271,7 @@ public class ACNoteShow extends AppCompatActivity {
             mHMFra.put(TAB_DAILY, new TFShowDaily());
             mHMFra.put(TAB_MONTHLY, new TFShowMonthly());
             mHMFra.put(TAB_YEARLY, new TFShowYearly());
+            mHMFra.put(TAB_BUDGET, new TFShowBudget());
         }
 
         @Override

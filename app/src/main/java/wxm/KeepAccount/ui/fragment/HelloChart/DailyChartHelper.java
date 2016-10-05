@@ -17,7 +17,7 @@ import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.util.ChartUtils;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
-import wxm.KeepAccount.R;
+import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 
 /**
@@ -55,8 +55,10 @@ public class DailyChartHelper extends ChartHelperBase {
             }
 
             List<SubcolumnValue> values = new ArrayList<>();
-            values.add(new SubcolumnValue(pay.floatValue(), res.getColor(R.color.aqua)));
-            values.add(new SubcolumnValue(income.floatValue(), res.getColor(R.color.forestgreen)));
+            values.add(new SubcolumnValue(pay.floatValue(),
+                    mHMColor.get(PreferencesUtil.SET_PAY_COLOR)));
+            values.add(new SubcolumnValue(income.floatValue(),
+                    mHMColor.get(PreferencesUtil.SET_INCOME_COLOR)));
 
             Column cd = new Column(values);
             cd.setHasLabels(true);

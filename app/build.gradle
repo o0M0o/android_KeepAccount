@@ -90,7 +90,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile files('libs/extend_lib/httpcomponents-core-4.4.4/lib/httpcore-4.4.4.jar')
-    compile files('libs/extend_lib/xcl/xcl-charts.jar')
     compile files('libs/extend_lib/junit/junit-4.12.jar')
     compile files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
     compile files('libs/extend_lib/ormlite/ormlite-android-5.0.jar')

@@ -32,7 +32,6 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
-import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
 /**
  * 预算数据视图辅助类
@@ -311,13 +310,13 @@ public class BudgetViewHelper  extends ListViewBase {
     /**
      * 首级adapter
      */
-    public class SelfAdapter extends SimpleAdapter implements View.OnClickListener {
+    private class SelfAdapter extends SimpleAdapter implements View.OnClickListener {
         private final static String TAG = "SelfAdapter";
         private final ListView        mRootView;
 
-        public SelfAdapter(Context context, ListView fv,
-                           List<? extends Map<String, ?>> mdata,
-                           String[] from, int[] to) {
+        SelfAdapter(Context context, ListView fv,
+                    List<? extends Map<String, ?>> mdata,
+                    String[] from, int[] to) {
             super(context, mdata, R.layout.li_budget_show, from, to);
             mRootView = fv;
         }

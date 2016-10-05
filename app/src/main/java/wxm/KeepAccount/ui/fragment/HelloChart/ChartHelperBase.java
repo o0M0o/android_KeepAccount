@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.HashMap;
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
@@ -16,6 +17,7 @@ import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.PreviewColumnChartView;
+import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
@@ -23,7 +25,7 @@ import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
  * chart view base helper
  * Created by wxm on 2016/9/29.
  */
-public abstract class ChartHelperBase extends ShowViewHelperBase {
+abstract class ChartHelperBase extends ShowViewHelperBase {
     private final static String TAG = "ChartHelperBase";
 
     private ColumnChartView         mChart;
@@ -32,6 +34,12 @@ public abstract class ChartHelperBase extends ShowViewHelperBase {
     ColumnChartData         mPreviewData;
 
     float   mPrvWidth = 12;
+    HashMap<String, Integer>    mHMColor;
+
+    ChartHelperBase()    {
+        super();
+        mHMColor = PreferencesUtil.loadChartColor();
+    }
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
