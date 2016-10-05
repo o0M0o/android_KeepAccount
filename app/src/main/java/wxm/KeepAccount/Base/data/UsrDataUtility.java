@@ -14,7 +14,7 @@ import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
 public class UsrDataUtility {
     private final String    TAG = "UsrDataUtility";
 
-    public UsrDataUtility()  {
+    UsrDataUtility()  {
     }
 
 

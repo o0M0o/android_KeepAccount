@@ -16,7 +16,7 @@ import wxm.KeepAccount.Base.db.UsrItem;
 class UsrUtility {
     private static final String TAG = "UsrUtility";
 
-    public static void doMsg(Message msg)   {
+    static void doMsg(Message msg)   {
         switch (msg.what) {
             case AppMsgDef.MSG_USR_ADDUSR : {
                 Object[] arr = UtilFun.cast(msg.obj);

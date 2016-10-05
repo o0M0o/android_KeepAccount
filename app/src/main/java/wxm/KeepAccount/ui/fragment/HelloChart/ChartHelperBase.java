@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +46,15 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     public View createView(LayoutInflater inflater, ViewGroup container) {
         mSelfView       = inflater.inflate(R.layout.chart_pager, container, false);
         mBFilter        = false;
+
+        // 展示条
+        ImageView iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_income));
+        assert null != iv;
+        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_INCOME_COLOR));
+
+        iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_pay));
+        assert null != iv;
+        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_PAY_COLOR));
 
         // 主chart需要响应触摸滚动事件
         mChart = UtilFun.cast(mSelfView.findViewById(R.id.chart));

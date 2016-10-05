@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
@@ -16,6 +17,50 @@
         android:paddingRight="4dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                app:srcCompat="@color/darkred"
+                android:id="@+id/iv_pay"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_toLeftOf="@+id/tv_pay"
+                android:layout_marginRight="8dp"
+                android:layout_alignTop="@+id/tv_income" />
+
+            <TextView
+                android:layout_toLeftOf="@+id/iv_income"
+                android:layout_alignTop="@+id/tv_income"
+                android:text="@string/cn_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_pay"
+                android:layout_marginRight="24dp"
+                android:layout_marginBottom="8dp" />
+
+            <ImageView
+                app:srcCompat="@color/aqua"
+                android:id="@+id/iv_income"
+                android:layout_alignParentRight="false"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_toLeftOf="@+id/tv_income"
+                android:layout_marginRight="8dp"
+                android:layout_alignTop="@+id/tv_income" />
+
+            <TextView
+                android:layout_alignParentRight="true"
+                android:text="@string/cn_income"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_income"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="4dp" />
+        </RelativeLayout>
 
         <lecho.lib.hellocharts.view.ColumnChartView
             android:id="@+id/chart"
