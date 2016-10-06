@@ -35,7 +35,6 @@
             android:name=".ui.acutility.ACAddUsr"
             android:label="@string/title_activity_add_account" />
         <activity android:name=".ui.acinterface.ACHelp" />
-        <activity android:name=".ui.acutility.ACRecordType" />
         <activity
             android:name=".ui.acutility.ACRecordTypeEdit"
             android:label="@string/title_activity_acrecord_type_edit"

@@ -41,9 +41,6 @@ public class ACRecordTypeEdit extends AppCompatActivity
     private static final String NEWITEM_PAY     = "新支出类型-新支出类型说明";
     private static final String NEWITEM_INCOME  = "新收入类型-新收入类型说明";
 
-    private static final String TEXTVIEW_CHILD = "TEXTVIEW_CHILD";
-    private static final String EDITTEXT_CHILD = "EDITTEXT_CHILD";
-    private static final String CHILD_TYPE     = "CHILD_TYPE";
     private static final String TITLE          = "TITLE";
     private static final String EXPLAIN        = "EXPLAIN";
 
