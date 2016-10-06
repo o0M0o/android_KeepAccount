@@ -6,14 +6,16 @@
 
     <ViewSwitcher
         android:layout_width="fill_parent"
-        android:layout_height="64dp"
+        android:layout_height="68dp"
         android:id="@+id/lvvs_switcher"
         android:layout_marginLeft="32dp">
 
         <RelativeLayout
             android:id = "@+id/rl_tv"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="4dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -22,7 +24,7 @@
                 android:text="title"
                 android:id="@+id/lvtv_title"
                 android:textColor="@color/abc_primary_text_disable_only_material_light"
-                android:textSize="26sp"/>
+                android:textSize="24sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -32,7 +34,7 @@
                 android:id="@+id/lvtv_explain"
                 android:textSize="16sp"
                 android:textColor="@color/background_floating_material_dark"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_below="@+id/lvtv_title"
                 android:layout_alignLeft="@+id/lvtv_title" />
         </RelativeLayout>
@@ -40,7 +42,9 @@
         <RelativeLayout
             android:id = "@+id/rl_ed"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="6dp">
 
             <EditText
                 android:layout_width="fill_parent"

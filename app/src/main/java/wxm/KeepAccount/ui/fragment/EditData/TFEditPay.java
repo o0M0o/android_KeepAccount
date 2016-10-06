@@ -37,7 +37,7 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
-import wxm.KeepAccount.ui.acutility.ACRecordType;
+import wxm.KeepAccount.ui.acutility.ACRecordTypeEdit;
 
 /**
  * 编辑支出
@@ -339,7 +339,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                 break;
 
                 case R.id.ar_et_info: {
-                    Intent it = new Intent(ac, ACRecordType.class);
+                    Intent it = new Intent(ac, ACRecordTypeEdit.class);
                     it.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.STR_RECORD_PAY);
                     startActivityForResult(it, 1);
                 }

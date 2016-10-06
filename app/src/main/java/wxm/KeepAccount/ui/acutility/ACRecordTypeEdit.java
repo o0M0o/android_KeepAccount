@@ -38,8 +38,8 @@ import wxm.KeepAccount.R;
 public class ACRecordTypeEdit extends AppCompatActivity
         implements  AdapterView.OnItemClickListener {
     private static final String TAG = "ACRecordTypeEdit";
-    private static final String NEWITEM_PAY     = "新支出类型-tv-新支出类型说明";
-    private static final String NEWITEM_INCOME  = "新收入类型-tv-新收入类型说明";
+    private static final String NEWITEM_PAY     = "新支出类型-新支出类型说明";
+    private static final String NEWITEM_INCOME  = "新收入类型-新收入类型说明";
 
     private static final String TEXTVIEW_CHILD = "TEXTVIEW_CHILD";
     private static final String EDITTEXT_CHILD = "EDITTEXT_CHILD";
@@ -54,6 +54,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
     private FloatingActionButton    mFABAddition;
     private MenuItem                mMISure;
     private MenuItem                mMIEdit;
+    private int                     mHotChildPos = ListView.INVALID_POSITION;
 
     private String                  mType;
     private boolean                 mBEditModel;
@@ -139,25 +140,21 @@ public class ACRecordTypeEdit extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.recordtype_menu_sure: {
-                String ty = "";
-                int cc = mLVRecordType.getChildCount();
-                for(int i = 0; i < cc; i++) {
-                    View vo = mLVRecordType.getChildAt(i);
-                    if(vo.isSelected())  {
-                        ty = mLHData.get(i).get(TITLE);
-                        break;
+                if(mBEditModel) {
+                    mBEditModel = false;
+                } else {
+                    if (ListView.INVALID_POSITION != mHotChildPos) {
+                        String ty = mLHData.get(mHotChildPos).get(TITLE);
+                        Intent data = new Intent();
+                        if (!UtilFun.StringIsNullOrEmpty(ty)) {
+                            data.putExtra(AppGobalDef.STR_RECORD_TYPE, ty);
+                            setResult(AppGobalDef.INTRET_SURE, data);
+                        } else {
+                            setResult(AppGobalDef.INTRET_GIVEUP, data);
+                        }
+                        finish();
                     }
                 }
-
-                Intent data = new Intent();
-                if(!UtilFun.StringIsNullOrEmpty(ty)) {
-                    data.putExtra(AppGobalDef.STR_RECORD_TYPE, ty);
-                    setResult(AppGobalDef.INTRET_SURE, data);
-                }
-                else    {
-                    setResult(AppGobalDef.INTRET_GIVEUP, data);
-                }
-                finish();
             }
             break;
 
@@ -230,19 +227,14 @@ public class ACRecordTypeEdit extends AppCompatActivity
      * @return item信息
      */
     private HashMap<String, String> line2hm(String ln)  {
-        String[] sln =  ln.split("-", 5);
-        if(BuildConfig.DEBUG && (3 != sln.length)) {
+        String[] sln =  ln.split("-");
+        if(BuildConfig.DEBUG && (2 != sln.length)) {
             throw new AssertionError();
         }
 
         HashMap<String, String> hm = new HashMap<>();
         hm.put(TITLE, sln[0]);
-        hm.put(EXPLAIN, sln[2]);
-
-        if(sln[1].equals("tv"))
-            hm.put(CHILD_TYPE, TEXTVIEW_CHILD);
-        else
-            hm.put(CHILD_TYPE, EDITTEXT_CHILD);
+        hm.put(EXPLAIN, sln[1]);
 
         return hm;
     }
@@ -250,38 +242,26 @@ public class ACRecordTypeEdit extends AppCompatActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        activeItem(position);
-    }
+        if(position == mHotChildPos)   {
+            mHotChildPos = ListView.INVALID_POSITION;
 
+            mMISure.setVisible(false);
+            mMIEdit.setVisible(true);
+        }   else    {
+            mHotChildPos = position;
 
-    /**
-     * 选中指定位置的节点
-     * @param pos 节点的位置
-     */
-    private void activeItem(int pos)    {
+            mMISure.setVisible(true);
+            mMIEdit.setVisible(false);
+        }
+
+        int n_c = getResources().getColor(R.color.white);
+        int y_c = getResources().getColor(R.color.powderblue);
         int cc = mLVRecordType.getChildCount();
         for(int i = 0; i < cc; i++) {
             View vo = mLVRecordType.getChildAt(i);
-            if(i != pos) {
-                if (vo.isSelected())
-                    vo.setSelected(false);
-            } else  {
-                vo.setSelected(!vo.isSelected());
-                boolean bs = vo.isSelected();
-
-                mMISure.setVisible(bs);
-                mMIEdit.setVisible(!bs);
-            }
-        }
-
-        for(int i = 0; i < cc; i++) {
-            View vo = mLVRecordType.getChildAt(i);
-            vo.setBackgroundColor(vo.isSelected() ?
-                    getResources().getColor(R.color.powderblue)
-                    : getResources().getColor(R.color.white));
+            vo.setBackgroundColor(mHotChildPos == i ? y_c : n_c);
         }
     }
-
 
 
     /**
@@ -292,10 +272,10 @@ public class ACRecordTypeEdit extends AppCompatActivity
         private final ACRecordTypeEdit mHome;
         private final List<? extends Map<String, ?>> mSelfData;
 
-        public MySimpleAdapter(ACRecordTypeEdit home,
-                               Context context, List<? extends Map<String, ?>> data,
-                               String[] from,
-                               int[] to) {
+        MySimpleAdapter(ACRecordTypeEdit home,
+                        Context context, List<? extends Map<String, ?>> data,
+                        String[] from,
+                        int[] to) {
             super(context, data, R.layout.li_record_type, from, to);
             mHome = home;
             mSelfData = data;
@@ -303,15 +283,13 @@ public class ACRecordTypeEdit extends AppCompatActivity
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            View v;
-            v = super.getView(position, view, arg2);
+            View v = super.getView(position, view, arg2);
             if (null != v) {
                 ViewSwitcher vs = (ViewSwitcher)v.findViewById(R.id.lvvs_switcher);
                 assert vs != null;
 
                 Map<String, ?> hm = mSelfData.get(position);
-                String tp = UtilFun.cast(hm.get(CHILD_TYPE));
-                if(tp.equals(TEXTVIEW_CHILD) && (!mBEditModel)) {
+                if(!mBEditModel) {
                     vs.setDisplayedChild(0);
                 } else {
                     vs.setDisplayedChild(1);
