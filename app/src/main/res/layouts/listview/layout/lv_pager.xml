@@ -17,13 +17,14 @@
         android:longClickable="true"
         android:layout_below="@+id/rl_attach_button"
         android:dividerHeight="2dp"
-        android:divider="@android:color/transparent" />
+        android:divider="@android:color/transparent"
+        android:layout_marginBottom="6dp" />
 
     <cn.wxm.andriodutillib.capricorn.RayMenu
         android:id="@+id/rm_show_record"
-        app:childSize="36dp"
+        app:childSize="32dp"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="54dp"
         android:paddingLeft="5dp"
         android:paddingRight="120dp"
         android:layout_alignParentBottom="true"

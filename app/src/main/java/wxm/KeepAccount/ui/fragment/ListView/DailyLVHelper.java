@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.fragment.ListView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -59,9 +58,7 @@ public class DailyLVHelper extends ListViewBase
 
     // for raymenu
     private static final int[] ITEM_DRAWABLES = {
-                                    R.drawable.ic_leave
-                                    ,R.drawable.ic_switch
-                                    ,R.drawable.ic_edit
+                                    R.drawable.ic_edit
                                     ,R.drawable.ic_delete
                                     ,R.drawable.ic_add};
 
@@ -278,11 +275,6 @@ public class DailyLVHelper extends ListViewBase
             }
             break;
 
-            case R.drawable.ic_switch : {
-                getRootActivity().switchShow();
-            }
-            break;
-
             case R.drawable.ic_delete: {
                 if (ACTION_DELETE != mActionType) {
                     mActionType = ACTION_DELETE;
@@ -296,14 +288,6 @@ public class DailyLVHelper extends ListViewBase
                     mActionType = ACTION_EDIT;
                     refreshView();
                 }
-            }
-            break;
-
-
-            case R.drawable.ic_leave :  {
-                Activity ac = getRootActivity();
-                ac.setResult(AppGobalDef.INTRET_USR_LOGOUT);
-                ac.finish();
             }
             break;
 
@@ -569,6 +553,9 @@ public class DailyLVHelper extends ListViewBase
 
                         ib_action.setSelected(!ib_action.isSelected());
                     } else  {
+                        mActionType = ACTION_NONE;
+                        refreshAttachLayout();
+
                         ACNoteShow ac = getRootActivity();
                         Intent intent = new Intent(ac, ACNoteEdit.class);
                         intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);

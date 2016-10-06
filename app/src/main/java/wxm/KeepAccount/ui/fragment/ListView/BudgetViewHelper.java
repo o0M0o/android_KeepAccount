@@ -190,7 +190,7 @@ public class BudgetViewHelper  extends ListViewBase {
             String tag = String.valueOf(i.get_id());
 
             String show_str = String.format(Locale.CHINA,
-                    "金额 : %.02f\n剩余总额 : %.02f",
+                    "总额度  : %.02f\n剩余额度 : %.02f",
                     i.getAmount(), i.getRemainderAmount());
             String nt = i.getNote();
             if(!UtilFun.StringIsNullOrEmpty(nt))    {

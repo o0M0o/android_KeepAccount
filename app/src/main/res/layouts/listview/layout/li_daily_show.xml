@@ -15,7 +15,7 @@
             android:layout_alignParentStart="false"
             android:textSize="20sp"
             android:textColor="@color/black"
-            android:layout_marginLeft="8dp" />
+            android:layout_marginLeft="64dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
         android:id="@+id/lv_show_detail"
         android:divider="@android:color/transparent"
         android:dividerHeight="3dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="72dp"
         android:layout_marginTop="6dp" />
 
 </RelativeLayout>
