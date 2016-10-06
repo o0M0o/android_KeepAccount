@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -35,7 +34,7 @@ import wxm.KeepAccount.R;
  * 选择记录类型界面
  */
 public class ACRecordType extends AppCompatActivity
-    implements View.OnClickListener, AdapterView.OnItemClickListener {
+    implements  AdapterView.OnItemClickListener {
     private static final String TAG = "ACRecordType";
 
     private static final String TEXTVIEW_CHILD = "TEXTVIEW_CHILD";
@@ -50,6 +49,7 @@ public class ACRecordType extends AppCompatActivity
 
     private MenuItem        mMISure;
     private MenuItem        mMIEdit;
+    private int             mHotChildPos = ListView.INVALID_POSITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +78,7 @@ public class ACRecordType extends AppCompatActivity
             mLVRecordType.setAdapter(mMAAdapter);
             mLVRecordType.setOnItemClickListener(this);
 
-
             load_type(rty);
-
         } else  {
             Log.e(TAG, "没有intent");
 
@@ -108,27 +106,18 @@ public class ACRecordType extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.recordtype_menu_sure: {
-                String ty = "";
-                int cc = mLVRecordType.getChildCount();
-                for(int i = 0; i < cc; i++) {
-                    View vo = mLVRecordType.getChildAt(i);
-                    CheckBox cb = (CheckBox)vo.findViewById(R.id.lvcb_selected);
-                    assert null != cb;
-
-                    if(cb.isChecked())  {
-                        ty = mLHData.get(i).get(TITLE);
+                if(ListView.INVALID_POSITION != mHotChildPos)   {
+                    String ty = mLHData.get(mHotChildPos).get(TITLE);
+                    Intent data = new Intent();
+                    if(!UtilFun.StringIsNullOrEmpty(ty)) {
+                        data.putExtra(AppGobalDef.STR_RECORD_TYPE, ty);
+                        setResult(AppGobalDef.INTRET_SURE, data);
                     }
+                    else    {
+                        setResult(AppGobalDef.INTRET_GIVEUP, data);
+                    }
+                    finish();
                 }
-
-                Intent data = new Intent();
-                if(!UtilFun.StringIsNullOrEmpty(ty)) {
-                    data.putExtra(AppGobalDef.STR_RECORD_TYPE, ty);
-                    setResult(AppGobalDef.INTRET_SURE, data);
-                }
-                else    {
-                    setResult(AppGobalDef.INTRET_GIVEUP, data);
-                }
-                finish();
             }
             break;
 
@@ -141,7 +130,6 @@ public class ACRecordType extends AppCompatActivity
 
 
             case R.id.recordtype_menu_edit :    {
-
             }
 
             default:
@@ -154,7 +142,7 @@ public class ACRecordType extends AppCompatActivity
 
 
     /**
-     * 加载数据
+     * 加载类型数据
      * @param ty 数据类型
      */
     private void load_type(String ty)   {
@@ -195,24 +183,7 @@ public class ACRecordType extends AppCompatActivity
         hm.put(EXPLAIN, sln[1]);
 
         hm.put(CHILD_TYPE, TEXTVIEW_CHILD);
-        /*
-        if(sln[1].equals("tv"))
-            hm.put(CHILD_TYPE, TEXTVIEW_CHILD);
-        else
-            hm.put(CHILD_TYPE, EDITTEXT_CHILD);
-            */
-
         return hm;
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.lvcb_selected){
-            int pos = mLVRecordType.getPositionForView(v);
-            activeItem(pos);
-        }
     }
 
 
@@ -221,21 +192,24 @@ public class ACRecordType extends AppCompatActivity
      * @param pos 节点的位置
      */
     private void activeItem(int pos)    {
+        if(pos == mHotChildPos)   {
+            mHotChildPos = ListView.INVALID_POSITION;
+
+            mMISure.setVisible(false);
+            mMIEdit.setVisible(true);
+        }   else    {
+            mHotChildPos = pos;
+
+            mMISure.setVisible(true);
+            mMIEdit.setVisible(false);
+        }
+
         int cc = mLVRecordType.getChildCount();
         for(int i = 0; i < cc; i++) {
             View vo = mLVRecordType.getChildAt(i);
-            CheckBox cb = (CheckBox)vo.findViewById(R.id.lvcb_selected);
-            assert null != cb;
-
-            if(i != pos) {
-                if (cb.isChecked()) {
-                    cb.setChecked(false);
-                }
-            } else  {
-                boolean bc = cb.isChecked();
-                mMISure.setVisible(bc);
-                mMIEdit.setVisible(!bc);
-            }
+            vo.setBackgroundColor(mHotChildPos == i ?
+                    getResources().getColor(R.color.powderblue)
+                    : getResources().getColor(R.color.white));
         }
     }
 
@@ -253,10 +227,10 @@ public class ACRecordType extends AppCompatActivity
         private final ACRecordType mHome;
         private final List<? extends Map<String, ?>> mSelfData;
 
-        public MySimpleAdapter(ACRecordType home,
-                               Context context, List<? extends Map<String, ?>> data,
-                               String[] from,
-                               int[] to) {
+        MySimpleAdapter(ACRecordType home,
+                        Context context, List<? extends Map<String, ?>> data,
+                        String[] from,
+                        int[] to) {
             super(context, data, R.layout.li_record_type, from, to);
             mHome = home;
             mSelfData = data;
@@ -280,11 +254,6 @@ public class ACRecordType extends AppCompatActivity
                     EditText et = (EditText)vs.getCurrentView().findViewById(R.id.lvet_title);
                     et.setText(info);
                 }
-
-                CheckBox cb = (CheckBox)v.findViewById(R.id.lvcb_selected);
-                assert null != cb;
-
-                cb.setOnClickListener(mHome);
             }
 
             return v;

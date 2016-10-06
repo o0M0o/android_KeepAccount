@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -37,7 +36,7 @@ import wxm.KeepAccount.R;
  * 记录类型编辑界面
  */
 public class ACRecordTypeEdit extends AppCompatActivity
-        implements View.OnClickListener, AdapterView.OnItemClickListener {
+        implements  AdapterView.OnItemClickListener {
     private static final String TAG = "ACRecordTypeEdit";
     private static final String NEWITEM_PAY     = "新支出类型-tv-新支出类型说明";
     private static final String NEWITEM_INCOME  = "新收入类型-tv-新收入类型说明";
@@ -144,11 +143,9 @@ public class ACRecordTypeEdit extends AppCompatActivity
                 int cc = mLVRecordType.getChildCount();
                 for(int i = 0; i < cc; i++) {
                     View vo = mLVRecordType.getChildAt(i);
-                    CheckBox cb = (CheckBox)vo.findViewById(R.id.lvcb_selected);
-                    assert null != cb;
-
-                    if(cb.isChecked())  {
+                    if(vo.isSelected())  {
                         ty = mLHData.get(i).get(TITLE);
+                        break;
                     }
                 }
 
@@ -252,16 +249,6 @@ public class ACRecordTypeEdit extends AppCompatActivity
 
 
     @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.lvcb_selected){
-            int pos = mLVRecordType.getPositionForView(v);
-            activeItem(pos);
-        }
-    }
-
-
-    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         activeItem(position);
     }
@@ -275,18 +262,23 @@ public class ACRecordTypeEdit extends AppCompatActivity
         int cc = mLVRecordType.getChildCount();
         for(int i = 0; i < cc; i++) {
             View vo = mLVRecordType.getChildAt(i);
-            CheckBox cb = (CheckBox)vo.findViewById(R.id.lvcb_selected);
-            assert null != cb;
-
             if(i != pos) {
-                if (cb.isChecked()) {
-                    cb.setChecked(false);
-                }
+                if (vo.isSelected())
+                    vo.setSelected(false);
             } else  {
-                boolean bc = cb.isChecked();
-                mMISure.setVisible(bc);
-                mMIEdit.setVisible(!bc);
+                vo.setSelected(!vo.isSelected());
+                boolean bs = vo.isSelected();
+
+                mMISure.setVisible(bs);
+                mMIEdit.setVisible(!bs);
             }
+        }
+
+        for(int i = 0; i < cc; i++) {
+            View vo = mLVRecordType.getChildAt(i);
+            vo.setBackgroundColor(vo.isSelected() ?
+                    getResources().getColor(R.color.powderblue)
+                    : getResources().getColor(R.color.white));
         }
     }
 
@@ -330,16 +322,6 @@ public class ACRecordTypeEdit extends AppCompatActivity
                     String explain = UtilFun.cast(hm.get(EXPLAIN));
                     EditText exet = (EditText)vs.getCurrentView().findViewById(R.id.lvet_explain);
                     exet.setText(explain);
-                }
-
-                CheckBox cb = (CheckBox)v.findViewById(R.id.lvcb_selected);
-                assert null != cb;
-
-                if(!mBEditModel) {
-                    cb.setOnClickListener(mHome);
-                    cb.setVisibility(View.VISIBLE);
-                } else    {
-                    cb.setVisibility(View.INVISIBLE);
                 }
             }
 
