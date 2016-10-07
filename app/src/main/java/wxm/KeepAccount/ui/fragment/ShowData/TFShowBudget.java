@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import wxm.KeepAccount.ui.fragment.HelloChart.BudgetChartHelper;
 import wxm.KeepAccount.ui.fragment.ListView.BudgetViewHelper;
 import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
@@ -21,8 +22,9 @@ public class TFShowBudget extends TFShowBase {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView, hot = " + mHotChild);
-        mViewHelper = new ShowViewHelperBase[1];
+        mViewHelper = new ShowViewHelperBase[2];
         mViewHelper[0] = new BudgetViewHelper();
+        mViewHelper[1] = new BudgetChartHelper();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 }
