@@ -37,7 +37,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
     // name of the database file for your application -- change to something appropriate for your app
     private static final String DATABASE_NAME = "AppLocal.db";
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     // the DAO object we use to access the SimpleData table
     private RuntimeExceptionDao<UsrItem, Integer>           mUsrNoteRDao = null;
@@ -66,13 +66,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
-            if(5 == newVersion) {
-                TableUtils.dropTable(connectionSource, UsrItem.class, true);
-
-                onCreate(db, connectionSource);
-            }
-
-            if(6 == newVersion)     {
+            if(7 == newVersion)     {
                 TableUtils.dropTable(connectionSource, UsrItem.class, true);
                 TableUtils.dropTable(connectionSource, RecordTypeItem.class, true);
                 TableUtils.dropTable(connectionSource, PayNoteItem.class, true);
