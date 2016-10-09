@@ -22,6 +22,7 @@ import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.db.RecordTypeItem;
+import wxm.KeepAccount.Base.db.RemindItem;
 import wxm.KeepAccount.Base.db.UsrItem;
 import wxm.KeepAccount.BuildConfig;
 import wxm.KeepAccount.R;
@@ -45,6 +46,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
     private RuntimeExceptionDao<BudgetItem, Integer>        mBudgetNoteRDao = null;
     private RuntimeExceptionDao<PayNoteItem, Integer>       mPayNoteRDao = null;
     private RuntimeExceptionDao<IncomeNoteItem, Integer>    mIncomeNoteRDao = null;
+    private RuntimeExceptionDao<RemindItem, Integer>        mRemindRDao = null;
 
     public DBOrmliteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -71,6 +73,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
                 TableUtils.dropTable(connectionSource, RecordTypeItem.class, true);
                 TableUtils.dropTable(connectionSource, PayNoteItem.class, true);
                 TableUtils.dropTable(connectionSource, IncomeNoteItem.class, true);
+                TableUtils.dropTable(connectionSource, BudgetItem.class, true);
 
                 onCreate(db, connectionSource);
             }
@@ -119,6 +122,14 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         return mIncomeNoteRDao;
     }
 
+    public RuntimeExceptionDao<RemindItem, Integer> getRemindREDao() {
+        if (mRemindRDao == null) {
+            mRemindRDao = getRuntimeExceptionDao(RemindItem.class);
+        }
+        return mRemindRDao;
+    }
+
+
     /**
      * Close the database connections and clear any cached DAOs.
      */
@@ -130,6 +141,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         mBudgetNoteRDao = null;
         mPayNoteRDao = null;
         mIncomeNoteRDao = null;
+        mRemindRDao = null;
     }
 
 
@@ -140,6 +152,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, BudgetItem.class);
             TableUtils.createTable(connectionSource, PayNoteItem.class);
             TableUtils.createTable(connectionSource, IncomeNoteItem.class);
+            TableUtils.createTable(connectionSource, RemindItem.class);
         } catch (SQLException e) {
             Log.e(TAG, "Can't create database", e);
             throw new RuntimeException(e);

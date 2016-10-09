@@ -130,7 +130,6 @@ public class PayNoteItem implements Parcelable {
         out.writeString(getNote());
         out.writeString(getVal().toString());
         out.writeString(getTs().toString());
-
     }
 
     public static final Parcelable.Creator<PayNoteItem> CREATOR

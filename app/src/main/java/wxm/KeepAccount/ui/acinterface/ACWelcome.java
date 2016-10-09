@@ -32,6 +32,7 @@ import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
+import wxm.KeepAccount.ui.acutility.ACRemindEdit;
 import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
 
 /**
@@ -114,6 +115,12 @@ public class ACWelcome extends AppCompatActivity
                     Intent data = new Intent();
                     setResult(ret_data, data);
                     finish();
+                }
+                break;
+
+                case ActionHelper.ACT_ADD_REMIND :  {
+                    Intent intent = new Intent(this, ACRemindEdit.class);
+                    startActivityForResult(intent, 1);
                 }
                 break;
 

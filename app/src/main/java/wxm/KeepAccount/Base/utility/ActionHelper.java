@@ -16,12 +16,16 @@ public class ActionHelper {
     public final static String ACT_ADD_BUDGET   = "添加预算";
     public final static String ACT_ADD_DATA     = "添加记录";
     public final static String ACT_LOGOUT       = "退出登录";
+    public final static String ACT_LOOK_REMIND  = "查看提醒";
+    public final static String ACT_ADD_REMIND   = "添加提醒";
 
     public final static String[] ACTION_NAMES   =   {
             ACT_LOOK_DATA
             ,ACT_LOOK_BUDGET
             ,ACT_ADD_BUDGET
             ,ACT_ADD_DATA
+            ,ACT_LOOK_REMIND
+            ,ACT_ADD_REMIND
             ,ACT_LOGOUT
     };
 
@@ -53,6 +57,14 @@ public class ActionHelper {
 
             case ACT_LOGOUT :
                 bm = BitmapFactory.decodeResource(res, R.drawable.ic_bt_logout);
+                break;
+
+            case ACT_LOOK_REMIND :
+                bm = BitmapFactory.decodeResource(res, R.drawable.ic_alarm);
+                break;
+
+            case ACT_ADD_REMIND :
+                bm = BitmapFactory.decodeResource(res, R.drawable.ic_act_add_alarm);
                 break;
         }
 

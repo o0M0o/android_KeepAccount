@@ -26,6 +26,7 @@ public class AppModel {
     private RecordTypeDataUtility   mRecordTypeu;
     private BudgetDataUtility       mBudgetu;
     private PayIncomeDataUtility    mPayIncomeu;
+    private RemindDataUtility       mRemindu;
 
     public static void SetContext(Context ct)   {
         mMockContext = ct;
@@ -62,6 +63,9 @@ public class AppModel {
 
         if(null == mPayIncomeu)
             mPayIncomeu = new PayIncomeDataUtility();
+
+        if(null == mRemindu)
+            mRemindu = new RemindDataUtility();
     }
 
 
@@ -78,6 +82,7 @@ public class AppModel {
         mRecordTypeu    = null;
         mBudgetu        = null;
         mPayIncomeu     = null;
+        mRemindu        = null;
     }
 
     /**
@@ -90,6 +95,7 @@ public class AppModel {
             mDBHelper.getPayDataREDao().deleteBuilder().delete();
             mDBHelper.getIncomeDataREDao().deleteBuilder().delete();
             mDBHelper.getRTItemREDao().deleteBuilder().delete();
+            mDBHelper.getRemindREDao().deleteBuilder().delete();
         }catch (SQLException e) {
             Log.e(TAG, UtilFun.ExceptionToString(e));
         }
@@ -150,5 +156,13 @@ public class AppModel {
      */
     public static PayIncomeDataUtility getPayIncomeUtility()  {
         return  getInstance().mPayIncomeu;
+    }
+
+    /**
+     * 获得收支数据辅助类
+     * @return  辅助类
+     */
+    public static RemindDataUtility getRemindUtility()  {
+        return  getInstance().mRemindu;
     }
 }

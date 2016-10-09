@@ -10,4 +10,12 @@
     <string name="select_budget">选择预算</string>
     <string name="budget_remainder">预算余额</string>
     <string name="budget_used">已使用预算</string>
+    <string name="remaind_type_select">选择提醒类型</string>
+    <string name="budget_select">选择预算</string>
+    <string name="remind_active_type">预警激活条件</string>
+    <string name="remind_amount">预警金额</string>
+    <string name="remind_period">预警周期</string>
+    <string name="remind_name">预警名</string>
+    <string name="remind_start_date">预警开始日期</string>
+    <string name="remind_end_date">预警结束日期</string>
 </resources>
