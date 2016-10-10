@@ -24,8 +24,8 @@ public class ActionHelper {
             ,ACT_LOOK_BUDGET
             ,ACT_ADD_BUDGET
             ,ACT_ADD_DATA
-            ,ACT_LOOK_REMIND
-            ,ACT_ADD_REMIND
+            //,ACT_LOOK_REMIND
+            //,ACT_ADD_REMIND
             ,ACT_LOGOUT
     };
 

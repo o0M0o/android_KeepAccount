@@ -3,6 +3,7 @@ package wxm.KeepAccount.ui.acutility;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -11,13 +12,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.util.HashMap;
+
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.db.RemindItem;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.fragment.EditData.TFEditIncome;
 import wxm.KeepAccount.ui.fragment.RemindEdit.TFEditRemindBase;
 import wxm.KeepAccount.ui.fragment.RemindEdit.TFEditRemindBudget;
-import wxm.KeepAccount.ui.fragment.RemindEdit.TFEditRemindIncome;
 import wxm.KeepAccount.ui.fragment.RemindEdit.TFEditRemindPay;
 
 public class ACRemindEdit extends AppCompatActivity {
@@ -52,7 +55,7 @@ public class ACRemindEdit extends AppCompatActivity {
             case R.id.mi_save: {
                 int hot = mTLTabs.getSelectedTabPosition();
                 if(hot >=0 && hot < REMIND_TYPE.length)     {
-                    TFEditRemindBase tb = UtilFun.cast(mVPPages.getChildAt(hot));
+                    TFEditRemindBase tb = getHotTabItem();
                     if(tb.onAccept())   {
                         int ret_data = AppGobalDef.INTRET_SURE;
 
@@ -83,6 +86,17 @@ public class ACRemindEdit extends AppCompatActivity {
 
 
     /// BEGIN PRIVATE
+
+    /**
+     * 得到当前选中的tab item
+     * @return  当前选中的tab item
+     */
+    private TFEditRemindBase getHotTabItem() {
+        int pos = mTLTabs.getSelectedTabPosition();
+        PagerAdapter pa = UtilFun.cast(mVPPages.getAdapter());
+        return UtilFun.cast(pa.getItem(pos));
+    }
+
     /**
      * 初始化view
      */
@@ -129,30 +143,25 @@ public class ACRemindEdit extends AppCompatActivity {
      */
     public class PagerAdapter extends FragmentStatePagerAdapter {
         int mNumOfTabs;
+        HashMap<String, Fragment> mHMFra;
 
         PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm);
             this.mNumOfTabs = NumOfTabs;
+
+            mHMFra = new HashMap<>();
+            mHMFra.put(RemindItem.REMIND_BUDGET, new TFEditRemindBudget());
+            mHMFra.put(RemindItem.REMIND_PAY, new TFEditRemindPay());
+            mHMFra.put(RemindItem.REMIND_INCOME, new TFEditIncome());
         }
 
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
-            android.support.v4.app.Fragment ret = null;
-            switch (position)   {
-                case 0 :
-                    ret = new TFEditRemindBudget();
-                    break;
-
-                case 1 :
-                    ret = new TFEditRemindPay();
-                    break;
-
-                case 2 :
-                    ret = new TFEditRemindIncome();
-                    break;
-            }
-
-            return ret;
+            TabLayout.Tab t = mTLTabs.getTabAt(position);
+            assert null != t;
+            CharSequence t_cs = t.getText();
+            assert null != t_cs;
+            return mHMFra.get(t_cs.toString());
         }
 
         @Override

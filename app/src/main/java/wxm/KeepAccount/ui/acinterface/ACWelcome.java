@@ -262,6 +262,14 @@ public class ACWelcome extends AppCompatActivity
                 }
 
                 mLSData.set(to, temp);
+
+                ArrayList<String> hot_name = new ArrayList<>();
+                for(HashMap<String, Object> hi : mLSData)   {
+                    String an = UtilFun.cast(hi.get(DGVButtonAdapter.HKEY_ACT_NAME));
+                    hot_name.add(an);
+                }
+                PreferencesUtil.saveHotAction(hot_name);
+
                 apt.notifyDataSetChanged();
             }
         });

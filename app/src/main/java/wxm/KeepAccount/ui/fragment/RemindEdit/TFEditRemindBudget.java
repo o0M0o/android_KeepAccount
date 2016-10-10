@@ -1,8 +1,10 @@
 package wxm.KeepAccount.ui.fragment.RemindEdit;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +27,8 @@ import wxm.KeepAccount.R;
  */
 public class TFEditRemindBudget extends TFEditRemindBase  {
     private Spinner     mSPBudget;
-    private Spinner     mSPRemindActiveType;
 
 
-    private final static String[] RAT_TYPE = {
-            RemindItem.RAT_AMOUNT_BELOW
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -44,8 +42,7 @@ public class TFEditRemindBudget extends TFEditRemindBase  {
         super.onViewCreated(view, savedInstanceState);
         if(null != view) {
             mSPBudget = UtilFun.cast(view.findViewById(R.id.sp_budget));
-            mSPRemindActiveType = UtilFun.cast(view.findViewById(R.id.sp_remind_active));
-            assert null != mSPBudget && null != mSPRemindActiveType;
+            assert null != mSPBudget;
 
             // init budget
             ArrayList<String> data_ls = new ArrayList<>();
@@ -60,12 +57,6 @@ public class TFEditRemindBudget extends TFEditRemindBase  {
                     android.R.layout.simple_spinner_item, data_ls);
             spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mSPBudget.setAdapter(spAdapter);
-
-            // init remind active type
-            ArrayAdapter<String> spAdapter1 = new ArrayAdapter<>(getContext(),
-                    android.R.layout.simple_spinner_item, RAT_TYPE);
-            spAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            mSPRemindActiveType.setAdapter(spAdapter1);
         }
     }
 
@@ -77,8 +68,47 @@ public class TFEditRemindBudget extends TFEditRemindBase  {
         if(!checkDate())
             return false;
 
-        return false;
+        if(!checkBudget())
+            return false;
+
+        if(!checkAmount())
+            return false;
+
+        if(!checkType())
+            return false;
+
+        RemindItem ri = new RemindItem();
+        ri.setName(mETName.getText().toString().trim());
+        ri.setType(RemindItem.REMIND_BUDGET);
+        ri.setStartDate(mTSStartDate);
+        ri.setEndDate(mTSEndDate);
+        ri.setAmount(mBDAmount);
+
+        String r = UtilFun.cast(mSPRemindActiveType.getSelectedItem());
+        ri.setReason(r);
+
+        return AppModel.getRemindUtility().AddOrUpdateRemind(ri);
     }
 
 
+    /**
+     * 检查预算数据合法性
+     * @return  合法返回true,否则返回false
+     */
+    private boolean checkBudget()   {
+        String sel_budget = UtilFun.cast(mSPBudget.getSelectedItem());
+        BudgetItem bi = AppModel.getBudgetUtility().GetBudgetByName(sel_budget);
+        if(null == bi)  {
+            Dialog alertDialog = new AlertDialog.Builder(getContext()).
+                    setTitle("缺少预算项").
+                    setMessage("需要选择预算项!").
+                    create();
+            alertDialog.show();
+
+            mSPBudget.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
 }

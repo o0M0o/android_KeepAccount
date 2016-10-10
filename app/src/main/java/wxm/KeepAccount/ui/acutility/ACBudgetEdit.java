@@ -15,14 +15,12 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
-import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
 
@@ -114,30 +112,17 @@ public class ACBudgetEdit extends AppCompatActivity implements View.OnTouchListe
             return false;
         }
 
-        List<BudgetItem> bils = AppModel.getBudgetUtility().GetBudget();
-        if(!ToolUtil.ListIsNullOrEmpty(bils))    {
-            int matchid = -1;
-            boolean bmatch = false;
-            for(BudgetItem i : bils)    {
-                if(name.equals(i.getName()))    {
-                    bmatch = true;
-                    matchid = i.get_id();
-                    break;
-                }
-            }
+        BudgetItem cbi = AppModel.getBudgetUtility().GetBudgetByName(name);
+        if((null != cbi) &&
+                ((null == mCurBudget) || (mCurBudget.get_id() != cbi.get_id())))  {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("预算名已经存在!").setTitle("警告");
 
-            if(bmatch &&
-                    ((null == mCurBudget)
-                    || (mCurBudget.get_id() != matchid)))  {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("预算名已经存在!").setTitle("警告");
+            AlertDialog dlg = builder.create();
+            dlg.show();
 
-                AlertDialog dlg = builder.create();
-                dlg.show();
-
-                mETName.requestFocus();
-                return false;
-            }
+            mETName.requestFocus();
+            return false;
         }
 
 

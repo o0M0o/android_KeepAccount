@@ -13,15 +13,19 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.db.RemindItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 
@@ -32,19 +36,38 @@ import wxm.KeepAccount.R;
 public abstract class TFEditRemindBase extends Fragment implements View.OnTouchListener  {
     private final static String TAG = "TFEditRemindBase";
 
+    protected Spinner         mSPRemindActiveType;
+
     protected EditText      mETStartDate;
     protected EditText      mETEndDate;
     protected EditText      mETName;
 
     protected EditText      mETAmount;
+    protected BigDecimal    mBDAmount;
 
-    private Timestamp       mTSStartDate;
-    private Timestamp       mTSEndDate;
+    protected Timestamp       mTSStartDate;
+    protected Timestamp       mTSEndDate;
+
+
+    private final static String[] RAT_TYPE = {
+            RemindItem.RAT_AMOUNT_BELOW,
+            RemindItem.RAT_AMOUNT_EXCEED
+    };
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(null != view) {
+            // init active type
+            mSPRemindActiveType = UtilFun.cast(view.findViewById(R.id.sp_remind_active));
+            assert null != mSPRemindActiveType;
+
+            ArrayAdapter<String> spAdapter1 = new ArrayAdapter<>(getContext(),
+                    android.R.layout.simple_spinner_item, RAT_TYPE);
+            spAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mSPRemindActiveType.setAdapter(spAdapter1);
+
             // init name
             mETName = UtilFun.cast(view.findViewById(R.id.et_name));
             assert null != mETName;
@@ -239,6 +262,48 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
             alertDialog.show();
 
             mETEndDate.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
+
+    /**
+     * 检查金额数据合法性
+     * @return  合法返回true,否则返回false
+     */
+    protected boolean checkAmount()   {
+        String val = mETAmount.getText().toString().trim();
+        if(UtilFun.StringIsNullOrEmpty(val))    {
+            Dialog alertDialog = new AlertDialog.Builder(getContext()).
+                    setTitle("缺少预警金额").
+                    setMessage("需要输入预警金额!").
+                    create();
+            alertDialog.show();
+
+            mETAmount.requestFocus();
+            return false;
+        }
+
+        mBDAmount = new BigDecimal(val);
+        return true;
+    }
+
+    /**
+     * 检查预警条件合法性
+     * @return  合法返回true,否则返回false
+     */
+    protected boolean checkType()   {
+        String r = UtilFun.cast(mSPRemindActiveType.getSelectedItem());
+        if(UtilFun.StringIsNullOrEmpty(r))  {
+            Dialog alertDialog = new AlertDialog.Builder(getContext()).
+                    setTitle("缺少预警条件").
+                    setMessage("需要选择预警条件!").
+                    create();
+            alertDialog.show();
+
+            mETAmount.requestFocus();
             return false;
         }
 
