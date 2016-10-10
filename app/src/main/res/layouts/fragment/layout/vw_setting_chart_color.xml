@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_row="0"
+        android:layout_column="0"
+        android:id="@+id/rl_pay_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+        <TextView
+            android:layout_centerVertical="true"
+            android:text="@string/setting_pay_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView8"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="24dp"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_width="64dp"
+            android:layout_height="24dp"
+            app:srcCompat="@color/aqua"
+            android:id="@+id/imageView2"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="200dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_row="1"
+        android:layout_column="0"
+        android:layout_marginTop="8dp"
+        android:id="@+id/rl_income_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_centerVertical="true"
+            android:text="@string/setting_pay_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView9"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="24dp"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_width="64dp"
+            android:layout_height="24dp"
+            app:srcCompat="@color/darkred"
+            android:id="@+id/imageView3"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="200dp" />
+    </RelativeLayout>
+
+</GridLayout>
