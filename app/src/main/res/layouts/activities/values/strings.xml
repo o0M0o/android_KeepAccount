@@ -18,4 +18,10 @@
     <string name="remind_name">预警名</string>
     <string name="remind_start_date">预警开始日期</string>
     <string name="remind_end_date">预警结束日期</string>
+    <string name="setting_remind">设置提醒</string>
+    <string name="setting_reformat_data">数据格式化</string>
+    <string name="setting_chart_color">设置图表颜色</string>
+    <string name="setting_check_version">检查更新</string>
+    <string name="setting_share_app">分享APP</string>
+    <string name="app_setting">设置</string>
 </resources>

@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="wxm.KeepAccount">
 
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -17,11 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon, android:theme, android:label">
-
         <activity
             android:name=".ui.acinterface.ACNoteShow"
-            android:label="@string/ac_title_noteshow"
-            android:exported="true" />
+            android:exported="true"
+            android:label="@string/ac_title_noteshow" />
         <activity
             android:name=".ui.acinterface.ACLogin"
             android:label="@string/cn_keepaccount_applabel">
@@ -46,9 +44,14 @@
             android:name=".ui.acutility.ACBudgetEdit"
             android:label="@string/ac_label_budget_manager" />
         <activity android:name=".ui.acutility.ACNoteEdit" />
-        <activity android:name=".ui.acutility.ACRemindEdit"
-            android:exported="true"/>
+        <activity
+            android:name=".ui.acutility.ACRemindEdit"
+            android:exported="true" />
         <activity android:name=".ui.acinterface.ACRemindShow" />
+        <activity
+            android:name=".ui.acutility.ACSetting"
+            android:exported="true"
+            android:label="@string/app_setting" />
     </application>
 
 </manifest>
