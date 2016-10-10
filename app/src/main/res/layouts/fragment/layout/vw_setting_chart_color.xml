@@ -24,8 +24,8 @@
             android:layout_centerVertical="true"
             android:layout_width="64dp"
             android:layout_height="24dp"
-            app:srcCompat="@color/aqua"
-            android:id="@+id/imageView2"
+            android:background="@color/antiquewhite"
+            android:id="@+id/iv_pay"
             android:layout_alignParentRight="true"
             android:layout_marginRight="200dp" />
     </RelativeLayout>
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content">
         <TextView
             android:layout_centerVertical="true"
-            android:text="@string/setting_pay_color"
+            android:text="@string/setting_income_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView9"
@@ -51,8 +51,8 @@
             android:layout_centerVertical="true"
             android:layout_width="64dp"
             android:layout_height="24dp"
-            app:srcCompat="@color/darkred"
-            android:id="@+id/imageView3"
+            android:background="@color/aliceblue"
+            android:id="@+id/iv_income"
             android:layout_alignParentRight="true"
             android:layout_marginRight="200dp" />
     </RelativeLayout>

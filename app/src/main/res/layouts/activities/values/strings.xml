@@ -25,4 +25,5 @@
     <string name="setting_share_app">分享APP</string>
     <string name="app_setting">设置</string>
     <string name="setting_pay_color">支出</string>
+    <string name="setting_income_color">收入</string>
 </resources>

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -35,7 +34,7 @@ public class TFSettingMain extends TFSettingBase {
             rl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "check version", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "check version", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -44,7 +43,7 @@ public class TFSettingMain extends TFSettingBase {
             rl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "chart color", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "chart color", Toast.LENGTH_SHORT).show();
                     toPageByIdx(ACSetting.PAGE_IDX_CHART_COLOR);
                 }
             });
