@@ -33,7 +33,7 @@ public class ToolUtil {
     public static int getVerCode(Context context) {
         int verCode = -1;
         try {
-            verCode = context.getPackageManager().getPackageInfo("wxm.KeepAccount", 0).versionCode;
+            verCode = context.getPackageManager().getPackageInfo("com.wxm.keepaccount", 0).versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, e.getMessage());
         }
@@ -50,7 +50,7 @@ public class ToolUtil {
     public static String getVerName(Context context) {
         String verName = "";
         try {
-            verName = context.getPackageManager().getPackageInfo("wxm.KeepAccount", 0).versionName;
+            verName = context.getPackageManager().getPackageInfo("com.wxm.keepaccount", 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, e.getMessage());
         }

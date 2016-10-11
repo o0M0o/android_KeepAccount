@@ -33,6 +33,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.acutility.ACRemindEdit;
+import wxm.KeepAccount.ui.acutility.ACSetting;
 import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
 
 /**
@@ -126,6 +127,8 @@ public class ACWelcome extends AppCompatActivity
 
                 case CN_SETTING :  {
                     //Toast.makeText(this, CN_SETTING, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, ACSetting.class);
+                    startActivityForResult(intent, 1);
                 }
                 break;
 
@@ -159,9 +162,8 @@ public class ACWelcome extends AppCompatActivity
             break;
 
             case R.id.nav_setting: {
-                Toast.makeText(getApplicationContext(),
-                        "invoke setting!",
-                        Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, ACSetting.class);
+                startActivityForResult(intent, 1);
             }
             break;
 

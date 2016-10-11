@@ -35,6 +35,7 @@ public class TFSettingMain extends TFSettingBase {
                 @Override
                 public void onClick(View v) {
                     //Toast.makeText(getContext(), "check version", Toast.LENGTH_SHORT).show();
+                    toPageByIdx(ACSetting.PAGE_IDX_CHECK_VERSION);
                 }
             });
 
