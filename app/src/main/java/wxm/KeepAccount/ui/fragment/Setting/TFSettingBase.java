@@ -11,7 +11,8 @@ import wxm.KeepAccount.ui.acutility.ACSetting;
  * 设置页面基础类
  * Created by 123 on 2016/10/10.
  */
-public class TFSettingBase extends Fragment {
+public abstract class TFSettingBase extends Fragment {
+    protected boolean   mBSettingDirty = false;
 
     /**
      * 得到ACSetting
@@ -46,4 +47,17 @@ public class TFSettingBase extends Fragment {
             acs.change_page(idx);
         }
     }
+
+    /**
+     * 页面所管理的配置是否更改
+     * @return  若配置已经更改则返回true, 否则返回false
+     */
+    public boolean isSettingDirty() {
+        return mBSettingDirty;
+    }
+
+    /**
+     * 保存页面所管理的配置
+     */
+    public abstract void updateSetting();
 }

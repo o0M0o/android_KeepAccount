@@ -20,9 +20,12 @@ import wxm.KeepAccount.ui.dialog.DlgSelectColor;
  * 图表颜色设置页面
  * Created by 123 on 2016/10/10.
  */
-public class TFSettingChartColor extends TFSettingBase {
-    private boolean                     mColorsDirty = false;
+public class TFSettingChartColor extends TFSettingBase
+            implements View.OnClickListener {
     private HashMap<String, Integer>    mHMColors;
+
+    private ImageView   mIVPay;
+    private ImageView   mIVIncome;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -37,51 +40,56 @@ public class TFSettingChartColor extends TFSettingBase {
         if (null != view) {
             mHMColors = PreferencesUtil.loadChartColor();
 
-            final ImageView iv_pay = UtilFun.cast(view.findViewById(R.id.iv_pay));
-            final ImageView iv_income = UtilFun.cast(view.findViewById(R.id.iv_income));
-            assert null != iv_pay && null != iv_income;
+            mIVPay = UtilFun.cast(view.findViewById(R.id.iv_pay));
+            mIVIncome = UtilFun.cast(view.findViewById(R.id.iv_income));
+            assert null != mIVPay && null != mIVIncome;
 
-            iv_pay.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_PAY_COLOR));
-            iv_income.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_INCOME_COLOR));
+            mIVPay.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_PAY_COLOR));
+            mIVIncome.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_INCOME_COLOR));
 
-            iv_pay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DlgSelectColor dsc = new DlgSelectColor();
-                    dsc.setDialogListener(new DlgSelectColor.NoticeDialogListener() {
-                        @Override
-                        public void onDialogPositiveClick(DialogFragment dialog) {
-                            DlgSelectColor ds = UtilFun.cast(dialog);
-                            iv_pay.setBackgroundColor(ds.getSelectedColor());
+            mIVPay.setOnClickListener(this);
+            mIVIncome.setOnClickListener(this);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        final int vid = v.getId();
+        switch (vid)    {
+            case R.id.iv_pay :
+            case R.id.iv_income :  {
+                DlgSelectColor dsc = new DlgSelectColor();
+                dsc.setDialogListener(new DlgSelectColor.NoticeDialogListener() {
+                    @Override
+                    public void onDialogPositiveClick(DialogFragment dialog) {
+                        DlgSelectColor ds = UtilFun.cast(dialog);
+                        int sel_col = ds.getSelectedColor();
+
+                        mBSettingDirty = true;
+                        if(R.id.iv_pay == vid)  {
+                            mIVPay.setBackgroundColor(sel_col);
+                            mHMColors.put(PreferencesUtil.SET_PAY_COLOR, sel_col);
+                        } else {
+                            mIVIncome.setBackgroundColor(sel_col);
+                            mHMColors.put(PreferencesUtil.SET_INCOME_COLOR, sel_col);
                         }
+                    }
 
-                        @Override
-                        public void onDialogNegativeClick(DialogFragment dialog) {
-                        }
-                    });
-                    dsc.show(getFragmentManager(), "选择颜色");
-                }
-            });
+                    @Override
+                    public void onDialogNegativeClick(DialogFragment dialog) {
+                    }
+                });
+                dsc.show(getFragmentManager(), "选择颜色");
+            }
+            break;
+        }
+    }
 
-
-            iv_income.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DlgSelectColor dsc = new DlgSelectColor();
-                    dsc.setDialogListener(new DlgSelectColor.NoticeDialogListener() {
-                        @Override
-                        public void onDialogPositiveClick(DialogFragment dialog) {
-                            DlgSelectColor ds = UtilFun.cast(dialog);
-                            iv_income.setBackgroundColor(ds.getSelectedColor());
-                        }
-
-                        @Override
-                        public void onDialogNegativeClick(DialogFragment dialog) {
-                        }
-                    });
-                    dsc.show(getFragmentManager(), "选择颜色");
-                }
-            });
+    @Override
+    public void updateSetting() {
+        if(mBSettingDirty)  {
+            PreferencesUtil.saveChartColor(mHMColors);
+            mBSettingDirty = false;
         }
     }
 }

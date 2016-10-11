@@ -49,4 +49,11 @@ public class TFSettingMain extends TFSettingBase {
             });
         }
     }
+
+    @Override
+    public void updateSetting() {
+        if(mBSettingDirty)  {
+            mBSettingDirty = false;
+        }
+    }
 }

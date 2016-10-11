@@ -1,11 +1,14 @@
 package wxm.KeepAccount.ui.acutility;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +17,7 @@ import android.view.MenuItem;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.fragment.Setting.TFSettingBase;
 import wxm.KeepAccount.ui.fragment.Setting.TFSettingChartColor;
 import wxm.KeepAccount.ui.fragment.Setting.TFSettingCheckVersion;
 import wxm.KeepAccount.ui.fragment.Setting.TFSettingMain;
@@ -22,7 +26,7 @@ import wxm.KeepAccount.ui.fragment.Setting.TFSettingRemind;
 public class ACSetting extends AppCompatActivity {
     private ViewPager mVPPages;
 
-    private final static int    PAGE_COUNT              = 4;
+    private final static int   PAGE_COUNT              = 4;
     public final static int    PAGE_IDX_MAIN           = 0;
     public final static int    PAGE_IDX_CHECK_VERSION  = 1;
     public final static int    PAGE_IDX_CHART_COLOR    = 2;
@@ -48,8 +52,29 @@ public class ACSetting extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_save: {
-                if(PAGE_IDX_MAIN != mVPPages.getCurrentItem())
-                    change_page(PAGE_IDX_MAIN);
+                if(PAGE_IDX_MAIN != mVPPages.getCurrentItem()) {
+                    final TFSettingBase tb = getCurrentPage();
+                    if(tb.isSettingDirty()) {
+                        Dialog alertDialog = new AlertDialog.Builder(this).
+                                setTitle("配置已经更改").
+                                setMessage("是否保存更改的配置?").
+                                setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        tb.updateSetting();
+                                        change_page(PAGE_IDX_MAIN);
+                                    }
+                                }).
+                                setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        change_page(PAGE_IDX_MAIN);
+                                    }
+                                }).
+                                create();
+                        alertDialog.show();
+                    }
+                }
             }
             break;
 
@@ -93,6 +118,15 @@ public class ACSetting extends AppCompatActivity {
      */
     public void change_page(int new_page)  {
         mVPPages.setCurrentItem(new_page);
+    }
+
+    /**
+     *  得到当前页
+     * @return  当前页实例
+     */
+    protected TFSettingBase getCurrentPage()   {
+        PagerAdapter pa = UtilFun.cast(mVPPages.getAdapter());
+        return UtilFun.cast(pa.getItem(mVPPages.getCurrentItem()));
     }
 
 

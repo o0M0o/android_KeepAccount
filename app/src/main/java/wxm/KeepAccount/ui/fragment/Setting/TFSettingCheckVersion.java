@@ -6,4 +6,10 @@ package wxm.KeepAccount.ui.fragment.Setting;
  * Created by 123 on 2016/10/10.
  */
 public class TFSettingCheckVersion extends TFSettingBase {
+    @Override
+    public void updateSetting() {
+        if(mBSettingDirty)  {
+            mBSettingDirty = false;
+        }
+    }
 }
