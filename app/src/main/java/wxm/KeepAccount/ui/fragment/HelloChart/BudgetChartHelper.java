@@ -58,7 +58,6 @@ public class BudgetChartHelper extends ShowViewHelperBase {
 
     public BudgetChartHelper()    {
         super();
-        mHMColor = PreferencesUtil.loadChartColor();
     }
 
 
@@ -68,13 +67,14 @@ public class BudgetChartHelper extends ShowViewHelperBase {
         mBFilter        = false;
 
         // 展示条
+        mHMColor = PreferencesUtil.loadChartColor();
         ImageView iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_remainder));
         assert null != iv;
-        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_INCOME_COLOR));
+        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_BUDGET_BALANCE_COLOR));
 
         iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_used));
         assert null != iv;
-        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_PAY_COLOR));
+        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_BUDGET_UESED_COLOR));
 
         // 填充预算数据
         mSPBudget = UtilFun.cast(mSelfView.findViewById(R.id.sp_budget));
@@ -221,6 +221,7 @@ public class BudgetChartHelper extends ShowViewHelperBase {
         BudgetItem bi = mSPBudgetData.get(mSPBudgetHot);
         List<PayNoteItem> pays = AppModel.getPayIncomeUtility().GetPayNoteByBudget(bi);
         HashMap<String, ArrayList<PayNoteItem>> hm_ret = new HashMap<>();
+
         for(PayNoteItem i : pays)   {
             String k = i.getTs().toString().substring(0, 10);
             ArrayList<PayNoteItem> lsp = hm_ret.get(k);
@@ -232,6 +233,11 @@ public class BudgetChartHelper extends ShowViewHelperBase {
             } else  {
                 lsp.add(i);
             }
+        }
+
+        if(0 == hm_ret.size())  {
+            String org_k = bi.getTs().toString().substring(0, 10);
+            hm_ret.put(org_k, new ArrayList<PayNoteItem>());
         }
 
         int id_col = 0;
@@ -251,9 +257,9 @@ public class BudgetChartHelper extends ShowViewHelperBase {
             BigDecimal left_budget = bi.getAmount().subtract(all_pay);
             List<SubcolumnValue> values = new ArrayList<>();
             values.add(new SubcolumnValue(left_budget.floatValue(),
-                    mHMColor.get(PreferencesUtil.SET_PAY_COLOR)));
+                    mHMColor.get(PreferencesUtil.SET_BUDGET_BALANCE_COLOR)));
             values.add(new SubcolumnValue(all_pay.floatValue(),
-                    mHMColor.get(PreferencesUtil.SET_INCOME_COLOR)));
+                    mHMColor.get(PreferencesUtil.SET_BUDGET_UESED_COLOR)));
 
             Column cd = new Column(values);
             cd.setHasLabels(true);
@@ -309,6 +315,16 @@ public class BudgetChartHelper extends ShowViewHelperBase {
     @Override
     protected void refreshView() {
         refreshAttachLayout();
+
+        // 展示条
+        mHMColor = PreferencesUtil.loadChartColor();
+        ImageView iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_remainder));
+        assert null != iv;
+        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_BUDGET_BALANCE_COLOR));
+
+        iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_used));
+        assert null != iv;
+        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_BUDGET_UESED_COLOR));
 
         /* for chart */
         mChart.setColumnChartData(mChartData);

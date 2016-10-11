@@ -39,7 +39,6 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
 
     ChartHelperBase()    {
         super();
-        mHMColor = PreferencesUtil.loadChartColor();
     }
 
     @Override
@@ -48,7 +47,8 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
         mBFilter        = false;
 
         // 展示条
-        ImageView iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_used));
+        mHMColor = PreferencesUtil.loadChartColor();
+        ImageView iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_income));
         assert null != iv;
         iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_INCOME_COLOR));
 
@@ -196,6 +196,16 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     @Override
     protected void refreshView() {
         refreshAttachLayout();
+
+        // 展示条
+        mHMColor = PreferencesUtil.loadChartColor();
+        ImageView iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_income));
+        assert null != iv;
+        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_INCOME_COLOR));
+
+        iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_pay));
+        assert null != iv;
+        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_PAY_COLOR));
 
         /* for chart */
         mChart.setColumnChartData(mChartData);

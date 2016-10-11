@@ -23,6 +23,8 @@ public class PreferencesUtil {
 
     public final static String SET_PAY_COLOR    = "pay";
     public final static String SET_INCOME_COLOR = "income";
+    public final static String SET_BUDGET_UESED_COLOR       = "budget_used";
+    public final static String SET_BUDGET_BALANCE_COLOR     = "budget_balance";
 
     /// BEGIN
     /**
@@ -69,7 +71,9 @@ public class PreferencesUtil {
 
         Resources res = ContextUtil.getInstance().getResources();
         String sb = SET_PAY_COLOR + ":" + String.valueOf(res.getColor(R.color.darkred)) +
-                " " + SET_INCOME_COLOR + ":" + String.valueOf(res.getColor(R.color.aqua));
+                " " + SET_INCOME_COLOR + ":" + String.valueOf(res.getColor(R.color.aqua)) +
+                " " + SET_BUDGET_UESED_COLOR + ":" + String.valueOf(res.getColor(R.color.darkred)) +
+                " " + SET_BUDGET_BALANCE_COLOR + ":" + String.valueOf(res.getColor(R.color.aqua));
 
         String load = param.getString(SET_CHART_COLOR, sb);
         return parseChartColors(load);

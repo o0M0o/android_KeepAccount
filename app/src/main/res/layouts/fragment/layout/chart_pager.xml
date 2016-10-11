@@ -23,7 +23,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                app:srcCompat="@color/darkred"
+                android:background="@color/aliceblue"
                 android:id="@+id/iv_pay"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
@@ -32,7 +32,7 @@
                 android:layout_alignTop="@+id/tv_income" />
 
             <TextView
-                android:layout_toLeftOf="@+id/iv_used"
+                android:layout_toLeftOf="@+id/iv_income"
                 android:layout_alignTop="@+id/tv_income"
                 android:text="@string/cn_pay"
                 android:layout_width="wrap_content"
@@ -42,8 +42,8 @@
                 android:layout_marginBottom="8dp" />
 
             <ImageView
-                app:srcCompat="@color/aqua"
-                android:id="@+id/iv_used"
+                android:background="@color/azure"
+                android:id="@+id/iv_income"
                 android:layout_alignParentRight="false"
                 android:layout_width="16dp"
                 android:layout_height="16dp"

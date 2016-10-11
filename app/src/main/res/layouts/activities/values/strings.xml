@@ -26,4 +26,6 @@
     <string name="app_setting">设置</string>
     <string name="setting_pay_color">支出</string>
     <string name="setting_income_color">收入</string>
+    <string name="setting_budget_balance_color">预算余额</string>
+    <string name="setting_budget_used_color">预算已使用</string>
 </resources>

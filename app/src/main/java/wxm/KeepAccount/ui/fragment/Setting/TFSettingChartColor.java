@@ -3,6 +3,7 @@ package wxm.KeepAccount.ui.fragment.Setting;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.BuildConfig;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,9 @@ public class TFSettingChartColor extends TFSettingBase
     private ImageView   mIVPay;
     private ImageView   mIVIncome;
 
+    private ImageView   mIVBudgetBalance;
+    private ImageView   mIVBudgetUsed;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -42,13 +46,23 @@ public class TFSettingChartColor extends TFSettingBase
 
             mIVPay = UtilFun.cast(view.findViewById(R.id.iv_pay));
             mIVIncome = UtilFun.cast(view.findViewById(R.id.iv_income));
-            assert null != mIVPay && null != mIVIncome;
+            mIVBudgetBalance = UtilFun.cast(view.findViewById(R.id.iv_budget_balance));
+            mIVBudgetUsed = UtilFun.cast(view.findViewById(R.id.iv_budget_used));
+            if(BuildConfig.DEBUG &&
+                    (null == mIVPay || null == mIVIncome || null == mIVBudgetUsed
+                            || null == mIVBudgetBalance))  {
+                throw new AssertionError("获取控件失败");
+            }
 
             mIVPay.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_PAY_COLOR));
             mIVIncome.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_INCOME_COLOR));
+            mIVBudgetBalance.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_BUDGET_BALANCE_COLOR));
+            mIVBudgetUsed.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_BUDGET_UESED_COLOR));
 
             mIVPay.setOnClickListener(this);
             mIVIncome.setOnClickListener(this);
+            mIVBudgetBalance.setOnClickListener(this);
+            mIVBudgetUsed.setOnClickListener(this);
         }
     }
 
@@ -56,6 +70,8 @@ public class TFSettingChartColor extends TFSettingBase
     public void onClick(View v) {
         final int vid = v.getId();
         switch (vid)    {
+            case R.id.iv_budget_balance :
+            case R.id.iv_budget_used :
             case R.id.iv_pay :
             case R.id.iv_income :  {
                 DlgSelectColor dsc = new DlgSelectColor();
@@ -66,12 +82,26 @@ public class TFSettingChartColor extends TFSettingBase
                         int sel_col = ds.getSelectedColor();
 
                         mBSettingDirty = true;
-                        if(R.id.iv_pay == vid)  {
-                            mIVPay.setBackgroundColor(sel_col);
-                            mHMColors.put(PreferencesUtil.SET_PAY_COLOR, sel_col);
-                        } else {
-                            mIVIncome.setBackgroundColor(sel_col);
-                            mHMColors.put(PreferencesUtil.SET_INCOME_COLOR, sel_col);
+                        switch (vid)    {
+                            case R.id.iv_pay :
+                                mIVPay.setBackgroundColor(sel_col);
+                                mHMColors.put(PreferencesUtil.SET_PAY_COLOR, sel_col);
+                                break;
+
+                            case R.id.iv_income :
+                                mIVIncome.setBackgroundColor(sel_col);
+                                mHMColors.put(PreferencesUtil.SET_INCOME_COLOR, sel_col);
+                                break;
+
+                            case R.id.iv_budget_balance :
+                                mIVBudgetBalance.setBackgroundColor(sel_col);
+                                mHMColors.put(PreferencesUtil.SET_BUDGET_BALANCE_COLOR, sel_col);
+                                break;
+
+                            case R.id.iv_budget_used :
+                                mIVBudgetUsed.setBackgroundColor(sel_col);
+                                mHMColors.put(PreferencesUtil.SET_BUDGET_UESED_COLOR, sel_col);
+                                break;
                         }
                     }
 
