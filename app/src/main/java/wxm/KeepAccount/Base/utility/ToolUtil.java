@@ -1,5 +1,7 @@
 package wxm.KeepAccount.Base.utility;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,40 @@ import cn.wxm.andriodutillib.util.UtilFun;
  */
 public class ToolUtil {
     private static final String TAG = "ToolUtil";
+
+    /**
+     * 获取包版本号
+     * @param context  包上下文
+     * @return   包版本号
+     */
+    public static int getVerCode(Context context) {
+        int verCode = -1;
+        try {
+            verCode = context.getPackageManager().getPackageInfo("wxm.KeepAccount", 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+        return verCode;
+    }
+
+
+    /**
+     * 获取包版本名
+     * @param context  包上下文
+     * @return   包版本名
+     */
+    public static String getVerName(Context context) {
+        String verName = "";
+        try {
+            verName = context.getPackageManager().getPackageInfo("wxm.KeepAccount", 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+        return verName;
+    }
+
 
 
     /**

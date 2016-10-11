@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -89,14 +90,12 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSPBudget.setAdapter(spAdapter);
 
+        RelativeLayout rl = UtilFun.cast(v.findViewById(R.id.rl_budget));
         if (0 < spAdapter.getCount()) {
-            mTVBudget.setVisibility(View.VISIBLE);
-            mSPBudget.setVisibility(View.VISIBLE);
-
+            rl.setVisibility(View.VISIBLE);
             mSPBudget.setSelection(0);
         } else {
-            mTVBudget.setVisibility(View.INVISIBLE);
-            mSPBudget.setVisibility(View.INVISIBLE);
+            rl.setVisibility(View.INVISIBLE);
         }
 
         // 填充其他数据
