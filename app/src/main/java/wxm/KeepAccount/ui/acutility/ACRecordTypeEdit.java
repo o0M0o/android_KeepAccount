@@ -7,6 +7,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +31,6 @@ import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.RecordTypeItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
-import wxm.KeepAccount.BuildConfig;
 import wxm.KeepAccount.R;
 
 /**
@@ -41,8 +42,12 @@ public class ACRecordTypeEdit extends AppCompatActivity
     private static final String NEWITEM_PAY     = "新支出类型-新支出类型说明";
     private static final String NEWITEM_INCOME  = "新收入类型-新收入类型说明";
 
+    private static final String ID             = "ID";
     private static final String TITLE          = "TITLE";
     private static final String EXPLAIN        = "EXPLAIN";
+    private static final String EDIT           = "EDIT";
+    private static final String PARA_CHANGED        = "CHANGED";
+    private static final String PARA_NOCHANGED      = "NOCHANGED";
 
     private final ArrayList<HashMap<String, String>> mLHData = new ArrayList<>();
     private ListView                mLVRecordType;
@@ -95,11 +100,13 @@ public class ACRecordTypeEdit extends AppCompatActivity
                     Snackbar.make(view, "新添加类型", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
-                    if(mType.equals(AppGobalDef.STR_RECORD_PAY))   {
-                        mLHData.add(line2hm(NEWITEM_PAY));
-                    } else  {
-                        mLHData.add(line2hm(NEWITEM_INCOME));
-                    }
+                    String[] lns = mType.equals(AppGobalDef.STR_RECORD_PAY) ?
+                                        NEWITEM_PAY.split("-") : NEWITEM_INCOME.split("-");
+                    HashMap<String, String> hm = new HashMap<>();
+                    hm.put(TITLE, lns[0]);
+                    hm.put(EXPLAIN, lns[1]);
+                    hm.put(EDIT, PARA_CHANGED);
+                    mLHData.add(hm);
 
                     mMAAdapter.notifyDataSetChanged();
                 }
@@ -114,7 +121,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
             mLVRecordType.setAdapter(mMAAdapter);
             mLVRecordType.setOnItemClickListener(this);
 
-            load_type(mType);
+            load_type();
         }
     }
 
@@ -139,6 +146,13 @@ public class ACRecordTypeEdit extends AppCompatActivity
             case R.id.recordtype_menu_sure: {
                 if(mBEditModel) {
                     mBEditModel = false;
+
+                    mMIEdit.setVisible(false);
+                    mMISure.setVisible(false);
+                    mFABAddition.setVisibility(View.INVISIBLE);
+
+                    update_type();
+                    mMAAdapter.notifyDataSetChanged();
                 } else {
                     if (ListView.INVALID_POSITION != mHotChildPos) {
                         String ty = mLHData.get(mHotChildPos).get(TITLE);
@@ -159,9 +173,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
                 if(mBEditModel) {
                     mBEditModel = false;
 
-                    mMIEdit.setVisible(true);
-                    mFABAddition.setVisibility(View.INVISIBLE);
-
+                    load_type();
                     mMAAdapter.notifyDataSetChanged();
                 } else  {
                     Intent data = new Intent();
@@ -177,6 +189,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
                     mFABAddition.setVisibility(View.VISIBLE);
 
                     mMIEdit.setVisible(false);
+                    mMISure.setVisible(true);
 
                     mMAAdapter.notifyDataSetChanged();
                 }
@@ -193,12 +206,11 @@ public class ACRecordTypeEdit extends AppCompatActivity
 
 
     /**
-     * 加载数据
-     * @param ty 数据类型
+     * 加载类型数据
      */
-    private void load_type(String ty)   {
+    private void load_type()   {
         List<RecordTypeItem> ls;
-        if(ty.equals(AppGobalDef.STR_RECORD_PAY))   {
+        if(mType.equals(AppGobalDef.STR_RECORD_PAY))   {
             ls = AppModel.getRecordTypeUtility().getAllPayItem();
             this.setTitle(R.string.title_acrt_pay);
         }
@@ -210,32 +222,48 @@ public class ACRecordTypeEdit extends AppCompatActivity
         mLHData.clear();
         HashMap<String, String> hm;
         for(RecordTypeItem ln : ls)   {
-            hm = line2hm(ln.getType());
+            hm = new HashMap<>();
+            hm.put(TITLE, ln.getType());
+            hm.put(EXPLAIN, ln.getNote());
+            hm.put(EDIT, PARA_NOCHANGED);
+            hm.put(ID, String.valueOf(ln.get_id()));
             mLHData.add(hm);
         }
 
         mMAAdapter.notifyDataSetChanged();
     }
 
-
     /**
-     * 把字符串(生活费-tv-生活开销)转换为item
-     * @param ln 待转换字符串
-     * @return item信息
+     * 更新类型数据
+     * 把当前的数据添加/更新到数据库中，然后再加载回来
      */
-    private HashMap<String, String> line2hm(String ln)  {
-        String[] sln =  ln.split("-");
-        if(BuildConfig.DEBUG && (2 != sln.length)) {
-            throw new AssertionError();
+    private void update_type() {
+        String rt = mType.equals(AppGobalDef.STR_RECORD_PAY) ? RecordTypeItem.DEF_PAY
+                                    : RecordTypeItem.DEF_INCOME;
+        for(HashMap<String, String> i : mLHData)    {
+            String id = i.get(ID);
+            if(UtilFun.StringIsNullOrEmpty(id)) {
+                RecordTypeItem ri = new RecordTypeItem();
+                ri.setType(i.get(TITLE));
+                ri.setNote(i.get(EXPLAIN));
+                ri.setItemType(rt);
+
+                AppModel.getRecordTypeUtility().addItem(ri);
+            } else  {
+                if(i.get(EDIT).equals(PARA_CHANGED))    {
+                    RecordTypeItem ri = new RecordTypeItem();
+                    ri.setType(i.get(TITLE));
+                    ri.setNote(i.get(EXPLAIN));
+                    ri.setItemType(rt);
+                    ri.set_id(Integer.parseInt(i.get(ID)));
+
+                    AppModel.getRecordTypeUtility().modifyItem(ri);
+                }
+            }
         }
 
-        HashMap<String, String> hm = new HashMap<>();
-        hm.put(TITLE, sln[0]);
-        hm.put(EXPLAIN, sln[1]);
-
-        return hm;
+        load_type();
     }
-
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -285,7 +313,7 @@ public class ACRecordTypeEdit extends AppCompatActivity
                 ViewSwitcher vs = (ViewSwitcher)v.findViewById(R.id.lvvs_switcher);
                 assert vs != null;
 
-                Map<String, ?> hm = mSelfData.get(position);
+                final Map<String, String> hm = UtilFun.cast(mSelfData.get(position));
                 if(!mBEditModel) {
                     vs.setDisplayedChild(0);
                 } else {
@@ -293,10 +321,42 @@ public class ACRecordTypeEdit extends AppCompatActivity
                     String info = UtilFun.cast(hm.get(TITLE));
                     EditText et = (EditText)vs.getCurrentView().findViewById(R.id.lvet_title);
                     et.setText(info);
+                    et.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            //Log.i(TAG, "changed to : " + s.toString());
+                            hm.put(EDIT, PARA_CHANGED);
+                            hm.put(TITLE, s.toString());
+                        }
+                    });
 
                     String explain = UtilFun.cast(hm.get(EXPLAIN));
                     EditText exet = (EditText)vs.getCurrentView().findViewById(R.id.lvet_explain);
                     exet.setText(explain);
+                    exet.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            hm.put(EDIT, PARA_CHANGED);
+                            hm.put(EXPLAIN, s.toString());
+                        }
+                    });
                 }
             }
 

@@ -91,7 +91,7 @@ public class AppModel {
      */
     public void ClearDB()   {
         try {
-            mDBHelper.getUsrItemREDao().deleteBuilder().delete();
+            //mDBHelper.getUsrItemREDao().deleteBuilder().delete();
             mDBHelper.getPayDataREDao().deleteBuilder().delete();
             mDBHelper.getIncomeDataREDao().deleteBuilder().delete();
             mDBHelper.getRTItemREDao().deleteBuilder().delete();

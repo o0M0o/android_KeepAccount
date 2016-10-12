@@ -1,14 +1,18 @@
 package wxm.KeepAccount.ui.fragment.Setting;
 
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACSetting;
 
@@ -48,6 +52,38 @@ public class TFSettingMain extends TFSettingBase {
                     toPageByIdx(ACSetting.PAGE_IDX_CHART_COLOR);
                 }
             });
+
+            rl = UtilFun.cast(view.findViewById(R.id.rl_reformat_data));
+            assert null != rl;
+            rl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Dialog alertDialog = new AlertDialog.Builder(getContext()).
+                            setTitle("清除所有数据!").
+                            setMessage("此操作不能恢复，是否继续操作!").
+                            setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    AppModel.getInstance().ClearDB();
+                                }
+                            }).
+                            setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            }).
+                            create();
+                    alertDialog.show();
+                }
+            });
+
+            rl = UtilFun.cast(view.findViewById(R.id.rl_remind));
+            assert null != rl;
+            setLayoutVisible(rl, View.INVISIBLE);
+
+            rl = UtilFun.cast(view.findViewById(R.id.rl_share_app));
+            assert null != rl;
+            setLayoutVisible(rl, View.INVISIBLE);
         }
     }
 
@@ -56,5 +92,25 @@ public class TFSettingMain extends TFSettingBase {
         if(mBSettingDirty)  {
             mBSettingDirty = false;
         }
+    }
+
+
+    /**
+     * 设置layout可见性
+     * 仅调整可见性，其它设置保持不变
+     * @param visible  若为 :
+     *                  1. {@code View.INVISIBLE}, 不可见
+     *                  2. {@code View.VISIBLE}, 可见
+     */
+    private void setLayoutVisible(RelativeLayout rl, int visible)    {
+        int w = RelativeLayout.LayoutParams.MATCH_PARENT;
+        int h = 0;
+        if(View.INVISIBLE != visible)
+            h = RelativeLayout.LayoutParams.WRAP_CONTENT;
+
+        ViewGroup.LayoutParams param = rl.getLayoutParams();
+        param.width = w;
+        param.height = h;
+        rl.setLayoutParams(param);
     }
 }

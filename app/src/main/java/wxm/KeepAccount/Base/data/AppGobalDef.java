@@ -5,20 +5,13 @@ package wxm.KeepAccount.Base.data;
  * Created by 123 on 2016/5/6.
  */
 public class AppGobalDef {
-    static public final String ITEM_TITLE   = "ItemTitle";
-    static public final String ITEM_TEXT    = "ItemText";
-    static public final String ITEM_ID      = "ItemID";
-    static public final String ITEM_TYPE    = "ItemType";
-
     static public final String STR_RECORD_PAY       = "record_pay";
     static public final String STR_RECORD_INCOME    = "record_income";
-    static public final String CNSTR_RECORD_PAY       = "支出";
-    static public final String CNSTR_RECORD_INCOME    = "收入";
 
     static public final String STR_RECORD_DATE      = "record_date";
     static public final String STR_RECORD_TYPE      = "record_type";
 
-    static public final String STR_PWD_PAD = "JkpYkhiayh@#$_)(";
+    static final String STR_PWD_PAD = "JkpYkhiayh@#$_)(";
 
     static public final int INTRET_RECORD_ADD       = 1000;
     static public final int INTRET_RECORD_MODIFY    = 1001;

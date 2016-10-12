@@ -74,6 +74,11 @@ public class ACSetting extends AppCompatActivity {
                                 create();
                         alertDialog.show();
                     }
+                } else  {
+                    int ret_data = AppGobalDef.INTRET_SURE;
+                    Intent data = new Intent();
+                    setResult(ret_data, data);
+                    finish();
                 }
             }
             break;
@@ -83,7 +88,6 @@ public class ACSetting extends AppCompatActivity {
                     change_page(PAGE_IDX_MAIN);
                 } else {
                     int ret_data = AppGobalDef.INTRET_GIVEUP;
-
                     Intent data = new Intent();
                     setResult(ret_data, data);
                     finish();

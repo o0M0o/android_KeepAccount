@@ -28,7 +28,9 @@
             android:background="@color/antiquewhite"
             android:id="@+id/iv_pay"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="140dp" />
+            android:layout_marginRight="140dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -53,10 +55,12 @@
             android:layout_centerVertical="true"
             android:layout_width="64dp"
             android:layout_height="32dp"
-            android:background="@color/aliceblue"
+            android:background="@color/aquamarine"
             android:id="@+id/iv_income"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="140dp" />
+            android:layout_marginRight="140dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -81,10 +85,12 @@
             android:layout_centerVertical="true"
             android:layout_width="64dp"
             android:layout_height="32dp"
-            android:background="@color/aliceblue"
+            android:background="@color/brown"
             android:id="@+id/iv_budget_balance"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="140dp" />
+            android:layout_marginRight="140dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -109,10 +115,12 @@
             android:layout_centerVertical="true"
             android:layout_width="64dp"
             android:layout_height="32dp"
-            android:background="@color/aliceblue"
+            android:background="@color/colorPrimaryDark"
             android:id="@+id/iv_budget_used"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="140dp" />
+            android:layout_marginRight="140dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp" />
     </RelativeLayout>
 
 </GridLayout>

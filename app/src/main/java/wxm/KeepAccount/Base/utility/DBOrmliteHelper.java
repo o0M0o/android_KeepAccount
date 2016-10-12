@@ -163,19 +163,13 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         Resources res = ContextUtil.getInstance().getResources();
         String[] type = res.getStringArray(R.array.payinfo);
         for(String ln : type)   {
-            RecordTypeItem ri = new RecordTypeItem();
-            ri.setItemType(RecordTypeItem.DEF_PAY);
-            ri.setType(ln);
-
+            RecordTypeItem ri = line2item(RecordTypeItem.DEF_PAY, ln);
             redao.create(ri);
         }
 
         type = res.getStringArray(R.array.incomeinfo);
         for(String ln : type)   {
-            RecordTypeItem ri = new RecordTypeItem();
-            ri.setItemType(RecordTypeItem.DEF_INCOME);
-            ri.setType(ln);
-
+            RecordTypeItem ri = line2item(RecordTypeItem.DEF_INCOME, ln);
             redao.create(ri);
         }
 
@@ -184,6 +178,26 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
 
         if(BuildConfig.FILL_TESTDATA)
             AddTestData();
+    }
+
+
+    /**
+     * 把字符串(生活费-生活开销)转换为item
+     * @param type  记录类型的类型
+     * @param ln    待转换字符串
+     * @return  记录类型数据
+     */
+    private RecordTypeItem line2item(String type, String ln)  {
+        String[] sln =  ln.split("-");
+        if(BuildConfig.DEBUG && (2 != sln.length)) {
+            throw new AssertionError();
+        }
+
+        RecordTypeItem ri = new RecordTypeItem();
+        ri.setItemType(type);
+        ri.setType(sln[0]);
+        ri.setNote(sln[1]);
+        return ri;
     }
 
 
