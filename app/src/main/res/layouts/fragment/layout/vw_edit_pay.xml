@@ -2,10 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@color/grey_1">
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/til_reason"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:layout_alignParentTop="false"
         android:layout_alignParentStart="true"
         android:layout_marginTop="4dp"
@@ -25,6 +28,8 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:id="@+id/til_date"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/til_reason"
@@ -46,6 +51,8 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:id="@+id/til_amount"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/til_date"
@@ -70,6 +77,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp">
         <TextView
@@ -97,6 +106,8 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:id="@+id/til_note"
         android:layout_alignParentStart="true"
         android:layout_below="@id/rl_budget"

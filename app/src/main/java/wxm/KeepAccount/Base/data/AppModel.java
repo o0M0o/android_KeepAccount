@@ -94,7 +94,7 @@ public class AppModel {
             //mDBHelper.getUsrItemREDao().deleteBuilder().delete();
             mDBHelper.getPayDataREDao().deleteBuilder().delete();
             mDBHelper.getIncomeDataREDao().deleteBuilder().delete();
-            mDBHelper.getRTItemREDao().deleteBuilder().delete();
+            //mDBHelper.getRTItemREDao().deleteBuilder().delete();
             mDBHelper.getRemindREDao().deleteBuilder().delete();
         }catch (SQLException e) {
             Log.e(TAG, UtilFun.ExceptionToString(e));

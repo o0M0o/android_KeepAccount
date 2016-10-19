@@ -11,7 +11,7 @@
     <application
         android:name=".Base.utility.ContextUtil"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_keepaccount_launcher"
+        android:icon="@drawable/ic_keepaccount_app"
         android:label="@string/cn_keepaccount_applabel"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"

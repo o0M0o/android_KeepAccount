@@ -23,11 +23,10 @@ android {
         applicationId "com.wxm.keepaccount"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 6
-        versionName "1.06"
+        versionCode 8
+        versionName "1.08"
         signingConfig signingConfigs.defkey
     }
-
 
     sourceSets {
         main {
@@ -42,7 +41,6 @@ android {
                 ]
         }
     }
-
 
 
     buildTypes {

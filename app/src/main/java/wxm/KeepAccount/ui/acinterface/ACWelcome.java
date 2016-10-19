@@ -10,10 +10,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -75,72 +76,10 @@ public class ACWelcome extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
-        if(v instanceof Button)     {
-            Button vb = UtilFun.cast(v);
-            String hv = vb.getText().toString();
-            Log.i(TAG, "onClick, view_id = " + id + ", button name = " + hv);
-            switch (hv)     {
-                case ActionHelper.ACT_LOOK_BUDGET :
-                case ActionHelper.ACT_LOOK_DATA :   {
-                    Intent intent = new Intent(this, ACNoteShow.class);
-                    startActivityForResult(intent, 1);
-                }
-                break;
-
-                case ActionHelper.ACT_ADD_BUDGET :  {
-                    Intent intent = new Intent(this, ACBudgetEdit.class);
-                    startActivityForResult(intent, 1);
-                }
-                break;
-
-                case ActionHelper.ACT_ADD_DATA: {
-                    Intent intent = new Intent(v.getContext(), ACNoteEdit.class);
-                    intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
-
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTimeInMillis(System.currentTimeMillis());
-                    intent.putExtra(AppGobalDef.STR_RECORD_DATE,
-                            String.format(Locale.CHINA ,"%d-%02d-%02d"
-                                    ,cal.get(Calendar.YEAR)
-                                    ,cal.get(Calendar.MONTH) + 1
-                                    ,cal.get(Calendar.DAY_OF_MONTH)));
-
-                    startActivityForResult(intent, 1);
-                }
-                break;
-
-                case ActionHelper.ACT_LOGOUT :      {
-                    int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
-
-                    Intent data = new Intent();
-                    setResult(ret_data, data);
-                    finish();
-                }
-                break;
-
-                case ActionHelper.ACT_ADD_REMIND :  {
-                    Intent intent = new Intent(this, ACRemindEdit.class);
-                    startActivityForResult(intent, 1);
-                }
-                break;
-
-                case CN_SETTING :  {
-                    //Toast.makeText(this, CN_SETTING, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(this, ACSetting.class);
-                    startActivityForResult(intent, 1);
-                }
-                break;
-
-                case CN_CHANNEL :  {
-                    //Toast.makeText(this, CN_CHANNEL, Toast.LENGTH_SHORT).show();
-                    DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
-                    DlgSelectChannel dlg = new DlgSelectChannel();
-                    dlg.setHotChannel(dapt.getCurAction());
-                    dlg.show(getFragmentManager(), "选择频道");
-                }
-                break;
-
+        if(v instanceof RelativeLayout) {
+            TextView tv = UtilFun.cast(v.findViewById(R.id.tv_name));
+            if(null != tv)  {
+                do_click(tv.getText().toString());
             }
         }
     }
@@ -212,6 +151,75 @@ public class ACWelcome extends AppCompatActivity
         //Toast.makeText(this, "you chose cancle", Toast.LENGTH_SHORT).show();
     }
     // END FOR DIALOG
+
+    /**
+     * 执行onclick
+     * @param act  onclick的动作
+     */
+    private void do_click(String act)   {
+        switch (act)     {
+            case ActionHelper.ACT_LOOK_BUDGET :
+            case ActionHelper.ACT_LOOK_DATA :   {
+                Intent intent = new Intent(this, ACNoteShow.class);
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+            case ActionHelper.ACT_ADD_BUDGET :  {
+                Intent intent = new Intent(this, ACBudgetEdit.class);
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+            case ActionHelper.ACT_ADD_DATA: {
+                Intent intent = new Intent(this, ACNoteEdit.class);
+                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
+                        String.format(Locale.CHINA ,"%d-%02d-%02d"
+                                ,cal.get(Calendar.YEAR)
+                                ,cal.get(Calendar.MONTH) + 1
+                                ,cal.get(Calendar.DAY_OF_MONTH)));
+
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+            case ActionHelper.ACT_LOGOUT :      {
+                int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
+
+                Intent data = new Intent();
+                setResult(ret_data, data);
+                finish();
+            }
+            break;
+
+            case ActionHelper.ACT_ADD_REMIND :  {
+                Intent intent = new Intent(this, ACRemindEdit.class);
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+            case CN_SETTING :  {
+                //Toast.makeText(this, CN_SETTING, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, ACSetting.class);
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+            case CN_CHANNEL :  {
+                //Toast.makeText(this, CN_CHANNEL, Toast.LENGTH_SHORT).show();
+                DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
+                DlgSelectChannel dlg = new DlgSelectChannel();
+                dlg.setHotChannel(dapt.getCurAction());
+                dlg.show(getFragmentManager(), "选择频道");
+            }
+            break;
+        }
+    }
+
 
     /**
      * 初始化activity

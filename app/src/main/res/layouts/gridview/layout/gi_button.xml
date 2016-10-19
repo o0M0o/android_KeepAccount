@@ -15,6 +15,18 @@
         android:contentDescription="action hint">
     </ImageView>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/tv_name"
+        android:layout_below="@+id/iv_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:paddingBottom="6dp" />
+
+    <!--
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
@@ -32,4 +44,5 @@
         android:paddingTop="1dp"
         android:paddingLeft="2dp"
         android:paddingRight="2dp" />
+        -->
 </RelativeLayout>
