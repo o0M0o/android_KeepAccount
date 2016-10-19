@@ -81,6 +81,9 @@ public class ACWelcome extends AppCompatActivity
             if(null != tv)  {
                 do_click(tv.getText().toString());
             }
+        } else if(v instanceof Button)  {
+            Button bt = UtilFun.cast(v);
+            do_click(bt.getText().toString());
         }
     }
 
