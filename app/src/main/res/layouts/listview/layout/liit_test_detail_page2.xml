@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="64dp">
+
+    <RelativeLayout
+        android:id="@+id/rl_left"
+        android:layout_alignParentLeft="true"
+        android:layout_width="72dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_day_number"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/black"
+            android:text="29"
+            android:textSize="24sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_day"
+            android:text="日"
+            android:textColor="@color/dimgrey"
+            android:textSize="12sp"
+            android:layout_alignBottom="@id/tv_day_number"
+            android:layout_toRightOf="@id/tv_day_number"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_day_in_week"
+            android:layout_alignLeft="@id/tv_day_number"
+            android:layout_below="@id/tv_day_number"
+            android:layout_marginTop="1dp"
+            android:textColor="@color/dimgrey"
+            android:text="星期五"
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_middle"
+        android:layout_toRightOf="@id/rl_left"
+        android:layout_width="20dp"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/iv_tag"
+            android:layout_centerInParent="true"
+            android:scaleType="fitXY"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            app:srcCompat="@drawable/ic_show_income" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_right"
+        android:layout_toRightOf="@id/rl_middle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_record_type"
+            android:textSize="18sp"
+            android:text="其它 > 其它"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_amount"
+            android:textSize="18sp"
+            android:text="+124.76"
+            android:textColor="@color/darkred"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_marginTop="4dp"
+            android:textSize="12sp"
+            android:text="12:04"
+            android:layout_below="@id/tv_record_type"
+            android:layout_alignLeft="@id/tv_record_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/right_arrow" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

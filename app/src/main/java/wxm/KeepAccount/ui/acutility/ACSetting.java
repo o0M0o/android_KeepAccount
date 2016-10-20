@@ -73,6 +73,8 @@ public class ACSetting extends AppCompatActivity {
                                 }).
                                 create();
                         alertDialog.show();
+                    } else  {
+                        change_page(PAGE_IDX_MAIN);
                     }
                 } else  {
                     int ret_data = AppGobalDef.INTRET_SURE;

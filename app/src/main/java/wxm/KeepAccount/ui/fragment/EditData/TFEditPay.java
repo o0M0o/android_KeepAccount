@@ -311,23 +311,22 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                     datePicker.init(cal.get(Calendar.YEAR),
                             cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), null);
 
-                    final EditText et_date = UtilFun.cast(v_self.findViewById(R.id.ar_et_date));
-                    assert et_date != null;
-                    final int inType = et_date.getInputType();
-                    et_date.setInputType(InputType.TYPE_NULL);
-                    et_date.onTouchEvent(event);
-                    et_date.setInputType(inType);
-                    et_date.setSelection(et_date.getText().length());
+                    final int inType = mETDate.getInputType();
+                    mETDate.setInputType(InputType.TYPE_NULL);
+                    mETDate.onTouchEvent(event);
+                    mETDate.setInputType(inType);
+                    mETDate.setSelection(mETDate.getText().length());
 
                     builder.setTitle("选取支出日期");
                     builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            et_date.setText(String.format(Locale.CHINA, "%d-%02d-%02d",
+                            mETDate.setText(String.format(Locale.CHINA, "%d-%02d-%02d %02d:%02d:%02d",
                                     datePicker.getYear(),
                                     datePicker.getMonth() + 1,
-                                    datePicker.getDayOfMonth()));
-                            et_date.requestFocus();
+                                    datePicker.getDayOfMonth(),
+                                    12, 5, 30));
+                            mETDate.requestFocus();
 
                             dialog.cancel();
                         }
