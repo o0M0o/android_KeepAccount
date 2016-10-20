@@ -209,7 +209,7 @@ public class MonthlyLVNewHelper extends ListViewBase {
         map.put(SelfAdapter.ITEM_TYPE, SelfAdapter.ITEM_MONTH);
         map.put(SelfAdapter.SIMPLE_SHOW, tag);
         map.put(SelfAdapter.ITEM_BACK_COLOR,
-                String.valueOf(getRootActivity().getResources().getColor(R.color.white)));
+                String.valueOf(getRootActivity().getResources().getColor(R.color.azure)));
         mMainPara.add(map);
 
         // for days in month
@@ -262,7 +262,7 @@ public class MonthlyLVNewHelper extends ListViewBase {
                 map.put(SelfAdapter.ITEM_TYPE, SelfAdapter.ITEM_PAY);
                 map.put(SelfAdapter.RECORD_INFO, pi.getInfo());
                 map.put(SelfAdapter.ARISE_AMOUNT,
-                        String.format(Locale.CHINA, "-%.02f", pi.getVal()));
+                        String.format(Locale.CHINA, "- %.02f", pi.getVal()));
             } else {
                 IncomeNoteItem ii = UtilFun.cast(r);
                 ts = ii.getTs();
@@ -270,7 +270,7 @@ public class MonthlyLVNewHelper extends ListViewBase {
                 map.put(SelfAdapter.ITEM_TYPE, SelfAdapter.ITEM_INCOME);
                 map.put(SelfAdapter.RECORD_INFO, ii.getInfo());
                 map.put(SelfAdapter.ARISE_AMOUNT,
-                        String.format(Locale.CHINA, "-%.02f", ii.getVal()));
+                        String.format(Locale.CHINA, "+ %.02f", ii.getVal()));
             }
 
             Calendar day = Calendar.getInstance();
