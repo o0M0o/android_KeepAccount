@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -310,7 +311,8 @@ public class MonthlyLVNewHelper extends ListViewBase {
      *   -- 收入项
      *   -- 支出项
      */
-    private class SelfAdapter extends SimpleAdapter {
+    private class SelfAdapter extends SimpleAdapter
+                    implements View.OnClickListener {
         private final static String TAG = "SelfAdapter";
 
         final static String  ITEM_TAG   = "item_tag";
@@ -353,6 +355,7 @@ public class MonthlyLVNewHelper extends ListViewBase {
             if(null != v)   {
                 HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 v.setBackgroundColor(Integer.parseInt(hm.get(ITEM_BACK_COLOR)));
+                v.setOnClickListener(this);
 
                 RelativeLayout rl_month = UtilFun.cast(v.findViewById(R.id.lo_month));
                 RelativeLayout rl_income = UtilFun.cast(v.findViewById(R.id.lo_income));
@@ -443,6 +446,17 @@ public class MonthlyLVNewHelper extends ListViewBase {
             param.width = rl.getWidth();
             param.height = h;
             rl.setLayoutParams(param);
+        }
+
+        @Override
+        public void onClick(View v) {
+            ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
+            int pos = lv.getPositionForView(v);
+            if(ListView.INVALID_POSITION != pos) {
+                Toast.makeText(getRootActivity(),
+                        "invoke click at " + pos,
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
