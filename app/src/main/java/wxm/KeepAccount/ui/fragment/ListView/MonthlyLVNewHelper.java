@@ -2,19 +2,14 @@ package wxm.KeepAccount.ui.fragment.ListView;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.ViewSwitcher;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -211,7 +206,7 @@ public class MonthlyLVNewHelper extends ListViewBase {
         // for monthly tag
         HashMap<String, String> map = new HashMap<>();
         map.put(SelfAdapter.ITEM_TAG, tag);
-        map.put(SelfAdapter.ITEM_TYPE, SelfAdapter.ITEM_SIMPLE);
+        map.put(SelfAdapter.ITEM_TYPE, SelfAdapter.ITEM_MONTH);
         map.put(SelfAdapter.SIMPLE_SHOW, tag);
         map.put(SelfAdapter.ITEM_BACK_COLOR,
                 String.valueOf(getRootActivity().getResources().getColor(R.color.white)));
@@ -264,7 +259,7 @@ public class MonthlyLVNewHelper extends ListViewBase {
                 PayNoteItem pi = UtilFun.cast(r);
                 ts = pi.getTs();
 
-                map.put(SelfAdapter.DATA_TYPE, SelfAdapter.DATA_PAY);
+                map.put(SelfAdapter.ITEM_TYPE, SelfAdapter.ITEM_PAY);
                 map.put(SelfAdapter.RECORD_INFO, pi.getInfo());
                 map.put(SelfAdapter.ARISE_AMOUNT,
                         String.format(Locale.CHINA, "-%.02f", pi.getVal()));
@@ -272,7 +267,7 @@ public class MonthlyLVNewHelper extends ListViewBase {
                 IncomeNoteItem ii = UtilFun.cast(r);
                 ts = ii.getTs();
 
-                map.put(SelfAdapter.DATA_TYPE, SelfAdapter.DATA_INCOME);
+                map.put(SelfAdapter.ITEM_TYPE, SelfAdapter.ITEM_INCOME);
                 map.put(SelfAdapter.RECORD_INFO, ii.getInfo());
                 map.put(SelfAdapter.ARISE_AMOUNT,
                         String.format(Locale.CHINA, "-%.02f", ii.getVal()));
@@ -286,11 +281,12 @@ public class MonthlyLVNewHelper extends ListViewBase {
             }
 
             String color = String.valueOf(getRootActivity().getResources().getColor(
-                                            0 == pos% 2 ? R.color.grey_2 : R.color.grey_3));
+                                            0 == pos ?
+                                                R.color.grey_4
+                                                : 0 == pos% 2 ? R.color.grey_2 : R.color.grey_3));
 
             map.put(SelfAdapter.ITEM_BACK_COLOR, color);
             map.put(SelfAdapter.ITEM_TAG, tag);
-            map.put(SelfAdapter.ITEM_TYPE, SelfAdapter.ITEM_DETAIL);
             map.put(SelfAdapter.ARISE_TIME,
                         String.format(Locale.CHINA, "%02d:%02d",
                             day.get(Calendar.HOUR_OF_DAY), day.get(Calendar.MINUTE)));
@@ -310,6 +306,9 @@ public class MonthlyLVNewHelper extends ListViewBase {
 
     /**
      * 首级adapter
+     *   -- 月度项
+     *   -- 收入项
+     *   -- 支出项
      */
     private class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
@@ -318,13 +317,10 @@ public class MonthlyLVNewHelper extends ListViewBase {
 
         final static String  ITEM_BACK_COLOR   = "item_back_color";
 
-        final static String  ITEM_TYPE   = "item_type";
-        final static String  ITEM_SIMPLE = "simple";
-        final static String  ITEM_DETAIL = "detail";
-
-        final static String  DATA_TYPE      = "data_type";
-        final static String  DATA_INCOME    = "data_income";
-        final static String  DATA_PAY       = "data_pay";
+        final static String  ITEM_TYPE      = "item_type";
+        final static String  ITEM_MONTH     = "item_month";
+        final static String  ITEM_PAY       = "item_pay";
+        final static String  ITEM_INCOME    = "item_income";
 
         final static String  SIMPLE_SHOW   = "simple_show";
 
@@ -358,77 +354,95 @@ public class MonthlyLVNewHelper extends ListViewBase {
                 HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 v.setBackgroundColor(Integer.parseInt(hm.get(ITEM_BACK_COLOR)));
 
-                ViewSwitcher vs = UtilFun.cast(v.findViewById(R.id.vs_page));
-                ToolUtil.throwExIf(null == vs);
+                RelativeLayout rl_month = UtilFun.cast(v.findViewById(R.id.lo_month));
+                RelativeLayout rl_income = UtilFun.cast(v.findViewById(R.id.lo_income));
+                RelativeLayout rl_pay = UtilFun.cast(v.findViewById(R.id.lo_pay));
+                String it = hm.get(ITEM_TYPE);
+                switch (it)     {
+                    case ITEM_MONTH :   {
+                        setLayoutVisible(rl_income, View.INVISIBLE);
+                        setLayoutVisible(rl_pay, View.INVISIBLE);
+                        init_month(rl_month, hm);
+                    }
+                    break;
 
-                if(ITEM_SIMPLE.equals(hm.get(ITEM_TYPE)))   {
-                    vs.setDisplayedChild(0);
-                    initSimpleItem(v, hm);
-                } else  {
-                    vs.setDisplayedChild(1);
-                    initDetailItem(v, hm);
+                    case ITEM_PAY :   {
+                        setLayoutVisible(rl_month, View.INVISIBLE);
+                        setLayoutVisible(rl_income, View.INVISIBLE);
+                        init_pay(rl_pay, hm);
+                    }
+                    break;
+
+                    case ITEM_INCOME :   {
+                        setLayoutVisible(rl_month, View.INVISIBLE);
+                        setLayoutVisible(rl_pay, View.INVISIBLE);
+                        init_income(rl_income, hm);
+                    }
+                    break;
                 }
             }
 
             return v;
         }
 
-        private void initSimpleItem(View v, HashMap<String, String> hm_data) {
-            TextView tv = UtilFun.cast(v.findViewById(R.id.tv_show));
+        private void init_month(RelativeLayout rl, HashMap<String, String> hm)  {
+            TextView tv = UtilFun.cast(rl.findViewById(R.id.tv_show));
             ToolUtil.throwExIf(null == tv);
 
-            tv.setText(hm_data.get(SIMPLE_SHOW));
+            tv.setText(hm.get(SelfAdapter.SIMPLE_SHOW));
         }
 
-        private void initDetailItem(View v, HashMap<String, String> hm_data) {
-            Resources res = getRootActivity().getResources();
-            boolean b_show_day = !UtilFun.StringIsNullOrEmpty(hm_data.get(DAY_NUMBER));
-            TextView tv = UtilFun.cast(v.findViewById(R.id.tv_day_number));
-            ToolUtil.throwExIf(null == tv);
-            if(b_show_day)
-                tv.setText(hm_data.get(DAY_NUMBER));
-            else
-                tv.setVisibility(View.INVISIBLE);
-
-            tv = UtilFun.cast(v.findViewById(R.id.tv_day_in_week));
-            ToolUtil.throwExIf(null == tv);
-            if(b_show_day)
-                tv.setText(hm_data.get(DAY_IN_WEEK));
-            else
-                tv.setVisibility(View.INVISIBLE);
-
-            if(!b_show_day) {
-                tv = UtilFun.cast(v.findViewById(R.id.tv_day));
+        private void init_income(RelativeLayout rl, HashMap<String, String> mHMData)  {
+            boolean b_show_day = !UtilFun.StringIsNullOrEmpty(mHMData.get(SelfAdapter.DAY_NUMBER));
+            TextView tv;
+            if(b_show_day) {
+                tv = UtilFun.cast(rl.findViewById(R.id.tv_day_number));
                 ToolUtil.throwExIf(null == tv);
-                tv.setVisibility(View.INVISIBLE);
-            }
+                tv.setText(mHMData.get(SelfAdapter.DAY_NUMBER));
 
-            tv = UtilFun.cast(v.findViewById(R.id.tv_record_type));
-            ToolUtil.throwExIf(null == tv);
-            tv.setText(hm_data.get(RECORD_INFO));
+                tv = UtilFun.cast(rl.findViewById(R.id.tv_day_in_week));
+                ToolUtil.throwExIf(null == tv);
+                tv.setText(mHMData.get(SelfAdapter.DAY_IN_WEEK));
 
-            tv = UtilFun.cast(v.findViewById(R.id.tv_time));
-            ToolUtil.throwExIf(null == tv);
-            tv.setText(hm_data.get(ARISE_TIME));
-
-            tv = UtilFun.cast(v.findViewById(R.id.tv_amount));
-            ToolUtil.throwExIf(null == tv);
-            tv.setText(hm_data.get(ARISE_AMOUNT));
-            if(DATA_INCOME.equals(hm_data.get(DATA_TYPE)))
-                tv.setTextColor(res.getColor(R.color.darkslategray));
-            else
-                tv.setTextColor(res.getColor(R.color.darkred));
-
-            Bitmap nicon;
-            if(DATA_PAY.equals(hm_data.get(DATA_TYPE)))   {
-                nicon = BitmapFactory.decodeResource(res, R.drawable.ic_show_pay);
             } else  {
-                nicon = BitmapFactory.decodeResource(res, R.drawable.ic_show_income);
+                RelativeLayout rll = UtilFun.cast(rl.findViewById(R.id.rl_left_show));
+                ToolUtil.throwExIf(null == rll);
+                rll.setVisibility(View.INVISIBLE);
             }
 
-            ImageView iv = UtilFun.cast(v.findViewById(R.id.iv_tag));
-            iv.setBackgroundColor(Color.TRANSPARENT);
-            iv.setImageBitmap(nicon);
+            tv = UtilFun.cast(rl.findViewById(R.id.tv_record_type));
+            ToolUtil.throwExIf(null == tv);
+            tv.setText(mHMData.get(SelfAdapter.RECORD_INFO));
+
+            tv = UtilFun.cast(rl.findViewById(R.id.tv_time));
+            ToolUtil.throwExIf(null == tv);
+            tv.setText(mHMData.get(SelfAdapter.ARISE_TIME));
+
+            tv = UtilFun.cast(rl.findViewById(R.id.tv_amount));
+            ToolUtil.throwExIf(null == tv);
+            tv.setText(mHMData.get(SelfAdapter.ARISE_AMOUNT));
+        }
+
+        private void init_pay(RelativeLayout rl, HashMap<String, String> hm)  {
+            init_income(rl, hm);
+        }
+
+        /**
+         * 设置layout可见性
+         * 仅调整可见性，其它设置保持不变
+         * @param visible  若为 :
+         *                  1. {@code View.INVISIBLE}, 不可见
+         *                  2. {@code View.VISIBLE}, 可见
+         */
+        private void setLayoutVisible(RelativeLayout rl, int visible)    {
+            int h = 0;
+            if(View.INVISIBLE != visible)
+                h = rl.getHeight();
+
+            ViewGroup.LayoutParams param = rl.getLayoutParams();
+            param.width = rl.getWidth();
+            param.height = h;
+            rl.setLayoutParams(param);
         }
     }
 }

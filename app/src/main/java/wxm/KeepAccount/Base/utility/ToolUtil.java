@@ -2,7 +2,6 @@ package wxm.KeepAccount.Base.utility;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.support.design.BuildConfig;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +64,8 @@ public class ToolUtil {
      * @param bThrow    若true则抛出异常
      */
     public static void throwExIf(boolean bThrow) throws AssertionError {
-        if(BuildConfig.DEBUG && bThrow)     {
+        //if(BuildConfig.DEBUG && bThrow)     {
+        if(bThrow)     {
             throw new AssertionError("测试版本出现异常");
         }
     }

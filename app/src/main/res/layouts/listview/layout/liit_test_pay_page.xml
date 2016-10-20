@@ -10,40 +10,45 @@
         android:layout_width="72dp"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_day_number"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="12dp"
-            android:textColor="@color/black"
-            android:text="29"
-            android:textSize="24sp"
+        <RelativeLayout
+            android:id="@+id/rl_left_show"
+            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_day"
-            android:text="日"
-            android:textColor="@color/dimgrey"
-            android:textSize="12sp"
-            android:layout_alignBottom="@id/tv_day_number"
-            android:layout_toRightOf="@id/tv_day_number"
-            android:layout_marginLeft="2dp"
-            android:layout_marginBottom="3dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_day_number"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:textColor="@color/black"
+                android:text="29"
+                android:textSize="24sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/tv_day_in_week"
-            android:layout_alignLeft="@id/tv_day_number"
-            android:layout_below="@id/tv_day_number"
-            android:layout_marginTop="1dp"
-            android:textColor="@color/dimgrey"
-            android:text="星期五"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_day"
+                android:text="日"
+                android:textColor="@color/dimgrey"
+                android:textSize="12sp"
+                android:layout_alignBottom="@id/tv_day_number"
+                android:layout_toRightOf="@id/tv_day_number"
+                android:layout_marginLeft="2dp"
+                android:layout_marginBottom="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
+            <TextView
+                android:id="@+id/tv_day_in_week"
+                android:layout_alignLeft="@id/tv_day_number"
+                android:layout_below="@id/tv_day_number"
+                android:layout_marginTop="1dp"
+                android:textColor="@color/dimgrey"
+                android:text="星期五"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
@@ -57,7 +62,7 @@
             android:scaleType="fitXY"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            app:srcCompat="@drawable/ic_show_income" />
+            app:srcCompat="@drawable/ic_show_pay" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -80,7 +85,7 @@
         <TextView
             android:id="@+id/tv_amount"
             android:textSize="18sp"
-            android:text="+124.76"
+            android:text="-124.76"
             android:textColor="@color/darkred"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
