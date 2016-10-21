@@ -13,6 +13,7 @@ import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.util.ChartUtils;
+import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
@@ -32,7 +33,7 @@ public class DailyChartHelper extends ChartHelperBase {
     @Override
     protected void reloadData() {
         ACNoteShow as = getRootActivity();
-        HashMap<String, ArrayList<Object>> ret = as.getNotesByDay();
+        HashMap<String, ArrayList<INote>> ret = as.getNotesByDay();
 
         int id_col = 0;
         List<AxisValue> axisValues = new ArrayList<>();

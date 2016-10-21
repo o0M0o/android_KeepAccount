@@ -212,6 +212,21 @@ public class ToolUtil {
 
 
     /**
+     * 设置layout可见性
+     * 仅调整可见性，其它设置保持不变
+     * @param visible  若为 :
+     *                  1. {@code View.INVISIBLE}, 不可见
+     *                  2. {@code View.VISIBLE}, 可见
+     */
+    public static void setViewGroupVisible(ViewGroup rl, int visible)    {
+        ViewGroup.LayoutParams param = rl.getLayoutParams();
+        param.width = rl.getWidth();
+        param.height = View.INVISIBLE != visible ? rl.getHeight() : 0;
+        rl.setLayoutParams(param);
+    }
+
+
+    /**
      * 次级列表视图计算列表高度有错误，使用此函数校正
      * @param listView      列表
      */

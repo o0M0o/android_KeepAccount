@@ -19,6 +19,7 @@ import java.util.List;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBudget;
@@ -43,9 +44,9 @@ public class ACNoteShow extends AppCompatActivity {
     private boolean     mBDayNoteModify = true;
     private boolean     mBMonthNoteModify = true;
     private boolean     mBYearNoteModify = true;
-    private HashMap<String, ArrayList<Object>> mHMNoteDataByDay;
-    private HashMap<String, ArrayList<Object>> mHMNoteDataByMonth;
-    private HashMap<String, ArrayList<Object>> mHMNoteDataByYear;
+    private HashMap<String, ArrayList<INote>> mHMNoteDataByDay;
+    private HashMap<String, ArrayList<INote>> mHMNoteDataByMonth;
+    private HashMap<String, ArrayList<INote>> mHMNoteDataByYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +131,7 @@ public class ACNoteShow extends AppCompatActivity {
         assert null != mTLTabs;
         mTLTabs.addTab(mTLTabs.newTab().setText(TAB_DAILY));
         mTLTabs.addTab(mTLTabs.newTab().setText(TAB_MONTHLY));
-        mTLTabs.addTab(mTLTabs.newTab().setText(TAB_MONTHLY_NEW));
+        //mTLTabs.addTab(mTLTabs.newTab().setText(TAB_MONTHLY_NEW));
         mTLTabs.addTab(mTLTabs.newTab().setText(TAB_YEARLY));
         mTLTabs.addTab(mTLTabs.newTab().setText(TAB_BUDGET));
         mTLTabs.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -158,7 +159,7 @@ public class ACNoteShow extends AppCompatActivity {
         });
     }
 
-    public HashMap<String, ArrayList<Object>> getNotesByDay()   {
+    public HashMap<String, ArrayList<INote>> getNotesByDay()   {
         if(mBDayNoteModify) {
             mHMNoteDataByDay = AppModel.getPayIncomeUtility().GetAllNotesToDay();
             mBDayNoteModify = false;
@@ -167,7 +168,7 @@ public class ACNoteShow extends AppCompatActivity {
         return mHMNoteDataByDay;
     }
 
-    public HashMap<String, ArrayList<Object>> getNotesByMonth()   {
+    public HashMap<String, ArrayList<INote>> getNotesByMonth()   {
         if(mBMonthNoteModify) {
             mHMNoteDataByMonth = AppModel.getPayIncomeUtility().GetAllNotesToMonth();
             mBMonthNoteModify = false;
@@ -176,7 +177,7 @@ public class ACNoteShow extends AppCompatActivity {
         return mHMNoteDataByMonth;
     }
 
-    public HashMap<String, ArrayList<Object>> getNotesByYear()   {
+    public HashMap<String, ArrayList<INote>> getNotesByYear()   {
         if(mBYearNoteModify) {
             mHMNoteDataByYear = AppModel.getPayIncomeUtility().GetAllNotesToYear();
             mBYearNoteModify = false;

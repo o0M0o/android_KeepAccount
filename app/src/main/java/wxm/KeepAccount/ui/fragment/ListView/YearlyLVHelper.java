@@ -23,6 +23,7 @@ import java.util.Map;
 import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
@@ -148,7 +149,7 @@ public class YearlyLVHelper extends ListViewBase {
         mHMSubPara.clear();
 
         // format output
-        HashMap<String, ArrayList<Object>> hm_data = getRootActivity().getNotesByYear();
+        HashMap<String, ArrayList<INote>> hm_data = getRootActivity().getNotesByYear();
         parseNotes(hm_data);
     }
 
@@ -194,7 +195,7 @@ public class YearlyLVHelper extends ListViewBase {
      * 解析数据
      * @param notes  待解析数据
      */
-    private void parseNotes(HashMap<String, ArrayList<Object>> notes)   {
+    private void parseNotes(HashMap<String, ArrayList<INote>> notes)   {
         mMainPara.clear();
         mHMSubPara.clear();
 
@@ -202,7 +203,7 @@ public class YearlyLVHelper extends ListViewBase {
         Collections.sort(set_k);
         for (String k : set_k) {
             String title = ToolUtil.FormatDateString(k);
-            ArrayList<Object> v = notes.get(k);
+            ArrayList<INote> v = notes.get(k);
             parseOneYear(title, v);
         }
     }
@@ -212,13 +213,13 @@ public class YearlyLVHelper extends ListViewBase {
      * @param tag       此年数据的tag
      * @param notes     此年数据
      */
-    private void parseOneYear(String tag, List<Object> notes)    {
+    private void parseOneYear(String tag, List<INote> notes)    {
         int pay_cout = 0;
         int income_cout = 0;
         BigDecimal pay_amount = BigDecimal.ZERO;
         BigDecimal income_amount = BigDecimal.ZERO;
-        HashMap<String, ArrayList<Object>> hm_data = new HashMap<>();
-        for (Object r : notes) {
+        HashMap<String, ArrayList<INote>> hm_data = new HashMap<>();
+        for (INote r : notes) {
             String h_k;
             if (r instanceof PayNoteItem) {
                 PayNoteItem pi = UtilFun.cast(r);
@@ -232,9 +233,9 @@ public class YearlyLVHelper extends ListViewBase {
                 h_k = ii.getTs().toString().substring(0, 7);
             }
 
-            ArrayList<Object> h_v = hm_data.get(h_k);
+            ArrayList<INote> h_v = hm_data.get(h_k);
             if (null == h_v) {
-                ArrayList<Object> v = new ArrayList<>();
+                ArrayList<INote> v = new ArrayList<>();
                 v.add(r);
                 hm_data.put(h_k, v);
             } else {
@@ -262,26 +263,24 @@ public class YearlyLVHelper extends ListViewBase {
      * @param tag       此月数据的tag
      * @param hm_data   此月数据
      */
-    private void parseMonths(String tag, HashMap<String, ArrayList<Object>> hm_data)    {
+    private void parseMonths(String tag, HashMap<String, ArrayList<INote>> hm_data)    {
         ArrayList<String> set_k = new ArrayList<>(hm_data.keySet());
         Collections.sort(set_k);
         LinkedList<HashMap<String, String>> cur_llhm = new LinkedList<>();
         for(String k : set_k) {
-            ArrayList<Object> notes = hm_data.get(k);
+            ArrayList<INote> notes = hm_data.get(k);
 
             int pay_cout = 0;
             int income_cout = 0;
             BigDecimal pay_amount = BigDecimal.ZERO;
             BigDecimal income_amount = BigDecimal.ZERO;
-            for (Object r : notes) {
-                if (r instanceof PayNoteItem) {
-                    PayNoteItem pi = UtilFun.cast(r);
+            for (INote r : notes) {
+                if (r.isPayNote()) {
                     pay_cout += 1;
-                    pay_amount = pay_amount.add(pi.getVal());
+                    pay_amount = pay_amount.add(r.getVal());
                 } else {
-                    IncomeNoteItem ii = UtilFun.cast(r);
                     income_cout += 1;
-                    income_amount = income_amount.add(ii.getVal());
+                    income_amount = income_amount.add(r.getVal());
                 }
             }
 

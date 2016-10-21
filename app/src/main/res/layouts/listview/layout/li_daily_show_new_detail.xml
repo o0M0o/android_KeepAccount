@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_income"
+        android:background="@color/grey_1"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+        <ImageView
+            android:id="@+id/iv_income_show"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_show_income"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/tv_income_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="工资"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="false"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@id/iv_income_show"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp" />
+
+        <TextView
+            android:id="@+id/tv_income_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="12:04"
+            android:layout_alignLeft="@id/tv_income_title"
+            android:layout_below="@id/tv_income_title"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/iv_income_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/right_arrow"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/tv_income_amount"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+ 145.75"
+            android:textColor="@color/darkslategray"
+            android:layout_toLeftOf="@id/iv_income_action"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_pay"
+        android:background="@color/grey_3"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+        <ImageView
+            android:id="@+id/iv_pay_show"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:scaleType="fitXY"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/ic_show_pay"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16dp" />
+
+        <ImageView
+            android:id="@+id/iv_pay_budget"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:scaleType="fitXY"
+            android:layout_marginBottom="6dp"
+            android:src="@drawable/ic_show_budget"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/tv_pay_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="交通费"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="false"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@id/iv_pay_show"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp" />
+
+        <TextView
+            android:id="@+id/tv_pay_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="12:04"
+            android:layout_alignLeft="@id/tv_pay_title"
+            android:layout_below="@id/tv_pay_title"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_pay_budget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/tv_pay_time"
+            android:layout_alignTop="@id/tv_pay_time"
+            android:layout_marginLeft="12dp"
+            android:text="预算 : 生活费"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/iv_pay_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/right_arrow"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/tv_pay_amount"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- 145.75"
+            android:textColor="@color/darkred"
+            android:layout_toLeftOf="@id/iv_pay_action"
+            android:textSize="16sp" />
+    </RelativeLayout>
+</LinearLayout>

@@ -22,7 +22,7 @@ import wxm.KeepAccount.Base.data.AppModel;
  * Created by 123 on 2016/5/3.
  */
 @DatabaseTable(tableName = "tbPayNote")
-public class PayNoteItem implements Parcelable {
+public class PayNoteItem implements Parcelable, INote {
     public final static String FIELD_TS         = "ts";
     public final static String FIELD_USR        = "usr_id";
     public final static String FIELD_BUDGET     = "budget_id";
@@ -49,50 +49,82 @@ public class PayNoteItem implements Parcelable {
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
     private Timestamp ts;
 
+    @Override
+    public boolean isPayNote() {
+        return true;
+    }
+
+    @Override
+    public boolean isIncomeNote() {
+        return false;
+    }
+
+    @Override
+    public PayNoteItem toPayNote() {
+        return this;
+    }
+
+    @Override
+    public IncomeNoteItem toIncomeNote() {
+        return null;
+    }
+
+    @Override
     public int getId() {
         return _id;
     }
 
+    @Override
     public void setId(int _id) {
         this._id = _id;
     }
 
+    @Override
     public String getInfo() {
         return info;
     }
 
+    @Override
     public void setInfo(String info) {
         this.info = info;
     }
 
+    @Override
     public String getNote() {
         return note;
     }
 
+    @Override
     public void setNote(String note) {
         this.note = note;
     }
 
+    @Override
     public BigDecimal getVal() {
         return val;
     }
 
+    @Override
     public void setVal(BigDecimal val) {
         this.val = val;
     }
 
+    @Override
     public Timestamp getTs() {
         return ts;
     }
 
+    @Override
     public void setTs(Timestamp tsval) {
         this.ts = tsval;
     }
 
+    @Override
     public UsrItem getUsr() {
         return usr;
     }
 
+    @Override
     public void setUsr(UsrItem usr) {
         this.usr = usr;
     }
@@ -173,10 +205,12 @@ public class PayNoteItem implements Parcelable {
         }
     }
 
+    @Override
     public BudgetItem getBudget() {
         return budget;
     }
 
+    @Override
     public void setBudget(BudgetItem bi) {
         this.budget = bi;
     }

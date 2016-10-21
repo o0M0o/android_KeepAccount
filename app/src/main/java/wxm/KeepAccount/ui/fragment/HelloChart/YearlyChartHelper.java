@@ -15,6 +15,7 @@ import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.util.ChartUtils;
+import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
@@ -34,7 +35,7 @@ public class YearlyChartHelper extends ChartHelperBase {
     protected void reloadData() {
         Resources res = getRootActivity().getResources();
         ACNoteShow as = getRootActivity();
-        HashMap<String, ArrayList<Object>> ret = as.getNotesByYear();
+        HashMap<String, ArrayList<INote>> ret = as.getNotesByYear();
 
         int id_col = 0;
         List<AxisValue> axisValues = new ArrayList<>();

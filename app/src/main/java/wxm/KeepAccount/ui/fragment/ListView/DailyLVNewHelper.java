@@ -3,9 +3,7 @@ package wxm.KeepAccount.ui.fragment.ListView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -41,9 +41,23 @@ import wxm.KeepAccount.ui.acutility.ACNoteEdit;
  * 日数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class DailyLVHelper extends ListViewBase
+public class DailyLVNewHelper extends ListViewBase
         implements OnClickListener {
-    private final static String TAG = "DailyLVHelper";
+    private final static String TAG = "DailyLVNewHelper";
+
+    /// list item data begin
+    final static String K_TITLE     = "k_title";
+    final static String K_TIME      = "k_time";
+    final static String K_BUDGET    = "k_budget";
+    final static String K_AMOUNT    = "k_amount";
+    final static String K_TAG       = "k_tag";
+    final static String K_ID        = "k_id";
+
+    final static String K_TYPE          = "k_type";
+    final static String V_TYPE_DAY      = "v_day";
+    final static String V_TYPE_PAY      = "v_pay";
+    final static String V_TYPE_INCOME   = "v_income";
+    /// list item data end
 
     // for action
     private final static int ACTION_NONE    = 0;
@@ -61,7 +75,7 @@ public class DailyLVHelper extends ListViewBase
                                     ,R.drawable.ic_delete
                                     ,R.drawable.ic_add};
 
-    public DailyLVHelper()    {
+    public DailyLVNewHelper()    {
         super();
 
         mDelPay    = new LinkedList<>();
@@ -315,37 +329,29 @@ public class DailyLVHelper extends ListViewBase
             BigDecimal income_amount = BigDecimal.ZERO;
             for (INote r : v) {
                 HashMap<String, String> map = new HashMap<>();
-                map.put(ListViewBase.SPARA_TITLE, r.getInfo());
-                map.put(ListViewBase.SPARA_ID, String.valueOf(r.getId()));
+                map.put(K_TITLE, r.getInfo());
+                map.put(K_ID, String.valueOf(r.getId()));
 
                 if (r.isPayNote()) {
-                    map.put(ListViewBase.SPARA_TAG, ListViewBase.SPARA_TAG_PAY);
+                    map.put(K_TYPE, V_TYPE_PAY);
+                    map.put(K_AMOUNT, String.format(Locale.CHINA, "- %.02f", r.getVal()));
+
+                    BudgetItem bi = r.getBudget();
+                    if(null != bi)  {
+                        map.put(K_BUDGET, String.format(Locale.CHINA, "使用预算 : %s", bi.getName()));
+                    }
 
                     pay_cout += 1;
                     pay_amount = pay_amount.add(r.getVal());
                 } else {
-                    map.put(ListViewBase.SPARA_TAG, ListViewBase.SPARA_TAG_INCOME);
+                    map.put(K_TYPE, V_TYPE_INCOME);
+                    map.put(K_AMOUNT, String.format(Locale.CHINA, "+ %.02f", r.getVal()));
 
                     income_cout += 1;
                     income_amount = income_amount.add(r.getVal());
                 }
 
-                String show;
-                BudgetItem bi = r.getBudget();
-                if(null != bi)
-                    show = String.format(Locale.CHINA, "金额 : %.02f\n使用预算 : %s",
-                            r.getVal(), bi.getName());
-                else
-                    show = String.format(Locale.CHINA, "金额 : %.02f", r.getVal());
-
-
-                String nt = r.getNote();
-                if(!UtilFun.StringIsNullOrEmpty(nt)) {
-                    show = String.format(Locale.CHINA, "%s\n备注 : %s", show ,nt);
-                }
-
-                map.put(ListViewBase.SPARA_DETAIL, show);
-                map.put(ListViewBase.MPARA_TAG, title);
+                map.put(K_TAG, title);
                 cur_llhm.add(map);
             }
 
@@ -449,11 +455,18 @@ public class DailyLVHelper extends ListViewBase
         private final static String TAG = "SelfSubAdapter";
         private final ListView        mRootView;
 
+        private Drawable    mDADelete;
+        private Drawable    mDADedit;
+
         SelfSubAdapter(Context context, ListView fv,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
-            super(context, sdata, R.layout.li_daily_show_detail, from, to);
+            super(context, sdata, R.layout.li_daily_show_new_detail, from, to);
             mRootView = fv;
+
+            Resources res = context.getResources();
+            mDADedit = res.getDrawable(R.drawable.right_arrow);
+            mDADelete = res.getDrawable(R.drawable.ic_delete);
         }
 
         @Override
@@ -471,10 +484,18 @@ public class DailyLVHelper extends ListViewBase
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
-                //Log.i(TAG, "create view at pos = " + position);
                 HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                final Resources res = v.getResources();
+                RelativeLayout rl_pay = UtilFun.cast_t(v.findViewById(R.id.rl_pay));
+                RelativeLayout rl_income = UtilFun.cast_t(v.findViewById(R.id.rl_income));
+                if(V_TYPE_PAY.equals(hm.get(K_TYPE)))   {
+                    ToolUtil.setViewGroupVisible(rl_income, View.INVISIBLE);
+                    init_pay(rl_pay, hm);
+                } else  {
+                    ToolUtil.setViewGroupVisible(rl_pay, View.INVISIBLE);
+                    init_income(rl_income, hm);
+                }
 
+                /*
                 // for action
                 ImageButton ib_action = UtilFun.cast(v.findViewById(R.id.ib_action));
                 assert null != ib_action;
@@ -484,31 +505,63 @@ public class DailyLVHelper extends ListViewBase
                     ib_action.setVisibility(View.VISIBLE);
 
                     if(ACTION_DELETE == mActionType)
-                        ib_action.setImageDrawable(res.getDrawable(R.drawable.ic_delete));
+                        ib_action.setImageDrawable(mDADelete);
                     else
-                        ib_action.setImageDrawable(res.getDrawable(R.drawable.ic_edit));
+                        ib_action.setImageDrawable(mDADedit);
 
                     ib_action.getBackground().setAlpha(0);
                     ib_action.setOnClickListener(this);
                 }
-
-                // for image & background
-                Bitmap nicon;
-                if(ListViewBase.SPARA_TAG_PAY.equals(hm.get(ListViewBase.SPARA_TAG)))   {
-                    v.setBackgroundColor(res.getColor(R.color.burlywood));
-                    nicon = BitmapFactory.decodeResource(res, R.drawable.ic_show_pay);
-                } else  {
-                    v.setBackgroundColor(res.getColor(R.color.darkseagreen));
-                    nicon = BitmapFactory.decodeResource(res, R.drawable.ic_show_income);
-                }
-
-                ImageView iv = UtilFun.cast(v.findViewById(R.id.iv_show));
-                iv.setBackgroundColor(Color.TRANSPARENT);
-                iv.setImageBitmap(nicon);
+                */
             }
 
             return v;
         }
+
+        private void init_pay(RelativeLayout rl_pay, HashMap<String, String> hd)    {
+            TextView tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_title));
+            tv.setText(hd.get(K_TITLE));
+
+            String b_name = hd.get(K_BUDGET);
+            if(!UtilFun.StringIsNullOrEmpty(b_name)) {
+                tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_budget));
+                tv.setText(b_name);
+            } else  {
+                tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_budget));
+                tv.setVisibility(View.INVISIBLE);
+
+                ImageView iv = UtilFun.cast_t(rl_pay.findViewById(R.id.iv_pay_budget));
+                iv.setVisibility(View.INVISIBLE);
+            }
+
+            tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_amount));
+            tv.setText(hd.get(K_AMOUNT));
+
+            ImageView iv = UtilFun.cast_t(rl_pay.findViewById(R.id.iv_pay_action));
+            iv.setOnClickListener(this);
+            if(ACTION_NONE == mActionType)    {
+                iv.setImageDrawable(mDADedit);
+            }   else    {
+                iv.setImageDrawable(mDADelete);
+            }
+        }
+
+        private void init_income(RelativeLayout rl_income, HashMap<String, String> hd)    {
+            TextView tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_title));
+            tv.setText(hd.get(K_TITLE));
+
+            tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_amount));
+            tv.setText(hd.get(K_AMOUNT));
+
+            ImageView iv = UtilFun.cast_t(rl_income.findViewById(R.id.iv_income_action));
+            iv.setOnClickListener(this);
+            if(ACTION_NONE == mActionType)    {
+                iv.setImageDrawable(mDADedit);
+            }   else    {
+                iv.setImageDrawable(mDADelete);
+            }
+        }
+
 
         @Override
         public void onClick(View v) {

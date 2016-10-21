@@ -13,6 +13,7 @@ import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.db.BudgetItem;
+import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.db.UsrItem;
@@ -25,21 +26,9 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
  */
 public class PayIncomeDataUtility {
     private final String    TAG = "PayIncomeDataUtility";
-    //private boolean     mPayDirty;
-    //private boolean     mIncomeDirty;
 
     PayIncomeDataUtility()  {
-        //mPayDirty = true;
-        //mIncomeDirty = true;
     }
-
-    /**
-     * 清除数据脏标签
-    public void ClearDataDirty()    {
-        mPayDirty = false;
-        mIncomeDirty = false;
-    }
-     */
 
     /**
      * 根据预算查找支出数据
@@ -89,10 +78,10 @@ public class PayIncomeDataUtility {
      * 获得当前用户所有支出/收入数据
      * @return 当前用户的所有记录
      */
-    public List<Object> GetAllNotes()   {
+    private List<INote> GetAllNotes()   {
         List<PayNoteItem> payls = GetAllPayNotes();
         List<IncomeNoteItem> incomels = GetAllIncomeNotes();
-        List<Object> objls = new LinkedList<>();
+        List<INote> objls = new LinkedList<>();
         if(null != payls)
             objls.addAll(payls);
 
@@ -107,17 +96,14 @@ public class PayIncomeDataUtility {
      * 并以 日期 --->  数据链表 方式返回数据
      * @return 日期 --->  数据链表
      */
-    public HashMap<String, ArrayList<Object>> GetAllNotesToDay()    {
-        List<Object> ret = GetAllNotes();
-        HashMap<String, ArrayList<Object>> hm_data = new HashMap<>();
-        for (Object i : ret) {
-            String h_k = i instanceof PayNoteItem ?
-                    ((PayNoteItem) i).getTs().toString().substring(0, 10)
-                    : ((IncomeNoteItem) i).getTs().toString().substring(0, 10);
-
-            ArrayList<Object> h_v = hm_data.get(h_k);
+    public HashMap<String, ArrayList<INote>> GetAllNotesToDay()    {
+        List<INote> ret = GetAllNotes();
+        HashMap<String, ArrayList<INote>> hm_data = new HashMap<>();
+        for (INote i : ret) {
+            String h_k = i.getTs().toString().substring(0, 10);
+            ArrayList<INote> h_v = hm_data.get(h_k);
             if (null == h_v) {
-                ArrayList<Object> v = new ArrayList<>();
+                ArrayList<INote> v = new ArrayList<>();
                 v.add(i);
                 hm_data.put(h_k, v);
             } else {
@@ -133,17 +119,14 @@ public class PayIncomeDataUtility {
      * 并以 日期 --->  数据链表 方式返回数据
      * @return 日期 --->  数据链表
      */
-    public HashMap<String, ArrayList<Object>> GetAllNotesToMonth()    {
-        List<Object> ret = GetAllNotes();
-        HashMap<String, ArrayList<Object>> hm_data = new HashMap<>();
-        for (Object i : ret) {
-            String h_k = i instanceof PayNoteItem ?
-                    ((PayNoteItem) i).getTs().toString().substring(0, 7)
-                    : ((IncomeNoteItem) i).getTs().toString().substring(0, 7);
-
-            ArrayList<Object> h_v = hm_data.get(h_k);
+    public HashMap<String, ArrayList<INote>> GetAllNotesToMonth()    {
+        List<INote> ret = GetAllNotes();
+        HashMap<String, ArrayList<INote>> hm_data = new HashMap<>();
+        for (INote i : ret) {
+            String h_k = i.getTs().toString().substring(0, 7);
+            ArrayList<INote> h_v = hm_data.get(h_k);
             if (null == h_v) {
-                ArrayList<Object> v = new ArrayList<>();
+                ArrayList<INote> v = new ArrayList<>();
                 v.add(i);
                 hm_data.put(h_k, v);
             } else {
@@ -159,17 +142,14 @@ public class PayIncomeDataUtility {
      * 并以 日期 --->  数据链表 方式返回数据
      * @return 日期 --->  数据链表
      */
-    public HashMap<String, ArrayList<Object>> GetAllNotesToYear()    {
-        List<Object> ret = GetAllNotes();
-        HashMap<String, ArrayList<Object>> hm_data = new HashMap<>();
-        for (Object i : ret) {
-            String h_k = i instanceof PayNoteItem ?
-                    ((PayNoteItem) i).getTs().toString().substring(0, 4)
-                    : ((IncomeNoteItem) i).getTs().toString().substring(0, 4);
-
-            ArrayList<Object> h_v = hm_data.get(h_k);
+    public HashMap<String, ArrayList<INote>> GetAllNotesToYear()    {
+        List<INote> ret = GetAllNotes();
+        HashMap<String, ArrayList<INote>> hm_data = new HashMap<>();
+        for (INote i : ret) {
+            String h_k = i.getTs().toString().substring(0, 4);
+            ArrayList<INote> h_v = hm_data.get(h_k);
             if (null == h_v) {
-                ArrayList<Object> v = new ArrayList<>();
+                ArrayList<INote> v = new ArrayList<>();
                 v.add(i);
                 hm_data.put(h_k, v);
             } else {
