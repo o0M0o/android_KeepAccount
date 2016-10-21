@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
@@ -42,6 +44,8 @@ public class MonthlyLVNewHelper extends ListViewBase {
             "星期日", "星期一", "星期二","星期三",
             "星期四","星期五","星期六"};
 
+    private ListView    mLVHolder;
+
     private boolean mBSelectSubFilter = false;
     private final LinkedList<String> mLLSubFilter = new LinkedList<>();
     private final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
@@ -56,8 +60,11 @@ public class MonthlyLVNewHelper extends ListViewBase {
 
         // init ray menu
         RayMenu rayMenu = UtilFun.cast(mSelfView.findViewById(R.id.rm_show_record));
-        assert null != rayMenu;
+        ToolUtil.throwExIf(null == rayMenu);
         rayMenu.setVisibility(View.INVISIBLE);
+
+        mLVHolder = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
+        ToolUtil.throwExIf(null == mLVHolder);
 
         return mSelfView;
     }
@@ -167,10 +174,9 @@ public class MonthlyLVNewHelper extends ListViewBase {
         // update data
 
         // 设置listview adapter
-        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), mMainPara,
                 new String[]{},  new int[]{});
-        lv.setAdapter(mSNAdapter);
+        mLVHolder.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
 
@@ -206,10 +212,11 @@ public class MonthlyLVNewHelper extends ListViewBase {
     private void parseOneMonth(String tag, List<Object> notes)    {
         // for monthly tag
         HashMap<String, String> map = new HashMap<>();
-        map.put(SelfAdapter.ITEM_TAG, tag);
-        map.put(SelfAdapter.ITEM_TYPE, SelfAdapter.ITEM_MONTH);
-        map.put(SelfAdapter.SIMPLE_SHOW, tag);
-        map.put(SelfAdapter.ITEM_BACK_COLOR,
+        map.put(SelfAdapter.KEY_TAG, tag);
+        map.put(SelfAdapter.KEY_TYPE, SelfAdapter.VAL_MONTH);
+        map.put(SelfAdapter.KEY_SHOW_OR_HIDE, SelfAdapter.VAL_HIDE);
+        map.put(SelfAdapter.KEY_SIMPLE_SHOW, tag);
+        map.put(SelfAdapter.KEY_BACK_COLOR,
                 String.valueOf(getRootActivity().getResources().getColor(R.color.azure)));
         mMainPara.add(map);
 
@@ -260,25 +267,25 @@ public class MonthlyLVNewHelper extends ListViewBase {
                 PayNoteItem pi = UtilFun.cast(r);
                 ts = pi.getTs();
 
-                map.put(SelfAdapter.ITEM_TYPE, SelfAdapter.ITEM_PAY);
-                map.put(SelfAdapter.RECORD_INFO, pi.getInfo());
-                map.put(SelfAdapter.ARISE_AMOUNT,
+                map.put(SelfAdapter.KEY_TYPE, SelfAdapter.VAL_PAY);
+                map.put(SelfAdapter.KEY_RECORD_INFO, pi.getInfo());
+                map.put(SelfAdapter.KEY_ARISE_AMOUNT,
                         String.format(Locale.CHINA, "- %.02f", pi.getVal()));
             } else {
                 IncomeNoteItem ii = UtilFun.cast(r);
                 ts = ii.getTs();
 
-                map.put(SelfAdapter.ITEM_TYPE, SelfAdapter.ITEM_INCOME);
-                map.put(SelfAdapter.RECORD_INFO, ii.getInfo());
-                map.put(SelfAdapter.ARISE_AMOUNT,
+                map.put(SelfAdapter.KEY_TYPE, SelfAdapter.VAL_INCOME);
+                map.put(SelfAdapter.KEY_RECORD_INFO, ii.getInfo());
+                map.put(SelfAdapter.KEY_ARISE_AMOUNT,
                         String.format(Locale.CHINA, "+ %.02f", ii.getVal()));
             }
 
             Calendar day = Calendar.getInstance();
             day.setTimeInMillis(ts.getTime());
             if(0 == pos)    {
-                map.put(SelfAdapter.DAY_NUMBER, String.valueOf(day.get(Calendar.DAY_OF_MONTH) + 1));
-                map.put(SelfAdapter.DAY_IN_WEEK, getDayInWeek(day.get(Calendar.DAY_OF_WEEK)));
+                map.put(SelfAdapter.KEY_DAY_NUMBER, String.valueOf(day.get(Calendar.DAY_OF_MONTH) + 1));
+                map.put(SelfAdapter.KEY_DAY_IN_WEEK, getDayInWeek(day.get(Calendar.DAY_OF_WEEK)));
             }
 
             String color = String.valueOf(getRootActivity().getResources().getColor(
@@ -286,9 +293,9 @@ public class MonthlyLVNewHelper extends ListViewBase {
                                                 R.color.grey_4
                                                 : 0 == pos% 2 ? R.color.grey_2 : R.color.grey_3));
 
-            map.put(SelfAdapter.ITEM_BACK_COLOR, color);
-            map.put(SelfAdapter.ITEM_TAG, tag);
-            map.put(SelfAdapter.ARISE_TIME,
+            map.put(SelfAdapter.KEY_BACK_COLOR, color);
+            map.put(SelfAdapter.KEY_TAG, tag);
+            map.put(SelfAdapter.KEY_ARISE_TIME,
                         String.format(Locale.CHINA, "%02d:%02d",
                             day.get(Calendar.HOUR_OF_DAY), day.get(Calendar.MINUTE)));
             mMainPara.add(map);
@@ -315,22 +322,34 @@ public class MonthlyLVNewHelper extends ListViewBase {
                     implements View.OnClickListener {
         private final static String TAG = "SelfAdapter";
 
-        final static String  ITEM_TAG   = "item_tag";
+        /// for item data begin
+        final static String KEY_TAG         = "k_tag";
 
-        final static String  ITEM_BACK_COLOR   = "item_back_color";
+        // for color
+        final static String KEY_BACK_COLOR  = "k_back_color";
 
-        final static String  ITEM_TYPE      = "item_type";
-        final static String  ITEM_MONTH     = "item_month";
-        final static String  ITEM_PAY       = "item_pay";
-        final static String  ITEM_INCOME    = "item_income";
+        // for item type begin
+        final static String KEY_TYPE        = "k_type";
+        final static String VAL_MONTH       = "v_month";
+        final static String VAL_PAY         = "v_pay";
+        final static String VAL_INCOME      = "v_income";
+        // for item type end
 
-        final static String  SIMPLE_SHOW   = "simple_show";
+        // for item show_or_hide begin
+        final static String KEY_SHOW_OR_HIDE    = "k_show_or_hide";
+        final static String VAL_SHOW            = "v_show";
+        final static String VAL_HIDE            = "v_hide";
+        // for item show_or_hide end
 
-        final static String  DAY_NUMBER   = "day_number";
-        final static String  DAY_IN_WEEK  = "day_in_week";
-        final static String  ARISE_TIME   = "arise_time";
-        final static String  ARISE_AMOUNT = "arise_amount";
-        final static String  RECORD_INFO  = "record_info";
+        // for others
+        final static String KEY_SIMPLE_SHOW     = "k_simple_show";
+
+        final static String KEY_DAY_NUMBER      = "k_day_number";
+        final static String KEY_DAY_IN_WEEK     = "k_day_in_week";
+        final static String KEY_ARISE_TIME      = "k_arise_time";
+        final static String KEY_ARISE_AMOUNT    = "k_arise_amount";
+        final static String KEY_RECORD_INFO     = "k_record_info";
+        /// for item data end
 
         SelfAdapter(Context context,
                     List<? extends Map<String, ?>> mdata,
@@ -354,29 +373,29 @@ public class MonthlyLVNewHelper extends ListViewBase {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
                 HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                v.setBackgroundColor(Integer.parseInt(hm.get(ITEM_BACK_COLOR)));
+                v.setBackgroundColor(Integer.parseInt(hm.get(KEY_BACK_COLOR)));
                 v.setOnClickListener(this);
 
                 RelativeLayout rl_month = UtilFun.cast(v.findViewById(R.id.lo_month));
                 RelativeLayout rl_income = UtilFun.cast(v.findViewById(R.id.lo_income));
                 RelativeLayout rl_pay = UtilFun.cast(v.findViewById(R.id.lo_pay));
-                String it = hm.get(ITEM_TYPE);
+                String it = hm.get(KEY_TYPE);
                 switch (it)     {
-                    case ITEM_MONTH :   {
+                    case VAL_MONTH:   {
                         setLayoutVisible(rl_income, View.INVISIBLE);
                         setLayoutVisible(rl_pay, View.INVISIBLE);
                         init_month(rl_month, hm);
                     }
                     break;
 
-                    case ITEM_PAY :   {
+                    case VAL_PAY:   {
                         setLayoutVisible(rl_month, View.INVISIBLE);
                         setLayoutVisible(rl_income, View.INVISIBLE);
                         init_pay(rl_pay, hm);
                     }
                     break;
 
-                    case ITEM_INCOME :   {
+                    case VAL_INCOME:   {
                         setLayoutVisible(rl_month, View.INVISIBLE);
                         setLayoutVisible(rl_pay, View.INVISIBLE);
                         init_income(rl_income, hm);
@@ -388,24 +407,37 @@ public class MonthlyLVNewHelper extends ListViewBase {
             return v;
         }
 
+        /**
+         * 初始化“月信息”节点
+         * @param rl    father view
+         * @param hm    data for view
+         */
         private void init_month(RelativeLayout rl, HashMap<String, String> hm)  {
             TextView tv = UtilFun.cast(rl.findViewById(R.id.tv_show));
             ToolUtil.throwExIf(null == tv);
+            tv.setText(hm.get(SelfAdapter.KEY_SIMPLE_SHOW));
 
-            tv.setText(hm.get(SelfAdapter.SIMPLE_SHOW));
+            ImageView iv = UtilFun.cast(rl.findViewById(R.id.iv_show_hide));
+            ToolUtil.throwExIf(null == iv);
+            iv.setOnClickListener(this);
         }
 
+        /**
+         * 初始化“收入信息”节点
+         * @param rl            father view
+         * @param mHMData       data for view
+         */
         private void init_income(RelativeLayout rl, HashMap<String, String> mHMData)  {
-            boolean b_show_day = !UtilFun.StringIsNullOrEmpty(mHMData.get(SelfAdapter.DAY_NUMBER));
+            boolean b_show_day = !UtilFun.StringIsNullOrEmpty(mHMData.get(SelfAdapter.KEY_DAY_NUMBER));
             TextView tv;
             if(b_show_day) {
                 tv = UtilFun.cast(rl.findViewById(R.id.tv_day_number));
                 ToolUtil.throwExIf(null == tv);
-                tv.setText(mHMData.get(SelfAdapter.DAY_NUMBER));
+                tv.setText(mHMData.get(SelfAdapter.KEY_DAY_NUMBER));
 
                 tv = UtilFun.cast(rl.findViewById(R.id.tv_day_in_week));
                 ToolUtil.throwExIf(null == tv);
-                tv.setText(mHMData.get(SelfAdapter.DAY_IN_WEEK));
+                tv.setText(mHMData.get(SelfAdapter.KEY_DAY_IN_WEEK));
 
             } else  {
                 RelativeLayout rll = UtilFun.cast(rl.findViewById(R.id.rl_left_show));
@@ -415,17 +447,22 @@ public class MonthlyLVNewHelper extends ListViewBase {
 
             tv = UtilFun.cast(rl.findViewById(R.id.tv_record_type));
             ToolUtil.throwExIf(null == tv);
-            tv.setText(mHMData.get(SelfAdapter.RECORD_INFO));
+            tv.setText(mHMData.get(SelfAdapter.KEY_RECORD_INFO));
 
             tv = UtilFun.cast(rl.findViewById(R.id.tv_time));
             ToolUtil.throwExIf(null == tv);
-            tv.setText(mHMData.get(SelfAdapter.ARISE_TIME));
+            tv.setText(mHMData.get(SelfAdapter.KEY_ARISE_TIME));
 
             tv = UtilFun.cast(rl.findViewById(R.id.tv_amount));
             ToolUtil.throwExIf(null == tv);
-            tv.setText(mHMData.get(SelfAdapter.ARISE_AMOUNT));
+            tv.setText(mHMData.get(SelfAdapter.KEY_ARISE_AMOUNT));
         }
 
+        /**
+         * 初始化“支出信息”节点
+         * @param rl       father view
+         * @param hm       data for view
+         */
         private void init_pay(RelativeLayout rl, HashMap<String, String> hm)  {
             init_income(rl, hm);
         }
@@ -450,11 +487,48 @@ public class MonthlyLVNewHelper extends ListViewBase {
 
         @Override
         public void onClick(View v) {
-            ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
-            int pos = lv.getPositionForView(v);
+            if(v instanceof RelativeLayout || v instanceof LinearLayout) {
+                click_listitem(v);
+            } else if(v instanceof ImageView)   {
+                if(R.id.iv_show_hide == v.getId()) {
+                    click_show_hide(v);
+                }
+            } else  {
+                Log.e(TAG, "can not process onClick at view : " + v.toString());
+            }
+        }
+
+        /**
+         * "展开"或者"隐藏"子节点
+         * @param v  点击的view
+         */
+        private void click_show_hide(View v) {
+            int pos = mLVHolder.getPositionForView(v);
             if(ListView.INVALID_POSITION != pos) {
-                Toast.makeText(getRootActivity(),
-                        "invoke click at " + pos,
+                ImageView iv = UtilFun.cast(v);
+                HashMap<String, String> hd = UtilFun.cast(mLVHolder.getItemAtPosition(pos));
+                if(null != hd)  {
+                    if(VAL_HIDE.equals(hd.get(KEY_SHOW_OR_HIDE)))   {
+                        hd.put(KEY_SHOW_OR_HIDE, VAL_SHOW);
+                        iv.setImageDrawable(getRootActivity()
+                                .getResources().getDrawable(R.drawable.ic_hide));
+                    } else  {
+                        hd.put(KEY_SHOW_OR_HIDE, VAL_HIDE);
+                        iv.setImageDrawable(getRootActivity()
+                                .getResources().getDrawable(R.drawable.ic_show));
+                    }
+                }
+            }
+        }
+
+        /**
+         * 点击listview节点
+         * @param v  点击的view
+         */
+        private void click_listitem(View v) {
+            int pos = mLVHolder.getPositionForView(v);
+            if (ListView.INVALID_POSITION != pos) {
+                Toast.makeText(getRootActivity(), "invoke click at " + pos,
                         Toast.LENGTH_SHORT).show();
             }
         }
