@@ -50,7 +50,7 @@
         android:layout_height="56dp">
 
         <RelativeLayout
-            android:id="@+id/act_add"
+            android:id="@+id/rl_act_add"
             android:layout_margin="2dp"
             android:layout_width="56dp"
             android:layout_height="match_parent"
@@ -76,7 +76,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/act_delete"
+            android:id="@+id/rl_act_delete"
             android:layout_margin="2dp"
             android:layout_width="56dp"
             android:layout_height="match_parent"

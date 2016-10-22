@@ -21,18 +21,15 @@ import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
-import wxm.KeepAccount.ui.fragment.ShowData.TFShowBudget;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowDaily;
-import wxm.KeepAccount.ui.fragment.ShowData.TFShowMonthly;
-import wxm.KeepAccount.ui.fragment.ShowData.TFShowYearly;
 
 public class ACNoteShowNew extends AppCompatActivity {
     private final static String TAG = "ACNoteShowNew";
 
     protected final static String TAB_DAILY         = "日流水";
-    protected final static String TAB_MONTHLY       = "月流水";
-    protected final static String TAB_YEARLY        = "年流水";
-    protected final static String TAB_BUDGET        = "预算";
+    //protected final static String TAB_MONTHLY       = "月流水";
+    //protected final static String TAB_YEARLY        = "年流水";
+    //protected final static String TAB_BUDGET        = "预算";
 
     private TabLayout   mTLTabs;
     private ViewPager   mVPTabs;
@@ -127,10 +124,9 @@ public class ACNoteShowNew extends AppCompatActivity {
         mTLTabs = (TabLayout) findViewById(R.id.tl_tabs);
         assert null != mTLTabs;
         mTLTabs.addTab(mTLTabs.newTab().setText(TAB_DAILY));
-        mTLTabs.addTab(mTLTabs.newTab().setText(TAB_MONTHLY));
-        //mTLTabs.addTab(mTLTabs.newTab().setText(TAB_MONTHLY_NEW));
-        mTLTabs.addTab(mTLTabs.newTab().setText(TAB_YEARLY));
-        mTLTabs.addTab(mTLTabs.newTab().setText(TAB_BUDGET));
+        //mTLTabs.addTab(mTLTabs.newTab().setText(TAB_MONTHLY));
+        //mTLTabs.addTab(mTLTabs.newTab().setText(TAB_YEARLY));
+        //mTLTabs.addTab(mTLTabs.newTab().setText(TAB_BUDGET));
         mTLTabs.setTabGravity(TabLayout.GRAVITY_FILL);
 
         mVPTabs = (ViewPager) findViewById(R.id.tab_pager);
@@ -273,9 +269,9 @@ public class ACNoteShowNew extends AppCompatActivity {
 
             mHMFra = new HashMap<>();
             mHMFra.put(TAB_DAILY, new TFShowDaily());
-            mHMFra.put(TAB_MONTHLY, new TFShowMonthly());
-            mHMFra.put(TAB_YEARLY, new TFShowYearly());
-            mHMFra.put(TAB_BUDGET, new TFShowBudget());
+            //mHMFra.put(TAB_MONTHLY, new TFShowMonthly());
+            //mHMFra.put(TAB_YEARLY, new TFShowYearly());
+            //mHMFra.put(TAB_BUDGET, new TFShowBudget());
         }
 
         @Override

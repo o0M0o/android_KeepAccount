@@ -14,6 +14,7 @@ import java.util.List;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
 
 /**
  * viewhelper基础类
@@ -119,6 +120,19 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
     }
 
     /**
+     * 获取视图所在的activity
+     * @return  若成功返回activity，失败返回null;
+     */
+    protected ACNoteShowNew getNewRootActivity()  {
+        Context ct = mSelfView.getContext();
+        if(ct instanceof ACNoteShowNew) {
+            return UtilFun.cast(ct);
+        }
+
+        return null;
+    }
+
+    /**
      * 设置附加layout可见性
      * @param visible  若为 :
      *                  1. {@code View.INVISIBLE}, 不可见
@@ -181,15 +195,11 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
      *                  1. {@code View.INVISIBLE}, 不可见
      *                  2. {@code View.VISIBLE}, 可见
      */
-    private void setLayoutVisible(RelativeLayout rl, int visible)    {
-        int w = RelativeLayout.LayoutParams.MATCH_PARENT;
-        int h = 0;
-        if(View.INVISIBLE != visible)
-            h = RelativeLayout.LayoutParams.WRAP_CONTENT;
-
+    protected void setLayoutVisible(ViewGroup rl, int visible)    {
         ViewGroup.LayoutParams param = rl.getLayoutParams();
-        param.width = w;
-        param.height = h;
+        //param.width = rl.getWidth();
+        param.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        param.height = View.INVISIBLE == visible ? 0 : ViewGroup.LayoutParams.WRAP_CONTENT;
         rl.setLayoutParams(param);
     }
 }

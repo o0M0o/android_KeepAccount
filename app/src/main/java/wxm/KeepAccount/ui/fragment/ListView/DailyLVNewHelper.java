@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -32,7 +34,7 @@ import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 
@@ -68,22 +70,73 @@ public class DailyLVNewHelper extends LVShowDataBase
     private final LinkedList<Integer> mDelPay;
     private final LinkedList<Integer> mDelIncome;
 
-    private static final int[] ITEM_DRAWABLES = {
-                                    R.drawable.ic_edit
-                                    ,R.drawable.ic_delete
-                                    ,R.drawable.ic_add};
+    // for expand or hide actions
+    private ImageView   mIVActions;
+    private GridLayout  mGLActions;
+    private boolean     mBActionExpand;
+    private Drawable    mDAExpand;
+    private Drawable    mDAHide;
 
     public DailyLVNewHelper()    {
         super();
 
         mDelPay    = new LinkedList<>();
         mDelIncome = new LinkedList<>();
+
+        mBActionExpand = false;
     }
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
         mSelfView       = inflater.inflate(R.layout.lv_newpager, container, false);
         mBFilter        = false;
+
+        // for action expand
+        Resources res = mSelfView.getResources();
+        mDAExpand = res.getDrawable(R.drawable.ic_to_up);
+        mDAHide = res.getDrawable(R.drawable.ic_to_down);
+
+        mIVActions = UtilFun.cast_t(mSelfView.findViewById(R.id.iv_expand));
+        mGLActions = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_action));
+        refreshAction();
+
+        mIVActions.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBActionExpand = !mBActionExpand;
+                refreshAction();
+            }
+        });
+
+        RelativeLayout rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_add));
+        rl.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ACNoteShowNew ac = getNewRootActivity();
+                Intent intent = new Intent(ac, ACNoteEdit.class);
+                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
+                        String.format(Locale.CHINA ,"%d-%02d-%02d"
+                                ,cal.get(Calendar.YEAR)
+                                ,cal.get(Calendar.MONTH) + 1
+                                ,cal.get(Calendar.DAY_OF_MONTH)));
+
+                ac.startActivityForResult(intent, 1);
+            }
+        });
+
+        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_delete));
+        rl.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mActionType = ACTION_DELETE;
+                refreshView();
+            }
+        });
+
 
         return mSelfView;
     }
@@ -96,7 +149,7 @@ public class DailyLVNewHelper extends LVShowDataBase
 
     @Override
     public void checkView() {
-        if(getRootActivity().getDayNotesDirty())
+        if(getNewRootActivity().getDayNotesDirty())
             loadView();
     }
 
@@ -150,7 +203,7 @@ public class DailyLVNewHelper extends LVShowDataBase
                     }
 
                     if(dirty) {
-                        getRootActivity().setNotesDirty();
+                        getNewRootActivity().setNotesDirty();
                         reloadData();
                     }
 
@@ -169,6 +222,16 @@ public class DailyLVNewHelper extends LVShowDataBase
         }
     }
 
+    private void refreshAction()    {
+        if(mBActionExpand)  {
+            mIVActions.setImageDrawable(mDAHide);
+            setLayoutVisible(mGLActions, View.VISIBLE);
+        } else  {
+            mIVActions.setImageDrawable(mDAExpand);
+            setLayoutVisible(mGLActions, View.INVISIBLE);
+        }
+    }
+
     /**
      * 重新加载数据
      */
@@ -176,7 +239,7 @@ public class DailyLVNewHelper extends LVShowDataBase
         mMainPara.clear();
         mHMSubPara.clear();
 
-        HashMap<String, ArrayList<INote>> hm_data = getRootActivity().getNotesByDay();
+        HashMap<String, ArrayList<INote>> hm_data = getNewRootActivity().getNotesByDay();
         parseNotes(hm_data);
     }
 
@@ -518,7 +581,7 @@ public class DailyLVNewHelper extends LVShowDataBase
 
                         iv.setSelected(!iv.isSelected());
                     } else  {
-                        ACNoteShow ac = getRootActivity();
+                        ACNoteShowNew ac = getNewRootActivity();
                         Intent intent = new Intent(ac, ACNoteEdit.class);
                         intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
                         if (V_TYPE_PAY.equals(tp)) {
