@@ -32,7 +32,8 @@
             android:text="日"
             android:layout_alignBottom="@id/tv_day_number"
             android:layout_toRightOf="@id/tv_day_number"
-            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="4dp"
             android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

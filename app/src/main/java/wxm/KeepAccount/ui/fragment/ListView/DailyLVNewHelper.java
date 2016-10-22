@@ -347,7 +347,7 @@ public class DailyLVNewHelper extends LVShowDataBase
 
             HashMap<String, String> map = new HashMap<>();
             map.put(K_MONTH, k.substring(0, 7));
-            map.put(K_DAY_NUMEBER, k.substring(8, 9));
+            map.put(K_DAY_NUMEBER, k.substring(8, 10));
 
             try {
                 Timestamp ts = ToolUtil.StringToTimestamp(k);
