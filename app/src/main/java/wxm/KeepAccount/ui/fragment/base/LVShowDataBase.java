@@ -20,10 +20,22 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     protected final static String K_ID        = "k_id";
     protected final static String K_TYPE      = "k_type";
 
+    protected final static String K_MONTH             = "k_month";
+    protected final static String K_DAY_NUMEBER       = "k_d_number";
+    protected final static String K_DAY_IN_WEEK       = "k_d_in_week";
+    protected final static String K_DAILY_PAY_COUNT   = "k_dpc";
+    protected final static String K_DAILY_PAY_AMOUNT  = "k_dpa";
+    protected final static String K_DAILY_INCOME_COUNT   = "k_dic";
+    protected final static String K_DAILY_INCOME_AMOUNT  = "k_dia";
+
     protected final static String K_SHOW           = "k_show";
     protected final static String V_SHOW_UNFOLD    = "vs_unfold";
     protected final static String V_SHOW_FOLD      = "vs_fold";
     /// list item data end
+
+    private final static String[] DAY_IN_WEEK = {
+            "星期日", "星期一", "星期二","星期三",
+            "星期四","星期五","星期六"};
 
     // 视图数据
     protected final LinkedList<HashMap<String, String>>                     mMainPara;
@@ -70,5 +82,16 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
      */
     protected boolean checkUnfoldItem(String tag)  {
         return mUnfoldItems.contains(tag);
+    }
+
+
+    /**
+     * 返回“星期*"
+     * @param dw    0-6格式的星期数
+     * @return  星期*
+     */
+    protected String getDayInWeek(int dw) {
+        dw--;
+        return DAY_IN_WEEK[dw];
     }
 }

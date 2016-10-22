@@ -18,6 +18,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -47,14 +49,6 @@ public class DailyLVNewHelper extends LVShowDataBase
     private final static String TAG = "DailyLVNewHelper";
 
     /// list item data begin
-    final static String K_TITLE     = "k_title";
-    final static String K_TIME      = "k_time";
-    final static String K_BUDGET    = "k_budget";
-    final static String K_AMOUNT    = "k_amount";
-    final static String K_TAG       = "k_tag";
-    final static String K_ID        = "k_id";
-
-    final static String K_TYPE          = "k_type";
     final static String V_TYPE_DAY      = "v_day";
     final static String V_TYPE_PAY      = "v_pay";
     final static String V_TYPE_INCOME   = "v_income";
@@ -269,8 +263,7 @@ public class DailyLVNewHelper extends LVShowDataBase
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
-                                        new String[]{K_TITLE, K_ABSTRACT},
-                                        new int[]{R.id.tv_title, R.id.tv_abstract});
+                                        new String[]{}, new int[]{});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
@@ -352,14 +345,29 @@ public class DailyLVNewHelper extends LVShowDataBase
                 cur_llhm.add(map);
             }
 
-            String show_str =
-                    String.format(Locale.CHINA,
-                            "支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
-                            pay_cout, pay_amount, income_cout, income_amount);
-
             HashMap<String, String> map = new HashMap<>();
-            map.put(K_TITLE, title);
-            map.put(K_ABSTRACT, show_str);
+            map.put(K_MONTH, k.substring(0, 7));
+            map.put(K_DAY_NUMEBER, k.substring(8, 9));
+
+            try {
+                Timestamp ts = ToolUtil.StringToTimestamp(k);
+                Calendar day = Calendar.getInstance();
+                day.setTimeInMillis(ts.getTime());
+                map.put(K_DAY_IN_WEEK, getDayInWeek(day.get(Calendar.DAY_OF_WEEK)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            map.put(K_DAILY_PAY_COUNT, String.valueOf(pay_cout));
+            map.put(K_DAILY_INCOME_COUNT, String.valueOf(income_cout));
+            map.put(K_DAILY_PAY_AMOUNT, String.format(Locale.CHINA, "%.02f", pay_amount));
+            map.put(K_DAILY_INCOME_AMOUNT, String.format(Locale.CHINA, "%.02f", income_amount));
+
+            BigDecimal bd_l = income_amount.subtract(pay_amount);
+            String v_l = String.format(Locale.CHINA,
+                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+            map.put(K_AMOUNT, v_l);
+
             map.put(K_TAG, title);
             map.put(K_SHOW, checkUnfoldItem(title) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
             mMainPara.add(map);
@@ -382,7 +390,7 @@ public class DailyLVNewHelper extends LVShowDataBase
 
         SelfAdapter(Context context, List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {
-            super(context, mdata, R.layout.li_daily_show, from, to);
+            super(context, mdata, R.layout.li_daily_new_show, from, to);
 
             Resources res   = context.getResources();
             mClOne = res.getColor(R.color.lightsteelblue);
@@ -442,6 +450,34 @@ public class DailyLVNewHelper extends LVShowDataBase
 
                 RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
                 rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
+
+                // for show
+                TextView tv = UtilFun.cast_t(v.findViewById(R.id.tv_month));
+                tv.setText(hm.get(K_MONTH));
+
+                tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_number));
+                tv.setText(hm.get(K_DAY_NUMEBER));
+
+                tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_in_week));
+                tv.setText(hm.get(K_DAY_IN_WEEK));
+
+                tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_in_week));
+                tv.setText(hm.get(K_DAY_IN_WEEK));
+
+                tv = UtilFun.cast_t(v.findViewById(R.id.tv_pay_count));
+                tv.setText(hm.get(K_DAILY_PAY_COUNT));
+
+                tv = UtilFun.cast_t(v.findViewById(R.id.tv_pay_amount));
+                tv.setText(hm.get(K_DAILY_PAY_AMOUNT));
+
+                tv = UtilFun.cast_t(v.findViewById(R.id.tv_income_count));
+                tv.setText(hm.get(K_DAILY_INCOME_COUNT));
+
+                tv = UtilFun.cast_t(v.findViewById(R.id.tv_income_amount));
+                tv.setText(hm.get(K_DAILY_INCOME_AMOUNT));
+
+                tv = UtilFun.cast_t(v.findViewById(R.id.tv_daily_amount));
+                tv.setText(hm.get(K_AMOUNT));
             }
 
             return v;
@@ -575,7 +611,6 @@ public class DailyLVNewHelper extends LVShowDataBase
                                 mDelIncome.add(did);
                             }
 
-                            iv.getBackground().setAlpha(255);
                             iv.setBackgroundColor(mClSelected);
                         }
 

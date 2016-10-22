@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/rl_pay"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp">
+        <ImageView
+            android:id="@+id/iv_pay_tag"
+            android:layout_centerVertical="true"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_show_pay"
+            android:scaleType="fitXY" />
+
+        <!--
+        <TextView
+            android:id="@+id/tv_pay_count_tag"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/iv_pay_tag"
+            android:layout_marginLeft="8dp"
+            android:text="次数 : "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+            -->
+
+        <TextView
+            android:id="@+id/tv_pay_count"
+            android:layout_marginLeft="8dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/iv_pay_tag"
+            android:textColor="@color/darkred"
+            android:text="5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:id="@+id/tv_pay_amount_tag"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_pay_count"
+            android:layout_marginLeft="20dp"
+            android:text="共计 : "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_pay_amount"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_pay_amount_tag"
+            android:textColor="@color/darkred"
+            android:text="754.76"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_income"
+        android:layout_below="@id/rl_pay"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp">
+        <ImageView
+            android:id="@+id/iv_income_tag"
+            android:layout_centerVertical="true"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_show_income"
+            android:scaleType="fitXY" />
+
+        <!--
+        <TextView
+            android:id="@+id/tv_income_count_tag"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/iv_income_tag"
+            android:layout_marginLeft="8dp"
+            android:text="次数 : "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+            -->
+
+        <TextView
+            android:id="@+id/tv_income_count"
+            android:layout_marginLeft="8dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/iv_income_tag"
+            android:textColor="@color/darkslategrey"
+            android:text="5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_income_amount_tag"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_income_count"
+            android:layout_marginLeft="20dp"
+            android:text="共计 : "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_income_amount"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_income_amount_tag"
+            android:textColor="@color/darkslategrey"
+            android:text="754.76"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_daily"
+        android:layout_marginTop="2dp"
+        android:layout_below="@id/rl_income"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_daily_tag"
+            android:layout_centerVertical="true"
+            android:text="结余 : "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_daily_amount"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_daily_tag"
+            android:textColor="@color/darkslategrey"
+            android:text="0.00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</RelativeLayout>
