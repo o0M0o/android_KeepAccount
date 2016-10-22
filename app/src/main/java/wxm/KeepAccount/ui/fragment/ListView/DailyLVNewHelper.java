@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,7 +25,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
@@ -36,12 +34,13 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
+import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 
 /**
  * 日数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class DailyLVNewHelper extends ListViewBase
+public class DailyLVNewHelper extends LVShowDataBase
         implements OnClickListener {
     private final static String TAG = "DailyLVNewHelper";
 
@@ -69,7 +68,6 @@ public class DailyLVNewHelper extends ListViewBase
     private final LinkedList<Integer> mDelPay;
     private final LinkedList<Integer> mDelIncome;
 
-    // for raymenu
     private static final int[] ITEM_DRAWABLES = {
                                     R.drawable.ic_edit
                                     ,R.drawable.ic_delete
@@ -84,24 +82,8 @@ public class DailyLVNewHelper extends ListViewBase
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
-        mSelfView       = inflater.inflate(R.layout.lv_pager, container, false);
+        mSelfView       = inflater.inflate(R.layout.lv_newpager, container, false);
         mBFilter        = false;
-
-        // init ray menu
-        RayMenu rayMenu = UtilFun.cast(mSelfView.findViewById(R.id.rm_show_record));
-        assert null != rayMenu;
-        for (int ITEM_DRAWABLE : ITEM_DRAWABLES) {
-            ImageView item = new ImageView(mSelfView.getContext());
-            item.setImageResource(ITEM_DRAWABLE);
-
-            final int position = ITEM_DRAWABLE;
-            rayMenu.addItem(item, new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    OnRayMenuClick(position);
-                }
-            });// Add a menu item
-        }
 
         return mSelfView;
     }
@@ -209,7 +191,7 @@ public class DailyLVNewHelper extends ListViewBase
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
         if(mBFilter) {
             for (HashMap<String, String> i : mMainPara) {
-                String cur_tag = i.get(ListViewBase.MPARA_TAG);
+                String cur_tag = i.get(K_TAG);
                 for (String ii : mFilterPara) {
                     if (cur_tag.equals(ii)) {
                         n_mainpara.add(i);
@@ -222,10 +204,10 @@ public class DailyLVNewHelper extends ListViewBase
         }
 
         // 设置listview adapter
-        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
+        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
-                new String[]{ListViewBase.MPARA_TITLE, ListViewBase.MPARA_ABSTRACT},
-                new int[]{R.id.tv_title, R.id.tv_abstract});
+                                        new String[]{K_TITLE, K_ABSTRACT},
+                                        new int[]{R.id.tv_title, R.id.tv_abstract});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
@@ -245,8 +227,8 @@ public class DailyLVNewHelper extends ListViewBase
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(ListViewBase.MPARA_SHOW_UNFOLD.equals(hm.get(ListViewBase.MPARA_SHOW))) {
-            llhm = mHMSubPara.get(hm.get(ListViewBase.MPARA_TAG));
+        if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW))) {
+            llhm = mHMSubPara.get(hm.get(K_TAG));
         }
 
         if(null == llhm) {
@@ -256,60 +238,12 @@ public class DailyLVNewHelper extends ListViewBase
         // init sub adapter
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
-        SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), mLVShowDetail,
-                llhm, new String[]{ListViewBase.SPARA_TITLE, ListViewBase.SPARA_DETAIL},
-                new int[]{R.id.tv_title, R.id.tv_detail});
+        SelfSubAdapter mAdapter = new SelfSubAdapter(mSelfView.getContext(), mLVShowDetail,
+                                        llhm, new String[]{}, new int[]{});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
     }
-
-    /**
-     * raymenu点击事件
-     * @param resid 点击发生的资源ID
-     */
-    private void OnRayMenuClick(int resid)  {
-        switch (resid)  {
-            case R.drawable.ic_add : {
-                ACNoteShow ac = getRootActivity();
-                Intent intent = new Intent(ac, ACNoteEdit.class);
-                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
-
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(System.currentTimeMillis());
-                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
-                        String.format(Locale.CHINA
-                                , "%d-%02d-%02d"
-                                , cal.get(Calendar.YEAR)
-                                , cal.get(Calendar.MONTH) + 1
-                                , cal.get(Calendar.DAY_OF_MONTH)));
-
-                ac.startActivityForResult(intent, 1);
-            }
-            break;
-
-            case R.drawable.ic_delete: {
-                if (ACTION_DELETE != mActionType) {
-                    mActionType = ACTION_DELETE;
-                    refreshView();
-                }
-                break;
-            }
-
-            case R.drawable.ic_edit:     {
-                if (ACTION_EDIT != mActionType) {
-                    mActionType = ACTION_EDIT;
-                    refreshView();
-                }
-            }
-            break;
-
-            default:
-                Log.e(TAG, "未处理的resid : " + resid);
-                break;
-        }
-    }
-
 
     /**
      * 解析支出/收入数据
@@ -361,14 +295,10 @@ public class DailyLVNewHelper extends ListViewBase
                             pay_cout, pay_amount, income_cout, income_amount);
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(ListViewBase.MPARA_TITLE, title);
-            map.put(ListViewBase.MPARA_ABSTRACT, show_str);
-            map.put(ListViewBase.MPARA_TAG, title);
-            if(checkUnfoldItem(title))
-                map.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_UNFOLD);
-            else
-                map.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_FOLD);
-
+            map.put(K_TITLE, title);
+            map.put(K_ABSTRACT, show_str);
+            map.put(K_TAG, title);
+            map.put(K_SHOW, checkUnfoldItem(title) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
             mMainPara.add(map);
 
             mHMSubPara.put(title, cur_llhm);
@@ -384,6 +314,9 @@ public class DailyLVNewHelper extends ListViewBase
         private int         mClOne;
         private int         mClTwo;
 
+        private Drawable    mDAFold;
+        private Drawable    mDAUnFold;
+
         SelfAdapter(Context context, List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {
             super(context, mdata, R.layout.li_daily_show, from, to);
@@ -391,6 +324,9 @@ public class DailyLVNewHelper extends ListViewBase
             Resources res   = context.getResources();
             mClOne = res.getColor(R.color.lightsteelblue);
             mClTwo = res.getColor(R.color.paleturquoise);
+
+            mDAFold = res.getDrawable(R.drawable.ic_hide);
+            mDAUnFold = res.getDrawable(R.drawable.ic_show);
         }
 
         @Override
@@ -408,7 +344,6 @@ public class DailyLVNewHelper extends ListViewBase
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
-                //Log.i(TAG, "create view at pos = " + position);
                 final HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 final View fv = v;
                 final Resources res = v.getResources();
@@ -420,26 +355,26 @@ public class DailyLVNewHelper extends ListViewBase
                         //Log.i(TAG, "onIbClick at pos = " + pos);
                         Resources res = v.getResources();
                         ImageButton ib = UtilFun.cast(v);
-                        if(ListViewBase.MPARA_SHOW_FOLD.equals(hm.get(ListViewBase.MPARA_SHOW)))    {
-                            hm.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_UNFOLD);
+                        if(V_SHOW_FOLD.equals(hm.get(K_SHOW)))    {
+                            hm.put(K_SHOW, V_SHOW_UNFOLD);
                             init_detail_view(fv, hm);
-                            ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
-                            addUnfoldItem(hm.get(ListViewBase.MPARA_TAG));
+                            ib.setImageDrawable(mDAFold);
+                            addUnfoldItem(hm.get(K_TAG));
                         }   else    {
-                            hm.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_FOLD);
+                            hm.put(K_SHOW, V_SHOW_FOLD);
                             init_detail_view(fv, hm);
-                            ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
-                            removeUnfoldItem(hm.get(ListViewBase.MPARA_TAG));
+                            ib.setImageDrawable(mDAUnFold);
+                            removeUnfoldItem(hm.get(K_TAG));
                         }
                     }
                 });
 
-                if(ListViewBase.MPARA_SHOW_FOLD.equals(hm.get(ListViewBase.MPARA_SHOW)))    {
+                if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)))    {
                     //init_detail_view(fv, hm);
-                    ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
+                    ib.setImageDrawable(mDAFold);
                 }   else    {
                     init_detail_view(fv, hm);
-                    ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
+                    ib.setImageDrawable(mDAUnFold);
                 }
 
                 RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
@@ -465,7 +400,7 @@ public class DailyLVNewHelper extends ListViewBase
         SelfSubAdapter(Context context, ListView fv,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
-            super(context, sdata, R.layout.li_daily_show_new_detail, from, to);
+            super(context, sdata, R.layout.li_daily_new_show_detail, from, to);
             mRootView = fv;
 
             Resources res   = context.getResources();

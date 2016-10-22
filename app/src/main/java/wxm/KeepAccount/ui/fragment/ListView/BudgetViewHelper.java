@@ -32,6 +32,7 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
+import wxm.KeepAccount.ui.fragment.base.ListViewBase;
 
 /**
  * 预算数据视图辅助类
@@ -150,7 +151,7 @@ public class BudgetViewHelper  extends ListViewBase {
         refreshAttachLayout();
 
         // 设置listview adapter
-        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
+        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), lv, mMainPara,
                 new String[]{ListViewBase.MPARA_TITLE, ListViewBase.MPARA_ABSTRACT},
                 new int[]{R.id.tv_title, R.id.tv_abstract});

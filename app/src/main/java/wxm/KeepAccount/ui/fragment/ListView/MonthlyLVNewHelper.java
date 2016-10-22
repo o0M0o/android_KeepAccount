@@ -27,6 +27,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.adapter.LVShowNoteAdapter;
 import wxm.KeepAccount.ui.fragment.base.DefForTabLayout;
+import wxm.KeepAccount.ui.fragment.base.ListViewBase;
 
 /**
  * 月数据辅助类
@@ -57,7 +58,7 @@ public class MonthlyLVNewHelper extends ListViewBase {
         ToolUtil.throwExIf(null == rayMenu);
         rayMenu.setVisibility(View.INVISIBLE);
 
-        mLVHolder = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
+        mLVHolder = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
         ToolUtil.throwExIf(null == mLVHolder);
 
         return mSelfView;

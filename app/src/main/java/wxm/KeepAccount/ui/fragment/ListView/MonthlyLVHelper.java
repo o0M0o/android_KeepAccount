@@ -28,6 +28,7 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.fragment.base.DefForTabLayout;
+import wxm.KeepAccount.ui.fragment.base.ListViewBase;
 
 /**
  * 月数据辅助类
@@ -176,7 +177,7 @@ public class MonthlyLVHelper extends ListViewBase {
         }
 
         // 设置listview adapter
-        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.tabvp_lv_main));
+        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
                 new String[]{ListViewBase.MPARA_TITLE, ListViewBase.MPARA_ABSTRACT},
                 new int[]{R.id.tv_title, R.id.tv_abstract});

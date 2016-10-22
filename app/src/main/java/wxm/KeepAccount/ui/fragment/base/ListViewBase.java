@@ -1,11 +1,9 @@
-package wxm.KeepAccount.ui.fragment.ListView;
+package wxm.KeepAccount.ui.fragment.base;
 
 import android.util.Log;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-
-import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
 /**
  * sub class for listview
@@ -14,27 +12,27 @@ import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 public abstract class ListViewBase extends ShowViewHelperBase {
     private final static String TAG = "ListViewBase";
 
-    final static String MPARA_TITLE      = "MPARA_TITLE";
-    final static String MPARA_ABSTRACT   = "MPARA_ABSTRACT";
-    final static String MPARA_TAG        = "MPARA_TAG";
-    final static String SPARA_TITLE  = "SPARA_TITLE";
-    final static String SPARA_DETAIL = "SPARA_DETAIL";
-    final static String SPARA_TAG    = "SPARA_TAG";
-    final static String SPARA_ID     = "SPARA_ID";
+    public final static String MPARA_TITLE      = "MPARA_TITLE";
+    public final static String MPARA_ABSTRACT   = "MPARA_ABSTRACT";
+    public final static String MPARA_TAG        = "MPARA_TAG";
+    public final static String SPARA_TITLE  = "SPARA_TITLE";
+    public final static String SPARA_DETAIL = "SPARA_DETAIL";
+    public final static String SPARA_TAG    = "SPARA_TAG";
+    public final static String SPARA_ID     = "SPARA_ID";
     public final static String MPARA_SHOW           = "MPARA_SHOW";
     public final static String MPARA_SHOW_UNFOLD    = "SHOW_UNFOLD";
     public final static String MPARA_SHOW_FOLD      = "SHOW_FOLD";
-    final static String SPARA_TAG_PAY    = "TAG_PAY";
-    final static String SPARA_TAG_INCOME = "TAG_INCOME";
+    public final static String SPARA_TAG_PAY    = "TAG_PAY";
+    public final static String SPARA_TAG_INCOME = "TAG_INCOME";
 
     // 视图数据
-    final LinkedList<HashMap<String, String>>                     mMainPara;
-    final HashMap<String, LinkedList<HashMap<String, String>>>    mHMSubPara;
+    protected final LinkedList<HashMap<String, String>>                     mMainPara;
+    protected final HashMap<String, LinkedList<HashMap<String, String>>>    mHMSubPara;
 
     // 存放展开节点的数据
     private final LinkedList<String>    mUnfoldItems;
 
-    ListViewBase()   {
+    public ListViewBase()   {
         super();
         mMainPara       = new LinkedList<>();
         mHMSubPara      = new HashMap<>();
@@ -46,7 +44,7 @@ public abstract class ListViewBase extends ShowViewHelperBase {
      * 只记录20个展开节点, 超过数量后将移除最早记录的节点
      * @param tag   展开节点tag
      */
-    void addUnfoldItem(String tag)   {
+    protected void addUnfoldItem(String tag)   {
         if(!mUnfoldItems.contains(tag)) {
             if(20 < mUnfoldItems.size())
                 mUnfoldItems.removeFirst();
@@ -60,7 +58,7 @@ public abstract class ListViewBase extends ShowViewHelperBase {
      * 移除一个展开节点
      * @param tag   移除节点tag
      */
-    void removeUnfoldItem(String tag)   {
+    protected void removeUnfoldItem(String tag)   {
         mUnfoldItems.remove(tag);
     }
 
@@ -70,7 +68,7 @@ public abstract class ListViewBase extends ShowViewHelperBase {
      * @param tag   待检查节点tag
      * @return  如果此节点是展开节点，返回true, 否则返回false
      */
-    boolean checkUnfoldItem(String tag)  {
+    protected boolean checkUnfoldItem(String tag)  {
         return mUnfoldItems.contains(tag);
     }
 }
