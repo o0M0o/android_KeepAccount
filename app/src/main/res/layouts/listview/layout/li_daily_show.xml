@@ -15,7 +15,7 @@
             android:layout_alignParentStart="false"
             android:textSize="20sp"
             android:textColor="@color/black"
-            android:layout_marginLeft="64dp" />
+            android:layout_marginLeft="16dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,13 +39,13 @@
     </RelativeLayout>
 
     <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/rl_header"
         android:id="@+id/lv_show_detail"
+        android:layout_below="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/alisbulue"
         android:divider="@android:color/transparent"
-        android:dividerHeight="3dp"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="6dp" />
+        android:paddingLeft="24dp"
+        android:dividerHeight="2dp" />
 
 </RelativeLayout>

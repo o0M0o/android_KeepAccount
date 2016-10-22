@@ -60,10 +60,10 @@ public class DailyLVNewHelper extends ListViewBase
     /// list item data end
 
     // for action
-    private final static int ACTION_NONE    = 0;
+    //private final static int ACTION_NONE    = 0;
     private final static int ACTION_DELETE  = 1;
     private final static int ACTION_EDIT    = 2;
-    private int mActionType = ACTION_NONE;
+    private int mActionType = ACTION_EDIT;
 
     // delete data
     private final LinkedList<Integer> mDelPay;
@@ -172,14 +172,14 @@ public class DailyLVNewHelper extends ListViewBase
                         reloadData();
                     }
 
-                    mActionType = ACTION_NONE;
+                    mActionType = ACTION_EDIT;
                     refreshView();
                 }
 
                 break;
 
             case R.id.bt_giveup :
-                mActionType = ACTION_NONE;
+                mActionType = ACTION_EDIT;
                 mDelPay.clear();
                 mDelIncome.clear();
                 refreshAttachLayout();
@@ -231,10 +231,10 @@ public class DailyLVNewHelper extends ListViewBase
     }
 
     private void refreshAttachLayout()    {
-        setAttachLayoutVisible(ACTION_NONE != mActionType || mBFilter ?
+        setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
                                 View.VISIBLE : View.INVISIBLE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
-        setAccpetGiveupLayoutVisible(ACTION_NONE != mActionType ? View.VISIBLE : View.INVISIBLE);
+        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.INVISIBLE);
     }
 
     /**
@@ -381,10 +381,16 @@ public class DailyLVNewHelper extends ListViewBase
      */
     private class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
+        private int         mClOne;
+        private int         mClTwo;
 
         SelfAdapter(Context context, List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {
             super(context, mdata, R.layout.li_daily_show, from, to);
+
+            Resources res   = context.getResources();
+            mClOne = res.getColor(R.color.lightsteelblue);
+            mClTwo = res.getColor(R.color.paleturquoise);
         }
 
         @Override
@@ -436,11 +442,8 @@ public class DailyLVNewHelper extends ListViewBase
                     ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
                 }
 
-                if(0 == position % 2)   {
-                    v.setBackgroundColor(res.getColor(R.color.lightsteelblue));
-                } else  {
-                    v.setBackgroundColor(res.getColor(R.color.paleturquoise));
-                }
+                RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
+                rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
             }
 
             return v;
@@ -457,6 +460,7 @@ public class DailyLVNewHelper extends ListViewBase
 
         private Drawable    mDADelete;
         private Drawable    mDADedit;
+        private int         mClSelected;
 
         SelfSubAdapter(Context context, ListView fv,
                        List<? extends Map<String, ?>> sdata,
@@ -464,9 +468,10 @@ public class DailyLVNewHelper extends ListViewBase
             super(context, sdata, R.layout.li_daily_show_new_detail, from, to);
             mRootView = fv;
 
-            Resources res = context.getResources();
-            mDADedit = res.getDrawable(R.drawable.right_arrow);
-            mDADelete = res.getDrawable(R.drawable.ic_delete);
+            Resources res   = context.getResources();
+            mDADedit        = res.getDrawable(R.drawable.right_arrow);
+            mDADelete       = res.getDrawable(R.drawable.ic_delete);
+            mClSelected     = res.getColor(R.color.red);
         }
 
         @Override
@@ -494,25 +499,6 @@ public class DailyLVNewHelper extends ListViewBase
                     ToolUtil.setViewGroupVisible(rl_pay, View.INVISIBLE);
                     init_income(rl_income, hm);
                 }
-
-                /*
-                // for action
-                ImageButton ib_action = UtilFun.cast(v.findViewById(R.id.ib_action));
-                assert null != ib_action;
-                if(ACTION_NONE == mActionType)    {
-                    ib_action.setVisibility(View.INVISIBLE);
-                }   else    {
-                    ib_action.setVisibility(View.VISIBLE);
-
-                    if(ACTION_DELETE == mActionType)
-                        ib_action.setImageDrawable(mDADelete);
-                    else
-                        ib_action.setImageDrawable(mDADedit);
-
-                    ib_action.getBackground().setAlpha(0);
-                    ib_action.setOnClickListener(this);
-                }
-                */
             }
 
             return v;
@@ -539,7 +525,7 @@ public class DailyLVNewHelper extends ListViewBase
 
             ImageView iv = UtilFun.cast_t(rl_pay.findViewById(R.id.iv_pay_action));
             iv.setOnClickListener(this);
-            if(ACTION_NONE == mActionType)    {
+            if(ACTION_EDIT == mActionType)    {
                 iv.setImageDrawable(mDADedit);
             }   else    {
                 iv.setImageDrawable(mDADelete);
@@ -555,7 +541,7 @@ public class DailyLVNewHelper extends ListViewBase
 
             ImageView iv = UtilFun.cast_t(rl_income.findViewById(R.id.iv_income_action));
             iv.setOnClickListener(this);
-            if(ACTION_NONE == mActionType)    {
+            if(ACTION_EDIT == mActionType)    {
                 iv.setImageDrawable(mDADedit);
             }   else    {
                 iv.setImageDrawable(mDADelete);
@@ -565,46 +551,42 @@ public class DailyLVNewHelper extends ListViewBase
 
         @Override
         public void onClick(View v) {
-            int vid = v.getId();
-            Resources res = v.getResources();
-
             int pos = mRootView.getPositionForView(v);
             HashMap<String, String> hm = UtilFun.cast(getItem(pos));
-            String tp = hm.get(ListViewBase.SPARA_TAG);
-            int did = Integer.parseInt(hm.get(ListViewBase.SPARA_ID));
+            String tp = hm.get(K_TYPE);
+            int did = Integer.parseInt(hm.get(K_ID));
 
+            int vid = v.getId();
             switch (vid)    {
-                case R.id.ib_action:       {
-                    ImageButton ib_action = UtilFun.cast(v);
+                case R.id.iv_pay_action :
+                case R.id.iv_income_action :       {
+                    ImageView iv = UtilFun.cast_t(v);
                     if(ACTION_DELETE == mActionType)    {
-                        if(ib_action.isSelected())  {
-                            if (ListViewBase.SPARA_TAG_PAY.equals(tp)) {
+                        if(iv.isSelected())  {
+                            if (V_TYPE_PAY.equals(tp)) {
                                 mDelPay.removeFirstOccurrence(did);
                             } else {
                                 mDelIncome.removeFirstOccurrence(did);
                             }
 
-                            ib_action.getBackground().setAlpha(0);
+                            iv.getBackground().setAlpha(0);
                         }   else    {
-                            if (ListViewBase.SPARA_TAG_PAY.equals(tp)) {
+                            if (V_TYPE_PAY.equals(tp)) {
                                 mDelPay.add(did);
                             } else {
                                 mDelIncome.add(did);
                             }
 
-                            ib_action.getBackground().setAlpha(255);
-                            ib_action.setBackgroundColor(res.getColor(R.color.red));
+                            iv.getBackground().setAlpha(255);
+                            iv.setBackgroundColor(mClSelected);
                         }
 
-                        ib_action.setSelected(!ib_action.isSelected());
+                        iv.setSelected(!iv.isSelected());
                     } else  {
-                        mActionType = ACTION_NONE;
-                        refreshAttachLayout();
-
                         ACNoteShow ac = getRootActivity();
                         Intent intent = new Intent(ac, ACNoteEdit.class);
                         intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
-                        if (ListViewBase.SPARA_TAG_PAY.equals(tp)) {
+                        if (V_TYPE_PAY.equals(tp)) {
                             intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, did);
                         } else {
                             intent.putExtra(ACNoteEdit.PARA_NOTE_INCOME, did);

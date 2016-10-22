@@ -11,7 +11,7 @@ import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
  * sub class for listview
  * Created by wxm on 2016/9/29.
  */
-abstract class ListViewBase extends ShowViewHelperBase {
+public abstract class ListViewBase extends ShowViewHelperBase {
     private final static String TAG = "ListViewBase";
 
     final static String MPARA_TITLE      = "MPARA_TITLE";
@@ -21,9 +21,9 @@ abstract class ListViewBase extends ShowViewHelperBase {
     final static String SPARA_DETAIL = "SPARA_DETAIL";
     final static String SPARA_TAG    = "SPARA_TAG";
     final static String SPARA_ID     = "SPARA_ID";
-    final static String MPARA_SHOW           = "MPARA_SHOW";
-    final static String MPARA_SHOW_UNFOLD    = "SHOW_UNFOLD";
-    final static String MPARA_SHOW_FOLD      = "SHOW_FOLD";
+    public final static String MPARA_SHOW           = "MPARA_SHOW";
+    public final static String MPARA_SHOW_UNFOLD    = "SHOW_UNFOLD";
+    public final static String MPARA_SHOW_FOLD      = "SHOW_FOLD";
     final static String SPARA_TAG_PAY    = "TAG_PAY";
     final static String SPARA_TAG_INCOME = "TAG_INCOME";
 
