@@ -3,20 +3,23 @@ package wxm.KeepAccount.ui.fragment.ListView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -26,7 +29,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
@@ -34,61 +36,101 @@ import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
-import wxm.KeepAccount.ui.fragment.base.ListViewBase;
+import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 
 /**
  * 日数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class DailyLVHelper extends ListViewBase
+public class DailyLVHelper extends LVShowDataBase
         implements OnClickListener {
     private final static String TAG = "DailyLVHelper";
 
+    /// list item data begin
+    final static String V_TYPE_DAY      = "v_day";
+    final static String V_TYPE_PAY      = "v_pay";
+    final static String V_TYPE_INCOME   = "v_income";
+    /// list item data end
+
     // for action
-    private final static int ACTION_NONE    = 0;
+    //private final static int ACTION_NONE    = 0;
     private final static int ACTION_DELETE  = 1;
     private final static int ACTION_EDIT    = 2;
-    private int mActionType = ACTION_NONE;
+    private int mActionType = ACTION_EDIT;
 
     // delete data
     private final LinkedList<Integer> mDelPay;
     private final LinkedList<Integer> mDelIncome;
 
-    // for raymenu
-    private static final int[] ITEM_DRAWABLES = {
-                                    R.drawable.ic_edit
-                                    ,R.drawable.ic_delete
-                                    ,R.drawable.ic_add};
+    // for expand or hide actions
+    private ImageView   mIVActions;
+    private GridLayout  mGLActions;
+    private boolean     mBActionExpand;
+    private Drawable    mDAExpand;
+    private Drawable    mDAHide;
 
     public DailyLVHelper()    {
         super();
 
         mDelPay    = new LinkedList<>();
         mDelIncome = new LinkedList<>();
+
+        mBActionExpand = false;
     }
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
-        mSelfView       = inflater.inflate(R.layout.lv_pager, container, false);
+        mSelfView       = inflater.inflate(R.layout.lv_newpager, container, false);
         mBFilter        = false;
 
-        // init ray menu
-        RayMenu rayMenu = UtilFun.cast(mSelfView.findViewById(R.id.rm_show_record));
-        assert null != rayMenu;
-        for (int ITEM_DRAWABLE : ITEM_DRAWABLES) {
-            ImageView item = new ImageView(mSelfView.getContext());
-            item.setImageResource(ITEM_DRAWABLE);
+        // for action expand
+        Resources res = mSelfView.getResources();
+        mDAExpand = res.getDrawable(R.drawable.ic_to_up);
+        mDAHide = res.getDrawable(R.drawable.ic_to_down);
 
-            final int position = ITEM_DRAWABLE;
-            rayMenu.addItem(item, new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    OnRayMenuClick(position);
-                }
-            });// Add a menu item
-        }
+        mIVActions = UtilFun.cast_t(mSelfView.findViewById(R.id.iv_expand));
+        mGLActions = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_action));
+        refreshAction();
+
+        mIVActions.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBActionExpand = !mBActionExpand;
+                refreshAction();
+            }
+        });
+
+        RelativeLayout rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_add));
+        rl.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ACNoteShowNew ac = getNewRootActivity();
+                Intent intent = new Intent(ac, ACNoteEdit.class);
+                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
+                        String.format(Locale.CHINA ,"%d-%02d-%02d"
+                                ,cal.get(Calendar.YEAR)
+                                ,cal.get(Calendar.MONTH) + 1
+                                ,cal.get(Calendar.DAY_OF_MONTH)));
+
+                ac.startActivityForResult(intent, 1);
+            }
+        });
+
+        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_delete));
+        rl.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mActionType = ACTION_DELETE;
+                refreshView();
+            }
+        });
+
 
         return mSelfView;
     }
@@ -101,7 +143,7 @@ public class DailyLVHelper extends ListViewBase
 
     @Override
     public void checkView() {
-        if(getRootActivity().getDayNotesDirty())
+        if(getNewRootActivity().getDayNotesDirty())
             loadView();
     }
 
@@ -155,22 +197,32 @@ public class DailyLVHelper extends ListViewBase
                     }
 
                     if(dirty) {
-                        getRootActivity().setNotesDirty();
+                        getNewRootActivity().setNotesDirty();
                         reloadData();
                     }
 
-                    mActionType = ACTION_NONE;
+                    mActionType = ACTION_EDIT;
                     refreshView();
                 }
 
                 break;
 
             case R.id.bt_giveup :
-                mActionType = ACTION_NONE;
+                mActionType = ACTION_EDIT;
                 mDelPay.clear();
                 mDelIncome.clear();
                 refreshAttachLayout();
                 break;
+        }
+    }
+
+    private void refreshAction()    {
+        if(mBActionExpand)  {
+            mIVActions.setImageDrawable(mDAHide);
+            setLayoutVisible(mGLActions, View.VISIBLE);
+        } else  {
+            mIVActions.setImageDrawable(mDAExpand);
+            setLayoutVisible(mGLActions, View.INVISIBLE);
         }
     }
 
@@ -181,7 +233,7 @@ public class DailyLVHelper extends ListViewBase
         mMainPara.clear();
         mHMSubPara.clear();
 
-        HashMap<String, ArrayList<INote>> hm_data = getRootActivity().getNotesByDay();
+        HashMap<String, ArrayList<INote>> hm_data = getNewRootActivity().getNotesByDay();
         parseNotes(hm_data);
     }
 
@@ -196,7 +248,7 @@ public class DailyLVHelper extends ListViewBase
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
         if(mBFilter) {
             for (HashMap<String, String> i : mMainPara) {
-                String cur_tag = i.get(ListViewBase.MPARA_TAG);
+                String cur_tag = i.get(K_TAG);
                 for (String ii : mFilterPara) {
                     if (cur_tag.equals(ii)) {
                         n_mainpara.add(i);
@@ -211,17 +263,16 @@ public class DailyLVHelper extends ListViewBase
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
-                new String[]{ListViewBase.MPARA_TITLE, ListViewBase.MPARA_ABSTRACT},
-                new int[]{R.id.tv_title, R.id.tv_abstract});
+                                        new String[]{}, new int[]{});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
 
     private void refreshAttachLayout()    {
-        setAttachLayoutVisible(ACTION_NONE != mActionType || mBFilter ?
+        setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
                                 View.VISIBLE : View.INVISIBLE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
-        setAccpetGiveupLayoutVisible(ACTION_NONE != mActionType ? View.VISIBLE : View.INVISIBLE);
+        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.INVISIBLE);
     }
 
     /**
@@ -232,8 +283,8 @@ public class DailyLVHelper extends ListViewBase
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(ListViewBase.MPARA_SHOW_UNFOLD.equals(hm.get(ListViewBase.MPARA_SHOW))) {
-            llhm = mHMSubPara.get(hm.get(ListViewBase.MPARA_TAG));
+        if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW))) {
+            llhm = mHMSubPara.get(hm.get(K_TAG));
         }
 
         if(null == llhm) {
@@ -243,60 +294,12 @@ public class DailyLVHelper extends ListViewBase
         // init sub adapter
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
-        SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), mLVShowDetail,
-                llhm, new String[]{ListViewBase.SPARA_TITLE, ListViewBase.SPARA_DETAIL},
-                new int[]{R.id.tv_title, R.id.tv_detail});
+        SelfSubAdapter mAdapter = new SelfSubAdapter(mSelfView.getContext(), mLVShowDetail,
+                                        llhm, new String[]{}, new int[]{});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
     }
-
-    /**
-     * raymenu点击事件
-     * @param resid 点击发生的资源ID
-     */
-    private void OnRayMenuClick(int resid)  {
-        switch (resid)  {
-            case R.drawable.ic_add : {
-                ACNoteShow ac = getRootActivity();
-                Intent intent = new Intent(ac, ACNoteEdit.class);
-                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
-
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(System.currentTimeMillis());
-                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
-                        String.format(Locale.CHINA
-                                , "%d-%02d-%02d"
-                                , cal.get(Calendar.YEAR)
-                                , cal.get(Calendar.MONTH) + 1
-                                , cal.get(Calendar.DAY_OF_MONTH)));
-
-                ac.startActivityForResult(intent, 1);
-            }
-            break;
-
-            case R.drawable.ic_delete: {
-                if (ACTION_DELETE != mActionType) {
-                    mActionType = ACTION_DELETE;
-                    refreshView();
-                }
-                break;
-            }
-
-            case R.drawable.ic_edit:     {
-                if (ACTION_EDIT != mActionType) {
-                    mActionType = ACTION_EDIT;
-                    refreshView();
-                }
-            }
-            break;
-
-            default:
-                Log.e(TAG, "未处理的resid : " + resid);
-                break;
-        }
-    }
-
 
     /**
      * 解析支出/收入数据
@@ -316,54 +319,57 @@ public class DailyLVHelper extends ListViewBase
             BigDecimal income_amount = BigDecimal.ZERO;
             for (INote r : v) {
                 HashMap<String, String> map = new HashMap<>();
-                map.put(ListViewBase.SPARA_TITLE, r.getInfo());
-                map.put(ListViewBase.SPARA_ID, String.valueOf(r.getId()));
+                map.put(K_TITLE, r.getInfo());
+                map.put(K_ID, String.valueOf(r.getId()));
 
                 if (r.isPayNote()) {
-                    map.put(ListViewBase.SPARA_TAG, ListViewBase.SPARA_TAG_PAY);
+                    map.put(K_TYPE, V_TYPE_PAY);
+                    map.put(K_AMOUNT, String.format(Locale.CHINA, "- %.02f", r.getVal()));
+
+                    BudgetItem bi = r.getBudget();
+                    if(null != bi)  {
+                        map.put(K_BUDGET, String.format(Locale.CHINA, "使用预算 : %s", bi.getName()));
+                    }
 
                     pay_cout += 1;
                     pay_amount = pay_amount.add(r.getVal());
                 } else {
-                    map.put(ListViewBase.SPARA_TAG, ListViewBase.SPARA_TAG_INCOME);
+                    map.put(K_TYPE, V_TYPE_INCOME);
+                    map.put(K_AMOUNT, String.format(Locale.CHINA, "+ %.02f", r.getVal()));
 
                     income_cout += 1;
                     income_amount = income_amount.add(r.getVal());
                 }
 
-                String show;
-                BudgetItem bi = r.getBudget();
-                if(null != bi)
-                    show = String.format(Locale.CHINA, "金额 : %.02f\n使用预算 : %s",
-                            r.getVal(), bi.getName());
-                else
-                    show = String.format(Locale.CHINA, "金额 : %.02f", r.getVal());
-
-
-                String nt = r.getNote();
-                if(!UtilFun.StringIsNullOrEmpty(nt)) {
-                    show = String.format(Locale.CHINA, "%s\n备注 : %s", show ,nt);
-                }
-
-                map.put(ListViewBase.SPARA_DETAIL, show);
-                map.put(ListViewBase.MPARA_TAG, title);
+                map.put(K_TAG, title);
                 cur_llhm.add(map);
             }
 
-            String show_str =
-                    String.format(Locale.CHINA,
-                            "支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
-                            pay_cout, pay_amount, income_cout, income_amount);
-
             HashMap<String, String> map = new HashMap<>();
-            map.put(ListViewBase.MPARA_TITLE, title);
-            map.put(ListViewBase.MPARA_ABSTRACT, show_str);
-            map.put(ListViewBase.MPARA_TAG, title);
-            if(checkUnfoldItem(title))
-                map.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_UNFOLD);
-            else
-                map.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_FOLD);
+            map.put(K_MONTH, k.substring(0, 7));
+            map.put(K_DAY_NUMEBER, k.substring(8, 10));
 
+            try {
+                Timestamp ts = ToolUtil.StringToTimestamp(k);
+                Calendar day = Calendar.getInstance();
+                day.setTimeInMillis(ts.getTime());
+                map.put(K_DAY_IN_WEEK, getDayInWeek(day.get(Calendar.DAY_OF_WEEK)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            map.put(K_DAY_PAY_COUNT, String.valueOf(pay_cout));
+            map.put(K_DAY_INCOME_COUNT, String.valueOf(income_cout));
+            map.put(K_DAY_PAY_AMOUNT, String.format(Locale.CHINA, "%.02f", pay_amount));
+            map.put(K_DAY_INCOME_AMOUNT, String.format(Locale.CHINA, "%.02f", income_amount));
+
+            BigDecimal bd_l = income_amount.subtract(pay_amount);
+            String v_l = String.format(Locale.CHINA,
+                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+            map.put(K_AMOUNT, v_l);
+
+            map.put(K_TAG, title);
+            map.put(K_SHOW, checkUnfoldItem(title) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
             mMainPara.add(map);
 
             mHMSubPara.put(title, cur_llhm);
@@ -376,10 +382,22 @@ public class DailyLVHelper extends ListViewBase
      */
     private class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
+        private int         mClOne;
+        private int         mClTwo;
+
+        private Drawable    mDAFold;
+        private Drawable    mDAUnFold;
 
         SelfAdapter(Context context, List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {
-            super(context, mdata, R.layout.li_daily_show, from, to);
+            super(context, mdata, R.layout.li_daily_new_show, from, to);
+
+            Resources res   = context.getResources();
+            mClOne = res.getColor(R.color.lightsteelblue);
+            mClTwo = res.getColor(R.color.paleturquoise);
+
+            mDAFold = res.getDrawable(R.drawable.ic_hide);
+            mDAUnFold = res.getDrawable(R.drawable.ic_show);
         }
 
         @Override
@@ -397,7 +415,6 @@ public class DailyLVHelper extends ListViewBase
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
-                //Log.i(TAG, "create view at pos = " + position);
                 final HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 final View fv = v;
                 final Resources res = v.getResources();
@@ -409,33 +426,45 @@ public class DailyLVHelper extends ListViewBase
                         //Log.i(TAG, "onIbClick at pos = " + pos);
                         Resources res = v.getResources();
                         ImageButton ib = UtilFun.cast(v);
-                        if(ListViewBase.MPARA_SHOW_FOLD.equals(hm.get(ListViewBase.MPARA_SHOW)))    {
-                            hm.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_UNFOLD);
+                        if(V_SHOW_FOLD.equals(hm.get(K_SHOW)))    {
+                            hm.put(K_SHOW, V_SHOW_UNFOLD);
                             init_detail_view(fv, hm);
-                            ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
-                            addUnfoldItem(hm.get(ListViewBase.MPARA_TAG));
+                            ib.setImageDrawable(mDAFold);
+                            addUnfoldItem(hm.get(K_TAG));
                         }   else    {
-                            hm.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_FOLD);
+                            hm.put(K_SHOW, V_SHOW_FOLD);
                             init_detail_view(fv, hm);
-                            ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
-                            removeUnfoldItem(hm.get(ListViewBase.MPARA_TAG));
+                            ib.setImageDrawable(mDAUnFold);
+                            removeUnfoldItem(hm.get(K_TAG));
                         }
                     }
                 });
 
-                if(ListViewBase.MPARA_SHOW_FOLD.equals(hm.get(ListViewBase.MPARA_SHOW)))    {
+                if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)))    {
                     //init_detail_view(fv, hm);
-                    ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
+                    ib.setImageDrawable(mDAFold);
                 }   else    {
                     init_detail_view(fv, hm);
-                    ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
+                    ib.setImageDrawable(mDAUnFold);
                 }
 
-                if(0 == position % 2)   {
-                    v.setBackgroundColor(res.getColor(R.color.lightsteelblue));
-                } else  {
-                    v.setBackgroundColor(res.getColor(R.color.paleturquoise));
-                }
+                RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
+                rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
+
+                // for show
+                TextView tv = UtilFun.cast_t(v.findViewById(R.id.tv_month));
+                tv.setText(hm.get(K_MONTH));
+
+                tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_number));
+                tv.setText(hm.get(K_DAY_NUMEBER));
+
+                tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_in_week));
+                tv.setText(hm.get(K_DAY_IN_WEEK));
+
+                RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
+                fillNoteInfo(rl_info, hm.get(K_DAY_PAY_COUNT), hm.get(K_DAY_PAY_AMOUNT),
+                        hm.get(K_DAY_INCOME_COUNT), hm.get(K_DAY_INCOME_AMOUNT),
+                        hm.get(K_AMOUNT));
             }
 
             return v;
@@ -450,11 +479,20 @@ public class DailyLVHelper extends ListViewBase
         private final static String TAG = "SelfSubAdapter";
         private final ListView        mRootView;
 
+        private Drawable    mDADelete;
+        private Drawable    mDADedit;
+        private int         mClSelected;
+
         SelfSubAdapter(Context context, ListView fv,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
-            super(context, sdata, R.layout.li_daily_show_detail, from, to);
+            super(context, sdata, R.layout.li_daily_new_show_detail, from, to);
             mRootView = fv;
+
+            Resources res   = context.getResources();
+            mDADedit        = res.getDrawable(R.drawable.right_arrow);
+            mDADelete       = res.getDrawable(R.drawable.ic_delete);
+            mClSelected     = res.getColor(R.color.red);
         }
 
         @Override
@@ -472,87 +510,103 @@ public class DailyLVHelper extends ListViewBase
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
-                //Log.i(TAG, "create view at pos = " + position);
                 HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                final Resources res = v.getResources();
-
-                // for action
-                ImageButton ib_action = UtilFun.cast(v.findViewById(R.id.ib_action));
-                assert null != ib_action;
-                if(ACTION_NONE == mActionType)    {
-                    ib_action.setVisibility(View.INVISIBLE);
-                }   else    {
-                    ib_action.setVisibility(View.VISIBLE);
-
-                    if(ACTION_DELETE == mActionType)
-                        ib_action.setImageDrawable(res.getDrawable(R.drawable.ic_delete));
-                    else
-                        ib_action.setImageDrawable(res.getDrawable(R.drawable.ic_edit));
-
-                    ib_action.getBackground().setAlpha(0);
-                    ib_action.setOnClickListener(this);
-                }
-
-                // for image & background
-                Bitmap nicon;
-                if(ListViewBase.SPARA_TAG_PAY.equals(hm.get(ListViewBase.SPARA_TAG)))   {
-                    v.setBackgroundColor(res.getColor(R.color.burlywood));
-                    nicon = BitmapFactory.decodeResource(res, R.drawable.ic_show_pay);
+                RelativeLayout rl_pay = UtilFun.cast_t(v.findViewById(R.id.rl_pay));
+                RelativeLayout rl_income = UtilFun.cast_t(v.findViewById(R.id.rl_income));
+                if(V_TYPE_PAY.equals(hm.get(K_TYPE)))   {
+                    ToolUtil.setViewGroupVisible(rl_income, View.INVISIBLE);
+                    init_pay(rl_pay, hm);
                 } else  {
-                    v.setBackgroundColor(res.getColor(R.color.darkseagreen));
-                    nicon = BitmapFactory.decodeResource(res, R.drawable.ic_show_income);
+                    ToolUtil.setViewGroupVisible(rl_pay, View.INVISIBLE);
+                    init_income(rl_income, hm);
                 }
-
-                ImageView iv = UtilFun.cast(v.findViewById(R.id.iv_show));
-                iv.setBackgroundColor(Color.TRANSPARENT);
-                iv.setImageBitmap(nicon);
             }
 
             return v;
         }
 
+        private void init_pay(RelativeLayout rl_pay, HashMap<String, String> hd)    {
+            TextView tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_title));
+            tv.setText(hd.get(K_TITLE));
+
+            String b_name = hd.get(K_BUDGET);
+            if(!UtilFun.StringIsNullOrEmpty(b_name)) {
+                tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_budget));
+                tv.setText(b_name);
+            } else  {
+                tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_budget));
+                tv.setVisibility(View.INVISIBLE);
+
+                ImageView iv = UtilFun.cast_t(rl_pay.findViewById(R.id.iv_pay_budget));
+                iv.setVisibility(View.INVISIBLE);
+            }
+
+            tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_amount));
+            tv.setText(hd.get(K_AMOUNT));
+
+            ImageView iv = UtilFun.cast_t(rl_pay.findViewById(R.id.iv_pay_action));
+            iv.setOnClickListener(this);
+            if(ACTION_EDIT == mActionType)    {
+                iv.setImageDrawable(mDADedit);
+            }   else    {
+                iv.setImageDrawable(mDADelete);
+            }
+        }
+
+        private void init_income(RelativeLayout rl_income, HashMap<String, String> hd)    {
+            TextView tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_title));
+            tv.setText(hd.get(K_TITLE));
+
+            tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_amount));
+            tv.setText(hd.get(K_AMOUNT));
+
+            ImageView iv = UtilFun.cast_t(rl_income.findViewById(R.id.iv_income_action));
+            iv.setOnClickListener(this);
+            if(ACTION_EDIT == mActionType)    {
+                iv.setImageDrawable(mDADedit);
+            }   else    {
+                iv.setImageDrawable(mDADelete);
+            }
+        }
+
+
         @Override
         public void onClick(View v) {
-            int vid = v.getId();
-            Resources res = v.getResources();
-
             int pos = mRootView.getPositionForView(v);
             HashMap<String, String> hm = UtilFun.cast(getItem(pos));
-            String tp = hm.get(ListViewBase.SPARA_TAG);
-            int did = Integer.parseInt(hm.get(ListViewBase.SPARA_ID));
+            String tp = hm.get(K_TYPE);
+            int did = Integer.parseInt(hm.get(K_ID));
 
+            int vid = v.getId();
             switch (vid)    {
-                case R.id.ib_action:       {
-                    ImageButton ib_action = UtilFun.cast(v);
+                case R.id.iv_pay_action :
+                case R.id.iv_income_action :       {
+                    ImageView iv = UtilFun.cast_t(v);
                     if(ACTION_DELETE == mActionType)    {
-                        if(ib_action.isSelected())  {
-                            if (ListViewBase.SPARA_TAG_PAY.equals(tp)) {
+                        if(iv.isSelected())  {
+                            if (V_TYPE_PAY.equals(tp)) {
                                 mDelPay.removeFirstOccurrence(did);
                             } else {
                                 mDelIncome.removeFirstOccurrence(did);
                             }
 
-                            ib_action.getBackground().setAlpha(0);
+                            iv.getBackground().setAlpha(0);
                         }   else    {
-                            if (ListViewBase.SPARA_TAG_PAY.equals(tp)) {
+                            if (V_TYPE_PAY.equals(tp)) {
                                 mDelPay.add(did);
                             } else {
                                 mDelIncome.add(did);
                             }
 
-                            ib_action.getBackground().setAlpha(255);
-                            ib_action.setBackgroundColor(res.getColor(R.color.red));
+                            iv.setBackgroundColor(mClSelected);
                         }
 
-                        ib_action.setSelected(!ib_action.isSelected());
+                        iv.setSelected(!iv.isSelected());
                     } else  {
-                        mActionType = ACTION_NONE;
-                        refreshAttachLayout();
-
-                        ACNoteShow ac = getRootActivity();
+                        ACNoteShowNew ac = getNewRootActivity();
                         Intent intent = new Intent(ac, ACNoteEdit.class);
                         intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
-                        if (ListViewBase.SPARA_TAG_PAY.equals(tp)) {
+                        if (V_TYPE_PAY.equals(tp)) {
                             intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, did);
                         } else {
                             intent.putExtra(ACNoteEdit.PARA_NOTE_INCOME, did);

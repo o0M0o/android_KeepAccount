@@ -3,16 +3,24 @@ package wxm.KeepAccount.ui.fragment.ListView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -20,7 +28,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.db.INote;
@@ -28,13 +35,14 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.fragment.base.DefForTabLayout;
+import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 import wxm.KeepAccount.ui.fragment.base.ListViewBase;
 
 /**
  * 月数据辅助类
  * Created by 123 on 2016/9/10.
  */
-public class MonthlyLVHelper extends ListViewBase {
+public class MonthlyLVHelper extends LVShowDataBase {
     private final static String TAG = "MonthlyLVHelper";
 
     private boolean mBSelectSubFilter = false;
@@ -47,12 +55,13 @@ public class MonthlyLVHelper extends ListViewBase {
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
-        mSelfView = inflater.inflate(R.layout.lv_pager, container, false);
+        mSelfView = inflater.inflate(R.layout.lv_newpager, container, false);
 
-        // init ray menu
-        RayMenu rayMenu = UtilFun.cast(mSelfView.findViewById(R.id.rm_show_record));
-        assert null != rayMenu;
-        rayMenu.setVisibility(View.INVISIBLE);
+        // 无附加动作
+        ImageView mIVActions = UtilFun.cast_t(mSelfView.findViewById(R.id.iv_expand));
+        GridLayout mGLActions = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_action));
+        setLayoutVisible(mGLActions, View.INVISIBLE);
+        mIVActions.setVisibility(View.INVISIBLE);
 
         return mSelfView;
     }
@@ -148,7 +157,7 @@ public class MonthlyLVHelper extends ListViewBase {
         mHMSubPara.clear();
 
         // format output
-        HashMap<String, ArrayList<INote>> hm_data = getRootActivity().getNotesByMonth();
+        HashMap<String, ArrayList<INote>> hm_data = getNewRootActivity().getNotesByMonth();
         parseNotes(hm_data);
     }
 
@@ -179,8 +188,7 @@ public class MonthlyLVHelper extends ListViewBase {
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
-                new String[]{ListViewBase.MPARA_TITLE, ListViewBase.MPARA_ABSTRACT},
-                new int[]{R.id.tv_title, R.id.tv_abstract});
+                                        new String[]{}, new int[]{});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
@@ -241,16 +249,20 @@ public class MonthlyLVHelper extends ListViewBase {
             }
         }
 
-        String show_str =
-                String.format(Locale.CHINA,
-                        "支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
-                        pay_cout, pay_amount, income_cout, income_amount);
-
         HashMap<String, String> map = new HashMap<>();
-        map.put(ListViewBase.MPARA_TITLE, tag);
-        map.put(ListViewBase.MPARA_ABSTRACT, show_str);
-        map.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_FOLD);
-        map.put(ListViewBase.MPARA_TAG, tag);
+        map.put(K_MONTH, tag.substring(0, 8));
+        map.put(K_MONTH_PAY_COUNT, String.valueOf(pay_cout));
+        map.put(K_MONTH_INCOME_COUNT, String.valueOf(income_cout));
+        map.put(K_MONTH_PAY_AMOUNT, String.format(Locale.CHINA, "%.02f", pay_amount));
+        map.put(K_MONTH_INCOME_AMOUNT, String.format(Locale.CHINA, "%.02f", income_amount));
+
+        BigDecimal bd_l = income_amount.subtract(pay_amount);
+        String v_l = String.format(Locale.CHINA,
+                0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+        map.put(K_AMOUNT, v_l);
+
+        map.put(K_TAG, tag);
+        map.put(K_SHOW, checkUnfoldItem(tag) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
         mMainPara.add(map);
 
         parseDays(tag, hm_data);
@@ -283,17 +295,27 @@ public class MonthlyLVHelper extends ListViewBase {
 
             }
 
-            String sub_tag = ToolUtil.FormatDateString(k);
-            String show =
-                    String.format(Locale.CHINA,
-                            "支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
-                            pay_cout, pay_amount, income_cout, income_amount);
-
             HashMap<String, String> map = new HashMap<>();
-            map.put(ListViewBase.SPARA_TITLE, sub_tag);
-            map.put(ListViewBase.SPARA_DETAIL, show);
-            map.put(ListViewBase.MPARA_TAG, tag);
-            map.put(ListViewBase.SPARA_TAG, sub_tag);
+            map.put(K_DAY_NUMEBER, k.substring(8, 10));
+            try {
+                Timestamp ts = ToolUtil.StringToTimestamp(k);
+                Calendar day = Calendar.getInstance();
+                day.setTimeInMillis(ts.getTime());
+                map.put(K_DAY_IN_WEEK, getDayInWeek(day.get(Calendar.DAY_OF_WEEK)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            map.put(K_DAY_PAY_COUNT, String.valueOf(pay_cout));
+            map.put(K_DAY_INCOME_COUNT, String.valueOf(income_cout));
+            map.put(K_DAY_PAY_AMOUNT, String.format(Locale.CHINA, "%.02f", pay_amount));
+            map.put(K_DAY_INCOME_AMOUNT, String.format(Locale.CHINA, "%.02f", income_amount));
+
+            BigDecimal bd_l = income_amount.subtract(pay_amount);
+            String v_l = String.format(Locale.CHINA,
+                    0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+            map.put(K_AMOUNT, v_l);
+            map.put(K_TAG, tag);
             cur_llhm.add(map);
         }
 
@@ -304,8 +326,8 @@ public class MonthlyLVHelper extends ListViewBase {
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(ListViewBase.MPARA_SHOW_UNFOLD.equals(hm.get(ListViewBase.MPARA_SHOW))) {
-            llhm = mHMSubPara.get(hm.get(ListViewBase.MPARA_TAG));
+        if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW))) {
+            llhm = mHMSubPara.get(hm.get(K_TAG));
         }
 
         if(null == llhm) {
@@ -313,11 +335,9 @@ public class MonthlyLVHelper extends ListViewBase {
         }
 
         // init sub adapter
-        ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
-        assert null != mLVShowDetail;
+        ListView mLVShowDetail = UtilFun.cast_t(v.findViewById(R.id.lv_show_detail));
         SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), llhm,
-                new String[]{ListViewBase.SPARA_TITLE, ListViewBase.SPARA_DETAIL},
-                new int[]{R.id.tv_title, R.id.tv_detail});
+                                    new String[]{}, new int[]{});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
@@ -327,13 +347,25 @@ public class MonthlyLVHelper extends ListViewBase {
     /**
      * 首级adapter
      */
-    public class SelfAdapter extends SimpleAdapter {
+    private class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
+        private int         mClOne;
+        private int         mClTwo;
 
-        public SelfAdapter(Context context,
-                           List<? extends Map<String, ?>> mdata,
-                           String[] from, int[] to) {
-            super(context, mdata, R.layout.li_monthly_show, from, to);
+        private Drawable    mDAFold;
+        private Drawable    mDAUnFold;
+
+        SelfAdapter(Context context,
+                    List<? extends Map<String, ?>> mdata,
+                    String[] from, int[] to) {
+            super(context, mdata, R.layout.li_monthly_new_show, from, to);
+
+            Resources res   = context.getResources();
+            mClOne = res.getColor(R.color.lightsteelblue);
+            mClTwo = res.getColor(R.color.paleturquoise);
+
+            mDAFold = res.getDrawable(R.drawable.ic_hide);
+            mDAUnFold = res.getDrawable(R.drawable.ic_show);
         }
 
         @Override
@@ -351,7 +383,7 @@ public class MonthlyLVHelper extends ListViewBase {
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
-                //Log.i(TAG, "create view at pos = " + position);
+                final HashMap<String, String> hm = UtilFun.cast(getItem(position));
 
                 final View fv = v;
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
@@ -359,27 +391,40 @@ public class MonthlyLVHelper extends ListViewBase {
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Resources res = v.getResources();
                         ImageButton ib = UtilFun.cast(v);
-                        HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                        if(ListViewBase.MPARA_SHOW_FOLD.equals(hm.get(ListViewBase.MPARA_SHOW)))    {
-                            hm.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_UNFOLD);
+                        if(V_SHOW_FOLD.equals(hm.get(K_SHOW)))    {
+                            hm.put(K_SHOW, V_SHOW_UNFOLD);
                             init_detail_view(fv, hm);
-                            ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
+                            ib.setImageDrawable(mDAFold);
+                            addUnfoldItem(hm.get(K_TAG));
                         }   else    {
-                            hm.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_FOLD);
+                            hm.put(K_SHOW, V_SHOW_FOLD);
                             init_detail_view(fv, hm);
-                            ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
+                            ib.setImageDrawable(mDAUnFold);
+                            removeUnfoldItem(hm.get(K_TAG));
                         }
                     }
                 });
 
-                Resources res = v.getResources();
-                if(0 == position % 2)   {
-                    v.setBackgroundColor(res.getColor(R.color.lightsteelblue));
-                } else  {
-                    v.setBackgroundColor(res.getColor(R.color.paleturquoise));
+                if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)))    {
+                    //init_detail_view(fv, hm);
+                    ib.setImageDrawable(mDAFold);
+                }   else    {
+                    init_detail_view(fv, hm);
+                    ib.setImageDrawable(mDAUnFold);
                 }
+
+                RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
+                rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
+
+                // for show
+                TextView tv = UtilFun.cast_t(v.findViewById(R.id.tv_month));
+                tv.setText(hm.get(K_MONTH));
+
+                RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
+                fillNoteInfo(rl_info, hm.get(K_MONTH_PAY_COUNT), hm.get(K_MONTH_PAY_AMOUNT),
+                        hm.get(K_MONTH_INCOME_COUNT), hm.get(K_MONTH_INCOME_AMOUNT),
+                        hm.get(K_AMOUNT));
             }
 
             return v;
@@ -390,13 +435,13 @@ public class MonthlyLVHelper extends ListViewBase {
     /**
      * 次级adapter
      */
-    public class SelfSubAdapter  extends SimpleAdapter {
+    private class SelfSubAdapter  extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
 
-        public SelfSubAdapter(Context context,
-                              List<? extends Map<String, ?>> sdata,
-                              String[] from, int[] to) {
-            super(context, sdata, R.layout.li_monthly_show_detail, from, to);
+        SelfSubAdapter(Context context,
+                       List<? extends Map<String, ?>> sdata,
+                       String[] from, int[] to) {
+            super(context, sdata, R.layout.li_monthly_new_show_detail, from, to);
         }
 
         @Override
@@ -414,6 +459,7 @@ public class MonthlyLVHelper extends ListViewBase {
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
+                final HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
                 ib.getBackground().setAlpha(0);
                 ib.setOnClickListener(new View.OnClickListener() {
@@ -425,7 +471,7 @@ public class MonthlyLVHelper extends ListViewBase {
                         }
 
                         HashMap<String, String> hp = UtilFun.cast(getItem(position));
-                        final String hp_tag = hp.get(ListViewBase.SPARA_TAG);
+                        final String hp_tag = hp.get(K_TAG);
                         Resources res = v.getResources();
                         if(!v.isSelected()) {
                             mLLSubFilter.add(hp_tag);
@@ -450,23 +496,20 @@ public class MonthlyLVHelper extends ListViewBase {
                         }
 
                         v.setSelected(!v.isSelected());
-                        /*
-                        ACNoteShow as = getRootActivity();
-                        as.jumpByTabName(DefForTabLayout.TAB_TITLE_DAILY);
-
-                        HashMap<String, String> hp = UtilFun.cast(getItem(position));
-                        final String hp_tag = hp.get(DefForTabLayout.SPARA_TAG);
-                        as.filterView(Collections.singletonList(hp_tag));
-                        */
                     }
                 });
 
-                Resources res = v.getResources();
-                if(0 == position % 2)   {
-                    v.setBackgroundColor(res.getColor(R.color.wheat));
-                } else  {
-                    v.setBackgroundColor(res.getColor(R.color.salmon));
-                }
+                // for show
+                TextView tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_number));
+                tv.setText(hm.get(K_DAY_NUMEBER));
+
+                tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_in_week));
+                tv.setText(hm.get(K_DAY_IN_WEEK));
+
+                RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
+                fillNoteInfo(rl_info, hm.get(K_DAY_PAY_COUNT), hm.get(K_DAY_PAY_AMOUNT),
+                        hm.get(K_DAY_INCOME_COUNT), hm.get(K_DAY_INCOME_AMOUNT),
+                        hm.get(K_AMOUNT));
             }
 
             return v;

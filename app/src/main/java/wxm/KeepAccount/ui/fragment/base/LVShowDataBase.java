@@ -126,7 +126,7 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
             tv = UtilFun.cast_t(rl.findViewById(R.id.tv_income_amount));
             tv.setText(income_amount);
 
-            tv = UtilFun.cast_t(rl.findViewById(R.id.tv_daily_amount));
+            tv = UtilFun.cast_t(rl.findViewById(R.id.tv_amount));
             tv.setText(amount);
         }
     }

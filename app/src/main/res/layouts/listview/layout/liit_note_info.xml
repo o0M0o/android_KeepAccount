@@ -124,7 +124,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/tv_daily_amount"
+            android:id="@+id/tv_amount"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/tv_daily_tag"
             android:textColor="@color/darkslategrey"

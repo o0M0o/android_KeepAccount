@@ -3,13 +3,18 @@ package wxm.KeepAccount.ui.fragment.ListView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -20,7 +25,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cn.wxm.andriodutillib.capricorn.RayMenu;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.db.INote;
@@ -30,13 +34,14 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.fragment.base.DefForTabLayout;
+import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 import wxm.KeepAccount.ui.fragment.base.ListViewBase;
 
 /**
  * 年数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class YearlyLVHelper extends ListViewBase {
+public class YearlyLVHelper extends LVShowDataBase {
     private final static String TAG = "YearlyLVHelper";
 
     private boolean mBSelectSubFilter = false;
@@ -49,12 +54,13 @@ public class YearlyLVHelper extends ListViewBase {
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
-        mSelfView = inflater.inflate(R.layout.lv_pager, container, false);
+        mSelfView = inflater.inflate(R.layout.lv_newpager, container, false);
 
-        // init ray menu
-        RayMenu rayMenu = UtilFun.cast(mSelfView.findViewById(R.id.rm_show_record));
-        assert null != rayMenu;
-        rayMenu.setVisibility(View.INVISIBLE);
+        // 无附加动作
+        ImageView mIVActions = UtilFun.cast_t(mSelfView.findViewById(R.id.iv_expand));
+        GridLayout mGLActions = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_action));
+        setLayoutVisible(mGLActions, View.INVISIBLE);
+        mIVActions.setVisibility(View.INVISIBLE);
 
         return mSelfView;
     }
@@ -150,7 +156,7 @@ public class YearlyLVHelper extends ListViewBase {
         mHMSubPara.clear();
 
         // format output
-        HashMap<String, ArrayList<INote>> hm_data = getRootActivity().getNotesByYear();
+        HashMap<String, ArrayList<INote>> hm_data = getNewRootActivity().getNotesByYear();
         parseNotes(hm_data);
     }
 
@@ -180,8 +186,7 @@ public class YearlyLVHelper extends ListViewBase {
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
-                new String[]{ListViewBase.MPARA_TITLE, ListViewBase.MPARA_ABSTRACT},
-                new int[]{R.id.tv_title, R.id.tv_abstract});
+                                        new String[]{}, new int[]{});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
@@ -244,16 +249,20 @@ public class YearlyLVHelper extends ListViewBase {
             }
         }
 
-        String show_str =
-                String.format(Locale.CHINA,
-                        "支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
-                        pay_cout, pay_amount, income_cout, income_amount);
-
         HashMap<String, String> map = new HashMap<>();
-        map.put(ListViewBase.MPARA_TITLE, tag);
-        map.put(ListViewBase.MPARA_ABSTRACT, show_str);
-        map.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_FOLD);
-        map.put(ListViewBase.MPARA_TAG, tag);
+        map.put(K_YEAR, tag);
+        map.put(K_YEAR_PAY_COUNT, String.valueOf(pay_cout));
+        map.put(K_YEAR_INCOME_COUNT, String.valueOf(income_cout));
+        map.put(K_YEAR_PAY_AMOUNT, String.format(Locale.CHINA, "%.02f", pay_amount));
+        map.put(K_YEAR_INCOME_AMOUNT, String.format(Locale.CHINA, "%.02f", income_amount));
+
+        BigDecimal bd_l = income_amount.subtract(pay_amount);
+        String v_l = String.format(Locale.CHINA,
+                0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+        map.put(K_AMOUNT, v_l);
+
+        map.put(K_TAG, tag);
+        map.put(K_SHOW, checkUnfoldItem(tag) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
         mMainPara.add(map);
 
         parseMonths(tag, hm_data);
@@ -269,12 +278,11 @@ public class YearlyLVHelper extends ListViewBase {
         Collections.sort(set_k);
         LinkedList<HashMap<String, String>> cur_llhm = new LinkedList<>();
         for(String k : set_k) {
-            ArrayList<INote> notes = hm_data.get(k);
-
             int pay_cout = 0;
             int income_cout = 0;
             BigDecimal pay_amount = BigDecimal.ZERO;
             BigDecimal income_amount = BigDecimal.ZERO;
+            ArrayList<INote> notes = hm_data.get(k);
             for (INote r : notes) {
                 if (r.isPayNote()) {
                     pay_cout += 1;
@@ -285,17 +293,19 @@ public class YearlyLVHelper extends ListViewBase {
                 }
             }
 
-            String sub_tag = ToolUtil.FormatDateString(k);
-            String show =
-                    String.format(Locale.CHINA,
-                            "支出项 ： %d    总金额 ：%.02f\n收入项 ： %d    总金额 ：%.02f",
-                            pay_cout, pay_amount, income_cout, income_amount);
-
             HashMap<String, String> map = new HashMap<>();
-            map.put(ListViewBase.SPARA_TITLE, sub_tag);
-            map.put(ListViewBase.SPARA_DETAIL, show);
-            map.put(ListViewBase.MPARA_TAG, tag);
-            map.put(ListViewBase.SPARA_TAG, sub_tag);
+            map.put(K_MONTH, k.substring(5, 7));
+            map.put(K_MONTH_PAY_COUNT, String.valueOf(pay_cout));
+            map.put(K_MONTH_INCOME_COUNT, String.valueOf(income_cout));
+            map.put(K_MONTH_PAY_AMOUNT, String.format(Locale.CHINA, "%.02f", pay_amount));
+            map.put(K_MONTH_INCOME_AMOUNT, String.format(Locale.CHINA, "%.02f", income_amount));
+
+            BigDecimal bd_l = income_amount.subtract(pay_amount);
+            String v_l = String.format(Locale.CHINA,
+                    0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+            map.put(K_AMOUNT, v_l);
+
+            map.put(K_TAG, tag);
             cur_llhm.add(map);
         }
 
@@ -307,8 +317,8 @@ public class YearlyLVHelper extends ListViewBase {
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
-        if(ListViewBase.MPARA_SHOW_UNFOLD.equals(hm.get(ListViewBase.MPARA_SHOW))) {
-            llhm = mHMSubPara.get(hm.get(ListViewBase.MPARA_TAG));
+        if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW))) {
+            llhm = mHMSubPara.get(hm.get(K_TAG));
         }
 
         if(null == llhm) {
@@ -319,8 +329,7 @@ public class YearlyLVHelper extends ListViewBase {
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
         SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), llhm,
-                new String[]{ListViewBase.SPARA_TITLE, ListViewBase.SPARA_DETAIL},
-                new int[]{R.id.tv_title, R.id.tv_detail});
+                                    new String[]{}, new int[]{});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
@@ -330,13 +339,25 @@ public class YearlyLVHelper extends ListViewBase {
     /**
      * 首级adapter
      */
-    public class SelfAdapter extends SimpleAdapter {
+    private class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
+        private int         mClOne;
+        private int         mClTwo;
 
-        public SelfAdapter(Context context,
-                           List<? extends Map<String, ?>> mdata,
-                           String[] from, int[] to) {
-            super(context, mdata, R.layout.li_yearly_show, from, to);
+        private Drawable    mDAFold;
+        private Drawable    mDAUnFold;
+
+        SelfAdapter(Context context,
+                    List<? extends Map<String, ?>> mdata,
+                    String[] from, int[] to) {
+            super(context, mdata, R.layout.li_yearly_new_show, from, to);
+
+            Resources res   = context.getResources();
+            mClOne = res.getColor(R.color.lightsteelblue);
+            mClTwo = res.getColor(R.color.paleturquoise);
+
+            mDAFold = res.getDrawable(R.drawable.ic_hide);
+            mDAUnFold = res.getDrawable(R.drawable.ic_show);
         }
 
         @Override
@@ -354,7 +375,7 @@ public class YearlyLVHelper extends ListViewBase {
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
-                //Log.i(TAG, "create view at pos = " + position);
+                final HashMap<String, String> hm = UtilFun.cast(getItem(position));
 
                 final View pv = v;
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
@@ -362,28 +383,40 @@ public class YearlyLVHelper extends ListViewBase {
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //Log.i(TAG, "onIbClick at pos = " + pos);
-                        Resources res = pv.getResources();
-                        ImageButton ib = UtilFun.cast(pv.findViewById(R.id.ib_hide_show));
-                        HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                        if(ListViewBase.MPARA_SHOW_FOLD.equals(hm.get(ListViewBase.MPARA_SHOW)))    {
-                            hm.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_UNFOLD);
+                        ImageButton ib = UtilFun.cast(v);
+                        if(V_SHOW_FOLD.equals(hm.get(K_SHOW)))    {
+                            hm.put(K_SHOW, V_SHOW_UNFOLD);
                             init_detail_view(pv, hm);
-                            ib.setImageDrawable(res.getDrawable(R.drawable.ic_hide));
+                            ib.setImageDrawable(mDAFold);
+                            addUnfoldItem(hm.get(K_TAG));
                         }   else    {
-                            hm.put(ListViewBase.MPARA_SHOW, ListViewBase.MPARA_SHOW_FOLD);
+                            hm.put(K_SHOW, V_SHOW_FOLD);
                             init_detail_view(pv, hm);
-                            ib.setImageDrawable(res.getDrawable(R.drawable.ic_show));
+                            ib.setImageDrawable(mDAUnFold);
+                            removeUnfoldItem(hm.get(K_TAG));
                         }
                     }
                 });
 
-                Resources res = v.getResources();
-                if(0 == position % 2)   {
-                    v.setBackgroundColor(res.getColor(R.color.lightsteelblue));
-                } else  {
-                    v.setBackgroundColor(res.getColor(R.color.paleturquoise));
+                if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)))    {
+                    //init_detail_view(fv, hm);
+                    ib.setImageDrawable(mDAFold);
+                }   else    {
+                    init_detail_view(pv, hm);
+                    ib.setImageDrawable(mDAUnFold);
                 }
+
+                RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
+                rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
+
+                // for show
+                TextView tv = UtilFun.cast_t(v.findViewById(R.id.tv_year));
+                tv.setText(hm.get(K_YEAR));
+
+                RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
+                fillNoteInfo(rl_info, hm.get(K_YEAR_PAY_COUNT), hm.get(K_YEAR_PAY_AMOUNT),
+                        hm.get(K_YEAR_INCOME_COUNT), hm.get(K_YEAR_INCOME_AMOUNT),
+                        hm.get(K_AMOUNT));
             }
 
             return v;
@@ -394,13 +427,13 @@ public class YearlyLVHelper extends ListViewBase {
     /**
      * 次级adapter
      */
-    public class SelfSubAdapter  extends SimpleAdapter {
+    private class SelfSubAdapter  extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
 
-        public SelfSubAdapter(Context context,
-                              List<? extends Map<String, ?>> sdata,
-                              String[] from, int[] to) {
-            super(context, sdata, R.layout.li_yearly_show_detail, from, to);
+        SelfSubAdapter(Context context,
+                       List<? extends Map<String, ?>> sdata,
+                       String[] from, int[] to) {
+            super(context, sdata, R.layout.li_yearly_new_show_detail, from, to);
         }
 
         @Override
@@ -418,6 +451,7 @@ public class YearlyLVHelper extends ListViewBase {
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
+                final HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
                 ib.getBackground().setAlpha(0);
                 ib.setOnClickListener(new View.OnClickListener() {
@@ -455,12 +489,14 @@ public class YearlyLVHelper extends ListViewBase {
                     }
                 });
 
-                Resources res = v.getResources();
-                if(0 == position % 2)   {
-                    v.setBackgroundColor(res.getColor(R.color.wheat));
-                } else  {
-                    v.setBackgroundColor(res.getColor(R.color.salmon));
-                }
+                // for show
+                TextView tv = UtilFun.cast_t(v.findViewById(R.id.tv_month));
+                tv.setText(hm.get(K_MONTH));
+
+                RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
+                fillNoteInfo(rl_info, hm.get(K_MONTH_PAY_COUNT), hm.get(K_MONTH_PAY_AMOUNT),
+                        hm.get(K_MONTH_INCOME_COUNT), hm.get(K_MONTH_INCOME_AMOUNT),
+                        hm.get(K_AMOUNT));
             }
 
             return v;
