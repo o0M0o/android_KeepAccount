@@ -1,7 +1,13 @@
 package wxm.KeepAccount.ui.fragment.base;
 
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import java.util.HashMap;
 import java.util.LinkedList;
+
+import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
 
 /**
  * sub class for listview
@@ -20,13 +26,14 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     protected final static String K_ID        = "k_id";
     protected final static String K_TYPE      = "k_type";
 
+    protected final static String K_YEAR              = "k_year";
     protected final static String K_MONTH             = "k_month";
     protected final static String K_DAY_NUMEBER       = "k_d_number";
     protected final static String K_DAY_IN_WEEK       = "k_d_in_week";
     protected final static String K_YEAR_PAY_COUNT       = "k_ypc";
     protected final static String K_YEAR_PAY_AMOUNT      = "k_ypa";
     protected final static String K_YEAR_INCOME_COUNT    = "k_yic";
-    protected final static String K_YRAR_INCOME_AMOUNT   = "k_yia";
+    protected final static String K_YEAR_INCOME_AMOUNT   = "k_yia";
     protected final static String K_DAY_PAY_COUNT       = "k_dpc";
     protected final static String K_DAY_PAY_AMOUNT      = "k_dpa";
     protected final static String K_DAY_INCOME_COUNT    = "k_dic";
@@ -101,5 +108,26 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     protected String getDayInWeek(int dw) {
         dw--;
         return DAY_IN_WEEK[dw];
+    }
+
+
+    protected void fillNoteInfo(RelativeLayout rl, String pay_count, String pay_amount,
+                                String income_count, String income_amount, String amount)   {
+        if(R.id.rl_info == rl.getId()) {
+            TextView tv = UtilFun.cast_t(rl.findViewById(R.id.tv_pay_count));
+            tv.setText(pay_count);
+
+            tv = UtilFun.cast_t(rl.findViewById(R.id.tv_pay_amount));
+            tv.setText(pay_amount);
+
+            tv = UtilFun.cast_t(rl.findViewById(R.id.tv_income_count));
+            tv.setText(income_count);
+
+            tv = UtilFun.cast_t(rl.findViewById(R.id.tv_income_amount));
+            tv.setText(income_amount);
+
+            tv = UtilFun.cast_t(rl.findViewById(R.id.tv_daily_amount));
+            tv.setText(amount);
+        }
     }
 }
