@@ -52,6 +52,9 @@
         <RelativeLayout
             android:id="@+id/rl_info"
             android:layout_toRightOf="@id/tv_month"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             android:layout_marginLeft="24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
