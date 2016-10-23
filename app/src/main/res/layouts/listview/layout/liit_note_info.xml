@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-
+        <!--
         <TextView
             android:id="@+id/tv_pay_amount_tag"
             android:layout_centerVertical="true"
@@ -45,11 +45,23 @@
             android:text="共计 : "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+            -->
+
+        <ImageView
+            android:id="@+id/iv_pay_amount_tag"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_pay_count"
+            android:layout_marginLeft="20dp"
+            app:srcCompat="@drawable/ic_yen"
+            android:scaleType="fitXY"
+            android:layout_width="18dp"
+            android:layout_height="18dp" />
 
         <TextView
             android:id="@+id/tv_pay_amount"
+            android:layout_marginLeft="8dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/tv_pay_amount_tag"
+            android:layout_toRightOf="@id/iv_pay_amount_tag"
             android:textColor="@color/darkred"
             android:text="754.76"
             android:layout_width="wrap_content"
@@ -90,6 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <!--
         <TextView
             android:id="@+id/tv_income_amount_tag"
             android:layout_centerVertical="true"
@@ -98,11 +111,22 @@
             android:text="共计 : "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+            -->
+        <ImageView
+            android:id="@+id/iv_income_amount_tag"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_income_count"
+            android:layout_marginLeft="20dp"
+            app:srcCompat="@drawable/ic_yen"
+            android:scaleType="fitXY"
+            android:layout_width="18dp"
+            android:layout_height="18dp" />
 
         <TextView
             android:id="@+id/tv_income_amount"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/tv_income_amount_tag"
+            android:layout_toRightOf="@id/iv_income_amount_tag"
+            android:layout_marginLeft="8dp"
             android:textColor="@color/darkslategrey"
             android:text="754.76"
             android:layout_width="wrap_content"

@@ -296,7 +296,10 @@ public class MonthlyLVHelper extends LVShowDataBase {
             }
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(K_DAY_NUMEBER, k.substring(8, 10));
+            String km = k.substring(8, 10);
+            if(km.startsWith("0"))
+                km = km.replaceFirst("0", " ");
+            map.put(K_DAY_NUMEBER, km);
             try {
                 Timestamp ts = ToolUtil.StringToTimestamp(k);
                 Calendar day = Calendar.getInstance();
@@ -358,7 +361,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
         SelfAdapter(Context context,
                     List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {
-            super(context, mdata, R.layout.li_monthly_new_show, from, to);
+            super(context, mdata, R.layout.li_monthly_show, from, to);
 
             Resources res   = context.getResources();
             mClOne = res.getColor(R.color.lightsteelblue);
@@ -441,7 +444,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
         SelfSubAdapter(Context context,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
-            super(context, sdata, R.layout.li_monthly_new_show_detail, from, to);
+            super(context, sdata, R.layout.li_monthly_show_detail, from, to);
         }
 
         @Override

@@ -6,27 +6,31 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/rl_header">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="title"
-            android:id="@+id/tv_title"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="false"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:layout_marginLeft="8dp" />
 
         <TextView
+            android:id="@+id/tv_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="abstract"
-            android:id="@+id/tv_abstract"
-            android:layout_below="@+id/tv_title"
-            android:layout_alignStart="@+id/tv_title"
-            android:layout_marginTop="4dp"
-            android:textColor="@color/bright_foreground_disabled_material_light"
-            android:textSize="14sp" />
+            android:layout_centerVertical="true"
+            android:text="2016-10"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="16dp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_info"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_month"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <include layout="@layout/liit_note_info" />
+        </RelativeLayout>
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -39,12 +43,12 @@
     </RelativeLayout>
 
     <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/rl_header"
         android:id="@+id/lv_show_detail"
+        android:layout_below="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="48dp"
+        android:paddingRight="0dp"
         android:divider="@android:color/transparent"
-        android:dividerHeight="3dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp" />
+        android:dividerHeight="1dp" />
 </RelativeLayout>

@@ -294,7 +294,10 @@ public class YearlyLVHelper extends LVShowDataBase {
             }
 
             HashMap<String, String> map = new HashMap<>();
-            map.put(K_MONTH, k.substring(5, 7));
+            String km = k.substring(5, 7);
+            if(km.startsWith("0"))
+                km = km.replaceFirst("0", " ");
+            map.put(K_MONTH, km);
             map.put(K_MONTH_PAY_COUNT, String.valueOf(pay_cout));
             map.put(K_MONTH_INCOME_COUNT, String.valueOf(income_cout));
             map.put(K_MONTH_PAY_AMOUNT, String.format(Locale.CHINA, "%.02f", pay_amount));
@@ -350,7 +353,7 @@ public class YearlyLVHelper extends LVShowDataBase {
         SelfAdapter(Context context,
                     List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {
-            super(context, mdata, R.layout.li_yearly_new_show, from, to);
+            super(context, mdata, R.layout.li_yearly_show, from, to);
 
             Resources res   = context.getResources();
             mClOne = res.getColor(R.color.lightsteelblue);
@@ -433,7 +436,7 @@ public class YearlyLVHelper extends LVShowDataBase {
         SelfSubAdapter(Context context,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
-            super(context, sdata, R.layout.li_yearly_new_show_detail, from, to);
+            super(context, sdata, R.layout.li_yearly_show_detail, from, to);
         }
 
         @Override
