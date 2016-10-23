@@ -29,14 +29,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import wxm.KeepAccount.R;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.Base.utility.ToolUtil;
-import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acinterface.ACNoteShowNew;
+import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 
@@ -106,7 +106,7 @@ public class DailyLVHelper extends LVShowDataBase
         rl.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ACNoteShowNew ac = getNewRootActivity();
+                ACNoteShow ac = getRootActivity();
                 Intent intent = new Intent(ac, ACNoteEdit.class);
                 intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
 
@@ -143,7 +143,7 @@ public class DailyLVHelper extends LVShowDataBase
 
     @Override
     public void checkView() {
-        if(getNewRootActivity().getDayNotesDirty())
+        if(getRootActivity().getDayNotesDirty())
             loadView();
     }
 
@@ -197,7 +197,7 @@ public class DailyLVHelper extends LVShowDataBase
                     }
 
                     if(dirty) {
-                        getNewRootActivity().setNotesDirty();
+                        getRootActivity().setNotesDirty();
                         reloadData();
                     }
 
@@ -233,7 +233,7 @@ public class DailyLVHelper extends LVShowDataBase
         mMainPara.clear();
         mHMSubPara.clear();
 
-        HashMap<String, ArrayList<INote>> hm_data = getNewRootActivity().getNotesByDay();
+        HashMap<String, ArrayList<INote>> hm_data = getRootActivity().getNotesByDay();
         parseNotes(hm_data);
     }
 
@@ -397,8 +397,8 @@ public class DailyLVHelper extends LVShowDataBase
             super(context, mdata, R.layout.li_daily_show, from, to);
 
             Resources res   = context.getResources();
-            mClOne = res.getColor(R.color.lightsteelblue);
-            mClTwo = res.getColor(R.color.paleturquoise);
+            mClOne = res.getColor(R.color.color_1);
+            mClTwo = res.getColor(R.color.color_2);
 
             mDAFold = res.getDrawable(R.drawable.ic_hide);
             mDAUnFold = res.getDrawable(R.drawable.ic_show);
@@ -607,7 +607,7 @@ public class DailyLVHelper extends LVShowDataBase
 
                         iv.setSelected(!iv.isSelected());
                     } else  {
-                        ACNoteShowNew ac = getNewRootActivity();
+                        ACNoteShow ac = getRootActivity();
                         Intent intent = new Intent(ac, ACNoteEdit.class);
                         intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
                         if (V_TYPE_PAY.equals(tp)) {

@@ -157,7 +157,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
         mHMSubPara.clear();
 
         // format output
-        HashMap<String, ArrayList<INote>> hm_data = getNewRootActivity().getNotesByMonth();
+        HashMap<String, ArrayList<INote>> hm_data = getRootActivity().getNotesByMonth();
         parseNotes(hm_data);
     }
 
@@ -364,8 +364,8 @@ public class MonthlyLVHelper extends LVShowDataBase {
             super(context, mdata, R.layout.li_monthly_show, from, to);
 
             Resources res   = context.getResources();
-            mClOne = res.getColor(R.color.lightsteelblue);
-            mClTwo = res.getColor(R.color.paleturquoise);
+            mClOne = res.getColor(R.color.color_1);
+            mClTwo = res.getColor(R.color.color_2);
 
             mDAFold = res.getDrawable(R.drawable.ic_hide);
             mDAUnFold = res.getDrawable(R.drawable.ic_show);

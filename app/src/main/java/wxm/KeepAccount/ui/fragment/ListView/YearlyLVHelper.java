@@ -156,7 +156,7 @@ public class YearlyLVHelper extends LVShowDataBase {
         mHMSubPara.clear();
 
         // format output
-        HashMap<String, ArrayList<INote>> hm_data = getNewRootActivity().getNotesByYear();
+        HashMap<String, ArrayList<INote>> hm_data = getRootActivity().getNotesByYear();
         parseNotes(hm_data);
     }
 
@@ -356,8 +356,8 @@ public class YearlyLVHelper extends LVShowDataBase {
             super(context, mdata, R.layout.li_yearly_show, from, to);
 
             Resources res   = context.getResources();
-            mClOne = res.getColor(R.color.lightsteelblue);
-            mClTwo = res.getColor(R.color.paleturquoise);
+            mClOne = res.getColor(R.color.color_1);
+            mClTwo = res.getColor(R.color.color_2);
 
             mDAFold = res.getDrawable(R.drawable.ic_hide);
             mDAUnFold = res.getDrawable(R.drawable.ic_show);

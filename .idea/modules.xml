@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndriodUtillib/AndriodUtillib.iml" filepath="$PROJECT_DIR$/AndriodUtillib/AndriodUtillib.iml" />
       <module fileurl="file://$PROJECT_DIR$/KeepAccount.iml" filepath="$PROJECT_DIR$/KeepAccount.iml" />
-      <module fileurl="file://$PROJECT_DIR$/andriod_keepaccount.iml" filepath="$PROJECT_DIR$/andriod_keepaccount.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/hellocharts-library-release/hellocharts-library-release.iml" filepath="$PROJECT_DIR$/hellocharts-library-release/hellocharts-library-release.iml" />
     </modules>

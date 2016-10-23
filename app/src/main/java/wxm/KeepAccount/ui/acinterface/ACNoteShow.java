@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,20 +21,17 @@ import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
-import wxm.KeepAccount.ui.fragment.ShowData.TFShowBudget;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowMonthly;
-import wxm.KeepAccount.ui.fragment.ShowData.TFShowMonthlyNew;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowYearly;
 
 public class ACNoteShow extends AppCompatActivity {
     private final static String TAG = "ACNoteShow";
 
-    protected final static String TAB_DAILY         = "日统计";
-    protected final static String TAB_MONTHLY       = "月统计";
-    protected final static String TAB_MONTHLY_NEW   = "新月统计";
-    protected final static String TAB_YEARLY        = "年统计";
-    protected final static String TAB_BUDGET        = "预算";
+    protected final static String TAB_DAILY         = "日流水";
+    protected final static String TAB_MONTHLY       = "月流水";
+    protected final static String TAB_YEARLY        = "年流水";
+    //protected final static String TAB_BUDGET        = "预算";
 
     private TabLayout   mTLTabs;
     private ViewPager   mVPTabs;
@@ -131,9 +127,8 @@ public class ACNoteShow extends AppCompatActivity {
         assert null != mTLTabs;
         mTLTabs.addTab(mTLTabs.newTab().setText(TAB_DAILY));
         mTLTabs.addTab(mTLTabs.newTab().setText(TAB_MONTHLY));
-        //mTLTabs.addTab(mTLTabs.newTab().setText(TAB_MONTHLY_NEW));
         mTLTabs.addTab(mTLTabs.newTab().setText(TAB_YEARLY));
-        mTLTabs.addTab(mTLTabs.newTab().setText(TAB_BUDGET));
+        //mTLTabs.addTab(mTLTabs.newTab().setText(TAB_BUDGET));
         mTLTabs.setTabGravity(TabLayout.GRAVITY_FILL);
 
         mVPTabs = (ViewPager) findViewById(R.id.tab_pager);
@@ -277,9 +272,8 @@ public class ACNoteShow extends AppCompatActivity {
             mHMFra = new HashMap<>();
             mHMFra.put(TAB_DAILY, new TFShowDaily());
             mHMFra.put(TAB_MONTHLY, new TFShowMonthly());
-            mHMFra.put(TAB_MONTHLY_NEW, new TFShowMonthlyNew());
             mHMFra.put(TAB_YEARLY, new TFShowYearly());
-            mHMFra.put(TAB_BUDGET, new TFShowBudget());
+            //mHMFra.put(TAB_BUDGET, new TFShowBudget());
         }
 
         @Override
