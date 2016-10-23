@@ -23,10 +23,18 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     protected final static String K_MONTH             = "k_month";
     protected final static String K_DAY_NUMEBER       = "k_d_number";
     protected final static String K_DAY_IN_WEEK       = "k_d_in_week";
-    protected final static String K_DAILY_PAY_COUNT   = "k_dpc";
-    protected final static String K_DAILY_PAY_AMOUNT  = "k_dpa";
-    protected final static String K_DAILY_INCOME_COUNT   = "k_dic";
-    protected final static String K_DAILY_INCOME_AMOUNT  = "k_dia";
+    protected final static String K_YEAR_PAY_COUNT       = "k_ypc";
+    protected final static String K_YEAR_PAY_AMOUNT      = "k_ypa";
+    protected final static String K_YEAR_INCOME_COUNT    = "k_yic";
+    protected final static String K_YRAR_INCOME_AMOUNT   = "k_yia";
+    protected final static String K_DAY_PAY_COUNT       = "k_dpc";
+    protected final static String K_DAY_PAY_AMOUNT      = "k_dpa";
+    protected final static String K_DAY_INCOME_COUNT    = "k_dic";
+    protected final static String K_DAY_INCOME_AMOUNT   = "k_dia";
+    protected final static String K_MONTH_PAY_COUNT     = "k_mpc";
+    protected final static String K_MONTH_PAY_AMOUNT    = "k_mpa";
+    protected final static String K_MONTH_INCOME_COUNT   = "k_mic";
+    protected final static String K_MONTH_INCOME_AMOUNT  = "k_mia";
 
     protected final static String K_SHOW           = "k_show";
     protected final static String V_SHOW_UNFOLD    = "vs_unfold";

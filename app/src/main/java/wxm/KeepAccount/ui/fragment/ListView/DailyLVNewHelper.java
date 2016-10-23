@@ -358,10 +358,10 @@ public class DailyLVNewHelper extends LVShowDataBase
                 e.printStackTrace();
             }
 
-            map.put(K_DAILY_PAY_COUNT, String.valueOf(pay_cout));
-            map.put(K_DAILY_INCOME_COUNT, String.valueOf(income_cout));
-            map.put(K_DAILY_PAY_AMOUNT, String.format(Locale.CHINA, "%.02f", pay_amount));
-            map.put(K_DAILY_INCOME_AMOUNT, String.format(Locale.CHINA, "%.02f", income_amount));
+            map.put(K_DAY_PAY_COUNT, String.valueOf(pay_cout));
+            map.put(K_DAY_INCOME_COUNT, String.valueOf(income_cout));
+            map.put(K_DAY_PAY_AMOUNT, String.format(Locale.CHINA, "%.02f", pay_amount));
+            map.put(K_DAY_INCOME_AMOUNT, String.format(Locale.CHINA, "%.02f", income_amount));
 
             BigDecimal bd_l = income_amount.subtract(pay_amount);
             String v_l = String.format(Locale.CHINA,
@@ -461,20 +461,17 @@ public class DailyLVNewHelper extends LVShowDataBase
                 tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_in_week));
                 tv.setText(hm.get(K_DAY_IN_WEEK));
 
-                tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_in_week));
-                tv.setText(hm.get(K_DAY_IN_WEEK));
-
                 tv = UtilFun.cast_t(v.findViewById(R.id.tv_pay_count));
-                tv.setText(hm.get(K_DAILY_PAY_COUNT));
+                tv.setText(hm.get(K_DAY_PAY_COUNT));
 
                 tv = UtilFun.cast_t(v.findViewById(R.id.tv_pay_amount));
-                tv.setText(hm.get(K_DAILY_PAY_AMOUNT));
+                tv.setText(hm.get(K_DAY_PAY_AMOUNT));
 
                 tv = UtilFun.cast_t(v.findViewById(R.id.tv_income_count));
-                tv.setText(hm.get(K_DAILY_INCOME_COUNT));
+                tv.setText(hm.get(K_DAY_INCOME_COUNT));
 
                 tv = UtilFun.cast_t(v.findViewById(R.id.tv_income_amount));
-                tv.setText(hm.get(K_DAILY_INCOME_AMOUNT));
+                tv.setText(hm.get(K_DAY_INCOME_AMOUNT));
 
                 tv = UtilFun.cast_t(v.findViewById(R.id.tv_daily_amount));
                 tv.setText(hm.get(K_AMOUNT));
