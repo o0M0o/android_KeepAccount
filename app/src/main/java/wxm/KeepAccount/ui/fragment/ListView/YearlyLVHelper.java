@@ -311,10 +311,19 @@ public class YearlyLVHelper extends LVShowDataBase {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
                 final HashMap<String, String> hm = UtilFun.cast(getItem(position));
-
                 final View pv = v;
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
                 ib.getBackground().setAlpha(0);
+
+                // set fold status
+                if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)))    {
+                    init_detail_view(pv, hm);
+                    ib.setImageDrawable(mDAFold);
+                }   else    {
+                    init_detail_view(pv, hm);
+                    ib.setImageDrawable(mDAUnFold);
+                }
+
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -322,25 +331,20 @@ public class YearlyLVHelper extends LVShowDataBase {
                         if(V_SHOW_FOLD.equals(hm.get(K_SHOW)))    {
                             hm.put(K_SHOW, V_SHOW_UNFOLD);
                             init_detail_view(pv, hm);
+
                             ib.setImageDrawable(mDAFold);
                             addUnfoldItem(hm.get(K_TAG));
                         }   else    {
                             hm.put(K_SHOW, V_SHOW_FOLD);
                             init_detail_view(pv, hm);
+
                             ib.setImageDrawable(mDAUnFold);
                             removeUnfoldItem(hm.get(K_TAG));
                         }
                     }
                 });
 
-                if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)))    {
-                    //init_detail_view(fv, hm);
-                    ib.setImageDrawable(mDAFold);
-                }   else    {
-                    init_detail_view(pv, hm);
-                    ib.setImageDrawable(mDAUnFold);
-                }
-
+                // adjust line color
                 RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
                 rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
 
