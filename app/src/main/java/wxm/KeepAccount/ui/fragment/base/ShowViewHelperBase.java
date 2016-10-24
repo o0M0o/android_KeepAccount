@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,6 +27,8 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
     // 视图过滤数据
     protected boolean                       mBFilter;
     protected final LinkedList<String>      mFilterPara;
+
+    protected final Timestamp mTSLastLoadViewTime = new Timestamp(0);
 
     protected ShowViewHelperBase()   {
         mBFilter        = false;

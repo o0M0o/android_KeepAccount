@@ -1,11 +1,5 @@
 package wxm.KeepAccount.ui.fragment.ShowData;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import wxm.KeepAccount.ui.fragment.HelloChart.MonthlyChartHelper;
 import wxm.KeepAccount.ui.fragment.ListView.MonthlyLVHelper;
 import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
@@ -17,14 +11,9 @@ import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 public class TFShowMonthly extends TFShowBase {
     private final static String TAG = "TFShowMonthly";
 
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        Log.i(TAG, "onCreateView");
+    public TFShowMonthly()   {
         mViewHelper = new ShowViewHelperBase[2];
-        //mViewHelper[0] = new MonthlyLVHelper();
         mViewHelper[0] = new MonthlyLVHelper();
         mViewHelper[1] = new MonthlyChartHelper();
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 }

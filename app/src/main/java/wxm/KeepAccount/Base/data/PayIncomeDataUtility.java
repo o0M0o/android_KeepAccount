@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,8 +27,17 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
  */
 public class PayIncomeDataUtility {
     private final String    TAG = "PayIncomeDataUtility";
+    private final Timestamp mTSLastModifyData = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
     PayIncomeDataUtility()  {
+    }
+
+    /**
+     * 返回数据最后更新时间
+     * @return  数据最后更新时间
+     */
+    public Timestamp getDataLastChangeTime()    {
+        return mTSLastModifyData;
     }
 
     /**
@@ -269,13 +279,14 @@ public class PayIncomeDataUtility {
     public int AddPayNotes(List<PayNoteItem> lsi)    {
         DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
         UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        int ret = 0;
         if(null != cur_usr) {
             for(PayNoteItem i : lsi) {
                 if(null == i.getUsr())
                     i.setUsr(cur_usr);
             }
 
-            return mDBHelper.getPayDataREDao().create(lsi);
+            ret =mDBHelper.getPayDataREDao().create(lsi);
         }
         else    {
             boolean nousr = false;
@@ -287,10 +298,12 @@ public class PayIncomeDataUtility {
             }
 
             if(!nousr)
-                return mDBHelper.getPayDataREDao().create(lsi);
+                ret = mDBHelper.getPayDataREDao().create(lsi);
         }
 
-        return 0;
+        if(0 < ret)
+            mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
+        return ret;
     }
 
 
@@ -302,13 +315,14 @@ public class PayIncomeDataUtility {
     public int AddIncomeNotes(List<IncomeNoteItem> lsi)    {
         DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
         UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        int ret = 0;
         if(null != cur_usr) {
             for(IncomeNoteItem i : lsi) {
                 if(null == i.getUsr())
                     i.setUsr(cur_usr);
             }
 
-            return mDBHelper.getIncomeDataREDao().create(lsi);
+            ret = mDBHelper.getIncomeDataREDao().create(lsi);
         }
         else    {
             boolean nousr = false;
@@ -320,10 +334,12 @@ public class PayIncomeDataUtility {
             }
 
             if(!nousr)
-                return mDBHelper.getIncomeDataREDao().create(lsi);
+                ret = mDBHelper.getIncomeDataREDao().create(lsi);
         }
 
-        return 0;
+        if(0 < ret)
+            mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
+        return ret;
     }
 
 
@@ -339,6 +355,8 @@ public class PayIncomeDataUtility {
             ret += mDBHelper.getPayDataREDao().update(i);
         }
 
+        if(0 < ret)
+            mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
         return ret;
     }
 
@@ -355,6 +373,8 @@ public class PayIncomeDataUtility {
             ret += mDBHelper.getIncomeDataREDao().update(i);
         }
 
+        if(0 < ret)
+            mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
         return ret;
     }
 
@@ -366,7 +386,10 @@ public class PayIncomeDataUtility {
      */
     public int DeletePayNotes(List<Integer> lsi)  {
         DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
-        return mDBHelper.getPayDataREDao().deleteIds(lsi);
+        int ret = mDBHelper.getPayDataREDao().deleteIds(lsi);
+        if(0 < ret)
+            mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
+        return ret;
     }
 
 
@@ -377,6 +400,9 @@ public class PayIncomeDataUtility {
      */
     public int DeleteIncomeNotes(List<Integer> lsi)  {
         DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
-        return mDBHelper.getIncomeDataREDao().deleteIds(lsi);
+        int ret = mDBHelper.getIncomeDataREDao().deleteIds(lsi);
+        if(0 < ret)
+            mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
+        return ret;
     }
 }

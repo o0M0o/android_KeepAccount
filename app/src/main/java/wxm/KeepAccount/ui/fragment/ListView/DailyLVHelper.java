@@ -138,8 +138,12 @@ public class DailyLVHelper extends LVShowDataBase
 
     @Override
     public void loadView() {
-        reloadData();
+        if(AppModel.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
+            reloadData();
+        }
+
         refreshView();
+        mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
     }
 
 

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
@@ -63,8 +65,12 @@ public class YearlyLVHelper extends LVShowDataBase {
 
     @Override
     public void loadView() {
-        reloadData();
+        if(AppModel.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
+            reloadData();
+        }
+
         refreshView();
+        mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
     }
 
     @Override
