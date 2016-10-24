@@ -50,8 +50,8 @@
         <ImageView
             android:id="@+id/iv_pay_amount_tag"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/tv_pay_count"
-            android:layout_marginLeft="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="76dp"
             app:srcCompat="@drawable/ic_yen"
             android:scaleType="fitXY"
             android:layout_width="18dp"
@@ -115,8 +115,8 @@
         <ImageView
             android:id="@+id/iv_income_amount_tag"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/tv_income_count"
-            android:layout_marginLeft="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="76dp"
             app:srcCompat="@drawable/ic_yen"
             android:scaleType="fitXY"
             android:layout_width="18dp"

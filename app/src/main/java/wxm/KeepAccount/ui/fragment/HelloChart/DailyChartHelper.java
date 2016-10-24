@@ -18,7 +18,7 @@ import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
-import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 
 /**
  * 加载日chart视图
@@ -32,8 +32,7 @@ public class DailyChartHelper extends ChartHelperBase {
 
     @Override
     protected void reloadData() {
-        ACNoteShow as = getRootActivity();
-        HashMap<String, ArrayList<INote>> ret = as.getNotesByDay();
+        HashMap<String, ArrayList<INote>> ret = NoteShowDataHelper.getInstance().getNotesForDay();
 
         int id_col = 0;
         List<AxisValue> axisValues = new ArrayList<>();

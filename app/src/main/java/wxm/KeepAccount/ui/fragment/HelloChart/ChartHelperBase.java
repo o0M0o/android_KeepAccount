@@ -165,12 +165,6 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     protected abstract void reloadData();
 
     @Override
-    public void checkView() {
-        if(getRootActivity().getDayNotesDirty())
-            loadView();
-    }
-
-    @Override
     protected void giveupFilter()   {
         mBFilter = false;
         loadView();

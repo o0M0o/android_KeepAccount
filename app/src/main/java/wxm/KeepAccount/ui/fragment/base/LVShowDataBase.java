@@ -26,6 +26,8 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     protected final static String K_TAG       = "k_tag";
     protected final static String K_ID        = "k_id";
     protected final static String K_TYPE      = "k_type";
+    protected final static String K_DETAIL    = "k_detail";
+    protected final static String K_SUB_TAG   = "k_sub_tag";
 
     protected final static String K_YEAR              = "k_year";
     protected final static String K_MONTH             = "k_month";

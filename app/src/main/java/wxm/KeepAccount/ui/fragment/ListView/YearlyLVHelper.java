@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,15 +26,12 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.db.INote;
-import wxm.KeepAccount.Base.db.IncomeNoteItem;
-import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
+import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
-import wxm.KeepAccount.ui.fragment.base.DefForTabLayout;
 import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
-import wxm.KeepAccount.ui.fragment.base.ListViewBase;
 
 /**
  * 年数据视图辅助类
@@ -69,12 +65,6 @@ public class YearlyLVHelper extends LVShowDataBase {
     public void loadView() {
         reloadData();
         refreshView();
-    }
-
-    @Override
-    public void checkView() {
-        if(getRootActivity().getYearNotesDirty())
-            loadView();
     }
 
     @Override
@@ -115,7 +105,7 @@ public class YearlyLVHelper extends LVShowDataBase {
                 if(mBSelectSubFilter) {
                     if(!ToolUtil.ListIsNullOrEmpty(mLLSubFilter)) {
                         ACNoteShow ac = getRootActivity();
-                        ac.jumpByTabName(DefForTabLayout.TAB_TITLE_MONTHLY);
+                        ac.jumpByTabName(NoteShowDataHelper.TAB_TITLE_MONTHLY);
                         ac.filterView(mLLSubFilter);
 
                         mLLSubFilter.clear();
@@ -155,9 +145,65 @@ public class YearlyLVHelper extends LVShowDataBase {
         mMainPara.clear();
         mHMSubPara.clear();
 
-        // format output
-        HashMap<String, ArrayList<INote>> hm_data = getRootActivity().getNotesByYear();
-        parseNotes(hm_data);
+        // for year
+        HashMap<String, NoteShowInfo> hm_y = NoteShowDataHelper.getInstance().getYearInfo();
+        ArrayList<String> set_k = new ArrayList<>(hm_y.keySet());
+        for(String k : set_k)   {
+            NoteShowInfo ni = hm_y.get(k);
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put(K_YEAR, k);
+            map.put(K_YEAR_PAY_COUNT, String.valueOf(ni.getPayCount()));
+            map.put(K_YEAR_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
+            map.put(K_YEAR_PAY_AMOUNT, String.format(Locale.CHINA,
+                    "%.02f", ni.getPayAmount()));
+            map.put(K_YEAR_INCOME_AMOUNT, String.format(Locale.CHINA,
+                    "%.02f", ni.getIncomeAmount()));
+
+            BigDecimal bd_l = ni.getBalance();
+            String v_l = String.format(Locale.CHINA,
+                    0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+            map.put(K_AMOUNT, v_l);
+
+            map.put(K_TAG, k);
+            map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+            mMainPara.add(map);
+        }
+
+        // for month
+        HashMap<String, NoteShowInfo> hm_m = NoteShowDataHelper.getInstance().getMonthInfo();
+        ArrayList<String> set_k_m = new ArrayList<>(hm_m.keySet());
+        for(String k : set_k_m)   {
+            String ky = k.substring(0, 4);
+            NoteShowInfo ni = hm_m.get(k);
+            HashMap<String, String> map = new HashMap<>();
+
+            String km = k.substring(5,7);
+            km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
+            map.put(K_MONTH, km);
+            map.put(K_MONTH_PAY_COUNT, String.valueOf(ni.getPayCount()));
+            map.put(K_MONTH_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
+            map.put(K_MONTH_PAY_AMOUNT, String.format(Locale.CHINA,
+                    "%.02f", ni.getPayAmount()));
+            map.put(K_MONTH_INCOME_AMOUNT, String.format(Locale.CHINA,
+                    "%.02f", ni.getIncomeAmount()));
+
+            BigDecimal bd_l = ni.getBalance();
+            String v_l = String.format(Locale.CHINA,
+                    0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+            map.put(K_AMOUNT, v_l);
+
+            map.put(K_TAG, ky);
+            map.put(K_SUB_TAG, k);
+
+            LinkedList<HashMap<String, String>>  ls_hm = mHMSubPara.get(ky);
+            if(ToolUtil.ListIsNullOrEmpty(ls_hm))   {
+                ls_hm = new LinkedList<>();
+            }
+
+            ls_hm.add(map);
+            mHMSubPara.put(ky, ls_hm);
+        }
     }
 
     /**
@@ -171,7 +217,7 @@ public class YearlyLVHelper extends LVShowDataBase {
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
         if(mBFilter) {
             for (HashMap<String, String> i : mMainPara) {
-                String cur_tag = i.get(ListViewBase.MPARA_TAG);
+                String cur_tag = i.get(K_TAG);
                 for (String ii : mFilterPara) {
                     if (cur_tag.equals(ii)) {
                         n_mainpara.add(i);
@@ -196,126 +242,6 @@ public class YearlyLVHelper extends LVShowDataBase {
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
         setAccpetGiveupLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.INVISIBLE);
     }
-
-    /**
-     * 解析数据
-     * @param notes  待解析数据
-     */
-    private void parseNotes(HashMap<String, ArrayList<INote>> notes)   {
-        mMainPara.clear();
-        mHMSubPara.clear();
-
-        ArrayList<String> set_k = new ArrayList<>(notes.keySet());
-        Collections.sort(set_k);
-        for (String k : set_k) {
-            String title = ToolUtil.FormatDateString(k);
-            ArrayList<INote> v = notes.get(k);
-            parseOneYear(title, v);
-        }
-    }
-
-    /**
-     * 解析一年的数据
-     * @param tag       此年数据的tag
-     * @param notes     此年数据
-     */
-    private void parseOneYear(String tag, List<INote> notes)    {
-        int pay_cout = 0;
-        int income_cout = 0;
-        BigDecimal pay_amount = BigDecimal.ZERO;
-        BigDecimal income_amount = BigDecimal.ZERO;
-        HashMap<String, ArrayList<INote>> hm_data = new HashMap<>();
-        for (INote r : notes) {
-            String h_k;
-            if (r instanceof PayNoteItem) {
-                PayNoteItem pi = UtilFun.cast(r);
-                pay_cout += 1;
-                pay_amount = pay_amount.add(pi.getVal());
-                h_k = pi.getTs().toString().substring(0, 7);
-            } else {
-                IncomeNoteItem ii = UtilFun.cast(r);
-                income_cout += 1;
-                income_amount = income_amount.add(ii.getVal());
-                h_k = ii.getTs().toString().substring(0, 7);
-            }
-
-            ArrayList<INote> h_v = hm_data.get(h_k);
-            if (null == h_v) {
-                ArrayList<INote> v = new ArrayList<>();
-                v.add(r);
-                hm_data.put(h_k, v);
-            } else {
-                h_v.add(r);
-            }
-        }
-
-        HashMap<String, String> map = new HashMap<>();
-        map.put(K_YEAR, tag);
-        map.put(K_YEAR_PAY_COUNT, String.valueOf(pay_cout));
-        map.put(K_YEAR_INCOME_COUNT, String.valueOf(income_cout));
-        map.put(K_YEAR_PAY_AMOUNT, String.format(Locale.CHINA, "%.02f", pay_amount));
-        map.put(K_YEAR_INCOME_AMOUNT, String.format(Locale.CHINA, "%.02f", income_amount));
-
-        BigDecimal bd_l = income_amount.subtract(pay_amount);
-        String v_l = String.format(Locale.CHINA,
-                0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-        map.put(K_AMOUNT, v_l);
-
-        map.put(K_TAG, tag);
-        map.put(K_SHOW, checkUnfoldItem(tag) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-        mMainPara.add(map);
-
-        parseMonths(tag, hm_data);
-    }
-
-    /**
-     * 解析一个月的数据
-     * @param tag       此月数据的tag
-     * @param hm_data   此月数据
-     */
-    private void parseMonths(String tag, HashMap<String, ArrayList<INote>> hm_data)    {
-        ArrayList<String> set_k = new ArrayList<>(hm_data.keySet());
-        Collections.sort(set_k);
-        LinkedList<HashMap<String, String>> cur_llhm = new LinkedList<>();
-        for(String k : set_k) {
-            int pay_cout = 0;
-            int income_cout = 0;
-            BigDecimal pay_amount = BigDecimal.ZERO;
-            BigDecimal income_amount = BigDecimal.ZERO;
-            ArrayList<INote> notes = hm_data.get(k);
-            for (INote r : notes) {
-                if (r.isPayNote()) {
-                    pay_cout += 1;
-                    pay_amount = pay_amount.add(r.getVal());
-                } else {
-                    income_cout += 1;
-                    income_amount = income_amount.add(r.getVal());
-                }
-            }
-
-            HashMap<String, String> map = new HashMap<>();
-            String km = k.substring(5, 7);
-            if(km.startsWith("0"))
-                km = km.replaceFirst("0", " ");
-            map.put(K_MONTH, km);
-            map.put(K_MONTH_PAY_COUNT, String.valueOf(pay_cout));
-            map.put(K_MONTH_INCOME_COUNT, String.valueOf(income_cout));
-            map.put(K_MONTH_PAY_AMOUNT, String.format(Locale.CHINA, "%.02f", pay_amount));
-            map.put(K_MONTH_INCOME_AMOUNT, String.format(Locale.CHINA, "%.02f", income_amount));
-
-            BigDecimal bd_l = income_amount.subtract(pay_amount);
-            String v_l = String.format(Locale.CHINA,
-                    0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-            map.put(K_AMOUNT, v_l);
-
-            map.put(K_TAG, tag);
-            cur_llhm.add(map);
-        }
-
-        mHMSubPara.put(tag, cur_llhm);
-    }
-
-
 
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
@@ -466,7 +392,7 @@ public class YearlyLVHelper extends LVShowDataBase {
                         }
 
                         HashMap<String, String> hp = UtilFun.cast(getItem(position));
-                        final String hp_tag = hp.get(ListViewBase.SPARA_TAG);
+                        final String hp_tag = hp.get(K_TAG);
                         Resources res = v.getResources();
                         if(!v.isSelected()) {
                             mLLSubFilter.add(hp_tag);

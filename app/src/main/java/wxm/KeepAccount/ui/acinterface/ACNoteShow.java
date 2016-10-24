@@ -11,15 +11,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
-import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowMonthly;
@@ -28,21 +26,8 @@ import wxm.KeepAccount.ui.fragment.ShowData.TFShowYearly;
 public class ACNoteShow extends AppCompatActivity {
     private final static String TAG = "ACNoteShow";
 
-    protected final static String TAB_DAILY         = "日流水";
-    protected final static String TAB_MONTHLY       = "月流水";
-    protected final static String TAB_YEARLY        = "年流水";
-    //protected final static String TAB_BUDGET        = "预算";
-
     private TabLayout   mTLTabs;
     private ViewPager   mVPTabs;
-
-    // for notes data
-    private boolean     mBDayNoteModify = true;
-    private boolean     mBMonthNoteModify = true;
-    private boolean     mBYearNoteModify = true;
-    private HashMap<String, ArrayList<INote>> mHMNoteDataByDay;
-    private HashMap<String, ArrayList<INote>> mHMNoteDataByMonth;
-    private HashMap<String, ArrayList<INote>> mHMNoteDataByYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,11 +108,15 @@ public class ACNoteShow extends AppCompatActivity {
      * 初始化tab页控件组
      */
     private void init_tabs() {
+        // init data
+        NoteShowDataHelper.getInstance().refreshData();
+
+        // init view
         mTLTabs = (TabLayout) findViewById(R.id.tl_tabs);
         assert null != mTLTabs;
-        mTLTabs.addTab(mTLTabs.newTab().setText(TAB_DAILY));
-        mTLTabs.addTab(mTLTabs.newTab().setText(TAB_MONTHLY));
-        mTLTabs.addTab(mTLTabs.newTab().setText(TAB_YEARLY));
+        mTLTabs.addTab(mTLTabs.newTab().setText(NoteShowDataHelper.TAB_TITLE_DAILY));
+        mTLTabs.addTab(mTLTabs.newTab().setText(NoteShowDataHelper.TAB_TITLE_MONTHLY));
+        mTLTabs.addTab(mTLTabs.newTab().setText(NoteShowDataHelper.TAB_TITLE_YEARLY));
         //mTLTabs.addTab(mTLTabs.newTab().setText(TAB_BUDGET));
         mTLTabs.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -153,52 +142,6 @@ public class ACNoteShow extends AppCompatActivity {
             }
         });
     }
-
-    public HashMap<String, ArrayList<INote>> getNotesByDay()   {
-        if(mBDayNoteModify) {
-            mHMNoteDataByDay = AppModel.getPayIncomeUtility().GetAllNotesToDay();
-            mBDayNoteModify = false;
-        }
-
-        return mHMNoteDataByDay;
-    }
-
-    public HashMap<String, ArrayList<INote>> getNotesByMonth()   {
-        if(mBMonthNoteModify) {
-            mHMNoteDataByMonth = AppModel.getPayIncomeUtility().GetAllNotesToMonth();
-            mBMonthNoteModify = false;
-        }
-
-        return mHMNoteDataByMonth;
-    }
-
-    public HashMap<String, ArrayList<INote>> getNotesByYear()   {
-        if(mBYearNoteModify) {
-            mHMNoteDataByYear = AppModel.getPayIncomeUtility().GetAllNotesToYear();
-            mBYearNoteModify = false;
-        }
-
-        return mHMNoteDataByYear;
-    }
-
-    public void setNotesDirty() {
-        mBDayNoteModify = true;
-        mBMonthNoteModify = true;
-        mBYearNoteModify = true;
-    }
-
-    public boolean getDayNotesDirty()   {
-        return  mBDayNoteModify;
-    }
-
-    public boolean getMonthNotesDirty()   {
-        return  mBMonthNoteModify;
-    }
-
-    public boolean getYearNotesDirty()   {
-        return  mBYearNoteModify;
-    }
-
 
     /**
      * 切换视图类型（列表视图/图表)
@@ -251,7 +194,7 @@ public class ACNoteShow extends AppCompatActivity {
         if(AppGobalDef.INTRET_RECORD_ADD == resultCode
                 || AppGobalDef.INTRET_RECORD_MODIFY == resultCode
                 || AppGobalDef.INTRET_SURE == resultCode)  {
-            setNotesDirty();
+            NoteShowDataHelper.getInstance().refreshData();
         }
 
         getHotTabItem().onActivityResult(requestCode, resultCode, data);
@@ -270,9 +213,9 @@ public class ACNoteShow extends AppCompatActivity {
             this.mNumOfTabs = NumOfTabs;
 
             mHMFra = new HashMap<>();
-            mHMFra.put(TAB_DAILY, new TFShowDaily());
-            mHMFra.put(TAB_MONTHLY, new TFShowMonthly());
-            mHMFra.put(TAB_YEARLY, new TFShowYearly());
+            mHMFra.put(NoteShowDataHelper.TAB_TITLE_DAILY, new TFShowDaily());
+            mHMFra.put(NoteShowDataHelper.TAB_TITLE_MONTHLY, new TFShowMonthly());
+            mHMFra.put(NoteShowDataHelper.TAB_TITLE_YEARLY, new TFShowYearly());
             //mHMFra.put(TAB_BUDGET, new TFShowBudget());
         }
 

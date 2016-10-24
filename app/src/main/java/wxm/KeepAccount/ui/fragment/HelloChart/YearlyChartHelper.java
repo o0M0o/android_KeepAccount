@@ -1,7 +1,5 @@
 package wxm.KeepAccount.ui.fragment.HelloChart;
 
-import android.content.res.Resources;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +17,7 @@ import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
-import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 
 /**
  * 加载年度chart视图
@@ -33,9 +31,7 @@ public class YearlyChartHelper extends ChartHelperBase {
 
     @Override
     protected void reloadData() {
-        Resources res = getRootActivity().getResources();
-        ACNoteShow as = getRootActivity();
-        HashMap<String, ArrayList<INote>> ret = as.getNotesByYear();
+        HashMap<String, ArrayList<INote>> ret = NoteShowDataHelper.getInstance().getNotesForYear();
 
         int id_col = 0;
         List<AxisValue> axisValues = new ArrayList<>();

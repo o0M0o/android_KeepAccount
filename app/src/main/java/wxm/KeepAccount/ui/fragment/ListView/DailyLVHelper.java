@@ -22,20 +22,21 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import wxm.KeepAccount.R;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.Base.utility.ToolUtil;
+import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
+import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
@@ -141,11 +142,6 @@ public class DailyLVHelper extends LVShowDataBase
         refreshView();
     }
 
-    @Override
-    public void checkView() {
-        if(getRootActivity().getDayNotesDirty())
-            loadView();
-    }
 
     @Override
     public void filterView(List<String> ls_tag) {
@@ -197,7 +193,6 @@ public class DailyLVHelper extends LVShowDataBase
                     }
 
                     if(dirty) {
-                        getRootActivity().setNotesDirty();
                         reloadData();
                     }
 
@@ -233,8 +228,74 @@ public class DailyLVHelper extends LVShowDataBase
         mMainPara.clear();
         mHMSubPara.clear();
 
-        HashMap<String, ArrayList<INote>> hm_data = getRootActivity().getNotesByDay();
-        parseNotes(hm_data);
+        // for day
+        HashMap<String, NoteShowInfo> hm_d = NoteShowDataHelper.getInstance().getDayInfo();
+        ArrayList<String> set_k_d = new ArrayList<>(hm_d.keySet());
+        for(String k : set_k_d)   {
+            NoteShowInfo ni = hm_d.get(k);
+            HashMap<String, String> map = new HashMap<>();
+            map.put(K_MONTH, k.substring(0, 7));
+
+            String km = k.substring(8, 10);
+            km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
+            map.put(K_DAY_NUMEBER, km);
+            try {
+                Timestamp ts = ToolUtil.StringToTimestamp(k);
+                Calendar day = Calendar.getInstance();
+                day.setTimeInMillis(ts.getTime());
+                map.put(K_DAY_IN_WEEK, getDayInWeek(day.get(Calendar.DAY_OF_WEEK)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            map.put(K_DAY_PAY_COUNT, String.valueOf(ni.getPayCount()));
+            map.put(K_DAY_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
+            map.put(K_DAY_PAY_AMOUNT, String.format(Locale.CHINA,
+                    "%.02f", ni.getPayAmount()));
+            map.put(K_DAY_INCOME_AMOUNT, String.format(Locale.CHINA,
+                    "%.02f", ni.getIncomeAmount()));
+
+            BigDecimal bd_l = ni.getBalance();
+            String v_l = String.format(Locale.CHINA,
+                    0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+            map.put(K_AMOUNT, v_l);
+
+            map.put(K_TAG, k);
+            map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+            mMainPara.add(map);
+        }
+
+        // for note
+        HashMap<String, ArrayList<INote>> hm_v =
+                NoteShowDataHelper.getInstance().getNotesForDay();
+        for(String k : set_k_d)     {
+            LinkedList<HashMap<String, String>> cur_llhm = new LinkedList<>();
+            ArrayList<INote> v = hm_v.get(k);
+            for (INote r : v) {
+                HashMap<String, String> map = new HashMap<>();
+                map.put(K_TITLE, r.getInfo());
+                map.put(K_ID, String.valueOf(r.getId()));
+
+                if (r.isPayNote()) {
+                    map.put(K_TYPE, V_TYPE_PAY);
+                    map.put(K_AMOUNT, String.format(Locale.CHINA, "- %.02f", r.getVal()));
+
+                    BudgetItem bi = r.getBudget();
+                    if(null != bi)  {
+                        map.put(K_BUDGET, String.format(Locale.CHINA, "使用预算 : %s", bi.getName()));
+                    }
+                } else {
+                    map.put(K_TYPE, V_TYPE_INCOME);
+                    map.put(K_AMOUNT, String.format(Locale.CHINA, "+ %.02f", r.getVal()));
+                }
+
+                map.put(K_TAG, k);
+                map.put(K_SUB_TAG, k);
+                cur_llhm.add(map);
+            }
+
+            mHMSubPara.put(k, cur_llhm);
+        }
     }
 
     /**
@@ -300,86 +361,6 @@ public class DailyLVHelper extends LVShowDataBase
         mAdapter.notifyDataSetChanged();
         ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
     }
-
-    /**
-     * 解析支出/收入数据
-     * @param notes   待解析数据（日期---数据HashMap）
-     */
-    private void parseNotes(HashMap<String, ArrayList<INote>> notes)   {
-        ArrayList<String> set_k = new ArrayList<>(notes.keySet());
-        Collections.sort(set_k);
-        for (String k : set_k) {
-            String title = ToolUtil.FormatDateString(k);
-            ArrayList<INote> v = notes.get(k);
-
-            LinkedList<HashMap<String, String>> cur_llhm = new LinkedList<>();
-            int pay_cout = 0;
-            int income_cout = 0;
-            BigDecimal pay_amount = BigDecimal.ZERO;
-            BigDecimal income_amount = BigDecimal.ZERO;
-            for (INote r : v) {
-                HashMap<String, String> map = new HashMap<>();
-                map.put(K_TITLE, r.getInfo());
-                map.put(K_ID, String.valueOf(r.getId()));
-
-                if (r.isPayNote()) {
-                    map.put(K_TYPE, V_TYPE_PAY);
-                    map.put(K_AMOUNT, String.format(Locale.CHINA, "- %.02f", r.getVal()));
-
-                    BudgetItem bi = r.getBudget();
-                    if(null != bi)  {
-                        map.put(K_BUDGET, String.format(Locale.CHINA, "使用预算 : %s", bi.getName()));
-                    }
-
-                    pay_cout += 1;
-                    pay_amount = pay_amount.add(r.getVal());
-                } else {
-                    map.put(K_TYPE, V_TYPE_INCOME);
-                    map.put(K_AMOUNT, String.format(Locale.CHINA, "+ %.02f", r.getVal()));
-
-                    income_cout += 1;
-                    income_amount = income_amount.add(r.getVal());
-                }
-
-                map.put(K_TAG, title);
-                cur_llhm.add(map);
-            }
-
-            HashMap<String, String> map = new HashMap<>();
-            map.put(K_MONTH, k.substring(0, 7));
-
-            String km = k.substring(8, 10);
-            if(km.startsWith("0"))
-                km = km.replaceFirst("0", " ");
-            map.put(K_DAY_NUMEBER, km);
-
-            try {
-                Timestamp ts = ToolUtil.StringToTimestamp(k);
-                Calendar day = Calendar.getInstance();
-                day.setTimeInMillis(ts.getTime());
-                map.put(K_DAY_IN_WEEK, getDayInWeek(day.get(Calendar.DAY_OF_WEEK)));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            map.put(K_DAY_PAY_COUNT, String.valueOf(pay_cout));
-            map.put(K_DAY_INCOME_COUNT, String.valueOf(income_cout));
-            map.put(K_DAY_PAY_AMOUNT, String.format(Locale.CHINA, "%.02f", pay_amount));
-            map.put(K_DAY_INCOME_AMOUNT, String.format(Locale.CHINA, "%.02f", income_amount));
-
-            BigDecimal bd_l = income_amount.subtract(pay_amount);
-            String v_l = String.format(Locale.CHINA,
-                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-            map.put(K_AMOUNT, v_l);
-
-            map.put(K_TAG, title);
-            map.put(K_SHOW, checkUnfoldItem(title) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-            mMainPara.add(map);
-
-            mHMSubPara.put(title, cur_llhm);
-        }
-    }
-
 
     /**
      * 首级列表adapter

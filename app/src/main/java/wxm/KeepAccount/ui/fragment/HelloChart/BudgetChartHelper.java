@@ -297,12 +297,6 @@ public class BudgetChartHelper extends ShowViewHelperBase {
         }
     }
 
-    @Override
-    public void checkView() {
-        if(getRootActivity().getDayNotesDirty())
-            loadView();
-    }
-
 
     @Override
     public void filterView(List<String> ls_tag) {
