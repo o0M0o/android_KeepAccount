@@ -316,31 +316,22 @@ public class YearlyLVHelper extends LVShowDataBase {
                 ib.getBackground().setAlpha(0);
 
                 // set fold status
-                if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)))    {
-                    init_detail_view(pv, hm);
-                    ib.setImageDrawable(mDAFold);
-                }   else    {
-                    init_detail_view(pv, hm);
-                    ib.setImageDrawable(mDAUnFold);
-                }
+                init_detail_view(pv, hm);
+                ib.setImageDrawable(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)) ? mDAFold : mDAUnFold);
 
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         ImageButton ib = UtilFun.cast(v);
-                        if(V_SHOW_FOLD.equals(hm.get(K_SHOW)))    {
-                            hm.put(K_SHOW, V_SHOW_UNFOLD);
-                            init_detail_view(pv, hm);
+                        boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
+                        hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                        init_detail_view(pv, hm);
 
-                            ib.setImageDrawable(mDAFold);
+                        ib.setImageDrawable(bf ? mDAFold : mDAUnFold);
+                        if(bf)
                             addUnfoldItem(hm.get(K_TAG));
-                        }   else    {
-                            hm.put(K_SHOW, V_SHOW_FOLD);
-                            init_detail_view(pv, hm);
-
-                            ib.setImageDrawable(mDAUnFold);
+                        else
                             removeUnfoldItem(hm.get(K_TAG));
-                        }
                     }
                 });
 

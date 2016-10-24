@@ -406,36 +406,26 @@ public class DailyLVHelper extends LVShowDataBase
             if(null != v)   {
                 final HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 final View fv = v;
-                final Resources res = v.getResources();
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
                 ib.getBackground().setAlpha(0);
+                init_detail_view(fv, hm);
+                ib.setImageDrawable(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)) ? mDAFold : mDAUnFold);
+
                 ib.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //Log.i(TAG, "onIbClick at pos = " + pos);
-                        Resources res = v.getResources();
                         ImageButton ib = UtilFun.cast(v);
-                        if(V_SHOW_FOLD.equals(hm.get(K_SHOW)))    {
-                            hm.put(K_SHOW, V_SHOW_UNFOLD);
-                            init_detail_view(fv, hm);
-                            ib.setImageDrawable(mDAFold);
+                        boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
+                        hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                        init_detail_view(fv, hm);
+
+                        ib.setImageDrawable(bf ? mDAFold : mDAUnFold);
+                        if(bf)
                             addUnfoldItem(hm.get(K_TAG));
-                        }   else    {
-                            hm.put(K_SHOW, V_SHOW_FOLD);
-                            init_detail_view(fv, hm);
-                            ib.setImageDrawable(mDAUnFold);
+                        else
                             removeUnfoldItem(hm.get(K_TAG));
-                        }
                     }
                 });
-
-                if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)))    {
-                    //init_detail_view(fv, hm);
-                    ib.setImageDrawable(mDAFold);
-                }   else    {
-                    init_detail_view(fv, hm);
-                    ib.setImageDrawable(mDAUnFold);
-                }
 
                 RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
                 rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
