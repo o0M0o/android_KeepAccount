@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.fragment.base;
 
+import android.content.res.Resources;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 
 /**
@@ -62,11 +64,19 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     // 存放展开节点的数据
     private final LinkedList<String>    mUnfoldItems;
 
+    // color for show
+    private final int  mCRForPay;
+    private final int  mCRForIncome;
+
     public LVShowDataBase()   {
         super();
         mMainPara       = new LinkedList<>();
         mHMSubPara      = new HashMap<>();
         mUnfoldItems    = new LinkedList<>();
+
+        Resources res = ContextUtil.getInstance().getResources();
+        mCRForPay       = res.getColor(R.color.darkred);
+        mCRForIncome    = res.getColor(R.color.darkslategray);
     }
 
     /**
@@ -152,6 +162,7 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
 
             TextView tv = UtilFun.cast_t(rl.findViewById(R.id.tv_amount));
             tv.setText(amount);
+            tv.setTextColor(amount.startsWith("+") ? mCRForIncome : mCRForPay);
         }
     }
 }

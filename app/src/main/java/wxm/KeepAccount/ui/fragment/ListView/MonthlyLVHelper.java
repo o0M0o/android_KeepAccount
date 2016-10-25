@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -156,6 +157,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
         // for month
         HashMap<String, NoteShowInfo> hm_m = NoteShowDataHelper.getInstance().getMonthInfo();
         ArrayList<String> set_k_m = new ArrayList<>(hm_m.keySet());
+        Collections.sort(set_k_m);
         for(String k : set_k_m)   {
             NoteShowInfo ni = hm_m.get(k);
             HashMap<String, String> map = new HashMap<>();
@@ -180,6 +182,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
         // for day
         HashMap<String, NoteShowInfo> hm_d = NoteShowDataHelper.getInstance().getDayInfo();
         ArrayList<String> set_k_d = new ArrayList<>(hm_d.keySet());
+        Collections.sort(set_k_d);
         for(String k : set_k_d)   {
             String mk = k.substring(0, 7);
             NoteShowInfo ni = hm_d.get(k);
@@ -365,11 +368,15 @@ public class MonthlyLVHelper extends LVShowDataBase {
      */
     private class SelfSubAdapter  extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
+        private int mCLSelected;
 
         SelfSubAdapter(Context context,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
             super(context, sdata, R.layout.li_monthly_show_detail, from, to);
+
+            Resources res = getRootActivity().getResources();
+            mCLSelected = res.getColor(R.color.darkred);
         }
 
         @Override
@@ -399,19 +406,17 @@ public class MonthlyLVHelper extends LVShowDataBase {
                         }
 
                         HashMap<String, String> hp = UtilFun.cast(getItem(position));
-                        final String hp_tag = hp.get(K_TAG);
-                        Resources res = v.getResources();
+                        final String hp_tag = hp.get(K_SUB_TAG);
                         if(!v.isSelected()) {
                             mLLSubFilter.add(hp_tag);
                             mLLSubFilterVW.add(v);
 
+                            v.getBackground().setAlpha(255);
+                            v.setBackgroundColor(mCLSelected);
                             if(!mBSelectSubFilter) {
                                 mBSelectSubFilter = true;
                                 refreshAttachLayout();
                             }
-
-                            v.getBackground().setAlpha(255);
-                            v.setBackgroundColor(res.getColor(R.color.red));
                         }   else    {
                             mLLSubFilter.removeFirstOccurrence(hp_tag);
                             mLLSubFilterVW.removeFirstOccurrence(v);

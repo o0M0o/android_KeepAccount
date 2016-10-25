@@ -3,8 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="trans_1">#20000000</color><!--白色 -->
     <color name="color_1">#b1ecd3</color><!--白色 -->
-    <color name="color_2">#7ca594</color><!--白色 -->
+    <color name="color_2">#A1BFB2</color><!--白色 -->
     <color name="grey_1">#dbdbdb</color><!--白色 -->
     <color name="grey_2">#eaeaea</color><!--白色 -->
     <color name="grey_3">#fafafa</color><!--白色 -->

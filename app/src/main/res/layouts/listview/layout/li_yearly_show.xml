@@ -21,13 +21,27 @@
             android:id="@+id/rl_info"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/tv_year"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="26dp"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <include layout="@layout/liit_note_info" />
         </RelativeLayout>
+
+        <!--
+        <RelativeLayout
+            android:id="@+id/rl_balance"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/ib_hide_show"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <include layout="@layout/liit_balance_info" />
+        </RelativeLayout>
+        -->
 
         <ImageButton
             android:layout_width="wrap_content"

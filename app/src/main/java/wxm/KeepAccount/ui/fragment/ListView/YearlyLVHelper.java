@@ -19,6 +19,7 @@ import android.widget.TextView;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -179,6 +180,7 @@ public class YearlyLVHelper extends LVShowDataBase {
         // for month
         HashMap<String, NoteShowInfo> hm_m = NoteShowDataHelper.getInstance().getMonthInfo();
         ArrayList<String> set_k_m = new ArrayList<>(hm_m.keySet());
+        Collections.sort(set_k_m);
         for(String k : set_k_m)   {
             String ky = k.substring(0, 4);
             NoteShowInfo ni = hm_m.get(k);
@@ -359,11 +361,15 @@ public class YearlyLVHelper extends LVShowDataBase {
      */
     private class SelfSubAdapter  extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
+        private int mCLSelected;
 
         SelfSubAdapter(Context context,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
             super(context, sdata, R.layout.li_yearly_show_detail, from, to);
+
+            Resources res = getRootActivity().getResources();
+            mCLSelected = res.getColor(R.color.darkred);
         }
 
         @Override
@@ -383,7 +389,9 @@ public class YearlyLVHelper extends LVShowDataBase {
             if(null != v)   {
                 final HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
+                ib.setSelected(false);
                 ib.getBackground().setAlpha(0);
+
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -392,10 +400,11 @@ public class YearlyLVHelper extends LVShowDataBase {
                             mLLSubFilterVW.clear();
                         }
 
-                        HashMap<String, String> hp = UtilFun.cast(getItem(position));
-                        final String hp_tag = hp.get(K_TAG);
-                        Resources res = v.getResources();
-                        if(!v.isSelected()) {
+                        String hp_tag = hm.get(K_SUB_TAG);
+                        boolean bsel = v.isSelected();
+                        v.setSelected(!bsel);
+                        v.getBackground().setAlpha(!bsel ? 255 : 0);
+                        if(!bsel) {
                             mLLSubFilter.add(hp_tag);
                             mLLSubFilterVW.add(v);
 
@@ -403,13 +412,9 @@ public class YearlyLVHelper extends LVShowDataBase {
                                 mBSelectSubFilter = true;
                                 refreshAttachLayout();
                             }
-
-                            v.getBackground().setAlpha(255);
-                            v.setBackgroundColor(res.getColor(R.color.red));
                         }   else    {
                             mLLSubFilter.removeFirstOccurrence(hp_tag);
                             mLLSubFilterVW.removeFirstOccurrence(v);
-                            v.getBackground().setAlpha(0);
 
                             if(mLLSubFilter.isEmpty()) {
                                 mBSelectSubFilter = false;

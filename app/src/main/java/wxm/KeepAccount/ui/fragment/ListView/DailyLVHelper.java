@@ -22,6 +22,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -235,6 +236,7 @@ public class DailyLVHelper extends LVShowDataBase
         // for day
         HashMap<String, NoteShowInfo> hm_d = NoteShowDataHelper.getInstance().getDayInfo();
         ArrayList<String> set_k_d = new ArrayList<>(hm_d.keySet());
+        Collections.sort(set_k_d);
         for(String k : set_k_d)   {
             NoteShowInfo ni = hm_d.get(k);
             HashMap<String, String> map = new HashMap<>();

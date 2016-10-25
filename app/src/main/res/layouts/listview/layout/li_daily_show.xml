@@ -6,56 +6,63 @@
         android:layout_height="wrap_content"
         android:id="@+id/rl_header">
 
-        <TextView
-            android:id="@+id/tv_month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2016-07"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="false"
-            android:textSize="22sp"
-            android:textColor="@color/black"
-            android:layout_marginLeft="16dp" />
-
-        <TextView
-            android:id="@+id/tv_day_number"
-            android:text="15"
-            android:layout_below="@id/tv_month"
-            android:layout_alignLeft="@id/tv_month"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/tv_day"
-            android:text="日"
-            android:layout_alignBottom="@id/tv_day_number"
-            android:layout_toRightOf="@id/tv_day_number"
-            android:layout_marginBottom="2dp"
-            android:layout_marginLeft="4dp"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/tv_day_in_week"
-            android:text="星期三"
-            android:layout_below="@id/tv_day"
-            android:layout_alignLeft="@id/tv_month"
+        <RelativeLayout
+            android:id="@+id/rl_date"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
-            android:textSize="12sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2016-07"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="false"
+                android:textSize="20sp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_day_number"
+                android:text="15"
+                android:layout_below="@id/tv_month"
+                android:layout_alignLeft="@id/tv_month"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_day"
+                android:text="日"
+                android:layout_alignBottom="@id/tv_day_number"
+                android:layout_toRightOf="@id/tv_day_number"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="2dp"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_day_in_week"
+                android:text="星期三"
+                android:layout_alignBottom="@id/tv_day"
+                android:layout_toRightOf="@id/tv_day"
+                android:layout_marginLeft="8dp"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_info"
-            android:layout_toRightOf="@id/tv_month"
+            android:layout_toRightOf="@id/rl_date"
             android:layout_centerVertical="true"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="26dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
                 <include layout="@layout/liit_note_info" />

@@ -6,12 +6,12 @@
     <RelativeLayout
         android:id="@+id/rl_pay"
         android:layout_width="wrap_content"
-        android:layout_height="24dp">
+        android:layout_height="22dp">
         <ImageView
             android:id="@+id/iv_pay_tag"
             android:layout_centerVertical="true"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             app:srcCompat="@drawable/ic_show_pay"
             android:scaleType="fitXY" />
 
@@ -28,7 +28,8 @@
 
         <TextView
             android:id="@+id/tv_pay_count"
-            android:layout_marginLeft="8dp"
+            android:textSize="13sp"
+            android:layout_marginLeft="4dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iv_pay_tag"
             android:textColor="@color/darkred"
@@ -51,15 +52,16 @@
             android:id="@+id/iv_pay_amount_tag"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="76dp"
+            android:layout_marginLeft="58dp"
             app:srcCompat="@drawable/ic_yen"
             android:scaleType="fitXY"
-            android:layout_width="18dp"
-            android:layout_height="18dp" />
+            android:layout_width="16dp"
+            android:layout_height="16dp" />
 
         <TextView
             android:id="@+id/tv_pay_amount"
-            android:layout_marginLeft="8dp"
+            android:textSize="13sp"
+            android:layout_marginLeft="4dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iv_pay_amount_tag"
             android:textColor="@color/darkred"
@@ -72,12 +74,12 @@
         android:id="@+id/rl_income"
         android:layout_below="@id/rl_pay"
         android:layout_width="wrap_content"
-        android:layout_height="24dp">
+        android:layout_height="22dp">
         <ImageView
             android:id="@+id/iv_income_tag"
             android:layout_centerVertical="true"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             app:srcCompat="@drawable/ic_show_income"
             android:scaleType="fitXY" />
 
@@ -94,7 +96,8 @@
 
         <TextView
             android:id="@+id/tv_income_count"
-            android:layout_marginLeft="8dp"
+            android:textSize="13sp"
+            android:layout_marginLeft="4dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iv_income_tag"
             android:textColor="@color/darkslategrey"
@@ -116,17 +119,18 @@
             android:id="@+id/iv_income_amount_tag"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="76dp"
+            android:layout_marginLeft="58dp"
             app:srcCompat="@drawable/ic_yen"
             android:scaleType="fitXY"
-            android:layout_width="18dp"
-            android:layout_height="18dp" />
+            android:layout_width="16dp"
+            android:layout_height="16dp" />
 
         <TextView
             android:id="@+id/tv_income_amount"
+            android:textSize="13sp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iv_income_amount_tag"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="4dp"
             android:textColor="@color/darkslategrey"
             android:text="754.76"
             android:layout_width="wrap_content"
@@ -142,6 +146,7 @@
 
         <TextView
             android:id="@+id/tv_daily_tag"
+            android:textSize="13sp"
             android:layout_centerVertical="true"
             android:text="结余 : "
             android:layout_width="wrap_content"
@@ -149,6 +154,7 @@
 
         <TextView
             android:id="@+id/tv_amount"
+            android:textSize="13sp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/tv_daily_tag"
             android:textColor="@color/darkslategrey"
