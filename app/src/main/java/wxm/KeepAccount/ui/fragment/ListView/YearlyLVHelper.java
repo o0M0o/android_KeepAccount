@@ -361,15 +361,12 @@ public class YearlyLVHelper extends LVShowDataBase {
      */
     private class SelfSubAdapter  extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
-        private int mCLSelected;
 
         SelfSubAdapter(Context context,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
             super(context, sdata, R.layout.li_yearly_show_detail, from, to);
-
-            Resources res = getRootActivity().getResources();
-            mCLSelected = res.getColor(R.color.darkred);
+            //Resources res = getRootActivity().getResources();
         }
 
         @Override
@@ -388,24 +385,19 @@ public class YearlyLVHelper extends LVShowDataBase {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
                 final HashMap<String, String> hm = UtilFun.cast(getItem(position));
+                final String sub_tag = hm.get(K_SUB_TAG);
+
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
-                ib.setSelected(false);
-                ib.getBackground().setAlpha(0);
+                ib.getBackground().setAlpha(mLLSubFilter.contains(sub_tag) ? 255 : 0);
 
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!mBSelectSubFilter) {
-                            mLLSubFilter.clear();
-                            mLLSubFilterVW.clear();
-                        }
-
-                        String hp_tag = hm.get(K_SUB_TAG);
-                        boolean bsel = v.isSelected();
-                        v.setSelected(!bsel);
-                        v.getBackground().setAlpha(!bsel ? 255 : 0);
+                        ImageButton ibv = UtilFun.cast_t(v);
+                        boolean bsel = mLLSubFilter.contains(sub_tag);
+                        ibv.getBackground().setAlpha(!bsel ? 255 : 0);
                         if(!bsel) {
-                            mLLSubFilter.add(hp_tag);
+                            mLLSubFilter.add(sub_tag);
                             mLLSubFilterVW.add(v);
 
                             if(!mBSelectSubFilter) {
@@ -413,10 +405,11 @@ public class YearlyLVHelper extends LVShowDataBase {
                                 refreshAttachLayout();
                             }
                         }   else    {
-                            mLLSubFilter.removeFirstOccurrence(hp_tag);
-                            mLLSubFilterVW.removeFirstOccurrence(v);
+                            mLLSubFilter.remove(sub_tag);
+                            mLLSubFilterVW.remove(v);
 
                             if(mLLSubFilter.isEmpty()) {
+                                mLLSubFilterVW.clear();;
                                 mBSelectSubFilter = false;
                                 refreshAttachLayout();
                             }

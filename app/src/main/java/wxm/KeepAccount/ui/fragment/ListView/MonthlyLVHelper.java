@@ -395,40 +395,35 @@ public class MonthlyLVHelper extends LVShowDataBase {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
                 final HashMap<String, String> hm = UtilFun.cast(getItem(position));
+                final String sub_tag = hm.get(K_SUB_TAG);
+
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
-                ib.getBackground().setAlpha(0);
+                ib.getBackground().setAlpha(mLLSubFilter.contains(sub_tag) ? 255 : 0);
+
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!mBSelectSubFilter) {
-                            mLLSubFilter.clear();
-                            mLLSubFilterVW.clear();
-                        }
-
-                        HashMap<String, String> hp = UtilFun.cast(getItem(position));
-                        final String hp_tag = hp.get(K_SUB_TAG);
-                        if(!v.isSelected()) {
-                            mLLSubFilter.add(hp_tag);
+                        ImageButton ibv = UtilFun.cast_t(v);
+                        boolean bsel = mLLSubFilter.contains(sub_tag);
+                        ibv.getBackground().setAlpha(!bsel ? 255 : 0);
+                        if(!bsel) {
+                            mLLSubFilter.add(sub_tag);
                             mLLSubFilterVW.add(v);
 
-                            v.getBackground().setAlpha(255);
-                            v.setBackgroundColor(mCLSelected);
                             if(!mBSelectSubFilter) {
                                 mBSelectSubFilter = true;
                                 refreshAttachLayout();
                             }
                         }   else    {
-                            mLLSubFilter.removeFirstOccurrence(hp_tag);
-                            mLLSubFilterVW.removeFirstOccurrence(v);
-                            v.getBackground().setAlpha(0);
+                            mLLSubFilter.remove(sub_tag);
+                            mLLSubFilterVW.remove(v);
 
                             if(mLLSubFilter.isEmpty()) {
+                                mLLSubFilterVW.clear();;
                                 mBSelectSubFilter = false;
                                 refreshAttachLayout();
                             }
                         }
-
-                        v.setSelected(!v.isSelected());
                     }
                 });
 

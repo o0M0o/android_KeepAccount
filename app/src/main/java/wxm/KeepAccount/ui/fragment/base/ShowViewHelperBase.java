@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import java.sql.Timestamp;
@@ -148,7 +148,7 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
         assert null != rl;
         setLayoutVisible(rl, visible);
 
-        Button bt = UtilFun.cast(rl.findViewById(R.id.bt_giveup_filter));
+        ImageButton bt = UtilFun.cast(rl.findViewById(R.id.bt_giveup_filter));
         assert null != bt;
         bt.setOnClickListener(this);
     }
@@ -168,7 +168,7 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
         assert null != rl;
         setLayoutVisible(rl, visible);
 
-        Button bt = UtilFun.cast(rl.findViewById(R.id.bt_giveup));
+        ImageButton bt = UtilFun.cast(rl.findViewById(R.id.bt_giveup));
         assert null != bt;
         bt.setOnClickListener(this);
 
