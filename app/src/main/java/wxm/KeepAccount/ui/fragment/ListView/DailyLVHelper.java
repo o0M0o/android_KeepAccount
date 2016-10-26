@@ -137,9 +137,8 @@ public class DailyLVHelper extends LVShowDataBase
         rl.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                NoteShowDataHelper.getInstance().refreshData();
                 mActionType = ACTION_EDIT;
-                loadView();
+                refreshView(v.getContext(), true);
             }
         });
 

@@ -49,6 +49,13 @@ public class MonthlyLVHelper extends LVShowDataBase {
     private final LinkedList<String> mLLSubFilter = new LinkedList<>();
     private final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
 
+    // for expand or hide actions
+    private ImageView   mIVActions;
+    private GridLayout  mGLActions;
+    private boolean     mBActionExpand;
+    private Drawable    mDAExpand;
+    private Drawable    mDAHide;
+
     public MonthlyLVHelper()    {
         super();
     }
@@ -57,11 +64,50 @@ public class MonthlyLVHelper extends LVShowDataBase {
     public View createView(LayoutInflater inflater, ViewGroup container) {
         mSelfView = inflater.inflate(R.layout.lv_newpager, container, false);
 
-        // 无附加动作
-        ImageView mIVActions = UtilFun.cast_t(mSelfView.findViewById(R.id.iv_expand));
-        GridLayout mGLActions = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_action));
+        // 附加动作仅支持“更新"
+        Resources res = mSelfView.getResources();
+        mDAExpand = res.getDrawable(R.drawable.ic_to_up);
+        mDAHide = res.getDrawable(R.drawable.ic_to_down);
+
+        mIVActions = UtilFun.cast_t(mSelfView.findViewById(R.id.iv_expand));
+        mGLActions = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_action));
+
+        mIVActions.setImageDrawable(mDAExpand);
         setLayoutVisible(mGLActions, View.INVISIBLE);
-        mIVActions.setVisibility(View.INVISIBLE);
+
+        mIVActions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBActionExpand = !mBActionExpand;
+                if(mBActionExpand)  {
+                    mIVActions.setImageDrawable(mDAHide);
+                    setLayoutVisible(mGLActions, View.VISIBLE);
+                } else  {
+                    mIVActions.setImageDrawable(mDAExpand);
+                    setLayoutVisible(mGLActions, View.INVISIBLE);
+                }
+            }
+        });
+
+        RelativeLayout rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_add));
+        ViewGroup.LayoutParams param = rl.getLayoutParams();
+        param.width = 0;
+        param.height = 0;
+        rl.setLayoutParams(param);
+
+        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_delete));
+        param = rl.getLayoutParams();
+        param.width = 0;
+        param.height = 0;
+        rl.setLayoutParams(param);
+
+        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_refresh));
+        rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshView(v.getContext(), true);
+            }
+        });
 
         return mSelfView;
     }

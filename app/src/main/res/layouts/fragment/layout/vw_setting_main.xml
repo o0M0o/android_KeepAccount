@@ -18,8 +18,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView6"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/imageView4"
-            android:layout_marginLeft="8dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="56dp"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -59,15 +59,16 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView7"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/imageView6"
-            android:layout_marginLeft="8dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="56dp"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_setting_reformat"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_setting_reformat1"
             android:id="@+id/imageView6"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
@@ -94,20 +95,20 @@
         android:clickable="true">
 
         <TextView
+            android:id="@+id/textView9"
+            android:layout_alignParentLeft="true"
             android:text="@string/setting_chart_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView9"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/imageView10"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="56dp"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_setting_chart_color"
+            app:srcCompat="@drawable/ic_setting_color_1"
             android:id="@+id/imageView10"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
@@ -135,13 +136,13 @@
         android:clickable="true">
 
         <TextView
+            android:id="@+id/textView12"
+            android:layout_alignParentLeft="true"
             android:text="@string/setting_check_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView12"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/imageView13"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="56dp"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -175,13 +176,13 @@
         android:clickable="true">
 
         <TextView
+            android:id="@+id/textView15"
+            android:layout_alignParentLeft="true"
             android:text="@string/setting_share_app"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView15"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/imageView16"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="56dp"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
