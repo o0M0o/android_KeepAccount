@@ -84,16 +84,16 @@
             <ImageView
                 android:id="@+id/iv_delete"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="8dp"
                 android:layout_centerHorizontal="true"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/ic_delete" />
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_delete_1" />
 
             <TextView
                 android:layout_below="@id/iv_delete"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="6dp"
                 android:layout_centerHorizontal="true"
                 android:text="@string/cn_delete_note"
                 android:textSize="10sp"

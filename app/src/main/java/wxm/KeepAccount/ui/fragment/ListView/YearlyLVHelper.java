@@ -293,8 +293,8 @@ public class YearlyLVHelper extends LVShowDataBase {
             mClOne = res.getColor(R.color.color_1);
             mClTwo = res.getColor(R.color.color_2);
 
-            mDAFold = res.getDrawable(R.drawable.ic_hide);
-            mDAUnFold = res.getDrawable(R.drawable.ic_show);
+            mDAFold = res.getDrawable(R.drawable.ic_hide_1);
+            mDAUnFold = res.getDrawable(R.drawable.ic_show_1);
         }
 
         @Override

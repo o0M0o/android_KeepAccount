@@ -184,25 +184,26 @@ public class DailyLVHelper extends LVShowDataBase
         switch (vid)    {
             case R.id.bt_accpet :
                 if(ACTION_DELETE == mActionType) {
-                    boolean dirty = false;
+                    boolean b_dirty = false;
                     if(!ToolUtil.ListIsNullOrEmpty(mDelPay)) {
                         AppModel.getPayIncomeUtility().DeletePayNotes(mDelPay);
+                        b_dirty = true;
                         mDelPay.clear();
-                        dirty = true;
                     }
 
                     if(!ToolUtil.ListIsNullOrEmpty(mDelIncome)) {
                         AppModel.getPayIncomeUtility().DeleteIncomeNotes(mDelIncome);
+                        b_dirty = true;
                         mDelIncome.clear();
-                        dirty = true;
-                    }
-
-                    if(dirty) {
-                        reloadData();
                     }
 
                     mActionType = ACTION_EDIT;
-                    refreshView();
+                    if(b_dirty) {
+                        NoteShowDataHelper.getInstance().refreshData();
+                        loadView();
+                    } else  {
+                        refreshAttachLayout();
+                    }
                 }
 
                 break;
@@ -387,8 +388,8 @@ public class DailyLVHelper extends LVShowDataBase
             mClOne = res.getColor(R.color.color_1);
             mClTwo = res.getColor(R.color.color_2);
 
-            mDAFold = res.getDrawable(R.drawable.ic_hide);
-            mDAUnFold = res.getDrawable(R.drawable.ic_show);
+            mDAFold = res.getDrawable(R.drawable.ic_hide_1);
+            mDAUnFold = res.getDrawable(R.drawable.ic_show_1);
         }
 
         @Override
@@ -462,7 +463,8 @@ public class DailyLVHelper extends LVShowDataBase
 
         private Drawable    mDADelete;
         private Drawable    mDADedit;
-        private int         mClSelected;
+        private int         mCLSel;
+        private int         mCLNoSel;
 
         SelfSubAdapter(Context context, ListView fv,
                        List<? extends Map<String, ?>> sdata,
@@ -472,8 +474,10 @@ public class DailyLVHelper extends LVShowDataBase
 
             Resources res   = context.getResources();
             mDADedit        = res.getDrawable(R.drawable.right_arrow);
-            mDADelete       = res.getDrawable(R.drawable.ic_delete);
-            mClSelected     = res.getColor(R.color.red);
+            mDADelete       = res.getDrawable(R.drawable.ic_delete_1);
+
+            mCLSel = res.getColor(R.color.powderblue);
+            mCLNoSel = res.getColor(R.color.trans_full);
         }
 
         @Override
@@ -527,11 +531,10 @@ public class DailyLVHelper extends LVShowDataBase
 
             ImageView iv = UtilFun.cast_t(rl_pay.findViewById(R.id.iv_pay_action));
             iv.setOnClickListener(this);
-            if(ACTION_EDIT == mActionType)    {
-                iv.setImageDrawable(mDADedit);
-            }   else    {
-                iv.setImageDrawable(mDADelete);
-            }
+            iv.setImageDrawable(ACTION_EDIT == mActionType ? mDADedit : mDADelete);
+
+            int did = Integer.parseInt(hd.get(K_ID));
+            iv.setBackgroundColor(mDelPay.contains(did) ? mCLSel : mCLNoSel);
         }
 
         private void init_income(RelativeLayout rl_income, HashMap<String, String> hd)    {
@@ -543,11 +546,10 @@ public class DailyLVHelper extends LVShowDataBase
 
             ImageView iv = UtilFun.cast_t(rl_income.findViewById(R.id.iv_income_action));
             iv.setOnClickListener(this);
-            if(ACTION_EDIT == mActionType)    {
-                iv.setImageDrawable(mDADedit);
-            }   else    {
-                iv.setImageDrawable(mDADelete);
-            }
+            iv.setImageDrawable(ACTION_EDIT == mActionType ? mDADedit : mDADelete);
+
+            int did = Integer.parseInt(hd.get(K_ID));
+            iv.setBackgroundColor(mDelIncome.contains(did) ? mCLSel : mCLNoSel);
         }
 
 
@@ -564,25 +566,20 @@ public class DailyLVHelper extends LVShowDataBase
                 case R.id.iv_income_action :       {
                     ImageView iv = UtilFun.cast_t(v);
                     if(ACTION_DELETE == mActionType)    {
-                        if(iv.isSelected())  {
-                            if (V_TYPE_PAY.equals(tp)) {
-                                mDelPay.removeFirstOccurrence(did);
-                            } else {
-                                mDelIncome.removeFirstOccurrence(did);
-                            }
-
-                            iv.getBackground().setAlpha(0);
+                        boolean is_pay = V_TYPE_PAY.equals(tp);
+                        boolean is_sel = is_pay ? mDelPay.contains(did) : mDelIncome.contains(did);
+                        iv.setBackgroundColor(is_sel ? mCLNoSel : mCLSel);
+                        if(is_sel)  {
+                            if (is_pay)
+                                mDelPay.remove((Object)did);
+                            else
+                                mDelIncome.remove((Object)did);
                         }   else    {
-                            if (V_TYPE_PAY.equals(tp)) {
+                            if (is_pay)
                                 mDelPay.add(did);
-                            } else {
+                            else
                                 mDelIncome.add(did);
-                            }
-
-                            iv.setBackgroundColor(mClSelected);
                         }
-
-                        iv.setSelected(!iv.isSelected());
                     } else  {
                         ACNoteShow ac = getRootActivity();
                         Intent intent = new Intent(ac, ACNoteEdit.class);
