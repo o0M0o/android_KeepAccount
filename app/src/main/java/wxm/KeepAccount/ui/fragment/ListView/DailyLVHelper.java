@@ -133,6 +133,16 @@ public class DailyLVHelper extends LVShowDataBase
             }
         });
 
+        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_refresh));
+        rl.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NoteShowDataHelper.getInstance().refreshData();
+                mActionType = ACTION_EDIT;
+                loadView();
+            }
+        });
+
 
         return mSelfView;
     }
