@@ -103,7 +103,7 @@ public class YearlyLVHelper extends LVShowDataBase {
         rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshView(v.getContext(), true);
+                reloadView(v.getContext(), true);
             }
         });
 

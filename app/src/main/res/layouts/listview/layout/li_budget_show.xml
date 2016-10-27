@@ -3,9 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
+        android:id="@+id/rl_header"
+        android:paddingLeft="18dp"
+        android:paddingRight="2dp"
+        android:background="@color/color_1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/rl_header">
+        android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -14,8 +17,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="false"
             android:textSize="20sp"
-            android:textColor="@color/black"
-            android:layout_marginLeft="64dp" />
+            android:textColor="@color/black"  />
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,34 +31,34 @@
             android:textSize="14sp" />
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/ib_hide_show"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="fitCenter"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="6dp"
-            android:src="@drawable/ic_show"
+            android:src="@drawable/ic_show_1"
             android:layout_centerVertical="true" />
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/ib_action"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignParentEnd="false"
-            android:src="@drawable/ic_delete"
+            android:src="@drawable/ic_delete_1"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/ib_hide_show"
             android:layout_marginRight="4dp"
             android:visibility="visible" />
-
     </RelativeLayout>
 
     <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/rl_header"
         android:id="@+id/lv_show_detail"
+        android:layout_below="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/alisbulue"
         android:divider="@android:color/transparent"
-        android:dividerHeight="3dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginLeft="72dp" />
+        android:layout_marginLeft="48dp"
+        android:dividerHeight="1dp" />
 </RelativeLayout>

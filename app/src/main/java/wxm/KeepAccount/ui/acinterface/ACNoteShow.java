@@ -19,6 +19,7 @@ import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
+import wxm.KeepAccount.ui.fragment.ShowData.TFShowBudget;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowMonthly;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowYearly;
@@ -117,7 +118,7 @@ public class ACNoteShow extends AppCompatActivity {
         mTLTabs.addTab(mTLTabs.newTab().setText(NoteShowDataHelper.TAB_TITLE_DAILY));
         mTLTabs.addTab(mTLTabs.newTab().setText(NoteShowDataHelper.TAB_TITLE_MONTHLY));
         mTLTabs.addTab(mTLTabs.newTab().setText(NoteShowDataHelper.TAB_TITLE_YEARLY));
-        //mTLTabs.addTab(mTLTabs.newTab().setText(TAB_BUDGET));
+        mTLTabs.addTab(mTLTabs.newTab().setText(NoteShowDataHelper.TAB_TITLE_BUDGET));
         mTLTabs.setTabGravity(TabLayout.GRAVITY_FILL);
 
         mVPTabs = (ViewPager) findViewById(R.id.tab_pager);
@@ -216,7 +217,7 @@ public class ACNoteShow extends AppCompatActivity {
             mHMFra.put(NoteShowDataHelper.TAB_TITLE_DAILY, new TFShowDaily());
             mHMFra.put(NoteShowDataHelper.TAB_TITLE_MONTHLY, new TFShowMonthly());
             mHMFra.put(NoteShowDataHelper.TAB_TITLE_YEARLY, new TFShowYearly());
-            //mHMFra.put(TAB_BUDGET, new TFShowBudget());
+            mHMFra.put(NoteShowDataHelper.TAB_TITLE_BUDGET, new TFShowBudget());
         }
 
         @Override

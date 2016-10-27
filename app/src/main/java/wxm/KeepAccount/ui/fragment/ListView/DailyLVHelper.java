@@ -138,7 +138,7 @@ public class DailyLVHelper extends LVShowDataBase
             @Override
             public void onClick(View v) {
                 mActionType = ACTION_EDIT;
-                refreshView(v.getContext(), true);
+                reloadView(v.getContext(), true);
             }
         });
 

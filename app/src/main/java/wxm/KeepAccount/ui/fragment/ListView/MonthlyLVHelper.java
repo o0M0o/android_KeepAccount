@@ -45,10 +45,6 @@ import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 public class MonthlyLVHelper extends LVShowDataBase {
     private final static String TAG = "MonthlyLVHelper";
 
-    private boolean mBSelectSubFilter = false;
-    private final LinkedList<String> mLLSubFilter = new LinkedList<>();
-    private final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
-
     // for expand or hide actions
     private ImageView   mIVActions;
     private GridLayout  mGLActions;
@@ -105,7 +101,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
         rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshView(v.getContext(), true);
+                reloadView(v.getContext(), true);
             }
         });
 
@@ -445,7 +441,6 @@ public class MonthlyLVHelper extends LVShowDataBase {
 
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
                 ib.getBackground().setAlpha(mLLSubFilter.contains(sub_tag) ? 255 : 0);
-
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

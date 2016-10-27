@@ -70,6 +70,11 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     private final int  mCRForPay;
     private final int  mCRForIncome;
 
+    // for filter
+    protected boolean mBSelectSubFilter = false;
+    protected final LinkedList<String> mLLSubFilter = new LinkedList<>();
+    protected final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
+
     public LVShowDataBase()   {
         super();
         mMainPara       = new LinkedList<>();
@@ -173,7 +178,7 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
      * @param v             for context
      * @param bShowDialog   若为true则显示提醒对话框
      */
-    protected void refreshView(Context v, boolean bShowDialog) {
+    protected void reloadView(Context v, boolean bShowDialog) {
         NoteShowDataHelper.getInstance().refreshData();
         loadView();
 
