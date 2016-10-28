@@ -82,6 +82,31 @@
             android:layout_below="@id/tv_pay_title"
             android:textSize="12sp" />
 
+        <RelativeLayout
+            android:id="@+id/rl_pay_note"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/tv_pay_time"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_note"
+                android:src="@drawable/ic_note"
+                android:layout_width="16dp"
+                android:layout_height="16dp" />
+
+            <TextView
+                android:id="@+id/tv_pay_note"
+                android:layout_toRightOf="@id/iv_note"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="生活开支类预算"
+                android:layout_marginLeft="4dp"
+                android:textSize="12sp" />
+            </RelativeLayout>
+
         <ImageView
             android:id="@+id/iv_look"
             android:layout_width="24dp"

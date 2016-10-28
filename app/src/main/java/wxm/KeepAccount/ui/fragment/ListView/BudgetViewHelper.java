@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -197,8 +196,8 @@ public class BudgetViewHelper  extends LVShowDataBase {
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), lv, mMainPara,
-                new String[]{K_TITLE, K_ABSTRACT},
-                new int[]{R.id.tv_title, R.id.tv_abstract});
+                new String[]{K_TITLE, K_AMOUNT, K_NOTE},
+                new int[]{R.id.tv_budget_name, R.id.tv_budget_amount, R.id.tv_budget_note});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
@@ -235,24 +234,18 @@ public class BudgetViewHelper  extends LVShowDataBase {
             String tag = String.valueOf(i.get_id());
 
             String show_str = String.format(Locale.CHINA,
-                    "总额度  : %.02f\n剩余额度 : %.02f",
+                    "(总额)%.02f/(剩余)%.02f",
                     i.getAmount(), i.getRemainderAmount());
-            String nt = i.getNote();
-            if(!UtilFun.StringIsNullOrEmpty(nt))    {
-                show_str = String.format(Locale.CHINA,
-                        "%s\n备注 : %s",
-                        show_str, nt);
-            }
-
 
             HashMap<String, String> map = new HashMap<>();
             map.put(K_TITLE, i.getName());
-            map.put(K_ABSTRACT, show_str);
+            String nt = i.getNote();
+            if(!UtilFun.StringIsNullOrEmpty(nt))    {
+                map.put(K_NOTE, nt);
+            }
+            map.put(K_AMOUNT, show_str);
             map.put(K_TAG, tag);
-            if(checkUnfoldItem(tag))
-                map.put(K_SHOW, V_SHOW_UNFOLD);
-            else
-                map.put(K_SHOW, V_SHOW_FOLD);
+            map.put(K_SHOW, checkUnfoldItem(tag) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
             mMainPara.add(map);
 
             parseSub(tag, ls_pay);
@@ -287,6 +280,11 @@ public class BudgetViewHelper  extends LVShowDataBase {
                     e.printStackTrace();
                 }
 
+                String nt = i.getNote();
+                if(!UtilFun.StringIsNullOrEmpty(nt))    {
+                    map.put(K_NOTE, nt);
+                }
+
                 map.put(K_TITLE, i.getInfo());
                 map.put(K_AMOUNT, String.format(Locale.CHINA, "%.02f", i.getVal()));
                 map.put(K_TAG, main_tag);
@@ -318,8 +316,11 @@ public class BudgetViewHelper  extends LVShowDataBase {
         // init sub adapter
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
-        SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), mLVShowDetail,
-                                        llhm, new String[]{}, new int[]{});
+        SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), mLVShowDetail, llhm,
+                                        new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK,
+                                                  K_TITLE, K_AMOUNT, K_NOTE},
+                                        new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week,
+                                                  R.id.tv_pay_title, R.id.tv_pay_amount, R.id.tv_pay_note});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
@@ -384,25 +385,38 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
                 rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
 
+                // for note
+                String nt = hm.get(K_NOTE);
+                if(UtilFun.StringIsNullOrEmpty(nt)) {
+                    rl = UtilFun.cast_t(v.findViewById(R.id.rl_budget_note));
+                    ToolUtil.setViewGroupVisible(rl, View.INVISIBLE);
+                }
+
                 // for fold/unfold
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
                 ib.getBackground().setAlpha(0);
                 ib.setImageDrawable(V_SHOW_FOLD.equals(hm.get(K_SHOW)) ?  mDAFold : mDAUnFold);
-                ib.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ImageButton ib = UtilFun.cast(v);
-                        boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-                        hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                        init_detail_view(fv, hm);
+                LinkedList<HashMap<String, String>> llhm = mHMSubPara.get(hm.get(K_TAG));
+                if(ToolUtil.ListIsNullOrEmpty(llhm))    {
+                    ib.setVisibility(View.INVISIBLE);
 
-                        ib.setImageDrawable(bf ? mDAFold : mDAUnFold);
-                        if(bf)
-                            addUnfoldItem(hm.get(K_TAG));
-                        else
-                            removeUnfoldItem(hm.get(K_TAG));
-                    }
-                });
+                } else  {
+                    ib.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ImageButton ib = UtilFun.cast(v);
+                            boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
+                            hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                            init_detail_view(fv, hm);
+
+                            ib.setImageDrawable(bf ? mDAFold : mDAUnFold);
+                            if(bf)
+                                addUnfoldItem(hm.get(K_TAG));
+                            else
+                                removeUnfoldItem(hm.get(K_TAG));
+                        }
+                    });
+                }
 
                 // for action
                 ImageButton ib_action = UtilFun.cast(v.findViewById(R.id.ib_action));
@@ -483,22 +497,12 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 final HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 final String sub_tag = hm.get(K_SUB_TAG);
 
-                // for date
-                TextView tv = UtilFun.cast_t(v.findViewById(R.id.tv_month));
-                tv.setText(hm.get(K_MONTH));
-
-                tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_number));
-                tv.setText(hm.get(K_DAY_NUMEBER));
-
-                tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_in_week));
-                tv.setText(hm.get(K_DAY_IN_WEEK));
-
-                // for pay
-                tv = UtilFun.cast_t(v.findViewById(R.id.tv_pay_title));
-                tv.setText(hm.get(K_TITLE));
-
-                tv = UtilFun.cast_t(v.findViewById(R.id.tv_pay_amount));
-                tv.setText(hm.get(K_AMOUNT));
+                // for note
+                String nt = hm.get(K_NOTE);
+                if(UtilFun.StringIsNullOrEmpty(nt)) {
+                    RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_pay_note));
+                    ToolUtil.setViewGroupVisible(rl, View.INVISIBLE);
+                }
 
                 ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_look));
                 iv.setBackgroundColor(mLLSubFilter.contains(sub_tag) ? mCLSel : mCLNoSel);
