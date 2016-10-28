@@ -36,13 +36,30 @@
                 android:textSize="19sp"
                 android:textColor="@color/black"/>
 
-            <TextView
-                android:id="@+id/tv_income_time"
+            <RelativeLayout
+                android:id="@+id/rl_iclock"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="12:04"
-                android:textSize="13sp" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_iclock"
+                    android:src="@drawable/ic_clock"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_income_time"
+                    android:layout_marginLeft="4dp"
+                    android:layout_toRightOf="@id/iv_iclock"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12:04"
+                    android:textSize="13sp" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_income_note"
@@ -135,21 +152,55 @@
                 android:textSize="19sp"
                 android:textColor="@color/black"/>
 
-            <TextView
-                android:id="@+id/tv_pay_time"
+            <RelativeLayout
+                android:id="@+id/rl_clock"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="4dp"
-                android:text="12:04"
-                android:textSize="13sp" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_pay_budget"
+                <ImageView
+                    android:id="@+id/iv_clock"
+                    android:src="@drawable/ic_clock"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_pay_time"
+                    android:layout_marginLeft="4dp"
+                    android:layout_toRightOf="@id/iv_clock"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12:04"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_budget"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="预算 : 生活费"
-                android:textSize="13sp" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_budget"
+                    android:src="@drawable/ic_budget_1"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_pay_budget"
+                    android:layout_marginLeft="4dp"
+                    android:layout_toRightOf="@id/iv_budget"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="生活费"
+                    android:textSize="13sp" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_pay_note"

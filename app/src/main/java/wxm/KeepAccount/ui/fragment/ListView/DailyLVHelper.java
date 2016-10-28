@@ -542,6 +542,13 @@ public class DailyLVHelper extends LVShowDataBase
             int did = Integer.parseInt(hd.get(K_ID));
             iv.setBackgroundColor(mDelPay.contains(did) ? mCLSel : mCLNoSel);
 
+            // for budget
+            String bd = hd.get(K_BUDGET);
+            if(UtilFun.StringIsNullOrEmpty(bd)) {
+                RelativeLayout rl = UtilFun.cast_t(rl_pay.findViewById(R.id.rl_budget));
+                ToolUtil.setViewGroupVisible(rl, View.INVISIBLE);
+            }
+
             // for note
             String nt = hd.get(K_NOTE);
             if(UtilFun.StringIsNullOrEmpty(nt)) {
