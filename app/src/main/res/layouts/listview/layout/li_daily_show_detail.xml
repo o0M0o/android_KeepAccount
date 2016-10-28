@@ -7,7 +7,7 @@
         android:id="@+id/rl_income"
         android:background="@color/grey_1"
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/iv_income_show"
             android:layout_width="24dp"
@@ -18,29 +18,55 @@
             android:layout_marginLeft="16dp"
             android:layout_centerVertical="true" />
 
-        <TextView
-            android:id="@+id/tv_income_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="工资"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="false"
-            android:textSize="19sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@id/iv_income_show"
-            android:layout_marginTop="6dp" />
-
-        <TextView
-            android:id="@+id/tv_income_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_income_info"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="56dp"
+            android:layout_marginTop="2dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:text="12:04"
-            android:layout_alignLeft="@id/tv_income_title"
-            android:layout_below="@id/tv_income_title"
-            android:textSize="13sp" />
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_income_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="工资"
+                android:textSize="19sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tv_income_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="12:04"
+                android:textSize="13sp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_income_note"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/iv_income_note"
+                    android:src="@drawable/ic_note"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_income_note"
+                    android:layout_toRightOf="@id/iv_income_note"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="月工资收入"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_income_action"
@@ -68,64 +94,86 @@
         android:id="@+id/rl_pay"
         android:background="@color/grey_3"
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/iv_pay_show"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:scaleType="fitXY"
-            android:layout_marginTop="6dp"
-            android:src="@drawable/ic_show_pay"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="16dp" />
-
-        <ImageView
-            android:id="@+id/iv_pay_budget"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:scaleType="fitXY"
-            android:layout_marginBottom="4dp"
-            android:src="@drawable/ic_show_budget"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="16dp"
-            android:layout_centerVertical="true" />
-
-        <TextView
-            android:id="@+id/tv_pay_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="交通费"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="false"
-            android:textSize="19sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@id/iv_pay_show"
-            android:layout_marginTop="6dp" />
-
-        <TextView
-            android:id="@+id/tv_pay_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:text="12:04"
-            android:layout_alignLeft="@id/tv_pay_title"
-            android:layout_below="@id/tv_pay_title"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/tv_pay_budget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/tv_pay_time"
-            android:layout_alignTop="@id/tv_pay_time"
+        <LinearLayout
+            android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:text="预算 : 生活费"
-            android:textSize="13sp" />
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_pay_show"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_show_pay" />
+
+            <ImageView
+                android:id="@+id/iv_pay_budget"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_show_budget"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_pay_info"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="56dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="4dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_pay_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="交通费"
+                android:textSize="19sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tv_pay_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:text="12:04"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_pay_budget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="预算 : 生活费"
+                android:textSize="13sp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_pay_note"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/iv_note"
+                    android:src="@drawable/ic_note"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_pay_note"
+                    android:layout_toRightOf="@id/iv_note"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="日常生活开销"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_pay_action"

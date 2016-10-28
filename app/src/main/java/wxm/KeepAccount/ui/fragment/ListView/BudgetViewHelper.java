@@ -282,7 +282,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
                 String nt = i.getNote();
                 if(!UtilFun.StringIsNullOrEmpty(nt))    {
-                    map.put(K_NOTE, nt);
+                    map.put(K_NOTE, nt.length() > 10 ? nt.substring(0, 10) + "..." : nt);
                 }
 
                 map.put(K_TITLE, i.getInfo());
@@ -395,11 +395,10 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 // for fold/unfold
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
                 ib.getBackground().setAlpha(0);
-                ib.setImageDrawable(V_SHOW_FOLD.equals(hm.get(K_SHOW)) ?  mDAFold : mDAUnFold);
+                ib.setImageDrawable(V_SHOW_FOLD.equals(hm.get(K_SHOW)) ?  mDAUnFold : mDAFold);
                 LinkedList<HashMap<String, String>> llhm = mHMSubPara.get(hm.get(K_TAG));
                 if(ToolUtil.ListIsNullOrEmpty(llhm))    {
                     ib.setVisibility(View.INVISIBLE);
-
                 } else  {
                     ib.setOnClickListener(new View.OnClickListener() {
                         @Override

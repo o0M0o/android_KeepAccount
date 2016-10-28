@@ -305,6 +305,11 @@ public class DailyLVHelper extends LVShowDataBase
                     map.put(K_AMOUNT, String.format(Locale.CHINA, "+ %.02f", r.getVal()));
                 }
 
+                String nt = r.getNote();
+                if(!UtilFun.StringIsNullOrEmpty(nt))    {
+                    map.put(K_NOTE, nt.length() > 10 ? nt.substring(0, 10) + "..." : nt);
+                }
+
                 map.put(K_TAG, k);
                 map.put(K_SUB_TAG, k);
                 cur_llhm.add(map);
@@ -340,7 +345,8 @@ public class DailyLVHelper extends LVShowDataBase
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
-                                        new String[]{}, new int[]{});
+                                        new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK},
+                                        new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week});
         lv.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
@@ -443,15 +449,6 @@ public class DailyLVHelper extends LVShowDataBase
                 rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
 
                 // for show
-                TextView tv = UtilFun.cast_t(v.findViewById(R.id.tv_month));
-                tv.setText(hm.get(K_MONTH));
-
-                tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_number));
-                tv.setText(hm.get(K_DAY_NUMEBER));
-
-                tv = UtilFun.cast_t(v.findViewById(R.id.tv_day_in_week));
-                tv.setText(hm.get(K_DAY_IN_WEEK));
-
                 RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
                 fillNoteInfo(rl_info, hm.get(K_DAY_PAY_COUNT), hm.get(K_DAY_PAY_AMOUNT),
                         hm.get(K_DAY_INCOME_COUNT), hm.get(K_DAY_INCOME_AMOUNT),
@@ -544,6 +541,16 @@ public class DailyLVHelper extends LVShowDataBase
 
             int did = Integer.parseInt(hd.get(K_ID));
             iv.setBackgroundColor(mDelPay.contains(did) ? mCLSel : mCLNoSel);
+
+            // for note
+            String nt = hd.get(K_NOTE);
+            if(UtilFun.StringIsNullOrEmpty(nt)) {
+                RelativeLayout rl = UtilFun.cast_t(rl_pay.findViewById(R.id.rl_pay_note));
+                ToolUtil.setViewGroupVisible(rl, View.INVISIBLE);
+            } else  {
+                tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_note));
+                tv.setText(nt);
+            }
         }
 
         private void init_income(RelativeLayout rl_income, HashMap<String, String> hd)    {
@@ -559,6 +566,16 @@ public class DailyLVHelper extends LVShowDataBase
 
             int did = Integer.parseInt(hd.get(K_ID));
             iv.setBackgroundColor(mDelIncome.contains(did) ? mCLSel : mCLNoSel);
+
+            // for note
+            String nt = hd.get(K_NOTE);
+            if(UtilFun.StringIsNullOrEmpty(nt)) {
+                RelativeLayout rl = UtilFun.cast_t(rl_income.findViewById(R.id.rl_income_note));
+                ToolUtil.setViewGroupVisible(rl, View.INVISIBLE);
+            } else  {
+                tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_note));
+                tv.setText(nt);
+            }
         }
 
 
