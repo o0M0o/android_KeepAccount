@@ -35,6 +35,7 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.acutility.ACBudget;
 import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
 import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 
@@ -46,10 +47,9 @@ public class BudgetViewHelper  extends LVShowDataBase {
     private final static String TAG = "BudgetViewHelper";
 
     //for action
-    private final static int ACTION_NONE    = 0;
     private final static int ACTION_DELETE  = 1;
     private final static int ACTION_EDIT    = 2;
-    private int mActionType = ACTION_NONE;
+    private int mActionType = ACTION_EDIT;
 
     // for delete
     private final LinkedList<Integer> mLLDelBudget    = new LinkedList<>();
@@ -182,7 +182,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 break;
 
             case R.id.bt_giveup :
-                mActionType = ACTION_NONE;
+                mActionType = ACTION_EDIT;
                 mLLDelBudget.clear();
                 refreshAttachLayout();
                 break;
@@ -204,9 +204,9 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
 
     private void refreshAttachLayout()    {
-        setAttachLayoutVisible(ACTION_NONE != mActionType ? View.VISIBLE : View.INVISIBLE);
+        setAttachLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.INVISIBLE);
         setFilterLayoutVisible(View.INVISIBLE);
-        setAccpetGiveupLayoutVisible(ACTION_NONE != mActionType ? View.VISIBLE : View.INVISIBLE);
+        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.INVISIBLE);
     }
 
 
@@ -245,6 +245,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
             }
             map.put(K_AMOUNT, show_str);
             map.put(K_TAG, tag);
+            map.put(K_ID, tag);
             map.put(K_SHOW, checkUnfoldItem(tag) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
             mMainPara.add(map);
 
@@ -360,7 +361,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
             mDAFold = res.getDrawable(R.drawable.ic_hide_1);
             mDAUnFold = res.getDrawable(R.drawable.ic_show_1);
             mDADelete = res.getDrawable(R.drawable.ic_delete_1);
-            mDAEdit = res.getDrawable(R.drawable.ic_edit);
+            mDAEdit = res.getDrawable(R.drawable.ic_look_2);
         }
 
         @Override
@@ -419,19 +420,22 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
                 // for action
                 ImageButton ib_action = UtilFun.cast(v.findViewById(R.id.ib_action));
-                if(ACTION_NONE == mActionType)    {
-                    ib_action.setVisibility(View.INVISIBLE);
-                }   else    {
-                    ib_action.setVisibility(View.VISIBLE);
-                    ib_action.setImageDrawable(ACTION_DELETE == mActionType ? mDADelete : mDAEdit);
+                ib_action.setImageDrawable(ACTION_DELETE == mActionType ? mDADelete : mDAEdit);
 
+                if(ACTION_DELETE == mActionType) {
+                    int tag_id = Integer.parseInt(hm.get(K_ID));
+                    boolean bc = mLLDelBudget.contains(tag_id);
+                    ib_action.getBackground().setAlpha(bc ? 255 : 0);
+                    ib_action.setBackgroundColor(bc ? mClSel : mClNoSel);
+                } else  {
                     ib_action.getBackground().setAlpha(0);
                 }
+
                 ib_action.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         ImageButton ib_action = UtilFun.cast(v);
-                        int tag_id = Integer.parseInt(hm.get(K_TAG));
+                        int tag_id = Integer.parseInt(hm.get(K_ID));
                         if(ACTION_DELETE == mActionType)    {
                             if(mLLDelBudget.contains(tag_id))  {
                                 mLLDelBudget.remove((Object)tag_id);
@@ -444,7 +448,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                             }
                         } else  {
                             Activity ac = getRootActivity();
-                            Intent it = new Intent(ac, ACBudgetEdit.class);
+                            Intent it = new Intent(ac, ACBudget.class);
                             it.putExtra(ACBudgetEdit.INTENT_LOAD_BUDGETID, tag_id);
                             ac.startActivityForResult(it, 1);
                         }
@@ -505,8 +509,8 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
                 ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_look));
                 iv.setBackgroundColor(mLLSubFilter.contains(sub_tag) ? mCLSel : mCLNoSel);
-                //iv.getBackground().setAlpha(mLLSubFilter.contains(sub_tag) ? 255 : 0);
                 /*
+                //iv.getBackground().setAlpha(mLLSubFilter.contains(sub_tag) ? 255 : 0);
                 iv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

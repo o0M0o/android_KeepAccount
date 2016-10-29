@@ -28,16 +28,6 @@ public abstract class TFSettingBase extends Fragment {
     }
 
     /**
-     * 切换回主设置页
-     */
-    public void toMainPage()    {
-        ACSetting acs = getRootActivity();
-        if(null != acs) {
-            acs.change_page(ACSetting.PAGE_IDX_MAIN);
-        }
-    }
-
-    /**
      * 切换页面
      * @param idx  新页面的idx
      */

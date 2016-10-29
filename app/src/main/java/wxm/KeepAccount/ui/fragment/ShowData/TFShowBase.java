@@ -104,6 +104,8 @@ public abstract class TFShowBase extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)  {
-        mViewHelper[mHotChild].onActivityResult(requestCode, resultCode, data);
+        ShowViewHelperBase sb = mViewHelper[mHotChild];
+        if(null != sb)
+            sb.onActivityResult(requestCode, resultCode, data);
     }
 }

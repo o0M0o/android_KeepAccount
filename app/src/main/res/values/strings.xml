@@ -90,4 +90,9 @@
     <string name="cn_use_budget">使用预算 :</string>
     <string name="ac_title_noteshow">查看流水</string>
     <string name="cn_refresh">更新视图</string>
+    <string name="budget_name">预算名</string>
+    <string name="budget_amount">预算金额</string>
+    <string name="all_amount">总额</string>
+    <string name="leave_amount">余额</string>
+    <string name="budget_note">预算备注</string>
 </resources>
