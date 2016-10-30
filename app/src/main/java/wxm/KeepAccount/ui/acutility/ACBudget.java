@@ -16,8 +16,10 @@ import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.fragment.Budget.BudgetEditFrg;
-import wxm.KeepAccount.ui.fragment.Budget.BudgetPreviewFrg;
+import wxm.KeepAccount.ui.fragment.EditData.TFEditBudget;
+import wxm.KeepAccount.ui.fragment.EditData.TFPreviewBudget;
+import wxm.KeepAccount.ui.fragment.base.TFEditBase;
+import wxm.KeepAccount.ui.fragment.base.TFPreviewBase;
 
 /**
  * activity for budget preview & edit
@@ -44,7 +46,7 @@ public class ACBudget extends AppCompatActivity {
         setContentView(R.layout.ac_budget);
 
         mVPPages = UtilFun.cast_t(findViewById(R.id.vp_pages));
-        final PagerAdapter adapter = new PagerAdapter
+        PagerAdapter adapter = new PagerAdapter
                 (getSupportFragmentManager(), PAGE_COUNT);
         mVPPages.setAdapter(adapter);
 
@@ -52,11 +54,10 @@ public class ACBudget extends AppCompatActivity {
         int id = it.getIntExtra(INTENT_LOAD_BUDGETID, -1);
         if(-1 != id) {
             BudgetItem bi = AppModel.getBudgetUtility().GetBudgetById(id);
-            ((BudgetEditFrg)adapter.getItem(PAGE_IDX_EDIT)).setBudgetData(bi);
-            ((BudgetPreviewFrg)adapter.getItem(PAGE_IDX_PREVIEW)).setBudgetData(bi);
-
+            ((TFPreviewBase)adapter.getItem(PAGE_IDX_PREVIEW)).setPreviewPara(bi);
             change_page(PAGE_IDX_PREVIEW);
         } else  {
+            ((TFEditBudget)adapter.getItem(PAGE_IDX_EDIT)).setCurPara(AppGobalDef.STR_CREATE, null);
             change_page(PAGE_IDX_EDIT);
         }
     }
@@ -90,8 +91,8 @@ public class ACBudget extends AppCompatActivity {
             break;
 
             case R.id.mi_save: {
-                BudgetEditFrg fr = UtilFun.cast_t(getCurrentPage());
-                if(fr.saveResult())    {
+                TFEditBase fr = UtilFun.cast_t(getCurrentPage());
+                if(fr.onAccept())    {
                     int ret_data = AppGobalDef.INTRET_SURE;
                     Intent data = new Intent();
                     setResult(ret_data, data);
@@ -121,7 +122,33 @@ public class ACBudget extends AppCompatActivity {
      * @param new_page 新页面postion
      */
     public void change_page(int new_page)  {
-        mVPPages.setCurrentItem(new_page);
+        int old_page = mVPPages.getCurrentItem();
+        if(new_page != old_page) {
+            PagerAdapter pa = new PagerAdapter(getSupportFragmentManager(), PAGE_COUNT);
+            PagerAdapter old_pa = UtilFun.cast_t(mVPPages.getAdapter());
+            switch (old_page)   {
+                case PAGE_IDX_EDIT :    {
+                    TFPreviewBase tp = UtilFun.cast_t(pa.getItem(PAGE_IDX_PREVIEW));
+                    TFEditBase old_te = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_EDIT));
+
+                    BudgetItem bi = UtilFun.cast(old_te.getCurData());
+                    tp.setPreviewPara(bi);
+                }
+                break;
+
+                case PAGE_IDX_PREVIEW :     {
+                    TFEditBase te = UtilFun.cast_t(pa.getItem(PAGE_IDX_EDIT));
+                    TFPreviewBase old_tp = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_PREVIEW));
+
+                    BudgetItem bi = UtilFun.cast(old_tp.getCurData());
+                    te.setCurPara(null == bi ? AppGobalDef.STR_CREATE : AppGobalDef.STR_MODIFY, bi);
+                }
+                break;
+            }
+
+            mVPPages.setAdapter(pa);
+            mVPPages.setCurrentItem(new_page);
+        }
     }
 
     /**
@@ -146,8 +173,8 @@ public class ACBudget extends AppCompatActivity {
             mNumOfFrags = NumOfTabs;
 
             mFRFrags = new Fragment[mNumOfFrags];
-            mFRFrags[PAGE_IDX_PREVIEW] = new BudgetPreviewFrg();
-            mFRFrags[PAGE_IDX_EDIT] = new BudgetEditFrg();
+            mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewBudget();
+            mFRFrags[PAGE_IDX_EDIT] = new TFEditBudget();
         }
 
         @Override

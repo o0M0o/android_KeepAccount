@@ -87,8 +87,8 @@
 
         <ImageView
             android:id="@+id/iv_income_action"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:scaleType="fitCenter"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="12dp"
@@ -98,7 +98,8 @@
         <TextView
             android:id="@+id/tv_income_amount"
             android:layout_centerVertical="true"
-            android:layout_marginRight="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="68dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+ 145.75"
@@ -228,8 +229,8 @@
 
         <ImageView
             android:id="@+id/iv_pay_action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="12dp"
             android:src="@drawable/right_arrow"
@@ -238,12 +239,12 @@
         <TextView
             android:id="@+id/tv_pay_amount"
             android:layout_centerVertical="true"
-            android:layout_marginRight="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="68dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="- 145.75"
             android:textColor="@color/darkred"
-            android:layout_toLeftOf="@id/iv_pay_action"
             android:textSize="16sp" />
     </RelativeLayout>
 </LinearLayout>

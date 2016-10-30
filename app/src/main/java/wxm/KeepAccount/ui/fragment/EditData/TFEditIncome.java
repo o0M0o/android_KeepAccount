@@ -26,11 +26,13 @@ import java.util.Locale;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.data.PayIncomeDataUtility;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.acutility.ACRecordTypeEdit;
+import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 
 /**
  * 编辑收入
@@ -49,10 +51,8 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        if (UtilFun.StringIsNullOrEmpty(mAction))
-            return null;
-
-        if (mAction.equals(ACNoteEdit.LOAD_NOTE_MODIFY) && null == mOldIncomeNote)
+        if (UtilFun.StringIsNullOrEmpty(mAction)
+                || (mAction.equals(AppGobalDef.STR_MODIFY) && null == mOldIncomeNote))
             return null;
 
         View v = inflater.inflate(R.layout.vw_edit_income, container, false);
@@ -112,7 +112,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
             }
         });
 
-        if (mAction.equals(ACNoteEdit.LOAD_NOTE_MODIFY)) {
+        if (mAction.equals(AppGobalDef.STR_MODIFY)) {
             String info = mOldIncomeNote.getInfo();
             String note = mOldIncomeNote.getNote();
             String date = mOldIncomeNote.getTs().toString().substring(0, 10);
@@ -143,7 +143,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
 
     @Override
-    public void setPara(String action, Object obj) {
+    public void setCurPara(String action, Object obj) {
         mAction = action;
         mOldIncomeNote = UtilFun.cast(obj);
     }
@@ -151,6 +151,11 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     @Override
     public boolean onAccept() {
         return checkResult() && fillResult();
+    }
+
+    @Override
+    public Object getCurData() {
+        return null;
     }
 
 
@@ -216,7 +221,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
         // set data
         IncomeNoteItem pi = new IncomeNoteItem();
-        if(null != mOldIncomeNote && mAction.equals(ACNoteEdit.LOAD_NOTE_MODIFY)) {
+        if(null != mOldIncomeNote && mAction.equals(AppGobalDef.STR_MODIFY)) {
             pi.setId(mOldIncomeNote.getId());
             pi.setUsr(mOldIncomeNote.getUsr());
         }
@@ -227,13 +232,19 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         pi.setNote(str_note);
 
         // add/modify data
-        if(mAction.equals(ACNoteEdit.LOAD_NOTE_ADD))    {
-            return 1 == AppModel.getPayIncomeUtility()
-                    .AddIncomeNotes(Collections.singletonList(pi));
-        } else  {
-            return 1 == AppModel.getPayIncomeUtility()
-                    .ModifyIncomeNotes(Collections.singletonList(pi));
+        boolean b_create = mAction.equals(AppGobalDef.STR_CREATE);
+        PayIncomeDataUtility uti = AppModel.getPayIncomeUtility();
+        boolean b_ret =  b_create ?
+                            1 == uti.AddIncomeNotes(Collections.singletonList(pi))
+                            : 1 == uti.ModifyIncomeNotes(Collections.singletonList(pi));
+        if(!b_ret)  {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage(b_create ? "创建收入数据失败!" : "更新收入数据失败")
+                    .setTitle("警告");
+            AlertDialog dlg = builder.create();
+            dlg.show();
         }
+        return b_ret;
     }
 
     @Override

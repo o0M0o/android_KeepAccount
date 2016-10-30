@@ -110,7 +110,7 @@ public class DailyLVHelper extends LVShowDataBase
             public void onClick(View v) {
                 ACNoteShow ac = getRootActivity();
                 Intent intent = new Intent(ac, ACNoteEdit.class);
-                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
+                intent.putExtra(ACNoteEdit.PARA_ACTION, AppGobalDef.STR_CREATE);
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
@@ -298,7 +298,7 @@ public class DailyLVHelper extends LVShowDataBase
 
                     BudgetItem bi = r.getBudget();
                     if(null != bi)  {
-                        map.put(K_BUDGET, String.format(Locale.CHINA, "使用预算 : %s", bi.getName()));
+                        map.put(K_BUDGET, bi.getName());
                     }
                 } else {
                     map.put(K_TYPE, V_TYPE_INCOME);
@@ -616,7 +616,7 @@ public class DailyLVHelper extends LVShowDataBase
                     } else  {
                         ACNoteShow ac = getRootActivity();
                         Intent intent = new Intent(ac, ACNoteEdit.class);
-                        intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_MODIFY);
+                        intent.putExtra(ACNoteEdit.PARA_ACTION, AppGobalDef.STR_MODIFY);
                         if (V_TYPE_PAY.equals(tp)) {
                             intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, did);
                         } else {

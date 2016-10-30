@@ -1,10 +1,9 @@
-package wxm.KeepAccount.ui.fragment.Budget;
+package wxm.KeepAccount.ui.fragment.EditData;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,15 +14,18 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 
 /**
- * edit fragment for budget
- * Created by 123 on 2016/10/29.
+ * 编辑支出
+ * Created by wxm on 2016/9/28.
  */
-public class BudgetEditFrg extends Fragment {
+public class TFEditBudget extends TFEditBase {
+    private final static String TAG = "TFEditBudget";
     private final static int  MAX_NOTELEN = 200;
 
     private View                    mSelfView;
@@ -34,10 +36,13 @@ public class BudgetEditFrg extends Fragment {
     private TextInputEditText       mETNote;
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.vw_budget_edit, container, false);
-        return v;
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        if (UtilFun.StringIsNullOrEmpty(mAction)
+                || (AppGobalDef.STR_MODIFY.equals(mAction) && null == mBIData))
+            return null;
+
+        return inflater.inflate(R.layout.vw_budget_edit, container, false);
     }
 
     @Override
@@ -50,21 +55,14 @@ public class BudgetEditFrg extends Fragment {
         }
     }
 
-    /**
-     * 设置Budget数据
-     * 如果设置Budget数据，则修改Budget数据，否则新建Budget数据
-     * @param bi  预览数据
-     */
-    public void setBudgetData(BudgetItem bi)    {
-        mBIData = bi;
+    @Override
+    public void setCurPara(String action, Object obj) {
+        mAction = action;
+        mBIData = UtilFun.cast(obj);
     }
 
-
-    /**
-     * 保存fragment上的当前数据
-     * @return  成功返回true, 否则返回false
-     */
-    public boolean saveResult() {
+    @Override
+    public boolean onAccept() {
         String name = mETName.getText().toString();
         String note = mETNote.getText().toString();
         String amount = mETAmount.getText().toString();
@@ -106,8 +104,31 @@ public class BudgetEditFrg extends Fragment {
         bi.setAmount(new BigDecimal(amount));
         bi.setNote(note);
 
-        return null == mBIData ? AppModel.getBudgetUtility().AddBudget(bi)
-                                        : AppModel.getBudgetUtility().ModifyBudget(bi);
+        boolean b_create = AppGobalDef.STR_CREATE.equals(mAction);
+        boolean s_ret = b_create ? AppModel.getBudgetUtility().AddBudget(bi)
+                                    : AppModel.getBudgetUtility().ModifyBudget(bi);
+        if(!s_ret)  {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage(b_create ? "创建预算数据失败!" : "更新预算数据失败")
+                    .setTitle("警告");
+            AlertDialog dlg = builder.create();
+            dlg.show();
+        }
+
+        return s_ret;
+    }
+
+    @Override
+    public Object getCurData() {
+        String name = mETName.getText().toString();
+        String note = mETNote.getText().toString();
+        String amount = mETAmount.getText().toString();
+
+        BudgetItem bi = new BudgetItem();
+        bi.setName(name);
+        bi.setAmount(UtilFun.StringIsNullOrEmpty(amount) ? BigDecimal.ZERO : new BigDecimal(amount));
+        bi.setNote(note);
+        return bi;
     }
 
 
@@ -169,7 +190,7 @@ public class BudgetEditFrg extends Fragment {
             public void afterTextChanged(Editable s) {
                 if(s.length() > MAX_NOTELEN)    {
                     mETNote.setError(String.format(Locale.CHINA,
-                                    "超过最大长度(%d)!", MAX_NOTELEN));
+                            "超过最大长度(%d)!", MAX_NOTELEN));
                     mETNote.setText(s.subSequence(0, MAX_NOTELEN));
                 }
             }

@@ -95,4 +95,7 @@
     <string name="all_amount">总额</string>
     <string name="leave_amount">余额</string>
     <string name="budget_note">预算备注</string>
+    <string name="budget_used_name">使用预算</string>
+    <string name="amount">金额</string>
+    <string name="note_note">备注</string>
 </resources>

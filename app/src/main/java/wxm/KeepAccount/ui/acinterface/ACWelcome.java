@@ -31,7 +31,7 @@ import wxm.KeepAccount.Base.utility.ActionHelper;
 import wxm.KeepAccount.Base.utility.DGVButtonAdapter;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acutility.ACBudgetEdit;
+import wxm.KeepAccount.ui.acutility.ACBudget;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.acutility.ACRemindEdit;
 import wxm.KeepAccount.ui.acutility.ACSetting;
@@ -169,14 +169,14 @@ public class ACWelcome extends AppCompatActivity
             break;
 
             case ActionHelper.ACT_ADD_BUDGET :  {
-                Intent intent = new Intent(this, ACBudgetEdit.class);
+                Intent intent = new Intent(this, ACBudget.class);
                 startActivityForResult(intent, 1);
             }
             break;
 
             case ActionHelper.ACT_ADD_DATA: {
                 Intent intent = new Intent(this, ACNoteEdit.class);
-                intent.putExtra(ACNoteEdit.PARA_ACTION, ACNoteEdit.LOAD_NOTE_ADD);
+                intent.putExtra(ACNoteEdit.PARA_ACTION, AppGobalDef.STR_CREATE);
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());

@@ -1,8 +1,7 @@
-package wxm.KeepAccount.ui.fragment.Budget;
+package wxm.KeepAccount.ui.fragment.EditData;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +12,13 @@ import java.util.Locale;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.fragment.base.TFPreviewBase;
 
 /**
  * preview fragment for budget
  * Created by 123 on 2016/10/29.
  */
-public class BudgetPreviewFrg extends Fragment {
+public class TFPreviewBudget extends TFPreviewBase {
     private TextView  mTVAllAmount;
     private TextView  mTVLeaveAmount;
     private TextView  mTVName;
@@ -46,12 +46,14 @@ public class BudgetPreviewFrg extends Fragment {
         }
     }
 
-    /**
-     * 设置Budget数据
-     * @param bi  预览数据
-     */
-    public void setBudgetData(BudgetItem bi)    {
-        mBIData = bi;
+    @Override
+    public void setPreviewPara(Object obj) {
+        mBIData = UtilFun.cast(obj);
+    }
+
+    @Override
+    public Object getCurData() {
+        return mBIData;
     }
 
     /**
@@ -68,6 +70,11 @@ public class BudgetPreviewFrg extends Fragment {
             if(ra.startsWith("-"))  {
                 mTVLeaveAmount.setTextColor(getResources().getColor(R.color.darkred));
             }
+        } else  {
+            mTVName.setText("");
+            mTVNote.setText("");
+            mTVAllAmount.setText("");
+            mTVLeaveAmount.setText("");
         }
     }
 }

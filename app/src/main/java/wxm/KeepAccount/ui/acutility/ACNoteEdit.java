@@ -22,7 +22,7 @@ import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
-import wxm.KeepAccount.ui.fragment.EditData.TFEditBase;
+import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditIncome;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditPay;
 
@@ -38,9 +38,6 @@ public class ACNoteEdit extends AppCompatActivity {
     public static final String  PARA_ACTION          = "para_action";
     public static final String  PARA_NOTE_PAY        = "note_pay";
     public static final String  PARA_NOTE_INCOME     = "note_income";
-
-    public static final String  LOAD_NOTE_ADD        = "note_add";
-    public static final String  LOAD_NOTE_MODIFY     = "note_modify";
 
     public static final int DEF_NOTE_MAXLEN = 200;
 
@@ -73,7 +70,7 @@ public class ACNoteEdit extends AppCompatActivity {
         mTLTabs = (TabLayout) findViewById(R.id.tl_tabs);
         assert null != mTLTabs;
 
-        if(mAction.equals(ACNoteEdit.LOAD_NOTE_MODIFY)) {
+        if(mAction.equals(AppGobalDef.STR_MODIFY)) {
             int pid = it.getIntExtra(ACNoteEdit.PARA_NOTE_PAY, AppGobalDef.INVALID_ID);
             int iid = it.getIntExtra(ACNoteEdit.PARA_NOTE_INCOME, AppGobalDef.INVALID_ID);
             if(AppGobalDef.INVALID_ID != pid)   {
@@ -145,7 +142,7 @@ public class ACNoteEdit extends AppCompatActivity {
                 TFEditBase tb = getHotTabItem();
                 if(tb.onAccept()) {
                     Intent data = new Intent();
-                    setResult(mAction.equals(LOAD_NOTE_ADD) ?  AppGobalDef.INTRET_RECORD_ADD
+                    setResult(mAction.equals(AppGobalDef.STR_CREATE) ?  AppGobalDef.INTRET_RECORD_ADD
                                 : AppGobalDef.INTRET_RECORD_MODIFY,  data);
                     finish();
                 }
@@ -199,10 +196,10 @@ public class ACNoteEdit extends AppCompatActivity {
             this.mNumOfTabs = NumOfTabs;
 
             TFEditPay tp = new TFEditPay();
-            tp.setPara(mAction, mOldPayNote);
+            tp.setCurPara(mAction, mOldPayNote);
 
             TFEditIncome ti = new TFEditIncome();
-            ti.setPara(mAction, mOldIncomeNote);
+            ti.setCurPara(mAction, mOldIncomeNote);
 
             mHMFra = new HashMap<>();
             mHMFra.put(TAB_PAY, tp);

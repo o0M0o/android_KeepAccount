@@ -11,6 +11,9 @@ public class AppGobalDef {
     static public final String STR_RECORD_DATE      = "record_date";
     static public final String STR_RECORD_TYPE      = "record_type";
 
+    public static final String  STR_CREATE     = "create";
+    public static final String  STR_MODIFY     = "modify";
+
     static final String STR_PWD_PAD = "JkpYkhiayh@#$_)(";
 
     static public final int INTRET_RECORD_ADD       = 1000;
