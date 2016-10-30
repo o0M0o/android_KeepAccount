@@ -55,10 +55,10 @@ public class ACBudget extends AppCompatActivity {
         if(-1 != id) {
             BudgetItem bi = AppModel.getBudgetUtility().GetBudgetById(id);
             ((TFPreviewBase)adapter.getItem(PAGE_IDX_PREVIEW)).setPreviewPara(bi);
-            change_page(PAGE_IDX_PREVIEW);
+            mVPPages.setCurrentItem(PAGE_IDX_PREVIEW);
         } else  {
             ((TFEditBudget)adapter.getItem(PAGE_IDX_EDIT)).setCurData(AppGobalDef.STR_CREATE, null);
-            change_page(PAGE_IDX_EDIT);
+            mVPPages.setCurrentItem(PAGE_IDX_EDIT);
         }
     }
 

@@ -40,9 +40,6 @@
         <activity
             android:name=".ui.acinterface.ACWelcome"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.acutility.ACBudgetEdit"
-            android:label="@string/ac_label_budget_manager" />
         <activity android:name=".ui.acutility.ACNoteEdit" />
         <activity
             android:name=".ui.acutility.ACRemindEdit"
@@ -52,7 +49,9 @@
             android:name=".ui.acutility.ACSetting"
             android:exported="true"
             android:label="@string/app_setting" />
-        <activity android:name=".ui.acutility.ACBudget"></activity>
+        <activity android:name=".ui.acutility.ACBudget" />
+        <activity android:name=".ui.acutility.ACPay" />
+        <activity android:name=".ui.acutility.ACIncome" />
     </application>
 
 </manifest>

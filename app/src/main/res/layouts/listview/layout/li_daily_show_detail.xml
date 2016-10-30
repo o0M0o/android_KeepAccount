@@ -5,7 +5,7 @@
 
     <RelativeLayout
         android:id="@+id/rl_income"
-        android:background="@color/grey_1"
+        android:background="@color/grey_4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView

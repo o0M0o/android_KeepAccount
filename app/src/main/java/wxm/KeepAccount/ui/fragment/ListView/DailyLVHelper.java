@@ -39,7 +39,9 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.acutility.ACIncome;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
+import wxm.KeepAccount.ui.acutility.ACPay;
 import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 
 /**
@@ -615,13 +617,13 @@ public class DailyLVHelper extends LVShowDataBase
                         }
                     } else  {
                         ACNoteShow ac = getRootActivity();
-                        Intent intent = new Intent(ac, ACNoteEdit.class);
-                        intent.putExtra(ACNoteEdit.PARA_ACTION, AppGobalDef.STR_MODIFY);
+                        Intent intent;
                         if (V_TYPE_PAY.equals(tp)) {
-                            intent.putExtra(ACNoteEdit.PARA_NOTE_PAY, did);
+                            intent = new Intent(ac, ACPay.class);
                         } else {
-                            intent.putExtra(ACNoteEdit.PARA_NOTE_INCOME, did);
+                            intent = new Intent(ac, ACIncome.class);
                         }
+                        intent.putExtra(AppGobalDef.INTENT_LOAD_RECORD_ID, did);
 
                         ac.startActivityForResult(intent, 1);
                     }

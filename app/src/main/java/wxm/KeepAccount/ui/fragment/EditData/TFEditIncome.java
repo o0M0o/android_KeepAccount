@@ -42,6 +42,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     private final static String TAG = "TFEditIncome";
 
     private IncomeNoteItem mOldIncomeNote;
+    private View        mSelfView;
 
     private EditText mETInfo;
     private EditText mETDate;
@@ -51,18 +52,20 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        if (UtilFun.StringIsNullOrEmpty(mAction)
-                || (mAction.equals(AppGobalDef.STR_MODIFY) && null == mOldIncomeNote))
-            return null;
-
-        View v = inflater.inflate(R.layout.vw_edit_income, container, false);
-        if(null != v)
-            init_view(v);
-        return v;
+        return inflater.inflate(R.layout.vw_edit_income, container, false);
     }
 
-    private void init_view(View v) {
-        // 填充其他数据
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (null != view) {
+            mSelfView = view;
+            init_compent(view);
+            init_view(view);
+        }
+    }
+
+    private void init_compent(View v) {
         mETInfo = UtilFun.cast(v.findViewById(R.id.ar_et_info));
         mETDate = UtilFun.cast(v.findViewById(R.id.ar_et_date));
         mETAmount = UtilFun.cast(v.findViewById(R.id.ar_et_amount));
@@ -111,6 +114,12 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
                 }
             }
         });
+    }
+
+    private void init_view(View v) {
+        if (UtilFun.StringIsNullOrEmpty(mAction)
+                || (mAction.equals(AppGobalDef.STR_MODIFY) && null == mOldIncomeNote))
+            return ;
 
         if (mAction.equals(AppGobalDef.STR_MODIFY)) {
             String info = mOldIncomeNote.getInfo();
@@ -155,11 +164,38 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
     @Override
     public Object getCurData() {
+        if(null != mSelfView) {
+            IncomeNoteItem ii = new IncomeNoteItem();
+            if(null != mOldIncomeNote) {
+                ii.setId(mOldIncomeNote.getId());
+                ii.setUsr(mOldIncomeNote.getUsr());
+            }
+
+            ii.setInfo(mETInfo.getText().toString());
+
+            String str_val = mETAmount.getText().toString();
+            ii.setVal(UtilFun.StringIsNullOrEmpty(str_val) ? BigDecimal.ZERO : new BigDecimal(str_val));
+            ii.setNote(mETNote.getText().toString());
+
+            String str_date = mETDate.getText().toString();
+            Timestamp tsDT;
+            try {
+                tsDT = ToolUtil.StringToTimestamp(str_date);
+            } catch(Exception ex) {
+                tsDT = new Timestamp(0);
+            }
+            ii.setTs(tsDT);
+
+            return ii;
+        }
+
         return null;
     }
 
     @Override
     public void reLoadView() {
+        if(null != mSelfView)
+            init_view(mSelfView);
     }
 
 

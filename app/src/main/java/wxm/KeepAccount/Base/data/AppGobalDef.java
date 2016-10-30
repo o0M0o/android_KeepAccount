@@ -16,6 +16,8 @@ public class AppGobalDef {
 
     static final String STR_PWD_PAD = "JkpYkhiayh@#$_)(";
 
+    public static final String INTENT_LOAD_RECORD_ID   = "record_id";
+
     static public final int INTRET_RECORD_ADD       = 1000;
     static public final int INTRET_RECORD_MODIFY    = 1001;
     static public final int INTRET_DAILY_DETAIL     = 1002;

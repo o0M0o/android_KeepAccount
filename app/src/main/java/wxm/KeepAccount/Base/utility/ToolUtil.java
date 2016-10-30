@@ -26,6 +26,10 @@ public class ToolUtil {
     private static final String TAG = "ToolUtil";
     private static final String SELF_PACKAGE_NAME = "com.wxm.keepaccount";
 
+    private final static String[] DAY_IN_WEEK = {
+            "星期日", "星期一", "星期二","星期三",
+            "星期四","星期五","星期六"};
+
     /**
      * 获取包版本号
      * @param context  包上下文
@@ -247,5 +251,17 @@ public class ToolUtil {
         // listView.getDividerHeight()获取子项间分隔符占用的高度
         // params.height最后得到整个ListView完整显示需要的高度
         listView.setLayoutParams(params);
+    }
+
+    /**
+     * 获取时间戳所在的星期信息
+     * @param ts    时间戳
+     * @return  返回"星期*"
+     */
+    public static String getDayInWeek(Timestamp ts) {
+        Calendar day = Calendar.getInstance();
+        day.setTimeInMillis(ts.getTime());
+        int dw = day.get(Calendar.DAY_OF_WEEK) - 1;
+        return (0 <= dw && dw < DAY_IN_WEEK.length) ? DAY_IN_WEEK[dw] : "";
     }
 }

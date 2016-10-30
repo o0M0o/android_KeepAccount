@@ -50,6 +50,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
     private final static String TAG = "TFEditPay";
 
     private PayNoteItem mOldPayNote;
+    private View        mSelfView;
 
     private EditText mETInfo;
     private EditText mETDate;
@@ -60,17 +61,23 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        if (UtilFun.StringIsNullOrEmpty(mAction)
-                || (mAction.equals(AppGobalDef.STR_MODIFY) && null == mOldPayNote))
-            return null;
+        return inflater.inflate(R.layout.vw_edit_pay, container, false);
+    }
 
-        View v = inflater.inflate(R.layout.vw_edit_pay, container, false);
-        if(null != v)
-            init_view(v);
-        return v;
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (null != view) {
+            mSelfView = view;
+            init_view(view);
+        }
     }
 
     private void init_view(View v) {
+        if (UtilFun.StringIsNullOrEmpty(mAction)
+                || (AppGobalDef.STR_MODIFY.equals(mAction) && null == mOldPayNote))
+            return ;
+
         // 填充预算数据
         mSPBudget = UtilFun.cast(v.findViewById(R.id.ar_sp_budget));
         TextView mTVBudget = UtilFun.cast(v.findViewById(R.id.ar_tv_budget));
@@ -203,6 +210,43 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
     @Override
     public Object getCurData() {
+        if(null != mSelfView) {
+            PayNoteItem pi = new PayNoteItem();
+            if(null != mOldPayNote) {
+                pi.setId(mOldPayNote.getId());
+                pi.setUsr(mOldPayNote.getUsr());
+            }
+
+            pi.setInfo(mETInfo.getText().toString());
+
+            String str_val = mETAmount.getText().toString();
+            pi.setVal(UtilFun.StringIsNullOrEmpty(str_val) ? BigDecimal.ZERO : new BigDecimal(str_val));
+            pi.setNote(mETNote.getText().toString());
+
+            String str_date = mETDate.getText().toString();
+            Timestamp tsDT;
+            try {
+                tsDT = ToolUtil.StringToTimestamp(str_date);
+            }
+            catch(Exception ex)
+            {
+                tsDT = new Timestamp(0);
+            }
+            pi.setTs(tsDT);
+
+            pi.setBudget(null);
+            int pos = mSPBudget.getSelectedItemPosition();
+            if(AdapterView.INVALID_POSITION != pos && 0 != pos) {
+                BudgetItem bi = AppModel.getBudgetUtility()
+                        .GetBudgetByName((String)mSPBudget.getSelectedItem());
+                if (null != bi) {
+                    pi.setBudget(bi);
+                }
+            }
+
+            return pi;
+        }
+
         return null;
     }
 
