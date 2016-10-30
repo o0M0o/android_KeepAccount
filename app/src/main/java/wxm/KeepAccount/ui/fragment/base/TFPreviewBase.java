@@ -23,4 +23,9 @@ public abstract class TFPreviewBase extends Fragment {
      * @return  当前数据，可以为null
      */
     public abstract Object getCurData();
+
+    /**
+     * 重新加载视图
+     */
+    public abstract void reLoadView();
 }

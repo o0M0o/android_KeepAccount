@@ -191,7 +191,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
 
     @Override
-    public void setCurPara(String action, Object obj) {
+    public void setCurData(String action, Object obj) {
         mAction = action;
         mOldPayNote = UtilFun.cast(obj);
     }
@@ -204,6 +204,10 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
     @Override
     public Object getCurData() {
         return null;
+    }
+
+    @Override
+    public void reLoadView() {
     }
 
 

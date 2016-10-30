@@ -18,7 +18,7 @@ public abstract class TFEditBase extends Fragment {
      *               * “新建”(AppGobalDef.STR_CREATE)
      * @param obj     若是“更新”，则此参数为待更新数据
      */
-    public abstract void setCurPara(String action, Object obj);
+    public abstract void setCurData(String action, Object obj);
 
 
     /**
@@ -34,4 +34,9 @@ public abstract class TFEditBase extends Fragment {
      * @return  当前数据，可以为null
      */
     public abstract Object getCurData();
+
+    /**
+     * 重新加载视图
+     */
+    public abstract void reLoadView();
 }

@@ -57,7 +57,7 @@ public class ACBudget extends AppCompatActivity {
             ((TFPreviewBase)adapter.getItem(PAGE_IDX_PREVIEW)).setPreviewPara(bi);
             change_page(PAGE_IDX_PREVIEW);
         } else  {
-            ((TFEditBudget)adapter.getItem(PAGE_IDX_EDIT)).setCurPara(AppGobalDef.STR_CREATE, null);
+            ((TFEditBudget)adapter.getItem(PAGE_IDX_EDIT)).setCurData(AppGobalDef.STR_CREATE, null);
             change_page(PAGE_IDX_EDIT);
         }
     }
@@ -124,30 +124,29 @@ public class ACBudget extends AppCompatActivity {
     public void change_page(int new_page)  {
         int old_page = mVPPages.getCurrentItem();
         if(new_page != old_page) {
-            PagerAdapter pa = new PagerAdapter(getSupportFragmentManager(), PAGE_COUNT);
+            mVPPages.setCurrentItem(new_page);
             PagerAdapter old_pa = UtilFun.cast_t(mVPPages.getAdapter());
             switch (old_page)   {
                 case PAGE_IDX_EDIT :    {
-                    TFPreviewBase tp = UtilFun.cast_t(pa.getItem(PAGE_IDX_PREVIEW));
+                    TFPreviewBase tp = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_PREVIEW));
                     TFEditBase old_te = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_EDIT));
 
                     BudgetItem bi = UtilFun.cast(old_te.getCurData());
                     tp.setPreviewPara(bi);
+                    tp.reLoadView();
                 }
                 break;
 
                 case PAGE_IDX_PREVIEW :     {
-                    TFEditBase te = UtilFun.cast_t(pa.getItem(PAGE_IDX_EDIT));
+                    TFEditBase te = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_EDIT));
                     TFPreviewBase old_tp = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_PREVIEW));
 
                     BudgetItem bi = UtilFun.cast(old_tp.getCurData());
-                    te.setCurPara(null == bi ? AppGobalDef.STR_CREATE : AppGobalDef.STR_MODIFY, bi);
+                    te.setCurData(null == bi ? AppGobalDef.STR_CREATE : AppGobalDef.STR_MODIFY, bi);
+                    te.reLoadView();
                 }
                 break;
             }
-
-            mVPPages.setAdapter(pa);
-            mVPPages.setCurrentItem(new_page);
         }
     }
 

@@ -25,6 +25,7 @@ public class TFPreviewBudget extends TFPreviewBase {
     private TextView  mTVNote;
 
     private BudgetItem mBIData;
+    private View       mSelfView;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -37,6 +38,8 @@ public class TFPreviewBudget extends TFPreviewBase {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (null != view) {
+            mSelfView = view;
+
             mTVName = UtilFun.cast_t(view.findViewById(R.id.tv_name));
             mTVNote = UtilFun.cast_t(view.findViewById(R.id.tv_note));
             mTVAllAmount = UtilFun.cast_t(view.findViewById(R.id.tv_all_amount));
@@ -54,6 +57,12 @@ public class TFPreviewBudget extends TFPreviewBase {
     @Override
     public Object getCurData() {
         return mBIData;
+    }
+
+    @Override
+    public void reLoadView() {
+        if(null != mSelfView)
+            init_view();
     }
 
     /**

@@ -360,7 +360,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
             mDAFold = res.getDrawable(R.drawable.ic_hide_1);
             mDAUnFold = res.getDrawable(R.drawable.ic_show_1);
             mDADelete = res.getDrawable(R.drawable.ic_delete_1);
-            mDAEdit = res.getDrawable(R.drawable.ic_look_2);
+            mDAEdit = res.getDrawable(R.drawable.right_arrow);
         }
 
         @Override

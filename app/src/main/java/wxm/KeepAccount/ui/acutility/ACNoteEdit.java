@@ -196,10 +196,10 @@ public class ACNoteEdit extends AppCompatActivity {
             this.mNumOfTabs = NumOfTabs;
 
             TFEditPay tp = new TFEditPay();
-            tp.setCurPara(mAction, mOldPayNote);
+            tp.setCurData(mAction, mOldPayNote);
 
             TFEditIncome ti = new TFEditIncome();
-            ti.setCurPara(mAction, mOldIncomeNote);
+            ti.setCurData(mAction, mOldIncomeNote);
 
             mHMFra = new HashMap<>();
             mHMFra.put(TAB_PAY, tp);
