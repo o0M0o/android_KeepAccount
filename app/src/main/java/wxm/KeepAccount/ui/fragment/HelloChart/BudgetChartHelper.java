@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.fragment.HelloChart;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -303,8 +302,9 @@ public class BudgetChartHelper extends ShowViewHelperBase {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onDataChange() {
     }
+
 
     @Override
     protected void refreshView() {

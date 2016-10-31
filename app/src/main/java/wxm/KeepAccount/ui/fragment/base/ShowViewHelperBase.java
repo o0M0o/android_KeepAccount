@@ -1,7 +1,6 @@
 package wxm.KeepAccount.ui.fragment.base;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,12 +71,9 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
     public abstract void filterView(List<String> ls_tag);
 
     /**
-     * 处理activity返回结果
-     * @param requestCode   返回参数
-     * @param resultCode    返回参数
-     * @param data          返回参数
+     * 数据变化后调用
      */
-    public abstract void onActivityResult(int requestCode, int resultCode, Intent data);
+    public abstract void onDataChange();
 
 
     /**

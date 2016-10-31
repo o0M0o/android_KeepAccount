@@ -1,10 +1,8 @@
 package wxm.KeepAccount.ui.fragment.ListView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +28,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -156,18 +153,9 @@ public class MonthlyLVHelper extends LVShowDataBase {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(resultCode)  {
-            case AppGobalDef.INTRET_RECORD_ADD    :
-            case AppGobalDef.INTRET_RECORD_MODIFY :
-            case AppGobalDef.INTRET_DAILY_DETAIL :
-                reloadData();
-                break;
-
-            default:
-                Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
-                break;
-        }
+    public void onDataChange() {
+        reloadData();
+        refreshView();
     }
 
     @Override

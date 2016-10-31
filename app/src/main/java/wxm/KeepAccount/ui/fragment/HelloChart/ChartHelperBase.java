@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.fragment.HelloChart;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -184,7 +183,7 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onDataChange() {
     }
 
     @Override

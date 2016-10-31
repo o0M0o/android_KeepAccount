@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.fragment.ShowData;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -102,10 +101,9 @@ public abstract class TFShowBase extends Fragment {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)  {
+    public void onDataChange()  {
         ShowViewHelperBase sb = mViewHelper[mHotChild];
         if(null != sb)
-            sb.onActivityResult(requestCode, resultCode, data);
+            sb.onDataChange();
     }
 }

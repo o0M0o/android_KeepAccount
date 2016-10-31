@@ -16,6 +16,8 @@ import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.data.IDataChangeNotice;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
@@ -30,12 +32,48 @@ public class ACNoteShow extends AppCompatActivity {
     private TabLayout   mTLTabs;
     private ViewPager   mVPTabs;
 
+    private IDataChangeNotice mIDCNotice = new IDataChangeNotice() {
+        @Override
+        public void DataModifyNotice() {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataCreateNotice() {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataDeleteNotice() {
+            reLoadFrg();
+        }
+
+        private void reLoadFrg()    {
+            NoteShowDataHelper.getInstance().refreshData();
+            TFShowBase tb = getHotTabItem();
+            tb.onDataChange();
+            /*
+            PagerAdapter pa = UtilFun.cast(mVPTabs.getAdapter());
+            for(int pos = 0; pos < pa.getCount(); pos++)    {
+                TFShowBase tb =  UtilFun.cast_t(pa.getItem(pos));
+                tb.onDataChange();
+            }
+            */
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_note_show);
 
         init_tabs();
+        AppModel.getPayIncomeUtility().addDataChangeNotice(mIDCNotice);
+    }
+
+    @Override
+    protected void onDestroy()  {
+        AppModel.getPayIncomeUtility().removeDataChangeNotice(mIDCNotice);
     }
 
     @Override
@@ -122,8 +160,7 @@ public class ACNoteShow extends AppCompatActivity {
         mTLTabs.setTabGravity(TabLayout.GRAVITY_FILL);
 
         mVPTabs = (ViewPager) findViewById(R.id.tab_pager);
-        final PagerAdapter adapter = new PagerAdapter
-                (getSupportFragmentManager(), mTLTabs.getTabCount());
+        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), mTLTabs.getTabCount());
         mVPTabs.setAdapter(adapter);
         mVPTabs.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTLTabs));
         mTLTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -192,13 +229,15 @@ public class ACNoteShow extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        /*
         if(AppGobalDef.INTRET_RECORD_ADD == resultCode
                 || AppGobalDef.INTRET_RECORD_MODIFY == resultCode
                 || AppGobalDef.INTRET_SURE == resultCode)  {
             NoteShowDataHelper.getInstance().refreshData();
         }
 
-        getHotTabItem().onActivityResult(requestCode, resultCode, data);
+        getHotTabItem().onDataChange(requestCode, resultCode, data);
+        */
     }
 
 

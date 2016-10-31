@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -195,18 +194,9 @@ public class DailyLVHelper extends LVShowDataBase
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(resultCode)  {
-            case AppGobalDef.INTRET_RECORD_ADD    :
-            case AppGobalDef.INTRET_RECORD_MODIFY :
-                reloadData();
-                refreshView();
-                break;
-
-            default:
-                Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
-                break;
-        }
+    public void onDataChange() {
+        reloadData();
+        refreshView();
     }
 
     @Override

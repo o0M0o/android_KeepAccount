@@ -175,11 +175,11 @@ public class ACNoteEdit extends AppCompatActivity {
 
     /*
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onDataChange(int requestCode, int resultCode, Intent data) {
+        super.onDataChange(requestCode, resultCode, data);
         if(mTabFragment instanceof STEditNoteFragment)  {
             STEditNoteFragment sf = UtilFun.cast(mTabFragment);
-            sf.onActivityResult(requestCode, resultCode, data);
+            sf.onDataChange(requestCode, resultCode, data);
         }
     }
     */
