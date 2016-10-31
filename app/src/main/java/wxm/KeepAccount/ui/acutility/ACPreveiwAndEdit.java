@@ -71,7 +71,7 @@ public class ACPreveiwAndEdit extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.acm_budget, menu);
+        inflater.inflate(R.menu.acm_preview_edit, menu);
 
         mMISwitch = menu.findItem(R.id.mi_switch);
         mMISave   = menu.findItem(R.id.mi_save);

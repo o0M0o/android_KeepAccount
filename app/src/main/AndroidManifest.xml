@@ -49,8 +49,6 @@
             android:name=".ui.acutility.ACSetting"
             android:exported="true"
             android:label="@string/app_setting" />
-        <activity android:name=".ui.acutility.ACBudget" />
-        <activity android:name=".ui.acutility.ACPay" />
         <activity android:name=".ui.acutility.ACPreveiwAndEdit" />
     </application>
 
