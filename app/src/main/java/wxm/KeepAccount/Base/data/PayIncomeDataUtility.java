@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,39 +24,11 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
  * 收支数据辅助类
  * Created by 123 on 2016/9/4.
  */
-public class PayIncomeDataUtility {
+public class PayIncomeDataUtility extends DataUtilityBase {
     private final String    TAG = "PayIncomeDataUtility";
-    private final Timestamp mTSLastModifyData = new Timestamp(Calendar.getInstance().getTimeInMillis());
-
-    private LinkedList<IDataChangeNotice>   mLLNotices;
 
     PayIncomeDataUtility()  {
-        mLLNotices = new LinkedList<>();
-    }
-
-    /**
-     * 添加数据变化监听
-     * @param inc  新监听器
-     */
-    public void addDataChangeNotice(IDataChangeNotice inc)  {
-        if(!mLLNotices.contains(inc))
-            mLLNotices.add(inc);
-    }
-
-    /**
-     * 移除数据变化监听
-     * @param inc  待移除监听器
-     */
-    public void removeDataChangeNotice(IDataChangeNotice inc)   {
-        mLLNotices.remove(inc);
-    }
-
-    /**
-     * 返回数据最后更新时间
-     * @return  数据最后更新时间
-     */
-    public Timestamp getDataLastChangeTime()    {
-        return mTSLastModifyData;
+        super();
     }
 
     /**
@@ -322,10 +293,7 @@ public class PayIncomeDataUtility {
         }
 
         if(0 < ret) {
-            mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
-            for (IDataChangeNotice inc : mLLNotices)    {
-                inc.DataCreateNotice();
-            }
+            onDataCreate();
         }
         return ret;
     }
@@ -362,10 +330,7 @@ public class PayIncomeDataUtility {
         }
 
         if(0 < ret) {
-            mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
-            for (IDataChangeNotice inc : mLLNotices)    {
-                inc.DataCreateNotice();
-            }
+            onDataCreate();
         }
         return ret;
     }
@@ -384,10 +349,7 @@ public class PayIncomeDataUtility {
         }
 
         if(0 < ret) {
-            mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
-            for (IDataChangeNotice inc : mLLNotices)    {
-                inc.DataModifyNotice();
-            }
+            onDataModify();
         }
         return ret;
     }
@@ -406,10 +368,7 @@ public class PayIncomeDataUtility {
         }
 
         if(0 < ret) {
-            mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
-            for (IDataChangeNotice inc : mLLNotices)    {
-                inc.DataModifyNotice();
-            }
+            onDataModify();
         }
         return ret;
     }
@@ -424,10 +383,7 @@ public class PayIncomeDataUtility {
         DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
         int ret = mDBHelper.getPayDataREDao().deleteIds(lsi);
         if(0 < ret) {
-            mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
-            for (IDataChangeNotice inc : mLLNotices)    {
-                inc.DataDeleteNotice();
-            }
+            onDataDelete();
         }
         return ret;
     }
@@ -442,10 +398,7 @@ public class PayIncomeDataUtility {
         DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
         int ret = mDBHelper.getIncomeDataREDao().deleteIds(lsi);
         if(0 < ret) {
-            mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
-            for (IDataChangeNotice inc : mLLNotices)    {
-                inc.DataDeleteNotice();
-            }
+            onDataDelete();
         }
         return ret;
     }

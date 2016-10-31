@@ -1,15 +1,16 @@
 package wxm.KeepAccount.Base.data;
 
-import wxm.KeepAccount.Base.db.RecordTypeItem;
-
 import java.util.List;
+
+import wxm.KeepAccount.Base.db.RecordTypeItem;
 
 /**
  * recordtype数据辅助类
  * Created by 123 on 2016/8/9.
  */
-public class RecordTypeDataUtility {
+public class RecordTypeDataUtility extends  DataUtilityBase {
     public RecordTypeDataUtility()  {
+        super();
     }
 
 
@@ -38,18 +39,24 @@ public class RecordTypeDataUtility {
      * @return  如果添加成功返回true, 否则返回false
      */
     public boolean addItem(RecordTypeItem ri)   {
-        return 1 == AppModel.getDBHelper().getRTItemREDao()
-                .create(ri);
+        boolean br = 1 == AppModel.getDBHelper().getRTItemREDao().create(ri);
+        if(br)
+            onDataCreate();
+
+        return br;
     }
 
 
     /**
-     *   更新数据
+     * 更新数据
      * @param ri    待修改数据
      * @return  如果修改成功返回true, 否则返回false
      */
     public boolean modifyItem(RecordTypeItem ri)    {
-        return 1== AppModel.getDBHelper().getRTItemREDao()
-                    .update(ri);
+        boolean br = 1== AppModel.getDBHelper().getRTItemREDao().update(ri);
+        if(br)
+            onDataModify();
+
+        return br;
     }
 }

@@ -154,8 +154,10 @@ public class MonthlyLVHelper extends LVShowDataBase {
 
     @Override
     public void onDataChange() {
-        reloadData();
-        refreshView();
+        if(null != mSelfView) {
+            reloadData();
+            refreshView();
+        }
     }
 
     @Override

@@ -11,12 +11,12 @@ import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
  * usr数据处理类
  * Created by 123 on 2016/8/9.
  */
-public class UsrDataUtility {
+public class UsrDataUtility extends  DataUtilityBase  {
     private final String    TAG = "UsrDataUtility";
 
     UsrDataUtility()  {
+        super();
     }
-
 
     /**
      * 检查是否用户'usr'已经存在
@@ -71,6 +71,9 @@ public class UsrDataUtility {
                 uiret = uiold;
             }
         }
+
+        if(null != uiret)
+            onDataCreate();
 
         return uiret;
     }
