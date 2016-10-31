@@ -81,7 +81,7 @@
 
     <RelativeLayout
         android:layout_below="@+id/rl_header"
-        android:background="@color/color_2"
+        android:background="@color/beige"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ListView
