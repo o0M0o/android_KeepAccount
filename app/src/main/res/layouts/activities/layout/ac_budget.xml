@@ -7,9 +7,9 @@
     android:paddingTop="2dp"
     tools:context="wxm.KeepAccount.ui.acutility.ACBudget">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_pages"
+    <FrameLayout
+        android:id="@+id/fl_income"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

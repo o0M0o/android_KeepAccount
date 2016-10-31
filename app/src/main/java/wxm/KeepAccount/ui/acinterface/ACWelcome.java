@@ -31,8 +31,8 @@ import wxm.KeepAccount.Base.utility.ActionHelper;
 import wxm.KeepAccount.Base.utility.DGVButtonAdapter;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acutility.ACBudget;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
+import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.acutility.ACRemindEdit;
 import wxm.KeepAccount.ui.acutility.ACSetting;
 import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
@@ -169,7 +169,8 @@ public class ACWelcome extends AppCompatActivity
             break;
 
             case ActionHelper.ACT_ADD_BUDGET :  {
-                Intent intent = new Intent(this, ACBudget.class);
+                Intent intent = new Intent(this, ACPreveiwAndEdit.class);
+                intent.putExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE, AppGobalDef.STR_RECORD_BUDGET);
                 startActivityForResult(intent, 1);
             }
             break;

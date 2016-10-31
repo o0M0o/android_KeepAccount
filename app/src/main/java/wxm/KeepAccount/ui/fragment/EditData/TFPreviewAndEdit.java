@@ -79,16 +79,15 @@ public class TFPreviewAndEdit extends Fragment
             return  false;
 
         if(isPreviewPage())     {
-            PagerAdapter old_pa = UtilFun.cast_t(mVPPages.getAdapter());
-            TFEditBase te = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_EDIT));
+            mVPPages.setCurrentItem(PAGE_IDX_EDIT);
             if(AppGobalDef.STR_MODIFY.equals(mStrAction)) {
+                PagerAdapter old_pa = UtilFun.cast_t(mVPPages.getAdapter());
+                TFEditBase te = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_EDIT));
                 TFPreviewBase old_tp = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_PREVIEW));
 
                 te.setCurData(mStrAction, old_tp.getCurData());
+                te.reLoadView();
             }
-
-            mVPPages.setCurrentItem(PAGE_IDX_EDIT);
-            te.reLoadView();
         }
         return true;
     }

@@ -4,10 +4,10 @@
     android:id="@+id/ac_pay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="wxm.KeepAccount.ui.acutility.ACPay">
+    tools:context="wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit">
 
     <FrameLayout
-        android:id="@+id/fl_income"
+        android:id="@+id/fl_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>

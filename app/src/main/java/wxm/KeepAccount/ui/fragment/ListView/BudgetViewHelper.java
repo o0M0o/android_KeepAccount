@@ -35,7 +35,7 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
-import wxm.KeepAccount.ui.acutility.ACBudget;
+import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 
 /**
@@ -103,7 +103,8 @@ public class BudgetViewHelper  extends LVShowDataBase {
             @Override
             public void onClick(View v) {
                 ACNoteShow ac = getRootActivity();
-                Intent intent = new Intent(ac, ACBudget.class);
+                Intent intent = new Intent(ac, ACPreveiwAndEdit.class);
+                intent.putExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE, AppGobalDef.STR_RECORD_BUDGET);
                 ac.startActivityForResult(intent, 1);
             }
         });
@@ -447,8 +448,9 @@ public class BudgetViewHelper  extends LVShowDataBase {
                             }
                         } else  {
                             Activity ac = getRootActivity();
-                            Intent it = new Intent(ac, ACBudget.class);
-                            it.putExtra(ACBudget.INTENT_LOAD_BUDGETID, tag_id);
+                            Intent it = new Intent(ac, ACPreveiwAndEdit.class);
+                            it.putExtra(AppGobalDef.INTENT_LOAD_RECORD_ID, tag_id);
+                            it.putExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE, AppGobalDef.STR_RECORD_BUDGET);
                             ac.startActivityForResult(it, 1);
                         }
                     }

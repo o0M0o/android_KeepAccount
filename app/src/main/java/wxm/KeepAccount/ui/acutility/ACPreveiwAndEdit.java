@@ -33,7 +33,7 @@ public class ACPreveiwAndEdit extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_income);
+        setContentView(R.layout.ac_preview_and_edit);
         if(null == savedInstanceState)  {
             Intent it = getIntent();
             String type = it.getStringExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE);
@@ -49,7 +49,7 @@ public class ACPreveiwAndEdit extends AppCompatActivity {
             if(AppGobalDef.STR_RECORD_PAY.equals(type)) {
                 PayNoteItem pi = -1 != id ? puit.GetPayNoteById(id) : null;
                 ob = pi;
-            } else if(AppGobalDef.STR_RECORD_PAY.equals(type)) {
+            } else if(AppGobalDef.STR_RECORD_BUDGET.equals(type)) {
                 BudgetItem bi = -1 != id ? buit.GetBudgetById(id) : null;
                 ob = bi;
             } else  {
@@ -62,7 +62,7 @@ public class ACPreveiwAndEdit extends AppCompatActivity {
             mTFBase = tpe;
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fl_income, tpe);
+            transaction.replace(R.id.fl_holder, tpe);
             transaction.commit();
         }
     }
