@@ -21,4 +21,31 @@ public interface ITFBase {
      * @return   若成功返回true
      */
     boolean onAccept();
+
+
+    /**
+     * 切换至预览页
+     * @return  切换成功返回true
+     */
+    boolean toPreviewPage();
+
+
+    /**
+     * 切换至编辑页
+     * @return  切换成功返回true
+     */
+    boolean toEditPage();
+
+
+    /**
+     * 当前页是否是编辑页
+     * @return   若是编辑页，返回true
+     */
+    boolean isEditPage();
+
+    /**
+     * 当前页是否是预览页
+     * @return   若是预览页，返回true
+     */
+    boolean isPreviewPage();
 }

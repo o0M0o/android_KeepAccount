@@ -26,12 +26,13 @@ import wxm.KeepAccount.ui.fragment.base.TFPreviewBase;
 public class TFPay extends Fragment
         implements ITFBase {
     private ViewPager       mVPPages;
+
+    private String          mStrAction;
     private PayNoteItem     mPNData;
-    private View            mSelfView;
 
     private final static int   PAGE_COUNT              = 2;
-    private final static int    PAGE_IDX_PREVIEW        = 0;
-    private final static int    PAGE_IDX_EDIT           = 1;
+    private final static int   PAGE_IDX_PREVIEW        = 0;
+    private final static int   PAGE_IDX_EDIT           = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -44,11 +45,8 @@ public class TFPay extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (null != view) {
-            if(!view.isInEditMode()) {
-                mSelfView = view;
-                mVPPages = UtilFun.cast_t(view.findViewById(R.id.vp_pages));
-                init_view();
-            }
+            mVPPages = UtilFun.cast_t(view.findViewById(R.id.vp_pages));
+            init_view();
         }
     }
 
@@ -56,6 +54,7 @@ public class TFPay extends Fragment
      * 当前页是否是编辑页
      * @return   若是编辑页，返回true
      */
+    @Override
     public boolean isEditPage() {
         return null != mVPPages && mVPPages.getCurrentItem() == PAGE_IDX_EDIT;
     }
@@ -64,6 +63,7 @@ public class TFPay extends Fragment
      * 当前页是否是预览页
      * @return   若是预览页，返回true
      */
+    @Override
     public boolean isPreviewPage() {
         return null != mVPPages && mVPPages.getCurrentItem() == PAGE_IDX_PREVIEW;
     }
@@ -73,6 +73,7 @@ public class TFPay extends Fragment
      * 切换至编辑页
      * @return  切换成功返回true
      */
+    @Override
     public boolean toEditPage() {
         if(null == mVPPages)
             return  false;
@@ -80,10 +81,14 @@ public class TFPay extends Fragment
         if(isPreviewPage())     {
             PagerAdapter old_pa = UtilFun.cast_t(mVPPages.getAdapter());
             TFEditBase te = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_EDIT));
-            TFPreviewBase old_tp = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_PREVIEW));
+            if(AppGobalDef.STR_MODIFY.equals(mStrAction)) {
+                TFPreviewBase old_tp = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_PREVIEW));
 
-            PayNoteItem bi = UtilFun.cast(old_tp.getCurData());
-            te.setCurData(null == bi ? AppGobalDef.STR_CREATE : AppGobalDef.STR_MODIFY, bi);
+                PayNoteItem bi = UtilFun.cast(old_tp.getCurData());
+                te.setCurData(mStrAction, bi);
+            }
+
+            mVPPages.setCurrentItem(PAGE_IDX_EDIT);
             te.reLoadView();
         }
         return true;
@@ -93,6 +98,7 @@ public class TFPay extends Fragment
      * 切换至预览页
      * @return  切换成功返回true
      */
+    @Override
     public boolean toPreviewPage() {
         if(null == mVPPages)
             return  false;
@@ -104,6 +110,8 @@ public class TFPay extends Fragment
 
             PayNoteItem bi = UtilFun.cast(old_te.getCurData());
             tp.setPreviewPara(bi);
+
+            mVPPages.setCurrentItem(PAGE_IDX_PREVIEW);
             tp.reLoadView();
         }
         return true;
@@ -113,17 +121,20 @@ public class TFPay extends Fragment
         PagerAdapter adapter = new PagerAdapter(getFragmentManager(), PAGE_COUNT);
         mVPPages.setAdapter(adapter);
 
-        if(null != mPNData) {
-            ((TFPreviewBase)adapter.getItem(PAGE_IDX_PREVIEW)).setPreviewPara(mPNData);
-            mVPPages.setCurrentItem(PAGE_IDX_PREVIEW);
-        } else  {
-            ((TFEditBase)adapter.getItem(PAGE_IDX_EDIT)).setCurData(AppGobalDef.STR_CREATE, null);
-            mVPPages.setCurrentItem(PAGE_IDX_EDIT);
-        }
+        if(UtilFun.StringIsNullOrEmpty(mStrAction)
+                || (AppGobalDef.STR_MODIFY.equals(mStrAction) && null == mPNData)
+                || (AppGobalDef.STR_CREATE.equals(mStrAction) && null != mPNData))
+            return;
+
+        ((TFPreviewBase)adapter.getItem(PAGE_IDX_PREVIEW)).setPreviewPara(mPNData);
+        ((TFEditBase)adapter.getItem(PAGE_IDX_EDIT)).setCurData(mStrAction, mPNData);
+        mVPPages.setCurrentItem(AppGobalDef.STR_MODIFY.equals(mStrAction) ?
+                PAGE_IDX_PREVIEW : PAGE_IDX_EDIT);
     }
 
     @Override
     public void setCurData(String action, Object obj) {
+        mStrAction = action;
         mPNData = UtilFun.cast(obj);
     }
 
@@ -133,7 +144,7 @@ public class TFPay extends Fragment
             return false;
 
         PagerAdapter pa = UtilFun.cast(mVPPages.getAdapter());
-        TFEditPay tp = UtilFun.cast_t(pa.getItem(PAGE_IDX_EDIT));
+        TFEditBase tp = UtilFun.cast_t(pa.getItem(PAGE_IDX_EDIT));
         return tp.onAccept();
     }
 

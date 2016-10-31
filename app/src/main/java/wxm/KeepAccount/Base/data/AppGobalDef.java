@@ -7,6 +7,7 @@ package wxm.KeepAccount.Base.data;
 public class AppGobalDef {
     static public final String STR_RECORD_PAY       = "record_pay";
     static public final String STR_RECORD_INCOME    = "record_income";
+    static public final String STR_RECORD_BUDGET    = "record_budget";
 
     static public final String STR_RECORD_DATE      = "record_date";
     static public final String STR_RECORD_TYPE      = "record_type";
@@ -16,7 +17,8 @@ public class AppGobalDef {
 
     static final String STR_PWD_PAD = "JkpYkhiayh@#$_)(";
 
-    public static final String INTENT_LOAD_RECORD_ID   = "record_id";
+    public static final String INTENT_LOAD_RECORD_ID     = "record_id";
+    public static final String INTENT_LOAD_RECORD_TYPE   = "record_type";
 
     static public final int INTRET_RECORD_ADD       = 1000;
     static public final int INTRET_RECORD_MODIFY    = 1001;

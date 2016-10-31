@@ -51,7 +51,7 @@
             android:label="@string/app_setting" />
         <activity android:name=".ui.acutility.ACBudget" />
         <activity android:name=".ui.acutility.ACPay" />
-        <activity android:name=".ui.acutility.ACIncome" />
+        <activity android:name=".ui.acutility.ACPreveiwAndEdit" />
     </application>
 
 </manifest>
