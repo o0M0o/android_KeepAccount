@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,6 +43,9 @@ import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
  */
 public class YearlyLVHelper extends LVShowDataBase {
     private final static String TAG = "YearlyLVHelper";
+
+    // 若为true则数据以时间降序排列
+    private boolean mBTimeDownOrder = true;
 
     private boolean mBSelectSubFilter = false;
     private final LinkedList<String> mLLSubFilter = new LinkedList<>();
@@ -104,6 +108,26 @@ public class YearlyLVHelper extends LVShowDataBase {
             @Override
             public void onClick(View v) {
                 reloadView(v.getContext(), true);
+            }
+        });
+
+        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_sort));
+        final ImageView iv_sort = UtilFun.cast_t(rl.findViewById(R.id.iv_sort));
+        final TextView tv_sort = UtilFun.cast_t(rl.findViewById(R.id.tv_sort));
+        iv_sort.setImageDrawable(mSelfView.getContext().getResources()
+                .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up : R.drawable.ic_sort_down));
+        tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up : R.string.cn_sort_down);
+        rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBTimeDownOrder = !mBTimeDownOrder;
+
+                iv_sort.setImageDrawable(mSelfView.getContext().getResources()
+                        .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up : R.drawable.ic_sort_down));
+                tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up : R.string.cn_sort_down);
+
+                reloadData();
+                refreshView();
             }
         });
 
@@ -201,6 +225,12 @@ public class YearlyLVHelper extends LVShowDataBase {
         // for year
         HashMap<String, NoteShowInfo> hm_y = NoteShowDataHelper.getInstance().getYearInfo();
         ArrayList<String> set_k = new ArrayList<>(hm_y.keySet());
+        Collections.sort(set_k, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1);
+            }
+        });
         for(String k : set_k)   {
             NoteShowInfo ni = hm_y.get(k);
 
@@ -226,7 +256,12 @@ public class YearlyLVHelper extends LVShowDataBase {
         // for month
         HashMap<String, NoteShowInfo> hm_m = NoteShowDataHelper.getInstance().getMonthInfo();
         ArrayList<String> set_k_m = new ArrayList<>(hm_m.keySet());
-        Collections.sort(set_k_m);
+        Collections.sort(set_k_m, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1);
+            }
+        });
         for(String k : set_k_m)   {
             String ky = k.substring(0, 4);
             NoteShowInfo ni = hm_m.get(k);
