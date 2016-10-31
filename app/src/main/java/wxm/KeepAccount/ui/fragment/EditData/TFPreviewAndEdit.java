@@ -13,22 +13,22 @@ import android.view.ViewGroup;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.base.ITFBase;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 import wxm.KeepAccount.ui.fragment.base.TFPreviewBase;
 
 /**
- * 查看/编辑支付数据
+ * 查看/编辑收入数据
  * Created by 123 on 2016/10/30.
  */
-public class TFPay extends Fragment
+public class TFPreviewAndEdit extends Fragment
         implements ITFBase {
     private ViewPager       mVPPages;
 
+    private String          mStrType;
     private String          mStrAction;
-    private PayNoteItem     mPNData;
+    private Object          mData;
 
     private final static int   PAGE_COUNT              = 2;
     private final static int   PAGE_IDX_PREVIEW        = 0;
@@ -84,8 +84,7 @@ public class TFPay extends Fragment
             if(AppGobalDef.STR_MODIFY.equals(mStrAction)) {
                 TFPreviewBase old_tp = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_PREVIEW));
 
-                PayNoteItem bi = UtilFun.cast(old_tp.getCurData());
-                te.setCurData(mStrAction, bi);
+                te.setCurData(mStrAction, old_tp.getCurData());
             }
 
             mVPPages.setCurrentItem(PAGE_IDX_EDIT);
@@ -108,10 +107,8 @@ public class TFPay extends Fragment
             TFEditBase old_te = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_EDIT));
             TFPreviewBase tp = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_PREVIEW));
 
-            PayNoteItem bi = UtilFun.cast(old_te.getCurData());
-            tp.setPreviewPara(bi);
-
             mVPPages.setCurrentItem(PAGE_IDX_PREVIEW);
+            tp.setPreviewPara(old_te.getCurData());
             tp.reLoadView();
         }
         return true;
@@ -122,20 +119,22 @@ public class TFPay extends Fragment
         mVPPages.setAdapter(adapter);
 
         if(UtilFun.StringIsNullOrEmpty(mStrAction)
-                || (AppGobalDef.STR_MODIFY.equals(mStrAction) && null == mPNData)
-                || (AppGobalDef.STR_CREATE.equals(mStrAction) && null != mPNData))
+                || UtilFun.StringIsNullOrEmpty(mStrType)
+                || (AppGobalDef.STR_MODIFY.equals(mStrAction) && null == mData)
+                || (AppGobalDef.STR_CREATE.equals(mStrAction) && null != mData))
             return;
 
-        ((TFPreviewBase)adapter.getItem(PAGE_IDX_PREVIEW)).setPreviewPara(mPNData);
-        ((TFEditBase)adapter.getItem(PAGE_IDX_EDIT)).setCurData(mStrAction, mPNData);
+        ((TFPreviewBase)adapter.getItem(PAGE_IDX_PREVIEW)).setPreviewPara(mData);
+        ((TFEditBase)adapter.getItem(PAGE_IDX_EDIT)).setCurData(mStrAction, mData);
         mVPPages.setCurrentItem(AppGobalDef.STR_MODIFY.equals(mStrAction) ?
-                PAGE_IDX_PREVIEW : PAGE_IDX_EDIT);
+                            PAGE_IDX_PREVIEW : PAGE_IDX_EDIT);
     }
 
     @Override
-    public void setCurData(String action, Object obj) {
+    public void setCurData(String type, String action, Object obj) {
+        mStrType = type;
         mStrAction = action;
-        mPNData = UtilFun.cast(obj);
+        mData = UtilFun.cast(obj);
     }
 
     @Override
@@ -159,14 +158,22 @@ public class TFPay extends Fragment
         PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm);
             mNumOfFrags = NumOfTabs;
-
             mFRFrags = new Fragment[mNumOfFrags];
-            mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewPay();
-            mFRFrags[PAGE_IDX_EDIT] = new TFEditPay();
+
+            if(AppGobalDef.STR_RECORD_INCOME.equals(mStrType)) {
+                mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewIncome();
+                mFRFrags[PAGE_IDX_EDIT] = new TFEditIncome();
+            } else if(AppGobalDef.STR_RECORD_PAY.equals(mStrType)) {
+                mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewPay();
+                mFRFrags[PAGE_IDX_EDIT] = new TFEditPay();
+            } else {
+                mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewBudget();
+                mFRFrags[PAGE_IDX_EDIT] = new TFEditBudget();
+            }
         }
 
         @Override
-        public android.support.v4.app.Fragment getItem(int position) {
+        public Fragment getItem(int position) {
             return mFRFrags[position];
         }
 

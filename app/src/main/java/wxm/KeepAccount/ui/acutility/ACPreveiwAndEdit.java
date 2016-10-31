@@ -2,7 +2,6 @@ package wxm.KeepAccount.ui.acutility;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -12,12 +11,13 @@ import android.view.MenuItem;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.data.BudgetDataUtility;
 import wxm.KeepAccount.Base.data.PayIncomeDataUtility;
+import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.fragment.EditData.TFIncome;
-import wxm.KeepAccount.ui.fragment.EditData.TFPay;
+import wxm.KeepAccount.ui.fragment.EditData.TFPreviewAndEdit;
 import wxm.KeepAccount.ui.fragment.base.ITFBase;
 
 public class ACPreveiwAndEdit extends AppCompatActivity {
@@ -42,32 +42,27 @@ public class ACPreveiwAndEdit extends AppCompatActivity {
                                 && !AppGobalDef.STR_RECORD_BUDGET.equals(type)))
                 return;
 
-            Fragment fr;
             Object ob;
             PayIncomeDataUtility puit = AppModel.getPayIncomeUtility();
+            BudgetDataUtility buit = AppModel.getBudgetUtility();
             int id = it.getIntExtra(AppGobalDef.INTENT_LOAD_RECORD_ID, -1);
             if(AppGobalDef.STR_RECORD_PAY.equals(type)) {
-                TFPay tp = new TFPay();
-                mTFBase = tp;
-                fr = tp;
-
                 PayNoteItem pi = -1 != id ? puit.GetPayNoteById(id) : null;
                 ob = pi;
-            //} else if(AppGobalDef.STR_RECORD_PAY.equals(type)) {
-            //    mTFBase = new TFIncome();
+            } else if(AppGobalDef.STR_RECORD_PAY.equals(type)) {
+                BudgetItem bi = -1 != id ? buit.GetBudgetById(id) : null;
+                ob = bi;
             } else  {
-                TFIncome ti = new TFIncome();
-                mTFBase = ti;
-                fr = ti;
-
-                IncomeNoteItem pi = -1 != id ? puit.GetIncomeNoteById(id) : null;
-                ob = pi;
+                IncomeNoteItem ii = -1 != id ? puit.GetIncomeNoteById(id) : null;
+                ob = ii;
             }
 
-            mTFBase.setCurData(ob == null ? AppGobalDef.STR_CREATE : AppGobalDef.STR_MODIFY, ob);
+            TFPreviewAndEdit tpe = new TFPreviewAndEdit();
+            tpe.setCurData(type, ob == null ? AppGobalDef.STR_CREATE : AppGobalDef.STR_MODIFY, ob);
+            mTFBase = tpe;
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fl_income, fr);
+            transaction.replace(R.id.fl_income, tpe);
             transaction.commit();
         }
     }
