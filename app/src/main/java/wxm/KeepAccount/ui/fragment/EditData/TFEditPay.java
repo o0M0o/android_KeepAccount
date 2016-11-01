@@ -1,13 +1,12 @@
 package wxm.KeepAccount.ui.fragment.EditData;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,12 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -40,6 +37,8 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.acutility.ACRecordTypeEdit;
+import wxm.KeepAccount.ui.dialog.DlgDatePicker;
+import wxm.KeepAccount.ui.dialog.DlgOKAndNOBase;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 
 /**
@@ -360,47 +359,27 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         if (null != v_self && event.getAction() == MotionEvent.ACTION_DOWN) {
             switch (v.getId()) {
                 case R.id.ar_et_date: {
-                    String old_date = mETDate.getText().toString();
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ac);
-                    View view = View.inflate(ac, R.layout.dlg_date, null);
-                    final DatePicker datePicker = (DatePicker) view.findViewById(R.id.date_picker);
-                    final TimePicker timePicker = (TimePicker) view.findViewById(R.id.time_picker);
-                    timePicker.setIs24HourView(true);
-                    builder.setView(view);
-                    //ToolUtil.resizeNumberPicker(datePicker);
-                    //ToolUtil.resizeNumberPicker(timePicker);
-
-                    datePicker.init(Integer.valueOf(old_date.substring(0, 4)),
-                            Integer.valueOf(old_date.substring(5, 7)),
-                            Integer.valueOf(old_date.substring(8, 10)),
-                            null);
-                    timePicker.setCurrentHour(Integer.valueOf(old_date.substring(11, 13)));
-                    timePicker.setCurrentMinute(Integer.valueOf(old_date.substring(14, 16)));
-
-                    final int inType = mETDate.getInputType();
-                    mETDate.setInputType(InputType.TYPE_NULL);
-                    mETDate.onTouchEvent(event);
-                    mETDate.setInputType(inType);
-                    mETDate.setSelection(mETDate.getText().length());
-
-                    builder.setTitle("选取支出日期");
-                    builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
+                    DlgDatePicker dp = new DlgDatePicker();
+                    dp.setInitDate(mETDate.getText().toString());
+                    dp.setDialogListener(new DlgOKAndNOBase.NoticeDialogListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mETDate.setText(String.format(Locale.CHINA, "%d-%02d-%02d %02d:%02d:00",
-                                    datePicker.getYear(),
-                                    datePicker.getMonth() + 1,
-                                    datePicker.getDayOfMonth(),
-                                    timePicker.getCurrentHour(),
-                                    timePicker.getCurrentMinute()));
-                            mETDate.requestFocus();
+                        public void onDialogPositiveClick(DialogFragment dialog) {
+                            DlgDatePicker cur_dp = UtilFun.cast_t(dialog);
+                            String cur_date = cur_dp.getCurDate();
 
-                            dialog.cancel();
+                            if(!UtilFun.StringIsNullOrEmpty(cur_date))
+                                mETDate.setText(cur_date);
+
+                            mETDate.requestFocus();
+                        }
+
+                        @Override
+                        public void onDialogNegativeClick(DialogFragment dialog) {
+                            mETDate.requestFocus();
                         }
                     });
 
-                    builder.create().show();
+                    dp.show(getFragmentManager(), "选择日期");
                 }
                 break;
 
