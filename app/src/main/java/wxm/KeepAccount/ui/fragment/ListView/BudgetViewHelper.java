@@ -186,16 +186,13 @@ public class BudgetViewHelper  extends LVShowDataBase {
         switch (vid)    {
             case R.id.bt_accpet :
                 if(ACTION_DELETE == mActionType)    {
+                    mActionType = ACTION_EDIT;
                     if(!ToolUtil.ListIsNullOrEmpty(mLLDelBudget)) {
                         AppModel.getBudgetUtility().DeleteBudgetById(mLLDelBudget);
                     }
-
-                    reloadData();
                 }
 
-                mActionType = ACTION_DELETE;
                 mLLDelBudget.clear();
-                refreshAttachLayout();
                 break;
 
             case R.id.bt_giveup :
@@ -312,6 +309,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                     map.put(K_NOTE, nt.length() > 10 ? nt.substring(0, 10) + "..." : nt);
                 }
 
+                map.put(K_TIME, all_date.substring(11, 16));
                 map.put(K_TITLE, i.getInfo());
                 map.put(K_AMOUNT, String.format(Locale.CHINA, "%.02f", i.getVal()));
                 map.put(K_TAG, main_tag);
@@ -345,9 +343,11 @@ public class BudgetViewHelper  extends LVShowDataBase {
         assert null != mLVShowDetail;
         SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), mLVShowDetail, llhm,
                                         new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK,
-                                                  K_TITLE, K_AMOUNT, K_NOTE},
+                                                    K_TITLE, K_AMOUNT, K_NOTE,
+                                                    K_TIME},
                                         new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week,
-                                                  R.id.tv_pay_title, R.id.tv_pay_amount, R.id.tv_pay_note});
+                                                  R.id.tv_pay_title, R.id.tv_pay_amount, R.id.tv_pay_note,
+                                                    R.id.tv_pay_time});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
@@ -525,7 +525,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
                 final HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                final String sub_tag = hm.get(K_SUB_TAG);
+                final String sub_id = hm.get(K_ID);
 
                 // for note
                 String nt = hm.get(K_NOTE);
@@ -535,36 +535,19 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 }
 
                 ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_look));
-                iv.setBackgroundColor(mLLSubFilter.contains(sub_tag) ? mCLSel : mCLNoSel);
-                /*
-                //iv.getBackground().setAlpha(mLLSubFilter.contains(sub_tag) ? 255 : 0);
                 iv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ImageView ibv = UtilFun.cast_t(v);
-                        boolean bsel = mLLSubFilter.contains(sub_tag);
-                        ibv.getBackground().setAlpha(!bsel ? 255 : 0);
-                        if(!bsel) {
-                            mLLSubFilter.add(sub_tag);
-                            mLLSubFilterVW.add(v);
+                        ACNoteShow ac = getRootActivity();
+                        Intent intent;
+                        intent = new Intent(ac, ACPreveiwAndEdit.class);
+                        intent.putExtra(AppGobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(sub_id));
+                        intent.putExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE,
+                                AppGobalDef.STR_RECORD_PAY);
 
-                            if(!mBSelectSubFilter) {
-                                mBSelectSubFilter = true;
-                                refreshAttachLayout();
-                            }
-                        }   else    {
-                            mLLSubFilter.remove(sub_tag);
-                            mLLSubFilterVW.remove(v);
-
-                            if(mLLSubFilter.isEmpty()) {
-                                mLLSubFilterVW.clear();;
-                                mBSelectSubFilter = false;
-                                refreshAttachLayout();
-                            }
-                        }
+                        ac.startActivityForResult(intent, 1);
                     }
                 });
-                */
             }
 
             return v;

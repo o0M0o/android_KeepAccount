@@ -17,10 +17,11 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
  * 预算数据工具类
  * Created by 123 on 2016/9/1.
  */
-public class BudgetDataUtility {
+public class BudgetDataUtility extends  DataUtilityBase {
     private final static String  TAG = "BudgetDataUtility";
 
     public BudgetDataUtility()  {
+        super();
     }
 
     /**
@@ -141,8 +142,11 @@ public class BudgetDataUtility {
         }
 
 
-        return 1 == AppModel.getDBHelper().getBudgetDataREDao()
+        boolean br = 1 == AppModel.getDBHelper().getBudgetDataREDao()
                         .create(bi);
+        if(br)
+            onDataCreate();
+        return br;
     }
 
     /**
@@ -151,7 +155,10 @@ public class BudgetDataUtility {
      * @return 成功返回{@code true}
      */
     public boolean ModifyBudget(BudgetItem bi)  {
-        return 1 == AppModel.getDBHelper().getBudgetDataREDao().update(bi);
+        boolean br = 1 == AppModel.getDBHelper().getBudgetDataREDao().update(bi);
+        if(br)
+            onDataModify();
+        return br;
     }
 
 
@@ -179,6 +186,9 @@ public class BudgetDataUtility {
                     r_s += 1;
                 }
             }
+
+            if(0 < r_s)
+                onDataDelete();
 
             return  w_s == r_s;
         }

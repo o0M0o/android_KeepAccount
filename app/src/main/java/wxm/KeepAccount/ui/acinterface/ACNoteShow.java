@@ -52,13 +52,6 @@ public class ACNoteShow extends AppCompatActivity {
             NoteShowDataHelper.getInstance().refreshData();
             TFShowBase tb = getHotTabItem();
             tb.onDataChange();
-            /*
-            PagerAdapter pa = UtilFun.cast(mVPTabs.getAdapter());
-            for(int pos = 0; pos < pa.getCount(); pos++)    {
-                TFShowBase tb =  UtilFun.cast_t(pa.getItem(pos));
-                tb.onDataChange();
-            }
-            */
         }
     };
 
@@ -69,6 +62,7 @@ public class ACNoteShow extends AppCompatActivity {
 
         init_tabs();
         AppModel.getPayIncomeUtility().addDataChangeNotice(mIDCNotice);
+        AppModel.getBudgetUtility().addDataChangeNotice(mIDCNotice);
 
         // 根据调用参数跳转到首页
         Intent it = getIntent();
@@ -94,6 +88,7 @@ public class ACNoteShow extends AppCompatActivity {
     protected void onDestroy()  {
         super.onDestroy();
         AppModel.getPayIncomeUtility().removeDataChangeNotice(mIDCNotice);
+        AppModel.getBudgetUtility().removeDataChangeNotice(mIDCNotice);
     }
 
     @Override

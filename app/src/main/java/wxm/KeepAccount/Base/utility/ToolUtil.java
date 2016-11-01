@@ -264,4 +264,12 @@ public class ToolUtil {
         int dw = day.get(Calendar.DAY_OF_WEEK) - 1;
         return (0 <= dw && dw < DAY_IN_WEEK.length) ? DAY_IN_WEEK[dw] : "";
     }
+
+    /**
+     * 调整numberpicker大小
+     */
+    public static void resizeNumberPicker(ViewGroup np) {
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(80, ViewGroup.LayoutParams.WRAP_CONTENT);
+        np.setLayoutParams(params);
+    }
 }

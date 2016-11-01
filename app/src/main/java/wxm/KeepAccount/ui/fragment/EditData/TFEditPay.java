@@ -21,11 +21,11 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -157,7 +157,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         if (mAction.equals(AppGobalDef.STR_MODIFY)) {
             String info = mOldPayNote.getInfo();
             String note = mOldPayNote.getNote();
-            String date = mOldPayNote.getTs().toString().substring(0, 10);
+            String date = mOldPayNote.getTs().toString().substring(0, 16);
             String amount = String.format(Locale.CHINA, "%.02f", mOldPayNote.getVal());
 
             BudgetItem bi = mOldPayNote.getBudget();
@@ -307,7 +307,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
         Timestamp tsDT;
         try {
-            tsDT = ToolUtil.StringToTimestamp(str_date);
+            tsDT = ToolUtil.StringToTimestamp(str_date + ":00");
         }
         catch(Exception ex)
         {
@@ -360,15 +360,23 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         if (null != v_self && event.getAction() == MotionEvent.ACTION_DOWN) {
             switch (v.getId()) {
                 case R.id.ar_et_date: {
+                    String old_date = mETDate.getText().toString();
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(ac);
                     View view = View.inflate(ac, R.layout.dlg_date, null);
                     final DatePicker datePicker = (DatePicker) view.findViewById(R.id.date_picker);
+                    final TimePicker timePicker = (TimePicker) view.findViewById(R.id.time_picker);
+                    timePicker.setIs24HourView(true);
                     builder.setView(view);
+                    //ToolUtil.resizeNumberPicker(datePicker);
+                    //ToolUtil.resizeNumberPicker(timePicker);
 
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTimeInMillis(System.currentTimeMillis());
-                    datePicker.init(cal.get(Calendar.YEAR),
-                            cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), null);
+                    datePicker.init(Integer.valueOf(old_date.substring(0, 4)),
+                            Integer.valueOf(old_date.substring(5, 7)),
+                            Integer.valueOf(old_date.substring(8, 10)),
+                            null);
+                    timePicker.setCurrentHour(Integer.valueOf(old_date.substring(11, 13)));
+                    timePicker.setCurrentMinute(Integer.valueOf(old_date.substring(14, 16)));
 
                     final int inType = mETDate.getInputType();
                     mETDate.setInputType(InputType.TYPE_NULL);
@@ -380,11 +388,12 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                     builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mETDate.setText(String.format(Locale.CHINA, "%d-%02d-%02d %02d:%02d:%02d",
+                            mETDate.setText(String.format(Locale.CHINA, "%d-%02d-%02d %02d:%02d:00",
                                     datePicker.getYear(),
                                     datePicker.getMonth() + 1,
                                     datePicker.getDayOfMonth(),
-                                    12, 5, 30));
+                                    timePicker.getCurrentHour(),
+                                    timePicker.getCurrentMinute()));
                             mETDate.requestFocus();
 
                             dialog.cancel();

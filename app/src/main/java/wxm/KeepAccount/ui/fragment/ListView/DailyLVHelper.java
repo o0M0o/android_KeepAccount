@@ -119,10 +119,12 @@ public class DailyLVHelper extends LVShowDataBase
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
                 intent.putExtra(AppGobalDef.STR_RECORD_DATE,
-                        String.format(Locale.CHINA ,"%d-%02d-%02d"
+                        String.format(Locale.CHINA ,"%d-%02d-%02d %02d%02d"
                                 ,cal.get(Calendar.YEAR)
-                                ,cal.get(Calendar.MONTH) + 1
-                                ,cal.get(Calendar.DAY_OF_MONTH)));
+                                ,cal.get(Calendar.MONTH)
+                                ,cal.get(Calendar.DAY_OF_MONTH)
+                                ,cal.get(Calendar.HOUR_OF_DAY)
+                                ,cal.get(Calendar.MINUTE)));
 
                 ac.startActivityForResult(intent, 1);
             }
@@ -209,26 +211,17 @@ public class DailyLVHelper extends LVShowDataBase
         switch (vid)    {
             case R.id.bt_accpet :
                 if(ACTION_DELETE == mActionType) {
-                    boolean b_dirty = false;
                     if(!ToolUtil.ListIsNullOrEmpty(mDelPay)) {
                         AppModel.getPayIncomeUtility().DeletePayNotes(mDelPay);
-                        b_dirty = true;
                         mDelPay.clear();
                     }
 
                     if(!ToolUtil.ListIsNullOrEmpty(mDelIncome)) {
                         AppModel.getPayIncomeUtility().DeleteIncomeNotes(mDelIncome);
-                        b_dirty = true;
                         mDelIncome.clear();
                     }
 
                     mActionType = ACTION_EDIT;
-                    if(b_dirty) {
-                        NoteShowDataHelper.getInstance().refreshData();
-                        loadView();
-                    } else  {
-                        refreshAttachLayout();
-                    }
                 }
 
                 break;
@@ -320,6 +313,7 @@ public class DailyLVHelper extends LVShowDataBase
                 HashMap<String, String> map = new HashMap<>();
                 map.put(K_TITLE, r.getInfo());
                 map.put(K_ID, String.valueOf(r.getId()));
+                map.put(K_TIME, r.getTs().toString().substring(11, 16));
 
                 if (r.isPayNote()) {
                     map.put(K_TYPE, V_TYPE_PAY);
@@ -564,6 +558,9 @@ public class DailyLVHelper extends LVShowDataBase
             tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_amount));
             tv.setText(hd.get(K_AMOUNT));
 
+            tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_time));
+            tv.setText(hd.get(K_TIME));
+
             ImageView iv = UtilFun.cast_t(rl_pay.findViewById(R.id.iv_pay_action));
             iv.setOnClickListener(this);
             iv.setImageDrawable(ACTION_EDIT == mActionType ? mDADedit : mDADelete);
@@ -595,6 +592,9 @@ public class DailyLVHelper extends LVShowDataBase
 
             tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_amount));
             tv.setText(hd.get(K_AMOUNT));
+
+            tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_time));
+            tv.setText(hd.get(K_TIME));
 
             ImageView iv = UtilFun.cast_t(rl_income.findViewById(R.id.iv_income_action));
             iv.setOnClickListener(this);
