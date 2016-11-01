@@ -44,7 +44,7 @@ public class ActionHelper {
                 break;
 
             case ACT_LOOK_BUDGET :
-                bm = BitmapFactory.decodeResource(res, R.drawable.ic_act_look_budget);
+                bm = BitmapFactory.decodeResource(res, R.drawable.ic_wallet);
                 break;
 
             case ACT_ADD_BUDGET :

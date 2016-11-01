@@ -70,6 +70,7 @@ public class ACNoteShow extends AppCompatActivity {
         init_tabs();
         AppModel.getPayIncomeUtility().addDataChangeNotice(mIDCNotice);
 
+        // 根据调用参数跳转到首页
         Intent it = getIntent();
         if(null != it)  {
             String ft = it.getStringExtra(NoteShowDataHelper.INTENT_PARA_FIRST_TAB);
@@ -91,6 +92,7 @@ public class ACNoteShow extends AppCompatActivity {
 
     @Override
     protected void onDestroy()  {
+        super.onDestroy();
         AppModel.getPayIncomeUtility().removeDataChangeNotice(mIDCNotice);
     }
 
@@ -99,9 +101,6 @@ public class ACNoteShow extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.acbar_back_help, menu);
-
-        // 开启"switch view"选项
-        menu.getItem(0).setVisible(true);
         return true;
     }
 
