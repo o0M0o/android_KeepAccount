@@ -6,29 +6,18 @@
     <RelativeLayout
         android:id="@+id/rl_pay"
         android:layout_width="wrap_content"
-        android:layout_height="22dp">
+        android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/iv_pay_tag"
             android:layout_centerVertical="true"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             app:srcCompat="@drawable/ic_show_pay"
             android:scaleType="fitXY" />
 
-        <!--
-        <TextView
-            android:id="@+id/tv_pay_count_tag"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/iv_pay_tag"
-            android:layout_marginLeft="8dp"
-            android:text="次数 : "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-            -->
-
         <TextView
             android:id="@+id/tv_pay_count"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:layout_marginLeft="4dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iv_pay_tag"
@@ -37,17 +26,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <!--
-        <TextView
-            android:id="@+id/tv_pay_amount_tag"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/tv_pay_count"
-            android:layout_marginLeft="20dp"
-            android:text="共计 : "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-            -->
-
         <ImageView
             android:id="@+id/iv_pay_amount_tag"
             android:layout_centerVertical="true"
@@ -55,12 +33,12 @@
             android:layout_marginLeft="68dp"
             app:srcCompat="@drawable/ic_yen"
             android:scaleType="fitXY"
-            android:layout_width="16dp"
-            android:layout_height="16dp" />
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/tv_pay_amount"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:layout_marginLeft="4dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iv_pay_amount_tag"
@@ -72,31 +50,22 @@
 
     <RelativeLayout
         android:id="@+id/rl_income"
+        android:layout_marginTop="2dp"
         android:layout_below="@id/rl_pay"
         android:layout_width="wrap_content"
-        android:layout_height="22dp">
+        android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/iv_income_tag"
             android:layout_centerVertical="true"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             app:srcCompat="@drawable/ic_show_income"
             android:scaleType="fitXY" />
 
-        <!--
-        <TextView
-            android:id="@+id/tv_income_count_tag"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/iv_income_tag"
-            android:layout_marginLeft="8dp"
-            android:text="次数 : "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-            -->
-
         <TextView
             android:id="@+id/tv_income_count"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:layout_marginLeft="4dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iv_income_tag"
@@ -105,16 +74,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <!--
-        <TextView
-            android:id="@+id/tv_income_amount_tag"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/tv_income_count"
-            android:layout_marginLeft="20dp"
-            android:text="共计 : "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-            -->
         <ImageView
             android:id="@+id/iv_income_amount_tag"
             android:layout_centerVertical="true"
@@ -122,12 +81,12 @@
             android:layout_marginLeft="68dp"
             app:srcCompat="@drawable/ic_yen"
             android:scaleType="fitXY"
-            android:layout_width="16dp"
-            android:layout_height="16dp" />
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/tv_income_amount"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iv_income_amount_tag"
             android:layout_marginLeft="4dp"
@@ -146,7 +105,7 @@
 
         <TextView
             android:id="@+id/tv_daily_tag"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:layout_centerVertical="true"
             android:text="结余 : "
             android:layout_width="wrap_content"
@@ -154,7 +113,7 @@
 
         <TextView
             android:id="@+id/tv_amount"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/tv_daily_tag"
             android:textColor="@color/darkslategrey"

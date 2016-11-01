@@ -14,9 +14,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
@@ -43,6 +46,9 @@ import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
  */
 public class BudgetViewHelper  extends LVShowDataBase {
     private final static String TAG = "BudgetViewHelper";
+
+    // 若为true,数据按照名称降序排列
+    private boolean mBNameDownOrder = true;
 
     //for action
     private final static int ACTION_DELETE  = 1;
@@ -123,6 +129,26 @@ public class BudgetViewHelper  extends LVShowDataBase {
             public void onClick(View v) {
                 mActionType = ACTION_EDIT;
                 reloadView(v.getContext(), true);
+            }
+        });
+
+        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_sort));
+        final ImageView iv_sort = UtilFun.cast_t(rl.findViewById(R.id.iv_sort));
+        final TextView tv_sort = UtilFun.cast_t(rl.findViewById(R.id.tv_sort));
+        iv_sort.setImageDrawable(mSelfView.getContext().getResources()
+                .getDrawable(mBNameDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
+        tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
+        rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBNameDownOrder = !mBNameDownOrder;
+
+                iv_sort.setImageDrawable(mSelfView.getContext().getResources()
+                        .getDrawable(mBNameDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
+                tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
+
+                reloadData();
+                refreshView();
             }
         });
 
@@ -220,7 +246,16 @@ public class BudgetViewHelper  extends LVShowDataBase {
         mMainPara.clear();
         mHMSubPara.clear();
 
-        for (BudgetItem i : mHMData.keySet()) {
+        Set<BudgetItem> set_bi = mHMData.keySet();
+        ArrayList<BudgetItem> ls_bi = new ArrayList<>(set_bi);
+        Collections.sort(ls_bi, new Comparator<BudgetItem>() {
+            @Override
+            public int compare(BudgetItem o1, BudgetItem o2) {
+                return mBNameDownOrder ? o1.getName().compareTo(o2.getName())
+                            : o2.getName().compareTo(o1.getName()) ;
+            }
+        });
+        for (BudgetItem i : ls_bi) {
             List<PayNoteItem> ls_pay = mHMData.get(i);
             String tag = String.valueOf(i.get_id());
 

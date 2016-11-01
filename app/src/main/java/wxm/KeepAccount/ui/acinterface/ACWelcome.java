@@ -31,6 +31,7 @@ import wxm.KeepAccount.Base.utility.ActionHelper;
 import wxm.KeepAccount.Base.utility.DGVButtonAdapter;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.acutility.ACRemindEdit;
@@ -161,7 +162,14 @@ public class ACWelcome extends AppCompatActivity
      */
     private void do_click(String act)   {
         switch (act)     {
-            case ActionHelper.ACT_LOOK_BUDGET :
+            case ActionHelper.ACT_LOOK_BUDGET :     {
+                Intent intent = new Intent(this, ACNoteShow.class);
+                intent.putExtra(NoteShowDataHelper.INTENT_PARA_FIRST_TAB,
+                                NoteShowDataHelper.TAB_TITLE_BUDGET);
+                startActivityForResult(intent, 1);
+            }
+            break;
+
             case ActionHelper.ACT_LOOK_DATA :   {
                 Intent intent = new Intent(this, ACNoteShow.class);
                 startActivityForResult(intent, 1);

@@ -69,6 +69,24 @@ public class ACNoteShow extends AppCompatActivity {
 
         init_tabs();
         AppModel.getPayIncomeUtility().addDataChangeNotice(mIDCNotice);
+
+        Intent it = getIntent();
+        if(null != it)  {
+            String ft = it.getStringExtra(NoteShowDataHelper.INTENT_PARA_FIRST_TAB);
+            if(!UtilFun.StringIsNullOrEmpty(ft))    {
+                int tc = mTLTabs.getTabCount();
+                for(int i = 0; i < tc; i++) {
+                    TabLayout.Tab t = mTLTabs.getTabAt(i);
+                    if(null != t) {
+                        CharSequence cs = t.getText();
+                        if (null != cs && cs.toString().equals(ft)){
+                            t.select();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override

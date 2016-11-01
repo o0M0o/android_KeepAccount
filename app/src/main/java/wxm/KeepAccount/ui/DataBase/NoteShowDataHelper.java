@@ -15,6 +15,9 @@ import wxm.KeepAccount.Base.db.INote;
 public class NoteShowDataHelper {
     private static final String TAG = "NoteShowDataHelper ";
 
+    // 定义调用参数
+    public static final String INTENT_PARA_FIRST_TAB   = "first_tab";
+
     // 定义tab页标签内容
     public static final String TAB_TITLE_DAILY      = "日流水";
     public static final String TAB_TITLE_MONTHLY    = "月流水";

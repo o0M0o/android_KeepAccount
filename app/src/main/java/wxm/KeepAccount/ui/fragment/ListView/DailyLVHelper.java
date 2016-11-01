@@ -150,16 +150,16 @@ public class DailyLVHelper extends LVShowDataBase
         final ImageView iv_sort = UtilFun.cast_t(rl.findViewById(R.id.iv_sort));
         final TextView tv_sort = UtilFun.cast_t(rl.findViewById(R.id.tv_sort));
         iv_sort.setImageDrawable(mSelfView.getContext().getResources()
-                .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up : R.drawable.ic_sort_down));
-        tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up : R.string.cn_sort_down);
+                .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
+        tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
         rl.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mBTimeDownOrder = !mBTimeDownOrder;
 
                 iv_sort.setImageDrawable(mSelfView.getContext().getResources()
-                        .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up : R.drawable.ic_sort_down));
-                tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up : R.string.cn_sort_down);
+                        .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
+                tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
                 reloadData();
                 refreshView();
