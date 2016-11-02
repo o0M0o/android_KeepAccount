@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/aliceblue"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/rl_types"
+        android:layout_margin="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:id="@+id/gv_types"
+            android:numColumns="4"
+            android:verticalSpacing="4dp"
+            android:horizontalSpacing="4dp"
+            android:columnWidth="42dp"
+            android:background="@color/button_material_light"
+            android:padding="8dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_hint"
+        android:layout_margin="4dp"
+        android:background="@color/grey_1"
+        android:layout_marginTop="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_hint"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="4dp"
+            android:text="交通类费用"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</LinearLayout>

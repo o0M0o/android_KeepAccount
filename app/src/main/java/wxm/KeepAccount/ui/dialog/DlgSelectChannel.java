@@ -1,13 +1,7 @@
 package wxm.KeepAccount.ui.dialog;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -29,15 +23,8 @@ import wxm.KeepAccount.R;
  * 选择关注channel的对话框
  * Created by 123 on 2016/9/20.
  */
-public class DlgSelectChannel extends DialogFragment implements AdapterView.OnItemClickListener {
-    // for notice interface
-    public interface NoticeDialogListener {
-        void onDialogPositiveClick(DialogFragment dialog);
-        void onDialogNegativeClick(DialogFragment dialog);
-    }
-
-    private NoticeDialogListener mListener;
-
+public class DlgSelectChannel extends DlgOKAndNOBase
+        implements AdapterView.OnItemClickListener {
     // for hot channel
     private ArrayList<String>  mLSHotChannel = new ArrayList<>();
 
@@ -69,44 +56,28 @@ public class DlgSelectChannel extends DialogFragment implements AdapterView.OnIt
     }
 
 
-    /**
-     * 处理NoticeDialogListener实例
-     */
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (NoticeDialogListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(
-                    activity.toString() + " must implement NoticeDialogListener");
-        }
-    }
+    protected View InitDlgView() {
+        InitDlgTitle("选择首页项", "接受", "放弃");
 
-    /**
-     * 在DialogFragment的show方法执行后，系统会调用此方法
-     */
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // 创建dialog并设置button的点击事件
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View vw = View.inflate(getActivity(), R.layout.dlg_select_channel, null);
-        init_view(vw);
-        builder.setView(vw);
+        GridView gv = UtilFun.cast_t(vw.findViewById(R.id.gv_channels));
+        gv.setOnItemClickListener(this);
 
-        builder.setMessage("选择首页项")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogPositiveClick(DlgSelectChannel.this);
-                    }
-                })
-                .setNegativeButton("放弃", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogNegativeClick(DlgSelectChannel.this);
-                    }
-                });
+        ArrayList<HashMap<String, Object>> ls_data = new ArrayList<>();
+        for(String i : ActionHelper.ACTION_NAMES)   {
+            HashMap<String, Object> hm = new HashMap<>();
+            hm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
 
-        return builder.create();
+            ls_data.add(hm);
+        }
+
+        GVChannelAdapter ga = new GVChannelAdapter(getActivity(), ls_data,
+                new String[] { DGVButtonAdapter.HKEY_ACT_NAME },
+                new int[]{ R.id.tv_name});
+        gv.setAdapter(ga);
+        ga.notifyDataSetChanged();
+        return vw;
     }
 
 
@@ -136,35 +107,11 @@ public class DlgSelectChannel extends DialogFragment implements AdapterView.OnIt
     }
 
     /**
-     * 初始化dialog的视图
-     * @param vw    待初始化view
-     */
-    private void init_view(View vw) {
-        GridView gv = UtilFun.cast(vw.findViewById(R.id.gv_channels));
-        assert null != gv;
-        gv.setOnItemClickListener(this);
-
-        ArrayList<HashMap<String, Object>> ls_data = new ArrayList<>();
-        for(String i : ActionHelper.ACTION_NAMES)   {
-            HashMap<String, Object> hm = new HashMap<>();
-            hm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
-
-            ls_data.add(hm);
-        }
-
-        GVChannelAdapter ga = new GVChannelAdapter(getActivity(), ls_data,
-                                    new String[] { DGVButtonAdapter.HKEY_ACT_NAME },
-                                    new int[]{ R.id.tv_name});
-        gv.setAdapter(ga);
-        ga.notifyDataSetChanged();
-    }
-
-    /**
      * 加载gridview的适配器类
      */
     public class GVChannelAdapter extends SimpleAdapter {
-        public GVChannelAdapter(Context context, List<? extends Map<String, ?>> data,
-                                String[] from, int[] to) {
+        GVChannelAdapter(Context context, List<? extends Map<String, ?>> data,
+                         String[] from, int[] to) {
             super(context, data, R.layout.gi_channel, from, to);
         }
 

@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -36,14 +37,14 @@ import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.acutility.ACRemindEdit;
 import wxm.KeepAccount.ui.acutility.ACSetting;
+import wxm.KeepAccount.ui.dialog.DlgOKAndNOBase;
 import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
 
 /**
  * 用户登陆后首页面
  */
 public class ACWelcome extends AppCompatActivity
-        implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,
-                    DlgSelectChannel.NoticeDialogListener  {
+        implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener  {
     private static final String TAG = "ACWelcome";
     //private static final int    BTDRAW_WIDTH    = 96;
     //private static final int    BTDRAW_HEIGHT   = 96;
@@ -132,30 +133,6 @@ public class ACWelcome extends AppCompatActivity
         return true;
     }
 
-    // BEGIN FOR DIALOG
-    @Override
-    public void onDialogPositiveClick(android.app.DialogFragment dialog) {
-        //Toast.makeText(this, "you chose fire", Toast.LENGTH_SHORT).show();
-        DlgSelectChannel dsc = UtilFun.cast(dialog);
-        PreferencesUtil.saveHotAction(dsc.getHotChannel());
-
-        mLSData.clear();
-        for(String i : PreferencesUtil.loadHotAction())     {
-            HashMap<String, Object> ihm = new HashMap<>();
-            ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
-            mLSData.add(ihm);
-        }
-
-        DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
-        dapt.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onDialogNegativeClick(android.app.DialogFragment dialog) {
-        //Toast.makeText(this, "you chose cancle", Toast.LENGTH_SHORT).show();
-    }
-    // END FOR DIALOG
-
     /**
      * 执行onclick
      * @param act  onclick的动作
@@ -228,7 +205,29 @@ public class ACWelcome extends AppCompatActivity
                 DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
                 DlgSelectChannel dlg = new DlgSelectChannel();
                 dlg.setHotChannel(dapt.getCurAction());
-                dlg.show(getFragmentManager(), "选择频道");
+                dlg.setDialogListener(new DlgOKAndNOBase.NoticeDialogListener() {
+                    @Override
+                    public void onDialogPositiveClick(DialogFragment dialog) {
+                        DlgSelectChannel dsc = UtilFun.cast(dialog);
+                        PreferencesUtil.saveHotAction(dsc.getHotChannel());
+
+                        mLSData.clear();
+                        for(String i : PreferencesUtil.loadHotAction())     {
+                            HashMap<String, Object> ihm = new HashMap<>();
+                            ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
+                            mLSData.add(ihm);
+                        }
+
+                        DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
+                        dapt.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onDialogNegativeClick(DialogFragment dialog) {
+                    }
+                });
+
+                dlg.show(getSupportFragmentManager(), "选择频道");
             }
             break;
         }

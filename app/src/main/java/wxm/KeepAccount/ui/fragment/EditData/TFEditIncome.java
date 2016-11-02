@@ -28,9 +28,9 @@ import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
-import wxm.KeepAccount.ui.acutility.ACRecordTypeEdit;
 import wxm.KeepAccount.ui.dialog.DlgDatePicker;
 import wxm.KeepAccount.ui.dialog.DlgOKAndNOBase;
+import wxm.KeepAccount.ui.dialog.DlgSelectRecordType;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 
 /**
@@ -318,9 +318,29 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
                 break;
 
                 case R.id.ar_et_info: {
+                    /*
                     Intent it = new Intent(ac, ACRecordTypeEdit.class);
                     it.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.STR_RECORD_INCOME);
                     startActivityForResult(it, 1);
+                    */
+                    DlgSelectRecordType dp = new DlgSelectRecordType();
+                    dp.setOldType(AppGobalDef.STR_RECORD_INCOME, mETInfo.getText().toString());
+                    dp.setDialogListener(new DlgOKAndNOBase.NoticeDialogListener() {
+                        @Override
+                        public void onDialogPositiveClick(DialogFragment dialog) {
+                            DlgSelectRecordType dp_cur = UtilFun.cast_t(dialog);
+                            String cur_info = dp_cur.getCurType();
+                            mETInfo.setText(cur_info);
+                            mETInfo.requestFocus();
+                        }
+
+                        @Override
+                        public void onDialogNegativeClick(DialogFragment dialog) {
+                            mETInfo.requestFocus();
+                        }
+                    });
+
+                    dp.show(getFragmentManager(), "选择类型");
                 }
                 break;
             }
