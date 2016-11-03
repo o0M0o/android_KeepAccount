@@ -58,6 +58,10 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (null != view) {
+            if (UtilFun.StringIsNullOrEmpty(mAction)
+                    || (mAction.equals(AppGobalDef.STR_MODIFY) && null == mOldIncomeNote))
+                return ;
+
             mSelfView = view;
             init_compent(view);
             init_view(view);
@@ -116,27 +120,11 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     }
 
     private void init_view(View v) {
-        if (UtilFun.StringIsNullOrEmpty(mAction)
-                || (mAction.equals(AppGobalDef.STR_MODIFY) && null == mOldIncomeNote))
-            return ;
-
         if (mAction.equals(AppGobalDef.STR_MODIFY)) {
-            String info = mOldIncomeNote.getInfo();
-            String note = mOldIncomeNote.getNote();
-            String date = mOldIncomeNote.getTs().toString().substring(0, 16);
-            String amount = String.format(Locale.CHINA, "%.02f", mOldIncomeNote.getVal());
-
-            if (!UtilFun.StringIsNullOrEmpty(date))
-                mETDate.setText(date);
-
-            if (!UtilFun.StringIsNullOrEmpty(info))
-                mETInfo.setText(info);
-
-            if (!UtilFun.StringIsNullOrEmpty(note))
-                mETNote.setText(note);
-
-            if (!UtilFun.StringIsNullOrEmpty(amount))
-                mETAmount.setText(amount);
+            mETDate.setText(mOldIncomeNote.getTs().toString().substring(0, 16));
+            mETInfo.setText(mOldIncomeNote.getInfo());
+            mETNote.setText(mOldIncomeNote.getNote());
+            mETAmount.setText(String.format(Locale.CHINA, "%.02f", mOldIncomeNote.getVal()));
         } else {
             Activity ac = getActivity();
             Intent it = ac.getIntent();
@@ -288,7 +276,6 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Activity ac = getActivity();
         View v_self = getView();
         if (null != v_self && event.getAction() == MotionEvent.ACTION_DOWN) {
             switch (v.getId()) {
@@ -318,11 +305,6 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
                 break;
 
                 case R.id.ar_et_info: {
-                    /*
-                    Intent it = new Intent(ac, ACRecordTypeEdit.class);
-                    it.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.STR_RECORD_INCOME);
-                    startActivityForResult(it, 1);
-                    */
                     DlgSelectRecordType dp = new DlgSelectRecordType();
                     dp.setOldType(AppGobalDef.STR_RECORD_INCOME, mETInfo.getText().toString());
                     dp.setDialogListener(new DlgOKAndNOBase.NoticeDialogListener() {
@@ -349,17 +331,5 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         }
 
         return false;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(AppGobalDef.INTRET_SURE ==  resultCode)  {
-            String ty = data.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
-            mETInfo.setText(ty);
-            mETInfo.requestFocus();
-        }
-        else    {
-            Log.d(TAG, String.format(Locale.CHINA, "不处理的resultCode(%d)!", resultCode));
-        }
     }
 }

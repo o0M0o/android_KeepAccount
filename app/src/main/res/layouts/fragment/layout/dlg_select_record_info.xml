@@ -12,7 +12,7 @@
         <GridView
             android:layout_width="match_parent"
             android:layout_height="280dp"
-            android:id="@+id/gv_types"
+            android:id="@+id/gv_record_info"
             android:numColumns="4"
             android:verticalSpacing="4dp"
             android:horizontalSpacing="4dp"

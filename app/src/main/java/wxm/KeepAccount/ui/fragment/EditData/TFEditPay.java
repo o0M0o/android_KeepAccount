@@ -67,19 +67,57 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (null != view) {
+            if (UtilFun.StringIsNullOrEmpty(mAction)
+                    || (AppGobalDef.STR_MODIFY.equals(mAction) && null == mOldPayNote))
+                return;
+
             mSelfView = view;
-            init_view(view);
+            init_component();
+            fill_data();
         }
     }
 
-    private void init_view(View v) {
-        if (UtilFun.StringIsNullOrEmpty(mAction)
-                || (AppGobalDef.STR_MODIFY.equals(mAction) && null == mOldPayNote))
-            return ;
+    /**
+     * 填充数据
+     */
+    private void fill_data() {
+        if (mAction.equals(AppGobalDef.STR_MODIFY)) {
+            BudgetItem bi = mOldPayNote.getBudget();
+            if (null != bi) {
+                String bn = bi.getName();
+                int cc = mSPBudget.getAdapter().getCount();
+                for (int i = 0; i < cc; ++i) {
+                    String bni = UtilFun.cast(mSPBudget.getAdapter().getItem(i));
+                    if (bn.equals(bni)) {
+                        mSPBudget.setSelection(i);
+                        break;
+                    }
+                }
+            }
 
+            mETDate.setText(mOldPayNote.getTs().toString().substring(0, 16));
+            mETInfo.setText(mOldPayNote.getInfo());
+            mETNote.setText(mOldPayNote.getNote());
+            mETAmount.setText(String.format(Locale.CHINA, "%.02f", mOldPayNote.getVal()));
+        } else {
+            Activity ac = getActivity();
+            Intent it = ac.getIntent();
+            if (null != it) {
+                String ad_date = it.getStringExtra(AppGobalDef.STR_RECORD_DATE);
+                if (!UtilFun.StringIsNullOrEmpty(ad_date)) {
+                    mETDate.setText(ad_date);
+                }
+            }
+        }
+    }
+
+    /**
+     * 初始化元素
+     */
+    private void init_component() {
         // 填充预算数据
-        mSPBudget = UtilFun.cast(v.findViewById(R.id.ar_sp_budget));
-        TextView mTVBudget = UtilFun.cast(v.findViewById(R.id.ar_tv_budget));
+        mSPBudget = UtilFun.cast(mSelfView.findViewById(R.id.ar_sp_budget));
+        TextView mTVBudget = UtilFun.cast(mSelfView.findViewById(R.id.ar_tv_budget));
         assert null != mSPBudget && null != mTVBudget;
 
         ArrayList<String> data_ls = new ArrayList<>();
@@ -92,11 +130,11 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         }
 
         ArrayAdapter<String> spAdapter = new ArrayAdapter<>(getContext(),
-                    android.R.layout.simple_spinner_item, data_ls);
+                android.R.layout.simple_spinner_item, data_ls);
         spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSPBudget.setAdapter(spAdapter);
 
-        RelativeLayout rl = UtilFun.cast(v.findViewById(R.id.rl_budget));
+        RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_budget));
         if (0 < spAdapter.getCount()) {
             rl.setVisibility(View.VISIBLE);
             mSPBudget.setSelection(0);
@@ -105,10 +143,10 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         }
 
         // 填充其他数据
-        mETInfo = UtilFun.cast(v.findViewById(R.id.ar_et_info));
-        mETDate = UtilFun.cast(v.findViewById(R.id.ar_et_date));
-        mETAmount = UtilFun.cast(v.findViewById(R.id.ar_et_amount));
-        mETNote = UtilFun.cast(v.findViewById(R.id.ar_et_note));
+        mETInfo = UtilFun.cast(mSelfView.findViewById(R.id.ar_et_info));
+        mETDate = UtilFun.cast(mSelfView.findViewById(R.id.ar_et_date));
+        mETAmount = UtilFun.cast(mSelfView.findViewById(R.id.ar_et_amount));
+        mETNote = UtilFun.cast(mSelfView.findViewById(R.id.ar_et_note));
 
         mETDate.setOnTouchListener(this);
         mETInfo.setOnTouchListener(this);
@@ -152,47 +190,6 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                 }
             }
         });
-
-        if (mAction.equals(AppGobalDef.STR_MODIFY)) {
-            String info = mOldPayNote.getInfo();
-            String note = mOldPayNote.getNote();
-            String date = mOldPayNote.getTs().toString().substring(0, 16);
-            String amount = String.format(Locale.CHINA, "%.02f", mOldPayNote.getVal());
-
-            BudgetItem bi = mOldPayNote.getBudget();
-            if (null != bi) {
-                String bn = bi.getName();
-                int cc = mSPBudget.getAdapter().getCount();
-                for (int i = 0; i < cc; ++i) {
-                    String bni = UtilFun.cast(mSPBudget.getAdapter().getItem(i));
-                    if (bn.equals(bni)) {
-                        mSPBudget.setSelection(i);
-                        break;
-                    }
-                }
-            }
-
-            if (!UtilFun.StringIsNullOrEmpty(date))
-                mETDate.setText(date);
-
-            if (!UtilFun.StringIsNullOrEmpty(info))
-                mETInfo.setText(info);
-
-            if (!UtilFun.StringIsNullOrEmpty(note))
-                mETNote.setText(note);
-
-            if (!UtilFun.StringIsNullOrEmpty(amount))
-                mETAmount.setText(amount);
-        } else {
-            Activity ac = getActivity();
-            Intent it = ac.getIntent();
-            if (null != it) {
-                String ad_date = it.getStringExtra(AppGobalDef.STR_RECORD_DATE);
-                if (!UtilFun.StringIsNullOrEmpty(ad_date)) {
-                    mETDate.setText(ad_date);
-                }
-            }
-        }
     }
 
 
@@ -384,11 +381,6 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                 break;
 
                 case R.id.ar_et_info: {
-                    /*
-                    Intent it = new Intent(ac, ACRecordTypeEdit.class);
-                    it.putExtra(AppGobalDef.STR_RECORD_TYPE, AppGobalDef.STR_RECORD_PAY);
-                    startActivityForResult(it, 1);
-                    */
                     DlgSelectRecordType dp = new DlgSelectRecordType();
                     dp.setOldType(AppGobalDef.STR_RECORD_PAY, mETInfo.getText().toString());
                     dp.setDialogListener(new DlgOKAndNOBase.NoticeDialogListener() {
@@ -415,17 +407,5 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         }
 
         return false;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(AppGobalDef.INTRET_SURE ==  resultCode)  {
-            String ty = data.getStringExtra(AppGobalDef.STR_RECORD_TYPE);
-            mETInfo.setText(ty);
-            mETInfo.requestFocus();
-        }
-        else    {
-            Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
-        }
     }
 }

@@ -36,17 +36,15 @@ public class ACAddUsr
         mMHHandler = new ACAUMsgHandler(this);
 
         // init view
-        Button bt_confirm = (Button)findViewById(R.id.ac_nabt_confirm);
-        Button bt_giveup = (Button)findViewById(R.id.ac_nabt_giveup);
-        assert bt_confirm != null && bt_giveup != null;
+        Button bt_confirm = UtilFun.cast_t(findViewById(R.id.ac_nabt_confirm));
+        Button bt_giveup = UtilFun.cast_t(findViewById(R.id.ac_nabt_giveup));
 
         bt_confirm.setOnClickListener(this);
         bt_giveup.setOnClickListener(this);
 
-        EditText et_usrname = (EditText)findViewById(R.id.ac_naet_accountname);
-        EditText et_pwd = (EditText)findViewById(R.id.ac_naet_accountpwd);
-        EditText et_repeatpwd = (EditText)findViewById(R.id.ac_naet_repeatpwd);
-        assert et_usrname != null && et_pwd != null && et_repeatpwd != null;
+        EditText et_usrname = UtilFun.cast_t(findViewById(R.id.ac_naet_accountname));
+        EditText et_pwd = UtilFun.cast_t(findViewById(R.id.ac_naet_accountpwd));
+        EditText et_repeatpwd = UtilFun.cast_t(findViewById(R.id.ac_naet_repeatpwd));
 
         et_usrname.setOnEditorActionListener(this);
         et_pwd.setOnEditorActionListener(this);

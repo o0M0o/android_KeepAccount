@@ -89,9 +89,9 @@ public class DlgSelectRecordType extends DlgOKAndNOBase {
         final GVTypeAdapter ga = new GVTypeAdapter(getActivity(), mLHMData,
                 new String[] { KEY_NAME }, new int[]{ R.id.tv_type_name });
 
-        View vw = View.inflate(getActivity(), R.layout.dlg_select_type, null);
+        View vw = View.inflate(getActivity(), R.layout.dlg_select_record_info, null);
         final TextView tv_note = UtilFun.cast_t(vw.findViewById(R.id.tv_hint));
-        GridView gv = UtilFun.cast_t(vw.findViewById(R.id.gv_types));
+        GridView gv = UtilFun.cast_t(vw.findViewById(R.id.gv_record_info));
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
