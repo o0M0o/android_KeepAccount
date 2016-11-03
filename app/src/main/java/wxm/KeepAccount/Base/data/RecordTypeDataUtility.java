@@ -59,4 +59,17 @@ public class RecordTypeDataUtility extends  DataUtilityBase {
 
         return br;
     }
+
+    /**
+     * 根据ID删除数据
+     * @param ri_id  待删除数据
+     * @return  如果删除成功返回ture, 否则返回false
+     */
+    public boolean removeItemById(int ri_id)    {
+        boolean br = 1== AppModel.getDBHelper().getRTItemREDao().deleteById(ri_id);
+        if(br)
+            onDataDelete();
+
+        return br;
+    }
 }
