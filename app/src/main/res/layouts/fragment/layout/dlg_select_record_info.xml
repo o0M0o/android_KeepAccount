@@ -4,36 +4,67 @@
     android:background="@color/aliceblue"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/rl_action"
+        android:background="@color/grey_1"
+        android:layout_margin="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/rl_pencil"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:background="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_pencil"
+                android:padding="8dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_pencil"
+                android:layout_width="36dp"
+                android:layout_height="36dp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rl_types"
+        android:background="@color/grey_1"
         android:layout_margin="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <GridView
             android:layout_width="match_parent"
-            android:layout_height="280dp"
+            android:layout_height="220dp"
             android:id="@+id/gv_record_info"
             android:numColumns="4"
             android:verticalSpacing="4dp"
             android:horizontalSpacing="4dp"
             android:columnWidth="42dp"
-            android:background="@color/button_material_light"
             android:padding="8dp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_hint"
-        android:layout_margin="4dp"
-        android:background="@color/grey_1"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
         android:layout_marginTop="2dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/grey_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/tv_hint"
+            android:textSize="16sp"
             android:layout_centerVertical="true"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="6dp"
             android:text="交通类费用"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

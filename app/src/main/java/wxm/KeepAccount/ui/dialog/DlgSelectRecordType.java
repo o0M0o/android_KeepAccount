@@ -1,10 +1,12 @@
 package wxm.KeepAccount.ui.dialog;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.data.RecordTypeDataUtility;
 import wxm.KeepAccount.Base.db.RecordTypeItem;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.acutility.ACRecordInfoEdit;
 
 /**
  * 选择“记录类型”对话框
@@ -33,9 +36,13 @@ public class DlgSelectRecordType extends DlgOKAndNOBase {
     private final static String VAL_NOT_SELECTED = "val_not_selected";
 
     private ArrayList<HashMap<String, String>>      mLHMData;
+    private GVTypeAdapter                           mGAAdapter;
+    private TextView                                mTVNote;
 
     private String  mRootType;
     private String  mCurType;
+
+    private RelativeLayout mRLPencil;
 
     /**
      * 设置以前的“记录类型”
@@ -64,13 +71,62 @@ public class DlgSelectRecordType extends DlgOKAndNOBase {
                         && !AppGobalDef.STR_RECORD_INCOME.equals(mRootType)))
             return null;
 
+        // init data
+        mLHMData = new ArrayList<>();
+        mGAAdapter= new GVTypeAdapter(getActivity(), mLHMData,
+                new String[] { KEY_NAME }, new int[]{ R.id.tv_type_name });
         InitDlgTitle(AppGobalDef.STR_RECORD_PAY.equals(mRootType) ? "选择支出类型" : "选择收入类型",
                 "接受", "放弃");
+
+        // for UI component
+        View vw = View.inflate(getActivity(), R.layout.dlg_select_record_info, null);
+        mTVNote = UtilFun.cast_t(vw.findViewById(R.id.tv_hint));
+        GridView gv = UtilFun.cast_t(vw.findViewById(R.id.gv_record_info));
+        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String tv_str = mLHMData.get(position).get(KEY_NAME);
+                if(!tv_str.equals(mCurType))    {
+                    for(HashMap<String, String> hm : mLHMData)  {
+                        if(hm.get(KEY_NAME).equals(tv_str)) {
+                            hm.put(KEY_SELECTED, VAL_SELECTED);
+                            mTVNote.setText(UtilFun.StringIsNullOrEmpty(hm.get(KEY_NOTE)) ?
+                                    "" : hm.get(KEY_NOTE));
+                        } else  {
+                            hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
+                        }
+                    }
+
+                    mCurType = tv_str;
+                    mGAAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+        gv.setAdapter(mGAAdapter);
+
+        // for edit action
+        mRLPencil = UtilFun.cast_t(vw.findViewById(R.id.rl_pencil));
+        mRLPencil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(getContext(), ACRecordInfoEdit.class);
+                it.putExtra(ACRecordInfoEdit.IT_PARA_RECORDTYPE, mRootType);
+
+                startActivityForResult(it, 1);
+            }
+        });
+
+        // for gridview show
+        loadData();
+        return vw;
+    }
+
+    private void loadData() {
         RecordTypeDataUtility rd = AppModel.getRecordTypeUtility();
         List<RecordTypeItem> al_type = AppGobalDef.STR_RECORD_PAY.equals(mRootType) ?
                                                 rd.getAllPayItem() : rd.getAllIncomeItem();
         String old_note = null;
-        mLHMData = new ArrayList<>();
+        mLHMData.clear();
         for(RecordTypeItem ri : al_type)    {
             HashMap<String, String> hmd = new HashMap<>();
             hmd.put(KEY_NAME, ri.getType());
@@ -86,38 +142,13 @@ public class DlgSelectRecordType extends DlgOKAndNOBase {
             mLHMData.add(hmd);
         }
 
-        final GVTypeAdapter ga = new GVTypeAdapter(getActivity(), mLHMData,
-                new String[] { KEY_NAME }, new int[]{ R.id.tv_type_name });
+        mTVNote.setText(UtilFun.StringIsNullOrEmpty(old_note) ? "" : old_note);
+        mGAAdapter.notifyDataSetChanged();
+    }
 
-        View vw = View.inflate(getActivity(), R.layout.dlg_select_record_info, null);
-        final TextView tv_note = UtilFun.cast_t(vw.findViewById(R.id.tv_hint));
-        GridView gv = UtilFun.cast_t(vw.findViewById(R.id.gv_record_info));
-        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String tv_str = mLHMData.get(position).get(KEY_NAME);
-                if(!tv_str.equals(mCurType))    {
-                    for(HashMap<String, String> hm : mLHMData)  {
-                        if(hm.get(KEY_NAME).equals(tv_str)) {
-                            hm.put(KEY_SELECTED, VAL_SELECTED);
-                            tv_note.setText(UtilFun.StringIsNullOrEmpty(hm.get(KEY_NOTE)) ?
-                                    "" : hm.get(KEY_NOTE));
-                        } else  {
-                            hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
-                        }
-                    }
-
-                    mCurType = tv_str;
-                    ga.notifyDataSetChanged();
-                }
-            }
-        });
-
-        gv.setAdapter(ga);
-        ga.notifyDataSetChanged();
-
-        tv_note.setText(UtilFun.StringIsNullOrEmpty(old_note) ? "" : old_note);
-        return vw;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)   {
+        loadData();
     }
 
 

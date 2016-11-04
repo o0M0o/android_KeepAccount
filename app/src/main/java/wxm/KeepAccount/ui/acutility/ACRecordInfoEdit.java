@@ -47,7 +47,7 @@ public class ACRecordInfoEdit extends AppCompatActivity {
         mMISave   = menu.findItem(R.id.mi_save);
         mMIGiveup = menu.findItem(R.id.mi_giveup);
         mMISwitch.setVisible(false);
-        mMISave.setVisible(false);
+        mMIGiveup.setVisible(false);
         return true;
     }
 

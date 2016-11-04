@@ -83,6 +83,14 @@ public abstract class DlgOKAndNOBase extends DialogFragment  {
     protected abstract View InitDlgView();
 
     /**
+     * 获取对话框视图
+     * @return  对话框视图
+     */
+    protected View getDlgView() {
+        return mVWDlg;
+    }
+
+    /**
      * 初始化对话框辅助字符串
      * @param title         对话框title
      * @param OKName        “OK”选项名

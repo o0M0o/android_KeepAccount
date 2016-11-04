@@ -40,7 +40,8 @@
         <activity
             android:name=".ui.acinterface.ACWelcome"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.acutility.ACNoteEdit" />
+        <activity android:name=".ui.acutility.ACNoteEdit"
+            android:exported="true"/>
         <activity
             android:name=".ui.acutility.ACRemindEdit"
             android:exported="true" />
