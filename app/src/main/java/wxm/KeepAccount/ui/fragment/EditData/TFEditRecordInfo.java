@@ -16,6 +16,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,6 +39,16 @@ import wxm.KeepAccount.ui.fragment.base.TFEditBase;
  */
 public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener {
     private final static String TAG = "TFEditRecordInfo";
+
+    // 没有选中action
+    private final static int SELECTED_NONE = 1;
+    // 选中"minus"
+    private final static int SELECTED_MINUS = 2;
+    // 选中"accpet"
+    private final static int SELECTED_ACCPET = 3;
+    // 选中"reject"
+    private final static int SELECTED_REJECT = 4;
+
 
     private View        mSelfView;
     private String      mEditType;
@@ -60,6 +72,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     private GridView        mGVHolder;
     private RelativeLayout  mRLActAdd;
     private RelativeLayout  mRLActMinus;
+    private RelativeLayout  mRLActPencil;
     private RelativeLayout  mRLActAccept;
     private RelativeLayout  mRLActReject;
 
@@ -92,76 +105,120 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
             mRLActMinus = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_minus));
             mRLActAccept = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_accept));
             mRLActReject = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_reject));
+            mRLActPencil = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_pencil));
 
-            // fill data
-            if(mEditType.equals(AppGobalDef.STR_RECORD_PAY))    {
-                init_pay_info();
-            } else  {
-                init_income_info();
-            }
+            // init gv
+            mLHMData = new ArrayList<>();
+            mGVAdapter = new GVTypeAdapter(getActivity(), mLHMData,
+                    new String[]{KEY_NAME}, new int[]{R.id.tv_type_name});
+            mGVHolder.setAdapter(mGVAdapter);
+            mGVHolder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    onGVItemClick(position);
+                }
+            });
+            load_info();
 
             // init action
             mRLActAdd.setOnClickListener(this);
             mRLActMinus.setOnClickListener(this);
             mRLActAccept.setOnClickListener(this);
             mRLActReject.setOnClickListener(this);
-
-            mRLActAccept.setVisibility(View.INVISIBLE);
-            mRLActReject.setVisibility(View.INVISIBLE);
+            mRLActPencil.setOnClickListener(this);
+            update_acts(SELECTED_NONE);
         }
     }
 
-    private void init_income_info() {
-        List<RecordTypeItem> al_type = AppModel.getRecordTypeUtility().getAllIncomeItem();
-        mLHMData = new ArrayList<>();
-        for(RecordTypeItem ri : al_type)    {
-            HashMap<String, String> hmd = new HashMap<>();
-            hmd.put(KEY_NAME, ri.getType());
-            hmd.put(KEY_NOTE, ri.getNote());
-            hmd.put(KEY_SELECTED, VAL_NOT_SELECTED);
-            hmd.put(KEY_ID, String.valueOf(ri.get_id()));
+    /**
+     * 更新界面动作状态
+     * @param type
+     */
+    private void update_acts(int type)  {
+        switch (type)   {
+            case SELECTED_NONE :
+                mRLActPencil.setVisibility(View.INVISIBLE);
+                mRLActAdd.setVisibility(View.VISIBLE);
+                mRLActMinus.setVisibility(View.VISIBLE);
+                mRLActAccept.setVisibility(View.INVISIBLE);
+                mRLActReject.setVisibility(View.INVISIBLE);
+                break;
 
-            mLHMData.add(hmd);
+            case SELECTED_MINUS :
+                mRLActPencil.setVisibility(View.INVISIBLE);
+                if(mRLActMinus.isSelected())    {
+                    mRLActAdd.setVisibility(View.VISIBLE);
+                    mRLActAccept.setVisibility(View.INVISIBLE);
+                    mRLActReject.setVisibility(View.INVISIBLE);
+
+                    mRLActMinus.setBackgroundColor(mCLNotSelected);
+                    mRLActMinus.setSelected(false);
+                } else {
+                    mRLActAdd.setVisibility(View.INVISIBLE);
+                    mRLActAccept.setVisibility(View.VISIBLE);
+                    mRLActReject.setVisibility(View.VISIBLE);
+
+                    mRLActMinus.setBackgroundColor(mCLSelected);
+                    mRLActMinus.setSelected(true);
+                }
+                break;
+
+            case SELECTED_ACCPET :
+                mRLActPencil.setVisibility(View.INVISIBLE);
+                mRLActAdd.setVisibility(View.VISIBLE);
+                mRLActAccept.setVisibility(View.INVISIBLE);
+                mRLActReject.setVisibility(View.INVISIBLE);
+                mRLActMinus.setBackgroundColor(mCLNotSelected);
+                break;
+
+            case SELECTED_REJECT :
+                mRLActPencil.setVisibility(View.INVISIBLE);
+                mRLActAdd.setVisibility(View.VISIBLE);
+                mRLActAccept.setVisibility(View.INVISIBLE);
+                mRLActReject.setVisibility(View.INVISIBLE);
+                mRLActMinus.setBackgroundColor(mCLNotSelected);
+                break;
+        }
+    }
+
+    /**
+     * 加载数据到gird view
+     */
+    private void load_info() {
+        mLHMData.clear();
+        List<RecordTypeItem> al_type;
+        if(mEditType.equals(AppGobalDef.STR_RECORD_PAY))    {
+            al_type = AppModel.getRecordTypeUtility().getAllPayItem();
+        } else  {
+            al_type = AppModel.getRecordTypeUtility().getAllIncomeItem();
         }
 
-        mGVAdapter = new GVTypeAdapter(getActivity(), mLHMData,
-                        new String[] { KEY_NAME }, new int[]{ R.id.tv_type_name });
-        mGVHolder.setAdapter(mGVAdapter);
-        mGVHolder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                onGVItemClick(position);
+        if(null != al_type) {
+            Collections.sort(al_type, new Comparator<RecordTypeItem>() {
+                @Override
+                public int compare(RecordTypeItem o1, RecordTypeItem o2) {
+                    return o1.getType().compareTo(o2.getType());
+                }
+            });
+
+            for (RecordTypeItem ri : al_type) {
+                HashMap<String, String> hmd = new HashMap<>();
+                hmd.put(KEY_NAME, ri.getType());
+                hmd.put(KEY_NOTE, ri.getNote());
+                hmd.put(KEY_SELECTED, VAL_NOT_SELECTED);
+                hmd.put(KEY_ID, String.valueOf(ri.get_id()));
+
+                mLHMData.add(hmd);
             }
-        });
-        mGVAdapter.notifyDataSetChanged();
-    }
 
-    private void init_pay_info() {
-        List<RecordTypeItem> al_type = AppModel.getRecordTypeUtility().getAllPayItem();
-        mLHMData = new ArrayList<>();
-        for(RecordTypeItem ri : al_type)    {
-            HashMap<String, String> hmd = new HashMap<>();
-            hmd.put(KEY_NAME, ri.getType());
-            hmd.put(KEY_NOTE, ri.getNote());
-            hmd.put(KEY_SELECTED, VAL_NOT_SELECTED);
-            hmd.put(KEY_ID, String.valueOf(ri.get_id()));
-
-            mLHMData.add(hmd);
+            mGVAdapter.notifyDataSetChanged();
         }
-
-        mGVAdapter = new GVTypeAdapter(getActivity(), mLHMData,
-                        new String[] { KEY_NAME }, new int[]{ R.id.tv_type_name });
-        mGVHolder.setAdapter(mGVAdapter);
-        mGVHolder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                onGVItemClick(position);
-            }
-        });
-        mGVAdapter.notifyDataSetChanged();
     }
 
-
+    /**
+     * GridView item选中后调用的函数
+     * @param position  当前点击位置
+     */
     private void onGVItemClick(int position) {
         if(mRLActMinus.isSelected())    {
             HashMap<String, String> hm = mLHMData.get(position);
@@ -180,20 +237,28 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
             mGVAdapter.notifyDataSetChanged();
         } else {
             String tv_str = mLHMData.get(position).get(KEY_NAME);
-            if (!tv_str.equals(mCurType)) {
-                for (HashMap<String, String> hm : mLHMData) {
-                    if (hm.get(KEY_NAME).equals(tv_str)) {
+            for (HashMap<String, String> hm : mLHMData) {
+                if (hm.get(KEY_NAME).equals(tv_str)) {
+                    if(hm.get(KEY_SELECTED).equals(VAL_NOT_SELECTED)) {
                         hm.put(KEY_SELECTED, VAL_SELECTED);
                         mTVNote.setText(UtilFun.StringIsNullOrEmpty(hm.get(KEY_NOTE)) ?
                                 "" : hm.get(KEY_NOTE));
-                    } else {
-                        hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
-                    }
-                }
 
-                mCurType = tv_str;
-                mGVAdapter.notifyDataSetChanged();
+                        mRLActPencil.setVisibility(View.VISIBLE);
+                        mCurType = tv_str;
+                    } else  {
+                        hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
+                        mTVNote.setText("");
+
+                        mRLActPencil.setVisibility(View.INVISIBLE);
+                        mCurType = "";
+                    }
+                } else {
+                    hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
+                }
             }
+
+            mGVAdapter.notifyDataSetChanged();
         }
     }
 
@@ -211,7 +276,17 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
 
     @Override
     public Object getCurData() {
-        return null;
+        RecordTypeItem ri = null;
+        if(!UtilFun.StringIsNullOrEmpty(mCurType)) {
+            for (HashMap<String, String> hm : mLHMData) {
+                if(hm.get(KEY_NAME).equals(mCurType))   {
+                    ri = AppModel.getRecordTypeUtility().getItemById(Integer.valueOf(hm.get(KEY_ID)));
+                    break;
+                }
+            }
+        }
+
+        return ri;
     }
 
     @Override
@@ -220,11 +295,12 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        int vid = v.getId();
+        final int vid = v.getId();
         switch (vid)    {
+            case R.id.rl_pencil :
             case R.id.rl_add :  {
                 DlgRecordInfo dp = new DlgRecordInfo();
-                dp.setInitDate(null);
+                dp.setInitDate(R.id.rl_pencil == vid ? (RecordTypeItem)getCurData() : null);
                 dp.setRecordType(mEditType);
                 dp.setDialogListener(new DlgOKAndNOBase.NoticeDialogListener() {
                     @Override
@@ -232,12 +308,11 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                         DlgRecordInfo cur_dp = UtilFun.cast_t(dialog);
                         RecordTypeItem ri = cur_dp.getCurDate();
                         if(null != ri) {
-                            AppModel.getRecordTypeUtility().addItem(ri);
-                            if(mEditType.equals(AppGobalDef.STR_RECORD_PAY))    {
-                                init_pay_info();
-                            } else  {
-                                init_income_info();
-                            }
+                            if(R.id.rl_add == vid)
+                                AppModel.getRecordTypeUtility().addItem(ri);
+                            else
+                                AppModel.getRecordTypeUtility().modifyItem(ri);
+                            load_info();
                         }
                     }
 
@@ -246,35 +321,20 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                     }
                 });
 
-                dp.show(getFragmentManager(), "选择日期");
+                dp.show(getFragmentManager(), "添加记录信息");
             }
             break;
 
             case R.id.rl_minus :    {
-                if(mRLActMinus.isSelected())    {
-                    mRLActAdd.setVisibility(View.VISIBLE);
-                    mRLActAccept.setVisibility(View.INVISIBLE);
-                    mRLActReject.setVisibility(View.INVISIBLE);
-
-                    mRLActMinus.setBackgroundColor(mCLNotSelected);
-                    mRLActMinus.setSelected(false);
-                } else {
-                    mRLActAdd.setVisibility(View.INVISIBLE);
-                    mRLActAccept.setVisibility(View.VISIBLE);
-                    mRLActReject.setVisibility(View.VISIBLE);
-
-                    mRLActMinus.setBackgroundColor(mCLSelected);
-                    mRLActMinus.setSelected(true);
-
-                    mCurType = "";
-                    for (HashMap<String, String> hm : mLHMData) {
-                        hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
-                    }
-
-                    mRLActAccept.setVisibility(View.INVISIBLE);
-                    mTVNote.setText("请选择待删除项");
-                    mGVAdapter.notifyDataSetChanged();
+                update_acts(SELECTED_MINUS);
+                mCurType = "";
+                for (HashMap<String, String> hm : mLHMData) {
+                    hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
                 }
+
+                mRLActAccept.setVisibility(View.INVISIBLE);
+                mTVNote.setText(mRLActMinus.isSelected() ? "请选择待删除项" : "");
+                mGVAdapter.notifyDataSetChanged();
             }
             break;
 
@@ -298,17 +358,8 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                             }
 
                             mTVNote.setText("");
-                            if(mEditType.equals(AppGobalDef.STR_RECORD_PAY))    {
-                                init_pay_info();
-                            } else  {
-                                init_income_info();
-                            }
-
-                            // for ui
-                            mRLActAdd.setVisibility(View.VISIBLE);
-                            mRLActAccept.setVisibility(View.INVISIBLE);
-                            mRLActReject.setVisibility(View.INVISIBLE);
-                            mRLActMinus.setBackgroundColor(mCLNotSelected);
+                            load_info();
+                            update_acts(SELECTED_ACCPET);
                         }
                     });
                     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -321,27 +372,15 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                     dlg.show();
                 } else {
                     mTVNote.setText("");
-                    if(mEditType.equals(AppGobalDef.STR_RECORD_PAY))    {
-                        init_pay_info();
-                    } else  {
-                        init_income_info();
-                    }
-
-                    // for ui
-                    mRLActAdd.setVisibility(View.VISIBLE);
-                    mRLActAccept.setVisibility(View.INVISIBLE);
-                    mRLActReject.setVisibility(View.INVISIBLE);
-                    mRLActMinus.setBackgroundColor(mCLNotSelected);
+                    load_info();
+                    update_acts(SELECTED_ACCPET);
                 }
             }
             break;
 
             case R.id.rl_reject :   {
                 // for ui
-                mRLActAdd.setVisibility(View.VISIBLE);
-                mRLActAccept.setVisibility(View.INVISIBLE);
-                mRLActReject.setVisibility(View.INVISIBLE);
-                mRLActMinus.setBackgroundColor(mCLNotSelected);
+                update_acts(SELECTED_REJECT);
 
                 // for gv
                 for (HashMap<String, String> hm : mLHMData) {

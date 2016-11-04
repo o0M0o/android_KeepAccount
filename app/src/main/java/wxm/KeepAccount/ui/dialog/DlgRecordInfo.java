@@ -35,6 +35,8 @@ public class DlgRecordInfo extends DlgOKAndNOBase {
             return null;
 
         RecordTypeItem ri = new RecordTypeItem();
+        if(null != mOldData)
+            ri.set_id(mOldData.get_id());
         ri.setItemType(AppGobalDef.STR_RECORD_PAY.equals(mRecordType) ?
                 RecordTypeItem.DEF_PAY : RecordTypeItem.DEF_INCOME);
         ri.setType(name);
@@ -55,7 +57,7 @@ public class DlgRecordInfo extends DlgOKAndNOBase {
         mTIETName = UtilFun.cast_t(vw.findViewById(R.id.ti_name));
         mTIETNote = UtilFun.cast_t(vw.findViewById(R.id.ti_note));
         if(null != mOldData)    {
-            mTIETName.setText(mOldData.getItemType());
+            mTIETName.setText(mOldData.getType());
             mTIETNote.setText(mOldData.getNote());
         }
 

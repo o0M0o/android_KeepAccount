@@ -72,4 +72,13 @@ public class RecordTypeDataUtility extends  DataUtilityBase {
 
         return br;
     }
+
+    /**
+     * 根据ID查找数据
+     * @param id   待查找数据ID
+     * @return   若有则返回数据
+     */
+    public RecordTypeItem getItemById(int id)   {
+        return AppModel.getDBHelper().getRTItemREDao().queryForId(id);
+    }
 }
