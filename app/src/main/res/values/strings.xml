@@ -109,4 +109,5 @@
     <string name="cn_name">名字</string>
     <string name="hint_name">名字</string>
     <string name="hint_note">说明</string>
+    <string name="manager"> 管理 </string>
 </resources>

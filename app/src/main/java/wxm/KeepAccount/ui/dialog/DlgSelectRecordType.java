@@ -2,15 +2,20 @@ package wxm.KeepAccount.ui.dialog;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +47,16 @@ public class DlgSelectRecordType extends DlgOKAndNOBase {
     private String  mRootType;
     private String  mCurType;
 
-    private RelativeLayout mRLPencil;
+    private RelativeLayout  mRLPencil;
+    private RelativeLayout  mRLSort;
+    private TextView        mTVSort;
+    private ImageView       mIVSort;
+
+    private Drawable    mDASortUp;
+    private Drawable    mDASortDown;
+    private String      mStrSortUp;
+    private String      mStrSortDown;
+
 
     /**
      * 设置以前的“记录类型”
@@ -78,6 +92,12 @@ public class DlgSelectRecordType extends DlgOKAndNOBase {
         InitDlgTitle(AppGobalDef.STR_RECORD_PAY.equals(mRootType) ? "选择支出类型" : "选择收入类型",
                 "接受", "放弃");
 
+        Resources res = getContext().getResources();
+        mDASortDown = res.getDrawable(R.drawable.ic_sort_down_1);
+        mDASortUp = res.getDrawable(R.drawable.ic_sort_up_1);
+        mStrSortUp = res.getString(R.string.cn_sort_up_by_name);
+        mStrSortDown = res.getString(R.string.cn_sort_down_by_name);
+
         // for UI component
         View vw = View.inflate(getActivity(), R.layout.dlg_select_record_info, null);
         mTVNote = UtilFun.cast_t(vw.findViewById(R.id.tv_hint));
@@ -104,7 +124,7 @@ public class DlgSelectRecordType extends DlgOKAndNOBase {
         });
         gv.setAdapter(mGAAdapter);
 
-        // for edit action
+        // for action
         mRLPencil = UtilFun.cast_t(vw.findViewById(R.id.rl_pencil));
         mRLPencil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +133,19 @@ public class DlgSelectRecordType extends DlgOKAndNOBase {
                 it.putExtra(ACRecordInfoEdit.IT_PARA_RECORDTYPE, mRootType);
 
                 startActivityForResult(it, 1);
+            }
+        });
+
+        mRLSort = UtilFun.cast_t(vw.findViewById(R.id.rl_sort));
+        mTVSort = UtilFun.cast_t(mRLSort.findViewById(R.id.tv_sort));
+        mIVSort = UtilFun.cast_t(mRLSort.findViewById(R.id.iv_sort));
+        mRLSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String cur_name = mTVSort.getText().toString();
+                mTVSort.setText(mStrSortUp.equals(cur_name) ? mStrSortDown : mStrSortUp);
+                mIVSort.setImageDrawable(mStrSortUp.equals(cur_name) ? mDASortDown : mDASortUp);
+                loadData();
             }
         });
 
@@ -125,6 +158,15 @@ public class DlgSelectRecordType extends DlgOKAndNOBase {
         RecordTypeDataUtility rd = AppModel.getRecordTypeUtility();
         List<RecordTypeItem> al_type = AppGobalDef.STR_RECORD_PAY.equals(mRootType) ?
                                                 rd.getAllPayItem() : rd.getAllIncomeItem();
+        Collections.sort(al_type, new Comparator<RecordTypeItem>() {
+            @Override
+            public int compare(RecordTypeItem o1, RecordTypeItem o2) {
+                return mStrSortUp.equals(mTVSort.getText().toString()) ?
+                                o1.getType().compareTo(o2.getType())
+                                : o2.getType().compareTo(o1.getType());
+            }
+        });
+
         String old_note = null;
         mLHMData.clear();
         for(RecordTypeItem ri : al_type)    {
