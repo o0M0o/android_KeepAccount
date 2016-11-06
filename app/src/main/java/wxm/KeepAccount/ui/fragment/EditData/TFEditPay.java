@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -121,9 +120,9 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         assert null != mSPBudget && null != mTVBudget;
 
         ArrayList<String> data_ls = new ArrayList<>();
+        data_ls.add("无预算(不使用预算)");
         List<BudgetItem> bils = AppModel.getBudgetUtility().GetBudget();
         if (!ToolUtil.ListIsNullOrEmpty(bils)) {
-            data_ls.add("无预算(不使用预算)");
             for (BudgetItem i : bils) {
                 data_ls.add(i.getName());
             }
@@ -134,6 +133,8 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSPBudget.setAdapter(spAdapter);
 
+        /*
+        不显示,UI会比较难看
         RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_budget));
         if (0 < spAdapter.getCount()) {
             rl.setVisibility(View.VISIBLE);
@@ -141,6 +142,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         } else {
             rl.setVisibility(View.INVISIBLE);
         }
+        */
 
         // 填充其他数据
         mETInfo = UtilFun.cast(mSelfView.findViewById(R.id.ar_et_info));

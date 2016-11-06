@@ -31,6 +31,7 @@ public class ACNoteShow extends AppCompatActivity {
 
     private TabLayout   mTLTabs;
     private ViewPager   mVPTabs;
+    private boolean[]   mBADataChange;
 
     private IDataChangeNotice mIDCNotice = new IDataChangeNotice() {
         @Override
@@ -52,6 +53,12 @@ public class ACNoteShow extends AppCompatActivity {
             NoteShowDataHelper.getInstance().refreshData();
             TFShowBase tb = getHotTabItem();
             tb.onDataChange();
+
+            int cur_pos = mVPTabs.getCurrentItem();
+            for(int i = 0; i < mBADataChange.length; i++)   {
+                if(cur_pos != i)
+                    mBADataChange[i] = true;
+            }
         }
     };
 
@@ -178,7 +185,12 @@ public class ACNoteShow extends AppCompatActivity {
         mTLTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mVPTabs.setCurrentItem(tab.getPosition());
+                int pos = tab.getPosition();
+                mVPTabs.setCurrentItem(pos);
+                if(mBADataChange[pos])  {
+                    getHotTabItem().onDataChange();
+                    mBADataChange[pos] = false;
+                }
             }
 
             @Override
@@ -191,16 +203,13 @@ public class ACNoteShow extends AppCompatActivity {
 
             }
         });
+
+        mBADataChange = new boolean[mTLTabs.getTabCount()];
+        for(int i = 0; i < mBADataChange.length; ++i)   {
+            mBADataChange[i] = false;
+        }
     }
 
-    /**
-     * 切换视图类型（列表视图/图表)
-     */
-    public void switchShow()    {
-        TFShowBase hot = getHotTabItem();
-        if(null != hot)
-            hot.switchPage();
-    }
 
     /**
      * 跳至对应名称的标签页
@@ -235,21 +244,6 @@ public class ACNoteShow extends AppCompatActivity {
     public void filterView(List<String> ls_tag) {
         TFShowBase hot = getHotTabItem();
         hot.filterView(ls_tag);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        /*
-        if(AppGobalDef.INTRET_RECORD_ADD == resultCode
-                || AppGobalDef.INTRET_RECORD_MODIFY == resultCode
-                || AppGobalDef.INTRET_SURE == resultCode)  {
-            NoteShowDataHelper.getInstance().refreshData();
-        }
-
-        getHotTabItem().onDataChange(requestCode, resultCode, data);
-        */
     }
 
 

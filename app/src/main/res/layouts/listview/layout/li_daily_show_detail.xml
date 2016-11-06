@@ -5,7 +5,7 @@
 
     <RelativeLayout
         android:id="@+id/rl_income"
-        android:background="@color/grey_4"
+        android:background="@color/grey_3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -38,7 +38,7 @@
 
             <RelativeLayout
                 android:id="@+id/rl_iclock"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:layout_marginBottom="2dp"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
 
             <RelativeLayout
                 android:id="@+id/rl_income_note"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -110,7 +110,7 @@
 
     <RelativeLayout
         android:id="@+id/rl_pay"
-        android:background="@color/grey_3"
+        android:background="@color/grey_4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -155,8 +155,8 @@
 
             <RelativeLayout
                 android:id="@+id/rl_clock"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -180,8 +180,7 @@
 
             <RelativeLayout
                 android:id="@+id/rl_budget"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -205,7 +204,7 @@
 
             <RelativeLayout
                 android:id="@+id/rl_pay_note"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">

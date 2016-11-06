@@ -128,7 +128,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
             @Override
             public void onClick(View v) {
                 mActionType = ACTION_EDIT;
-                reloadView(v.getContext(), true);
+                reloadView(v.getContext(), false);
             }
         });
 

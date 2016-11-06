@@ -119,7 +119,7 @@ public class DailyLVHelper extends LVShowDataBase
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
                 intent.putExtra(AppGobalDef.STR_RECORD_DATE,
-                        String.format(Locale.CHINA ,"%d-%02d-%02d %02d%02d"
+                        String.format(Locale.CHINA ,"%d-%02d-%02d %02d:%02d"
                                 ,cal.get(Calendar.YEAR)
                                 ,cal.get(Calendar.MONTH) + 1
                                 ,cal.get(Calendar.DAY_OF_MONTH)
@@ -144,7 +144,7 @@ public class DailyLVHelper extends LVShowDataBase
             @Override
             public void onClick(View v) {
                 mActionType = ACTION_EDIT;
-                reloadView(v.getContext(), true);
+                reloadView(v.getContext(), false);
             }
         });
 

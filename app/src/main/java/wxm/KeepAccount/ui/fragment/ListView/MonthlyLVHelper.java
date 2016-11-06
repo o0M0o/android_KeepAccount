@@ -102,7 +102,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
         rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reloadView(v.getContext(), true);
+                reloadView(v.getContext(), false);
             }
         });
 

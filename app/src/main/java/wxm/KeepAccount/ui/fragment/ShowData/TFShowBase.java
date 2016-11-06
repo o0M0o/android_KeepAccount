@@ -101,6 +101,9 @@ public abstract class TFShowBase extends Fragment {
         }
     }
 
+    /**
+     * 数据变化后调用
+     */
     public void onDataChange()  {
         ShowViewHelperBase sb = mViewHelper[mHotChild];
         if(null != sb)

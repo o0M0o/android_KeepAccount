@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="payinfo">
-        <item>生活费-生活开销</item>
-        <item>通讯费-手机/电话/宽带费用</item>
-        <item>社交费用-交友社交开销</item>
-        <item>投资-用于投资的开销</item>
-        <item>其他-其它不好归类的开销</item>
+        <item>生活费-生活</item>
+        <item>通讯费-手机/电话/宽带</item>
+        <item>社交费用-交友社交</item>
+        <item>投资-用于投资</item>
+        <item>其他-其它不好归类</item>
+        <item>房租-日常生活开销</item>
+        <item>水电煤气-日常生活开销</item>
+        <item>交通费-打车/公交/地铁</item>
     </string-array>
     <string-array name="incomeinfo">
-        <item>工资-工作报酬</item>
-        <item>奖金-工作产生的额外报酬</item>
-        <item>投资收益-投资产生的收益</item>
-        <item>其他-其它不好归类的收入</item>
+        <item>工资-劳动收入</item>
+        <item>奖金-劳动收入</item>
+        <item>租金-资产收入</item>
+        <item>投资收益-投资产生</item>
+        <item>其他-其它不好归类</item>
     </string-array>
 </resources>

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="@color/white"
+    android:background="@color/grey_4"
     android:layout_height="wrap_content">
     <RelativeLayout
         android:id="@+id/rl_date"
@@ -76,7 +76,7 @@
         <RelativeLayout
             android:id="@+id/rl_clock"
             android:layout_below="@id/tv_pay_title"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="1dp"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -101,7 +101,7 @@
             android:id="@+id/rl_pay_note"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/rl_clock"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="1dp"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">

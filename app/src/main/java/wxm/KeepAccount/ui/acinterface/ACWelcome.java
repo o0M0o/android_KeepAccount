@@ -94,10 +94,6 @@ public class ACWelcome extends AppCompatActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.nav_help: {
-                /*Toast.makeText(getApplicationContext(),
-                        "invoke help!",
-                        Toast.LENGTH_SHORT).show();*/
-
                 Intent intent = new Intent(this, ACHelp.class);
                 intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_START);
 
@@ -119,9 +115,6 @@ public class ACWelcome extends AppCompatActivity
             break;
 
             case R.id.nav_contact_writer: {
-                /*Toast.makeText(getApplicationContext(),
-                        "invoke contact!",
-                        Toast.LENGTH_SHORT).show();*/
                 contactWriter();
             }
             break;

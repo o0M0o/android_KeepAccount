@@ -57,6 +57,7 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
      */
     public abstract void loadView();
 
+
     /**
      * 检查数据是否更新，然后决定是否重新加载视图
     public abstract void checkView();
