@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import cn.wxm.andriodutillib.Dialog.DlgDatePicker;
+import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
@@ -35,8 +37,6 @@ import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
-import wxm.KeepAccount.ui.dialog.DlgDatePicker;
-import wxm.KeepAccount.ui.dialog.DlgOKAndNOBase;
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 
@@ -360,9 +360,9 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                 case R.id.ar_et_date: {
                     DlgDatePicker dp = new DlgDatePicker();
                     dp.setInitDate(mETDate.getText().toString());
-                    dp.setDialogListener(new DlgOKAndNOBase.NoticeDialogListener() {
+                    dp.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                         @Override
-                        public void onDialogPositiveClick(DialogFragment dialog) {
+                        public void onDialogPositiveResult(DialogFragment dialog) {
                             DlgDatePicker cur_dp = UtilFun.cast_t(dialog);
                             String cur_date = cur_dp.getCurDate();
 
@@ -373,7 +373,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                         }
 
                         @Override
-                        public void onDialogNegativeClick(DialogFragment dialog) {
+                        public void onDialogNegativeResult(DialogFragment dialog) {
                             mETDate.requestFocus();
                         }
                     });
@@ -385,9 +385,9 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                 case R.id.ar_et_info: {
                     DlgSelectRecordType dp = new DlgSelectRecordType();
                     dp.setOldType(AppGobalDef.STR_RECORD_PAY, mETInfo.getText().toString());
-                    dp.setDialogListener(new DlgOKAndNOBase.NoticeDialogListener() {
+                    dp.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                         @Override
-                        public void onDialogPositiveClick(DialogFragment dialog) {
+                        public void onDialogPositiveResult(DialogFragment dialog) {
                             DlgSelectRecordType dp_cur = UtilFun.cast_t(dialog);
                             String cur_info = dp_cur.getCurType();
                             mETInfo.setText(cur_info);
@@ -395,7 +395,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                         }
 
                         @Override
-                        public void onDialogNegativeClick(DialogFragment dialog) {
+                        public void onDialogNegativeResult(DialogFragment dialog) {
                             mETInfo.requestFocus();
                         }
                     });

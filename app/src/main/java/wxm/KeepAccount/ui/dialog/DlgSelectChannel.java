@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.utility.ActionHelper;
 import wxm.KeepAccount.Base.utility.DGVButtonAdapter;
@@ -23,7 +24,7 @@ import wxm.KeepAccount.R;
  * 选择关注channel的对话框
  * Created by 123 on 2016/9/20.
  */
-public class DlgSelectChannel extends DlgOKAndNOBase
+public class DlgSelectChannel extends DlgOKOrNOBase
         implements AdapterView.OnItemClickListener {
     // for hot channel
     private ArrayList<String>  mLSHotChannel = new ArrayList<>();

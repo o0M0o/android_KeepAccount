@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import java.util.HashMap;
 
+import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
@@ -75,9 +76,9 @@ public class TFSettingChartColor extends TFSettingBase
             case R.id.iv_pay :
             case R.id.iv_income :  {
                 DlgSelectColor dsc = new DlgSelectColor();
-                dsc.setDialogListener(new DlgSelectColor.NoticeDialogListener() {
+                dsc.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                     @Override
-                    public void onDialogPositiveClick(DialogFragment dialog) {
+                    public void onDialogPositiveResult(DialogFragment dialog) {
                         DlgSelectColor ds = UtilFun.cast(dialog);
                         int sel_col = ds.getSelectedColor();
 
@@ -106,7 +107,7 @@ public class TFSettingChartColor extends TFSettingBase
                     }
 
                     @Override
-                    public void onDialogNegativeClick(DialogFragment dialog) {
+                    public void onDialogNegativeResult(DialogFragment dialog) {
                     }
                 });
                 dsc.show(getFragmentManager(), "选择颜色");

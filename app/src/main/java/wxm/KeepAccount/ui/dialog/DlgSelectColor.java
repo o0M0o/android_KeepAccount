@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
@@ -22,7 +23,7 @@ import wxm.KeepAccount.R;
  * 颜色选择对话框
  * Created by 123 on 2016/10/10.
  */
-public class DlgSelectColor extends DlgOKAndNOBase
+public class DlgSelectColor extends DlgOKOrNOBase
         implements AdapterView.OnItemClickListener  {
     private int     mHotPos = AppGobalDef.INVALID_ID;
 

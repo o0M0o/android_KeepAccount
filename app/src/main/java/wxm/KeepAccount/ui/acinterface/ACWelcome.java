@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.DragGrid.DragGridView;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
@@ -37,7 +38,6 @@ import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.acutility.ACRemindEdit;
 import wxm.KeepAccount.ui.acutility.ACSetting;
-import wxm.KeepAccount.ui.dialog.DlgOKAndNOBase;
 import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
 
 /**
@@ -198,9 +198,9 @@ public class ACWelcome extends AppCompatActivity
                 DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
                 DlgSelectChannel dlg = new DlgSelectChannel();
                 dlg.setHotChannel(dapt.getCurAction());
-                dlg.setDialogListener(new DlgOKAndNOBase.NoticeDialogListener() {
+                dlg.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                     @Override
-                    public void onDialogPositiveClick(DialogFragment dialog) {
+                    public void onDialogPositiveResult(DialogFragment dialog) {
                         DlgSelectChannel dsc = UtilFun.cast(dialog);
                         PreferencesUtil.saveHotAction(dsc.getHotChannel());
 
@@ -216,7 +216,7 @@ public class ACWelcome extends AppCompatActivity
                     }
 
                     @Override
-                    public void onDialogNegativeClick(DialogFragment dialog) {
+                    public void onDialogNegativeResult(DialogFragment dialog) {
                     }
                 });
 

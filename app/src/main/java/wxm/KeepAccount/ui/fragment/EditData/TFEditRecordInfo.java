@@ -24,12 +24,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.RecordTypeItem;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.dialog.DlgOKAndNOBase;
 import wxm.KeepAccount.ui.dialog.DlgRecordInfo;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 
@@ -302,9 +302,9 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                 DlgRecordInfo dp = new DlgRecordInfo();
                 dp.setInitDate(R.id.rl_pencil == vid ? (RecordTypeItem)getCurData() : null);
                 dp.setRecordType(mEditType);
-                dp.setDialogListener(new DlgOKAndNOBase.NoticeDialogListener() {
+                dp.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                     @Override
-                    public void onDialogPositiveClick(DialogFragment dialog) {
+                    public void onDialogPositiveResult(DialogFragment dialog) {
                         DlgRecordInfo cur_dp = UtilFun.cast_t(dialog);
                         RecordTypeItem ri = cur_dp.getCurDate();
                         if(null != ri) {
@@ -317,7 +317,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                     }
 
                     @Override
-                    public void onDialogNegativeClick(DialogFragment dialog) {
+                    public void onDialogNegativeResult(DialogFragment dialog) {
                     }
                 });
 

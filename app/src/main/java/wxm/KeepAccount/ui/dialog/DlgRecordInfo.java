@@ -3,6 +3,7 @@ package wxm.KeepAccount.ui.dialog;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
 
+import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.db.RecordTypeItem;
@@ -12,7 +13,7 @@ import wxm.KeepAccount.R;
  * 日期选择对话框
  * Created by 123 on 2016/11/1.
  */
-public class DlgRecordInfo extends DlgOKAndNOBase {
+public class DlgRecordInfo extends DlgOKOrNOBase {
     private RecordTypeItem  mOldData;
     private String          mRecordType;
 

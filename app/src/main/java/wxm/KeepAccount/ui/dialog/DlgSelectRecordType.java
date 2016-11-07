@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
@@ -32,7 +33,7 @@ import wxm.KeepAccount.ui.acutility.ACRecordInfoEdit;
  * 选择“记录类型”对话框
  * Created by 123 on 2016/11/1.
  */
-public class DlgSelectRecordType extends DlgOKAndNOBase {
+public class DlgSelectRecordType extends DlgOKOrNOBase {
     private final static String KEY_NAME = "key_name";
     private final static String KEY_NOTE = "key_note";
     private final static String KEY_SELECTED = "key_selected";
