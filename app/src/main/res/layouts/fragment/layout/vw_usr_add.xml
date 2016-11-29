@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/ac_padding">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tl_usrname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
+
+        <EditText
+            android:id="@+id/et_usr_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:hint="@string/hint_new_usr_name" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tl_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
+
+        <EditText
+            android:id="@+id/et_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:ems="10"
+            android:hint="@string/hint_new_pwd"
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tl_repeat_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
+
+        <EditText
+            android:id="@+id/et_repeat_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:hint="@string/hint_new_repeat_pwd"
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/bt_confirm"
+            android:layout_alignParentEnd="true"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="@string/cn_sure" />
+
+        <Button
+            android:id="@+id/bt_giveup"
+            android:layout_below="@id/bt_confirm"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="@string/cn_giveup" />
+    </RelativeLayout>
+
+</LinearLayout>

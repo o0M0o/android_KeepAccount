@@ -30,7 +30,7 @@ public class ACLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_login_new);
+        setContentView(R.layout.ac_login);
 
         ButterKnife.bind(this);
         init_ui(savedInstanceState);
