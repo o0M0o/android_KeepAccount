@@ -74,6 +74,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
                 TableUtils.dropTable(connectionSource, PayNoteItem.class, true);
                 TableUtils.dropTable(connectionSource, IncomeNoteItem.class, true);
                 TableUtils.dropTable(connectionSource, BudgetItem.class, true);
+                TableUtils.dropTable(connectionSource, RemindItem.class, true);
 
                 onCreate(db, connectionSource);
             }

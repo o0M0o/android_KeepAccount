@@ -211,7 +211,6 @@ public class ToolUtil {
      */
     public static boolean ListIsNullOrEmpty(List lst)    {
         return (null == lst) || lst.isEmpty();
-
     }
 
 
