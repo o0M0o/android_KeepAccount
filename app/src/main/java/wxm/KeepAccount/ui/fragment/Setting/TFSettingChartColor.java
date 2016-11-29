@@ -35,7 +35,7 @@ public class TFSettingChartColor extends TFSettingBase
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.vw_setting_chart_color, container, false);
+        View v = inflater.inflate(R.layout.page_setting_chart_color, container, false);
         return v;
     }
 

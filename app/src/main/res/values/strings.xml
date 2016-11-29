@@ -65,7 +65,7 @@
     <string name="cn_date">日期</string>
     <string name="cn_amount">金额</string>
     <string name="cn_note">备注(200字以内）</string>
-    <string name="cn_swithview">切换视图</string>
+    <string name="cn_swith_view">切换视图</string>
     <string name="cn_record_pay">记录支出</string>
     <string name="cn_record_income">记录收入</string>
     <string name="cn_income_type">收入类型</string>

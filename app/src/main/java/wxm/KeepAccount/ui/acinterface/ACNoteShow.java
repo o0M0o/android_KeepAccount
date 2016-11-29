@@ -7,13 +7,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
@@ -67,6 +70,26 @@ public class ACNoteShow extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_note_show);
 
+        ButterKnife.bind(this);
+        init_ui(savedInstanceState);
+    }
+
+    private void init_ui(Bundle savedInstanceState) {
+        // for left menu(go back)
+        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
+
+                Intent data = new Intent();
+                setResult(ret_data, data);
+                finish();
+            }
+        });
+
         init_tabs();
         AppModel.getPayIncomeUtility().addDataChangeNotice(mIDCNotice);
         AppModel.getBudgetUtility().addDataChangeNotice(mIDCNotice);
@@ -102,7 +125,7 @@ public class ACNoteShow extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.acbar_back_help, menu);
+        inflater.inflate(R.menu.note_show, menu);
         return true;
     }
 
@@ -110,7 +133,7 @@ public class ACNoteShow extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.acb_mi_help : {
+            case R.id.mi_help: {
                 Intent intent = new Intent(this, ACHelp.class);
                 intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_RECORD);
 
@@ -118,16 +141,7 @@ public class ACNoteShow extends AppCompatActivity {
             }
             break;
 
-            case R.id.acb_mi_leave :    {
-                int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
-
-                Intent data = new Intent();
-                setResult(ret_data, data);
-                finish();
-            }
-            break;
-
-            case R.id.acb_mi_switch :   {
+            case R.id.mi_switch:   {
                 TFShowBase hot = getHotTabItem();
                 if(null != hot)  {
                     hot.switchPage();

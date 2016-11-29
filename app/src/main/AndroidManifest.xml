@@ -17,10 +17,6 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon, android:theme, android:label">
         <activity
-            android:name=".ui.acinterface.ACNoteShow"
-            android:exported="true"
-            android:label="@string/ac_title_noteshow" />
-        <activity
             android:name=".ui.acinterface.ACLogin"
             android:label="@string/cn_keepaccount_applabel">
             <intent-filter>
@@ -30,7 +26,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.acinterface.ACNoteShow"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true"
+            android:label="@string/ac_title_noteshow" />
+        <activity
             android:name=".ui.acutility.ACAddUsr"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_add_account" />
         <activity android:name=".ui.acinterface.ACHelp" />
         <activity
@@ -48,6 +50,7 @@
         <activity android:name=".ui.acinterface.ACRemindShow" />
         <activity
             android:name=".ui.acutility.ACSetting"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="true"
             android:label="@string/app_setting" />
         <activity android:name=".ui.acutility.ACPreveiwAndEdit" />

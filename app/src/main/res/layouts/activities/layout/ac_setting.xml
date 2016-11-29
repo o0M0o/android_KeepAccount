@@ -4,13 +4,19 @@
     android:id="@+id/ac_setting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="6dp"
-    tools:context="wxm.KeepAccount.ui.acutility.ACSetting"
-    android:background="@color/lightgrey">
+    android:background="@color/lightgrey"
+    tools:context="wxm.KeepAccount.ui.acutility.ACSetting">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_pages"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary" />
+
+    <FrameLayout
+        android:id="@+id/fl_holder"
+        android:layout_below="@id/toolbar"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
 
 </RelativeLayout>

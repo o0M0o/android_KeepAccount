@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acutility.ACSetting;
+import wxm.KeepAccount.ui.fragment.utility.FrgSetting;
 
 /**
  * 设置主页面
@@ -25,7 +25,7 @@ public class TFSettingMain extends TFSettingBase {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.vw_setting_main, container, false);
+        View v = inflater.inflate(R.layout.page_setting_main, container, false);
         return v;
     }
 
@@ -39,7 +39,7 @@ public class TFSettingMain extends TFSettingBase {
                 @Override
                 public void onClick(View v) {
                     //Toast.makeText(getContext(), "check version", Toast.LENGTH_SHORT).show();
-                    toPageByIdx(ACSetting.PAGE_IDX_CHECK_VERSION);
+                    toPageByIdx(FrgSetting.PAGE_IDX_CHECK_VERSION);
                 }
             });
 
@@ -49,7 +49,7 @@ public class TFSettingMain extends TFSettingBase {
                 @Override
                 public void onClick(View v) {
                     //Toast.makeText(getContext(), "chart color", Toast.LENGTH_SHORT).show();
-                    toPageByIdx(ACSetting.PAGE_IDX_CHART_COLOR);
+                    toPageByIdx(FrgSetting.PAGE_IDX_CHART_COLOR);
                 }
             });
 

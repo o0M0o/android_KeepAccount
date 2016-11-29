@@ -4,10 +4,10 @@
 
      <item
         android:orderInCategory="9000"
-        android:id="@+id/acb_mi_switch"
+        android:id="@+id/mi_switch"
         app:showAsAction="always"
         android:icon="@drawable/ic_switch_1"
-        android:title="@string/cn_swithview"/>
+        android:title="@string/cn_swith_view"/>
 
     <item
         android:orderInCategory="9001"
@@ -18,7 +18,7 @@
 
     <item
         android:orderInCategory="9002"
-        android:id="@+id/acb_mi_help"
+        android:id="@+id/mi_help"
         app:showAsAction="never"
         android:icon="@drawable/ic_help"
         android:title="@string/cn_help"/>
