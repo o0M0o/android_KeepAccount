@@ -1,95 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
     <RelativeLayout
+        android:id="@+id/rl_header"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/rl_header">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:id="@+id/rl_date"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="2dp">
+
             <TextView
                 android:id="@+id/tv_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2016-07"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentStart="false"
-                android:textSize="20sp"
-                android:textColor="@color/black" />
+                android:layout_alignParentTop="true"
+                android:text="2016-07"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tv_day_number"
-                android:text="15"
-                android:layout_below="@id/tv_month"
-                android:layout_alignLeft="@id/tv_month"
-                android:textSize="18sp"
-                android:textColor="@color/black"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv_month"
+                android:layout_below="@id/tv_month"
+                android:text="15"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_day"
-                android:text="日"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/tv_day_number"
-                android:layout_toRightOf="@id/tv_day_number"
                 android:layout_marginBottom="2dp"
                 android:layout_marginLeft="2dp"
-                android:textSize="12sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_toRightOf="@id/tv_day_number"
+                android:text="日"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tv_day_in_week"
-                android:text="星期三"
-                android:layout_alignBottom="@id/tv_day"
-                android:layout_toRightOf="@id/tv_day"
-                android:layout_marginLeft="8dp"
-                android:textSize="12sp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tv_day"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/tv_day"
+                android:text="星期三"
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_info"
-            android:layout_toRightOf="@id/rl_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:layout_marginLeft="26dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-                <include layout="@layout/liit_note_info" />
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/rl_date">
+
+            <include layout="@layout/liit_note_info" />
         </RelativeLayout>
 
         <ImageButton
             android:id="@+id/ib_hide_show"
             android:layout_width="42dp"
             android:layout_height="36dp"
-            android:scaleType="fitCenter"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="12dp"
-            android:src="@drawable/ic_show_1"
-            android:layout_centerVertical="true" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_show_1" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_below="@+id/rl_header"
-        android:background="@color/beige"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_header"
+        android:background="@color/beige">
+
         <ListView
             android:id="@+id/lv_show_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@android:color/transparent"
             android:layout_marginLeft="48dp"
-            android:dividerHeight="1dp" />
+            android:divider="@android:color/transparent"
+            android:dividerHeight="1dp"
+            android:fastScrollEnabled="false" />
     </RelativeLayout>
 </RelativeLayout>

@@ -50,7 +50,9 @@
             android:exported="true"
             android:label="@string/app_setting"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.acutility.ACPreveiwAndEdit" />
+        <activity
+            android:name=".ui.acutility.ACPreveiwAndEdit"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.acutility.ACRecordInfoEdit"
             android:exported="true"

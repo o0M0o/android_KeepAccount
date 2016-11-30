@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
+import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
@@ -35,40 +38,6 @@ public class ACPreveiwAndEdit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_preview_and_edit);
         init_ui(savedInstanceState);
-    }
-
-    private void init_ui(Bundle savedInstanceState) {
-        Intent it = getIntent();
-        String type = it.getStringExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE);
-        if(UtilFun.StringIsNullOrEmpty(type)
-                || (!AppGobalDef.STR_RECORD_PAY.equals(type) && !AppGobalDef.STR_RECORD_INCOME.equals(type)
-                && !AppGobalDef.STR_RECORD_BUDGET.equals(type)))
-            return;
-
-        Object ob;
-        PayIncomeDataUtility puit = AppModel.getPayIncomeUtility();
-        BudgetDataUtility buit = AppModel.getBudgetUtility();
-        int id = it.getIntExtra(AppGobalDef.INTENT_LOAD_RECORD_ID, -1);
-        if(AppGobalDef.STR_RECORD_PAY.equals(type)) {
-            PayNoteItem pi = -1 != id ? puit.GetPayNoteById(id) : null;
-            ob = pi;
-        } else if(AppGobalDef.STR_RECORD_BUDGET.equals(type)) {
-            BudgetItem bi = -1 != id ? buit.GetBudgetById(id) : null;
-            ob = bi;
-        } else  {
-            IncomeNoteItem ii = -1 != id ? puit.GetIncomeNoteById(id) : null;
-            ob = ii;
-        }
-
-        if(null == savedInstanceState)  {
-            FrgPreviewAndEdit tpe = new FrgPreviewAndEdit();
-            tpe.setCurData(type, ob == null ? AppGobalDef.STR_CREATE : AppGobalDef.STR_MODIFY, ob);
-            mTFBase = tpe;
-
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fl_holder, tpe);
-            transaction.commit();
-        }
     }
 
     @Override
@@ -122,5 +91,56 @@ public class ACPreveiwAndEdit extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void init_ui(Bundle savedInstanceState) {
+        // for left menu(go back)
+        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int ret_data = AppGobalDef.INTRET_GIVEUP;
+
+                Intent data = new Intent();
+                setResult(ret_data, data);
+                finish();
+            }
+        });
+
+
+        // for ui
+        Intent it = getIntent();
+        String type = it.getStringExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE);
+        if(UtilFun.StringIsNullOrEmpty(type)
+                || (!AppGobalDef.STR_RECORD_PAY.equals(type) && !AppGobalDef.STR_RECORD_INCOME.equals(type)
+                && !AppGobalDef.STR_RECORD_BUDGET.equals(type)))
+            return;
+
+        Object ob;
+        PayIncomeDataUtility puit = AppModel.getPayIncomeUtility();
+        BudgetDataUtility buit = AppModel.getBudgetUtility();
+        int id = it.getIntExtra(AppGobalDef.INTENT_LOAD_RECORD_ID, -1);
+        if(AppGobalDef.STR_RECORD_PAY.equals(type)) {
+            PayNoteItem pi = -1 != id ? puit.GetPayNoteById(id) : null;
+            ob = pi;
+        } else if(AppGobalDef.STR_RECORD_BUDGET.equals(type)) {
+            BudgetItem bi = -1 != id ? buit.GetBudgetById(id) : null;
+            ob = bi;
+        } else  {
+            IncomeNoteItem ii = -1 != id ? puit.GetIncomeNoteById(id) : null;
+            ob = ii;
+        }
+
+        if(null == savedInstanceState)  {
+            FrgPreviewAndEdit tpe = new FrgPreviewAndEdit();
+            tpe.setCurData(type, ob == null ? AppGobalDef.STR_CREATE : AppGobalDef.STR_MODIFY, ob);
+            mTFBase = tpe;
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fl_holder, tpe);
+            transaction.commit();
+        }
     }
 }
