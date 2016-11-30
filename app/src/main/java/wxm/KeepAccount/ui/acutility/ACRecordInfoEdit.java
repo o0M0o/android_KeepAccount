@@ -4,18 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
+import butterknife.ButterKnife;
 import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditRecordInfo;
 
 public class ACRecordInfoEdit extends AppCompatActivity {
     public final static String  IT_PARA_RECORDTYPE = "record_type";
-
-    private TFEditRecordInfo        mTFRecordInfo;
+    private TFEditRecordInfo        mTFRecordInfo = new TFEditRecordInfo();
 
     // for menu
     private MenuItem    mMISwitch;
@@ -27,14 +29,35 @@ public class ACRecordInfoEdit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_record_info_edit);
 
+        ButterKnife.bind(this);
+        init_ui(savedInstanceState);
+    }
+
+    private void init_ui(Bundle savedInstanceState) {
+        // for left menu(go back)
+        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int ret_data = AppGobalDef.INTRET_GIVEUP;
+                Intent data = new Intent();
+                setResult(ret_data, data);
+                finish();
+            }
+        });
+
+
         // init view
-        mTFRecordInfo = new TFEditRecordInfo();
         Intent it = getIntent();
         mTFRecordInfo.setCurData("", it.getStringExtra(IT_PARA_RECORDTYPE));
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fl_holder, mTFRecordInfo);
-        transaction.commit();
+        if(null == savedInstanceState)  {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fl_holder, mTFRecordInfo);
+            transaction.commit();
+        }
     }
 
     @Override

@@ -27,35 +27,34 @@
         </activity>
         <activity
             android:name=".ui.acinterface.ACNoteShow"
-            android:theme="@style/AppTheme.NoActionBar"
             android:exported="true"
-            android:label="@string/ac_title_noteshow" />
+            android:label="@string/ac_title_noteshow"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.acutility.ACAddUsr"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_add_account" />
-        <activity android:name=".ui.acinterface.ACHelp" />
-        <activity
-            android:name=".ui.acutility.ACRecordTypeEdit"
-            android:label="@string/title_activity_acrecord_type_edit"
+            android:label="@string/title_activity_add_account"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.acinterface.ACHelp" />
         <activity
             android:name=".ui.acinterface.ACWelcome"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.acutility.ACNoteEdit"
-            android:exported="true"/>
+        <activity
+            android:name=".ui.acutility.ACNoteEdit"
+            android:exported="true" />
         <activity
             android:name=".ui.acutility.ACRemindEdit"
             android:exported="true" />
         <activity android:name=".ui.acinterface.ACRemindShow" />
         <activity
             android:name=".ui.acutility.ACSetting"
-            android:theme="@style/AppTheme.NoActionBar"
             android:exported="true"
-            android:label="@string/app_setting" />
+            android:label="@string/app_setting"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.acutility.ACPreveiwAndEdit" />
-        <activity android:name=".ui.acutility.ACRecordInfoEdit"
-            android:exported="true"/>
+        <activity
+            android:name=".ui.acutility.ACRecordInfoEdit"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

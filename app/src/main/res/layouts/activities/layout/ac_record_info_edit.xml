@@ -6,8 +6,15 @@
     android:layout_height="match_parent"
     tools:context="wxm.KeepAccount.ui.acutility.ACRecordInfoEdit">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary" />
+
     <FrameLayout
         android:id="@+id/fl_holder"
+        android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>
