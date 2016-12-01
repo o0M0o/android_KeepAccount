@@ -1,7 +1,11 @@
 package wxm.KeepAccount.ui.fragment.utility;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +43,9 @@ import static wxm.KeepAccount.Base.data.AppModel.getPayIncomeUtility;
  */
 public class FrgNoteShow extends FrgUtilityBase {
     // for ui
+    @BindView(R.id.login_progress)
+    ProgressBar mPBLoginProgress;
+
     @BindView(R.id.tab_pager)
     ViewPager mVPPages;
 
@@ -63,6 +71,7 @@ public class FrgNoteShow extends FrgUtilityBase {
         }
 
         private void reLoadFrg()    {
+            showProgress(true);
             new ATDataChange().execute();
         }
     };
@@ -88,6 +97,8 @@ public class FrgNoteShow extends FrgUtilityBase {
                 if(cur_pos != i)
                     mBADataChange[i] = true;
             }
+
+            showProgress(false);
         }
     }
 
@@ -155,6 +166,8 @@ public class FrgNoteShow extends FrgUtilityBase {
                     }
                 }
             }
+
+            showProgress(false);
         }
     }
 
@@ -191,6 +204,7 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     @Override
     protected void initUiInfo() {
+        showProgress(true);
         new ATLoadUI().execute();
     }
 
@@ -228,6 +242,28 @@ public class FrgNoteShow extends FrgUtilityBase {
 
 
     /// PRIVATE BEGIN
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        int shortAnimTime = getResources()
+                .getInteger(android.R.integer.config_shortAnimTime);
+
+        mPBLoginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+        mPBLoginProgress.animate().setDuration(shortAnimTime)
+                .alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mPBLoginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
+    }
+
+
     /**
      * 得到当前选中的tab item
      * @return  当前选中的tab item
