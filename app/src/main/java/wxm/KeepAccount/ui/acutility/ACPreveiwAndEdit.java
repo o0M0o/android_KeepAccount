@@ -19,11 +19,13 @@ import wxm.KeepAccount.Base.data.PayIncomeDataUtility;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.utility.FrgPreviewAndEdit;
 import wxm.KeepAccount.ui.fragment.base.ITFBase;
+import wxm.KeepAccount.ui.fragment.utility.FrgUsrAdd;
 
-public class ACPreveiwAndEdit extends AppCompatActivity {
+public class ACPreveiwAndEdit extends BaseAppCompatActivity {
     private ITFBase     mTFBase;
 
     private final static String     CHANGETO_PREVIEW = "预览";
@@ -31,14 +33,53 @@ public class ACPreveiwAndEdit extends AppCompatActivity {
 
     private MenuItem    mMISwitch;
     private MenuItem    mMISave;
-    private MenuItem    mMIGiveup;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_preview_and_edit);
-        init_ui(savedInstanceState);
+    protected void initUi(Bundle savedInstanceState) {
+        Intent it = getIntent();
+        String type = it.getStringExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE);
+        if(UtilFun.StringIsNullOrEmpty(type)
+                || (!AppGobalDef.STR_RECORD_PAY.equals(type) && !AppGobalDef.STR_RECORD_INCOME.equals(type)
+                && !AppGobalDef.STR_RECORD_BUDGET.equals(type)))
+            return;
+
+        // for ui
+        LOG_TAG = "ACPreveiwAndEdit";
+
+        Object ob;
+        PayIncomeDataUtility puit = AppModel.getPayIncomeUtility();
+        BudgetDataUtility buit = AppModel.getBudgetUtility();
+        int id = it.getIntExtra(AppGobalDef.INTENT_LOAD_RECORD_ID, -1);
+        if(AppGobalDef.STR_RECORD_PAY.equals(type)) {
+            PayNoteItem pi = -1 != id ? puit.GetPayNoteById(id) : null;
+            ob = pi;
+        } else if(AppGobalDef.STR_RECORD_BUDGET.equals(type)) {
+            BudgetItem bi = -1 != id ? buit.GetBudgetById(id) : null;
+            ob = bi;
+        } else  {
+            IncomeNoteItem ii = -1 != id ? puit.GetIncomeNoteById(id) : null;
+            ob = ii;
+        }
+
+        FrgPreviewAndEdit tpe = new FrgPreviewAndEdit();
+        tpe.setCurData(type, ob == null ? AppGobalDef.STR_CREATE : AppGobalDef.STR_MODIFY, ob);
+        mTFBase = tpe;
+        mFGSupportHolder = tpe;
+
+        super.initUi(savedInstanceState);
     }
+
+    @Override
+    protected void leaveActivity() {
+        int ret_data = AppGobalDef.INTRET_GIVEUP;
+
+        Intent data = new Intent();
+        setResult(ret_data, data);
+        finish();
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -48,7 +89,7 @@ public class ACPreveiwAndEdit extends AppCompatActivity {
 
         mMISwitch = menu.findItem(R.id.mi_switch);
         mMISave   = menu.findItem(R.id.mi_save);
-        mMIGiveup = menu.findItem(R.id.mi_giveup);
+        MenuItem mMIGiveup = menu.findItem(R.id.mi_giveup);
         mMISwitch.setTitle(mTFBase.isPreviewPage() ? CHANGETO_EDIT : CHANGETO_PREVIEW);
         mMISave.setVisible(mTFBase.isEditPage());
         return true;
@@ -91,56 +132,5 @@ public class ACPreveiwAndEdit extends AppCompatActivity {
         }
 
         return true;
-    }
-
-    private void init_ui(Bundle savedInstanceState) {
-        // for left menu(go back)
-        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int ret_data = AppGobalDef.INTRET_GIVEUP;
-
-                Intent data = new Intent();
-                setResult(ret_data, data);
-                finish();
-            }
-        });
-
-
-        // for ui
-        Intent it = getIntent();
-        String type = it.getStringExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE);
-        if(UtilFun.StringIsNullOrEmpty(type)
-                || (!AppGobalDef.STR_RECORD_PAY.equals(type) && !AppGobalDef.STR_RECORD_INCOME.equals(type)
-                && !AppGobalDef.STR_RECORD_BUDGET.equals(type)))
-            return;
-
-        Object ob;
-        PayIncomeDataUtility puit = AppModel.getPayIncomeUtility();
-        BudgetDataUtility buit = AppModel.getBudgetUtility();
-        int id = it.getIntExtra(AppGobalDef.INTENT_LOAD_RECORD_ID, -1);
-        if(AppGobalDef.STR_RECORD_PAY.equals(type)) {
-            PayNoteItem pi = -1 != id ? puit.GetPayNoteById(id) : null;
-            ob = pi;
-        } else if(AppGobalDef.STR_RECORD_BUDGET.equals(type)) {
-            BudgetItem bi = -1 != id ? buit.GetBudgetById(id) : null;
-            ob = bi;
-        } else  {
-            IncomeNoteItem ii = -1 != id ? puit.GetIncomeNoteById(id) : null;
-            ob = ii;
-        }
-
-        if(null == savedInstanceState)  {
-            FrgPreviewAndEdit tpe = new FrgPreviewAndEdit();
-            tpe.setCurData(type, ob == null ? AppGobalDef.STR_CREATE : AppGobalDef.STR_MODIFY, ob);
-            mTFBase = tpe;
-
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fl_holder, tpe);
-            transaction.commit();
-        }
     }
 }

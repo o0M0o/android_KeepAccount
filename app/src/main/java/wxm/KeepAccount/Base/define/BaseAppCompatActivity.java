@@ -17,8 +17,12 @@ import wxm.KeepAccount.R;
  */
 public abstract class BaseAppCompatActivity extends AppCompatActivity {
     protected String LOG_TAG = "BaseAppCompatActivity";
-    protected Fragment  mFGHolder;
+
     protected int       mDIDBack = R.drawable.ic_back;
+
+    // 下面两个成员必须有一个有效
+    protected Fragment  mFGHolder;
+    protected android.support.v4.app.Fragment  mFGSupportHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +35,11 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
 
     /**
      * 需要在调用此函数前赋值view holder和LOG_TAG
+     * 优先使用当前view holder，然后再使用兼容view holder
      * @param savedInstanceState 视图参数
      */
     protected void initUi(Bundle savedInstanceState) {
-        if(null == mFGHolder)   {
+        if(null == mFGHolder && null == mFGSupportHolder)   {
             Log.e(LOG_TAG, "需要先赋值View Holder");
             return;
         }
@@ -51,9 +56,18 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         });
 
         if(null == savedInstanceState)  {
-            FragmentTransaction t =  getFragmentManager().beginTransaction();
-            t.add(R.id.fl_holder, mFGHolder);
-            t.commit();
+            if(null != mFGHolder) {
+                FragmentTransaction t = getFragmentManager().beginTransaction();
+                t.add(R.id.fl_holder, mFGHolder);
+                t.commit();
+            } else  {
+                if(null != mFGSupportHolder)    {
+                    android.support.v4.app.FragmentTransaction t =
+                                            getSupportFragmentManager().beginTransaction();
+                    t.add(R.id.fl_holder, mFGSupportHolder);
+                    t.commit();
+                }
+            }
         }
     }
 
