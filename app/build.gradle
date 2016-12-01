@@ -5,13 +5,13 @@ android {
         defkey {
             keyAlias 'defkey'
             keyPassword 'hugo99505'
-            storeFile file('G:/backup/appkey/andriodapp-key.jks')
+            storeFile file('E:/backup/appkey/andriodapp-key.jks')
             storePassword 'hugo99505'
         }
         longTimeKey {
             keyAlias 'andriodapp-key-longtime'
             keyPassword 'w789065'
-            storeFile file('G:/backup/appkey/andriodapp-key-longtime.jks')
+            storeFile file('E:/backup/appkey/andriodapp-key-longtime.jks')
             storePassword 'w127865'
         }
     }
@@ -100,7 +100,7 @@ dependencies {
     //compile 'com.android.support:support-annotations:24.2.1'
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta3'
+    //compile 'com.android.support.constraint:constraint-layout:1.0.0-beta3'
 }
 
 

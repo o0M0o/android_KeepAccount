@@ -1,58 +1,41 @@
 package wxm.KeepAccount.ui.acinterface;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
 import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
 import wxm.KeepAccount.ui.fragment.utility.FrgNoteShow;
 
-public class ACNoteShow extends AppCompatActivity {
-    private final static String TAG = "ACNoteShow";
-    private FrgNoteShow     mFGNoteShow = new FrgNoteShow();
+/**
+ * for Note show
+ * Created by wxm on 2016/12/1.
+ */
+public class ACNoteShow extends BaseAppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_note_show);
-
-        ButterKnife.bind(this);
-        init_ui(savedInstanceState);
+    protected void initUi(Bundle savedInstanceState) {
+        LOG_TAG = "ACNoteShow";
+        mFGHolder = new FrgNoteShow();
+        super.initUi(savedInstanceState);
     }
 
-    private void init_ui(Bundle savedInstanceState) {
-        // for left menu(go back)
-        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
+    @Override
+    protected void leaveActivity() {
+        int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
 
-                Intent data = new Intent();
-                setResult(ret_data, data);
-                finish();
-            }
-        });
-
-        if(null == savedInstanceState)  {
-            FragmentTransaction t =  getFragmentManager().beginTransaction();
-            t.add(R.id.fl_holder, mFGNoteShow);
-            t.commit();
-        }
+        Intent data = new Intent();
+        setResult(ret_data, data);
+        finish();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,7 +58,7 @@ public class ACNoteShow extends AppCompatActivity {
             break;
 
             case R.id.mi_switch:   {
-                TFShowBase hot = mFGNoteShow.getHotTabItem();
+                TFShowBase hot = ((FrgNoteShow)mFGHolder).getHotTabItem();
                 if(null != hot)  {
                     hot.switchPage();
                 }
@@ -96,7 +79,7 @@ public class ACNoteShow extends AppCompatActivity {
      * @param bflag  若为true则打开触摸功能，否则关闭触摸功能
      */
     public void disableViewPageTouch(boolean bflag) {
-        mFGNoteShow.disableViewPageTouch(bflag);
+        ((FrgNoteShow)mFGHolder).disableViewPageTouch(bflag);
     }
 
 
@@ -105,7 +88,7 @@ public class ACNoteShow extends AppCompatActivity {
      * @param tabname 需跳转标签页的名字
      */
     public void jumpByTabName(String tabname)  {
-        mFGNoteShow.jumpByTabName(tabname);
+        ((FrgNoteShow)mFGHolder).jumpByTabName(tabname);
     }
 
 
@@ -114,6 +97,6 @@ public class ACNoteShow extends AppCompatActivity {
      * @param ls_tag 过滤数据项
      */
     public void filterView(List<String> ls_tag) {
-        mFGNoteShow.filterView(ls_tag);
+        ((FrgNoteShow)mFGHolder).filterView(ls_tag);
     }
 }
