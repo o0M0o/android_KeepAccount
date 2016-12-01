@@ -34,7 +34,6 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
     private MenuItem    mMISwitch;
     private MenuItem    mMISave;
 
-
     @Override
     protected void initUi(Bundle savedInstanceState) {
         Intent it = getIntent();

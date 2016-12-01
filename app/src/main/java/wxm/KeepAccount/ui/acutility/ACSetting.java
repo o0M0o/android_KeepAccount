@@ -15,21 +15,34 @@ import android.view.View;
 
 import butterknife.ButterKnife;
 import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.Setting.TFSettingBase;
 import wxm.KeepAccount.ui.fragment.utility.FrgSetting;
 
-public class ACSetting extends AppCompatActivity {
-    private static final String TAG = "ACAddUsr";
+/**
+ * for app setting
+ */
+public class ACSetting extends BaseAppCompatActivity {
     private FrgSetting mFGSetting = new FrgSetting();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_setting);
+    protected void leaveActivity() {
+        if(FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
+            mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
+        } else {
+            int ret_data = AppGobalDef.INTRET_GIVEUP;
+            Intent data = new Intent();
+            setResult(ret_data, data);
+            finish();
+        }
+    }
 
-        ButterKnife.bind(this);
-        init_ui(savedInstanceState);
+    @Override
+    protected void initUi(Bundle savedInstanceState) {
+        LOG_TAG = "ACRecordInfoEdit";
+        mFGHolder = mFGSetting;
+        super.initUi(savedInstanceState);
     }
 
     @Override
@@ -103,36 +116,5 @@ public class ACSetting extends AppCompatActivity {
      */
     public void change_page(int new_page)  {
         mFGSetting.setCurrentItem(new_page);
-    }
-
-
-    /**
-     * 初始化UI组件
-     */
-    private void init_ui(Bundle savedInstanceState) {
-        // for left menu(go back)
-        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
-                    mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
-                } else {
-                    int ret_data = AppGobalDef.INTRET_GIVEUP;
-                    Intent data = new Intent();
-                    setResult(ret_data, data);
-                    finish();
-                }
-            }
-        });
-
-        // for frg
-        if(null == savedInstanceState) {
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.fl_holder, mFGSetting);
-            transaction.commit();
-        }
     }
 }

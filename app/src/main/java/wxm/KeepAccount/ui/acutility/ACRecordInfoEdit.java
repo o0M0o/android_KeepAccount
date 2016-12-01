@@ -12,52 +12,31 @@ import android.view.View;
 
 import butterknife.ButterKnife;
 import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditRecordInfo;
+import wxm.KeepAccount.ui.fragment.utility.FrgUsrAdd;
 
-public class ACRecordInfoEdit extends AppCompatActivity {
+public class ACRecordInfoEdit extends BaseAppCompatActivity {
     public final static String  IT_PARA_RECORDTYPE = "record_type";
-    private TFEditRecordInfo        mTFRecordInfo = new TFEditRecordInfo();
-
-    // for menu
-    private MenuItem    mMISwitch;
-    private MenuItem    mMISave;
-    private MenuItem    mMIGiveup;
+    private TFEditRecordInfo    mTFRecordInfo = new TFEditRecordInfo();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_record_info_edit);
-
-        ButterKnife.bind(this);
-        init_ui(savedInstanceState);
+    protected void leaveActivity() {
+        int ret_data = AppGobalDef.INTRET_GIVEUP;
+        Intent data = new Intent();
+        setResult(ret_data, data);
+        finish();
     }
 
-    private void init_ui(Bundle savedInstanceState) {
-        // for left menu(go back)
-        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int ret_data = AppGobalDef.INTRET_GIVEUP;
-                Intent data = new Intent();
-                setResult(ret_data, data);
-                finish();
-            }
-        });
-
-
-        // init view
+    @Override
+    protected void initUi(Bundle savedInstanceState) {
         Intent it = getIntent();
         mTFRecordInfo.setCurData("", it.getStringExtra(IT_PARA_RECORDTYPE));
 
-        if(null == savedInstanceState)  {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fl_holder, mTFRecordInfo);
-            transaction.commit();
-        }
+        LOG_TAG = "ACRecordInfoEdit";
+        mFGSupportHolder = mTFRecordInfo;
+        super.initUi(savedInstanceState);
     }
 
     @Override
@@ -66,9 +45,8 @@ public class ACRecordInfoEdit extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.acm_preview_edit, menu);
 
-        mMISwitch = menu.findItem(R.id.mi_switch);
-        mMISave   = menu.findItem(R.id.mi_save);
-        mMIGiveup = menu.findItem(R.id.mi_giveup);
+        MenuItem mMISwitch = menu.findItem(R.id.mi_switch);
+        MenuItem mMIGiveup = menu.findItem(R.id.mi_giveup);
         mMISwitch.setVisible(false);
         mMIGiveup.setVisible(false);
         return true;
