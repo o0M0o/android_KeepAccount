@@ -21,19 +21,18 @@ import wxm.KeepAccount.ui.fragment.utility.FrgNoteShow;
 public class ACNoteShow extends BaseAppCompatActivity {
 
     @Override
-    protected void initUi(Bundle savedInstanceState) {
-        LOG_TAG = "ACNoteShow";
-        mFGHolder = new FrgNoteShow();
-        super.initUi(savedInstanceState);
-    }
-
-    @Override
     protected void leaveActivity() {
         int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
 
         Intent data = new Intent();
         setResult(ret_data, data);
         finish();
+    }
+
+    @Override
+    protected void initFrgHolder() {
+        LOG_TAG = "ACNoteShow";
+        mFGHolder = new FrgNoteShow();
     }
 
 

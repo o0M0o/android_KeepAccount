@@ -141,4 +141,5 @@
     <string name="setting_budget_balance_color">预算余额</string>
     <string name="setting_budget_used_color">预算已使用</string>
     <string name="cn_delete_note">删除记录</string>
+    <string name="title_help">帮助</string>
 </resources>

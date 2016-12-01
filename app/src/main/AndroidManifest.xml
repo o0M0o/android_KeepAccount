@@ -34,7 +34,10 @@
             android:name=".ui.acutility.ACAddUsr"
             android:label="@string/title_activity_add_account"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.acinterface.ACHelp" />
+        <activity
+            android:name=".ui.acinterface.ACHelp"
+            android:label="@string/title_help"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.acinterface.ACWelcome"
             android:theme="@style/AppTheme.NoActionBar" />

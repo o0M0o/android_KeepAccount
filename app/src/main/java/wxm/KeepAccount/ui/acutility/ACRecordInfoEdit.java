@@ -30,13 +30,12 @@ public class ACRecordInfoEdit extends BaseAppCompatActivity {
     }
 
     @Override
-    protected void initUi(Bundle savedInstanceState) {
+    protected void initFrgHolder() {
         Intent it = getIntent();
         mTFRecordInfo.setCurData("", it.getStringExtra(IT_PARA_RECORDTYPE));
 
         LOG_TAG = "ACRecordInfoEdit";
         mFGSupportHolder = mTFRecordInfo;
-        super.initUi(savedInstanceState);
     }
 
     @Override

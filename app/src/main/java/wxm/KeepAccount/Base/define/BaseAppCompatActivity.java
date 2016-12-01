@@ -39,6 +39,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * @param savedInstanceState 视图参数
      */
     protected void initUi(Bundle savedInstanceState) {
+        initFrgHolder();
         if(null == mFGHolder && null == mFGSupportHolder)   {
             Log.e(LOG_TAG, "需要先赋值View Holder");
             return;
@@ -76,4 +77,9 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * 离开当前activity
      */
     protected abstract void leaveActivity();
+
+    /**
+     * 初始化fragement holder
+     */
+    protected abstract void initFrgHolder();
 }

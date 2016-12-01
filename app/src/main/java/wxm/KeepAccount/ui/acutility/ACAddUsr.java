@@ -10,14 +10,13 @@ import wxm.KeepAccount.ui.fragment.utility.FrgUsrAdd;
  */
 public class ACAddUsr extends BaseAppCompatActivity {
     @Override
-    protected void initUi(Bundle savedInstanceState) {
-        LOG_TAG = "ACAddUsr";
-        mFGHolder = new FrgUsrAdd();
-        super.initUi(savedInstanceState);
+    protected void leaveActivity() {
+        finish();
     }
 
     @Override
-    protected void leaveActivity() {
-        finish();
+    protected void initFrgHolder() {
+        LOG_TAG = "ACAddUsr";
+        mFGHolder = new FrgUsrAdd();
     }
 }

@@ -43,6 +43,27 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
                 && !AppGobalDef.STR_RECORD_BUDGET.equals(type)))
             return;
 
+        super.initUi(savedInstanceState);
+    }
+
+    @Override
+    protected void leaveActivity() {
+        int ret_data = AppGobalDef.INTRET_GIVEUP;
+
+        Intent data = new Intent();
+        setResult(ret_data, data);
+        finish();
+    }
+
+    @Override
+    protected void initFrgHolder() {
+        Intent it = getIntent();
+        String type = it.getStringExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE);
+        if(UtilFun.StringIsNullOrEmpty(type)
+                || (!AppGobalDef.STR_RECORD_PAY.equals(type) && !AppGobalDef.STR_RECORD_INCOME.equals(type)
+                && !AppGobalDef.STR_RECORD_BUDGET.equals(type)))
+            return;
+
         // for ui
         LOG_TAG = "ACPreveiwAndEdit";
 
@@ -65,19 +86,7 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
         tpe.setCurData(type, ob == null ? AppGobalDef.STR_CREATE : AppGobalDef.STR_MODIFY, ob);
         mTFBase = tpe;
         mFGSupportHolder = tpe;
-
-        super.initUi(savedInstanceState);
     }
-
-    @Override
-    protected void leaveActivity() {
-        int ret_data = AppGobalDef.INTRET_GIVEUP;
-
-        Intent data = new Intent();
-        setResult(ret_data, data);
-        finish();
-    }
-
 
 
     @Override

@@ -39,10 +39,9 @@ public class ACSetting extends BaseAppCompatActivity {
     }
 
     @Override
-    protected void initUi(Bundle savedInstanceState) {
+    protected void initFrgHolder() {
         LOG_TAG = "ACRecordInfoEdit";
         mFGHolder = mFGSetting;
-        super.initUi(savedInstanceState);
     }
 
     @Override
