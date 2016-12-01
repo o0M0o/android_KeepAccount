@@ -43,7 +43,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.acutility.ACNoteEdit"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.acutility.ACRemindEdit"
             android:exported="true" />

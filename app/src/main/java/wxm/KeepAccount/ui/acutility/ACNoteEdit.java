@@ -20,99 +20,63 @@ import wxm.KeepAccount.Base.data.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditIncome;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditPay;
+import wxm.KeepAccount.ui.fragment.utility.FrgNoteEdit;
 
 /**
  * 支出/收入数据编辑UI
  */
-public class ACNoteEdit extends AppCompatActivity {
-    private static final String TAG = "ACNoteEdit";
-
-    protected final static String TAB_PAY     = "支出";
-    protected final static String TAB_INCOME  = "收入";
-
+public class ACNoteEdit extends BaseAppCompatActivity {
     public static final String  PARA_ACTION          = "para_action";
     public static final String  PARA_NOTE_PAY        = "note_pay";
     public static final String  PARA_NOTE_INCOME     = "note_income";
 
     public static final int DEF_NOTE_MAXLEN = 200;
-
-    private String          mAction;
-    private PayNoteItem     mOldPayNote;
-    private IncomeNoteItem  mOldIncomeNote;
-
-    private TabLayout mTLTabs;
-    private ViewPager mVPTabs;
+    private String mAction;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_note_edit);
+    protected void leaveActivity() {
+        int ret_data = AppGobalDef.INTRET_GIVEUP;
 
-        initView();
+        Intent data = new Intent();
+        setResult(ret_data, data);
+        finish();
     }
 
-    private void initView() {
+    @Override
+    protected void initFrgHolder() {
+        LOG_TAG = "ACNoteEdit";
+
         Intent it = getIntent();
         assert null != it;
-
         mAction = it.getStringExtra(PARA_ACTION);
         if(UtilFun.StringIsNullOrEmpty(mAction)) {
-            Log.e(TAG, "调用intent缺少'PARA_ACTION'参数");
+            Log.e(LOG_TAG, "调用intent缺少'PARA_ACTION'参数");
             return ;
         }
 
-        // for tabs
-        mTLTabs = (TabLayout) findViewById(R.id.tl_tabs);
-        assert null != mTLTabs;
-
+        // for holder
+        mFGHolder = new FrgNoteEdit();
+        Bundle bd = new Bundle();
+        bd.putString(PARA_ACTION, mAction);
         if(mAction.equals(AppGobalDef.STR_MODIFY)) {
             int pid = it.getIntExtra(ACNoteEdit.PARA_NOTE_PAY, AppGobalDef.INVALID_ID);
             int iid = it.getIntExtra(ACNoteEdit.PARA_NOTE_INCOME, AppGobalDef.INVALID_ID);
             if(AppGobalDef.INVALID_ID != pid)   {
-                mOldPayNote = AppModel.getPayIncomeUtility().GetPayNoteById(pid);
-                mTLTabs.addTab(mTLTabs.newTab().setText(TAB_PAY));
+                bd.putInt(ACNoteEdit.PARA_NOTE_PAY, pid);
             } else if(AppGobalDef.INVALID_ID != iid)    {
-                mOldIncomeNote = AppModel.getPayIncomeUtility().GetIncomeNoteById(iid);
-                mTLTabs.addTab(mTLTabs.newTab().setText(TAB_INCOME));
+                bd.putInt(ACNoteEdit.PARA_NOTE_INCOME, iid);
             } else  {
-                Log.e(TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");
+                Log.e(LOG_TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");
                 return;
             }
-
-        } else {
-            mTLTabs.addTab(mTLTabs.newTab().setText(TAB_PAY));
-            mTLTabs.addTab(mTLTabs.newTab().setText(TAB_INCOME));
         }
-
-        mTLTabs.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        mVPTabs = (ViewPager) findViewById(R.id.tab_pager);
-        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(),
-                                        mTLTabs.getTabCount());
-        mVPTabs.setAdapter(adapter);
-        mVPTabs.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTLTabs));
-        mTLTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mVPTabs.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
+        mFGHolder.setArguments(bd);
     }
 
     @Override
@@ -129,9 +93,7 @@ public class ACNoteEdit extends AppCompatActivity {
      * @return  当前选中的tab item
      */
     private TFEditBase getHotTabItem() {
-        int pos = mTLTabs.getSelectedTabPosition();
-        PagerAdapter pa = UtilFun.cast(mVPTabs.getAdapter());
-        return UtilFun.cast(pa.getItem(pos));
+        return ((FrgNoteEdit)mFGHolder).getHotTabItem();
     }
 
 
@@ -183,41 +145,4 @@ public class ACNoteEdit extends AppCompatActivity {
         }
     }
     */
-
-    /**
-     * fragment adapter
-     */
-    public class PagerAdapter extends FragmentStatePagerAdapter {
-        int mNumOfTabs;
-        HashMap<String, Fragment> mHMFra;
-
-        PagerAdapter(FragmentManager fm, int NumOfTabs) {
-            super(fm);
-            this.mNumOfTabs = NumOfTabs;
-
-            TFEditPay tp = new TFEditPay();
-            tp.setCurData(mAction, mOldPayNote);
-
-            TFEditIncome ti = new TFEditIncome();
-            ti.setCurData(mAction, mOldIncomeNote);
-
-            mHMFra = new HashMap<>();
-            mHMFra.put(TAB_PAY, tp);
-            mHMFra.put(TAB_INCOME, ti);
-        }
-
-        @Override
-        public android.support.v4.app.Fragment getItem(int position) {
-            TabLayout.Tab t = mTLTabs.getTabAt(position);
-            assert null != t;
-            CharSequence t_cs = t.getText();
-            assert null != t_cs;
-            return mHMFra.get(t_cs.toString());
-        }
-
-        @Override
-        public int getCount() {
-            return mNumOfTabs;
-        }
-    }
 }
