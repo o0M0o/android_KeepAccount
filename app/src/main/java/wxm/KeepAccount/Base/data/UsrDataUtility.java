@@ -5,7 +5,9 @@ import java.util.List;
 import cn.wxm.andriodutillib.util.MD5Util;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.db.UsrItem;
-import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
+import wxm.KeepAccount.Base.db.DBOrmLiteHelper;
+import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**
  * usr数据处理类
@@ -14,7 +16,7 @@ import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
 public class UsrDataUtility extends  DataUtilityBase  {
     private final String    TAG = "UsrDataUtility";
 
-    UsrDataUtility()  {
+    public UsrDataUtility()  {
         super();
     }
 
@@ -27,7 +29,7 @@ public class UsrDataUtility extends  DataUtilityBase  {
         if(UtilFun.StringIsNullOrEmpty(usr))
             return false;
 
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
         List<UsrItem> ret = mDBHelper.getUsrItemREDao()
                 .queryForEq(UsrItem.FIELD_NAME, usr);
         return !((null == ret) || (ret.size() < 1));
@@ -50,7 +52,7 @@ public class UsrDataUtility extends  DataUtilityBase  {
         }
         pwdpad = MD5Util.string2MD5(pwdpad);
 
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
         UsrItem uiret = null;
         List<UsrItem> ret = mDBHelper.getUsrItemREDao()
                 .queryForEq(UsrItem.FIELD_NAME, usr);
@@ -91,7 +93,7 @@ public class UsrDataUtility extends  DataUtilityBase  {
             pwdpad += AppGobalDef.STR_PWD_PAD.substring(pwd.length());
         }
 
-        List<UsrItem> lsui = AppModel.getDBHelper().getUsrItemREDao()
+        List<UsrItem> lsui = ContextUtil.getDBHelper().getUsrItemREDao()
                             .queryForEq(UsrItem.FIELD_NAME, usr);
         if((null == lsui) || (lsui.size() < 1))
             return false;
@@ -114,7 +116,7 @@ public class UsrDataUtility extends  DataUtilityBase  {
             pwdpad += AppGobalDef.STR_PWD_PAD.substring(pwd.length());
         }
 
-        List<UsrItem> lsui = AppModel.getDBHelper().getUsrItemREDao()
+        List<UsrItem> lsui = ContextUtil.getDBHelper().getUsrItemREDao()
                             .queryForEq(UsrItem.FIELD_NAME, usr);
         if((null == lsui) || (lsui.size() < 1))
             return null;
@@ -132,6 +134,6 @@ public class UsrDataUtility extends  DataUtilityBase  {
      * @return  用户数据，或者返回NULL
      */
     public UsrItem GetUsrById(int uid)  {
-        return AppModel.getDBHelper().getUsrItemREDao().queryForId(uid);
+        return ContextUtil.getDBHelper().getUsrItemREDao().queryForId(uid);
     }
 }

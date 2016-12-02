@@ -30,10 +30,10 @@ import java.util.Map;
 import java.util.Set;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
@@ -158,7 +158,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
     @Override
     public void loadView() {
-        if(AppModel.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
+        if(ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
             reloadData();
         }
 
@@ -188,7 +188,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 if(ACTION_DELETE == mActionType)    {
                     mActionType = ACTION_EDIT;
                     if(!ToolUtil.ListIsNullOrEmpty(mLLDelBudget)) {
-                        AppModel.getBudgetUtility().DeleteBudgetById(mLLDelBudget);
+                        ContextUtil.getBudgetUtility().DeleteBudgetById(mLLDelBudget);
                     }
                 }
 
@@ -232,7 +232,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
         mHMSubPara.clear();
 
         // format output
-        mHMData = AppModel.getBudgetUtility().GetBudgetWithPayNote();
+        mHMData = ContextUtil.getBudgetUtility().GetBudgetWithPayNote();
         parseNotes();
     }
 

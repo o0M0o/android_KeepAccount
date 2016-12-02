@@ -5,6 +5,8 @@ import java.util.List;
 
 import wxm.KeepAccount.Base.db.RemindItem;
 import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**
  * 提醒数据辅助类
@@ -19,11 +21,11 @@ public class RemindDataUtility {
      * @return 返回数据,无数据返回{@code NULL}
      */
     public List<RemindItem> GetAllRemind()  {
-        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        UsrItem cur_usr = ContextUtil.getCurUsr();
         if(null == cur_usr)
             return null;
 
-        return AppModel.getDBHelper().getRemindREDao()
+        return ContextUtil.getDBHelper().getRemindREDao()
                 .queryForEq(RemindItem.FIELD_USR, cur_usr.getId());
     }
 
@@ -33,13 +35,13 @@ public class RemindDataUtility {
      * @return  如果重名返回true, 否则返回false
      */
     public boolean CheckRemindName(String name)    {
-        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        UsrItem cur_usr = ContextUtil.getCurUsr();
         if(null == cur_usr)
             return true;
 
         boolean r;
         try {
-            List<RemindItem> ret = AppModel.getDBHelper().getRemindREDao().queryBuilder()
+            List<RemindItem> ret = ContextUtil.getDBHelper().getRemindREDao().queryBuilder()
                                     .where().eq(RemindItem.FIELD_USR, cur_usr.getId())
                                         .and().eq(RemindItem.FIELD_NAME, name).query();
             r = 0 < ret.size();
@@ -58,7 +60,7 @@ public class RemindDataUtility {
      */
     public boolean AddOrUpdateRemind(RemindItem ri)     {
         if(null == ri.getUsr()) {
-            UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+            UsrItem cur_usr = ContextUtil.getInstance().getCurUsr();
             if(null == cur_usr)
                 return false;
 
@@ -67,9 +69,9 @@ public class RemindDataUtility {
 
         boolean r;
         if(AppGobalDef.INVALID_ID == ri.get_id())
-            r = 1 == AppModel.getDBHelper().getRemindREDao().create(ri);
+            r = 1 == ContextUtil.getDBHelper().getRemindREDao().create(ri);
         else
-            r = 1 == AppModel.getDBHelper().getRemindREDao().update(ri);
+            r = 1 == ContextUtil.getDBHelper().getRemindREDao().update(ri);
 
         return r;
     }

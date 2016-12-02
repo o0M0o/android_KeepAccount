@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.utility.FrgSetting;
 
@@ -64,7 +64,7 @@ public class TFSettingMain extends TFSettingBase {
                             setPositiveButton("是", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    AppModel.getInstance().ClearDB();
+                                    ContextUtil.ClearDB();
                                 }
                             }).
                             setNegativeButton("否", new DialogInterface.OnClickListener() {

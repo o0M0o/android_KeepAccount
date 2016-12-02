@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
-import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppMsgDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;

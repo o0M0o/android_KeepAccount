@@ -5,9 +5,9 @@ import android.os.Handler;
 import android.os.Message;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.data.AppMsgDef;
 import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**
  * 处理用户登录的辅助类
@@ -26,11 +26,11 @@ class UsrUtility {
                 String usr = data.getStringExtra(UsrItem.FIELD_NAME);
                 String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
 
-                if(AppModel.getUsrUtility().hasUsr(usr))  {
+                if(ContextUtil.getUsrUtility().hasUsr(usr))  {
                     GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_USR_ADDUSR,
                                     new Object[]{false, data, "用户已经存在！"});
                 } else {
-                    boolean ret = (null != AppModel.getUsrUtility().addUsr(usr, pwd));
+                    boolean ret = (null != ContextUtil.getUsrUtility().addUsr(usr, pwd));
                     GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_USR_ADDUSR,
                                     new Object[]{ret, data});
                 }
@@ -44,8 +44,8 @@ class UsrUtility {
                 String usr = data.getStringExtra(UsrItem.FIELD_NAME);
                 String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
 
-                AppModel.getInstance().setCurUsr(AppModel.getUsrUtility().CheckAndGetUsr(usr, pwd));
-                boolean ret = (null != AppModel.getInstance().getCurUsr());
+                ContextUtil.setCurUsr(ContextUtil.getUsrUtility().CheckAndGetUsr(usr, pwd));
+                boolean ret = (null != ContextUtil.getInstance().getCurUsr());
 
                 Handler h = UtilFun.cast(arr[1]);
                 GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_USR_LOGIN, ret);
@@ -53,7 +53,7 @@ class UsrUtility {
             break;
 
             case AppMsgDef.MSG_USR_LOGOUT : {
-                AppModel.getInstance().setCurUsr(null);
+                ContextUtil.setCurUsr(null);
             }
             break;
         }

@@ -49,18 +49,6 @@ public class DGVButtonAdapter extends SimpleAdapter {
             HashMap<String, Object> hmd = UtilFun.cast(getItem(position));
             String hv = UtilFun.cast(hmd.get(HKEY_ACT_NAME));
 
-            /*
-            // for button
-            Button bt = UtilFun.cast(v.findViewById(R.id.bt_action));
-            assert null != bt;
-            bt.setText(hv);
-
-            Rect rt = new Rect();
-            bt.getPaint().getTextBounds(hv, 0, hv.length(), rt);
-            bt.setWidth(rt.width()+ 32);
-            //bt.setHeight(rt.height());
-            */
-
             TextView tv = UtilFun.cast(v.findViewById(R.id.tv_name));
             ToolUtil.throwExIf(null == tv);
             tv.setText(hv);

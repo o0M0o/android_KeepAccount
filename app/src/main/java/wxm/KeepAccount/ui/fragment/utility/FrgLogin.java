@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.WRMsgHandler;
-import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.data.AppMsgDef;
 import wxm.KeepAccount.Base.db.UsrItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;

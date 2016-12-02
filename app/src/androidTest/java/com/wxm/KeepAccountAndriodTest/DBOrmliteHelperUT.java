@@ -13,14 +13,14 @@ import java.util.List;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.db.UsrItem;
-import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
+import wxm.KeepAccount.Base.db.DBOrmLiteHelper;
 
 /**
- * UT for DBOrmliteHelper
+ * UT for DBOrmLiteHelper
  * Created by 123 on 2016/8/5.
  */
 public class DBOrmliteHelperUT extends AndroidTestCase {
-    private DBOrmliteHelper             mHelper;
+    private DBOrmLiteHelper mHelper;
 
     public DBOrmliteHelperUT()     {
     }
@@ -31,7 +31,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
 
         RenamingDelegatingContext mMockContext = new RenamingDelegatingContext(getContext(), "test1_");
         assertNotNull(mMockContext);
-        mHelper = new DBOrmliteHelper(mMockContext);
+        mHelper = new DBOrmLiteHelper(mMockContext);
         assertNotNull(mHelper);
 
         RuntimeExceptionDao<UsrItem, Integer> sdao1 = mHelper.getUsrItemREDao();

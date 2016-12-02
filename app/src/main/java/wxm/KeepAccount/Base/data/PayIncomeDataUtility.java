@@ -13,11 +13,12 @@ import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.db.BudgetItem;
+import wxm.KeepAccount.Base.db.DBOrmLiteHelper;
 import wxm.KeepAccount.Base.db.INote;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.db.UsrItem;
-import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 
 /**
@@ -27,7 +28,7 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 public class PayIncomeDataUtility extends DataUtilityBase {
     private final String    TAG = "PayIncomeDataUtility";
 
-    PayIncomeDataUtility()  {
+    public PayIncomeDataUtility()  {
         super();
     }
 
@@ -38,7 +39,7 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      * @return 查找到的数据
      */
     public List<PayNoteItem> GetPayNoteByBudget(BudgetItem bi)  {
-        List<PayNoteItem> ls_pay =  AppModel.getDBHelper().getPayDataREDao()
+        List<PayNoteItem> ls_pay =  ContextUtil.getDBHelper().getPayDataREDao()
                                 .queryForEq(PayNoteItem.FIELD_BUDGET, bi.get_id());
 
         bi.useBudget(BigDecimal.ZERO);
@@ -51,7 +52,7 @@ public class PayIncomeDataUtility extends DataUtilityBase {
             bi.useBudget(all_pay);
         }
 
-        AppModel.getDBHelper().getBudgetDataREDao().update(bi);
+        ContextUtil.getDBHelper().getBudgetDataREDao().update(bi);
         return ls_pay;
     }
 
@@ -62,7 +63,7 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      * @return 查找到的数据
      */
     public PayNoteItem GetPayNoteById(int id)  {
-        return AppModel.getDBHelper().getPayDataREDao().queryForId(id);
+        return ContextUtil.getDBHelper().getPayDataREDao().queryForId(id);
     }
 
     /**
@@ -71,7 +72,7 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      * @return 查找到的数据
      */
     public IncomeNoteItem GetIncomeNoteById(int id)  {
-        return AppModel.getDBHelper().getIncomeDataREDao().queryForId(id);
+        return ContextUtil.getDBHelper().getIncomeDataREDao().queryForId(id);
     }
 
 
@@ -166,11 +167,11 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      * @return 当前用户的所有记录
      */
     public List<PayNoteItem> GetAllPayNotes()     {
-        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        UsrItem cur_usr = ContextUtil.getInstance().getCurUsr();
         if(null == cur_usr)
             return null;
 
-        return AppModel.getDBHelper().getPayDataREDao()
+        return ContextUtil.getDBHelper().getPayDataREDao()
                     .queryForEq(PayNoteItem.FIELD_USR, cur_usr.getId());
     }
 
@@ -180,11 +181,11 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      * @return 当前用户的所有记录
      */
     public List<IncomeNoteItem> GetAllIncomeNotes()     {
-        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        UsrItem cur_usr = ContextUtil.getInstance().getCurUsr();
         if(null == cur_usr)
             return null;
 
-        return AppModel.getDBHelper().getIncomeDataREDao()
+        return ContextUtil.getDBHelper().getIncomeDataREDao()
                 .queryForEq(IncomeNoteItem.FIELD_USR, cur_usr.getId());
     }
 
@@ -196,7 +197,7 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      * @return  满足日期条件的记录
      */
     public List<PayNoteItem> GetPayNotesByDay(String day_str)   {
-        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        UsrItem cur_usr = ContextUtil.getInstance().getCurUsr();
         if(null == cur_usr)
             return null;
 
@@ -211,7 +212,7 @@ public class PayIncomeDataUtility extends DataUtilityBase {
             return null;
         }
 
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
         List<PayNoteItem> ret;
         try {
             ret = mDBHelper.getPayDataREDao().queryBuilder()
@@ -232,7 +233,7 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      * @return  满足日期条件的记录
      */
     public List<IncomeNoteItem> GetIncomeNotesByDay(String day_str)   {
-        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        UsrItem cur_usr = ContextUtil.getInstance().getCurUsr();
         if(null == cur_usr)
             return null;
 
@@ -247,7 +248,7 @@ public class PayIncomeDataUtility extends DataUtilityBase {
             return null;
         }
 
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
         List<IncomeNoteItem> ret;
         try {
             ret = mDBHelper.getIncomeDataREDao().queryBuilder()
@@ -268,8 +269,8 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      * @return  返回添加成功的数据量
      */
     public int AddPayNotes(List<PayNoteItem> lsi)    {
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
-        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
+        UsrItem cur_usr = ContextUtil.getInstance().getCurUsr();
         int ret = 0;
         if(null != cur_usr) {
             for(PayNoteItem i : lsi) {
@@ -305,8 +306,8 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      * @return  返回添加成功的数据量
      */
     public int AddIncomeNotes(List<IncomeNoteItem> lsi)    {
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
-        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
+        UsrItem cur_usr = ContextUtil.getInstance().getCurUsr();
         int ret = 0;
         if(null != cur_usr) {
             for(IncomeNoteItem i : lsi) {
@@ -343,7 +344,7 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      */
     public int ModifyPayNotes(List<PayNoteItem> lsi)  {
         int ret = 0;
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
         for(PayNoteItem i : lsi) {
             ret += mDBHelper.getPayDataREDao().update(i);
         }
@@ -362,7 +363,7 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      */
     public int ModifyIncomeNotes(List<IncomeNoteItem> lsi)  {
         int ret = 0;
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
         for(IncomeNoteItem i : lsi) {
             ret += mDBHelper.getIncomeDataREDao().update(i);
         }
@@ -380,7 +381,7 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      * @return  删除的记录数
      */
     public int DeletePayNotes(List<Integer> lsi)  {
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
         int ret = mDBHelper.getPayDataREDao().deleteIds(lsi);
         if(0 < ret) {
             onDataDelete();
@@ -395,7 +396,7 @@ public class PayIncomeDataUtility extends DataUtilityBase {
      * @return  删除的记录数
      */
     public int DeleteIncomeNotes(List<Integer> lsi)  {
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
         int ret = mDBHelper.getIncomeDataREDao().deleteIds(lsi);
         if(0 < ret) {
             onDataDelete();

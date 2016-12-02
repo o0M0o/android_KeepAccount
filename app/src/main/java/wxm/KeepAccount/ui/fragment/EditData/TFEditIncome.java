@@ -23,10 +23,10 @@ import java.util.Locale;
 import cn.wxm.andriodutillib.Dialog.DlgDatePicker;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.data.PayIncomeDataUtility;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
@@ -260,7 +260,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
         // add/modify data
         boolean b_create = mAction.equals(AppGobalDef.STR_CREATE);
-        PayIncomeDataUtility uti = AppModel.getPayIncomeUtility();
+        PayIncomeDataUtility uti = ContextUtil.getPayIncomeUtility();
         boolean b_ret =  b_create ?
                             1 == uti.AddIncomeNotes(Collections.singletonList(pi))
                             : 1 == uti.ModifyIncomeNotes(Collections.singletonList(pi));

@@ -26,9 +26,9 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.db.RecordTypeItem;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.dialog.DlgRecordInfo;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
@@ -188,9 +188,9 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
         mLHMData.clear();
         List<RecordTypeItem> al_type;
         if(mEditType.equals(AppGobalDef.STR_RECORD_PAY))    {
-            al_type = AppModel.getRecordTypeUtility().getAllPayItem();
+            al_type = ContextUtil.getRecordTypeUtility().getAllPayItem();
         } else  {
-            al_type = AppModel.getRecordTypeUtility().getAllIncomeItem();
+            al_type = ContextUtil.getRecordTypeUtility().getAllIncomeItem();
         }
 
         if(null != al_type) {
@@ -280,7 +280,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
         if(!UtilFun.StringIsNullOrEmpty(mCurType)) {
             for (HashMap<String, String> hm : mLHMData) {
                 if(hm.get(KEY_NAME).equals(mCurType))   {
-                    ri = AppModel.getRecordTypeUtility().getItemById(Integer.valueOf(hm.get(KEY_ID)));
+                    ri = ContextUtil.getRecordTypeUtility().getItemById(Integer.valueOf(hm.get(KEY_ID)));
                     break;
                 }
             }
@@ -309,9 +309,9 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                         RecordTypeItem ri = cur_dp.getCurDate();
                         if(null != ri) {
                             if(R.id.rl_add == vid)
-                                AppModel.getRecordTypeUtility().addItem(ri);
+                                ContextUtil.getRecordTypeUtility().addItem(ri);
                             else
-                                AppModel.getRecordTypeUtility().modifyItem(ri);
+                                ContextUtil.getRecordTypeUtility().modifyItem(ri);
                             load_info();
                         }
                     }
@@ -354,7 +354,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             for(int id : ll_i) {
-                                AppModel.getRecordTypeUtility().removeItemById(id);
+                                ContextUtil.getRecordTypeUtility().removeItemById(id);
                             }
 
                             mTVNote.setText("");

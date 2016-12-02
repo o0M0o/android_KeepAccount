@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.INote;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**
  * Data helper for NoteShow
@@ -58,9 +58,9 @@ public class NoteShowDataHelper {
         mHMMonthInfo.clear();
         mHMYearInfo.clear();
 
-        mHMYearNotes = AppModel.getPayIncomeUtility().GetAllNotesToYear();
-        mHMMonthNotes = AppModel.getPayIncomeUtility().GetAllNotesToMonth();
-        mHMDayNotes = AppModel.getPayIncomeUtility().GetAllNotesToDay();
+        mHMYearNotes = ContextUtil.getPayIncomeUtility().GetAllNotesToYear();
+        mHMMonthNotes = ContextUtil.getPayIncomeUtility().GetAllNotesToMonth();
+        mHMDayNotes = ContextUtil.getPayIncomeUtility().GetAllNotesToDay();
 
         refresh_day();
         refresh_month();

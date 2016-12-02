@@ -1,20 +1,14 @@
 package wxm.KeepAccount.ui.acutility;
 
 import android.app.Dialog;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
-import butterknife.ButterKnife;
-import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.Setting.TFSettingBase;

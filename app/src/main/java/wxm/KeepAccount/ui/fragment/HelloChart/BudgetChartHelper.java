@@ -28,9 +28,9 @@ import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.PreviewColumnChartView;
-import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -79,7 +79,7 @@ public class BudgetChartHelper extends ShowViewHelperBase {
         mSPBudget = UtilFun.cast(mSelfView.findViewById(R.id.sp_budget));
         assert null != mSPBudget;
 
-        mSPBudgetData = AppModel.getBudgetUtility().GetBudget();
+        mSPBudgetData = ContextUtil.getBudgetUtility().GetBudget();
         if (!ToolUtil.ListIsNullOrEmpty(mSPBudgetData)) {
             ArrayList<String> data_ls = new ArrayList<>();
             for (BudgetItem i : mSPBudgetData) {
@@ -218,7 +218,7 @@ public class BudgetChartHelper extends ShowViewHelperBase {
             return;
 
         BudgetItem bi = mSPBudgetData.get(mSPBudgetHot);
-        List<PayNoteItem> pays = AppModel.getPayIncomeUtility().GetPayNoteByBudget(bi);
+        List<PayNoteItem> pays = ContextUtil.getPayIncomeUtility().GetPayNoteByBudget(bi);
         HashMap<String, ArrayList<PayNoteItem>> hm_ret = new HashMap<>();
 
         for(PayNoteItem i : pays)   {

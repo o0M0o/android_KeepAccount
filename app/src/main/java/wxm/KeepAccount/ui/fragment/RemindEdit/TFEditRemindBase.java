@@ -24,8 +24,8 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.RemindItem;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 
@@ -198,7 +198,7 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
             return false;
         }
 
-        if(AppModel.getRemindUtility().CheckRemindName(name))   {
+        if(ContextUtil.getRemindUtility().CheckRemindName(name))   {
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("提醒名不正确").
                     setMessage("提醒名已经存在!").

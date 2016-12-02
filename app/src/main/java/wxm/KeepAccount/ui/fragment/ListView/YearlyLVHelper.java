@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
@@ -133,7 +133,7 @@ public class YearlyLVHelper extends LVShowDataBase {
 
     @Override
     public void loadView() {
-        if(AppModel.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
+        if(ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
             reloadData();
         }
 

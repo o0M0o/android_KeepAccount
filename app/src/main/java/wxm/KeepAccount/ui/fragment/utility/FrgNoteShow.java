@@ -34,8 +34,8 @@ import wxm.KeepAccount.ui.fragment.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowMonthly;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowYearly;
 
-import static wxm.KeepAccount.Base.data.AppModel.getBudgetUtility;
-import static wxm.KeepAccount.Base.data.AppModel.getPayIncomeUtility;
+import static wxm.KeepAccount.Base.utility.ContextUtil.getBudgetUtility;
+import static wxm.KeepAccount.Base.utility.ContextUtil.getPayIncomeUtility;
 
 /**
  * for note show

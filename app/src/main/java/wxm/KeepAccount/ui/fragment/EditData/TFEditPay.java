@@ -29,11 +29,11 @@ import java.util.Locale;
 import cn.wxm.andriodutillib.Dialog.DlgDatePicker;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.data.PayIncomeDataUtility;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
@@ -121,7 +121,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
         ArrayList<String> data_ls = new ArrayList<>();
         data_ls.add("无预算(不使用预算)");
-        List<BudgetItem> bils = AppModel.getBudgetUtility().GetBudget();
+        List<BudgetItem> bils = ContextUtil.getBudgetUtility().GetBudget();
         if (!ToolUtil.ListIsNullOrEmpty(bils)) {
             for (BudgetItem i : bils) {
                 data_ls.add(i.getName());
@@ -235,7 +235,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             pi.setBudget(null);
             int pos = mSPBudget.getSelectedItemPosition();
             if(AdapterView.INVALID_POSITION != pos && 0 != pos) {
-                BudgetItem bi = AppModel.getBudgetUtility()
+                BudgetItem bi = ContextUtil.getBudgetUtility()
                         .GetBudgetByName((String)mSPBudget.getSelectedItem());
                 if (null != bi) {
                     pi.setBudget(bi);
@@ -328,7 +328,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         pi.setBudget(null);
         int pos = mSPBudget.getSelectedItemPosition();
         if(AdapterView.INVALID_POSITION != pos && 0 != pos) {
-            BudgetItem bi = AppModel.getBudgetUtility()
+            BudgetItem bi = ContextUtil.getBudgetUtility()
                     .GetBudgetByName((String)mSPBudget.getSelectedItem());
             if (null != bi) {
                 pi.setBudget(bi);
@@ -337,7 +337,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
         // add/modify data
         boolean b_create = mAction.equals(AppGobalDef.STR_CREATE);
-        PayIncomeDataUtility uti = AppModel.getPayIncomeUtility();
+        PayIncomeDataUtility uti = ContextUtil.getPayIncomeUtility();
         boolean b_ret =  b_create ?
                             1 == uti.AddPayNotes(Collections.singletonList(pi))
                             : 1 == uti.ModifyPayNotes(Collections.singletonList(pi));

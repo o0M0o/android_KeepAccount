@@ -1,52 +1,29 @@
 package wxm.KeepAccount.ui.fragment.utility;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.HashMap;
 
-import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import cn.wxm.andriodutillib.util.WRMsgHandler;
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
-import wxm.KeepAccount.Base.data.AppMsgDef;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.db.IncomeNoteItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
-import wxm.KeepAccount.Base.db.UsrItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acinterface.ACWelcome;
-import wxm.KeepAccount.ui.acutility.ACAddUsr;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditIncome;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditPay;
@@ -88,10 +65,10 @@ public class FrgNoteEdit extends FrgUtilityBase {
             int pid = bd.getInt(ACNoteEdit.PARA_NOTE_PAY, AppGobalDef.INVALID_ID);
             int iid = bd.getInt(ACNoteEdit.PARA_NOTE_INCOME, AppGobalDef.INVALID_ID);
             if(AppGobalDef.INVALID_ID != pid)   {
-                mOldPayNote = AppModel.getPayIncomeUtility().GetPayNoteById(pid);
+                mOldPayNote = ContextUtil.getPayIncomeUtility().GetPayNoteById(pid);
                 mTLTabs.addTab(mTLTabs.newTab().setText(TAB_PAY));
             } else if(AppGobalDef.INVALID_ID != iid)    {
-                mOldIncomeNote = AppModel.getPayIncomeUtility().GetIncomeNoteById(iid);
+                mOldIncomeNote = ContextUtil.getPayIncomeUtility().GetIncomeNoteById(iid);
                 mTLTabs.addTab(mTLTabs.newTab().setText(TAB_INCOME));
             } else  {
                 Log.e(LOG_TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");

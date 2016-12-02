@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppModel;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.RemindItem;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 
@@ -46,7 +46,7 @@ public class TFEditRemindBudget extends TFEditRemindBase  {
 
             // init budget
             ArrayList<String> data_ls = new ArrayList<>();
-            List<BudgetItem> bils = AppModel.getBudgetUtility().GetBudget();
+            List<BudgetItem> bils = ContextUtil.getBudgetUtility().GetBudget();
             if (!ToolUtil.ListIsNullOrEmpty(bils)) {
                 for (BudgetItem i : bils) {
                     data_ls.add(i.getName());
@@ -87,7 +87,7 @@ public class TFEditRemindBudget extends TFEditRemindBase  {
         String r = UtilFun.cast(mSPRemindActiveType.getSelectedItem());
         ri.setReason(r);
 
-        return AppModel.getRemindUtility().AddOrUpdateRemind(ri);
+        return ContextUtil.getRemindUtility().AddOrUpdateRemind(ri);
     }
 
 
@@ -97,7 +97,7 @@ public class TFEditRemindBudget extends TFEditRemindBase  {
      */
     private boolean checkBudget()   {
         String sel_budget = UtilFun.cast(mSPBudget.getSelectedItem());
-        BudgetItem bi = AppModel.getBudgetUtility().GetBudgetByName(sel_budget);
+        BudgetItem bi = ContextUtil.getBudgetUtility().GetBudgetByName(sel_budget);
         if(null == bi)  {
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("缺少预算项").

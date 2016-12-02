@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.utility;
+package wxm.KeepAccount.Base.db;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -16,14 +16,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
 
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
-import wxm.KeepAccount.Base.db.BudgetItem;
-import wxm.KeepAccount.Base.db.IncomeNoteItem;
-import wxm.KeepAccount.Base.db.PayNoteItem;
-import wxm.KeepAccount.Base.db.RecordTypeItem;
-import wxm.KeepAccount.Base.db.RemindItem;
-import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.BuildConfig;
 import wxm.KeepAccount.R;
 
@@ -31,8 +25,8 @@ import wxm.KeepAccount.R;
  * db ormlite helper
  * Created by 123 on 2016/8/5.
  */
-public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
-    private static final String TAG = "DBOrmliteHelper";
+public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
+    private static final String TAG = "DBOrmLiteHelper";
 
 
     // name of the database file for your application -- change to something appropriate for your app
@@ -48,7 +42,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
     private RuntimeExceptionDao<IncomeNoteItem, Integer>    mIncomeNoteRDao = null;
     private RuntimeExceptionDao<RemindItem, Integer>        mRemindRDao = null;
 
-    public DBOrmliteHelper(Context context) {
+    public DBOrmLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -175,7 +169,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         }
 
         // 添加默认用户
-        AppModel.getUsrUtility().addUsr(AppGobalDef.DEF_USR_NAME, AppGobalDef.DEF_USR_PWD);
+        ContextUtil.getUsrUtility().addUsr(AppGobalDef.DEF_USR_NAME, AppGobalDef.DEF_USR_PWD);
 
         if(BuildConfig.FILL_TESTDATA)
             AddTestData();
@@ -206,8 +200,8 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
      * 填充测试数据
      */
     private void AddTestData()  {
-        UsrItem ui_wxm  = AppModel.getUsrUtility().addUsr("wxm", "123456");
-        UsrItem ui_hugo = AppModel.getUsrUtility().addUsr("hugo", "123456");
+        UsrItem ui_wxm  = ContextUtil.getUsrUtility().addUsr("wxm", "123456");
+        UsrItem ui_hugo = ContextUtil.getUsrUtility().addUsr("hugo", "123456");
 
         // for wxm
         LinkedList<PayNoteItem> ls_pay = new LinkedList<>();
@@ -232,7 +226,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         pay_it.setVal(new BigDecimal(12.34));
         pay_it.getTs().setTime(de.getTime());
         ls_pay.add(pay_it);
-        AppModel.getPayIncomeUtility().AddPayNotes(ls_pay);
+        ContextUtil.getPayIncomeUtility().AddPayNotes(ls_pay);
 
         LinkedList<IncomeNoteItem> ls_income = new LinkedList<>();
         IncomeNoteItem income_it = new IncomeNoteItem();
@@ -241,27 +235,27 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
         income_it.setVal(new BigDecimal(12.34));
         income_it.getTs().setTime(de.getTime());
         ls_income.add(income_it);
-        AppModel.getPayIncomeUtility().AddIncomeNotes(ls_income);
+        ContextUtil.getPayIncomeUtility().AddIncomeNotes(ls_income);
 
         // for hugo
         for(PayNoteItem i : ls_pay)     {
             i.setId(AppGobalDef.INVALID_ID);
             i.setUsr(ui_hugo);
         }
-        AppModel.getPayIncomeUtility().AddPayNotes(ls_pay);
+        ContextUtil.getPayIncomeUtility().AddPayNotes(ls_pay);
 
         for(IncomeNoteItem i : ls_income)     {
             i.setId(AppGobalDef.INVALID_ID);
             i.setUsr(ui_hugo);
         }
-        AppModel.getPayIncomeUtility().AddIncomeNotes(ls_income);
+        ContextUtil.getPayIncomeUtility().AddIncomeNotes(ls_income);
 
         AddTestDataForDefualtUsr();
     }
 
 
     private void AddTestDataForDefualtUsr() {
-        UsrItem def_ui = AppModel.getUsrUtility()
+        UsrItem def_ui = ContextUtil.getUsrUtility()
                             .CheckAndGetUsr(AppGobalDef.DEF_USR_NAME, AppGobalDef.DEF_USR_PWD);
         if(null != def_ui)  {
             long one_day_msecs = 1000 * 3600 * 24;
@@ -292,7 +286,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
                             ls_pay.add(pay_it);
                         }
 
-                        AppModel.getPayIncomeUtility().AddPayNotes(ls_pay);
+                        ContextUtil.getPayIncomeUtility().AddPayNotes(ls_pay);
                     }
 
 
@@ -312,7 +306,7 @@ public class DBOrmliteHelper extends OrmLiteSqliteOpenHelper {
                             ls_pay.add(pay_it);
                         }
 
-                        AppModel.getPayIncomeUtility().AddIncomeNotes(ls_pay);
+                        ContextUtil.getPayIncomeUtility().AddIncomeNotes(ls_pay);
                     }
                 }
             }

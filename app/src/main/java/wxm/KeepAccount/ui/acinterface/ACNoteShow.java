@@ -1,14 +1,13 @@
 package wxm.KeepAccount.ui.acinterface;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import java.util.List;
 
-import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;

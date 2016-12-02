@@ -10,7 +10,8 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.PayNoteItem;
 import wxm.KeepAccount.Base.db.UsrItem;
-import wxm.KeepAccount.Base.utility.DBOrmliteHelper;
+import wxm.KeepAccount.Base.db.DBOrmLiteHelper;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 
 /**
@@ -33,7 +34,7 @@ public class BudgetDataUtility extends  DataUtilityBase {
         List<BudgetItem> ls_bi = GetBudget();
         if(null != ls_bi)   {
             for(BudgetItem bi : ls_bi)  {
-                List<PayNoteItem> pi = AppModel.getPayIncomeUtility().GetPayNoteByBudget(bi);
+                List<PayNoteItem> pi = ContextUtil.getPayIncomeUtility().GetPayNoteByBudget(bi);
                 
                 BudgetItem nbi = GetBudgetById(bi.get_id());
                 bret.put(nbi, pi);
@@ -48,11 +49,11 @@ public class BudgetDataUtility extends  DataUtilityBase {
      * @return 查找到的数据,没有数据时返回{@code NULL}
      */
     public List<BudgetItem> GetBudget()  {
-        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        UsrItem cur_usr = ContextUtil.getCurUsr();
         if(null == cur_usr)
             return null;
 
-        List<BudgetItem> lsret = AppModel.getDBHelper().getBudgetDataREDao()
+        List<BudgetItem> lsret = ContextUtil.getDBHelper().getBudgetDataREDao()
                                     .queryForEq(BudgetItem.FIELD_USR, cur_usr);
         if((null == lsret) || (0 == lsret.size()))
             return null;
@@ -93,7 +94,7 @@ public class BudgetDataUtility extends  DataUtilityBase {
      * @return 查找到的数据,没有数据时返回{@code NULL}
      */
     public BudgetItem GetBudgetById(int biid)  {
-        return AppModel.getDBHelper().getBudgetDataREDao()
+        return ContextUtil.getDBHelper().getBudgetDataREDao()
                 .queryForId(biid);
     }
 
@@ -105,11 +106,11 @@ public class BudgetDataUtility extends  DataUtilityBase {
         if(UtilFun.StringIsNullOrEmpty(bn))
             return null;
 
-        UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+        UsrItem cur_usr = ContextUtil.getInstance().getCurUsr();
         if(null == cur_usr)
             return null;
 
-        DBOrmliteHelper mDBHelper = AppModel.getDBHelper();
+        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
         List<BudgetItem> ret;
         try {
             ret = mDBHelper.getBudgetDataREDao().queryBuilder()
@@ -134,7 +135,7 @@ public class BudgetDataUtility extends  DataUtilityBase {
      */
     public boolean AddBudget(BudgetItem bi)   {
         if((null == bi.getUsr()) || (-1 == bi.getUsr().getId())) {
-            UsrItem cur_usr = AppModel.getInstance().getCurUsr();
+            UsrItem cur_usr = ContextUtil.getCurUsr();
             if(null == cur_usr)
                 return false;
 
@@ -142,7 +143,7 @@ public class BudgetDataUtility extends  DataUtilityBase {
         }
 
 
-        boolean br = 1 == AppModel.getDBHelper().getBudgetDataREDao()
+        boolean br = 1 == ContextUtil.getDBHelper().getBudgetDataREDao()
                         .create(bi);
         if(br)
             onDataCreate();
@@ -155,7 +156,7 @@ public class BudgetDataUtility extends  DataUtilityBase {
      * @return 成功返回{@code true}
      */
     public boolean ModifyBudget(BudgetItem bi)  {
-        boolean br = 1 == AppModel.getDBHelper().getBudgetDataREDao().update(bi);
+        boolean br = 1 == ContextUtil.getDBHelper().getBudgetDataREDao().update(bi);
         if(br)
             onDataModify();
         return br;
@@ -173,16 +174,16 @@ public class BudgetDataUtility extends  DataUtilityBase {
             int w_s = ls_biid.size();
             int r_s = 0;
             for(Integer id : ls_biid) {
-                List<PayNoteItem> ls_pay = AppModel.getDBHelper().getPayDataREDao()
+                List<PayNoteItem> ls_pay = ContextUtil.getDBHelper().getPayDataREDao()
                                             .queryForEq(PayNoteItem.FIELD_BUDGET, id);
                 if (!ToolUtil.ListIsNullOrEmpty(ls_pay)) {
                     for (PayNoteItem i : ls_pay) {
                         i.setBudget(null);
-                        AppModel.getDBHelper().getPayDataREDao().update(i);
+                        ContextUtil.getDBHelper().getPayDataREDao().update(i);
                     }
                 }
 
-                if(1 == AppModel.getDBHelper().getBudgetDataREDao().deleteById(id)) {
+                if(1 == ContextUtil.getDBHelper().getBudgetDataREDao().deleteById(id)) {
                     r_s += 1;
                 }
             }

@@ -14,9 +14,9 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.db.BudgetItem;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 
@@ -76,7 +76,7 @@ public class TFEditBudget extends TFEditBase {
             return false;
         }
 
-        BudgetItem cbi = AppModel.getBudgetUtility().GetBudgetByName(name);
+        BudgetItem cbi = ContextUtil.getBudgetUtility().GetBudgetByName(name);
         if((null != cbi)
                 && ((null == mBIData) || (mBIData.get_id() != cbi.get_id())))  {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -103,8 +103,8 @@ public class TFEditBudget extends TFEditBase {
         bi.setAmount(new BigDecimal(amount));
         bi.setNote(note);
 
-        boolean s_ret = b_create ? AppModel.getBudgetUtility().AddBudget(bi)
-                                    : AppModel.getBudgetUtility().ModifyBudget(bi);
+        boolean s_ret = b_create ? ContextUtil.getBudgetUtility().AddBudget(bi)
+                                    : ContextUtil.getBudgetUtility().ModifyBudget(bi);
         if(!s_ret)  {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage(b_create ? "创建预算数据失败!" : "更新预算数据失败")

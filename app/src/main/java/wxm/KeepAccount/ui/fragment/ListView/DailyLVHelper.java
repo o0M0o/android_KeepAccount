@@ -30,10 +30,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.db.BudgetItem;
 import wxm.KeepAccount.Base.db.INote;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
@@ -173,7 +173,7 @@ public class DailyLVHelper extends LVShowDataBase
 
     @Override
     public void loadView() {
-        if(AppModel.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
+        if(ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
             reloadData();
         }
 
@@ -212,12 +212,12 @@ public class DailyLVHelper extends LVShowDataBase
             case R.id.bt_accpet :
                 if(ACTION_DELETE == mActionType) {
                     if(!ToolUtil.ListIsNullOrEmpty(mDelPay)) {
-                        AppModel.getPayIncomeUtility().DeletePayNotes(mDelPay);
+                        ContextUtil.getPayIncomeUtility().DeletePayNotes(mDelPay);
                         mDelPay.clear();
                     }
 
                     if(!ToolUtil.ListIsNullOrEmpty(mDelIncome)) {
-                        AppModel.getPayIncomeUtility().DeleteIncomeNotes(mDelIncome);
+                        ContextUtil.getPayIncomeUtility().DeleteIncomeNotes(mDelIncome);
                         mDelIncome.clear();
                     }
 

@@ -14,8 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**
  * 支出记录数据
@@ -180,12 +180,12 @@ public class PayNoteItem implements Parcelable, INote {
 
         int uid = in.readInt();
         if(AppGobalDef.INVALID_ID != uid)   {
-            setUsr(AppModel.getUsrUtility().GetUsrById(uid));
+            setUsr(ContextUtil.getUsrUtility().GetUsrById(uid));
         }
 
         int bid = in.readInt();
         if(AppGobalDef.INVALID_ID != bid)   {
-            setBudget(AppModel.getBudgetUtility().GetBudgetById(bid));
+            setBudget(ContextUtil.getBudgetUtility().GetBudgetById(bid));
         }
 
         setInfo(in.readString());

@@ -2,30 +2,17 @@ package wxm.KeepAccount.ui.acutility;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import java.util.HashMap;
-
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
-import wxm.KeepAccount.Base.db.IncomeNoteItem;
-import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
-import wxm.KeepAccount.ui.fragment.EditData.TFEditIncome;
-import wxm.KeepAccount.ui.fragment.EditData.TFEditPay;
 import wxm.KeepAccount.ui.fragment.utility.FrgNoteEdit;
 
 /**

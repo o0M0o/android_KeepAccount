@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.data;
+package wxm.KeepAccount.Base.define;
 
 /**
  * App全局定义
@@ -15,7 +15,7 @@ public class AppGobalDef {
     public static final String  STR_CREATE     = "create";
     public static final String  STR_MODIFY     = "modify";
 
-    static final String STR_PWD_PAD = "JkpYkhiayh@#$_)(";
+    public static final String STR_PWD_PAD = "JkpYkhiayh@#$_)(";
 
     public static final String INTENT_LOAD_RECORD_ID     = "record_id";
     public static final String INTENT_LOAD_RECORD_TYPE   = "record_type";

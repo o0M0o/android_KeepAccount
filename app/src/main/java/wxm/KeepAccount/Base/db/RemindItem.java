@@ -14,8 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**
  * 提醒数据
@@ -76,7 +76,7 @@ public class RemindItem  implements Parcelable {
         set_id(in.readInt());
         int uid = in.readInt();
         if(AppGobalDef.INVALID_ID != uid)   {
-            setUsr(AppModel.getUsrUtility().GetUsrById(uid));
+            setUsr(ContextUtil.getUsrUtility().GetUsrById(uid));
         }
 
         setName(in.readString());

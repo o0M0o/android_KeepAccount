@@ -1,21 +1,14 @@
 package wxm.KeepAccount.ui.acutility;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
-import butterknife.ButterKnife;
-import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditRecordInfo;
-import wxm.KeepAccount.ui.fragment.utility.FrgUsrAdd;
 
 public class ACRecordInfoEdit extends BaseAppCompatActivity {
     public final static String  IT_PARA_RECORDTYPE = "record_type";

@@ -16,7 +16,7 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppGobalDef;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.R;
 
 /**

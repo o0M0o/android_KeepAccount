@@ -22,10 +22,10 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppModel;
+import wxm.KeepAccount.Base.define.AppGobalDef;
 import wxm.KeepAccount.Base.data.RecordTypeDataUtility;
 import wxm.KeepAccount.Base.db.RecordTypeItem;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACRecordInfoEdit;
 
@@ -156,7 +156,7 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
     }
 
     private void loadData() {
-        RecordTypeDataUtility rd = AppModel.getRecordTypeUtility();
+        RecordTypeDataUtility rd = ContextUtil.getRecordTypeUtility();
         List<RecordTypeItem> al_type = AppGobalDef.STR_RECORD_PAY.equals(mRootType) ?
                                                 rd.getAllPayItem() : rd.getAllIncomeItem();
         Collections.sort(al_type, new Comparator<RecordTypeItem>() {
