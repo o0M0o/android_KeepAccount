@@ -1,8 +1,8 @@
-package wxm.KeepAccount.Base.data;
+package wxm.KeepAccount.Base.db;
 
 import java.util.List;
 
-import wxm.KeepAccount.Base.db.RecordTypeItem;
+import wxm.KeepAccount.Base.data.RecordTypeItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**

@@ -30,9 +30,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.db.BudgetItem;
-import wxm.KeepAccount.Base.db.INote;
+import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.Base.data.BudgetItem;
+import wxm.KeepAccount.Base.data.INote;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -114,11 +114,11 @@ public class DailyLVHelper extends LVShowDataBase
             public void onClick(View v) {
                 ACNoteShow ac = getRootActivity();
                 Intent intent = new Intent(ac, ACNoteEdit.class);
-                intent.putExtra(ACNoteEdit.PARA_ACTION, AppGobalDef.STR_CREATE);
+                intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
-                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
+                intent.putExtra(GlobalDef.STR_RECORD_DATE,
                         String.format(Locale.CHINA ,"%d-%02d-%02d %02d:%02d"
                                 ,cal.get(Calendar.YEAR)
                                 ,cal.get(Calendar.MONTH) + 1
@@ -212,12 +212,12 @@ public class DailyLVHelper extends LVShowDataBase
             case R.id.bt_accpet :
                 if(ACTION_DELETE == mActionType) {
                     if(!ToolUtil.ListIsNullOrEmpty(mDelPay)) {
-                        ContextUtil.getPayIncomeUtility().DeletePayNotes(mDelPay);
+                        ContextUtil.getPayIncomeUtility().deletePayNotes(mDelPay);
                         mDelPay.clear();
                     }
 
                     if(!ToolUtil.ListIsNullOrEmpty(mDelIncome)) {
-                        ContextUtil.getPayIncomeUtility().DeleteIncomeNotes(mDelIncome);
+                        ContextUtil.getPayIncomeUtility().deleteIncomeNotes(mDelIncome);
                         mDelIncome.clear();
                     }
 
@@ -646,10 +646,10 @@ public class DailyLVHelper extends LVShowDataBase
                         ACNoteShow ac = getRootActivity();
                         Intent intent;
                         intent = new Intent(ac, ACPreveiwAndEdit.class);
-                        intent.putExtra(AppGobalDef.INTENT_LOAD_RECORD_ID, did);
-                        intent.putExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE,
-                                V_TYPE_PAY.equals(tp) ? AppGobalDef.STR_RECORD_PAY
-                                        : AppGobalDef.STR_RECORD_INCOME);
+                        intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, did);
+                        intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
+                                V_TYPE_PAY.equals(tp) ? GlobalDef.STR_RECORD_PAY
+                                        : GlobalDef.STR_RECORD_INCOME);
 
                         ac.startActivityForResult(intent, 1);
                     }

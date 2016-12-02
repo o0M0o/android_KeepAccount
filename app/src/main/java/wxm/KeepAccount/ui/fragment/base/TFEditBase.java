@@ -14,8 +14,8 @@ public abstract class TFEditBase extends Fragment {
      * 设置运行数据
      *
      * @param action 可以为以下参数 --
-     *               * “更新”(AppGobalDef.STR_MODIFY)
-     *               * “新建”(AppGobalDef.STR_CREATE)
+     *               * “更新”(GlobalDef.STR_MODIFY)
+     *               * “新建”(GlobalDef.STR_CREATE)
      * @param obj     若是“更新”，则此参数为待更新数据
      */
     public abstract void setCurData(String action, Object obj);

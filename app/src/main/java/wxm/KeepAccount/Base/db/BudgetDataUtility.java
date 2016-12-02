@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.data;
+package wxm.KeepAccount.Base.db;
 
 import android.util.Log;
 
@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.db.BudgetItem;
-import wxm.KeepAccount.Base.db.PayNoteItem;
-import wxm.KeepAccount.Base.db.UsrItem;
-import wxm.KeepAccount.Base.db.DBOrmLiteHelper;
+import wxm.KeepAccount.Base.data.BudgetItem;
+import wxm.KeepAccount.Base.data.PayNoteItem;
+import wxm.KeepAccount.Base.data.UsrItem;
+import wxm.KeepAccount.Base.data.DBOrmLiteHelper;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 
@@ -34,7 +34,7 @@ public class BudgetDataUtility extends  DataUtilityBase {
         List<BudgetItem> ls_bi = GetBudget();
         if(null != ls_bi)   {
             for(BudgetItem bi : ls_bi)  {
-                List<PayNoteItem> pi = ContextUtil.getPayIncomeUtility().GetPayNoteByBudget(bi);
+                List<PayNoteItem> pi = ContextUtil.getPayIncomeUtility().getPayNoteByBudget(bi);
                 
                 BudgetItem nbi = GetBudgetById(bi.get_id());
                 bret.put(nbi, pi);

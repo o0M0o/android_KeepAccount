@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.db;
+package wxm.KeepAccount.Base.data;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;

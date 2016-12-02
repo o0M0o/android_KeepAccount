@@ -8,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.Setting.TFSettingBase;
@@ -25,7 +25,7 @@ public class ACSetting extends BaseAppCompatActivity {
         if(FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
             mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
         } else {
-            int ret_data = AppGobalDef.INTRET_GIVEUP;
+            int ret_data = GlobalDef.INTRET_GIVEUP;
             Intent data = new Intent();
             setResult(ret_data, data);
             finish();
@@ -75,7 +75,7 @@ public class ACSetting extends BaseAppCompatActivity {
                         mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
                     }
                 } else  {
-                    int ret_data = AppGobalDef.INTRET_SURE;
+                    int ret_data = GlobalDef.INTRET_SURE;
                     Intent data = new Intent();
                     setResult(ret_data, data);
                     finish();
@@ -87,7 +87,7 @@ public class ACSetting extends BaseAppCompatActivity {
                 if(FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
                     mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
                 } else {
-                    int ret_data = AppGobalDef.INTRET_GIVEUP;
+                    int ret_data = GlobalDef.INTRET_GIVEUP;
                     Intent data = new Intent();
                     setResult(ret_data, data);
                     finish();

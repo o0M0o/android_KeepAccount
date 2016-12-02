@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.db;
+package wxm.KeepAccount.Base.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,7 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import wxm.KeepAccount.Base.define.AppGobalDef;
+import cn.wxm.andriodutillib.DBHelper.IDBRow;
+import wxm.KeepAccount.Base.define.GlobalDef;
 
 
 /**
@@ -22,7 +23,8 @@ import wxm.KeepAccount.Base.define.AppGobalDef;
  * Created by 123 on 2016/5/3.
  */
 @DatabaseTable(tableName = "tbIncomeNote")
-public class IncomeNoteItem implements Parcelable, INote {
+public class IncomeNoteItem
+        implements Parcelable, INote, IDBRow<Integer> {
     public final static String FIELD_TS         = "ts";
     public final static String FIELD_USR        = "usr_id";
 
@@ -164,13 +166,13 @@ public class IncomeNoteItem implements Parcelable, INote {
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(getId());
 
-        int usrid = AppGobalDef.INVALID_ID;
+        int usrid = GlobalDef.INVALID_ID;
         UsrItem ui = getUsr();
         if(null != ui)
             usrid = ui.getId();
         out.writeInt(usrid);
 
-        int budgetid = AppGobalDef.INVALID_ID;
+        int budgetid = GlobalDef.INVALID_ID;
         BudgetItem bi = getBudget();
         if(null != bi)
             budgetid = bi.get_id();
@@ -217,6 +219,16 @@ public class IncomeNoteItem implements Parcelable, INote {
         {
             setTs(new Timestamp(0));
         }
+    }
+
+    @Override
+    public Integer getID() {
+        return getId();
+    }
+
+    @Override
+    public void setID(Integer integer) {
+        setId(integer);
     }
 }
 

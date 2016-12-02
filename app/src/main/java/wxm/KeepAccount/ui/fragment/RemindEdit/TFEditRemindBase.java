@@ -24,7 +24,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.db.RemindItem;
+import wxm.KeepAccount.Base.data.RemindItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;

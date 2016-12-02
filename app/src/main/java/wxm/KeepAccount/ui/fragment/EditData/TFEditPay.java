@@ -29,10 +29,10 @@ import java.util.Locale;
 import cn.wxm.andriodutillib.Dialog.DlgDatePicker;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.data.PayIncomeDataUtility;
-import wxm.KeepAccount.Base.db.BudgetItem;
-import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.data.BudgetItem;
+import wxm.KeepAccount.Base.data.PayNoteItem;
+import wxm.KeepAccount.Base.db.PayIncomeDBUtility;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -67,7 +67,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         super.onViewCreated(view, savedInstanceState);
         if (null != view) {
             if (UtilFun.StringIsNullOrEmpty(mAction)
-                    || (AppGobalDef.STR_MODIFY.equals(mAction) && null == mOldPayNote))
+                    || (GlobalDef.STR_MODIFY.equals(mAction) && null == mOldPayNote))
                 return;
 
             mSelfView = view;
@@ -80,7 +80,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
      * 填充数据
      */
     private void fill_data() {
-        if (mAction.equals(AppGobalDef.STR_MODIFY)) {
+        if (mAction.equals(GlobalDef.STR_MODIFY)) {
             BudgetItem bi = mOldPayNote.getBudget();
             if (null != bi) {
                 String bn = bi.getName();
@@ -102,7 +102,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             Activity ac = getActivity();
             Intent it = ac.getIntent();
             if (null != it) {
-                String ad_date = it.getStringExtra(AppGobalDef.STR_RECORD_DATE);
+                String ad_date = it.getStringExtra(GlobalDef.STR_RECORD_DATE);
                 if (!UtilFun.StringIsNullOrEmpty(ad_date)) {
                     mETDate.setText(ad_date);
                 }
@@ -315,7 +315,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
         // set data
         PayNoteItem pi = new PayNoteItem();
-        if(null != mOldPayNote && mAction.equals(AppGobalDef.STR_MODIFY)) {
+        if(null != mOldPayNote && mAction.equals(GlobalDef.STR_MODIFY)) {
             pi.setId(mOldPayNote.getId());
             pi.setUsr(mOldPayNote.getUsr());
         }
@@ -336,11 +336,11 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         }
 
         // add/modify data
-        boolean b_create = mAction.equals(AppGobalDef.STR_CREATE);
-        PayIncomeDataUtility uti = ContextUtil.getPayIncomeUtility();
+        boolean b_create = mAction.equals(GlobalDef.STR_CREATE);
+        PayIncomeDBUtility uti = ContextUtil.getPayIncomeUtility();
         boolean b_ret =  b_create ?
-                            1 == uti.AddPayNotes(Collections.singletonList(pi))
-                            : 1 == uti.ModifyPayNotes(Collections.singletonList(pi));
+                            1 == uti.addPayNotes(Collections.singletonList(pi))
+                            : 1 == uti.modifyPayNotes(Collections.singletonList(pi));
         if(!b_ret)  {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage(b_create ? "创建支出数据失败!" : "更新支出数据失败")
@@ -384,7 +384,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
                 case R.id.ar_et_info: {
                     DlgSelectRecordType dp = new DlgSelectRecordType();
-                    dp.setOldType(AppGobalDef.STR_RECORD_PAY, mETInfo.getText().toString());
+                    dp.setOldType(GlobalDef.STR_RECORD_PAY, mETInfo.getText().toString());
                     dp.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                         @Override
                         public void onDialogPositiveResult(DialogFragment dialog) {

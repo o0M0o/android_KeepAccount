@@ -23,9 +23,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.wxm.andriodutillib.DBHelper.IDataChangeNotice;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.IDataChangeNotice;
+import wxm.KeepAccount.Base.data.IncomeNoteItem;
+import wxm.KeepAccount.Base.data.PayNoteItem;
+import wxm.KeepAccount.Base.db.IDBChangeNotice;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
@@ -54,7 +57,7 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     // for notice
     private boolean[]   mBADataChange;
-    private IDataChangeNotice mIDCNotice = new IDataChangeNotice() {
+    private IDBChangeNotice mIDCNotice = new IDBChangeNotice() {
         @Override
         public void DataModifyNotice() {
             reLoadFrg();
@@ -75,6 +78,53 @@ public class FrgNoteShow extends FrgUtilityBase {
             new ATDataChange().execute();
         }
     };
+
+    private IDataChangeNotice mIDCPayNotice = new IDataChangeNotice<PayNoteItem>() {
+        @Override
+        public void DataModifyNotice(List<PayNoteItem> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataCreateNotice(List<PayNoteItem> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataDeleteNotice(List<PayNoteItem> list) {
+            reLoadFrg();
+        }
+
+        private void reLoadFrg()    {
+            showProgress(true);
+            new ATDataChange().execute();
+        }
+    };
+
+
+    private IDataChangeNotice mIDCIncomeNotice = new IDataChangeNotice<IncomeNoteItem>() {
+        @Override
+        public void DataModifyNotice(List<IncomeNoteItem> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataCreateNotice(List<IncomeNoteItem> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataDeleteNotice(List<IncomeNoteItem> list) {
+            reLoadFrg();
+        }
+
+
+        private void reLoadFrg()    {
+            showProgress(true);
+            new ATDataChange().execute();
+        }
+    };
+
 
 
     private class ATDataChange extends AsyncTask<Void, Void, Void> {
@@ -174,13 +224,15 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     @Override
     protected void enterActivity()  {
-        getPayIncomeUtility().addDataChangeNotice(mIDCNotice);
+        getPayIncomeUtility().getPayDBUtility().addDataChangeNotice(mIDCPayNotice);
+        getPayIncomeUtility().getIncomeDBUtility().addDataChangeNotice(mIDCIncomeNotice);
         getBudgetUtility().addDataChangeNotice(mIDCNotice);
     }
 
     @Override
     protected void leaveActivity()  {
-        getPayIncomeUtility().removeDataChangeNotice(mIDCNotice);
+        getPayIncomeUtility().getPayDBUtility().removeDataChangeNotice(mIDCPayNotice);
+        getPayIncomeUtility().getIncomeDBUtility().removeDataChangeNotice(mIDCIncomeNotice);
         getBudgetUtility().removeDataChangeNotice(mIDCNotice);
     }
 

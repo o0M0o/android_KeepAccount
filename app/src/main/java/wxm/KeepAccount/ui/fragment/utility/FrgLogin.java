@@ -29,9 +29,8 @@ import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.WRMsgHandler;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppMsgDef;
-import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.Base.data.UsrItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACWelcome;
@@ -117,11 +116,11 @@ public class FrgLogin extends FrgUtilityBase {
             @Override
             public void onClick(View v) {
                 Intent data = new Intent();
-                data.putExtra(UsrItem.FIELD_NAME, AppGobalDef.DEF_USR_NAME);
-                data.putExtra(UsrItem.FIELD_PWD, AppGobalDef.DEF_USR_PWD);
+                data.putExtra(UsrItem.FIELD_NAME, GlobalDef.DEF_USR_NAME);
+                data.putExtra(UsrItem.FIELD_PWD, GlobalDef.DEF_USR_PWD);
 
                 Message m = Message.obtain(ContextUtil.getMsgHandler(),
-                        AppMsgDef.MSG_USR_LOGIN);
+                        GlobalDef.MSG_USR_LOGIN);
                 m.obj = new Object[]{data, mMHHandler};
                 m.sendToTarget();
             }
@@ -281,7 +280,7 @@ public class FrgLogin extends FrgUtilityBase {
             data.putExtra(UsrItem.FIELD_PWD, mPassword);
 
             Message m = Message.obtain(ContextUtil.getMsgHandler(),
-                    AppMsgDef.MSG_USR_LOGIN);
+                    GlobalDef.MSG_USR_LOGIN);
             m.obj = new Object[]{data, mMHHandler};
             m.sendToTarget();
             return true;
@@ -304,9 +303,9 @@ public class FrgLogin extends FrgUtilityBase {
         @Override
         protected void processMsg(Message m, FrgLogin home) {
             switch (m.what) {
-                case AppMsgDef.MSG_REPLY: {
+                case GlobalDef.MSG_REPLY: {
                     switch (m.arg1) {
-                        case AppMsgDef.MSG_USR_LOGIN: {
+                        case GlobalDef.MSG_USR_LOGIN: {
                             boolean ret = UtilFun.cast(m.obj);
                             home.afterLoginExecute(ret);
                         }

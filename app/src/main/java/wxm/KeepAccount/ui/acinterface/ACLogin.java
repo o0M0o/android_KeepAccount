@@ -13,8 +13,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppMsgDef;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.utility.FrgLogin;
@@ -105,17 +104,17 @@ public class ACLogin extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         boolean b_resetview = false;
-        if (AppGobalDef.INTRET_USR_ADD == resultCode) {
+        if (GlobalDef.INTRET_USR_ADD == resultCode) {
             Log.i(TAG, "从'添加新帐户'页面返回");
             b_resetview = true;
-        } else if (AppGobalDef.INTRET_GIVEUP == resultCode) {
+        } else if (GlobalDef.INTRET_GIVEUP == resultCode) {
             Log.i(TAG, "从'添加新帐户'页面返回(放弃添加新帐户)");
-        } else if (AppGobalDef.INTRET_USR_LOGOUT == resultCode) {
+        } else if (GlobalDef.INTRET_USR_LOGOUT == resultCode) {
             Log.i(TAG, "注销帐户");
             b_resetview = true;
 
             Message m = Message.obtain(ContextUtil.getMsgHandler(),
-                    AppMsgDef.MSG_USR_LOGOUT);
+                    GlobalDef.MSG_USR_LOGOUT);
             m.sendToTarget();
         } else {
             Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));

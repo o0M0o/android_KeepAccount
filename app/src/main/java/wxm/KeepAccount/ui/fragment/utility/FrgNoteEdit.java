@@ -19,9 +19,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.db.IncomeNoteItem;
-import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.Base.data.IncomeNoteItem;
+import wxm.KeepAccount.Base.data.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
@@ -61,14 +61,14 @@ public class FrgNoteEdit extends FrgUtilityBase {
     protected void initUiComponent(View view) {
         Bundle bd = getArguments();
         mAction = bd.getString(ACNoteEdit.PARA_ACTION);
-        if(AppGobalDef.STR_MODIFY.equals(mAction)) {
-            int pid = bd.getInt(ACNoteEdit.PARA_NOTE_PAY, AppGobalDef.INVALID_ID);
-            int iid = bd.getInt(ACNoteEdit.PARA_NOTE_INCOME, AppGobalDef.INVALID_ID);
-            if(AppGobalDef.INVALID_ID != pid)   {
-                mOldPayNote = ContextUtil.getPayIncomeUtility().GetPayNoteById(pid);
+        if(GlobalDef.STR_MODIFY.equals(mAction)) {
+            int pid = bd.getInt(ACNoteEdit.PARA_NOTE_PAY, GlobalDef.INVALID_ID);
+            int iid = bd.getInt(ACNoteEdit.PARA_NOTE_INCOME, GlobalDef.INVALID_ID);
+            if(GlobalDef.INVALID_ID != pid)   {
+                mOldPayNote = ContextUtil.getPayIncomeUtility().getPayById(pid);
                 mTLTabs.addTab(mTLTabs.newTab().setText(TAB_PAY));
-            } else if(AppGobalDef.INVALID_ID != iid)    {
-                mOldIncomeNote = ContextUtil.getPayIncomeUtility().GetIncomeNoteById(iid);
+            } else if(GlobalDef.INVALID_ID != iid)    {
+                mOldIncomeNote = ContextUtil.getPayIncomeUtility().getIncomeById(iid);
                 mTLTabs.addTab(mTLTabs.newTab().setText(TAB_INCOME));
             } else  {
                 Log.e(LOG_TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");

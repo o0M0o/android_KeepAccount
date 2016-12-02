@@ -26,8 +26,8 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.db.RecordTypeItem;
+import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.Base.data.RecordTypeItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.dialog.DlgRecordInfo;
@@ -93,8 +93,8 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
             mCLNotSelected = getResources().getColor(R.color.white);
 
             mSelfView = view;
-            if(!mEditType.equals(AppGobalDef.STR_RECORD_PAY) &&
-                    !mEditType.equals(AppGobalDef.STR_RECORD_INCOME))
+            if(!mEditType.equals(GlobalDef.STR_RECORD_PAY) &&
+                    !mEditType.equals(GlobalDef.STR_RECORD_INCOME))
                 return;
 
             // init view
@@ -187,7 +187,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     private void load_info() {
         mLHMData.clear();
         List<RecordTypeItem> al_type;
-        if(mEditType.equals(AppGobalDef.STR_RECORD_PAY))    {
+        if(mEditType.equals(GlobalDef.STR_RECORD_PAY))    {
             al_type = ContextUtil.getRecordTypeUtility().getAllPayItem();
         } else  {
             al_type = ContextUtil.getRecordTypeUtility().getAllIncomeItem();

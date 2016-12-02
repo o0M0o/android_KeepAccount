@@ -1,11 +1,11 @@
-package wxm.KeepAccount.Base.data;
+package wxm.KeepAccount.Base.db;
 
 import java.sql.SQLException;
 import java.util.List;
 
-import wxm.KeepAccount.Base.db.RemindItem;
-import wxm.KeepAccount.Base.db.UsrItem;
-import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.data.RemindItem;
+import wxm.KeepAccount.Base.data.UsrItem;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**
@@ -68,7 +68,7 @@ public class RemindDataUtility {
         }
 
         boolean r;
-        if(AppGobalDef.INVALID_ID == ri.get_id())
+        if(GlobalDef.INVALID_ID == ri.get_id())
             r = 1 == ContextUtil.getDBHelper().getRemindREDao().create(ri);
         else
             r = 1 == ContextUtil.getDBHelper().getRemindREDao().update(ri);

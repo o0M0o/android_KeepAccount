@@ -1,10 +1,10 @@
-package wxm.KeepAccount.Base.data;
+package wxm.KeepAccount.Base.db;
 
 /**
  * 数据变化提醒接口
  * Created by 123 on 2016/10/31.
  */
-public interface IDataChangeNotice {
+public interface IDBChangeNotice {
     /**
      * 数据更新提醒
      */

@@ -7,13 +7,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.data.BudgetDataUtility;
-import wxm.KeepAccount.Base.data.PayIncomeDataUtility;
-import wxm.KeepAccount.Base.db.BudgetItem;
-import wxm.KeepAccount.Base.db.IncomeNoteItem;
-import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.data.BudgetItem;
+import wxm.KeepAccount.Base.data.IncomeNoteItem;
+import wxm.KeepAccount.Base.data.PayNoteItem;
+import wxm.KeepAccount.Base.db.BudgetDataUtility;
+import wxm.KeepAccount.Base.db.PayIncomeDBUtility;
 import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.base.ITFBase;
@@ -31,10 +31,10 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
     @Override
     protected void initUi(Bundle savedInstanceState) {
         Intent it = getIntent();
-        String type = it.getStringExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE);
+        String type = it.getStringExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE);
         if(UtilFun.StringIsNullOrEmpty(type)
-                || (!AppGobalDef.STR_RECORD_PAY.equals(type) && !AppGobalDef.STR_RECORD_INCOME.equals(type)
-                && !AppGobalDef.STR_RECORD_BUDGET.equals(type)))
+                || (!GlobalDef.STR_RECORD_PAY.equals(type) && !GlobalDef.STR_RECORD_INCOME.equals(type)
+                && !GlobalDef.STR_RECORD_BUDGET.equals(type)))
             return;
 
         super.initUi(savedInstanceState);
@@ -42,7 +42,7 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
 
     @Override
     protected void leaveActivity() {
-        int ret_data = AppGobalDef.INTRET_GIVEUP;
+        int ret_data = GlobalDef.INTRET_GIVEUP;
 
         Intent data = new Intent();
         setResult(ret_data, data);
@@ -52,32 +52,32 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
     @Override
     protected void initFrgHolder() {
         Intent it = getIntent();
-        String type = it.getStringExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE);
+        String type = it.getStringExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE);
         if(UtilFun.StringIsNullOrEmpty(type)
-                || (!AppGobalDef.STR_RECORD_PAY.equals(type) && !AppGobalDef.STR_RECORD_INCOME.equals(type)
-                && !AppGobalDef.STR_RECORD_BUDGET.equals(type)))
+                || (!GlobalDef.STR_RECORD_PAY.equals(type) && !GlobalDef.STR_RECORD_INCOME.equals(type)
+                && !GlobalDef.STR_RECORD_BUDGET.equals(type)))
             return;
 
         // for ui
         LOG_TAG = "ACPreveiwAndEdit";
 
         Object ob;
-        PayIncomeDataUtility puit = ContextUtil.getPayIncomeUtility();
+        PayIncomeDBUtility puit = ContextUtil.getPayIncomeUtility();
         BudgetDataUtility buit = ContextUtil.getBudgetUtility();
-        int id = it.getIntExtra(AppGobalDef.INTENT_LOAD_RECORD_ID, -1);
-        if(AppGobalDef.STR_RECORD_PAY.equals(type)) {
-            PayNoteItem pi = -1 != id ? puit.GetPayNoteById(id) : null;
+        int id = it.getIntExtra(GlobalDef.INTENT_LOAD_RECORD_ID, -1);
+        if(GlobalDef.STR_RECORD_PAY.equals(type)) {
+            PayNoteItem pi = -1 != id ? puit.getPayById(id) : null;
             ob = pi;
-        } else if(AppGobalDef.STR_RECORD_BUDGET.equals(type)) {
+        } else if(GlobalDef.STR_RECORD_BUDGET.equals(type)) {
             BudgetItem bi = -1 != id ? buit.GetBudgetById(id) : null;
             ob = bi;
         } else  {
-            IncomeNoteItem ii = -1 != id ? puit.GetIncomeNoteById(id) : null;
+            IncomeNoteItem ii = -1 != id ? puit.getIncomeById(id) : null;
             ob = ii;
         }
 
         FrgPreviewAndEdit tpe = new FrgPreviewAndEdit();
-        tpe.setCurData(type, ob == null ? AppGobalDef.STR_CREATE : AppGobalDef.STR_MODIFY, ob);
+        tpe.setCurData(type, ob == null ? GlobalDef.STR_CREATE : GlobalDef.STR_MODIFY, ob);
         mTFBase = tpe;
         mFGSupportHolder = tpe;
     }
@@ -112,7 +112,7 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
 
             case R.id.mi_save: {
                 if(mTFBase.onAccept())    {
-                    int ret_data = AppGobalDef.INTRET_SURE;
+                    int ret_data = GlobalDef.INTRET_SURE;
                     Intent data = new Intent();
                     setResult(ret_data, data);
                     finish();
@@ -121,7 +121,7 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
             break;
 
             case R.id.mi_giveup:    {
-                int ret_data = AppGobalDef.INTRET_GIVEUP;
+                int ret_data = GlobalDef.INTRET_GIVEUP;
                 Intent data = new Intent();
                 setResult(ret_data, data);
                 finish();

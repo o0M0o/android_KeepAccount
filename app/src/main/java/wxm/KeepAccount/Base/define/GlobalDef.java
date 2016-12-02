@@ -4,7 +4,7 @@ package wxm.KeepAccount.Base.define;
  * App全局定义
  * Created by 123 on 2016/5/6.
  */
-public class AppGobalDef {
+public class GlobalDef {
     static public final String STR_RECORD_PAY       = "record_pay";
     static public final String STR_RECORD_INCOME    = "record_income";
     static public final String STR_RECORD_BUDGET    = "record_budget";
@@ -36,4 +36,11 @@ public class AppGobalDef {
 
     public final static String DEF_USR_NAME = "default";
     public final static String DEF_USR_PWD  = "123456";
+
+    // for msg
+    public static final int MSG_USR_ADDUSR  = 1001;
+    public static final int MSG_USR_LOGIN   = 1002;
+    public static final int MSG_USR_LOGOUT  = 1003;
+
+    public static final int MSG_REPLY       = 9999;
 }

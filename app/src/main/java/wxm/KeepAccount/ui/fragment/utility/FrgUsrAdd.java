@@ -20,9 +20,8 @@ import butterknife.OnClick;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.WRMsgHandler;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.data.AppMsgDef;
-import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.Base.data.UsrItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 
@@ -91,7 +90,7 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
                     data.putExtra(UsrItem.FIELD_PWD, mETPwd.getText().toString());
 
                     Message m = Message.obtain(ContextUtil.getMsgHandler(),
-                            AppMsgDef.MSG_USR_ADDUSR);
+                            GlobalDef.MSG_USR_ADDUSR);
                     m.obj = new Object[] {data, mMHHandler};
                     m.sendToTarget();
                 }
@@ -99,7 +98,7 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
             break;
 
             case R.id.bt_giveup: {
-                int ret_data = AppGobalDef.INTRET_GIVEUP;
+                int ret_data = GlobalDef.INTRET_GIVEUP;
 
                 Activity ac = getActivity();
                 Intent data = new Intent();
@@ -187,9 +186,9 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
         @Override
         protected void processMsg(Message m, FrgUsrAdd home) {
             switch (m.what) {
-                case AppMsgDef.MSG_REPLY: {
+                case GlobalDef.MSG_REPLY: {
                     switch (m.arg1) {
-                        case AppMsgDef.MSG_USR_ADDUSR: {
+                        case GlobalDef.MSG_USR_ADDUSR: {
                             afterAddUsr(m, home);
                         }
                         break;
@@ -214,7 +213,7 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
             if (ret) {
                 Intent data = UtilFun.cast_t(arr[1]);
 
-                int ret_data = AppGobalDef.INTRET_USR_ADD;
+                int ret_data = GlobalDef.INTRET_USR_ADD;
                 ac.setResult(ret_data, data);
                 ac.finish();
             } else {

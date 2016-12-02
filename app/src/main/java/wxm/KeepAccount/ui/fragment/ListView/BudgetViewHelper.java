@@ -30,9 +30,9 @@ import java.util.Map;
 import java.util.Set;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.db.BudgetItem;
-import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.Base.data.BudgetItem;
+import wxm.KeepAccount.Base.data.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -109,7 +109,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
             public void onClick(View v) {
                 ACNoteShow ac = getRootActivity();
                 Intent intent = new Intent(ac, ACPreveiwAndEdit.class);
-                intent.putExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE, AppGobalDef.STR_RECORD_BUDGET);
+                intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
                 ac.startActivityForResult(intent, 1);
             }
         });
@@ -475,8 +475,8 @@ public class BudgetViewHelper  extends LVShowDataBase {
                         } else  {
                             Activity ac = getRootActivity();
                             Intent it = new Intent(ac, ACPreveiwAndEdit.class);
-                            it.putExtra(AppGobalDef.INTENT_LOAD_RECORD_ID, tag_id);
-                            it.putExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE, AppGobalDef.STR_RECORD_BUDGET);
+                            it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, tag_id);
+                            it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
                             ac.startActivityForResult(it, 1);
                         }
                     }
@@ -541,9 +541,9 @@ public class BudgetViewHelper  extends LVShowDataBase {
                         ACNoteShow ac = getRootActivity();
                         Intent intent;
                         intent = new Intent(ac, ACPreveiwAndEdit.class);
-                        intent.putExtra(AppGobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(sub_id));
-                        intent.putExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE,
-                                AppGobalDef.STR_RECORD_PAY);
+                        intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(sub_id));
+                        intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
+                                GlobalDef.STR_RECORD_PAY);
 
                         ac.startActivityForResult(intent, 1);
                     }

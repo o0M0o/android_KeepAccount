@@ -22,9 +22,9 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.data.RecordTypeDataUtility;
-import wxm.KeepAccount.Base.db.RecordTypeItem;
+import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.Base.db.RecordTypeDataUtility;
+import wxm.KeepAccount.Base.data.RecordTypeItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACRecordInfoEdit;
@@ -62,8 +62,8 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
     /**
      * 设置以前的“记录类型”
      * @param rt  记录类型归属的大类，可以为 :
-     *             -- AppGobalDef.STR_RECORD_PAY
-     *             -- AppGobalDef.STR_RECORD_INCOME
+     *             -- GlobalDef.STR_RECORD_PAY
+     *             -- GlobalDef.STR_RECORD_INCOME
      * @param ot  以前的记录类型
      */
     public void setOldType(String rt, String ot)   {
@@ -82,15 +82,15 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
     @Override
     protected View InitDlgView() {
         if(UtilFun.StringIsNullOrEmpty(mRootType)
-                || (!AppGobalDef.STR_RECORD_PAY.equals(mRootType)
-                        && !AppGobalDef.STR_RECORD_INCOME.equals(mRootType)))
+                || (!GlobalDef.STR_RECORD_PAY.equals(mRootType)
+                        && !GlobalDef.STR_RECORD_INCOME.equals(mRootType)))
             return null;
 
         // init data
         mLHMData = new ArrayList<>();
         mGAAdapter= new GVTypeAdapter(getActivity(), mLHMData,
                 new String[] { KEY_NAME }, new int[]{ R.id.tv_type_name });
-        InitDlgTitle(AppGobalDef.STR_RECORD_PAY.equals(mRootType) ? "选择支出类型" : "选择收入类型",
+        InitDlgTitle(GlobalDef.STR_RECORD_PAY.equals(mRootType) ? "选择支出类型" : "选择收入类型",
                 "接受", "放弃");
 
         Resources res = getContext().getResources();
@@ -157,7 +157,7 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
 
     private void loadData() {
         RecordTypeDataUtility rd = ContextUtil.getRecordTypeUtility();
-        List<RecordTypeItem> al_type = AppGobalDef.STR_RECORD_PAY.equals(mRootType) ?
+        List<RecordTypeItem> al_type = GlobalDef.STR_RECORD_PAY.equals(mRootType) ?
                                                 rd.getAllPayItem() : rd.getAllIncomeItem();
         Collections.sort(al_type, new Comparator<RecordTypeItem>() {
             @Override

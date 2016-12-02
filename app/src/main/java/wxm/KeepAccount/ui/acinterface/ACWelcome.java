@@ -28,7 +28,7 @@ import java.util.Locale;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.DragGrid.DragGridView;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ActionHelper;
 import wxm.KeepAccount.Base.utility.DGVButtonAdapter;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
@@ -148,18 +148,18 @@ public class ACWelcome extends AppCompatActivity
 
             case ActionHelper.ACT_ADD_BUDGET :  {
                 Intent intent = new Intent(this, ACPreveiwAndEdit.class);
-                intent.putExtra(AppGobalDef.INTENT_LOAD_RECORD_TYPE, AppGobalDef.STR_RECORD_BUDGET);
+                intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
                 startActivityForResult(intent, 1);
             }
             break;
 
             case ActionHelper.ACT_ADD_DATA: {
                 Intent intent = new Intent(this, ACNoteEdit.class);
-                intent.putExtra(ACNoteEdit.PARA_ACTION, AppGobalDef.STR_CREATE);
+                intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
-                intent.putExtra(AppGobalDef.STR_RECORD_DATE,
+                intent.putExtra(GlobalDef.STR_RECORD_DATE,
                         String.format(Locale.CHINA ,"%d-%02d-%02d %02d:%02d"
                                 ,cal.get(Calendar.YEAR)
                                 ,cal.get(Calendar.MONTH) + 1
@@ -172,7 +172,7 @@ public class ACWelcome extends AppCompatActivity
             break;
 
             case ActionHelper.ACT_LOGOUT :      {
-                int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
+                int ret_data = GlobalDef.INTRET_USR_LOGOUT;
 
                 Intent data = new Intent();
                 setResult(ret_data, data);

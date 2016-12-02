@@ -5,8 +5,8 @@ import android.os.Handler;
 import android.os.Message;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.AppMsgDef;
-import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.data.UsrItem;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**
@@ -18,7 +18,7 @@ class UsrUtility {
 
     static void doMsg(Message msg)   {
         switch (msg.what) {
-            case AppMsgDef.MSG_USR_ADDUSR : {
+            case GlobalDef.MSG_USR_ADDUSR : {
                 Object[] arr = UtilFun.cast(msg.obj);
 
                 Intent data = UtilFun.cast(arr[0]);
@@ -27,17 +27,17 @@ class UsrUtility {
                 String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
 
                 if(ContextUtil.getUsrUtility().hasUsr(usr))  {
-                    GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_USR_ADDUSR,
+                    GlobalMsgHandler.ReplyMsg(h, GlobalDef.MSG_USR_ADDUSR,
                                     new Object[]{false, data, "用户已经存在！"});
                 } else {
                     boolean ret = (null != ContextUtil.getUsrUtility().addUsr(usr, pwd));
-                    GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_USR_ADDUSR,
+                    GlobalMsgHandler.ReplyMsg(h, GlobalDef.MSG_USR_ADDUSR,
                                     new Object[]{ret, data});
                 }
             }
             break;
 
-            case AppMsgDef.MSG_USR_LOGIN: {
+            case GlobalDef.MSG_USR_LOGIN: {
                 Object[] arr = UtilFun.cast(msg.obj);
 
                 Intent data = UtilFun.cast(arr[0]);
@@ -48,11 +48,11 @@ class UsrUtility {
                 boolean ret = (null != ContextUtil.getInstance().getCurUsr());
 
                 Handler h = UtilFun.cast(arr[1]);
-                GlobalMsgHandler.ReplyMsg(h, AppMsgDef.MSG_USR_LOGIN, ret);
+                GlobalMsgHandler.ReplyMsg(h, GlobalDef.MSG_USR_LOGIN, ret);
             }
             break;
 
-            case AppMsgDef.MSG_USR_LOGOUT : {
+            case GlobalDef.MSG_USR_LOGOUT : {
                 ContextUtil.setCurUsr(null);
             }
             break;

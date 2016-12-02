@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.db;
+package wxm.KeepAccount.Base.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,7 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import wxm.KeepAccount.Base.define.AppGobalDef;
+import cn.wxm.andriodutillib.DBHelper.IDBRow;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**
@@ -22,7 +23,8 @@ import wxm.KeepAccount.Base.utility.ContextUtil;
  * Created by 123 on 2016/5/3.
  */
 @DatabaseTable(tableName = "tbPayNote")
-public class PayNoteItem implements Parcelable, INote {
+public class PayNoteItem
+        implements Parcelable, INote, IDBRow<Integer> {
     public final static String FIELD_TS         = "ts";
     public final static String FIELD_USR        = "usr_id";
     public final static String FIELD_BUDGET     = "budget_id";
@@ -137,7 +139,7 @@ public class PayNoteItem implements Parcelable, INote {
         setInfo("");
         setNote("");
 
-        setId(AppGobalDef.INVALID_ID);
+        setId(GlobalDef.INVALID_ID);
     }
 
     @Override
@@ -155,8 +157,8 @@ public class PayNoteItem implements Parcelable, INote {
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(getId());
 
-        out.writeInt(null == getUsr() ? AppGobalDef.INVALID_ID : getUsr().getId());
-        out.writeInt(null == getBudget() ? AppGobalDef.INVALID_ID : getBudget().get_id());
+        out.writeInt(null == getUsr() ? GlobalDef.INVALID_ID : getUsr().getId());
+        out.writeInt(null == getBudget() ? GlobalDef.INVALID_ID : getBudget().get_id());
 
         out.writeString(getInfo());
         out.writeString(getNote());
@@ -179,12 +181,12 @@ public class PayNoteItem implements Parcelable, INote {
         setId(in.readInt());
 
         int uid = in.readInt();
-        if(AppGobalDef.INVALID_ID != uid)   {
+        if(GlobalDef.INVALID_ID != uid)   {
             setUsr(ContextUtil.getUsrUtility().GetUsrById(uid));
         }
 
         int bid = in.readInt();
-        if(AppGobalDef.INVALID_ID != bid)   {
+        if(GlobalDef.INVALID_ID != bid)   {
             setBudget(ContextUtil.getBudgetUtility().GetBudgetById(bid));
         }
 
@@ -213,6 +215,16 @@ public class PayNoteItem implements Parcelable, INote {
     @Override
     public void setBudget(BudgetItem bi) {
         this.budget = bi;
+    }
+
+    @Override
+    public Integer getID() {
+        return getId();
+    }
+
+    @Override
+    public void setID(Integer integer) {
+        setId(integer);
     }
 }
 

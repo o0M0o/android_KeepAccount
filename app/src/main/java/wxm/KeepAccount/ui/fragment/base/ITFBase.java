@@ -9,12 +9,12 @@ public interface ITFBase {
      * 设置运行数据
      *
      * @param type   可以为以下参数 --
-     *               * “支出”(AppGobalDef.STR_RECORD_PAY)
-     *               * “收入”(AppGobalDef.STR_RECORD_INCOME)
-     *               * “预算”(AppGobalDef.STR_RECORD_BUDGET)
+     *               * “支出”(GlobalDef.STR_RECORD_PAY)
+     *               * “收入”(GlobalDef.STR_RECORD_INCOME)
+     *               * “预算”(GlobalDef.STR_RECORD_BUDGET)
      * @param action 可以为以下参数 --
-     *               * “更新”(AppGobalDef.STR_MODIFY)
-     *               * “新建”(AppGobalDef.STR_CREATE)
+     *               * “更新”(GlobalDef.STR_MODIFY)
+     *               * “新建”(GlobalDef.STR_CREATE)
      * @param obj     若是“更新”，则此参数为待更新数据
      */
     void setCurData(String type, String action, Object obj);

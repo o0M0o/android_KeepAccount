@@ -1,15 +1,18 @@
-package wxm.KeepAccount.Base.db;
+package wxm.KeepAccount.Base.data;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import cn.wxm.andriodutillib.DBHelper.IDBRow;
 
 /**
  * 用户数据
  * Created by 123 on 2016/8/5.
  */
 @DatabaseTable(tableName = "tbUsr")
-public class UsrItem {
+public class UsrItem
+        implements IDBRow<Integer> {
     public final static String FIELD_ID = "_id";
     public final static String FIELD_NAME = "name";
     public final static String FIELD_PWD = "pwd";
@@ -51,5 +54,15 @@ public class UsrItem {
 
     public void setId(int _id) {
         this._id = _id;
+    }
+
+    @Override
+    public Integer getID() {
+        return getId();
+    }
+
+    @Override
+    public void setID(Integer integer) {
+        setId(integer);
     }
 }

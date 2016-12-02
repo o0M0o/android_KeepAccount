@@ -14,8 +14,8 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.db.BudgetItem;
+import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.Base.data.BudgetItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
@@ -61,7 +61,7 @@ public class TFEditBudget extends TFEditBase {
 
     @Override
     public boolean onAccept() {
-        boolean b_create = AppGobalDef.STR_CREATE.equals(mAction);
+        boolean b_create = GlobalDef.STR_CREATE.equals(mAction);
         String name = mETName.getText().toString();
         String note = mETNote.getText().toString();
         String amount = mETAmount.getText().toString();
@@ -149,7 +149,7 @@ public class TFEditBudget extends TFEditBase {
      */
     private void init_view()    {
         if (UtilFun.StringIsNullOrEmpty(mAction)
-                || (AppGobalDef.STR_MODIFY.equals(mAction) && null == mBIData))
+                || (GlobalDef.STR_MODIFY.equals(mAction) && null == mBIData))
             return ;
 
         if(null != mBIData) {

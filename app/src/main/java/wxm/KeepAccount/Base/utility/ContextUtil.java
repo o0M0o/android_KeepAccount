@@ -3,13 +3,13 @@ package wxm.KeepAccount.Base.utility;
 import android.app.Application;
 import android.util.Log;
 
-import wxm.KeepAccount.Base.data.BudgetDataUtility;
-import wxm.KeepAccount.Base.data.PayIncomeDataUtility;
-import wxm.KeepAccount.Base.data.RecordTypeDataUtility;
-import wxm.KeepAccount.Base.data.RemindDataUtility;
-import wxm.KeepAccount.Base.data.UsrDataUtility;
-import wxm.KeepAccount.Base.db.DBOrmLiteHelper;
-import wxm.KeepAccount.Base.db.UsrItem;
+import wxm.KeepAccount.Base.data.DBOrmLiteHelper;
+import wxm.KeepAccount.Base.data.UsrItem;
+import wxm.KeepAccount.Base.db.BudgetDataUtility;
+import wxm.KeepAccount.Base.db.PayIncomeDBUtility;
+import wxm.KeepAccount.Base.db.RecordTypeDataUtility;
+import wxm.KeepAccount.Base.db.RemindDataUtility;
+import wxm.KeepAccount.Base.db.UsrDataUtility;
 import wxm.KeepAccount.Base.handler.GlobalMsgHandler;
 
 /**
@@ -30,7 +30,7 @@ public class ContextUtil extends Application {
     private UsrDataUtility          mUsru;
     private RecordTypeDataUtility   mRecordTypeu;
     private BudgetDataUtility       mBudgetu;
-    private PayIncomeDataUtility    mPayIncomeu;
+    private PayIncomeDBUtility      mPayIncomeu;
     private RemindDataUtility       mRemindu;
 
     @Override
@@ -46,7 +46,7 @@ public class ContextUtil extends Application {
         mUsru           = new UsrDataUtility();
         mRecordTypeu    = new RecordTypeDataUtility();
         mBudgetu        = new BudgetDataUtility();
-        mPayIncomeu     = new PayIncomeDataUtility();
+        mPayIncomeu     = new PayIncomeDBUtility();
         mRemindu        = new RemindDataUtility();
     }
 
@@ -137,7 +137,7 @@ public class ContextUtil extends Application {
      * 获得收支数据辅助类
      * @return  辅助类
      */
-    public static PayIncomeDataUtility getPayIncomeUtility()  {
+    public static PayIncomeDBUtility getPayIncomeUtility()  {
         return  getInstance().mPayIncomeu;
     }
 

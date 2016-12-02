@@ -4,7 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import wxm.KeepAccount.Base.data.AppMsgDef;
+import wxm.KeepAccount.Base.define.GlobalDef;
+
 
 /**
  * APP全局消息处理器
@@ -17,9 +18,9 @@ public class GlobalMsgHandler extends Handler {
     public void handleMessage(Message msg) {
         Log.i(TAG, "receive msg : " + msg.toString());
         switch (msg.what)   {
-            case AppMsgDef.MSG_USR_ADDUSR :
-            case AppMsgDef.MSG_USR_LOGOUT :
-            case AppMsgDef.MSG_USR_LOGIN: {
+            case GlobalDef.MSG_USR_ADDUSR :
+            case GlobalDef.MSG_USR_LOGOUT :
+            case GlobalDef.MSG_USR_LOGIN: {
                 UsrUtility.doMsg(msg);
             }
             break;
@@ -34,7 +35,7 @@ public class GlobalMsgHandler extends Handler {
      * @param msgobj        回复消息的参数{@code obj}
      */
     public static void ReplyMsg(Handler mh, int rmsgtype, Object msgobj) {
-        Message m = Message.obtain(mh, AppMsgDef.MSG_REPLY);
+        Message m = Message.obtain(mh, GlobalDef.MSG_REPLY);
         m.arg1 = rmsgtype;
         m.obj = msgobj;
         m.sendToTarget();

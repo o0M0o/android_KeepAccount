@@ -16,7 +16,7 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.R;
 
 /**
@@ -25,7 +25,7 @@ import wxm.KeepAccount.R;
  */
 public class DlgSelectColor extends DlgOKOrNOBase
         implements AdapterView.OnItemClickListener  {
-    private int     mHotPos = AppGobalDef.INVALID_ID;
+    private int     mHotPos = GlobalDef.INVALID_ID;
 
     private final static String  PARA_COLOR = "color";
     private final static int[] ARR_COLOR = {
@@ -62,10 +62,10 @@ public class DlgSelectColor extends DlgOKOrNOBase
 
 
     public int getSelectedColor()   {
-        if(AppGobalDef.INVALID_ID != mHotPos)
+        if(GlobalDef.INVALID_ID != mHotPos)
             return getResources().getColor(ARR_COLOR[mHotPos]);
         else
-            return AppGobalDef.INVALID_ID;
+            return GlobalDef.INVALID_ID;
     }
 
     /**
@@ -80,7 +80,7 @@ public class DlgSelectColor extends DlgOKOrNOBase
         Resources res = getResources();
 
         view.setBackgroundColor(res.getColor(R.color.red));
-        if(AppGobalDef.INVALID_ID == mHotPos)   {
+        if(GlobalDef.INVALID_ID == mHotPos)   {
             mHotPos = position;
         }   else    {
             parent.getChildAt(mHotPos).setBackgroundColor(res.getColor(R.color.white));

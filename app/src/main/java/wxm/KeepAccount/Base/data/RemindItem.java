@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.db;
+package wxm.KeepAccount.Base.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,7 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import wxm.KeepAccount.Base.define.AppGobalDef;
+import cn.wxm.andriodutillib.DBHelper.IDBRow;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**
@@ -22,7 +23,8 @@ import wxm.KeepAccount.Base.utility.ContextUtil;
  * Created by 123 on 2016/10/9.
  */
 @DatabaseTable(tableName = "tbRemind")
-public class RemindItem  implements Parcelable {
+public class RemindItem
+        implements Parcelable, IDBRow<Integer> {
     // for type
     public final static String REMIND_BUDGET   = "预算预警";
     public final static String REMIND_PAY      = "支出预警";
@@ -69,13 +71,13 @@ public class RemindItem  implements Parcelable {
     private BigDecimal amount;
 
     public RemindItem() {
-        set_id(AppGobalDef.INVALID_ID);
+        set_id(GlobalDef.INVALID_ID);
     }
 
     private RemindItem(Parcel in) {
         set_id(in.readInt());
         int uid = in.readInt();
-        if(AppGobalDef.INVALID_ID != uid)   {
+        if(GlobalDef.INVALID_ID != uid)   {
             setUsr(ContextUtil.getUsrUtility().GetUsrById(uid));
         }
 
@@ -121,7 +123,7 @@ public class RemindItem  implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(get_id());
-        dest.writeInt(null == getUsr() ? AppGobalDef.INVALID_ID : getUsr().getId());
+        dest.writeInt(null == getUsr() ? GlobalDef.INVALID_ID : getUsr().getId());
         dest.writeString(getName());
         dest.writeString(getType());
         dest.writeString(getReason());
@@ -201,5 +203,15 @@ public class RemindItem  implements Parcelable {
 
     public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public Integer getID() {
+        return get_id();
+    }
+
+    @Override
+    public void setID(Integer integer) {
+        set_id(integer);
     }
 }

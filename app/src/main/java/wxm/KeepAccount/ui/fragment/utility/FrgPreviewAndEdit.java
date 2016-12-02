@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditBudget;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditIncome;
@@ -93,7 +93,7 @@ public class FrgPreviewAndEdit extends Fragment
 
         if (isPreviewPage()) {
             mVPPages.setCurrentItem(PAGE_IDX_EDIT);
-            if (AppGobalDef.STR_MODIFY.equals(mStrAction)) {
+            if (GlobalDef.STR_MODIFY.equals(mStrAction)) {
                 PagerAdapter old_pa = UtilFun.cast_t(mVPPages.getAdapter());
                 TFEditBase te = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_EDIT));
                 TFPreviewBase old_tp = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_PREVIEW));
@@ -133,13 +133,13 @@ public class FrgPreviewAndEdit extends Fragment
 
         if (UtilFun.StringIsNullOrEmpty(mStrAction)
                 || UtilFun.StringIsNullOrEmpty(mStrType)
-                || (AppGobalDef.STR_MODIFY.equals(mStrAction) && null == mData)
-                || (AppGobalDef.STR_CREATE.equals(mStrAction) && null != mData))
+                || (GlobalDef.STR_MODIFY.equals(mStrAction) && null == mData)
+                || (GlobalDef.STR_CREATE.equals(mStrAction) && null != mData))
             return;
 
         ((TFPreviewBase) adapter.getItem(PAGE_IDX_PREVIEW)).setPreviewPara(mData);
         ((TFEditBase) adapter.getItem(PAGE_IDX_EDIT)).setCurData(mStrAction, mData);
-        mVPPages.setCurrentItem(AppGobalDef.STR_MODIFY.equals(mStrAction) ?
+        mVPPages.setCurrentItem(GlobalDef.STR_MODIFY.equals(mStrAction) ?
                 PAGE_IDX_PREVIEW : PAGE_IDX_EDIT);
     }
 
@@ -173,10 +173,10 @@ public class FrgPreviewAndEdit extends Fragment
             mNumOfFrags = NumOfTabs;
             mFRFrags = new Fragment[mNumOfFrags];
 
-            if (AppGobalDef.STR_RECORD_INCOME.equals(mStrType)) {
+            if (GlobalDef.STR_RECORD_INCOME.equals(mStrType)) {
                 mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewIncome();
                 mFRFrags[PAGE_IDX_EDIT] = new TFEditIncome();
-            } else if (AppGobalDef.STR_RECORD_PAY.equals(mStrType)) {
+            } else if (GlobalDef.STR_RECORD_PAY.equals(mStrType)) {
                 mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewPay();
                 mFRFrags[PAGE_IDX_EDIT] = new TFEditPay();
             } else {

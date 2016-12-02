@@ -10,10 +10,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import wxm.KeepAccount.Base.db.IncomeNoteItem;
-import wxm.KeepAccount.Base.db.PayNoteItem;
-import wxm.KeepAccount.Base.db.UsrItem;
-import wxm.KeepAccount.Base.db.DBOrmLiteHelper;
+import wxm.KeepAccount.Base.data.IncomeNoteItem;
+import wxm.KeepAccount.Base.data.PayNoteItem;
+import wxm.KeepAccount.Base.data.UsrItem;
+import wxm.KeepAccount.Base.data.DBOrmLiteHelper;
 
 /**
  * UT for DBOrmLiteHelper

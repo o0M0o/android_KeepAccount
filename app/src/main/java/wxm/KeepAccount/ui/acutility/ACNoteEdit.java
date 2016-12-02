@@ -8,7 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACHelp;
@@ -28,7 +28,7 @@ public class ACNoteEdit extends BaseAppCompatActivity {
 
     @Override
     protected void leaveActivity() {
-        int ret_data = AppGobalDef.INTRET_GIVEUP;
+        int ret_data = GlobalDef.INTRET_GIVEUP;
 
         Intent data = new Intent();
         setResult(ret_data, data);
@@ -51,12 +51,12 @@ public class ACNoteEdit extends BaseAppCompatActivity {
         mFGHolder = new FrgNoteEdit();
         Bundle bd = new Bundle();
         bd.putString(PARA_ACTION, mAction);
-        if(mAction.equals(AppGobalDef.STR_MODIFY)) {
-            int pid = it.getIntExtra(ACNoteEdit.PARA_NOTE_PAY, AppGobalDef.INVALID_ID);
-            int iid = it.getIntExtra(ACNoteEdit.PARA_NOTE_INCOME, AppGobalDef.INVALID_ID);
-            if(AppGobalDef.INVALID_ID != pid)   {
+        if(mAction.equals(GlobalDef.STR_MODIFY)) {
+            int pid = it.getIntExtra(ACNoteEdit.PARA_NOTE_PAY, GlobalDef.INVALID_ID);
+            int iid = it.getIntExtra(ACNoteEdit.PARA_NOTE_INCOME, GlobalDef.INVALID_ID);
+            if(GlobalDef.INVALID_ID != pid)   {
                 bd.putInt(ACNoteEdit.PARA_NOTE_PAY, pid);
-            } else if(AppGobalDef.INVALID_ID != iid)    {
+            } else if(GlobalDef.INVALID_ID != iid)    {
                 bd.putInt(ACNoteEdit.PARA_NOTE_INCOME, iid);
             } else  {
                 Log.e(LOG_TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");
@@ -91,15 +91,15 @@ public class ACNoteEdit extends BaseAppCompatActivity {
                 TFEditBase tb = getHotTabItem();
                 if(tb.onAccept()) {
                     Intent data = new Intent();
-                    setResult(mAction.equals(AppGobalDef.STR_CREATE) ?  AppGobalDef.INTRET_RECORD_ADD
-                                : AppGobalDef.INTRET_RECORD_MODIFY,  data);
+                    setResult(mAction.equals(GlobalDef.STR_CREATE) ?  GlobalDef.INTRET_RECORD_ADD
+                                : GlobalDef.INTRET_RECORD_MODIFY,  data);
                     finish();
                 }
             }
             break;
 
             case R.id.record_menu_giveup: {
-                int ret_data = AppGobalDef.INTRET_GIVEUP;
+                int ret_data = GlobalDef.INTRET_GIVEUP;
 
                 Intent data = new Intent();
                 setResult(ret_data, data);

@@ -23,9 +23,9 @@ import java.util.Locale;
 import cn.wxm.andriodutillib.Dialog.DlgDatePicker;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.data.PayIncomeDataUtility;
-import wxm.KeepAccount.Base.db.IncomeNoteItem;
+import wxm.KeepAccount.Base.data.IncomeNoteItem;
+import wxm.KeepAccount.Base.db.PayIncomeDBUtility;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -59,7 +59,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         super.onViewCreated(view, savedInstanceState);
         if (null != view) {
             if (UtilFun.StringIsNullOrEmpty(mAction)
-                    || (mAction.equals(AppGobalDef.STR_MODIFY) && null == mOldIncomeNote))
+                    || (mAction.equals(GlobalDef.STR_MODIFY) && null == mOldIncomeNote))
                 return ;
 
             mSelfView = view;
@@ -120,7 +120,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     }
 
     private void init_view(View v) {
-        if (mAction.equals(AppGobalDef.STR_MODIFY)) {
+        if (mAction.equals(GlobalDef.STR_MODIFY)) {
             mETDate.setText(mOldIncomeNote.getTs().toString().substring(0, 16));
             mETInfo.setText(mOldIncomeNote.getInfo());
             mETNote.setText(mOldIncomeNote.getNote());
@@ -129,7 +129,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
             Activity ac = getActivity();
             Intent it = ac.getIntent();
             if (null != it) {
-                String ad_date = it.getStringExtra(AppGobalDef.STR_RECORD_DATE);
+                String ad_date = it.getStringExtra(GlobalDef.STR_RECORD_DATE);
                 if (!UtilFun.StringIsNullOrEmpty(ad_date)) {
                     mETDate.setText(ad_date);
                 }
@@ -248,7 +248,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
         // set data
         IncomeNoteItem pi = new IncomeNoteItem();
-        if(null != mOldIncomeNote && mAction.equals(AppGobalDef.STR_MODIFY)) {
+        if(null != mOldIncomeNote && mAction.equals(GlobalDef.STR_MODIFY)) {
             pi.setId(mOldIncomeNote.getId());
             pi.setUsr(mOldIncomeNote.getUsr());
         }
@@ -259,11 +259,11 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         pi.setNote(str_note);
 
         // add/modify data
-        boolean b_create = mAction.equals(AppGobalDef.STR_CREATE);
-        PayIncomeDataUtility uti = ContextUtil.getPayIncomeUtility();
+        boolean b_create = mAction.equals(GlobalDef.STR_CREATE);
+        PayIncomeDBUtility uti = ContextUtil.getPayIncomeUtility();
         boolean b_ret =  b_create ?
                             1 == uti.AddIncomeNotes(Collections.singletonList(pi))
-                            : 1 == uti.ModifyIncomeNotes(Collections.singletonList(pi));
+                            : 1 == uti.modifyIncomeNotes(Collections.singletonList(pi));
         if(!b_ret)  {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage(b_create ? "创建收入数据失败!" : "更新收入数据失败")
@@ -306,7 +306,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
                 case R.id.ar_et_info: {
                     DlgSelectRecordType dp = new DlgSelectRecordType();
-                    dp.setOldType(AppGobalDef.STR_RECORD_INCOME, mETInfo.getText().toString());
+                    dp.setOldType(GlobalDef.STR_RECORD_INCOME, mETInfo.getText().toString());
                     dp.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                         @Override
                         public void onDialogPositiveResult(DialogFragment dialog) {

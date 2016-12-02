@@ -1,12 +1,12 @@
-package wxm.KeepAccount.Base.data;
+package wxm.KeepAccount.Base.db;
 
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.MD5Util;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.db.UsrItem;
-import wxm.KeepAccount.Base.db.DBOrmLiteHelper;
-import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.data.UsrItem;
+import wxm.KeepAccount.Base.data.DBOrmLiteHelper;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 
 /**
@@ -47,8 +47,8 @@ public class UsrDataUtility extends  DataUtilityBase  {
             return null;
 
         String pwdpad = pwd;
-        if(pwdpad.length() < AppGobalDef.STR_PWD_PAD.length()) {
-            pwdpad += AppGobalDef.STR_PWD_PAD.substring(pwd.length());
+        if(pwdpad.length() < GlobalDef.STR_PWD_PAD.length()) {
+            pwdpad += GlobalDef.STR_PWD_PAD.substring(pwd.length());
         }
         pwdpad = MD5Util.string2MD5(pwdpad);
 
@@ -89,8 +89,8 @@ public class UsrDataUtility extends  DataUtilityBase  {
      */
     public boolean checkUsr(String usr, String pwd) {
         String pwdpad = pwd;
-        if(pwdpad.length() < AppGobalDef.STR_PWD_PAD.length()) {
-            pwdpad += AppGobalDef.STR_PWD_PAD.substring(pwd.length());
+        if(pwdpad.length() < GlobalDef.STR_PWD_PAD.length()) {
+            pwdpad += GlobalDef.STR_PWD_PAD.substring(pwd.length());
         }
 
         List<UsrItem> lsui = ContextUtil.getDBHelper().getUsrItemREDao()
@@ -112,8 +112,8 @@ public class UsrDataUtility extends  DataUtilityBase  {
      */
     public UsrItem CheckAndGetUsr(String usr, String pwd)   {
         String pwdpad = pwd;
-        if(pwdpad.length() < AppGobalDef.STR_PWD_PAD.length()) {
-            pwdpad += AppGobalDef.STR_PWD_PAD.substring(pwd.length());
+        if(pwdpad.length() < GlobalDef.STR_PWD_PAD.length()) {
+            pwdpad += GlobalDef.STR_PWD_PAD.substring(pwd.length());
         }
 
         List<UsrItem> lsui = ContextUtil.getDBHelper().getUsrItemREDao()

@@ -5,7 +5,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.EditData.TFEditRecordInfo;
@@ -16,7 +16,7 @@ public class ACRecordInfoEdit extends BaseAppCompatActivity {
 
     @Override
     protected void leaveActivity() {
-        int ret_data = AppGobalDef.INTRET_GIVEUP;
+        int ret_data = GlobalDef.INTRET_GIVEUP;
         Intent data = new Intent();
         setResult(ret_data, data);
         finish();
@@ -49,7 +49,7 @@ public class ACRecordInfoEdit extends BaseAppCompatActivity {
         switch (item.getItemId()) {
             case R.id.mi_save: {
                 if(mTFRecordInfo.onAccept())    {
-                    int ret_data = AppGobalDef.INTRET_SURE;
+                    int ret_data = GlobalDef.INTRET_SURE;
                     Intent data = new Intent();
                     setResult(ret_data, data);
                     finish();
@@ -58,7 +58,7 @@ public class ACRecordInfoEdit extends BaseAppCompatActivity {
             break;
 
             case R.id.mi_giveup:    {
-                int ret_data = AppGobalDef.INTRET_GIVEUP;
+                int ret_data = GlobalDef.INTRET_GIVEUP;
                 Intent data = new Intent();
                 setResult(ret_data, data);
                 finish();

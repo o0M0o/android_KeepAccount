@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 import java.util.List;
 
-import wxm.KeepAccount.Base.define.AppGobalDef;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
@@ -21,7 +21,7 @@ public class ACNoteShow extends BaseAppCompatActivity {
 
     @Override
     protected void leaveActivity() {
-        int ret_data = AppGobalDef.INTRET_USR_LOGOUT;
+        int ret_data = GlobalDef.INTRET_USR_LOGOUT;
 
         Intent data = new Intent();
         setResult(ret_data, data);

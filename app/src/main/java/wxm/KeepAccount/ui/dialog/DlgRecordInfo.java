@@ -5,8 +5,8 @@ import android.view.View;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.AppGobalDef;
-import wxm.KeepAccount.Base.db.RecordTypeItem;
+import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.Base.data.RecordTypeItem;
 import wxm.KeepAccount.R;
 
 /**
@@ -38,7 +38,7 @@ public class DlgRecordInfo extends DlgOKOrNOBase {
         RecordTypeItem ri = new RecordTypeItem();
         if(null != mOldData)
             ri.set_id(mOldData.get_id());
-        ri.setItemType(AppGobalDef.STR_RECORD_PAY.equals(mRecordType) ?
+        ri.setItemType(GlobalDef.STR_RECORD_PAY.equals(mRecordType) ?
                 RecordTypeItem.DEF_PAY : RecordTypeItem.DEF_INCOME);
         ri.setType(name);
         ri.setNote(note);
@@ -49,10 +49,10 @@ public class DlgRecordInfo extends DlgOKOrNOBase {
     @Override
     protected View InitDlgView() {
         if(UtilFun.StringIsNullOrEmpty(mRecordType)
-                || (!AppGobalDef.STR_RECORD_PAY.equals(mRecordType) && !AppGobalDef.STR_RECORD_INCOME.equals(mRecordType)))
+                || (!GlobalDef.STR_RECORD_PAY.equals(mRecordType) && !GlobalDef.STR_RECORD_INCOME.equals(mRecordType)))
             return null;
 
-        InitDlgTitle(AppGobalDef.STR_RECORD_PAY.equals(mRecordType) ? "添加支付类型" : "添加收入类型",
+        InitDlgTitle(GlobalDef.STR_RECORD_PAY.equals(mRecordType) ? "添加支付类型" : "添加收入类型",
                 "接受", "放弃");
         View vw = View.inflate(getActivity(), R.layout.dlg_add_record_info, null);
         mTIETName = UtilFun.cast_t(vw.findViewById(R.id.ti_name));

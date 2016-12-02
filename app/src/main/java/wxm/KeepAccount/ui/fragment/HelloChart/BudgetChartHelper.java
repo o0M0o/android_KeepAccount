@@ -28,8 +28,8 @@ import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.PreviewColumnChartView;
-import wxm.KeepAccount.Base.db.BudgetItem;
-import wxm.KeepAccount.Base.db.PayNoteItem;
+import wxm.KeepAccount.Base.data.BudgetItem;
+import wxm.KeepAccount.Base.data.PayNoteItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
@@ -218,7 +218,7 @@ public class BudgetChartHelper extends ShowViewHelperBase {
             return;
 
         BudgetItem bi = mSPBudgetData.get(mSPBudgetHot);
-        List<PayNoteItem> pays = ContextUtil.getPayIncomeUtility().GetPayNoteByBudget(bi);
+        List<PayNoteItem> pays = ContextUtil.getPayIncomeUtility().getPayNoteByBudget(bi);
         HashMap<String, ArrayList<PayNoteItem>> hm_ret = new HashMap<>();
 
         for(PayNoteItem i : pays)   {

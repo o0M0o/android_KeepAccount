@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.db;
+package wxm.KeepAccount.Base.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,12 +7,15 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import cn.wxm.andriodutillib.DBHelper.IDBRow;
+
 /**
  * 记录类型数据
  * Created by 123 on 2016/8/8.
  */
 @DatabaseTable(tableName = "tbRecordType")
-public class RecordTypeItem  implements Parcelable {
+public class RecordTypeItem
+        implements Parcelable, IDBRow<Integer> {
     public final static String FIELD_ITEMTYPE = "itemType";
 
     public final static String DEF_INCOME   = "income";
@@ -110,5 +113,15 @@ public class RecordTypeItem  implements Parcelable {
         setItemType(in.readString());
         setType(in.readString());
         setNote(in.readString());
+    }
+
+    @Override
+    public Integer getID() {
+        return get_id();
+    }
+
+    @Override
+    public void setID(Integer integer) {
+        set_id(integer);
     }
 }

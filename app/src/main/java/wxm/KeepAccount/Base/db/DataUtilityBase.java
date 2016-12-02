@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.data;
+package wxm.KeepAccount.Base.db;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -9,7 +9,7 @@ import java.util.LinkedList;
  * Created by 123 on 2016/10/31.
  */
 public abstract class DataUtilityBase {
-    private LinkedList<IDataChangeNotice> mLLNotices;
+    private LinkedList<IDBChangeNotice> mLLNotices;
     Timestamp mTSLastModifyData;
 
     DataUtilityBase()    {
@@ -21,7 +21,7 @@ public abstract class DataUtilityBase {
      * 添加数据变化监听
      * @param inc  新监听器
      */
-    public void addDataChangeNotice(IDataChangeNotice inc)  {
+    public void addDataChangeNotice(IDBChangeNotice inc)  {
         if(!mLLNotices.contains(inc))
             mLLNotices.add(inc);
     }
@@ -30,7 +30,7 @@ public abstract class DataUtilityBase {
      * 移除数据变化监听
      * @param inc  待移除监听器
      */
-    public void removeDataChangeNotice(IDataChangeNotice inc)   {
+    public void removeDataChangeNotice(IDBChangeNotice inc)   {
         mLLNotices.remove(inc);
     }
 
@@ -48,7 +48,7 @@ public abstract class DataUtilityBase {
      */
     void onDataModify()   {
         mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
-        for (IDataChangeNotice inc : mLLNotices)    {
+        for (IDBChangeNotice inc : mLLNotices)    {
             inc.DataModifyNotice();
         }
     }
@@ -58,7 +58,7 @@ public abstract class DataUtilityBase {
      */
     void onDataCreate()   {
         mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
-        for (IDataChangeNotice inc : mLLNotices)    {
+        for (IDBChangeNotice inc : mLLNotices)    {
             inc.DataCreateNotice();
         }
     }
@@ -68,7 +68,7 @@ public abstract class DataUtilityBase {
      */
     void onDataDelete()   {
         mTSLastModifyData.setTime(Calendar.getInstance().getTimeInMillis());
-        for (IDataChangeNotice inc : mLLNotices)    {
+        for (IDBChangeNotice inc : mLLNotices)    {
             inc.DataDeleteNotice();
         }
     }
