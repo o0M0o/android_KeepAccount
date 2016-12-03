@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
  * Created by wxm on 2016/9/27.
  */
 public abstract class TFEditBase extends Fragment {
-    //private final static String TAG = "TFEditBase";
+    //private final static String LOG_TAG = "TFEditBase";
     protected String mAction;
 
     /**

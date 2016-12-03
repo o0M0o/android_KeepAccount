@@ -3,6 +3,7 @@ package wxm.KeepAccount.ui.fragment.ShowData;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
  * Created by wxm on 2016/9/27.
  */
 public abstract class TFShowBase extends Fragment {
-    private final static String TAG = "TFShowBase";
+    protected String LOG_TAG = "TFShowBase";
 
     private final static String CHILD_HOT = "child_hot";
     private ViewSwitcher    mVSSwitcher;
@@ -61,16 +62,37 @@ public abstract class TFShowBase extends Fragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        View cur_v = getView();
+        Log.i(LOG_TAG, "setUserVisibleHint, visible = "
+                        + (isVisibleToUser ? "true" : "false")
+                        + ", view = " + (cur_v == null ? "false" : "true"));
+
+        /*
+        if(isVisibleToUser && null != cur_v) {
+            mVSSwitcher = UtilFun.cast(cur_v.findViewById(R.id.vs_page));
+            mVSSwitcher.setDisplayedChild(mHotChild);
+
+            mViewHelper[mHotChild].loadView();
+        }
+        */
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.i(LOG_TAG, "onViewCreated");
+        /*
         if(null != view) {
             mVSSwitcher = UtilFun.cast(view.findViewById(R.id.vs_page));
             mVSSwitcher.setDisplayedChild(mHotChild);
 
             mViewHelper[mHotChild].loadView();
         }
+        */
     }
-
 
     /**
      * 在两个视图之间切换
@@ -108,5 +130,19 @@ public abstract class TFShowBase extends Fragment {
         ShowViewHelperBase sb = mViewHelper[mHotChild];
         if(null != sb)
             sb.onDataChange();
+    }
+
+
+    /**
+     * 数据变化后调用
+     */
+    public void loadView()  {
+        View cur_v = getView();
+        if(null != cur_v) {
+            mVSSwitcher = UtilFun.cast(cur_v.findViewById(R.id.vs_page));
+            mVSSwitcher.setDisplayedChild(mHotChild);
+
+            mViewHelper[mHotChild].loadView();
+        }
     }
 }

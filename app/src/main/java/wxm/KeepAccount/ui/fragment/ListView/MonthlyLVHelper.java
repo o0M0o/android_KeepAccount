@@ -55,6 +55,8 @@ public class MonthlyLVHelper extends LVShowDataBase {
 
     public MonthlyLVHelper()    {
         super();
+
+        LOG_TAG = "MonthlyLVHelper";
     }
 
     @Override
@@ -131,12 +133,13 @@ public class MonthlyLVHelper extends LVShowDataBase {
 
     @Override
     public void loadView() {
+        super.loadView();
+
         if(ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
             reloadData();
         }
 
         refreshView();
-        mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
     }
 
     @Override
@@ -207,6 +210,8 @@ public class MonthlyLVHelper extends LVShowDataBase {
      * 重新加载数据
      */
     private void reloadData() {
+        mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
+
         mMainPara.clear();
         mHMSubPara.clear();
 

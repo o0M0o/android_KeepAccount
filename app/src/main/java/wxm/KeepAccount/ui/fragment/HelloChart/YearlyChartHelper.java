@@ -27,6 +27,8 @@ public class YearlyChartHelper extends ChartHelperBase {
     public YearlyChartHelper()   {
         super();
         mPrvWidth = 6;
+
+        LOG_TAG = "YearlyChartHelper";
     }
 
     @Override

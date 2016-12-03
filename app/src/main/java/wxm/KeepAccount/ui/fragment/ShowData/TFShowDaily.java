@@ -11,9 +11,11 @@ import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
  */
 
 public class TFShowDaily extends TFShowBase {
-    private final static String TAG = "TFShowDaily";
 
     public TFShowDaily()   {
+        super();
+        LOG_TAG = "TFShowDaily";
+
         mViewHelper = new ShowViewHelperBase[2];
         mViewHelper[0] = new DailyLVHelper();
         mViewHelper[1] = new DailyChartHelper();

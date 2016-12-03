@@ -19,8 +19,6 @@ import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
  * Created by wxm on 2016/9/29.
  */
 public abstract class LVShowDataBase extends ShowViewHelperBase {
-    private final static String TAG = "LVShowDataBase";
-
     /// list item data begin
     protected final static String K_TITLE     = "k_title";
     protected final static String K_ABSTRACT  = "k_abstract";
@@ -97,7 +95,7 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
             if(20 < mUnfoldItems.size())
                 mUnfoldItems.removeFirst();
 
-            //Log.i(TAG, "addUnfoldItem, tag = " + tag);
+            //Log.i(LOG_TAG, "addUnfoldItem, tag = " + tag);
             mUnfoldItems.addLast(tag);
         }
     }

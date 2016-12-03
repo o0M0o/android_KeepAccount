@@ -159,10 +159,14 @@ public class FrgNoteShow extends FrgUtilityBase {
                 public void onTabSelected(TabLayout.Tab tab) {
                     int pos = tab.getPosition();
                     mVPPages.setCurrentItem(pos);
+                    getHotTabItem().loadView();
+
+                    /*
                     if(mBADataChange[pos])  {
                         getHotTabItem().onDataChange();
                         mBADataChange[pos] = false;
                     }
+                    */
                 }
 
                 @Override
@@ -182,9 +186,11 @@ public class FrgNoteShow extends FrgUtilityBase {
             }
 
 
-            // 根据调用参数跳转到首页
+            // 默认选择第一页为首页
+            // 根据调用参数跳转到指定首页
             Intent it = getActivity().getIntent();
             if(null != it)  {
+                boolean b_hot = false;
                 String ft = it.getStringExtra(NoteShowDataHelper.INTENT_PARA_FIRST_TAB);
                 if(!UtilFun.StringIsNullOrEmpty(ft))    {
                     int tc = mTLTab.getTabCount();
@@ -194,11 +200,20 @@ public class FrgNoteShow extends FrgUtilityBase {
                             CharSequence cs = t.getText();
                             if (null != cs && cs.toString().equals(ft)){
                                 t.select();
+                                b_hot = true;
                                 break;
                             }
                         }
                     }
                 }
+
+                if(!b_hot) {
+                    TabLayout.Tab t = mTLTab.getTabAt(0);
+                    if (null != t)
+                        t.select();
+                }
+
+                getHotTabItem().loadView();
             }
 
             showProgress(false);

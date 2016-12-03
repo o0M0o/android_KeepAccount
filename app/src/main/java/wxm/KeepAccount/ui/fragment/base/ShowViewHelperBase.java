@@ -1,6 +1,8 @@
 package wxm.KeepAccount.ui.fragment.base;
 
 import android.content.Context;
+import android.support.annotation.CallSuper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +22,7 @@ import wxm.KeepAccount.ui.acinterface.ACNoteShow;
  * Created by 123 on 2016/9/14.
  */
 public abstract class ShowViewHelperBase implements View.OnClickListener {
-    private final static String TAG = "ShowViewHelperBase";
+    protected String    LOG_TAG = "ShowViewHelperBase";
     protected View      mSelfView;
 
     // 视图过滤数据
@@ -55,7 +57,10 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
      * 加载视图
      * 在这里进行视图初始化
      */
-    public abstract void loadView();
+    @CallSuper
+    public void loadView()  {
+        Log.d(LOG_TAG, "loadView");
+    }
 
 
     /**

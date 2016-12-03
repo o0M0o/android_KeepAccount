@@ -9,9 +9,11 @@ import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
  * Created by wxm on 2016/9/25.
  */
 public class TFShowMonthly extends TFShowBase {
-    private final static String TAG = "TFShowMonthly";
 
     public TFShowMonthly()   {
+        super();
+        LOG_TAG = "TFShowMonthly";
+
         mViewHelper = new ShowViewHelperBase[2];
         mViewHelper[0] = new MonthlyLVHelper();
         mViewHelper[1] = new MonthlyChartHelper();

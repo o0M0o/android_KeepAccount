@@ -28,6 +28,8 @@ public class DailyChartHelper extends ChartHelperBase {
     public DailyChartHelper()   {
         super();
         mPrvWidth = 4.5f;
+
+        LOG_TAG = "DailyChartHelper";
     }
 
     @Override

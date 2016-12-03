@@ -80,21 +80,22 @@ public class DailyLVHelper extends LVShowDataBase
     public DailyLVHelper()    {
         super();
 
+        LOG_TAG = "DailyLVHelper";
         mDelPay    = new LinkedList<>();
         mDelIncome = new LinkedList<>();
 
         mBActionExpand = false;
+
+        // for action expand
+        Resources res = ContextUtil.getInstance().getResources();
+        mDAExpand = res.getDrawable(R.drawable.ic_to_up);
+        mDAHide = res.getDrawable(R.drawable.ic_to_down);
     }
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
         mSelfView       = inflater.inflate(R.layout.lv_newpager, container, false);
         mBFilter        = false;
-
-        // for action expand
-        Resources res = mSelfView.getResources();
-        mDAExpand = res.getDrawable(R.drawable.ic_to_up);
-        mDAHide = res.getDrawable(R.drawable.ic_to_down);
 
         mIVActions = UtilFun.cast_t(mSelfView.findViewById(R.id.iv_expand));
         mGLActions = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_action));
@@ -173,12 +174,13 @@ public class DailyLVHelper extends LVShowDataBase
 
     @Override
     public void loadView() {
+        super.loadView();
+
         if(ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
             reloadData();
         }
 
         refreshView();
-        mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
     }
 
 
@@ -249,6 +251,8 @@ public class DailyLVHelper extends LVShowDataBase
      * 重新加载数据
      */
     private void reloadData() {
+        mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
+
         mMainPara.clear();
         mHMSubPara.clear();
 

@@ -62,7 +62,7 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                //Log.i(TAG, "in chart event = " + event.getAction());
+                //Log.i(LOG_TAG, "in chart event = " + event.getAction());
                 int act = event.getAction();
                 switch (act) {
                     case MotionEvent.ACTION_DOWN :
@@ -106,7 +106,7 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
         mPreviewChart.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                //Log.i(TAG, "in preview chart event = " + event.getAction());
+                //Log.i(LOG_TAG, "in preview chart event = " + event.getAction());
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         getRootActivity().disableViewPageTouch(true);
@@ -157,6 +157,8 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
 
     @Override
     public void loadView() {
+        super.loadView();
+
         reloadData();
         refreshView();
     }

@@ -71,6 +71,8 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
     public BudgetViewHelper()    {
         super();
+
+        LOG_TAG = "BudgetViewHelper";
     }
 
     @Override
@@ -158,6 +160,8 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
     @Override
     public void loadView() {
+        super.loadView();
+
         if(ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
             reloadData();
         }

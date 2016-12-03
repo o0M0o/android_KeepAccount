@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
  * Created by wxm on 2016/9/27.
  */
 public abstract class TFPreviewBase extends Fragment {
-    //private final static String TAG = "TFPreviewBase";
+    //private final static String LOG_TAG = "TFPreviewBase";
 
     /**
      * 设置预览参数

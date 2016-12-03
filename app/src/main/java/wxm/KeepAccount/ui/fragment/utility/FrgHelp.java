@@ -20,7 +20,7 @@ import wxm.KeepAccount.R;
 public class FrgHelp extends FrgUtilityBase {
 
 
-    //private static String TAG = "ACHelp";
+    //private static String LOG_TAG = "ACHelp";
     private static final String ENCODING = "utf-8";
     //private static final String MIMETYPE = "text/html; charset=UTF-8";
 
