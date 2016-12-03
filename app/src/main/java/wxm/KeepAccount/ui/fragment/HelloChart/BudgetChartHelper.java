@@ -95,13 +95,13 @@ public class BudgetChartHelper extends ShowViewHelperBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     mSPBudgetHot = position;
-                    loadView();
+                    loadView(false);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                     mSPBudgetHot = Spinner.INVALID_POSITION;
-                    loadView();
+                    loadView(false);
                 }
             });
         }
@@ -207,13 +207,11 @@ public class BudgetChartHelper extends ShowViewHelperBase {
         return mSelfView;
     }
 
-    @Override
-    public void loadView() {
-        reloadData();
-        refreshView();
-    }
 
-    private void reloadData() {
+    @Override
+    protected void refreshData() {
+        super.refreshData();
+
         if(Spinner.INVALID_POSITION == mSPBudgetHot)
             return;
 
@@ -299,10 +297,6 @@ public class BudgetChartHelper extends ShowViewHelperBase {
 
     @Override
     public void filterView(List<String> ls_tag) {
-    }
-
-    @Override
-    public void onDataChange() {
     }
 
 

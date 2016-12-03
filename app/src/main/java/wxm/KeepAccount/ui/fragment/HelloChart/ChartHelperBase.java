@@ -156,19 +156,17 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     }
 
     @Override
-    public void loadView() {
-        super.loadView();
+    public void loadView(boolean bForce) {
+        super.loadView(bForce);
 
-        reloadData();
+        refreshData();
         refreshView();
     }
-
-    protected abstract void reloadData();
 
     @Override
     protected void giveupFilter()   {
         mBFilter = false;
-        loadView();
+        loadView(false);
     }
 
     @Override
@@ -177,15 +175,11 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
             mBFilter = true;
             mFilterPara.clear();
             mFilterPara.addAll(ls_tag);
-            loadView();
+            loadView(false);
         } else  {
             mBFilter = false;
-            loadView();
+            loadView(false);
         }
-    }
-
-    @Override
-    public void onDataChange() {
     }
 
     @Override

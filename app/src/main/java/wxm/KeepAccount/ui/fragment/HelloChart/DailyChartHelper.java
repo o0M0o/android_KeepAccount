@@ -33,7 +33,9 @@ public class DailyChartHelper extends ChartHelperBase {
     }
 
     @Override
-    protected void reloadData() {
+    protected void refreshData() {
+        super.refreshData();
+
         HashMap<String, ArrayList<INote>> ret = NoteShowDataHelper.getInstance().getNotesForDay();
 
         int id_col = 0;

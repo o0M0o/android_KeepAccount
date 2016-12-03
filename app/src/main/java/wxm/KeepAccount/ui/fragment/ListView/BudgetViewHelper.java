@@ -157,30 +157,10 @@ public class BudgetViewHelper  extends LVShowDataBase {
         return mSelfView;
     }
 
-
-    @Override
-    public void loadView() {
-        super.loadView();
-
-        if(ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
-            reloadData();
-        }
-
-        refreshView();
-        mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
-    }
-
     @Override
     public void filterView(List<String> ls_tag) {
     }
 
-
-
-    @Override
-    public void onDataChange() {
-        reloadData();
-        refreshView();
-    }
 
     @Override
     public void onClick(View v) {
@@ -220,6 +200,18 @@ public class BudgetViewHelper  extends LVShowDataBase {
         mSNAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    protected void refreshData() {
+        super.refreshData();
+
+        mMainPara.clear();
+        mHMSubPara.clear();
+
+        // format output
+        mHMData = ContextUtil.getBudgetUtility().getBudgetWithPayNote();
+        parseNotes();
+    }
+
 
     private void refreshAttachLayout()    {
         setAttachLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.INVISIBLE);
@@ -232,12 +224,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
      * 重新加载数据
      */
     private void reloadData() {
-        mMainPara.clear();
-        mHMSubPara.clear();
 
-        // format output
-        mHMData = ContextUtil.getBudgetUtility().getBudgetWithPayNote();
-        parseNotes();
     }
 
     /**

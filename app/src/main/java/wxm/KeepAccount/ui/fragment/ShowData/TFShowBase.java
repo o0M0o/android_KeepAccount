@@ -104,7 +104,7 @@ public abstract class TFShowBase extends Fragment {
             mVSSwitcher.showNext();
             mHotChild = mVSSwitcher.getDisplayedChild();
 
-            mViewHelper[mHotChild].loadView();
+            mViewHelper[mHotChild].loadView(false);
         }   else    {
             Toast.makeText(getActivity(), "getView is null", Toast.LENGTH_SHORT).show();
         }
@@ -123,26 +123,18 @@ public abstract class TFShowBase extends Fragment {
         }
     }
 
-    /**
-     * 数据变化后调用
-     */
-    public void onDataChange()  {
-        ShowViewHelperBase sb = mViewHelper[mHotChild];
-        if(null != sb)
-            sb.onDataChange();
-    }
-
 
     /**
      * 数据变化后调用
+     * @param bForce   若为true则刷新数据
      */
-    public void loadView()  {
+    public void loadView(boolean bForce)  {
         View cur_v = getView();
         if(null != cur_v) {
             mVSSwitcher = UtilFun.cast(cur_v.findViewById(R.id.vs_page));
             mVSSwitcher.setDisplayedChild(mHotChild);
 
-            mViewHelper[mHotChild].loadView();
+            mViewHelper[mHotChild].loadView(bForce);
         }
     }
 }

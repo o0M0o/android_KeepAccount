@@ -26,7 +26,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
@@ -125,23 +124,12 @@ public class YearlyLVHelper extends LVShowDataBase {
                         .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
                 tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
-                reloadData();
+                refreshData();
                 refreshView();
             }
         });
 
         return mSelfView;
-    }
-
-    @Override
-    public void loadView() {
-        super.loadView();
-
-        if(ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
-            reloadData();
-        }
-
-        refreshView();
     }
 
     @Override
@@ -153,14 +141,6 @@ public class YearlyLVHelper extends LVShowDataBase {
             refreshView();
         } else  {
             mBFilter = false;
-            refreshView();
-        }
-    }
-
-    @Override
-    public void onDataChange() {
-        if(null != mSelfView) {
-            reloadData();
             refreshView();
         }
     }
@@ -211,7 +191,10 @@ public class YearlyLVHelper extends LVShowDataBase {
     /**
      * 重新加载数据
      */
-    private void reloadData() {
+    @Override
+    protected void refreshData() {
+        super.refreshData();
+
         mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
 
         mMainPara.clear();

@@ -32,7 +32,9 @@ public class YearlyChartHelper extends ChartHelperBase {
     }
 
     @Override
-    protected void reloadData() {
+    protected void refreshData() {
+        super.refreshData();
+
         HashMap<String, ArrayList<INote>> ret = NoteShowDataHelper.getInstance().getNotesForYear();
 
         int id_col = 0;

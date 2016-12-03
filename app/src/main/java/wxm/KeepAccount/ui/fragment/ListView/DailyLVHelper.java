@@ -164,23 +164,12 @@ public class DailyLVHelper extends LVShowDataBase
                         .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
                 tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
-                reloadData();
+                refreshData();
                 refreshView();
             }
         });
 
         return mSelfView;
-    }
-
-    @Override
-    public void loadView() {
-        super.loadView();
-
-        if(ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
-            reloadData();
-        }
-
-        refreshView();
     }
 
 
@@ -193,14 +182,6 @@ public class DailyLVHelper extends LVShowDataBase
             refreshView();
         } else  {
             mBFilter = false;
-            refreshView();
-        }
-    }
-
-    @Override
-    public void onDataChange() {
-        if(null != mSelfView) {
-            reloadData();
             refreshView();
         }
     }
@@ -250,7 +231,9 @@ public class DailyLVHelper extends LVShowDataBase
     /**
      * 重新加载数据
      */
-    private void reloadData() {
+    protected void refreshData() {
+        super.refreshData();
+
         mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
 
         mMainPara.clear();

@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,11 +56,11 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
 
     /**
      * 加载视图
-     * 在这里进行视图初始化
+     * @param bForce     若为true则强制全部刷新
      */
     @CallSuper
-    public void loadView()  {
-        Log.d(LOG_TAG, "loadView");
+    public void loadView(boolean bForce)  {
+        Log.d(LOG_TAG, "loadView, bForce = " + (bForce ? "true" : "false"));
     }
 
 
@@ -76,16 +77,19 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
      */
     public abstract void filterView(List<String> ls_tag);
 
-    /**
-     * 数据变化后调用
-     */
-    public abstract void onDataChange();
-
 
     /**
-     * 仅更新视图
+     * 更新视图
      */
     protected abstract void refreshView();
+
+    /**
+     * 更新数据
+     */
+    @CallSuper
+    protected void refreshData()    {
+        mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
+    }
 
     /**
      * 取消过滤

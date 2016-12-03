@@ -28,7 +28,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
@@ -123,23 +122,12 @@ public class MonthlyLVHelper extends LVShowDataBase {
                         .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
                 tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
-                reloadData();
+                refreshData();
                 refreshView();
             }
         });
 
         return mSelfView;
-    }
-
-    @Override
-    public void loadView() {
-        super.loadView();
-
-        if(ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
-            reloadData();
-        }
-
-        refreshView();
     }
 
     @Override
@@ -151,14 +139,6 @@ public class MonthlyLVHelper extends LVShowDataBase {
             refreshView();
         } else  {
             mBFilter = false;
-            refreshView();
-        }
-    }
-
-    @Override
-    public void onDataChange() {
-        if(null != mSelfView) {
-            reloadData();
             refreshView();
         }
     }
@@ -209,8 +189,8 @@ public class MonthlyLVHelper extends LVShowDataBase {
     /**
      * 重新加载数据
      */
-    private void reloadData() {
-        mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
+    protected void refreshData() {
+        super.refreshData();
 
         mMainPara.clear();
         mHMSubPara.clear();

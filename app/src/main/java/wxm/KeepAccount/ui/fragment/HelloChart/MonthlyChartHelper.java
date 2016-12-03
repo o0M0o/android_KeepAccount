@@ -32,7 +32,9 @@ public class MonthlyChartHelper extends ChartHelperBase {
     }
 
     @Override
-    protected void reloadData() {
+    protected void refreshData() {
+        super.refreshData();
+
         HashMap<String, ArrayList<INote>> ret = NoteShowDataHelper.getInstance().getNotesForMonth();
 
         int id_col = 0;

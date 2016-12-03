@@ -2,6 +2,7 @@ package wxm.KeepAccount.ui.fragment.base;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -172,22 +173,50 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
         }
     }
 
+    @Override
+    public void loadView(boolean bForce) {
+        super.loadView(bForce);
+
+        if(bForce ||
+                ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
+            refreshData();
+        }
+
+        refreshView();
+    }
+
+
     /**
      * 刷新数据以及视图
      * @param v             for context
      * @param bShowDialog   若为true则显示提醒对话框
      */
-    protected void reloadView(Context v, boolean bShowDialog) {
-        NoteShowDataHelper.getInstance().refreshData();
-        loadView();
+    protected void reloadView(final Context v, final boolean bShowDialog) {
+        AsyncTask<Void, Void, Void>  cur_task = new AsyncTask<Void, Void, Void> () {
+            @Override
+            protected Void doInBackground(Void... params) {
+                NoteShowDataHelper.getInstance().refreshData();
+                return null;
+            }
 
-        if(bShowDialog) {
-            android.app.AlertDialog.Builder builder =
-                    new android.app.AlertDialog.Builder(v);
-            builder.setMessage("数据已刷新!").setTitle("提醒");
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                // After completing execution of given task, control will return here.
+                // Hence if you want to populate UI elements with fetched data, do it here.
+                loadView(true);
 
-            android.app.AlertDialog dlg = builder.create();
-            dlg.show();
-        }
+                if(bShowDialog) {
+                    android.app.AlertDialog.Builder builder =
+                            new android.app.AlertDialog.Builder(v);
+                    builder.setMessage("数据已刷新!").setTitle("提醒");
+
+                    android.app.AlertDialog dlg = builder.create();
+                    dlg.show();
+                }
+            }
+        };
+
+        cur_task.execute();
     }
 }

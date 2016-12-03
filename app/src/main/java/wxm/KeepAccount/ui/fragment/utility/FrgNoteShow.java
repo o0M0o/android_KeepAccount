@@ -124,7 +124,7 @@ public class FrgNoteShow extends FrgUtilityBase {
             // After completing execution of given task, control will return here.
             // Hence if you want to populate UI elements with fetched data, do it here.
             TFShowBase tb = getHotTabItem();
-            tb.onDataChange();
+            tb.loadView(true);
 
             int cur_pos = mVPPages.getCurrentItem();
             for(int i = 0; i < mBADataChange.length; i++)   {
@@ -159,14 +159,7 @@ public class FrgNoteShow extends FrgUtilityBase {
                 public void onTabSelected(TabLayout.Tab tab) {
                     int pos = tab.getPosition();
                     mVPPages.setCurrentItem(pos);
-                    getHotTabItem().loadView();
-
-                    /*
-                    if(mBADataChange[pos])  {
-                        getHotTabItem().onDataChange();
-                        mBADataChange[pos] = false;
-                    }
-                    */
+                    getHotTabItem().loadView(mBADataChange[pos]);
                 }
 
                 @Override
@@ -213,7 +206,7 @@ public class FrgNoteShow extends FrgUtilityBase {
                         t.select();
                 }
 
-                getHotTabItem().loadView();
+                getHotTabItem().loadView(true);
             }
 
             showProgress(false);
