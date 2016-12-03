@@ -65,10 +65,10 @@ public class FrgNoteEdit extends FrgUtilityBase {
             int pid = bd.getInt(ACNoteEdit.PARA_NOTE_PAY, GlobalDef.INVALID_ID);
             int iid = bd.getInt(ACNoteEdit.PARA_NOTE_INCOME, GlobalDef.INVALID_ID);
             if(GlobalDef.INVALID_ID != pid)   {
-                mOldPayNote = ContextUtil.getPayIncomeUtility().getPayById(pid);
+                mOldPayNote = ContextUtil.getPayIncomeUtility().getPayDBUtility().getData(pid);
                 mTLTabs.addTab(mTLTabs.newTab().setText(TAB_PAY));
             } else if(GlobalDef.INVALID_ID != iid)    {
-                mOldIncomeNote = ContextUtil.getPayIncomeUtility().getIncomeById(iid);
+                mOldIncomeNote = ContextUtil.getPayIncomeUtility().getIncomeDBUtility().getData(iid);
                 mTLTabs.addTab(mTLTabs.newTab().setText(TAB_INCOME));
             } else  {
                 Log.e(LOG_TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");

@@ -10,7 +10,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.BudgetItem;
 import wxm.KeepAccount.Base.data.IncomeNoteItem;
 import wxm.KeepAccount.Base.data.PayNoteItem;
-import wxm.KeepAccount.Base.db.BudgetDataUtility;
+import wxm.KeepAccount.Base.db.BudgetDBUtility;
 import wxm.KeepAccount.Base.db.PayIncomeDBUtility;
 import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.Base.define.GlobalDef;
@@ -63,16 +63,16 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
 
         Object ob;
         PayIncomeDBUtility puit = ContextUtil.getPayIncomeUtility();
-        BudgetDataUtility buit = ContextUtil.getBudgetUtility();
+        BudgetDBUtility buit = ContextUtil.getBudgetUtility();
         int id = it.getIntExtra(GlobalDef.INTENT_LOAD_RECORD_ID, -1);
         if(GlobalDef.STR_RECORD_PAY.equals(type)) {
-            PayNoteItem pi = -1 != id ? puit.getPayById(id) : null;
+            PayNoteItem pi = -1 != id ? puit.getPayDBUtility().getData(id) : null;
             ob = pi;
         } else if(GlobalDef.STR_RECORD_BUDGET.equals(type)) {
-            BudgetItem bi = -1 != id ? buit.GetBudgetById(id) : null;
+            BudgetItem bi = -1 != id ? buit.getData(id) : null;
             ob = bi;
         } else  {
-            IncomeNoteItem ii = -1 != id ? puit.getIncomeById(id) : null;
+            IncomeNoteItem ii = -1 != id ? puit.getIncomeDBUtility().getData(id) : null;
             ob = ii;
         }
 

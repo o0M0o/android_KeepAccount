@@ -182,12 +182,12 @@ public class PayNoteItem
 
         int uid = in.readInt();
         if(GlobalDef.INVALID_ID != uid)   {
-            setUsr(ContextUtil.getUsrUtility().GetUsrById(uid));
+            setUsr(ContextUtil.getUsrUtility().getData(uid));
         }
 
         int bid = in.readInt();
         if(GlobalDef.INVALID_ID != bid)   {
-            setBudget(ContextUtil.getBudgetUtility().GetBudgetById(bid));
+            setBudget(ContextUtil.getBudgetUtility().getData(bid));
         }
 
         setInfo(in.readString());

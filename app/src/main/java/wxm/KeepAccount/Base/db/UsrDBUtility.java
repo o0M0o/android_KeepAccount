@@ -1,11 +1,13 @@
 package wxm.KeepAccount.Base.db;
 
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+
 import java.util.List;
 
+import cn.wxm.andriodutillib.DBHelper.DBUtilityBase;
 import cn.wxm.andriodutillib.util.MD5Util;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.UsrItem;
-import wxm.KeepAccount.Base.data.DBOrmLiteHelper;
 import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 
@@ -13,11 +15,16 @@ import wxm.KeepAccount.Base.utility.ContextUtil;
  * usr数据处理类
  * Created by 123 on 2016/8/9.
  */
-public class UsrDataUtility extends  DataUtilityBase  {
-    private final String    TAG = "UsrDataUtility";
+public class UsrDBUtility extends DBUtilityBase<UsrItem, Integer> {
+    private final String    TAG = "UsrDBUtility";
 
-    public UsrDataUtility()  {
+    public UsrDBUtility()  {
         super();
+    }
+
+    @Override
+    protected RuntimeExceptionDao<UsrItem, Integer> getDBHelper() {
+        return ContextUtil.getDBHelper().getUsrItemREDao();
     }
 
     /**
@@ -29,9 +36,7 @@ public class UsrDataUtility extends  DataUtilityBase  {
         if(UtilFun.StringIsNullOrEmpty(usr))
             return false;
 
-        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
-        List<UsrItem> ret = mDBHelper.getUsrItemREDao()
-                .queryForEq(UsrItem.FIELD_NAME, usr);
+        List<UsrItem> ret = getDBHelper().queryForEq(UsrItem.FIELD_NAME, usr);
         return !((null == ret) || (ret.size() < 1));
     }
 
@@ -52,30 +57,25 @@ public class UsrDataUtility extends  DataUtilityBase  {
         }
         pwdpad = MD5Util.string2MD5(pwdpad);
 
-        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
         UsrItem uiret = null;
-        List<UsrItem> ret = mDBHelper.getUsrItemREDao()
-                .queryForEq(UsrItem.FIELD_NAME, usr);
+        List<UsrItem> ret = getDBHelper().queryForEq(UsrItem.FIELD_NAME, usr);
         if((null == ret) || (ret.size() < 1))   {
             UsrItem ui = new UsrItem();
             ui.setName(usr);
             ui.setPwd(pwdpad);
 
-            if(1 == mDBHelper.getUsrItemREDao().create(ui))
+            if(createData(ui))
                 uiret = ui;
         } else  {
             UsrItem uiold = ret.get(0);
             if(!pwdpad.equals(uiold.getPwd()))  {
                 uiold.setPwd(pwdpad);
-                if(1 == mDBHelper.getUsrItemREDao().update(uiold))
+                if(modifyData(uiold))
                     uiret = uiold;
             } else {
                 uiret = uiold;
             }
         }
-
-        if(null != uiret)
-            onDataCreate();
 
         return uiret;
     }
@@ -93,8 +93,7 @@ public class UsrDataUtility extends  DataUtilityBase  {
             pwdpad += GlobalDef.STR_PWD_PAD.substring(pwd.length());
         }
 
-        List<UsrItem> lsui = ContextUtil.getDBHelper().getUsrItemREDao()
-                            .queryForEq(UsrItem.FIELD_NAME, usr);
+        List<UsrItem> lsui = getDBHelper().queryForEq(UsrItem.FIELD_NAME, usr);
         if((null == lsui) || (lsui.size() < 1))
             return false;
 
@@ -116,8 +115,7 @@ public class UsrDataUtility extends  DataUtilityBase  {
             pwdpad += GlobalDef.STR_PWD_PAD.substring(pwd.length());
         }
 
-        List<UsrItem> lsui = ContextUtil.getDBHelper().getUsrItemREDao()
-                            .queryForEq(UsrItem.FIELD_NAME, usr);
+        List<UsrItem> lsui = getDBHelper().queryForEq(UsrItem.FIELD_NAME, usr);
         if((null == lsui) || (lsui.size() < 1))
             return null;
 
@@ -126,14 +124,5 @@ public class UsrDataUtility extends  DataUtilityBase  {
             return lsui.get(0);
 
         return null;
-    }
-
-    /**
-     * 根据用户ID获取用户数据
-     * @param uid 用户ID
-     * @return  用户数据，或者返回NULL
-     */
-    public UsrItem GetUsrById(int uid)  {
-        return ContextUtil.getDBHelper().getUsrItemREDao().queryForId(uid);
     }
 }

@@ -76,7 +76,7 @@ public class TFEditBudget extends TFEditBase {
             return false;
         }
 
-        BudgetItem cbi = ContextUtil.getBudgetUtility().GetBudgetByName(name);
+        BudgetItem cbi = ContextUtil.getBudgetUtility().getBudgetByName(name);
         if((null != cbi)
                 && ((null == mBIData) || (mBIData.get_id() != cbi.get_id())))  {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -103,8 +103,8 @@ public class TFEditBudget extends TFEditBase {
         bi.setAmount(new BigDecimal(amount));
         bi.setNote(note);
 
-        boolean s_ret = b_create ? ContextUtil.getBudgetUtility().AddBudget(bi)
-                                    : ContextUtil.getBudgetUtility().ModifyBudget(bi);
+        boolean s_ret = b_create ? ContextUtil.getBudgetUtility().createData(bi)
+                                    : ContextUtil.getBudgetUtility().modifyData(bi);
         if(!s_ret)  {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage(b_create ? "创建预算数据失败!" : "更新预算数据失败")

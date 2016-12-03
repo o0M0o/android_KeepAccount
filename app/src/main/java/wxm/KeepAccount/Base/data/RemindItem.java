@@ -78,7 +78,7 @@ public class RemindItem
         set_id(in.readInt());
         int uid = in.readInt();
         if(GlobalDef.INVALID_ID != uid)   {
-            setUsr(ContextUtil.getUsrUtility().GetUsrById(uid));
+            setUsr(ContextUtil.getUsrUtility().getData(uid));
         }
 
         setName(in.readString());

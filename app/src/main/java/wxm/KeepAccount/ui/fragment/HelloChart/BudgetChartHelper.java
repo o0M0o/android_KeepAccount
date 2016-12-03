@@ -79,7 +79,7 @@ public class BudgetChartHelper extends ShowViewHelperBase {
         mSPBudget = UtilFun.cast(mSelfView.findViewById(R.id.sp_budget));
         assert null != mSPBudget;
 
-        mSPBudgetData = ContextUtil.getBudgetUtility().GetBudget();
+        mSPBudgetData = ContextUtil.getBudgetUtility().getBudgetForCurUsr();
         if (!ToolUtil.ListIsNullOrEmpty(mSPBudgetData)) {
             ArrayList<String> data_ls = new ArrayList<>();
             for (BudgetItem i : mSPBudgetData) {

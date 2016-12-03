@@ -262,8 +262,8 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         boolean b_create = mAction.equals(GlobalDef.STR_CREATE);
         PayIncomeDBUtility uti = ContextUtil.getPayIncomeUtility();
         boolean b_ret =  b_create ?
-                            1 == uti.AddIncomeNotes(Collections.singletonList(pi))
-                            : 1 == uti.modifyIncomeNotes(Collections.singletonList(pi));
+                            1 == uti.addIncomeNotes(Collections.singletonList(pi))
+                            : uti.getIncomeDBUtility().modifyData(pi);
         if(!b_ret)  {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage(b_create ? "创建收入数据失败!" : "更新收入数据失败")

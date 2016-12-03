@@ -188,7 +188,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 if(ACTION_DELETE == mActionType)    {
                     mActionType = ACTION_EDIT;
                     if(!ToolUtil.ListIsNullOrEmpty(mLLDelBudget)) {
-                        ContextUtil.getBudgetUtility().DeleteBudgetById(mLLDelBudget);
+                        ContextUtil.getBudgetUtility().removeDatas(mLLDelBudget);
                     }
                 }
 
@@ -232,7 +232,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
         mHMSubPara.clear();
 
         // format output
-        mHMData = ContextUtil.getBudgetUtility().GetBudgetWithPayNote();
+        mHMData = ContextUtil.getBudgetUtility().getBudgetWithPayNote();
         parseNotes();
     }
 

@@ -121,7 +121,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
         ArrayList<String> data_ls = new ArrayList<>();
         data_ls.add("无预算(不使用预算)");
-        List<BudgetItem> bils = ContextUtil.getBudgetUtility().GetBudget();
+        List<BudgetItem> bils = ContextUtil.getBudgetUtility().getBudgetForCurUsr();
         if (!ToolUtil.ListIsNullOrEmpty(bils)) {
             for (BudgetItem i : bils) {
                 data_ls.add(i.getName());
@@ -236,7 +236,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             int pos = mSPBudget.getSelectedItemPosition();
             if(AdapterView.INVALID_POSITION != pos && 0 != pos) {
                 BudgetItem bi = ContextUtil.getBudgetUtility()
-                        .GetBudgetByName((String)mSPBudget.getSelectedItem());
+                        .getBudgetByName((String)mSPBudget.getSelectedItem());
                 if (null != bi) {
                     pi.setBudget(bi);
                 }
@@ -329,7 +329,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         int pos = mSPBudget.getSelectedItemPosition();
         if(AdapterView.INVALID_POSITION != pos && 0 != pos) {
             BudgetItem bi = ContextUtil.getBudgetUtility()
-                    .GetBudgetByName((String)mSPBudget.getSelectedItem());
+                    .getBudgetByName((String)mSPBudget.getSelectedItem());
             if (null != bi) {
                 pi.setBudget(bi);
             }
@@ -340,7 +340,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         PayIncomeDBUtility uti = ContextUtil.getPayIncomeUtility();
         boolean b_ret =  b_create ?
                             1 == uti.addPayNotes(Collections.singletonList(pi))
-                            : 1 == uti.modifyPayNotes(Collections.singletonList(pi));
+                            : uti.getPayDBUtility().modifyData(pi);
         if(!b_ret)  {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage(b_create ? "创建支出数据失败!" : "更新支出数据失败")

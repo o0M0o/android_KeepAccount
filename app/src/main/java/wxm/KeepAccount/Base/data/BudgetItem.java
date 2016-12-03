@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import cn.wxm.andriodutillib.DBHelper.IDBRow;
 import cn.wxm.andriodutillib.util.UtilFun;
 
 /**
@@ -21,7 +22,8 @@ import cn.wxm.andriodutillib.util.UtilFun;
  * Created by 123 on 2016/9/1.
  */
 @DatabaseTable(tableName = "tbBudget")
-public class BudgetItem implements Parcelable {
+public class BudgetItem
+        implements Parcelable, IDBRow<Integer> {
     private static final String TAG = "BudgetItem";
 
     public final static String FIELD_USR        = "usr_id";
@@ -196,5 +198,15 @@ public class BudgetItem implements Parcelable {
     @Override
     public int hashCode()   {
         return getName().hashCode() + getAmount().hashCode() + get_id();
+    }
+
+    @Override
+    public Integer getID() {
+        return get_id();
+    }
+
+    @Override
+    public void setID(Integer integer) {
+        set_id(integer);
     }
 }

@@ -235,7 +235,7 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
         income_it.setVal(new BigDecimal(12.34));
         income_it.getTs().setTime(de.getTime());
         ls_income.add(income_it);
-        ContextUtil.getPayIncomeUtility().AddIncomeNotes(ls_income);
+        ContextUtil.getPayIncomeUtility().addIncomeNotes(ls_income);
 
         // for hugo
         for(PayNoteItem i : ls_pay)     {
@@ -248,7 +248,7 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
             i.setId(GlobalDef.INVALID_ID);
             i.setUsr(ui_hugo);
         }
-        ContextUtil.getPayIncomeUtility().AddIncomeNotes(ls_income);
+        ContextUtil.getPayIncomeUtility().addIncomeNotes(ls_income);
 
         AddTestDataForDefualtUsr();
     }
@@ -306,7 +306,7 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
                             ls_pay.add(pay_it);
                         }
 
-                        ContextUtil.getPayIncomeUtility().AddIncomeNotes(ls_pay);
+                        ContextUtil.getPayIncomeUtility().addIncomeNotes(ls_pay);
                     }
                 }
             }

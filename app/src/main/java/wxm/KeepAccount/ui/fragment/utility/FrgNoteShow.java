@@ -26,9 +26,9 @@ import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.DBHelper.IDataChangeNotice;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.data.BudgetItem;
 import wxm.KeepAccount.Base.data.IncomeNoteItem;
 import wxm.KeepAccount.Base.data.PayNoteItem;
-import wxm.KeepAccount.Base.db.IDBChangeNotice;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
@@ -57,25 +57,20 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     // for notice
     private boolean[]   mBADataChange;
-    private IDBChangeNotice mIDCNotice = new IDBChangeNotice() {
+    private IDataChangeNotice mIDCBudgetNotice = new IDataChangeNotice<BudgetItem>() {
         @Override
-        public void DataModifyNotice() {
+        public void DataModifyNotice(List<BudgetItem> list) {
             reLoadFrg();
         }
 
         @Override
-        public void DataCreateNotice() {
+        public void DataCreateNotice(List<BudgetItem> list) {
             reLoadFrg();
         }
 
         @Override
-        public void DataDeleteNotice() {
+        public void DataDeleteNotice(List<BudgetItem> list) {
             reLoadFrg();
-        }
-
-        private void reLoadFrg()    {
-            showProgress(true);
-            new ATDataChange().execute();
         }
     };
 
@@ -94,11 +89,6 @@ public class FrgNoteShow extends FrgUtilityBase {
         public void DataDeleteNotice(List<PayNoteItem> list) {
             reLoadFrg();
         }
-
-        private void reLoadFrg()    {
-            showProgress(true);
-            new ATDataChange().execute();
-        }
     };
 
 
@@ -116,12 +106,6 @@ public class FrgNoteShow extends FrgUtilityBase {
         @Override
         public void DataDeleteNotice(List<IncomeNoteItem> list) {
             reLoadFrg();
-        }
-
-
-        private void reLoadFrg()    {
-            showProgress(true);
-            new ATDataChange().execute();
         }
     };
 
@@ -222,18 +206,27 @@ public class FrgNoteShow extends FrgUtilityBase {
     }
 
 
+    /**
+     * 数据变化后重新加载数据
+     */
+    private void reLoadFrg()    {
+        showProgress(true);
+        new ATDataChange().execute();
+    }
+
+
     @Override
     protected void enterActivity()  {
         getPayIncomeUtility().getPayDBUtility().addDataChangeNotice(mIDCPayNotice);
         getPayIncomeUtility().getIncomeDBUtility().addDataChangeNotice(mIDCIncomeNotice);
-        getBudgetUtility().addDataChangeNotice(mIDCNotice);
+        getBudgetUtility().addDataChangeNotice(mIDCBudgetNotice);
     }
 
     @Override
     protected void leaveActivity()  {
         getPayIncomeUtility().getPayDBUtility().removeDataChangeNotice(mIDCPayNotice);
         getPayIncomeUtility().getIncomeDBUtility().removeDataChangeNotice(mIDCIncomeNotice);
-        getBudgetUtility().removeDataChangeNotice(mIDCNotice);
+        getBudgetUtility().removeDataChangeNotice(mIDCBudgetNotice);
     }
 
     @Override
@@ -324,15 +317,6 @@ public class FrgNoteShow extends FrgUtilityBase {
         int pos = mTLTab.getSelectedTabPosition();
         PagerAdapter pa = UtilFun.cast(mVPPages.getAdapter());
         return UtilFun.cast(pa.getItem(pos));
-    }
-
-
-    /**
-     * 初始化tab页控件组
-     */
-    private void init_tabs() {
-
-
     }
     ///PRIVATE END
 

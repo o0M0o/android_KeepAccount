@@ -5,11 +5,11 @@ import android.util.Log;
 
 import wxm.KeepAccount.Base.data.DBOrmLiteHelper;
 import wxm.KeepAccount.Base.data.UsrItem;
-import wxm.KeepAccount.Base.db.BudgetDataUtility;
+import wxm.KeepAccount.Base.db.BudgetDBUtility;
 import wxm.KeepAccount.Base.db.PayIncomeDBUtility;
-import wxm.KeepAccount.Base.db.RecordTypeDataUtility;
-import wxm.KeepAccount.Base.db.RemindDataUtility;
-import wxm.KeepAccount.Base.db.UsrDataUtility;
+import wxm.KeepAccount.Base.db.RecordTypeDBUtility;
+import wxm.KeepAccount.Base.db.RemindDBUtility;
+import wxm.KeepAccount.Base.db.UsrDBUtility;
 import wxm.KeepAccount.Base.handler.GlobalMsgHandler;
 
 /**
@@ -27,11 +27,11 @@ public class ContextUtil extends Application {
 
     // mainly for sqlite
     private DBOrmLiteHelper mDBHelper;
-    private UsrDataUtility          mUsru;
-    private RecordTypeDataUtility   mRecordTypeu;
-    private BudgetDataUtility       mBudgetu;
+    private UsrDBUtility mUsru;
+    private RecordTypeDBUtility     mRecordTypeu;
+    private BudgetDBUtility mBudgetu;
     private PayIncomeDBUtility      mPayIncomeu;
-    private RemindDataUtility       mRemindu;
+    private RemindDBUtility mRemindu;
 
     @Override
     public void onCreate() {
@@ -43,11 +43,11 @@ public class ContextUtil extends Application {
         // for db
         mDBHelper       = new DBOrmLiteHelper(getInstance());
 
-        mUsru           = new UsrDataUtility();
-        mRecordTypeu    = new RecordTypeDataUtility();
-        mBudgetu        = new BudgetDataUtility();
+        mUsru           = new UsrDBUtility();
+        mRecordTypeu    = new RecordTypeDBUtility();
+        mBudgetu        = new BudgetDBUtility();
         mPayIncomeu     = new PayIncomeDBUtility();
-        mRemindu        = new RemindDataUtility();
+        mRemindu        = new RemindDBUtility();
     }
 
     @Override
@@ -113,7 +113,7 @@ public class ContextUtil extends Application {
      * 获得用户数据辅助类
      * @return 用户数据辅助类
      */
-    public static UsrDataUtility getUsrUtility()   {
+    public static UsrDBUtility getUsrUtility()   {
         return getInstance().mUsru;
     }
 
@@ -121,7 +121,7 @@ public class ContextUtil extends Application {
      * 获得recordtype数据辅助类
      * @return 辅助类
      */
-    public static RecordTypeDataUtility getRecordTypeUtility()  {
+    public static RecordTypeDBUtility getRecordTypeUtility()  {
         return getInstance().mRecordTypeu;
     }
 
@@ -129,7 +129,7 @@ public class ContextUtil extends Application {
      * 获得预算辅助类
      * @return  辅助类
      */
-    public static BudgetDataUtility getBudgetUtility()  {
+    public static BudgetDBUtility getBudgetUtility()  {
         return  getInstance().mBudgetu;
     }
 
@@ -146,7 +146,7 @@ public class ContextUtil extends Application {
      * 获得提醒数据辅助类
      * @return  辅助类
      */
-    public static RemindDataUtility getRemindUtility()  {
+    public static RemindDBUtility getRemindUtility()  {
         return  getInstance().mRemindu;
     }
 

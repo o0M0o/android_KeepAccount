@@ -280,7 +280,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
         if(!UtilFun.StringIsNullOrEmpty(mCurType)) {
             for (HashMap<String, String> hm : mLHMData) {
                 if(hm.get(KEY_NAME).equals(mCurType))   {
-                    ri = ContextUtil.getRecordTypeUtility().getItemById(Integer.valueOf(hm.get(KEY_ID)));
+                    ri = ContextUtil.getRecordTypeUtility().getData(Integer.valueOf(hm.get(KEY_ID)));
                     break;
                 }
             }
@@ -309,9 +309,9 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                         RecordTypeItem ri = cur_dp.getCurDate();
                         if(null != ri) {
                             if(R.id.rl_add == vid)
-                                ContextUtil.getRecordTypeUtility().addItem(ri);
+                                ContextUtil.getRecordTypeUtility().createData(ri);
                             else
-                                ContextUtil.getRecordTypeUtility().modifyItem(ri);
+                                ContextUtil.getRecordTypeUtility().modifyData(ri);
                             load_info();
                         }
                     }
@@ -354,7 +354,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             for(int id : ll_i) {
-                                ContextUtil.getRecordTypeUtility().removeItemById(id);
+                                ContextUtil.getRecordTypeUtility().removeData(id);
                             }
 
                             mTVNote.setText("");
