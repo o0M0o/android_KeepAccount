@@ -20,6 +20,6 @@
         android:id="@+id/start_nav_view"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/ac_start_nav_header"
-        app:menu="@menu/acm_start_nav" />
+        app:menu="@menu/mu_start_nav" />
 
 </android.support.v4.widget.DrawerLayout>

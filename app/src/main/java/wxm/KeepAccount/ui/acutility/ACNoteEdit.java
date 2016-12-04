@@ -70,7 +70,7 @@ public class ACNoteEdit extends BaseAppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.acm_record_actbar, menu);
+        inflater.inflate(R.menu.mu_record_actbar, menu);
         return true;
     }
 

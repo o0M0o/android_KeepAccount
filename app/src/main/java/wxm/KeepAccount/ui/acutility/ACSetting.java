@@ -42,7 +42,7 @@ public class ACSetting extends BaseAppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.acm_save_giveup, menu);
+        inflater.inflate(R.menu.mu_save_giveup, menu);
         return true;
     }
 

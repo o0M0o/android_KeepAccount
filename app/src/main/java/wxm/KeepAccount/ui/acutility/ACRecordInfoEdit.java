@@ -35,7 +35,7 @@ public class ACRecordInfoEdit extends BaseAppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.acm_preview_edit, menu);
+        inflater.inflate(R.menu.mu_preview_edit, menu);
 
         MenuItem mMISwitch = menu.findItem(R.id.mi_switch);
         MenuItem mMIGiveup = menu.findItem(R.id.mi_giveup);
