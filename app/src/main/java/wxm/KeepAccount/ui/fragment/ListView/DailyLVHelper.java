@@ -29,10 +29,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import butterknife.BindDrawable;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.data.BudgetItem;
 import wxm.KeepAccount.Base.data.INote;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -71,11 +74,19 @@ public class DailyLVHelper extends LVShowDataBase
     private final LinkedList<Integer> mDelIncome;
 
     // for expand or hide actions
-    private ImageView   mIVActions;
-    private GridLayout  mGLActions;
+    @BindView(R.id.iv_expand)
+    ImageView   mIVActions;
+
+    @BindView(R.id.rl_action)
+    GridLayout  mGLActions;
+
     private boolean     mBActionExpand;
-    private Drawable    mDAExpand;
-    private Drawable    mDAHide;
+
+    @BindDrawable(R.drawable.ic_to_up)
+    Drawable    mDAExpand;
+
+    @BindDrawable(R.drawable.ic_to_down)
+    Drawable    mDAHide;
 
     public DailyLVHelper()    {
         super();
@@ -85,11 +96,6 @@ public class DailyLVHelper extends LVShowDataBase
         mDelIncome = new LinkedList<>();
 
         mBActionExpand = false;
-
-        // for action expand
-        Resources res = ContextUtil.getInstance().getResources();
-        mDAExpand = res.getDrawable(R.drawable.ic_to_up);
-        mDAHide = res.getDrawable(R.drawable.ic_to_down);
     }
 
     @Override
@@ -97,8 +103,7 @@ public class DailyLVHelper extends LVShowDataBase
         mSelfView       = inflater.inflate(R.layout.lv_newpager, container, false);
         mBFilter        = false;
 
-        mIVActions = UtilFun.cast_t(mSelfView.findViewById(R.id.iv_expand));
-        mGLActions = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_action));
+        ButterKnife.bind(this, mSelfView);
         refreshAction();
 
         mIVActions.setOnClickListener(new OnClickListener() {
@@ -194,17 +199,25 @@ public class DailyLVHelper extends LVShowDataBase
         switch (vid)    {
             case R.id.bt_accpet :
                 if(ACTION_DELETE == mActionType) {
+                    boolean bf = false;
                     if(!ToolUtil.ListIsNullOrEmpty(mDelPay)) {
                         ContextUtil.getPayIncomeUtility().deletePayNotes(mDelPay);
                         mDelPay.clear();
+
+                        bf = true;
                     }
 
                     if(!ToolUtil.ListIsNullOrEmpty(mDelIncome)) {
                         ContextUtil.getPayIncomeUtility().deleteIncomeNotes(mDelIncome);
                         mDelIncome.clear();
+
+                        bf = true;
                     }
 
                     mActionType = ACTION_EDIT;
+
+                    if(bf)
+                        reloadView(v.getContext(), false);
                 }
 
                 break;
@@ -492,7 +505,7 @@ public class DailyLVHelper extends LVShowDataBase
             mDADedit        = res.getDrawable(R.drawable.right_arrow);
             mDADelete       = res.getDrawable(R.drawable.ic_delete_1);
 
-            mCLSel = res.getColor(R.color.powderblue);
+            mCLSel = res.getColor(R.color.trans_1);
             mCLNoSel = res.getColor(R.color.trans_full);
         }
 

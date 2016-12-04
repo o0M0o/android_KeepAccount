@@ -248,11 +248,13 @@ public class FrgNoteShow extends FrgUtilityBase {
     @Override
     protected void initUiComponent(View view) {
         // init view
-        mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_DAILY));
-        mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_MONTHLY));
-        mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_YEARLY));
-        mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_BUDGET));
-        mTLTab.setTabGravity(TabLayout.GRAVITY_FILL);
+        if(0 == mTLTab.getTabCount()) {
+            mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_DAILY));
+            mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_MONTHLY));
+            mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_YEARLY));
+            mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_BUDGET));
+            mTLTab.setTabGravity(TabLayout.GRAVITY_FILL);
+        }
     }
 
     @Override

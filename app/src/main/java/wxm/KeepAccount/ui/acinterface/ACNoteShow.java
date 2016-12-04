@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.acinterface;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -73,6 +74,12 @@ public class ACNoteShow extends BaseAppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // TODO Auto-generated method stub
+        super.onConfigurationChanged(newConfig);
+        ((FrgNoteShow)mFGHolder).refreshUI();
+    }
 
     /**
      * 关闭/打开触摸功能
@@ -82,7 +89,6 @@ public class ACNoteShow extends BaseAppCompatActivity {
         ((FrgNoteShow)mFGHolder).disableViewPageTouch(bflag);
     }
 
-
     /**
      * 跳至对应名称的标签页
      * @param tabname 需跳转标签页的名字
@@ -90,7 +96,6 @@ public class ACNoteShow extends BaseAppCompatActivity {
     public void jumpByTabName(String tabname)  {
         ((FrgNoteShow)mFGHolder).jumpByTabName(tabname);
     }
-
 
     /**
      * 过滤视图数据
