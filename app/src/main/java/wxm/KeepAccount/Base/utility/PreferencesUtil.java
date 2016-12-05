@@ -36,10 +36,10 @@ public class PreferencesUtil {
                                     .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE);
 
         String def = String.format(Locale.CHINA,
-                        "%s:%s:%s:%s:%s",
+                        "%s:%s:%s:%s:%s:%s",
                         ActionHelper.ACT_ADD_DATA, ActionHelper.ACT_LOOK_DATA,
-                        ActionHelper.ACT_LOOK_BUDGET, ActionHelper.ACT_ADD_BUDGET,
-                        ActionHelper.ACT_LOGOUT);
+                        ActionHelper.ACT_CALENDAR_VIEW, ActionHelper.ACT_LOOK_BUDGET,
+                        ActionHelper.ACT_ADD_BUDGET, ActionHelper.ACT_LOGOUT);
 
         String load = param.getString(SET_HOT_ACTION, def);
         return parsePreferences(load);

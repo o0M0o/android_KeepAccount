@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 
 import butterknife.ButterKnife;
 import wxm.KeepAccount.R;
@@ -15,7 +14,8 @@ import wxm.KeepAccount.R;
  * for activity base
  * Created by wxm on 2016/12/1.
  */
-public abstract class BaseAppCompatActivity extends AppCompatActivity {
+public abstract class BaseAppCompatActivity
+        extends AppCompatActivity {
     protected String LOG_TAG = "BaseAppCompatActivity";
 
     protected int       mDIDBack = R.drawable.ic_back;
@@ -49,12 +49,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(mDIDBack);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                leaveActivity();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> leaveActivity());
 
         if(null == savedInstanceState)  {
             if(null != mFGHolder) {

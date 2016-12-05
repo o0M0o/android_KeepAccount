@@ -34,6 +34,7 @@ import wxm.KeepAccount.Base.utility.DGVButtonAdapter;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
+import wxm.KeepAccount.ui.acutility.ACCalendarShow;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.acutility.ACRemindEdit;
@@ -142,6 +143,12 @@ public class ACWelcome extends AppCompatActivity
 
             case ActionHelper.ACT_LOOK_DATA :   {
                 Intent intent = new Intent(this, ACNoteShow.class);
+                startActivityForResult(intent, 1);
+            }
+            break;
+
+            case ActionHelper.ACT_CALENDAR_VIEW :   {
+                Intent intent = new Intent(this, ACCalendarShow.class);
                 startActivityForResult(intent, 1);
             }
             break;
