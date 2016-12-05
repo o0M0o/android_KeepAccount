@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     signingConfigs {
@@ -26,6 +27,12 @@ android {
         versionCode 8
         versionName "1.08"
         signingConfig signingConfigs.defkey
+
+        /*
+        jackOptions {
+            enabled true
+        }
+        */
     }
 
     sourceSets {
@@ -42,7 +49,6 @@ android {
                 ]
         }
     }
-
 
     buildTypes {
         release {
@@ -73,6 +79,11 @@ android {
             }
         }
     }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 def releaseTime() {
@@ -81,7 +92,6 @@ def releaseTime() {
 }
 
 
-apply plugin: 'com.neenbedankt.android-apt'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -97,11 +107,20 @@ dependencies {
     compile files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
     compile project(':AndriodUtillib')
     compile project(':hellocharts-library-release')
-
     //compile 'com.android.support:support-annotations:24.2.1'
     compile 'com.jakewharton:butterknife:8.4.0'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     //compile 'com.android.support.constraint:constraint-layout:1.0.0-beta3'
+    compile project(':calendarlv-library')
+
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'com.trello:rxlifecycle:0.5.0'
+    // If you want pre-written Activities and Fragments you can subclass as providers
+    compile 'com.trello:rxlifecycle-components:0.5.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
 
 

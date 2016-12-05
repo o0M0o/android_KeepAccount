@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".Base.utility.ContextUtil"
@@ -54,6 +55,11 @@
             android:name=".ui.acutility.ACSetting"
             android:exported="true"
             android:label="@string/app_setting"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.test.ACTestCalendar"
+            android:exported="true"
+            android:label="测试日历"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.acutility.ACPreveiwAndEdit"

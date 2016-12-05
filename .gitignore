@@ -6,3 +6,9 @@
 .DS_Store
 /build
 /captures
+.gitignore
+bintrayUpload.gradle
+build.gradle
+proguard-rules.pro
+src/
+libs/

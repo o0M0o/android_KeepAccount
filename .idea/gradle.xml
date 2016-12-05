@@ -5,12 +5,13 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="C:\Program Files\Android\studio_2_3\android-studio\gradle\gradle-2.14.1" />
+        <option name="gradleHome" value="C:/Program Files/Android/studio_2_3/android-studio/gradle/gradle-2.14.1" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/AndriodUtillib" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/calendarlv-library" />
             <option value="$PROJECT_DIR$/hellocharts-library-release" />
           </set>
         </option>
