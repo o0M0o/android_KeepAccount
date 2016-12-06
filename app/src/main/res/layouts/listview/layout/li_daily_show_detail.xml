@@ -109,7 +109,7 @@
             android:layout_marginRight="68dp"
             android:layout_toLeftOf="@id/iv_income_action"
             android:text="+ 145.75"
-            android:textColor="@color/darkslategray"
+            android:textColor="@color/darkslategrey"
             android:textSize="16sp" />
     </RelativeLayout>
 

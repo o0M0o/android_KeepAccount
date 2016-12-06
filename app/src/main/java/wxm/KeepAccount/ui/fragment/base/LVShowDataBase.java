@@ -83,7 +83,7 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
 
         Resources res = ContextUtil.getInstance().getResources();
         mCRForPay       = res.getColor(R.color.darkred);
-        mCRForIncome    = res.getColor(R.color.darkslategray);
+        mCRForIncome    = res.getColor(R.color.darkslategrey);
     }
 
     /**
