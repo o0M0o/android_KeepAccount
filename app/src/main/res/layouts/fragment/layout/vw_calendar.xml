@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,10 +18,19 @@
         android:layout_height="0dip" />
         -->
 
+    <ProgressBar
+        android:id="@+id/load_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
     <wxm.calendarlv_library.CalendarListView
         android:id="@+id/calendar_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </wxm.calendarlv_library.CalendarListView>
 
-</LinearLayout>
+</RelativeLayout>
