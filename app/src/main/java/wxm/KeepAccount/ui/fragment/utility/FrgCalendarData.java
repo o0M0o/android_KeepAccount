@@ -3,6 +3,7 @@ package wxm.KeepAccount.ui.fragment.utility;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,9 +25,12 @@ import java.util.TreeMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.wxm.andriodutillib.DBHelper.IDataChangeNotice;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.INote;
+import wxm.KeepAccount.Base.data.IncomeNoteItem;
+import wxm.KeepAccount.Base.data.PayNoteItem;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.CalendarListView.CalendarShowItemAdapter;
 import wxm.KeepAccount.ui.CalendarListView.CalendarShowItemModel;
@@ -35,6 +38,8 @@ import wxm.KeepAccount.ui.CalendarListView.NoteListAdapter;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.calendarlv_library.CalendarHelper;
 import wxm.calendarlv_library.CalendarListView;
+
+import static wxm.KeepAccount.Base.utility.ContextUtil.getPayIncomeUtility;
 
 /**
  * for calendar show
@@ -65,6 +70,43 @@ public class FrgCalendarData extends FrgUtilityBase {
 
     //private Handler handler = new Handler();
 
+    private IDataChangeNotice mIDCPayNotice = new IDataChangeNotice<PayNoteItem>() {
+        @Override
+        public void DataModifyNotice(List<PayNoteItem> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataCreateNotice(List<PayNoteItem> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataDeleteNotice(List<PayNoteItem> list) {
+            reLoadFrg();
+        }
+    };
+
+
+
+
+    private IDataChangeNotice mIDCIncomeNotice = new IDataChangeNotice<IncomeNoteItem>() {
+        @Override
+        public void DataModifyNotice(List<IncomeNoteItem> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataCreateNotice(List<IncomeNoteItem> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataDeleteNotice(List<IncomeNoteItem> list) {
+            reLoadFrg();
+        }
+    };
+
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         LOG_TAG = "FrgCalendarData";
@@ -75,6 +117,8 @@ public class FrgCalendarData extends FrgUtilityBase {
 
     @Override
     protected void initUiComponent(View view) {
+        Log.d(LOG_TAG, "initUiComponent");
+
         mNLAdapter = new NoteListAdapter(getActivity());
         mCSIAdapter = new CalendarShowItemAdapter(getActivity());
         mHGVDays.setCalendarListViewAdapter(mCSIAdapter, mNLAdapter);
@@ -122,37 +166,29 @@ public class FrgCalendarData extends FrgUtilityBase {
         mHGVDays.setOnCalendarViewItemClickListener((View, selectedDate, listSection, selectedDateRegion) -> {
         });
 
-        // load data
-        showProgress(true);
-        new AsyncTask<Void, Void, Void> () {
-            @Override
-            protected Void doInBackground(Void... params) {
-                NoteShowDataHelper.getInstance().refreshData();
-                loadNotes();
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-
-                showProgress(false);
-
-                mNLAdapter.setDateDataMap(mTMList);
-                mNLAdapter.notifyDataSetChanged();
-                mCSIAdapter.notifyDataSetChanged();
-
-                //loadCalendarData(YEAR_MONTH_SIMPLE_FORMAT.format(calendar.getTime()));
-            }
-        }.execute();
+        reLoadFrg();
     }
 
     @Override
     protected void initUiInfo() {
+        Log.d(LOG_TAG, "initUiInfo");
+    }
+
+    @Override
+    protected void enterActivity()  {
+        getPayIncomeUtility().getPayDBUtility().addDataChangeNotice(mIDCPayNotice);
+        getPayIncomeUtility().getIncomeDBUtility().addDataChangeNotice(mIDCIncomeNotice);
+    }
+
+    @Override
+    protected void leaveActivity()  {
+        getPayIncomeUtility().getPayDBUtility().removeDataChangeNotice(mIDCPayNotice);
+        getPayIncomeUtility().getIncomeDBUtility().removeDataChangeNotice(mIDCIncomeNotice);
     }
 
     /**
      * Shows the progress UI and hides the login form.
+     * @param show   如果为true则显示加载数据图
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -182,6 +218,10 @@ public class FrgCalendarData extends FrgUtilityBase {
     }
 
 
+    /**
+     * 加载数据
+     * 一次加载全部数据
+     */
     private void loadNotes()  {
         Log.d(LOG_TAG, "loadNotes");
 
@@ -204,9 +244,54 @@ public class FrgCalendarData extends FrgUtilityBase {
         }
     }
 
-    // date (yyyy-MM),load data for Calendar View by date,load one month data one times.
-    // generate test data for CalendarView,imitate to be a Network Requests. update "mCSIAdapter.getDayModelList()"
-    //and notifyDataSetChanged will update CalendarView.
+    /**
+     * 重新加载数据
+     */
+    private void reLoadFrg() {
+        Log.d(LOG_TAG, "reLoadFrg");
+
+        showProgress(true);
+        new AsyncTask<Void, Void, Void> () {
+            @Override
+            protected Void doInBackground(Void... params) {
+                NoteShowDataHelper.getInstance().refreshData();
+                loadNotes();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                showProgress(false);
+
+                if(mTMList.isEmpty()) {
+                    Activity ac = getActivity();
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ac);
+                    builder.setMessage("当前用户没有数据，请先添加数据!").setTitle("警告");
+                    builder.setNegativeButton("确认", (d, w) -> ac.finish());
+
+                    android.app.AlertDialog dlg = builder.create();
+                    dlg.show();
+                } else {
+                    mNLAdapter.setDateDataMap(mTMList);
+                    mNLAdapter.notifyDataSetChanged();
+                    mCSIAdapter.notifyDataSetChanged();
+
+                    //loadCalendarData(YEAR_MONTH_SIMPLE_FORMAT.format(calendar.getTime()));
+                }
+            }
+        }.execute();
+    }
+
+
+    /**
+     *
+     // date (yyyy-MM),load data for Calendar View by date,load one month data one times.
+     // generate test data for CalendarView,imitate to be a Network Requests. update "mCSIAdapter.getDayModelList()"
+     // and notifyDataSetChanged will update CalendarView.
+     * @param date  加载的月份，比如"2016-07"
+     */
     private void loadCalendarData(final String date) {
         Log.d(LOG_TAG, "loadCalendarData, date = " + date);
 
@@ -224,6 +309,7 @@ public class FrgCalendarData extends FrgUtilityBase {
         mCSIAdapter.notifyDataSetChanged();
     }
 
+    /*
     public static Calendar getCalendarByYearMonthDay(String yearMonthDay) {
         Calendar calendar = Calendar.getInstance();
         try {
@@ -233,4 +319,5 @@ public class FrgCalendarData extends FrgUtilityBase {
         }
         return calendar;
     }
+    */
 }

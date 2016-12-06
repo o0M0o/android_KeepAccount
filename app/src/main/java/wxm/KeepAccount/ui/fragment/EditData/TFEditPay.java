@@ -221,7 +221,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             pi.setVal(UtilFun.StringIsNullOrEmpty(str_val) ? BigDecimal.ZERO : new BigDecimal(str_val));
             pi.setNote(mETNote.getText().toString());
 
-            String str_date = mETDate.getText().toString();
+            String str_date = mETDate.getText().toString() + ":00";
             Timestamp tsDT;
             try {
                 tsDT = ToolUtil.StringToTimestamp(str_date);

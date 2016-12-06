@@ -164,7 +164,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
             ii.setVal(UtilFun.StringIsNullOrEmpty(str_val) ? BigDecimal.ZERO : new BigDecimal(str_val));
             ii.setNote(mETNote.getText().toString());
 
-            String str_date = mETDate.getText().toString();
+            String str_date = mETDate.getText().toString() + ":00";
             Timestamp tsDT;
             try {
                 tsDT = ToolUtil.StringToTimestamp(str_date);

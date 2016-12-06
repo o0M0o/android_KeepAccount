@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.CalendarListView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,8 +16,10 @@ import wxm.KeepAccount.Base.data.BudgetItem;
 import wxm.KeepAccount.Base.data.INote;
 import wxm.KeepAccount.Base.data.IncomeNoteItem;
 import wxm.KeepAccount.Base.data.PayNoteItem;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.fragment.utility.FrgCalendarData;
 import wxm.calendarlv_library.BaseCalendarListAdapter;
 import wxm.calendarlv_library.CalendarHelper;
@@ -133,8 +136,15 @@ public class NoteListAdapter extends BaseCalendarListAdapter<INote> {
         tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_time));
         tv.setText(pn.getTs().toString().substring(11, 16));
 
-        //ImageView iv = UtilFun.cast_t(mRLPay.findViewById(R.id.iv_pay_action));
-        //iv.setOnClickListener(this);
+        ImageView iv = UtilFun.cast_t(rl_pay.findViewById(R.id.iv_pay_action));
+        iv.setOnClickListener(v -> {
+            Intent intent;
+            intent = new Intent(rl_pay.getContext(), ACPreveiwAndEdit.class);
+            intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, data.getId());
+            intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_PAY);
+
+            (rl_pay.getContext()).startActivity(intent);
+        });
         //iv.setImageDrawable(ACTION_EDIT == mActionType ? mDADedit : mDADelete);
 
         // for budget
@@ -166,8 +176,15 @@ public class NoteListAdapter extends BaseCalendarListAdapter<INote> {
         tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_time));
         tv.setText(i_n.getTs().toString().substring(11, 16));
 
-        //ImageView iv = UtilFun.cast_t(rl_income.findViewById(R.id.iv_income_action));
-        //iv.setOnClickListener(this);
+        ImageView iv = UtilFun.cast_t(rl_income.findViewById(R.id.iv_income_action));
+        iv.setOnClickListener(v -> {
+            Intent intent;
+            intent = new Intent(rl_income.getContext(), ACPreveiwAndEdit.class);
+            intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, data.getId());
+            intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_INCOME);
+
+            (rl_income.getContext()).startActivity(intent);
+        });
         //iv.setImageDrawable(ACTION_EDIT == mActionType ? mDADedit : mDADelete);
 
         //int did = Integer.parseInt(hd.get(K_ID));

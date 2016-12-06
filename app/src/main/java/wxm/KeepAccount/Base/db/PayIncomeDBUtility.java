@@ -274,6 +274,16 @@ public class PayIncomeDBUtility  {
         protected RuntimeExceptionDao<PayNoteItem, Integer> getDBHelper() {
             return ContextUtil.getDBHelper().getPayDataREDao();
         }
+
+
+        @Override
+        public List<PayNoteItem> getAllData() {
+            UsrItem ui = ContextUtil.getCurUsr();
+            if(null == ui)
+                return new ArrayList<>();
+
+            return getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
+        }
     }
 
 
@@ -285,6 +295,15 @@ public class PayIncomeDBUtility  {
         @Override
         protected RuntimeExceptionDao<IncomeNoteItem, Integer> getDBHelper() {
             return ContextUtil.getDBHelper().getIncomeDataREDao();
+        }
+
+        @Override
+        public List<IncomeNoteItem> getAllData() {
+            UsrItem ui = ContextUtil.getCurUsr();
+            if(null == ui)
+                return new ArrayList<>();
+
+            return getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
         }
     }
 }
