@@ -62,6 +62,11 @@
             android:label="测试日历"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".ui.acutility.ACCalendarShow"
+            android:exported="false"
+            android:label="日历展示"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.acutility.ACPreveiwAndEdit"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
