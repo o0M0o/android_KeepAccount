@@ -2,14 +2,19 @@ package wxm.KeepAccount.ui.fragment.base;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import butterknife.BindDrawable;
+import butterknife.BindView;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
@@ -74,6 +79,22 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     protected boolean mBSelectSubFilter = false;
     protected final LinkedList<String> mLLSubFilter = new LinkedList<>();
     protected final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
+
+
+    protected boolean mBActionExpand;
+
+    // for ui
+    @BindView(R.id.iv_expand)
+    protected ImageView mIVActions;
+
+    @BindView(R.id.rl_action)
+    protected GridLayout mGLActions;
+
+    @BindDrawable(R.drawable.ic_to_up)
+    protected Drawable mDAExpand;
+
+    @BindDrawable(R.drawable.ic_to_down)
+    protected Drawable    mDAHide;
 
     public LVShowDataBase()   {
         super();

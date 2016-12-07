@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -29,8 +28,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.BindDrawable;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.BudgetItem;
@@ -73,6 +70,9 @@ public class DailyLVHelper extends LVShowDataBase
     private final LinkedList<Integer> mDelPay;
     private final LinkedList<Integer> mDelIncome;
 
+
+    /*
+    protected boolean mBActionExpand;
     // for expand or hide actions
     @BindView(R.id.iv_expand)
     ImageView   mIVActions;
@@ -80,13 +80,12 @@ public class DailyLVHelper extends LVShowDataBase
     @BindView(R.id.rl_action)
     GridLayout  mGLActions;
 
-    private boolean   mBActionExpand;
-
     @BindDrawable(R.drawable.ic_to_up)
     Drawable    mDAExpand;
 
     @BindDrawable(R.drawable.ic_to_down)
     Drawable    mDAHide;
+    */
 
     public DailyLVHelper()    {
         super();

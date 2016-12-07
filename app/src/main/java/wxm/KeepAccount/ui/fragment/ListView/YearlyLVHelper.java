@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -25,6 +24,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -47,88 +47,37 @@ public class YearlyLVHelper extends LVShowDataBase {
     private final LinkedList<String> mLLSubFilter = new LinkedList<>();
     private final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
 
+    /*
     // for expand or hide actions
-    private ImageView   mIVActions;
-    private GridLayout  mGLActions;
+    @BindView(R.id.iv_expand)
+    ImageView   mIVActions;
+
+    @BindView(R.id.rl_action)
+    GridLayout  mGLActions;
+
     private boolean     mBActionExpand;
-    private Drawable    mDAExpand;
-    private Drawable    mDAHide;
+
+    @BindDrawable(R.drawable.ic_to_up)
+    Drawable    mDAExpand;
+
+    @BindDrawable(R.drawable.ic_to_down)
+    Drawable    mDAHide;
+    */
 
     public YearlyLVHelper()    {
         super();
-
         LOG_TAG = "YearlyLVHelper";
+
+        mBActionExpand = false;
     }
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container) {
         mSelfView = inflater.inflate(R.layout.lv_newpager, container, false);
+        ButterKnife.bind(this, mSelfView);
 
-        // 附加动作仅支持“更新"
-        Resources res = mSelfView.getResources();
-        mDAExpand = res.getDrawable(R.drawable.ic_to_up);
-        mDAHide = res.getDrawable(R.drawable.ic_to_down);
-
-        mIVActions = UtilFun.cast_t(mSelfView.findViewById(R.id.iv_expand));
-        mGLActions = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_action));
-
-        mIVActions.setImageDrawable(mDAExpand);
-        setLayoutVisible(mGLActions, View.INVISIBLE);
-
-        mIVActions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBActionExpand = !mBActionExpand;
-                if(mBActionExpand)  {
-                    mIVActions.setImageDrawable(mDAHide);
-                    setLayoutVisible(mGLActions, View.VISIBLE);
-                } else  {
-                    mIVActions.setImageDrawable(mDAExpand);
-                    setLayoutVisible(mGLActions, View.INVISIBLE);
-                }
-            }
-        });
-
-        RelativeLayout rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_add));
-        ViewGroup.LayoutParams param = rl.getLayoutParams();
-        param.width = 0;
-        param.height = 0;
-        rl.setLayoutParams(param);
-
-        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_delete));
-        param = rl.getLayoutParams();
-        param.width = 0;
-        param.height = 0;
-        rl.setLayoutParams(param);
-
-        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_refresh));
-        rl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reloadView(v.getContext(), false);
-            }
-        });
-
-        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_sort));
-        final ImageView iv_sort = UtilFun.cast_t(rl.findViewById(R.id.iv_sort));
-        final TextView tv_sort = UtilFun.cast_t(rl.findViewById(R.id.tv_sort));
-        iv_sort.setImageDrawable(mSelfView.getContext().getResources()
-                .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
-        tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
-        rl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBTimeDownOrder = !mBTimeDownOrder;
-
-                iv_sort.setImageDrawable(mSelfView.getContext().getResources()
-                        .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
-                tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
-
-                refreshData();
-                refreshView();
-            }
-        });
-
+        refreshAttachLayout();
+        initActs(mSelfView);
         return mSelfView;
     }
 
@@ -185,6 +134,58 @@ public class YearlyLVHelper extends LVShowDataBase {
                 refreshAttachLayout();
                 break;
         }
+    }
+
+    /**
+     * 初始化可隐藏动作条
+     * @param pv   视图
+     */
+    private void initActs(View pv) {
+        mIVActions.setImageDrawable(mDAExpand);
+        setLayoutVisible(mGLActions, View.INVISIBLE);
+
+        mIVActions.setOnClickListener(v -> {
+            mBActionExpand = !mBActionExpand;
+            if(mBActionExpand)  {
+                mIVActions.setImageDrawable(mDAHide);
+                setLayoutVisible(mGLActions, View.VISIBLE);
+            } else  {
+                mIVActions.setImageDrawable(mDAExpand);
+                setLayoutVisible(mGLActions, View.INVISIBLE);
+            }
+        });
+
+        RelativeLayout rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_add));
+        ViewGroup.LayoutParams param = rl.getLayoutParams();
+        param.width = 0;
+        param.height = 0;
+        rl.setLayoutParams(param);
+
+        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_delete));
+        param = rl.getLayoutParams();
+        param.width = 0;
+        param.height = 0;
+        rl.setLayoutParams(param);
+
+        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_refresh));
+        rl.setOnClickListener(v -> reloadView(v.getContext(), false));
+
+        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_sort));
+        final ImageView iv_sort = UtilFun.cast_t(rl.findViewById(R.id.iv_sort));
+        final TextView tv_sort = UtilFun.cast_t(rl.findViewById(R.id.tv_sort));
+        iv_sort.setImageDrawable(pv.getContext().getResources()
+                .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
+        tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+        rl.setOnClickListener(v -> {
+            mBTimeDownOrder = !mBTimeDownOrder;
+
+            iv_sort.setImageDrawable(mSelfView.getContext().getResources()
+                    .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
+            tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+
+            refreshData();
+            refreshView();
+        });
     }
 
 

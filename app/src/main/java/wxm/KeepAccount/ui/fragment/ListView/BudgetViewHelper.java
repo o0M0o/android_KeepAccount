@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -29,10 +28,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.data.BudgetItem;
 import wxm.KeepAccount.Base.data.PayNoteItem;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -62,16 +62,17 @@ public class BudgetViewHelper  extends LVShowDataBase {
     // original data
     private HashMap<BudgetItem, List<PayNoteItem>>  mHMData;
 
+    /*
     // for expand or hide actions
     private ImageView   mIVActions;
     private GridLayout mGLActions;
     private boolean     mBActionExpand;
     private Drawable mDAExpand;
     private Drawable    mDAHide;
+    */
 
     public BudgetViewHelper()    {
         super();
-
         LOG_TAG = "BudgetViewHelper";
     }
 
@@ -79,86 +80,73 @@ public class BudgetViewHelper  extends LVShowDataBase {
     public View createView(LayoutInflater inflater, ViewGroup container) {
         mSelfView       = inflater.inflate(R.layout.lv_newpager, container, false);
         mBFilter        = false;
+        ButterKnife.bind(this, mSelfView);
 
-        // for action expand
-        Resources res = mSelfView.getResources();
-        mDAExpand = res.getDrawable(R.drawable.ic_to_up);
-        mDAHide = res.getDrawable(R.drawable.ic_to_down);
-
-        mIVActions = UtilFun.cast_t(mSelfView.findViewById(R.id.iv_expand));
-        mGLActions = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_action));
-
-        mIVActions.setImageDrawable(mDAExpand);
-        setLayoutVisible(mGLActions, View.INVISIBLE);
-
-        mIVActions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBActionExpand = !mBActionExpand;
-                if(mBActionExpand)  {
-                    mIVActions.setImageDrawable(mDAHide);
-                    setLayoutVisible(mGLActions, View.VISIBLE);
-                } else  {
-                    mIVActions.setImageDrawable(mDAExpand);
-                    setLayoutVisible(mGLActions, View.INVISIBLE);
-                }
-            }
-        });
-
-        RelativeLayout rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_add));
-        rl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ACNoteShow ac = getRootActivity();
-                Intent intent = new Intent(ac, ACPreveiwAndEdit.class);
-                intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
-                ac.startActivityForResult(intent, 1);
-            }
-        });
-
-        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_delete));
-        rl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mActionType = ACTION_DELETE;
-                refreshView();
-            }
-        });
-
-        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_refresh));
-        rl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mActionType = ACTION_EDIT;
-                reloadView(v.getContext(), false);
-            }
-        });
-
-        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_sort));
-        final ImageView iv_sort = UtilFun.cast_t(rl.findViewById(R.id.iv_sort));
-        final TextView tv_sort = UtilFun.cast_t(rl.findViewById(R.id.tv_sort));
-        iv_sort.setImageDrawable(mSelfView.getContext().getResources()
-                .getDrawable(mBNameDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
-        tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
-        rl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBNameDownOrder = !mBNameDownOrder;
-
-                iv_sort.setImageDrawable(mSelfView.getContext().getResources()
-                        .getDrawable(mBNameDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
-                tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
-
-                reloadData();
-                refreshView();
-            }
-        });
-
+        refreshAttachLayout();
+        initActs(mSelfView);
         return mSelfView;
     }
 
     @Override
     public void filterView(List<String> ls_tag) {
+    }
+
+
+    /**
+     * 初始化可隐藏动作条
+     * @param pv   视图
+     */
+    private void initActs(View pv) {
+        mIVActions.setImageDrawable(mDAExpand);
+        setLayoutVisible(mGLActions, View.INVISIBLE);
+
+        mIVActions.setOnClickListener(v -> {
+            mBActionExpand = !mBActionExpand;
+            if(mBActionExpand)  {
+                mIVActions.setImageDrawable(mDAHide);
+                setLayoutVisible(mGLActions, View.VISIBLE);
+            } else  {
+                mIVActions.setImageDrawable(mDAExpand);
+                setLayoutVisible(mGLActions, View.INVISIBLE);
+            }
+        });
+
+        RelativeLayout rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_add));
+        rl.setOnClickListener(v -> {
+            ACNoteShow ac = getRootActivity();
+            Intent intent = new Intent(ac, ACPreveiwAndEdit.class);
+            intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
+            ac.startActivityForResult(intent, 1);
+        });
+
+        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_delete));
+        rl.setOnClickListener(v -> {
+            mActionType = ACTION_DELETE;
+            refreshView();
+        });
+
+        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_refresh));
+        rl.setOnClickListener(v -> {
+            mActionType = ACTION_EDIT;
+            reloadView(v.getContext(), false);
+        });
+
+        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_sort));
+        final ImageView iv_sort = UtilFun.cast_t(rl.findViewById(R.id.iv_sort));
+        final TextView tv_sort = UtilFun.cast_t(rl.findViewById(R.id.tv_sort));
+        iv_sort.setImageDrawable(pv.getContext().getResources()
+                .getDrawable(mBNameDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
+        tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
+        rl.setOnClickListener(v -> {
+            mBNameDownOrder = !mBNameDownOrder;
+
+            iv_sort.setImageDrawable(pv.getContext().getResources()
+                    .getDrawable(mBNameDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
+            tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
+
+            reloadData();
+            refreshView();
+        });
     }
 
 
@@ -236,13 +224,8 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
         Set<BudgetItem> set_bi = mHMData.keySet();
         ArrayList<BudgetItem> ls_bi = new ArrayList<>(set_bi);
-        Collections.sort(ls_bi, new Comparator<BudgetItem>() {
-            @Override
-            public int compare(BudgetItem o1, BudgetItem o2) {
-                return mBNameDownOrder ? o1.getName().compareTo(o2.getName())
-                            : o2.getName().compareTo(o1.getName()) ;
-            }
-        });
+        Collections.sort(ls_bi, (o1, o2) -> mBNameDownOrder ? o1.getName().compareTo(o2.getName())
+                    : o2.getName().compareTo(o1.getName()));
         for (BudgetItem i : ls_bi) {
             List<PayNoteItem> ls_pay = mHMData.get(i);
             String tag = String.valueOf(i.get_id());
