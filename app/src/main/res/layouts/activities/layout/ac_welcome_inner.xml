@@ -1,71 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_welcome"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context="wxm.KeepAccount.ui.acinterface.ACWelcome"
-    android:background="@color/lightgray"
-    android:id="@+id/rl_welcome">
+    android:padding="@dimen/ac_tight_pad"
+    tools:context="wxm.KeepAccount.ui.acinterface.ACWelcome">
 
     <cn.wxm.andriodutillib.DragGrid.DragGridView
         android:id="@+id/dgv_buttons"
-        android:listSelector="@android:color/transparent"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:cacheColorHint="@android:color/transparent"
-        android:verticalSpacing="10dip"
-        android:horizontalSpacing="10dip"
-        android:stretchMode="columnWidth"
-        android:gravity="center"
-        android:numColumns="3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rl_buttons"
         android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/ll_button"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="12dp">
-    </cn.wxm.andriodutillib.DragGrid.DragGridView>
+        android:background="@color/grey_1"
+        android:cacheColorHint="@android:color/transparent"
+        android:gravity="center"
+        android:horizontalSpacing="10dip"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="4"
+        android:padding="4dp"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dip" />
 
     <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="70dp"
-        android:layout_height="fill_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
+        android:id="@+id/rl_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:id="@+id/ll_button"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="12dp">
+        android:layout_marginTop="4dp"
+        android:background="@color/grey_1"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-        <Button
-            android:layout_width="50dp"
+        <RelativeLayout
+            android:id="@+id/rl_channel"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
-            android:id="@+id/bt_setting"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="false"
-            android:background="@color/antiquewhite"
-            android:drawableTop="@drawable/ic_menu_setting"
-            android:text="@string/cn_setting"
-            android:textSize="12sp"
-            android:layout_gravity="center_horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="80dp" />
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/rl_setting"
+            android:background="@color/white"
+            android:padding="2dp">
 
-        <Button
-            android:layout_width="50dp"
+            <ImageView
+                android:id="@+id/iv_channel"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_channel" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_channel"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:text="@string/cn_channel"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_setting"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@color/white"
+            android:padding="2dp">
+
+            <ImageView
+                android:id="@+id/iv_setting"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_menu_setting" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_setting"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:text="@string/cn_setting"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+        <!--
+        <Button
             android:id="@+id/bt_channel"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentEnd="false"
-            android:background="@color/antiquewhite"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/bt_setting"
+            android:background="@color/white"
             android:drawableTop="@drawable/ic_channel"
             android:text="@string/cn_channel"
-            android:textSize="12sp"
-            android:layout_gravity="center_horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="36dp"
-            android:layout_above="@+id/bt_setting" />
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/bt_setting"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@color/white"
+            android:drawableTop="@drawable/ic_menu_setting"
+            android:text="@string/cn_setting"
+            android:textSize="12sp" />
+            -->
     </RelativeLayout>
 
 </RelativeLayout>

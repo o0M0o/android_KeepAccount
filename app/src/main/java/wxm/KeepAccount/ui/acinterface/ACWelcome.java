@@ -50,8 +50,6 @@ public class ACWelcome extends AppCompatActivity
     //private static final int    BTDRAW_WIDTH    = 96;
     //private static final int    BTDRAW_HEIGHT   = 96;
 
-    private static final String CN_SETTING = "设定";
-    private static final String CN_CHANNEL = "关注";
 
     // for DragGridView
     private List<HashMap<String, Object>> mLSData = new ArrayList<>();
@@ -192,44 +190,6 @@ public class ACWelcome extends AppCompatActivity
                 startActivityForResult(intent, 1);
             }
             break;
-
-            case CN_SETTING :  {
-                //Toast.makeText(this, CN_SETTING, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, ACSetting.class);
-                startActivityForResult(intent, 1);
-            }
-            break;
-
-            case CN_CHANNEL :  {
-                //Toast.makeText(this, CN_CHANNEL, Toast.LENGTH_SHORT).show();
-                DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
-                DlgSelectChannel dlg = new DlgSelectChannel();
-                dlg.setHotChannel(dapt.getCurAction());
-                dlg.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
-                    @Override
-                    public void onDialogPositiveResult(DialogFragment dialog) {
-                        DlgSelectChannel dsc = UtilFun.cast(dialog);
-                        PreferencesUtil.saveHotAction(dsc.getHotChannel());
-
-                        mLSData.clear();
-                        for(String i : PreferencesUtil.loadHotAction())     {
-                            HashMap<String, Object> ihm = new HashMap<>();
-                            ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
-                            mLSData.add(ihm);
-                        }
-
-                        DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
-                        dapt.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onDialogNegativeResult(DialogFragment dialog) {
-                    }
-                });
-
-                dlg.show(getSupportFragmentManager(), "选择频道");
-            }
-            break;
         }
     }
 
@@ -270,44 +230,69 @@ public class ACWelcome extends AppCompatActivity
                 new String[] {}, new int[] { });
 
         mDGVActions.setAdapter(apt);
-        mDGVActions.setOnChangeListener(new DragGridView.OnChanageListener() {
-            @Override
-            public void onChange(int from, int to) {
-                HashMap<String, Object> temp = mLSData.get(from);
-                if(from < to){
-                    for(int i=from; i<to; i++){
-                        Collections.swap(mLSData, i, i+1);
-                    }
-                }else if(from > to){
-                    for(int i=from; i>to; i--){
-                        Collections.swap(mLSData, i, i-1);
-                    }
+        mDGVActions.setOnChangeListener((from, to) -> {
+            HashMap<String, Object> temp = mLSData.get(from);
+            if(from < to){
+                for(int i=from; i<to; i++){
+                    Collections.swap(mLSData, i, i+1);
                 }
-
-                mLSData.set(to, temp);
-
-                ArrayList<String> hot_name = new ArrayList<>();
-                for(HashMap<String, Object> hi : mLSData)   {
-                    String an = UtilFun.cast(hi.get(DGVButtonAdapter.HKEY_ACT_NAME));
-                    hot_name.add(an);
+            }else if(from > to){
+                for(int i=from; i>to; i--){
+                    Collections.swap(mLSData, i, i-1);
                 }
-                PreferencesUtil.saveHotAction(hot_name);
-
-                apt.notifyDataSetChanged();
             }
+
+            mLSData.set(to, temp);
+
+            ArrayList<String> hot_name = new ArrayList<>();
+            for(HashMap<String, Object> hi : mLSData)   {
+                String an = UtilFun.cast(hi.get(DGVButtonAdapter.HKEY_ACT_NAME));
+                hot_name.add(an);
+            }
+            PreferencesUtil.saveHotAction(hot_name);
+
+            apt.notifyDataSetChanged();
         });
         apt.notifyDataSetChanged();
 
         // init other button
-        Button bt = UtilFun.cast(findViewById(R.id.bt_setting));
-        assert null != bt;
-        bt.setText(CN_SETTING);
-        bt.setOnClickListener(this);
+        RelativeLayout rl = UtilFun.cast(findViewById(R.id.rl_channel));
+        assert null != rl;
+        rl.setOnClickListener(v -> {
+            DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
+            DlgSelectChannel dlg = new DlgSelectChannel();
+            dlg.setHotChannel(dapt.getCurAction());
+            dlg.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                @Override
+                public void onDialogPositiveResult(DialogFragment dialog) {
+                    DlgSelectChannel dsc = UtilFun.cast(dialog);
+                    PreferencesUtil.saveHotAction(dsc.getHotChannel());
 
-        bt = UtilFun.cast(findViewById(R.id.bt_channel));
-        assert null != bt;
-        bt.setText(CN_CHANNEL);
-        bt.setOnClickListener(this);
+                    mLSData.clear();
+                    for(String i : PreferencesUtil.loadHotAction())     {
+                        HashMap<String, Object> ihm = new HashMap<>();
+                        ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
+                        mLSData.add(ihm);
+                    }
+
+                    DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
+                    dapt.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onDialogNegativeResult(DialogFragment dialog) {
+                }
+            });
+
+            dlg.show(getSupportFragmentManager(), "选择频道");
+        });
+
+        rl = UtilFun.cast(findViewById(R.id.rl_setting));
+        assert null != rl;
+        rl.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ACSetting.class);
+            startActivityForResult(intent, 1);
+        });
     }
 
     /**

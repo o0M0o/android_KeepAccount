@@ -10,4 +10,5 @@
     <dimen name="bigbutton_height">80dp</dimen>
     <dimen name="bigbutton_width">120dp</dimen>
     <dimen name="ac_padding">8dp</dimen>
+    <dimen name="ac_tight_pad">6dp</dimen>
 </resources>
