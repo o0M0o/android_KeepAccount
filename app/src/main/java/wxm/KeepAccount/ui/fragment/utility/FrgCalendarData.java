@@ -68,42 +68,37 @@ public class FrgCalendarData extends FrgUtilityBase {
     //key:date "yyyy-mm-dd" format.
     private TreeMap<String, List<INote>> mTMList = new TreeMap<>();
 
-    //private Handler handler = new Handler();
-
     private IDataChangeNotice mIDCPayNotice = new IDataChangeNotice<PayNoteItem>() {
         @Override
         public void DataModifyNotice(List<PayNoteItem> list) {
-            reLoadFrg();
+            reLoadFrg(true);
         }
 
         @Override
         public void DataCreateNotice(List<PayNoteItem> list) {
-            reLoadFrg();
+            reLoadFrg(true);
         }
 
         @Override
         public void DataDeleteNotice(List<PayNoteItem> list) {
-            reLoadFrg();
+            reLoadFrg(true);
         }
     };
-
-
-
 
     private IDataChangeNotice mIDCIncomeNotice = new IDataChangeNotice<IncomeNoteItem>() {
         @Override
         public void DataModifyNotice(List<IncomeNoteItem> list) {
-            reLoadFrg();
+            reLoadFrg(true);
         }
 
         @Override
         public void DataCreateNotice(List<IncomeNoteItem> list) {
-            reLoadFrg();
+            reLoadFrg(true);
         }
 
         @Override
         public void DataDeleteNotice(List<IncomeNoteItem> list) {
-            reLoadFrg();
+            reLoadFrg(true);
         }
     };
 
@@ -166,7 +161,7 @@ public class FrgCalendarData extends FrgUtilityBase {
         mHGVDays.setOnCalendarViewItemClickListener((View, selectedDate, listSection, selectedDateRegion) -> {
         });
 
-        reLoadFrg();
+        reLoadFrg(false);
     }
 
     @Override
@@ -227,17 +222,19 @@ public class FrgCalendarData extends FrgUtilityBase {
 
         mTMList.clear();
         HashMap<String, ArrayList<INote>> hm_note = NoteShowDataHelper.getInstance().getNotesForDay();
-        for(String day : hm_note.keySet())  {
-            List<INote> ls_note = hm_note.get(day);
-            if(!UtilFun.ListIsNullOrEmpty(ls_note)) {
-                for (INote i : ls_note) {
-                    if (mTMList.get(day) != null) {
-                        List<INote> list = mTMList.get(day);
-                        list.add(i);
-                    } else {
-                        List<INote> list = new ArrayList<>();
-                        list.add(i);
-                        mTMList.put(day, list);
+        if(null != hm_note) {
+            for (String day : hm_note.keySet()) {
+                List<INote> ls_note = hm_note.get(day);
+                if (!UtilFun.ListIsNullOrEmpty(ls_note)) {
+                    for (INote i : ls_note) {
+                        if (mTMList.get(day) != null) {
+                            List<INote> list = mTMList.get(day);
+                            list.add(i);
+                        } else {
+                            List<INote> list = new ArrayList<>();
+                            list.add(i);
+                            mTMList.put(day, list);
+                        }
                     }
                 }
             }
@@ -247,14 +244,21 @@ public class FrgCalendarData extends FrgUtilityBase {
     /**
      * 重新加载数据
      */
-    private void reLoadFrg() {
+    private void reLoadFrg(boolean refreshData) {
         Log.d(LOG_TAG, "reLoadFrg");
 
-        showProgress(true);
         new AsyncTask<Void, Void, Void> () {
             @Override
+            protected void onPreExecute()   {
+                super.onPreExecute();
+                showProgress(true);
+            }
+
+
+            @Override
             protected Void doInBackground(Void... params) {
-                NoteShowDataHelper.getInstance().refreshData();
+                if(refreshData)
+                    NoteShowDataHelper.getInstance().refreshData();
                 loadNotes();
                 return null;
             }

@@ -10,6 +10,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.UsrItem;
 import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 
 /**
  * usr数据处理类
@@ -124,5 +125,22 @@ public class UsrDBUtility extends DBUtilityBase<UsrItem, Integer> {
             return lsui.get(0);
 
         return null;
+    }
+
+    /**
+     * 使用用户信息登录APP
+     * （并刷新数据)
+     * @param usr   待检查用户名
+     * @param pwd   待检查用户密码
+     * @return  如果登录成功返回true, 否则返回false
+     */
+    public boolean loginByUsr(String usr, String pwd)   {
+        UsrItem ui = CheckAndGetUsr(usr, pwd);
+        if(null == ui)
+            return false;
+
+        ContextUtil.setCurUsr(ui);
+        NoteShowDataHelper.getInstance().refreshData();
+        return true;
     }
 }

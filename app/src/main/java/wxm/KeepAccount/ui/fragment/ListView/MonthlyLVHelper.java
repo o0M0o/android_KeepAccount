@@ -309,9 +309,9 @@ public class MonthlyLVHelper extends LVShowDataBase {
     }
 
     private void refreshAttachLayout()    {
-        setAttachLayoutVisible(mBFilter || mBSelectSubFilter ? View.VISIBLE : View.INVISIBLE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
-        setAccpetGiveupLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.INVISIBLE);
+        setAttachLayoutVisible(mBFilter || mBSelectSubFilter ? View.VISIBLE : View.GONE);
+        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
+        setAccpetGiveupLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.GONE);
     }
 
     private void init_detail_view(View v, HashMap<String, String> hm) {

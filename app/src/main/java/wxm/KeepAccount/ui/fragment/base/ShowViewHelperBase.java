@@ -130,20 +130,21 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
     /**
      * 设置附加layout可见性
      * @param visible  若为 :
-     *                  1. {@code View.INVISIBLE}, 不可见
+     *                  1. {@code View.GONE}, 不可见
      *                  2. {@code View.VISIBLE}, 可见
      */
     protected void setAttachLayoutVisible(int visible)   {
         RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_attach_button));
         assert null != rl;
-        setLayoutVisible(rl, visible);
+        rl.setVisibility(visible);
+        //setLayoutVisible(rl, visible);
     }
 
 
     /**
      * 设置过滤layout可见性
      * @param visible  若为 :
-     *                  1. {@code View.INVISIBLE}, 不可见
+     *                  1. {@code View.GONE}, 不可见
      *                  2. {@code View.VISIBLE}, 可见
      */
     protected void setFilterLayoutVisible(int visible)   {
@@ -152,7 +153,8 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
 
         RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_filter));
         assert null != rl;
-        setLayoutVisible(rl, visible);
+        rl.setVisibility(visible);
+        //setLayoutVisible(rl, visible);
 
         ImageButton bt = UtilFun.cast(rl.findViewById(R.id.bt_giveup_filter));
         assert null != bt;
@@ -163,7 +165,7 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
     /**
      * 设置接受-放弃layout可见性
      * @param visible  若为 :
-     *                  1. {@code View.INVISIBLE}, 不可见
+     *                  1. {@code View.GONE}, 不可见
      *                  2. {@code View.VISIBLE}, 可见
      */
     protected void setAccpetGiveupLayoutVisible(int visible)   {

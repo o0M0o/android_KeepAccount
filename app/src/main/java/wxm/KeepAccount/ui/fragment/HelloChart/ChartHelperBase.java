@@ -212,9 +212,9 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
 
 
     private void refreshAttachLayout()    {
-        setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
-        setAccpetGiveupLayoutVisible(View.INVISIBLE);
+        setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
+        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
+        setAccpetGiveupLayoutVisible(View.GONE);
     }
 
 

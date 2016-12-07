@@ -8,29 +8,21 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
-import cn.wxm.andriodutillib.util.UtilFun;
-import cn.wxm.andriodutillib.util.WRMsgHandler;
 import wxm.KeepAccount.Base.define.GlobalDef;
-import wxm.KeepAccount.Base.data.UsrItem;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACWelcome;
@@ -67,9 +59,6 @@ public class FrgLogin extends FrgUtilityBase {
     @BindString(R.string.error_incorrect_password)
     String  mHSErrorPassword;
 
-    // for msg handler
-    private LocalMsgHandler mMHHandler;
-
     // Keep track of the login task to ensure we can cancel it if requested.
     private UserLoginTask mAuthTask = null;
 
@@ -83,64 +72,36 @@ public class FrgLogin extends FrgUtilityBase {
 
     @Override
     protected void initUiComponent(View view) {
-        mMHHandler = new LocalMsgHandler(this);
-
+        /*
         // Set up the login form.
         //populateAutoComplete();
-        mETPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        mBTEmailSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mETPassword.setOnEditorActionListener((textView, id, keyEvent) -> {
+            if (id == R.id.login || id == EditorInfo.IME_NULL) {
                 attemptLogin();
+                return true;
             }
+            return false;
+        });
+        */
+
+        mBTEmailSignIn.setOnClickListener(view1 -> attemptLogin());
+
+        mBTEmailRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ACAddUsr.class);
+            startActivityForResult(intent, 1);
         });
 
-        mBTEmailRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerNewAccount();
-            }
-        });
-
-        mBTDefUsrLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent data = new Intent();
-                data.putExtra(UsrItem.FIELD_NAME, GlobalDef.DEF_USR_NAME);
-                data.putExtra(UsrItem.FIELD_PWD, GlobalDef.DEF_USR_PWD);
-
-                Message m = Message.obtain(ContextUtil.getMsgHandler(),
-                        GlobalDef.MSG_USR_LOGIN);
-                m.obj = new Object[]{data, mMHHandler};
-                m.sendToTarget();
-            }
+        mBTDefUsrLogin.setOnClickListener(v -> {
+            mAuthTask = new UserLoginTask(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD);
+            mAuthTask.execute((Void) null);
         });
     }
 
     @Override
     protected void initUiInfo() {
-
     }
 
     /// PRIVATE BEGIN
-    /**
-     * 注册新帐户
-     */
-    private void registerNewAccount() {
-        Intent intent = new Intent(getActivity(), ACAddUsr.class);
-        startActivityForResult(intent, 1);
-    }
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid mETEmail, missing fields, etc.), the
@@ -183,7 +144,6 @@ public class FrgLogin extends FrgUtilityBase {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
@@ -194,14 +154,6 @@ public class FrgLogin extends FrgUtilityBase {
         return password.length() >= 4;
     }
 
-
-    /**
-     * 切换到工作主activity
-     */
-    private void SwitchToWorkActivity() {
-        Intent intent = new Intent(getActivity(), ACWelcome.class);
-        startActivityForResult(intent, 1);
-    }
 
     /**
      * Shows the progress UI and hides the login form.
@@ -232,24 +184,6 @@ public class FrgLogin extends FrgUtilityBase {
             }
         });
     }
-
-
-    /**
-     * 执行完登陆动作后辅助函数
-     *
-     * @param loginret 登陆结果
-     */
-    private void afterLoginExecute(final boolean loginret) {
-        mAuthTask = null;
-        showProgress(false);
-
-        if (loginret) {
-            SwitchToWorkActivity();
-        } else {
-            mETPassword.setError(mHSErrorPassword);
-            mETPassword.requestFocus();
-        }
-    }
     /// PRIVATE END
 
 
@@ -267,61 +201,38 @@ public class FrgLogin extends FrgUtilityBase {
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                // Simulate network access.
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            Intent data = new Intent();
-            data.putExtra(UsrItem.FIELD_NAME, mEmail);
-            data.putExtra(UsrItem.FIELD_PWD, mPassword);
-
-            Message m = Message.obtain(ContextUtil.getMsgHandler(),
-                    GlobalDef.MSG_USR_LOGIN);
-            m.obj = new Object[]{data, mMHHandler};
-            m.sendToTarget();
-            return true;
+        protected void onPreExecute()   {
+            super.onPreExecute();
+            showProgress(true);
         }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return ContextUtil.getUsrUtility().loginByUsr(mEmail, mPassword);
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean bret) {
+            super.onPostExecute(bret);
+
+            mAuthTask = null;
+            showProgress(false);
+
+            if (bret) {
+                Intent intent = new Intent(getActivity(), ACWelcome.class);
+                startActivityForResult(intent, 1);
+            } else {
+                mETPassword.setError(mHSErrorPassword);
+                mETPassword.requestFocus();
+            }
+        }
+
 
         @Override
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
-        }
-    }
-
-
-    private static class LocalMsgHandler extends WRMsgHandler<FrgLogin> {
-        LocalMsgHandler(FrgLogin ac) {
-            super(ac);
-            TAG = "LocalMsgHandler";
-        }
-
-        @Override
-        protected void processMsg(Message m, FrgLogin home) {
-            switch (m.what) {
-                case GlobalDef.MSG_REPLY: {
-                    switch (m.arg1) {
-                        case GlobalDef.MSG_USR_LOGIN: {
-                            boolean ret = UtilFun.cast(m.obj);
-                            home.afterLoginExecute(ret);
-                        }
-                        break;
-
-                        default:
-                            Log.e(TAG, String.format("msg(%s) can not process", m.toString()));
-                            break;
-                    }
-                }
-                break;
-
-                default:
-                    Log.e(TAG, String.format("msg(%s) can not process", m.toString()));
-                    break;
-            }
         }
     }
 }

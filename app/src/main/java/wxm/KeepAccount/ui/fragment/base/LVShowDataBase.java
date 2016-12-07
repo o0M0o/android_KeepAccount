@@ -181,6 +181,11 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
                 ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
             AsyncTask<Void, Void, Void>  cur_task = new AsyncTask<Void, Void, Void> () {
                 @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                }
+
+                @Override
                 protected Void doInBackground(Void... params) {
                     refreshData();
                     return null;

@@ -171,7 +171,7 @@ public class NoteListAdapter extends BaseCalendarListAdapter<INote> {
         tv.setText(i_n.getInfo());
 
         tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_amount));
-        tv.setText(String.format(Locale.CHINA, "- %.02f", i_n.getVal()));
+        tv.setText(String.format(Locale.CHINA, "+ %.02f", i_n.getVal()));
 
         tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_time));
         tv.setText(i_n.getTs().toString().substring(11, 16));

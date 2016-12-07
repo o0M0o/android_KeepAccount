@@ -214,9 +214,9 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
 
     private void refreshAttachLayout()    {
-        setAttachLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.INVISIBLE);
-        setFilterLayoutVisible(View.INVISIBLE);
-        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.INVISIBLE);
+        setAttachLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
+        setFilterLayoutVisible(View.GONE);
+        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
     }
 
 

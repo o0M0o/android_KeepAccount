@@ -80,7 +80,7 @@ public class DailyLVHelper extends LVShowDataBase
     @BindView(R.id.rl_action)
     GridLayout  mGLActions;
 
-    private boolean     mBActionExpand;
+    private boolean   mBActionExpand;
 
     @BindDrawable(R.drawable.ic_to_up)
     Drawable    mDAExpand;
@@ -102,79 +102,72 @@ public class DailyLVHelper extends LVShowDataBase
     public View createView(LayoutInflater inflater, ViewGroup container) {
         mSelfView       = inflater.inflate(R.layout.lv_newpager, container, false);
         mBFilter        = false;
-
         ButterKnife.bind(this, mSelfView);
+
+        refreshAttachLayout();
+        initActs(mSelfView);
+        return mSelfView;
+    }
+
+    /**
+     * 初始化可隐藏动作条
+     * @param pv   视图
+     */
+    private void initActs(View pv) {
         refreshAction();
 
-        mIVActions.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBActionExpand = !mBActionExpand;
-                refreshAction();
-            }
+        mIVActions.setOnClickListener(v -> {
+            mBActionExpand = !mBActionExpand;
+            refreshAction();
         });
 
-        RelativeLayout rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_add));
-        rl.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ACNoteShow ac = getRootActivity();
-                Intent intent = new Intent(ac, ACNoteEdit.class);
-                intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
+        RelativeLayout rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_add));
+        rl.setOnClickListener(v -> {
+            ACNoteShow ac = getRootActivity();
+            Intent intent = new Intent(ac, ACNoteEdit.class);
+            intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
 
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(System.currentTimeMillis());
-                intent.putExtra(GlobalDef.STR_RECORD_DATE,
-                        String.format(Locale.CHINA ,"%d-%02d-%02d %02d:%02d"
-                                ,cal.get(Calendar.YEAR)
-                                ,cal.get(Calendar.MONTH) + 1
-                                ,cal.get(Calendar.DAY_OF_MONTH)
-                                ,cal.get(Calendar.HOUR_OF_DAY)
-                                ,cal.get(Calendar.MINUTE)));
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(System.currentTimeMillis());
+            intent.putExtra(GlobalDef.STR_RECORD_DATE,
+                    String.format(Locale.CHINA ,"%d-%02d-%02d %02d:%02d"
+                            ,cal.get(Calendar.YEAR)
+                            ,cal.get(Calendar.MONTH) + 1
+                            ,cal.get(Calendar.DAY_OF_MONTH)
+                            ,cal.get(Calendar.HOUR_OF_DAY)
+                            ,cal.get(Calendar.MINUTE)));
 
-                ac.startActivityForResult(intent, 1);
-            }
+            ac.startActivityForResult(intent, 1);
         });
 
-        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_delete));
-        rl.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mActionType = ACTION_DELETE;
-                refreshView();
-            }
+        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_delete));
+        rl.setOnClickListener(v -> {
+            mActionType = ACTION_DELETE;
+            refreshView();
         });
 
-        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_refresh));
-        rl.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mActionType = ACTION_EDIT;
-                reloadView(v.getContext(), false);
-            }
+        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_refresh));
+        rl.setOnClickListener(v -> {
+            mActionType = ACTION_EDIT;
+            reloadView(v.getContext(), false);
         });
 
-        rl = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_act_sort));
+        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_sort));
         final ImageView iv_sort = UtilFun.cast_t(rl.findViewById(R.id.iv_sort));
         final TextView tv_sort = UtilFun.cast_t(rl.findViewById(R.id.tv_sort));
-        iv_sort.setImageDrawable(mSelfView.getContext().getResources()
+        iv_sort.setImageDrawable(pv.getContext().getResources()
                 .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
         tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
-        rl.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBTimeDownOrder = !mBTimeDownOrder;
+        rl.setOnClickListener(v -> {
+            mBTimeDownOrder = !mBTimeDownOrder;
 
-                iv_sort.setImageDrawable(mSelfView.getContext().getResources()
-                        .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
-                tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+            iv_sort.setImageDrawable(pv.getContext().getResources()
+                    .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
+            tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
-                refreshData();
-                refreshView();
-            }
+            refreshData();
+            refreshView();
         });
-
-        return mSelfView;
     }
 
 
@@ -234,10 +227,12 @@ public class DailyLVHelper extends LVShowDataBase
     private void refreshAction()    {
         if(mBActionExpand)  {
             mIVActions.setImageDrawable(mDAHide);
-            setLayoutVisible(mGLActions, View.VISIBLE);
+            mGLActions.setVisibility(View.VISIBLE);
+            //setLayoutVisible(mGLActions, View.VISIBLE);
         } else  {
             mIVActions.setImageDrawable(mDAExpand);
-            setLayoutVisible(mGLActions, View.INVISIBLE);
+            mGLActions.setVisibility(View.GONE);
+            //setLayoutVisible(mGLActions, View.INVISIBLE);
         }
     }
 
@@ -376,9 +371,9 @@ public class DailyLVHelper extends LVShowDataBase
 
     private void refreshAttachLayout()    {
         setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
-                                View.VISIBLE : View.INVISIBLE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.INVISIBLE);
-        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.INVISIBLE);
+                                View.VISIBLE : View.GONE);
+        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
+        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
     }
 
     /**
