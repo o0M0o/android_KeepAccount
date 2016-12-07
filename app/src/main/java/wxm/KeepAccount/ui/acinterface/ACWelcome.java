@@ -1,11 +1,11 @@
 package wxm.KeepAccount.ui.acinterface;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,20 +18,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
-import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
-import cn.wxm.andriodutillib.DragGrid.DragGridView;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ActionHelper;
-import wxm.KeepAccount.Base.utility.DGVButtonAdapter;
-import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.acutility.ACCalendarShow;
@@ -39,7 +31,7 @@ import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.acutility.ACRemindEdit;
 import wxm.KeepAccount.ui.acutility.ACSetting;
-import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
+import wxm.KeepAccount.ui.fragment.utility.FrgWelcome;
 
 /**
  * 用户登陆后首页面
@@ -47,20 +39,14 @@ import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
 public class ACWelcome extends AppCompatActivity
         implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener  {
     private static final String TAG = "ACWelcome";
-    //private static final int    BTDRAW_WIDTH    = 96;
-    //private static final int    BTDRAW_HEIGHT   = 96;
-
-
-    // for DragGridView
-    private List<HashMap<String, Object>> mLSData = new ArrayList<>();
-    private DragGridView        mDGVActions;
+    private FrgWelcome   mFGWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_welcome);
 
-        init_component();
+        init_component(savedInstanceState);
     }
 
 
@@ -193,11 +179,11 @@ public class ACWelcome extends AppCompatActivity
         }
     }
 
-
     /**
      * 初始化activity
+     * @param savedInstanceState  onclick的动作
      */
-    private void init_component() {
+    private void init_component(Bundle savedInstanceState) {
         // set nav view
         Toolbar tb = UtilFun.cast(findViewById(R.id.ac_navw_toolbar));
         setSupportActionBar(tb);
@@ -215,84 +201,13 @@ public class ACWelcome extends AppCompatActivity
         assert null != nv;
         nv.setNavigationItemSelectedListener(this);
 
-        // init drag grid view
-        // frist init data
-        for(String i : PreferencesUtil.loadHotAction())  {
-            HashMap<String, Object> ihm = new HashMap<>();
-            ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
-            mLSData.add(ihm);
+        // load fragment
+        if(null == savedInstanceState)  {
+            mFGWelcome = new FrgWelcome();
+            FragmentTransaction ft =  getFragmentManager().beginTransaction();
+            ft.add(R.id.fl_holder, mFGWelcome);
+            ft.commit();
         }
-
-        // then init adapter & view
-        mDGVActions = UtilFun.cast(findViewById(R.id.dgv_buttons));
-        assert null != mDGVActions;
-        final DGVButtonAdapter apt = new DGVButtonAdapter(this, mLSData,
-                new String[] {}, new int[] { });
-
-        mDGVActions.setAdapter(apt);
-        mDGVActions.setOnChangeListener((from, to) -> {
-            HashMap<String, Object> temp = mLSData.get(from);
-            if(from < to){
-                for(int i=from; i<to; i++){
-                    Collections.swap(mLSData, i, i+1);
-                }
-            }else if(from > to){
-                for(int i=from; i>to; i--){
-                    Collections.swap(mLSData, i, i-1);
-                }
-            }
-
-            mLSData.set(to, temp);
-
-            ArrayList<String> hot_name = new ArrayList<>();
-            for(HashMap<String, Object> hi : mLSData)   {
-                String an = UtilFun.cast(hi.get(DGVButtonAdapter.HKEY_ACT_NAME));
-                hot_name.add(an);
-            }
-            PreferencesUtil.saveHotAction(hot_name);
-
-            apt.notifyDataSetChanged();
-        });
-        apt.notifyDataSetChanged();
-
-        // init other button
-        RelativeLayout rl = UtilFun.cast(findViewById(R.id.rl_channel));
-        assert null != rl;
-        rl.setOnClickListener(v -> {
-            DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
-            DlgSelectChannel dlg = new DlgSelectChannel();
-            dlg.setHotChannel(dapt.getCurAction());
-            dlg.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
-                @Override
-                public void onDialogPositiveResult(DialogFragment dialog) {
-                    DlgSelectChannel dsc = UtilFun.cast(dialog);
-                    PreferencesUtil.saveHotAction(dsc.getHotChannel());
-
-                    mLSData.clear();
-                    for(String i : PreferencesUtil.loadHotAction())     {
-                        HashMap<String, Object> ihm = new HashMap<>();
-                        ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
-                        mLSData.add(ihm);
-                    }
-
-                    DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
-                    dapt.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onDialogNegativeResult(DialogFragment dialog) {
-                }
-            });
-
-            dlg.show(getSupportFragmentManager(), "选择频道");
-        });
-
-        rl = UtilFun.cast(findViewById(R.id.rl_setting));
-        assert null != rl;
-        rl.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ACSetting.class);
-            startActivityForResult(intent, 1);
-        });
     }
 
     /**
