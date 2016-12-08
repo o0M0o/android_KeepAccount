@@ -34,7 +34,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.acutility.ACAddUsr"
-            android:label="@string/title_activity_add_account"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/label_add_usr"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.acinterface.ACHelp"
@@ -42,6 +43,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.acinterface.ACWelcome"
+            android:label="@string/label_welcome"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.acutility.ACNoteEdit"

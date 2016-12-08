@@ -4,7 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
 
 <item
     android:id="@+id/mi_switch"
-    android:icon="@drawable/ic_switch_1"
+    android:icon="@drawable/ic_swtich_white"
     android:orderInCategory="9000"
     android:title="@string/cn_swith_view"
     app:showAsAction="ifRoom" />

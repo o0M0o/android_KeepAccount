@@ -55,6 +55,7 @@ public class FrgWelcome extends FrgUtilityBase {
 
     @Override
     protected void initUiComponent(View view) {
+        mLSData.clear();
         for(String i : PreferencesUtil.loadHotAction())  {
             HashMap<String, Object> ihm = new HashMap<>();
             ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);

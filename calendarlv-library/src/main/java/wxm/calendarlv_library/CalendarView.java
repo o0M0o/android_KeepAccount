@@ -50,7 +50,7 @@ public class CalendarView extends FrameLayout {
     public CalendarView(Context context) {
         super(context);
         mItemWidth = CalendarHelper.width / ROW_ITEM_COUNT;
-        mItemHeight = mItemWidth;
+        mItemHeight = mItemWidth * 3 / 4;
         gestureDetector = new GestureDetector(context, new FlingListener());
     }
 

@@ -25,7 +25,6 @@ public class ACLogin extends AppCompatActivity {
     private static final String TAG = "ACLogin";
     private FrgLogin mFGLogin = new FrgLogin();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -2,6 +2,7 @@ package wxm.KeepAccount.ui.acinterface;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,6 +48,13 @@ public class ACWelcome extends AppCompatActivity
         setContentView(R.layout.ac_welcome);
 
         init_component(savedInstanceState);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // TODO Auto-generated method stub
+        super.onConfigurationChanged(newConfig);
+        mFGWelcome.refreshUI();
     }
 
 
