@@ -226,16 +226,7 @@ public class FrgCalendarData extends FrgUtilityBase {
             for (String day : hm_note.keySet()) {
                 List<INote> ls_note = hm_note.get(day);
                 if (!UtilFun.ListIsNullOrEmpty(ls_note)) {
-                    for (INote i : ls_note) {
-                        if (mTMList.get(day) != null) {
-                            List<INote> list = mTMList.get(day);
-                            list.add(i);
-                        } else {
-                            List<INote> list = new ArrayList<>();
-                            list.add(i);
-                            mTMList.put(day, list);
-                        }
-                    }
+                    mTMList.put(day, new ArrayList<>(ls_note));
                 }
             }
         }
@@ -282,7 +273,8 @@ public class FrgCalendarData extends FrgUtilityBase {
                     mNLAdapter.notifyDataSetChanged();
                     mCSIAdapter.notifyDataSetChanged();
 
-                    //loadCalendarData(YEAR_MONTH_SIMPLE_FORMAT.format(calendar.getTime()));
+                    Calendar cl = Calendar.getInstance();
+                    loadCalendarData(YEAR_MONTH_SIMPLE_FORMAT.format(cl.getTime()));
                 }
             }
         }.execute();

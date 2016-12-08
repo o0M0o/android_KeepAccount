@@ -2,12 +2,14 @@ package wxm.KeepAccount.ui.CalendarListView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -19,6 +21,8 @@ import wxm.KeepAccount.Base.data.PayNoteItem;
 import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
+import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.fragment.utility.FrgCalendarData;
 import wxm.calendarlv_library.BaseCalendarListAdapter;
@@ -26,9 +30,13 @@ import wxm.calendarlv_library.CalendarHelper;
 
 
 public class NoteListAdapter extends BaseCalendarListAdapter<INote> {
+    private int mCLPay;
+    private int mCLIncome;
+
     private static class HeaderViewHolder {
         TextView dayText;
         TextView yearMonthText;
+        TextView dayBalance;
     }
 
     private static class ContentViewHolder {
@@ -39,30 +47,45 @@ public class NoteListAdapter extends BaseCalendarListAdapter<INote> {
 
     public NoteListAdapter(Context context) {
         super(context);
+
+        Resources res = context.getResources();
+        mCLPay = res.getColor(R.color.darkred);
+        mCLIncome = res.getColor(R.color.darkslategrey);
     }
 
     @Override
-    public View getSectionHeaderView(String date, View convertView, ViewGroup parent) {
-        HeaderViewHolder headerViewHolder;
-        if (convertView != null) {
-            headerViewHolder = (HeaderViewHolder) convertView.getTag();
+    public View getSectionHeaderView(String date, View cv, ViewGroup parent) {
+        HeaderViewHolder hv;
+        if (cv != null) {
+            hv = (HeaderViewHolder) cv.getTag();
         } else {
-            convertView = inflater.inflate(R.layout.listitem_calendar_header, null);
-            headerViewHolder = new HeaderViewHolder();
-            headerViewHolder.dayText = (TextView) convertView.findViewById(R.id.header_day);
-            headerViewHolder.yearMonthText = (TextView) convertView.findViewById(R.id.header_year_month);
-            convertView.setTag(headerViewHolder);
+            cv = inflater.inflate(R.layout.listitem_calendar_header, null);
+            hv = new HeaderViewHolder();
+            hv.dayText = UtilFun.cast_t(cv.findViewById(R.id.header_day));
+            hv.yearMonthText = UtilFun.cast_t(cv.findViewById(R.id.header_year_month));
+            hv.dayBalance = UtilFun.cast_t(cv.findViewById(R.id.header_day_balance));
+            cv.setTag(hv);
         }
 
-        Calendar calendar = CalendarHelper.getCalendarByYearMonthDay(date);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        String dayStr = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+        Calendar ca = CalendarHelper.getCalendarByYearMonthDay(date);
+        int day = ca.get(Calendar.DAY_OF_MONTH);
+        String dayStr = String.valueOf(ca.get(Calendar.DAY_OF_MONTH));
         if (day < 10) {
             dayStr = "0" + dayStr;
         }
-        headerViewHolder.dayText.setText(dayStr);
-        headerViewHolder.yearMonthText.setText(FrgCalendarData.YEAR_MONTH_FORMAT.format(calendar.getTime()));
-        return convertView;
+
+        hv.dayText.setText(dayStr);
+        hv.yearMonthText.setText(FrgCalendarData.YEAR_MONTH_FORMAT.format(ca.getTime()));
+
+        String t_day = String.format(Locale.CHINA  ,"%04d-%02d-%02d"
+                            ,ca.get(Calendar.YEAR), ca.get(Calendar.MONTH) + 1, ca.get(Calendar.DAY_OF_MONTH));
+        NoteShowInfo ni = NoteShowDataHelper.getInstance().getDayInfo().get(t_day);
+        BigDecimal bb = null != ni ? ni.getBalance() : BigDecimal.ZERO;
+        hv.dayBalance.setText(String.format(Locale.CHINA, "%s %.02f",
+                                0 > bb.compareTo(BigDecimal.ZERO) ? "-" : "+",
+                                Math.abs(bb.floatValue())));
+        hv.dayBalance.setTextColor(0 > bb.compareTo(BigDecimal.ZERO) ?  mCLPay : mCLIncome);
+        return cv;
     }
 
     @Override

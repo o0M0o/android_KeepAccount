@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.CalendarListView;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,20 @@ import wxm.calendarlv_library.BaseCalendarItemModel;
  * Created by kelin on 16-7-19.
  */
 public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarShowItemModel> {
+    private int mCLToday;
+    private int mCLHoliday;
+
+    private int mCLDisable;
+    private int mCLNotCurrentMonth;
 
     public CalendarShowItemAdapter(Context context) {
         super(context);
+
+        Resources res = mContext.getResources();
+        mCLToday = res.getColor(R.color.red_ff725f);
+        mCLHoliday = res.getColor(R.color.red_ff725f);
+        mCLDisable = res.getColor(android.R.color.darker_gray);
+        mCLNotCurrentMonth = res.getColor(R.color.gray_bbbbbb);
     }
 
     @Override
@@ -27,24 +39,24 @@ public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarSho
         TextView dayNum = (TextView) view.findViewById(R.id.tv_day_num);
         dayNum.setText(model.getDayNumber());
 
-        view.setBackgroundResource(R.drawable.bg_shape_calendar_item_normal);
+        view.setBackgroundResource(model.getRecordCount() > 0 ?
+                R.drawable.day_shape : R.drawable.day_empty_shape);
 
         if (model.isToday()) {
-            dayNum.setTextColor(mContext.getResources().getColor(R.color.red_ff725f));
+            dayNum.setTextColor(mCLToday);
             dayNum.setText(mContext.getResources().getString(R.string.today));
         }
 
         if (model.isHoliday()) {
-            dayNum.setTextColor(mContext.getResources().getColor(R.color.red_ff725f));
+            dayNum.setTextColor(mCLHoliday);
         }
 
-
         if (model.getStatus() == BaseCalendarItemModel.Status.DISABLE) {
-            dayNum.setTextColor(mContext.getResources().getColor(android.R.color.darker_gray));
+            dayNum.setTextColor(mCLDisable);
         }
 
         if (!model.isCurrentMonth()) {
-            dayNum.setTextColor(mContext.getResources().getColor(R.color.gray_bbbbbb));
+            dayNum.setTextColor(mCLNotCurrentMonth);
             view.setClickable(true);
         }
 
@@ -53,7 +65,7 @@ public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarSho
             dayNewsCount.setText(String.format(mContext.getResources().getString(R.string.calendar_item_new_count), model.getRecordCount()));
             dayNewsCount.setVisibility(View.VISIBLE);
         } else {
-            dayNewsCount.setVisibility(View.GONE);
+            dayNum.setTextColor(mCLDisable);
         }
 
         return view;

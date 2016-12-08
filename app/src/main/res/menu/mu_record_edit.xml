@@ -2,20 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/record_menu_giveup"
+        android:id="@+id/mi_giveup"
+        android:icon="@drawable/ic_reject_1"
         android:orderInCategory="100"
         app:showAsAction="ifRoom|withText"
         android:title="@string/cn_giveup"/>
 
     <item
-        android:id="@+id/record_memenu_save"
+        android:id="@+id/mi_save"
+        android:icon="@drawable/ic_accept_1"
         android:orderInCategory="101"
         app:showAsAction="ifRoom|withText"
         android:title="@string/cn_save"/>
-
-    <item
-        android:id="@+id/recordmenu_help"
-        android:orderInCategory="102"
-        app:showAsAction="never"
-        android:title="@string/cn_help"/>
 </menu>

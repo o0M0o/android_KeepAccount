@@ -372,7 +372,7 @@ public class DailyLVHelper extends LVShowDataBase
         setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
                                 View.VISIBLE : View.GONE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
-        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
+        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType && !mBFilter ? View.VISIBLE : View.GONE);
     }
 
     /**

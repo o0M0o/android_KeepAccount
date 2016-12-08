@@ -8,10 +8,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acinterface.ACHelp;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 import wxm.KeepAccount.ui.fragment.utility.FrgNoteEdit;
 
@@ -70,7 +69,7 @@ public class ACNoteEdit extends BaseAppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.mu_record_actbar, menu);
+        inflater.inflate(R.menu.mu_record_edit, menu);
         return true;
     }
 
@@ -87,7 +86,7 @@ public class ACNoteEdit extends BaseAppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.record_memenu_save: {
+            case R.id.mi_save: {
                 TFEditBase tb = getHotTabItem();
                 if(tb.onAccept()) {
                     Intent data = new Intent();
@@ -98,20 +97,12 @@ public class ACNoteEdit extends BaseAppCompatActivity {
             }
             break;
 
-            case R.id.record_menu_giveup: {
+            case R.id.mi_giveup: {
                 int ret_data = GlobalDef.INTRET_GIVEUP;
 
                 Intent data = new Intent();
                 setResult(ret_data, data);
                 finish();
-            }
-            break;
-
-            case R.id.recordmenu_help : {
-                Intent intent = new Intent(this, ACHelp.class);
-                intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_RECORD);
-
-                startActivityForResult(intent, 1);
             }
             break;
 
@@ -121,15 +112,4 @@ public class ACNoteEdit extends BaseAppCompatActivity {
 
         return true;
     }
-
-    /*
-    @Override
-    protected void onDataChange(int requestCode, int resultCode, Intent data) {
-        super.onDataChange(requestCode, resultCode, data);
-        if(mTabFragment instanceof STEditNoteFragment)  {
-            STEditNoteFragment sf = UtilFun.cast(mTabFragment);
-            sf.onDataChange(requestCode, resultCode, data);
-        }
-    }
-    */
 }
