@@ -161,4 +161,5 @@
     <color name="Bg_Calendar_ListView_Header">#e9e9e9</color>
 
     <color name="text_fit">#333333</color>
+    <color name="red_ff725f">#ff725f</color>
 </resources>

@@ -5,9 +5,9 @@
       <module fileurl="file://$PROJECT_DIR$/AndriodUtillib/AndriodUtillib.iml" filepath="$PROJECT_DIR$/AndriodUtillib/AndriodUtillib.iml" />
       <module fileurl="file://$PROJECT_DIR$/KeepAccount.iml" filepath="$PROJECT_DIR$/KeepAccount.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/calendarlv-library/calendarlv-library.iml" filepath="$PROJECT_DIR$/calendarlv-library/calendarlv-library.iml" />
       <module fileurl="file://$PROJECT_DIR$/hellocharts-library-release/hellocharts-library-release.iml" filepath="$PROJECT_DIR$/hellocharts-library-release/hellocharts-library-release.iml" />
       <module fileurl="file://$PROJECT_DIR$/lm_banner_library/lm_banner_library.iml" filepath="$PROJECT_DIR$/lm_banner_library/lm_banner_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simplecalendar/simplecalendar.iml" filepath="$PROJECT_DIR$/simplecalendar/simplecalendar.iml" />
     </modules>
   </component>
 </project>

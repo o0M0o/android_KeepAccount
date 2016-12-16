@@ -1,7 +1,7 @@
 package wxm.KeepAccount.ui.CalendarListView;
 
 
-import wxm.calendarlv_library.BaseCalendarItemModel;
+import wxm.simplecalendarlvb.BaseCalendarItemModel;
 
 /**
  * Created by kelin on 16-7-20.

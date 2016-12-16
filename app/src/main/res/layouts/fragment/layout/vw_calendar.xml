@@ -12,10 +12,9 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <wxm.calendarlv_library.CalendarListView
+    <wxm.simplecalendarlvb.CalendarListView
         android:id="@+id/calendar_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </wxm.calendarlv_library.CalendarListView>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

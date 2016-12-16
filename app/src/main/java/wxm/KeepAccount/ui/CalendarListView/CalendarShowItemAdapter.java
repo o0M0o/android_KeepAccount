@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import wxm.KeepAccount.R;
-import wxm.calendarlv_library.BaseCalendarItemAdapter;
-import wxm.calendarlv_library.BaseCalendarItemModel;
+import wxm.simplecalendarlvb.BaseCalendarItemAdapter;
+import wxm.simplecalendarlvb.BaseCalendarItemModel;
 
 
 /**
@@ -55,17 +55,19 @@ public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarSho
             dayNum.setTextColor(mCLDisable);
         }
 
-        if (!model.isCurrentMonth()) {
-            dayNum.setTextColor(mCLNotCurrentMonth);
-            view.setClickable(true);
-        }
-
         TextView dayNewsCount = (TextView) view.findViewById(R.id.tv_day_new_count);
-        if (model.getRecordCount() > 0) {
-            dayNewsCount.setText(String.format(mContext.getResources().getString(R.string.calendar_item_new_count), model.getRecordCount()));
-            dayNewsCount.setVisibility(View.VISIBLE);
+        if (!model.isCurrentMonth()) {
+            dayNum.setVisibility(View.GONE);
+            dayNewsCount.setVisibility(View.GONE);
+            //dayNum.setTextColor(mCLNotCurrentMonth);
+            view.setClickable(true);
         } else {
-            dayNum.setTextColor(mCLDisable);
+            if (model.getRecordCount() > 0) {
+                dayNewsCount.setText(String.format(mContext.getResources().getString(R.string.calendar_item_new_count), model.getRecordCount()));
+                dayNewsCount.setVisibility(View.VISIBLE);
+            } else {
+                dayNewsCount.setVisibility(View.GONE);
+            }
         }
 
         return view;

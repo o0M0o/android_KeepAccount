@@ -4,15 +4,15 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import java.text.SimpleDateFormat;
@@ -34,10 +34,8 @@ import wxm.KeepAccount.Base.data.PayNoteItem;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.CalendarListView.CalendarShowItemAdapter;
 import wxm.KeepAccount.ui.CalendarListView.CalendarShowItemModel;
-import wxm.KeepAccount.ui.CalendarListView.NoteListAdapter;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
-import wxm.calendarlv_library.CalendarHelper;
-import wxm.calendarlv_library.CalendarListView;
+import wxm.simplecalendarlvb.CalendarListView;
 
 import static wxm.KeepAccount.Base.utility.ContextUtil.getPayIncomeUtility;
 
@@ -45,7 +43,7 @@ import static wxm.KeepAccount.Base.utility.ContextUtil.getPayIncomeUtility;
  * for calendar show
  * Created by ookoo on 2016/12/4.
  */
-public class FrgCalendarData extends FrgUtilityBase {
+public class FrgCalendarShow extends FrgUtilityBase {
     public static final SimpleDateFormat DAY_FORMAT =
                 new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
 
@@ -55,6 +53,9 @@ public class FrgCalendarData extends FrgUtilityBase {
     public static final SimpleDateFormat YEAR_MONTH_SIMPLE_FORMAT =
             new SimpleDateFormat("yyyy-MM", Locale.CHINA);
 
+    public static final SimpleDateFormat ALL_SIMPLE_FORMAT =
+            new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+
     // for ui
     @BindView(R.id.calendar_listview)
     CalendarListView mHGVDays;
@@ -62,11 +63,15 @@ public class FrgCalendarData extends FrgUtilityBase {
     @BindView(R.id.load_progress)
     ProgressBar mPBLoad;
 
+    @BindView(R.id.fl_holder)
+    FrameLayout mFLHolder;
+
     // for data
-    private NoteListAdapter             mNLAdapter;
     private CalendarShowItemAdapter     mCSIAdapter;
     //key:date "yyyy-mm-dd" format.
     private TreeMap<String, List<INote>> mTMList = new TreeMap<>();
+
+    private FrgCalendarContent     mFGContent = new FrgCalendarContent();
 
     private IDataChangeNotice mIDCPayNotice = new IDataChangeNotice<PayNoteItem>() {
         @Override
@@ -104,9 +109,16 @@ public class FrgCalendarData extends FrgUtilityBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "FrgCalendarData";
+        LOG_TAG = "FrgCalendarShow";
         View rootView = layoutInflater.inflate(R.layout.vw_calendar, viewGroup, false);
         ButterKnife.bind(this, rootView);
+
+        if(null == bundle) {
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            ft.add(R.id.fl_holder, mFGContent);
+            ft.commit();
+        }
+
         return rootView;
     }
 
@@ -114,51 +126,18 @@ public class FrgCalendarData extends FrgUtilityBase {
     protected void initUiComponent(View view) {
         Log.d(LOG_TAG, "initUiComponent");
 
-        mNLAdapter = new NoteListAdapter(getActivity());
         mCSIAdapter = new CalendarShowItemAdapter(getActivity());
-        mHGVDays.setCalendarListViewAdapter(mCSIAdapter, mNLAdapter);
+        mHGVDays.setCalendarListViewAdapter(mCSIAdapter);
 
-        // set start time,just for test.
-        final ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        assert actionBar != null;
-
-        final Calendar calendar = Calendar.getInstance();
-        actionBar.setTitle(YEAR_MONTH_FORMAT.format(calendar.getTime()));
-
-        // deal with refresh and load more event.
-        mHGVDays.setOnListPullListener(new CalendarListView.onListPullListener() {
-            @Override
-            public void onRefresh() {
-                Log.d(LOG_TAG, "onListPullListener:onRefresh");
-
-                //String date = mTMList.firstKey();
-                //Calendar calendar = CalendarHelper.getCalendarByYearMonthDay(date);
-                //calendar.add(Calendar.MONTH, -1);
-                //calendar.set(Calendar.DAY_OF_MONTH, 1);
-            }
-
-            @Override
-            public void onLoadMore() {
-                Log.d(LOG_TAG, "onListPullListener:onLoadMore");
-
-                //String date = mTMList.lastKey();
-                //Calendar calendar = CalendarHelper.getCalendarByYearMonthDay(date);
-                //calendar.add(Calendar.MONTH, 1);
-                //calendar.set(Calendar.DAY_OF_MONTH, 1);
-            }
-        });
 
         mHGVDays.setOnMonthChangedListener(yearMonth -> {
             Log.d(LOG_TAG, "OnMonthChangedListener, yearMonth = " + yearMonth);
-
-            Calendar calendar1 = CalendarHelper.getCalendarByYearMonth(yearMonth);
-            actionBar.setTitle(YEAR_MONTH_FORMAT.format(calendar1.getTime()));
-
-            //loadNotes(DAY_FORMAT.format(calendar1.getTime()));
             loadCalendarData(yearMonth);
         });
 
-        mHGVDays.setOnCalendarViewItemClickListener((View, selectedDate, listSection, selectedDateRegion) -> {
+        mHGVDays.setOnCalendarViewItemClickListener((View, selectedDate) -> {
+            Log.d(LOG_TAG, "OnCalendarViewItemClick, selectedDate = " + selectedDate);
+            mFGContent.setDay(selectedDate, mTMList.get(selectedDate));
         });
 
         reLoadFrg(false);
@@ -216,18 +195,28 @@ public class FrgCalendarData extends FrgUtilityBase {
     /**
      * 加载数据
      * 一次加载全部数据
+     * @param month  加载的月份，比如"2016-07"
      */
-    private void loadNotes()  {
+    private void loadNotes(String month)  {
         Log.d(LOG_TAG, "loadNotes");
 
         mTMList.clear();
-        HashMap<String, ArrayList<INote>> hm_note = NoteShowDataHelper.getInstance().getNotesForDay();
+        HashMap<String, ArrayList<INote>> hm_note
+                = NoteShowDataHelper.getInstance().getNotesForMonth();
         if(null != hm_note) {
-            for (String day : hm_note.keySet()) {
-                List<INote> ls_note = hm_note.get(day);
-                if (!UtilFun.ListIsNullOrEmpty(ls_note)) {
-                    mTMList.put(day, new ArrayList<>(ls_note));
+            ArrayList<INote> al_notes = hm_note.get(month);
+            for(INote ci : al_notes)    {
+                Calendar cd = Calendar.getInstance();
+                cd.setTimeInMillis(ci.getTs().getTime());
+                String day = ALL_SIMPLE_FORMAT.format(cd.getTime());
+
+                List<INote> ls_note = mTMList.get(day);
+                if(null == ls_note) {
+                    ls_note = new ArrayList<>();
+                    mTMList.put(day, ls_note);
                 }
+
+                ls_note.add(ci);
             }
         }
     }
@@ -239,6 +228,8 @@ public class FrgCalendarData extends FrgUtilityBase {
         Log.d(LOG_TAG, "reLoadFrg");
 
         new AsyncTask<Void, Void, Void> () {
+            private String  mSZFristMonth;
+
             @Override
             protected void onPreExecute()   {
                 super.onPreExecute();
@@ -250,7 +241,13 @@ public class FrgCalendarData extends FrgUtilityBase {
             protected Void doInBackground(Void... params) {
                 if(refreshData)
                     NoteShowDataHelper.getInstance().refreshData();
-                loadNotes();
+
+                HashMap<String, ArrayList<INote>> hm
+                        = NoteShowDataHelper.getInstance().getNotesForMonth();
+                if(null != hm)  {
+                    mSZFristMonth = UtilFun.cast_t(hm.keySet().toArray()[0]);
+                }
+
                 return null;
             }
 
@@ -260,7 +257,7 @@ public class FrgCalendarData extends FrgUtilityBase {
 
                 showProgress(false);
 
-                if(mTMList.isEmpty()) {
+                if(UtilFun.StringIsNullOrEmpty(mSZFristMonth)) {
                     Activity ac = getActivity();
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ac);
                     builder.setMessage("当前用户没有数据，请先添加数据!").setTitle("警告");
@@ -269,12 +266,13 @@ public class FrgCalendarData extends FrgUtilityBase {
                     android.app.AlertDialog dlg = builder.create();
                     dlg.show();
                 } else {
-                    mNLAdapter.setDateDataMap(mTMList);
-                    mNLAdapter.notifyDataSetChanged();
-                    mCSIAdapter.notifyDataSetChanged();
+                    Calendar c_cur = Calendar.getInstance();
+                    String cur_month = YEAR_MONTH_SIMPLE_FORMAT.format(c_cur.getTime());
 
-                    Calendar cl = Calendar.getInstance();
-                    loadCalendarData(YEAR_MONTH_SIMPLE_FORMAT.format(cl.getTime()));
+                    if(!cur_month.equals(mSZFristMonth))
+                        mHGVDays.changeMonth(mSZFristMonth);
+                    else
+                        loadCalendarData(mSZFristMonth);
                 }
             }
         }.execute();
@@ -289,31 +287,23 @@ public class FrgCalendarData extends FrgUtilityBase {
      * @param date  加载的月份，比如"2016-07"
      */
     private void loadCalendarData(final String date) {
-        Log.d(LOG_TAG, "loadCalendarData, date = " + date);
+        Log.d(LOG_TAG, "loadCalendarData, date = " + date
+                + ", select_date = " + mHGVDays.getCurrentSelectedDate());
+        loadNotes(date);
 
-        for(int d = 1; d < 32; d++) {
-            String day = date + (d > 9 ? "-" + d : "-0" + d);
-            List<INote> ls_n = mTMList.get(day);
-            if(!UtilFun.ListIsNullOrEmpty(ls_n))    {
-                CalendarShowItemModel calendarItemModel = mCSIAdapter.getDayModelList().get(day);
+        if(!mTMList.isEmpty()) {
+            for(String ik : mTMList.keySet())   {
+                List<INote> ls_n = mTMList.get(ik);
+                CalendarShowItemModel calendarItemModel = mCSIAdapter.getDayModelList().get(ik);
                 if (calendarItemModel != null) {
                     calendarItemModel.setRecordCount(ls_n.size());
                 }
             }
         }
-
         mCSIAdapter.notifyDataSetChanged();
-    }
 
-    /*
-    public static Calendar getCalendarByYearMonthDay(String yearMonthDay) {
-        Calendar calendar = Calendar.getInstance();
-        try {
-            calendar.setTimeInMillis(DAY_FORMAT.parse(yearMonthDay).getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return calendar;
+        String cur_day = mHGVDays.getCurrentSelectedDate();
+        mFGContent.setDay(cur_day,
+                !UtilFun.StringIsNullOrEmpty(cur_day) ? mTMList.get(cur_day) : null);
     }
-    */
 }
