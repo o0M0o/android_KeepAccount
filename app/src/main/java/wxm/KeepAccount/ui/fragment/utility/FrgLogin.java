@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -217,7 +218,9 @@ public class FrgLogin extends FrgUtilityBase {
             super.onPostExecute(bret);
 
             mAuthTask = null;
-            showProgress(false);
+            new Handler().postDelayed(() -> {
+                showProgress(false);
+            }, 300);
 
             if (bret) {
                 Intent intent = new Intent(getActivity(), ACWelcome.class);

@@ -70,7 +70,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:paddingLeft="12dp"
-            android:paddingRight="6dp"></lecho.lib.hellocharts.view.ColumnChartView>
+            android:paddingRight="6dp" />
 
         <View
             android:layout_width="match_parent"
@@ -113,7 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="12dp"
-                android:paddingRight="6dp"></lecho.lib.hellocharts.view.PreviewColumnChartView>
+                android:paddingRight="6dp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

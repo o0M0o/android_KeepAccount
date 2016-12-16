@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.allure.lbanners.LMBanners;
+import com.allure.lbanners.transformer.TransitionEffect;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,6 +26,8 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.utility.DGVButtonAdapter;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.DataBase.FrgAdapter;
+import wxm.KeepAccount.ui.DataBase.FrgPara;
 import wxm.KeepAccount.ui.acutility.ACSetting;
 import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
 
@@ -41,12 +46,18 @@ public class FrgWelcome extends FrgUtilityBase {
     @BindView(R.id.rl_setting)
     RelativeLayout  mRLSetting;
 
+    @BindView(R.id.banners)
+    LMBanners mLBanners;
+
     // for data
     private List<HashMap<String, Object>> mLSData = new ArrayList<>();
+    private ArrayList<FrgPara> mALFrgs = new ArrayList<>();
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         LOG_TAG = "FrgWelcome";
+        initFrgs();
+
         View rootView = layoutInflater.inflate(R.layout.vw_welcome, viewGroup, false);
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -54,6 +65,8 @@ public class FrgWelcome extends FrgUtilityBase {
 
     @Override
     protected void initUiComponent(View view) {
+        initBanner();
+
         mLSData.clear();
         for(String i : PreferencesUtil.loadHotAction())  {
             HashMap<String, Object> ihm = new HashMap<>();
@@ -129,5 +142,43 @@ public class FrgWelcome extends FrgUtilityBase {
 
     @Override
     protected void initUiInfo() {
+    }
+
+    private void initFrgs()  {
+        FrgPara fp = new FrgPara();
+        fp.mFPViewId = R.layout.banner_month;
+        mALFrgs.add(fp);
+
+        fp = new FrgPara();
+        fp.mFPViewId = R.layout.banner_year;
+        mALFrgs.add(fp);
+
+//        fp = new FrgPara();
+//        fp.mFPViewId = R.layout.banner_three;
+//        mALFrgs.add(fp);
+    }
+
+    private void initBanner()   {
+        //设置Banners高度
+        //mLBanners.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ScreenUtils.dip2px(this, 200)));
+        //本地用法
+        mLBanners.setAdapter(new FrgAdapter(getActivity()), mALFrgs);
+
+        //网络图片
+//        mLBanners.setAdapter(new UrlImgAdapter(MainActivity.this), networkImages);
+        //参数设置
+        mLBanners.setAutoPlay(false);//自动播放
+        mLBanners.setVertical(false);//是否可以垂直
+        mLBanners.setScrollDurtion(222);//两页切换时间
+        mLBanners.setCanLoop(true);//循环播放
+        mLBanners.setSelectIndicatorRes(R.drawable.page_indicator_select);//选中的原点
+        mLBanners.setUnSelectUnIndicatorRes(R.drawable.page_indicator_unselect);//未选中的原点
+        mLBanners.setIndicatorWidth(5);//默认为5dp
+        mLBanners.setHoriZontalTransitionEffect(TransitionEffect.Default);//选中喜欢的样式
+        //mLBanners.setHoriZontalCustomTransformer(new ParallaxTransformer(R.id.id_image));//自定义样式
+        mLBanners.setDurtion(5000);//切换时间
+        mLBanners.hideIndicatorLayout();//隐藏原点
+        mLBanners.showIndicatorLayout();//显示原点
+        mLBanners.setIndicatorPosition(LMBanners.IndicaTorPosition.BOTTOM_MID);//设置原点显示位置
     }
 }

@@ -70,23 +70,6 @@ public class DailyLVHelper extends LVShowDataBase
     private final LinkedList<Integer> mDelPay;
     private final LinkedList<Integer> mDelIncome;
 
-
-    /*
-    protected boolean mBActionExpand;
-    // for expand or hide actions
-    @BindView(R.id.iv_expand)
-    ImageView   mIVActions;
-
-    @BindView(R.id.rl_action)
-    GridLayout  mGLActions;
-
-    @BindDrawable(R.drawable.ic_to_up)
-    Drawable    mDAExpand;
-
-    @BindDrawable(R.drawable.ic_to_down)
-    Drawable    mDAHide;
-    */
-
     public DailyLVHelper()    {
         super();
 

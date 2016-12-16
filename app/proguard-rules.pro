@@ -15,3 +15,40 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
+-dontwarn com.j256.ormlite.**
+-keep class com.j256.ormlite.** {
+    *;
+}
+
+-dontwarn org.junit.experimental.**
+-keep class org.junit.experimental.** {
+    *;
+}
+
+-dontwarn andriod.net.http.**
+-keep class andriod.net.http.** {
+    *;
+}
+
+-dontwarn de.mindpipe.android.**
+-keep class de.mindpipe.android.** {
+    *;
+}
+
+-dontwarn org.apache.http.**
+-keep class org.apache.http.** {
+    *;
+}

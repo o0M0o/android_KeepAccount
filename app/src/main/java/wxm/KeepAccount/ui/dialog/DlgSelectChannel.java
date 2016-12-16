@@ -133,6 +133,8 @@ public class DlgSelectChannel extends DlgOKOrNOBase
             if (null != v) {
                 HashMap<String, Object> hmd = UtilFun.cast(getItem(position));
                 String hv = UtilFun.cast(hmd.get(DGVButtonAdapter.HKEY_ACT_NAME));
+
+                /*
                 if(mLSHotChannel.contains(hv))  {
                     //v.setSelected(true);
                     v.setBackgroundColor(v.getResources().getColor(R.color.paleturquoise));
@@ -140,6 +142,7 @@ public class DlgSelectChannel extends DlgOKOrNOBase
                     //v.setSelected(false);
                     v.setBackgroundColor(v.getResources().getColor(R.color.white));
                 }
+                */
 
                 // for image
                 ImageView iv = UtilFun.cast(v.findViewById(R.id.iv_act));

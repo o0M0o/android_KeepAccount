@@ -2,21 +2,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/ac_tight_pad">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/grey_2"
+    android:orientation="vertical">
+
+    <com.allure.lbanners.LMBanners
+        android:id="@+id/banners"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/banner_height"
+        app:auto_play="false"
+        app:canLoop="true"
+        app:durtion="5000"
+        app:horizontal_transitionEffect="accordion"
+        app:indicator_position="bottom_mid"
+        app:indicator_select="@drawable/page_indicator_select"
+        app:indicator_unselect="@drawable/page_indicator_unselect"
+        app:indicator_width="5"
+        app:isVertical="false"
+        app:scroll_duration="1000" />
 
     <cn.wxm.andriodutillib.DragGrid.DragGridView
         android:id="@+id/dgv_buttons"
+        android:layout_below="@+id/banners"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/rl_buttons"
-        android:background="@color/grey_1"
-        android:cacheColorHint="@android:color/transparent"
         android:gravity="center"
         android:horizontalSpacing="2dp"
         android:listSelector="@android:color/transparent"
         android:numColumns="4"
-        android:padding="4dp"
+        android:padding="8dp"
         android:stretchMode="columnWidth"
         android:verticalSpacing="2dp" />
 
@@ -26,28 +41,28 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="4dp"
-        android:background="@color/grey_1"
+        android:background="@color/white"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="4dp">
 
         <RelativeLayout
             android:id="@+id/rl_channel"
-            android:layout_width="64dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_toStartOf="@+id/rl_setting"
-            android:background="@color/white"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="16dp"
             android:padding="2dp">
 
             <ImageView
                 android:id="@+id/iv_channel"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_channel" />
 
             <TextView
+                android:textColor="@color/text_fit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_channel"
@@ -57,25 +72,35 @@
                 android:textSize="12sp" />
         </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/vw_tag"
+            android:layout_toEndOf="@id/rl_channel"
+            android:layout_marginStart="16dp"
+            android:layout_centerVertical="true"
+            android:background="@color/darkorange"
+            android:layout_width="1dp"
+            android:layout_height="42dp" />
+
 
         <RelativeLayout
             android:id="@+id/rl_setting"
-            android:layout_width="64dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="@color/white"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/vw_tag"
             android:padding="2dp">
 
             <ImageView
                 android:id="@+id/iv_setting"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_menu_setting" />
 
             <TextView
                 android:layout_width="wrap_content"
+                android:textColor="@color/text_fit"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_setting"
                 android:layout_centerHorizontal="true"

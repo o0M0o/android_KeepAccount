@@ -11,4 +11,6 @@
     <dimen name="bigbutton_width">120dp</dimen>
     <dimen name="ac_padding">8dp</dimen>
     <dimen name="ac_tight_pad">6dp</dimen>
+    <dimen name="banner_height">160dp</dimen>
+    <dimen name="banner_chart_width">96dp</dimen>
 </resources>

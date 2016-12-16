@@ -159,4 +159,6 @@
     <color name="black">#000000</color><!--黑色 -->
     <color name="waterblue">#ff495A80</color>   <!-- 水墨蓝  -->
     <color name="Bg_Calendar_ListView_Header">#e9e9e9</color>
+
+    <color name="text_fit">#333333</color>
 </resources>

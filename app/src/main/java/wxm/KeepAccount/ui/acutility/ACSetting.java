@@ -1,15 +1,14 @@
 package wxm.KeepAccount.ui.acutility;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
+import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.fragment.Setting.TFSettingBase;
 import wxm.KeepAccount.ui.fragment.utility.FrgSetting;
@@ -56,19 +55,11 @@ public class ACSetting extends BaseAppCompatActivity {
                         Dialog alertDialog = new AlertDialog.Builder(this).
                                 setTitle("配置已经更改").
                                 setMessage("是否保存更改的配置?").
-                                setPositiveButton("是", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        tb.updateSetting();
-                                        mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
-                                    }
+                                setPositiveButton("是", (dialog, which) -> {
+                                    tb.updateSetting();
+                                    mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
                                 }).
-                                setNegativeButton("否", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
-                                    }
-                                }).
+                                setNegativeButton("否", (dialog, which) -> mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN)).
                                 create();
                         alertDialog.show();
                     } else  {

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/banner_chart_width"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <lecho.lib.hellocharts.view.ColumnChartView
+        android:paddingStart="16dp"
+        android:paddingEnd="2dp"
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="72dp" />
+
+    <RelativeLayout
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chart" >
+
+        <RelativeLayout
+            android:id="@+id/rl_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_pay"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_centerVertical="true"
+                android:background="@color/aliceblue" />
+
+            <TextView
+                android:textSize="12sp"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@+id/iv_pay"
+                android:text="@string/cn_pay" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_income"
+            android:layout_toEndOf="@id/rl_pay"
+            android:layout_marginStart="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_income"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_centerVertical="true"
+                android:background="@color/lightcoral" />
+
+            <TextView
+                android:textSize="12sp"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@+id/iv_income"
+                android:text="@string/cn_income" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

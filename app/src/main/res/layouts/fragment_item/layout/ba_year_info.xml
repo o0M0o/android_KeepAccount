@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/rl_pay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp">
+
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="年度支出"
+            android:textColor="@color/text_fit"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_pay_amount"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="24dp"
+            android:text="0.00"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_tag"
+        android:layout_below="@id/rl_pay"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/grey_1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+
+
+    <RelativeLayout
+        android:id="@+id/rl_income"
+        android:layout_below="@id/iv_tag"
+        android:layout_marginTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp">
+
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="年度收入"
+            android:textColor="@color/text_fit"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_income_amount"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="24dp"
+            android:text="0.00"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</RelativeLayout>
