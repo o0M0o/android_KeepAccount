@@ -1,120 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <RelativeLayout
         android:id="@+id/rl_action"
-        android:background="@color/trans_full"
-        android:layout_margin="4dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="4dp">
 
         <RelativeLayout
             android:id="@+id/rl_pencil"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginRight="8dp"
-            android:layout_alignParentRight="true"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:background="@color/linen"
+            android:background="@drawable/rl_action_shape"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="4dp">
+
             <ImageView
                 android:id="@+id/iv_pencil"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:padding="8dp"
-                android:src="@drawable/ic_pencil"
                 android:layout_width="36dp"
-                android:layout_height="36dp" />
+                android:layout_height="36dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:padding="4dp"
+                android:src="@drawable/ic_pencil" />
 
             <TextView
-                android:text="@string/manager"
-                android:textSize="12sp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/iv_pencil"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/iv_pencil"/>
+                android:layout_marginTop="2dp"
+                android:text="@string/manager"
+                android:textSize="10sp" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_sort"
+            android:background="@drawable/rl_action_shape"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
             android:layout_marginRight="12dp"
             android:layout_toLeftOf="@id/rl_pencil"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:background="@color/linen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:padding = "4dp">
+
             <ImageView
                 android:id="@+id/iv_sort"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:padding="8dp"
-                android:src="@drawable/ic_sort_up_1"
                 android:layout_width="36dp"
-                android:layout_height="36dp" />
+                android:layout_height="36dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:padding="4dp"
+                android:src="@drawable/ic_sort_up_1" />
 
             <TextView
                 android:id="@+id/tv_sort"
-                android:text="@string/cn_sort_up_by_name"
-                android:textSize="12sp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/iv_sort"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/iv_sort"/>
+                android:layout_marginTop="2dp"
+                android:text="@string/cn_sort_up_by_name"
+                android:textSize="10sp" />
         </RelativeLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/rl_types"
-        android:background="@color/grey_1"
-        android:layout_margin="8dp"
+    <GridView
+        android:id="@+id/gv_record_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <GridView
-            android:id="@+id/gv_record_info"
-            android:padding="2dp"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:numColumns="4"
-            android:verticalSpacing="2dp"
-            android:horizontalSpacing="2dp"
-            android:columnWidth="42dp" />
-    </RelativeLayout>
+        android:layout_height="240dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/grey_1"
+        android:horizontalSpacing="2dp"
+        android:numColumns="4"
+        android:padding="2dp"
+        android:verticalSpacing="2dp" />
 
     <RelativeLayout
         android:id="@+id/rl_hint"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/grey_1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/grey_1">
+
         <TextView
             android:id="@+id/tv_hint"
-            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="6dp"
+            android:layout_marginTop="4dp"
             android:text="交通类费用"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textSize="16sp" />
     </RelativeLayout>
 </LinearLayout>
