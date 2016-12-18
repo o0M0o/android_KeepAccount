@@ -139,17 +139,14 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
                         mETStartDate.setSelection(mETStartDate.getText().length());
 
                         builder.setTitle("选取预警开始日期");
-                        builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mETStartDate.setText(String.format(Locale.CHINA, "%d-%02d-%02d",
-                                        datePicker.getYear(),
-                                        datePicker.getMonth() + 1,
-                                        datePicker.getDayOfMonth()));
-                                mETStartDate.requestFocus();
+                        builder.setPositiveButton("确  定", (dialog, which) -> {
+                            mETStartDate.setText(String.format(Locale.CHINA, "%d-%02d-%02d",
+                                    datePicker.getYear(),
+                                    datePicker.getMonth() + 1,
+                                    datePicker.getDayOfMonth()));
+                            mETStartDate.requestFocus();
 
-                                dialog.cancel();
-                            }
+                            dialog.cancel();
                         });
                     } else {
                         final int inType = mETEndDate.getInputType();
@@ -158,17 +155,14 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
                         mETEndDate.setSelection(mETEndDate.getText().length());
 
                         builder.setTitle("选取预警结束日期");
-                        builder.setPositiveButton("确  定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mETEndDate.setText(String.format(Locale.CHINA, "%d-%02d-%02d",
-                                        datePicker.getYear(),
-                                        datePicker.getMonth() + 1,
-                                        datePicker.getDayOfMonth()));
-                                mETEndDate.requestFocus();
+                        builder.setPositiveButton("确  定", (dialog, which) -> {
+                            mETEndDate.setText(String.format(Locale.CHINA, "%d-%02d-%02d",
+                                    datePicker.getYear(),
+                                    datePicker.getMonth() + 1,
+                                    datePicker.getDayOfMonth()));
+                            mETEndDate.requestFocus();
 
-                                dialog.cancel();
-                            }
+                            dialog.cancel();
                         });
                     }
 

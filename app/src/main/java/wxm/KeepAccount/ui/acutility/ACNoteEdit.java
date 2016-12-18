@@ -1,16 +1,18 @@
 package wxm.KeepAccount.ui.acutility;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
 import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 import wxm.KeepAccount.ui.fragment.utility.FrgNoteEdit;
 
@@ -89,10 +91,21 @@ public class ACNoteEdit extends BaseAppCompatActivity {
             case R.id.mi_save: {
                 TFEditBase tb = getHotTabItem();
                 if(tb.onAccept()) {
-                    Intent data = new Intent();
-                    setResult(mAction.equals(GlobalDef.STR_CREATE) ?  GlobalDef.INTRET_RECORD_ADD
-                                : GlobalDef.INTRET_RECORD_MODIFY,  data);
-                    finish();
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            NoteShowDataHelper.getInstance().refreshData();
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            Intent data = new Intent();
+                            setResult(mAction.equals(GlobalDef.STR_CREATE) ?  GlobalDef.INTRET_RECORD_ADD
+                                    : GlobalDef.INTRET_RECORD_MODIFY,  data);
+                            finish();
+                        }
+                    }.execute();
                 }
             }
             break;

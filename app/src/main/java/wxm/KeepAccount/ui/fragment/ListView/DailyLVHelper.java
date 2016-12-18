@@ -232,12 +232,7 @@ public class DailyLVHelper extends LVShowDataBase
         // for day
         HashMap<String, NoteShowInfo> hm_d = NoteShowDataHelper.getInstance().getDayInfo();
         ArrayList<String> set_k_d = new ArrayList<>(hm_d.keySet());
-        Collections.sort(set_k_d, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1);
-            }
-        });
+        Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
 
         for(String k : set_k_d)   {
             NoteShowInfo ni = hm_d.get(k);
@@ -279,13 +274,8 @@ public class DailyLVHelper extends LVShowDataBase
         for(String k : set_k_d)     {
             LinkedList<HashMap<String, String>> cur_llhm = new LinkedList<>();
             ArrayList<INote> v = hm_v.get(k);
-            Collections.sort(v, new Comparator<INote>() {
-                @Override
-                public int compare(INote o1, INote o2) {
-                    return !mBTimeDownOrder ? o1.getTs().compareTo(o2.getTs())
-                            : o2.getTs().compareTo(o1.getTs());
-                }
-            });
+            Collections.sort(v, (o1, o2) -> !mBTimeDownOrder ? o1.getTs().compareTo(o2.getTs())
+                    : o2.getTs().compareTo(o1.getTs()));
             for (INote r : v) {
                 HashMap<String, String> map = new HashMap<>();
                 map.put(K_TITLE, r.getInfo());
@@ -429,20 +419,17 @@ public class DailyLVHelper extends LVShowDataBase
                 init_detail_view(fv, hm);
                 ib.setImageDrawable(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)) ? mDAFold : mDAUnFold);
 
-                ib.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ImageButton ib = UtilFun.cast(v);
-                        boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-                        hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                        init_detail_view(fv, hm);
+                ib.setOnClickListener(v1 -> {
+                    ImageButton ib1 = UtilFun.cast(v1);
+                    boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
+                    hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                    init_detail_view(fv, hm);
 
-                        ib.setImageDrawable(bf ? mDAFold : mDAUnFold);
-                        if(bf)
-                            addUnfoldItem(hm.get(K_TAG));
-                        else
-                            removeUnfoldItem(hm.get(K_TAG));
-                    }
+                    ib1.setImageDrawable(bf ? mDAFold : mDAUnFold);
+                    if(bf)
+                        addUnfoldItem(hm.get(K_TAG));
+                    else
+                        removeUnfoldItem(hm.get(K_TAG));
                 });
 
                 RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));

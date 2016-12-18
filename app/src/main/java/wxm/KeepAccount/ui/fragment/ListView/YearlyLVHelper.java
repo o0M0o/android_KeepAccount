@@ -204,12 +204,7 @@ public class YearlyLVHelper extends LVShowDataBase {
         // for year
         HashMap<String, NoteShowInfo> hm_y = NoteShowDataHelper.getInstance().getYearInfo();
         ArrayList<String> set_k = new ArrayList<>(hm_y.keySet());
-        Collections.sort(set_k, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1);
-            }
-        });
+        Collections.sort(set_k, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
         for(String k : set_k)   {
             NoteShowInfo ni = hm_y.get(k);
 
@@ -235,12 +230,7 @@ public class YearlyLVHelper extends LVShowDataBase {
         // for month
         HashMap<String, NoteShowInfo> hm_m = NoteShowDataHelper.getInstance().getMonthInfo();
         ArrayList<String> set_k_m = new ArrayList<>(hm_m.keySet());
-        Collections.sort(set_k_m, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1);
-            }
-        });
+        Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
         for(String k : set_k_m)   {
             String ky = k.substring(0, 4);
             NoteShowInfo ni = hm_m.get(k);
@@ -381,20 +371,17 @@ public class YearlyLVHelper extends LVShowDataBase {
                 init_detail_view(pv, hm);
                 ib.setImageDrawable(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)) ? mDAFold : mDAUnFold);
 
-                ib.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ImageButton ib = UtilFun.cast(v);
-                        boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-                        hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                        init_detail_view(pv, hm);
+                ib.setOnClickListener(v1 -> {
+                    ImageButton ib1 = UtilFun.cast(v1);
+                    boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
+                    hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                    init_detail_view(pv, hm);
 
-                        ib.setImageDrawable(bf ? mDAFold : mDAUnFold);
-                        if(bf)
-                            addUnfoldItem(hm.get(K_TAG));
-                        else
-                            removeUnfoldItem(hm.get(K_TAG));
-                    }
+                    ib1.setImageDrawable(bf ? mDAFold : mDAUnFold);
+                    if(bf)
+                        addUnfoldItem(hm.get(K_TAG));
+                    else
+                        removeUnfoldItem(hm.get(K_TAG));
                 });
 
                 // adjust line color
@@ -450,29 +437,26 @@ public class YearlyLVHelper extends LVShowDataBase {
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
                 ib.getBackground().setAlpha(mLLSubFilter.contains(sub_tag) ? 255 : 0);
 
-                ib.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ImageButton ibv = UtilFun.cast_t(v);
-                        boolean bsel = mLLSubFilter.contains(sub_tag);
-                        ibv.getBackground().setAlpha(!bsel ? 255 : 0);
-                        if(!bsel) {
-                            mLLSubFilter.add(sub_tag);
-                            mLLSubFilterVW.add(v);
+                ib.setOnClickListener(v1 -> {
+                    ImageButton ibv = UtilFun.cast_t(v1);
+                    boolean bsel = mLLSubFilter.contains(sub_tag);
+                    ibv.getBackground().setAlpha(!bsel ? 255 : 0);
+                    if(!bsel) {
+                        mLLSubFilter.add(sub_tag);
+                        mLLSubFilterVW.add(v1);
 
-                            if(!mBSelectSubFilter) {
-                                mBSelectSubFilter = true;
-                                refreshAttachLayout();
-                            }
-                        }   else    {
-                            mLLSubFilter.remove(sub_tag);
-                            mLLSubFilterVW.remove(v);
+                        if(!mBSelectSubFilter) {
+                            mBSelectSubFilter = true;
+                            refreshAttachLayout();
+                        }
+                    }   else    {
+                        mLLSubFilter.remove(sub_tag);
+                        mLLSubFilterVW.remove(v1);
 
-                            if(mLLSubFilter.isEmpty()) {
-                                mLLSubFilterVW.clear();;
-                                mBSelectSubFilter = false;
-                                refreshAttachLayout();
-                            }
+                        if(mLLSubFilter.isEmpty()) {
+                            mLLSubFilterVW.clear();;
+                            mBSelectSubFilter = false;
+                            refreshAttachLayout();
                         }
                     }
                 });

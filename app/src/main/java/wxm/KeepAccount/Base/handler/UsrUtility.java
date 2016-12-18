@@ -45,7 +45,7 @@ class UsrUtility {
                 String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
 
                 ContextUtil.setCurUsr(ContextUtil.getUsrUtility().CheckAndGetUsr(usr, pwd));
-                boolean ret = (null != ContextUtil.getInstance().getCurUsr());
+                boolean ret = (null != ContextUtil.getCurUsr());
 
                 Handler h = UtilFun.cast(arr[1]);
                 GlobalMsgHandler.ReplyMsg(h, GlobalDef.MSG_USR_LOGIN, ret);

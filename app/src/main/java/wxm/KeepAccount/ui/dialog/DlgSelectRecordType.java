@@ -103,51 +103,42 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
         View vw = View.inflate(getActivity(), R.layout.dlg_select_record_info, null);
         mTVNote = UtilFun.cast_t(vw.findViewById(R.id.tv_hint));
         GridView gv = UtilFun.cast_t(vw.findViewById(R.id.gv_record_info));
-        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String tv_str = mLHMData.get(position).get(KEY_NAME);
-                if(!tv_str.equals(mCurType))    {
-                    for(HashMap<String, String> hm : mLHMData)  {
-                        if(hm.get(KEY_NAME).equals(tv_str)) {
-                            hm.put(KEY_SELECTED, VAL_SELECTED);
-                            mTVNote.setText(UtilFun.StringIsNullOrEmpty(hm.get(KEY_NOTE)) ?
-                                    "" : hm.get(KEY_NOTE));
-                        } else  {
-                            hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
-                        }
+        gv.setOnItemClickListener((parent, view, position, id) -> {
+            String tv_str = mLHMData.get(position).get(KEY_NAME);
+            if(!tv_str.equals(mCurType))    {
+                for(HashMap<String, String> hm : mLHMData)  {
+                    if(hm.get(KEY_NAME).equals(tv_str)) {
+                        hm.put(KEY_SELECTED, VAL_SELECTED);
+                        mTVNote.setText(UtilFun.StringIsNullOrEmpty(hm.get(KEY_NOTE)) ?
+                                "" : hm.get(KEY_NOTE));
+                    } else  {
+                        hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
                     }
-
-                    mCurType = tv_str;
-                    mGAAdapter.notifyDataSetChanged();
                 }
+
+                mCurType = tv_str;
+                mGAAdapter.notifyDataSetChanged();
             }
         });
         gv.setAdapter(mGAAdapter);
 
         // for action
         mRLPencil = UtilFun.cast_t(vw.findViewById(R.id.rl_pencil));
-        mRLPencil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent it = new Intent(getContext(), ACRecordInfoEdit.class);
-                it.putExtra(ACRecordInfoEdit.IT_PARA_RECORDTYPE, mRootType);
+        mRLPencil.setOnClickListener(v -> {
+            Intent it = new Intent(getContext(), ACRecordInfoEdit.class);
+            it.putExtra(ACRecordInfoEdit.IT_PARA_RECORDTYPE, mRootType);
 
-                startActivityForResult(it, 1);
-            }
+            startActivityForResult(it, 1);
         });
 
         mRLSort = UtilFun.cast_t(vw.findViewById(R.id.rl_sort));
         mTVSort = UtilFun.cast_t(mRLSort.findViewById(R.id.tv_sort));
         mIVSort = UtilFun.cast_t(mRLSort.findViewById(R.id.iv_sort));
-        mRLSort.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String cur_name = mTVSort.getText().toString();
-                mTVSort.setText(mStrSortUp.equals(cur_name) ? mStrSortDown : mStrSortUp);
-                mIVSort.setImageDrawable(mStrSortUp.equals(cur_name) ? mDASortDown : mDASortUp);
-                loadData();
-            }
+        mRLSort.setOnClickListener(v -> {
+            String cur_name = mTVSort.getText().toString();
+            mTVSort.setText(mStrSortUp.equals(cur_name) ? mStrSortDown : mStrSortUp);
+            mIVSort.setImageDrawable(mStrSortUp.equals(cur_name) ? mDASortDown : mDASortUp);
+            loadData();
         });
 
         // for gridview show
@@ -159,14 +150,9 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
         RecordTypeDBUtility rd = ContextUtil.getRecordTypeUtility();
         List<RecordTypeItem> al_type = GlobalDef.STR_RECORD_PAY.equals(mRootType) ?
                                                 rd.getAllPayItem() : rd.getAllIncomeItem();
-        Collections.sort(al_type, new Comparator<RecordTypeItem>() {
-            @Override
-            public int compare(RecordTypeItem o1, RecordTypeItem o2) {
-                return mStrSortUp.equals(mTVSort.getText().toString()) ?
-                                o1.getType().compareTo(o2.getType())
-                                : o2.getType().compareTo(o1.getType());
-            }
-        });
+        Collections.sort(al_type, (o1, o2) -> mStrSortUp.equals(mTVSort.getText().toString()) ?
+                        o1.getType().compareTo(o2.getType())
+                        : o2.getType().compareTo(o1.getType()));
 
         String old_note = null;
         mLHMData.clear();

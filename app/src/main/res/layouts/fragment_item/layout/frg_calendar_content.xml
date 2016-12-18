@@ -42,10 +42,10 @@
 
             <TextView
                 android:id="@+id/header_day_balance"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:text="+ 100"
                 android:textColor="@color/darkslategrey"
                 android:textSize="14sp" />
@@ -54,12 +54,13 @@
 
     <ListView
         android:id="@+id/lv_body"
-        android:paddingTop="4dp"
+        android:background="@color/aliceblue"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:divider="@color/trans_full"
         android:dividerHeight="3dp"
-        android:paddingStart="4dp"
         android:paddingEnd="2dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:paddingStart="4dp"
+        android:paddingTop="4dp" />
 
 </LinearLayout>

@@ -103,52 +103,43 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
 
         // 预览chart需要锁定触摸滚屏
         mPreviewChart = UtilFun.cast(mSelfView.findViewById(R.id.chart_preview));
-        mPreviewChart.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                //Log.i(LOG_TAG, "in preview chart event = " + event.getAction());
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        getRootActivity().disableViewPageTouch(true);
-                        break;
+        mPreviewChart.setOnTouchListener((v, event) -> {
+            //Log.i(LOG_TAG, "in preview chart event = " + event.getAction());
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    getRootActivity().disableViewPageTouch(true);
+                    break;
 
-                    case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_UP:
+                    getRootActivity().disableViewPageTouch(false);
+                    break;
+
+                default:
+                    if(MotionEvent.ACTION_MOVE != event.getAction())
                         getRootActivity().disableViewPageTouch(false);
-                        break;
-
-                    default:
-                        if(MotionEvent.ACTION_MOVE != event.getAction())
-                            getRootActivity().disableViewPageTouch(false);
-                        break;
-                }
-
-                return false;
+                    break;
             }
+
+            return false;
         });
 
         // 设置扩大/缩小viewport
         final Button bt_less = UtilFun.cast(mSelfView.findViewById(R.id.bt_less_viewport));
         Button bt = UtilFun.cast(mSelfView.findViewById(R.id.bt_more_viewport));
-        bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPrvWidth += 0.2;
-                refreshViewPort();
+        bt.setOnClickListener(v -> {
+            mPrvWidth += 0.2;
+            refreshViewPort();
 
-                if(!bt_less.isClickable() && 1 < mPrvWidth)
-                    bt_less.setClickable(true);
-            }
+            if(!bt_less.isClickable() && 1 < mPrvWidth)
+                bt_less.setClickable(true);
         });
 
-        bt_less.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(1 < mPrvWidth) {
-                    mPrvWidth -= 0.2;
-                    refreshViewPort();
-                } else  {
-                    bt_less.setClickable(false);
-                }
+        bt_less.setOnClickListener(v -> {
+            if(1 < mPrvWidth) {
+                mPrvWidth -= 0.2;
+                refreshViewPort();
+            } else  {
+                bt_less.setClickable(false);
             }
         });
 

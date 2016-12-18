@@ -199,12 +199,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
         // for month
         HashMap<String, NoteShowInfo> hm_m = NoteShowDataHelper.getInstance().getMonthInfo();
         ArrayList<String> set_k_m = new ArrayList<>(hm_m.keySet());
-        Collections.sort(set_k_m, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1);
-            }
-        });
+        Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
         for(String k : set_k_m)   {
             NoteShowInfo ni = hm_m.get(k);
             HashMap<String, String> map = new HashMap<>();
@@ -229,12 +224,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
         // for day
         HashMap<String, NoteShowInfo> hm_d = NoteShowDataHelper.getInstance().getDayInfo();
         ArrayList<String> set_k_d = new ArrayList<>(hm_d.keySet());
-        Collections.sort(set_k_d, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1);
-            }
-        });
+        Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
         for(String k : set_k_d)   {
             String mk = k.substring(0, 7);
             NoteShowInfo ni = hm_d.get(k);
@@ -381,20 +371,17 @@ public class MonthlyLVHelper extends LVShowDataBase {
                 init_detail_view(fv, hm);
                 ib.setImageDrawable(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)) ? mDAFold : mDAUnFold);
 
-                ib.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ImageButton ib = UtilFun.cast(v);
-                        boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-                        hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                        init_detail_view(fv, hm);
+                ib.setOnClickListener(v1 -> {
+                    ImageButton ib1 = UtilFun.cast(v1);
+                    boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
+                    hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                    init_detail_view(fv, hm);
 
-                        ib.setImageDrawable(bf ? mDAFold : mDAUnFold);
-                        if(bf)
-                            addUnfoldItem(hm.get(K_TAG));
-                        else
-                            removeUnfoldItem(hm.get(K_TAG));
-                    }
+                    ib1.setImageDrawable(bf ? mDAFold : mDAUnFold);
+                    if(bf)
+                        addUnfoldItem(hm.get(K_TAG));
+                    else
+                        removeUnfoldItem(hm.get(K_TAG));
                 });
 
                 RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
@@ -451,29 +438,26 @@ public class MonthlyLVHelper extends LVShowDataBase {
 
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
                 ib.getBackground().setAlpha(mLLSubFilter.contains(sub_tag) ? 255 : 0);
-                ib.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ImageButton ibv = UtilFun.cast_t(v);
-                        boolean bsel = mLLSubFilter.contains(sub_tag);
-                        ibv.getBackground().setAlpha(!bsel ? 255 : 0);
-                        if(!bsel) {
-                            mLLSubFilter.add(sub_tag);
-                            mLLSubFilterVW.add(v);
+                ib.setOnClickListener(v1 -> {
+                    ImageButton ibv = UtilFun.cast_t(v1);
+                    boolean bsel = mLLSubFilter.contains(sub_tag);
+                    ibv.getBackground().setAlpha(!bsel ? 255 : 0);
+                    if(!bsel) {
+                        mLLSubFilter.add(sub_tag);
+                        mLLSubFilterVW.add(v1);
 
-                            if(!mBSelectSubFilter) {
-                                mBSelectSubFilter = true;
-                                refreshAttachLayout();
-                            }
-                        }   else    {
-                            mLLSubFilter.remove(sub_tag);
-                            mLLSubFilterVW.remove(v);
+                        if(!mBSelectSubFilter) {
+                            mBSelectSubFilter = true;
+                            refreshAttachLayout();
+                        }
+                    }   else    {
+                        mLLSubFilter.remove(sub_tag);
+                        mLLSubFilterVW.remove(v1);
 
-                            if(mLLSubFilter.isEmpty()) {
-                                mLLSubFilterVW.clear();;
-                                mBSelectSubFilter = false;
-                                refreshAttachLayout();
-                            }
+                        if(mLLSubFilter.isEmpty()) {
+                            mLLSubFilterVW.clear();;
+                            mBSelectSubFilter = false;
+                            refreshAttachLayout();
                         }
                     }
                 });

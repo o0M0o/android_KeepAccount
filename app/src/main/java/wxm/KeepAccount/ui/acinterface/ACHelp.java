@@ -1,17 +1,7 @@
 package wxm.KeepAccount.ui.acinterface;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-
-import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
-import wxm.KeepAccount.R;
+import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
 import wxm.KeepAccount.ui.fragment.utility.FrgHelp;
-import wxm.KeepAccount.ui.fragment.utility.FrgNoteShow;
 
 /**
  * 本activity用于展示应用帮助信息

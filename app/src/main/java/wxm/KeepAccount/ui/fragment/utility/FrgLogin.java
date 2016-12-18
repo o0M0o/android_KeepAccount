@@ -218,9 +218,7 @@ public class FrgLogin extends FrgUtilityBase {
             super.onPostExecute(bret);
 
             mAuthTask = null;
-            new Handler().postDelayed(() -> {
-                showProgress(false);
-            }, 300);
+            new Handler().postDelayed(() -> showProgress(false), 300);
 
             if (bret) {
                 Intent intent = new Intent(getActivity(), ACWelcome.class);

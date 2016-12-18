@@ -112,12 +112,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
             mGVAdapter = new GVTypeAdapter(getActivity(), mLHMData,
                     new String[]{KEY_NAME}, new int[]{R.id.tv_type_name});
             mGVHolder.setAdapter(mGVAdapter);
-            mGVHolder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    onGVItemClick(position);
-                }
-            });
+            mGVHolder.setOnItemClickListener((parent, view1, position, id) -> onGVItemClick(position));
             load_info();
 
             // init action
@@ -194,12 +189,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
         }
 
         if(null != al_type) {
-            Collections.sort(al_type, new Comparator<RecordTypeItem>() {
-                @Override
-                public int compare(RecordTypeItem o1, RecordTypeItem o2) {
-                    return o1.getType().compareTo(o2.getType());
-                }
-            });
+            Collections.sort(al_type, (o1, o2) -> o1.getType().compareTo(o2.getType()));
 
             for (RecordTypeItem ri : al_type) {
                 HashMap<String, String> hmd = new HashMap<>();
@@ -350,22 +340,16 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                 if(0 < ll_i.size()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setMessage("请确认是否删除数据!").setTitle("警告");
-                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            for(int id : ll_i) {
-                                ContextUtil.getRecordTypeUtility().removeData(id);
-                            }
+                    builder.setPositiveButton("确认", (dialog, which) -> {
+                        for(int id : ll_i) {
+                            ContextUtil.getRecordTypeUtility().removeData(id);
+                        }
 
-                            mTVNote.setText("");
-                            load_info();
-                            update_acts(SELECTED_ACCPET);
-                        }
+                        mTVNote.setText("");
+                        load_info();
+                        update_acts(SELECTED_ACCPET);
                     });
-                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
+                    builder.setNegativeButton("取消", (dialog, which) -> {
                     });
 
                     AlertDialog dlg = builder.create();

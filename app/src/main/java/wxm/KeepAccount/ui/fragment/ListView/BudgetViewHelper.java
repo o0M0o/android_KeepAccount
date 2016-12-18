@@ -254,12 +254,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
     private void parseSub(String main_tag, List<PayNoteItem> ls_pay)   {
         LinkedList<HashMap<String, String>> cur_llhm = new LinkedList<>();
         if(!ToolUtil.ListIsNullOrEmpty(ls_pay)) {
-            Collections.sort(ls_pay, new Comparator<PayNoteItem>() {
-                @Override
-                public int compare(PayNoteItem o1, PayNoteItem o2) {
-                    return o1.getTs().compareTo(o2.getTs());
-                }
-            });
+            Collections.sort(ls_pay, (o1, o2) -> o1.getTs().compareTo(o2.getTs()));
 
             for(PayNoteItem i : ls_pay)     {
                 String all_date = i.getTs().toString();
@@ -401,20 +396,17 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 if(ToolUtil.ListIsNullOrEmpty(llhm))    {
                     ib.setVisibility(View.INVISIBLE);
                 } else  {
-                    ib.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ImageButton ib = UtilFun.cast(v);
-                            boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-                            hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                            init_detail_view(fv, hm);
+                    ib.setOnClickListener(v12 -> {
+                        ImageButton ib1 = UtilFun.cast(v12);
+                        boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
+                        hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                        init_detail_view(fv, hm);
 
-                            ib.setImageDrawable(bf ? mDAFold : mDAUnFold);
-                            if(bf)
-                                addUnfoldItem(hm.get(K_TAG));
-                            else
-                                removeUnfoldItem(hm.get(K_TAG));
-                        }
+                        ib1.setImageDrawable(bf ? mDAFold : mDAUnFold);
+                        if(bf)
+                            addUnfoldItem(hm.get(K_TAG));
+                        else
+                            removeUnfoldItem(hm.get(K_TAG));
                     });
                 }
 
@@ -431,28 +423,25 @@ public class BudgetViewHelper  extends LVShowDataBase {
                     ib_action.getBackground().setAlpha(0);
                 }
 
-                ib_action.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ImageButton ib_action = UtilFun.cast(v);
-                        int tag_id = Integer.parseInt(hm.get(K_ID));
-                        if(ACTION_DELETE == mActionType)    {
-                            if(mLLDelBudget.contains(tag_id))  {
-                                mLLDelBudget.remove((Object)tag_id);
-                                ib_action.getBackground().setAlpha(0);
-                                ib_action.setBackgroundColor(mClNoSel);
-                            }   else    {
-                                mLLDelBudget.add(tag_id);
-                                ib_action.getBackground().setAlpha(255);
-                                ib_action.setBackgroundColor(mClSel);
-                            }
-                        } else  {
-                            Activity ac = getRootActivity();
-                            Intent it = new Intent(ac, ACPreveiwAndEdit.class);
-                            it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, tag_id);
-                            it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
-                            ac.startActivityForResult(it, 1);
+                ib_action.setOnClickListener(v1 -> {
+                    ImageButton ib_action1 = UtilFun.cast(v1);
+                    int tag_id = Integer.parseInt(hm.get(K_ID));
+                    if(ACTION_DELETE == mActionType)    {
+                        if(mLLDelBudget.contains(tag_id))  {
+                            mLLDelBudget.remove((Object)tag_id);
+                            ib_action1.getBackground().setAlpha(0);
+                            ib_action1.setBackgroundColor(mClNoSel);
+                        }   else    {
+                            mLLDelBudget.add(tag_id);
+                            ib_action1.getBackground().setAlpha(255);
+                            ib_action1.setBackgroundColor(mClSel);
                         }
+                    } else  {
+                        Activity ac = getRootActivity();
+                        Intent it = new Intent(ac, ACPreveiwAndEdit.class);
+                        it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, tag_id);
+                        it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
+                        ac.startActivityForResult(it, 1);
                     }
                 });
             }
@@ -509,18 +498,15 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 }
 
                 ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_look));
-                iv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ACNoteShow ac = getRootActivity();
-                        Intent intent;
-                        intent = new Intent(ac, ACPreveiwAndEdit.class);
-                        intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(sub_id));
-                        intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
-                                GlobalDef.STR_RECORD_PAY);
+                iv.setOnClickListener(v1 -> {
+                    ACNoteShow ac = getRootActivity();
+                    Intent intent;
+                    intent = new Intent(ac, ACPreveiwAndEdit.class);
+                    intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(sub_id));
+                    intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
+                            GlobalDef.STR_RECORD_PAY);
 
-                        ac.startActivityForResult(intent, 1);
-                    }
+                    ac.startActivityForResult(intent, 1);
                 });
             }
 

@@ -12,6 +12,7 @@ import com.allure.lbanners.LMBanners;
 import com.allure.lbanners.adapter.LBaseAdapter;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,12 +35,57 @@ import wxm.KeepAccount.R;
  * Created by wangxm on 16/12/15.
  */
 public class FrgAdapter implements LBaseAdapter<FrgPara> {
-    private Context                 mContext;
-    private SparseArray<View>  mSAView;
+    private final static String    LOG_TAG = "FrgAdapter";
+
+    private Context             mContext;
+    private SparseArray<View>   mSAView;
+    private Timestamp           mTSLastUpdate;
 
     public FrgAdapter(Context context) {
         mContext=context;
         mSAView = new SparseArray<>();
+
+        initView();
+    }
+
+    @Override
+    public View getView(final LMBanners lBanners, final Context context, int position, FrgPara data) {
+        /*
+        Timestamp ts_data = ContextUtil.getPayIncomeUtility().getDataLastChangeTime();
+        Log.d(LOG_TAG, "getView, pos = " + position + ", data = " + data.toString());
+        Log.d(LOG_TAG, "ts_db = " + ts_data.toString() + ", ts_view = " + mTSLastUpdate.toString());
+
+        if(mTSLastUpdate.before(ts_data))   {
+            initView();
+        }
+
+        return mSAView.get(data.mFPViewId);
+        */
+
+        View v = null;
+        switch (data.mFPViewId) {
+            case R.layout.banner_month : {
+                v = LayoutInflater.from(mContext).inflate(R.layout.banner_month, null);
+                fillMonth(v);
+            }
+            break;
+
+            case R.layout.banner_year : {
+                v = LayoutInflater.from(mContext).inflate(R.layout.banner_year, null);
+                fillYear(v);
+            }
+            break;
+        }
+
+        return v;
+    }
+
+
+    private void initView() {
+        Log.d(LOG_TAG, "initView");
+
+        mSAView.clear();
+        mTSLastUpdate = new Timestamp(System.currentTimeMillis());
 
         View v = LayoutInflater.from(mContext).inflate(R.layout.banner_month, null);
         fillMonth(v);
@@ -48,12 +94,6 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
         v = LayoutInflater.from(mContext).inflate(R.layout.banner_year, null);
         fillYear(v);
         mSAView.put(R.layout.banner_year, v);
-    }
-
-    @Override
-    public View getView(final LMBanners lBanners, final Context context, int position, FrgPara data) {
-        Log.d("FrgAdapter", "getView, pos = " + position + ", data = " + data.toString());
-        return mSAView.get(data.mFPViewId);
     }
 
     /**

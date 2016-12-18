@@ -76,34 +76,34 @@ public class FrgCalendarShow extends FrgUtilityBase {
     private IDataChangeNotice mIDCPayNotice = new IDataChangeNotice<PayNoteItem>() {
         @Override
         public void DataModifyNotice(List<PayNoteItem> list) {
-            reLoadFrg(true);
+            reLoadFrg(false);
         }
 
         @Override
         public void DataCreateNotice(List<PayNoteItem> list) {
-            reLoadFrg(true);
+            reLoadFrg(false);
         }
 
         @Override
         public void DataDeleteNotice(List<PayNoteItem> list) {
-            reLoadFrg(true);
+            reLoadFrg(false);
         }
     };
 
     private IDataChangeNotice mIDCIncomeNotice = new IDataChangeNotice<IncomeNoteItem>() {
         @Override
         public void DataModifyNotice(List<IncomeNoteItem> list) {
-            reLoadFrg(true);
+            reLoadFrg(false);
         }
 
         @Override
         public void DataCreateNotice(List<IncomeNoteItem> list) {
-            reLoadFrg(true);
+            reLoadFrg(false);
         }
 
         @Override
         public void DataDeleteNotice(List<IncomeNoteItem> list) {
-            reLoadFrg(true);
+            reLoadFrg(false);
         }
     };
 
@@ -193,8 +193,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
 
     /**
-     * 加载数据
-     * 一次加载全部数据
+     * 加载月度数据
      * @param month  加载的月份，比如"2016-07"
      */
     private void loadNotes(String month)  {
@@ -268,8 +267,12 @@ public class FrgCalendarShow extends FrgUtilityBase {
                 } else {
                     Calendar c_cur = Calendar.getInstance();
                     String cur_month = YEAR_MONTH_SIMPLE_FORMAT.format(c_cur.getTime());
+                    String cur_sel_month = mHGVDays.getCurrentSelectedDate();
+                    if(!UtilFun.StringIsNullOrEmpty(cur_sel_month))
+                        cur_sel_month = cur_sel_month.substring(0, 7);
 
-                    if(!cur_month.equals(mSZFristMonth))
+
+                    if(!cur_month.equals(mSZFristMonth) && !mSZFristMonth.equals(cur_sel_month))
                         mHGVDays.changeMonth(mSZFristMonth);
                     else
                         loadCalendarData(mSZFristMonth);

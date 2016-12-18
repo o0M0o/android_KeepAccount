@@ -2,7 +2,7 @@ package wxm.KeepAccount.ui.acutility;
 
 import android.content.res.Configuration;
 
-import wxm.KeepAccount.Base.define.BaseAppCompatActivity;
+import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
 import wxm.KeepAccount.ui.fragment.utility.FrgUsrAdd;
 
 /**

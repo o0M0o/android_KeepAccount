@@ -74,7 +74,6 @@ public class FrgNoteEdit extends FrgUtilityBase {
                 Log.e(LOG_TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");
                 return;
             }
-
         } else {
             mTLTabs.addTab(mTLTabs.newTab().setText(TAB_PAY));
             mTLTabs.addTab(mTLTabs.newTab().setText(TAB_INCOME));

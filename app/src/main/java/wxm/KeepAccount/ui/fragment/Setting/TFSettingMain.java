@@ -35,46 +35,29 @@ public class TFSettingMain extends TFSettingBase {
         if (null != view) {
             RelativeLayout rl = UtilFun.cast(view.findViewById(R.id.rl_check_version));
             assert null != rl;
-            rl.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(getContext(), "check version", Toast.LENGTH_SHORT).show();
-                    toPageByIdx(FrgSetting.PAGE_IDX_CHECK_VERSION);
-                }
+            rl.setOnClickListener(v -> {
+                //Toast.makeText(getContext(), "check version", Toast.LENGTH_SHORT).show();
+                toPageByIdx(FrgSetting.PAGE_IDX_CHECK_VERSION);
             });
 
             rl = UtilFun.cast(view.findViewById(R.id.rl_chart_color));
             assert null != rl;
-            rl.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(getContext(), "chart color", Toast.LENGTH_SHORT).show();
-                    toPageByIdx(FrgSetting.PAGE_IDX_CHART_COLOR);
-                }
+            rl.setOnClickListener(v -> {
+                //Toast.makeText(getContext(), "chart color", Toast.LENGTH_SHORT).show();
+                toPageByIdx(FrgSetting.PAGE_IDX_CHART_COLOR);
             });
 
             rl = UtilFun.cast(view.findViewById(R.id.rl_reformat_data));
             assert null != rl;
-            rl.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Dialog alertDialog = new AlertDialog.Builder(getContext()).
-                            setTitle("清除所有数据!").
-                            setMessage("此操作不能恢复，是否继续操作!").
-                            setPositiveButton("是", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ContextUtil.ClearDB();
-                                }
-                            }).
-                            setNegativeButton("否", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            }).
-                            create();
-                    alertDialog.show();
-                }
+            rl.setOnClickListener(v -> {
+                Dialog alertDialog = new AlertDialog.Builder(getContext()).
+                        setTitle("清除所有数据!").
+                        setMessage("此操作不能恢复，是否继续操作!").
+                        setPositiveButton("是", (dialog, which) -> ContextUtil.ClearDB()).
+                        setNegativeButton("否", (dialog, which) -> {
+                        }).
+                        create();
+                alertDialog.show();
             });
 
             rl = UtilFun.cast(view.findViewById(R.id.rl_remind));
