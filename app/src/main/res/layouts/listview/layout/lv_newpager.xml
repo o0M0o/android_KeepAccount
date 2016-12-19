@@ -25,7 +25,7 @@
             android:layout_marginBottom="32dp"
             android:background="@color/grey_3"
             android:divider="@android:color/transparent"
-            android:dividerHeight="2dp"
+            android:dividerHeight="1dp"
             android:fastScrollEnabled="false"
             android:longClickable="true" />
 

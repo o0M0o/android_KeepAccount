@@ -1,7 +1,9 @@
 package wxm.KeepAccount.ui.dialog;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -111,9 +113,16 @@ public class DlgSelectChannel extends DlgOKOrNOBase
      * 加载gridview的适配器类
      */
     public class GVChannelAdapter extends SimpleAdapter {
+        private Drawable  mDASel;
+        private Drawable  mDANoSel;
+
         GVChannelAdapter(Context context, List<? extends Map<String, ?>> data,
                          String[] from, int[] to) {
             super(context, data, R.layout.gi_channel, from, to);
+
+            Resources res = context.getResources();
+            mDANoSel = res.getDrawable(R.drawable.gi_channel_no_sel_shape);
+            mDASel   = res.getDrawable(R.drawable.gi_channel_sel_shape);
         }
 
         @Override
@@ -134,23 +143,13 @@ public class DlgSelectChannel extends DlgOKOrNOBase
                 HashMap<String, Object> hmd = UtilFun.cast(getItem(position));
                 String hv = UtilFun.cast(hmd.get(DGVButtonAdapter.HKEY_ACT_NAME));
 
-                /*
-                if(mLSHotChannel.contains(hv))  {
-                    //v.setSelected(true);
-                    v.setBackgroundColor(v.getResources().getColor(R.color.paleturquoise));
-                }   else    {
-                    //v.setSelected(false);
-                    v.setBackgroundColor(v.getResources().getColor(R.color.white));
-                }
-                */
+                v.setBackground(mLSHotChannel.contains(hv) ? mDASel : mDANoSel);
 
                 // for image
-                ImageView iv = UtilFun.cast(v.findViewById(R.id.iv_act));
-                assert null != iv;
+                ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_act));
                 Bitmap bm = ActionHelper.getBitMapFromName(hv);
                 if (null != bm) {
                     iv.setImageBitmap(bm);
-                    iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 }
             }
 

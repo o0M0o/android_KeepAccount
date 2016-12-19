@@ -19,7 +19,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -316,19 +315,26 @@ public class MonthlyLVHelper extends LVShowDataBase {
             llhm = new LinkedList<>();
         }
 
-        // init sub adapter
-        ListView mLVShowDetail = UtilFun.cast_t(v.findViewById(R.id.lv_show_detail));
-        SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), llhm,
-                                    new String[]{}, new int[]{});
-        mLVShowDetail.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
-        ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
+        RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_detail));
+        if(llhm.isEmpty())  {
+            rl.setVisibility(View.GONE);
+        } else {
+            rl.setVisibility(View.VISIBLE);
+
+            // init sub adapter
+            ListView mLVShowDetail = UtilFun.cast_t(v.findViewById(R.id.lv_show_detail));
+            SelfSubAdapter mAdapter = new SelfSubAdapter(mSelfView.getContext(), llhm,
+                    new String[]{}, new int[]{});
+            mLVShowDetail.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+            ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
+        }
     }
 
     /**
      * 首级adapter
      */
-    private class SelfAdapter extends SimpleAdapter {
+    private class SelfAdapter extends SimpleAdapter implements View.OnClickListener {
         private final static String TAG = "SelfAdapter";
         private int         mClOne;
         private int         mClTwo;
@@ -364,25 +370,11 @@ public class MonthlyLVHelper extends LVShowDataBase {
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
-                final HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                final View fv = v;
-                ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
-                ib.getBackground().setAlpha(0);
+                HashMap<String, String> hm = UtilFun.cast(getItem(position));
+                View fv = v;
                 init_detail_view(fv, hm);
-                ib.setImageDrawable(V_SHOW_UNFOLD.equals(hm.get(K_SHOW)) ? mDAFold : mDAUnFold);
 
-                ib.setOnClickListener(v1 -> {
-                    ImageButton ib1 = UtilFun.cast(v1);
-                    boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-                    hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                    init_detail_view(fv, hm);
-
-                    ib1.setImageDrawable(bf ? mDAFold : mDAUnFold);
-                    if(bf)
-                        addUnfoldItem(hm.get(K_TAG));
-                    else
-                        removeUnfoldItem(hm.get(K_TAG));
-                });
+                v.setOnClickListener(this);
 
                 RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
                 rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
@@ -398,6 +390,22 @@ public class MonthlyLVHelper extends LVShowDataBase {
             }
 
             return v;
+        }
+
+        @Override
+        public void onClick(View view) {
+            ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
+            int pos = lv.getPositionForView(view);
+
+            HashMap<String, String> hm = UtilFun.cast(getItem(pos));
+            boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
+            hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+
+            init_detail_view(view, hm);
+            if (bf)
+                addUnfoldItem(hm.get(K_TAG));
+            else
+                removeUnfoldItem(hm.get(K_TAG));
         }
     }
 

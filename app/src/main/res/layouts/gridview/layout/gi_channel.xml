@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/gi_channel_shape"
+    android:background="@drawable/gi_channel_no_sel_shape"
     android:orientation="vertical"
     android:padding="6dp">
 
     <ImageView
         android:id="@+id/iv_act"
+        android:scaleType="fitXY"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentStart="false"

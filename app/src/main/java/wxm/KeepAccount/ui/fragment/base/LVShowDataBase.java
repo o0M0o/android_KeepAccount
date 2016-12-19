@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -174,7 +175,7 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
                 tv.setText(pay_amount);
             } else  {
                 RelativeLayout rl_p = UtilFun.cast_t(rl.findViewById(R.id.rl_pay));
-                setLayoutVisible(rl_p, View.INVISIBLE);
+                rl_p.setVisibility(View.GONE);
             }
 
             if(b_income) {
@@ -185,7 +186,20 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
                 tv.setText(income_amount);
             } else  {
                 RelativeLayout rl_i = UtilFun.cast_t(rl.findViewById(R.id.rl_income));
-                setLayoutVisible(rl_i, View.INVISIBLE);
+                rl_i.setVisibility(View.GONE);
+            }
+
+            if(b_income && b_pay)   {
+                float pay = Float.valueOf(pay_amount);
+                float income = Float.valueOf(income_amount);
+                ImageView iv = UtilFun.cast_t(rl.findViewById(pay < income ?
+                                        R.id.iv_pay_line : R.id.iv_income_line));
+
+                ViewGroup.LayoutParams para = iv.getLayoutParams();
+                float ratio = (pay > income ? income : pay)
+                                    / (pay < income ? income : pay);
+                para.width = (int)(para.width * ratio);
+                iv.setLayoutParams(para);
             }
 
             TextView tv = UtilFun.cast_t(rl.findViewById(R.id.tv_amount));
