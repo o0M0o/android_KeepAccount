@@ -1,8 +1,7 @@
 package wxm.KeepAccount.ui.fragment.RemindEdit;
 
-import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,13 +13,15 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
@@ -117,56 +118,57 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
-            Activity ac = getActivity();
             int vid = v.getId();
             switch (vid) {
                 case R.id.et_end_date:
                 case R.id.et_start_date: {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ac);
-                    View view = View.inflate(ac, R.layout.dlg_date, null);
-                    final DatePicker datePicker = (DatePicker) view.findViewById(R.id.date_picker);
-                    builder.setView(view);
+                    DatePickerDialog.OnDateSetListener dt = (view, year, month, dayOfMonth) -> {
+                        String str_date = String.format(Locale.CHINA, "%04d-%02d-%02d",
+                                year, month + 1, dayOfMonth);
 
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTimeInMillis(System.currentTimeMillis());
-                    datePicker.init(cal.get(Calendar.YEAR),
-                            cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), null);
+                        if (R.id.et_start_date == vid) {
+                            mETStartDate.setText(str_date);
+                        } else {
+                            mETEndDate.setText(str_date);
+                        }
+                    };
 
+                    SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+                    Date j_dt;
                     if (R.id.et_start_date == vid) {
                         final int inType = mETStartDate.getInputType();
                         mETStartDate.setInputType(InputType.TYPE_NULL);
                         mETStartDate.setInputType(inType);
                         mETStartDate.setSelection(mETStartDate.getText().length());
 
-                        builder.setTitle("选取预警开始日期");
-                        builder.setPositiveButton("确  定", (dialog, which) -> {
-                            mETStartDate.setText(String.format(Locale.CHINA, "%d-%02d-%02d",
-                                    datePicker.getYear(),
-                                    datePicker.getMonth() + 1,
-                                    datePicker.getDayOfMonth()));
-                            mETStartDate.requestFocus();
-
-                            dialog.cancel();
-                        });
+                        try {
+                            j_dt = sf.parse(mETStartDate.getText().toString());
+                        } catch (ParseException e) {
+                            j_dt = new Date();
+                            e.printStackTrace();
+                        }
                     } else {
                         final int inType = mETEndDate.getInputType();
                         mETEndDate.setInputType(InputType.TYPE_NULL);
                         mETEndDate.setInputType(inType);
                         mETEndDate.setSelection(mETEndDate.getText().length());
 
-                        builder.setTitle("选取预警结束日期");
-                        builder.setPositiveButton("确  定", (dialog, which) -> {
-                            mETEndDate.setText(String.format(Locale.CHINA, "%d-%02d-%02d",
-                                    datePicker.getYear(),
-                                    datePicker.getMonth() + 1,
-                                    datePicker.getDayOfMonth()));
-                            mETEndDate.requestFocus();
-
-                            dialog.cancel();
-                        });
+                        try {
+                            j_dt = sf.parse(mETEndDate.getText().toString());
+                        } catch (ParseException e) {
+                            j_dt = new Date();
+                            e.printStackTrace();
+                        }
                     }
 
-                    builder.create().show();
+                    Calendar cd = Calendar.getInstance();
+                    cd.setTime(j_dt);
+                    DatePickerDialog dd = new DatePickerDialog(getContext(), dt
+                            ,cd.get(Calendar.YEAR)
+                            ,cd.get(Calendar.MONTH)
+                            ,cd.get(Calendar.DAY_OF_MONTH));
+
+                    dd.show();
                 }
                 break;
             }

@@ -56,32 +56,35 @@
 
         <Button
             android:id="@+id/email_sign_in_button"
-            android:background="@drawable/bt_shape"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:background="@drawable/bt_shape"
             android:text="@string/action_sign_in"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/email_register_button"
-            android:background="@drawable/bt_shape"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:background="@drawable/bt_shape"
             android:text="@string/action_register"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/bt_def_usr_login"
-            android:background="@drawable/bt_shape"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:background="@drawable/bt_shape"
             android:text="@string/action_def_usr_login"
+            android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>

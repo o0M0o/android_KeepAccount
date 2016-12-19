@@ -14,11 +14,11 @@
 
         <RelativeLayout
             android:id="@+id/rl_pencil"
-            android:background="@drawable/rl_action_shape"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:background="@drawable/rl_action_shape"
             android:padding="4dp">
 
             <ImageView
@@ -42,13 +42,13 @@
 
         <RelativeLayout
             android:id="@+id/rl_sort"
-            android:background="@drawable/rl_action_shape"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
             android:layout_toLeftOf="@id/rl_pencil"
-            android:padding = "4dp">
+            android:background="@drawable/rl_action_shape"
+            android:padding="4dp">
 
             <ImageView
                 android:id="@+id/iv_sort"

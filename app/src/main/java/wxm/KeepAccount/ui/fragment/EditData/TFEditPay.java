@@ -1,6 +1,8 @@
 package wxm.KeepAccount.ui.fragment.EditData;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,12 +23,15 @@ import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import cn.wxm.andriodutillib.Dialog.DlgDatePicker;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.BudgetItem;
@@ -39,6 +44,8 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
+
+import static java.lang.String.format;
 
 /**
  * 编辑支出
@@ -97,7 +104,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             mETDate.setText(mOldPayNote.getTs().toString().substring(0, 16));
             mETInfo.setText(mOldPayNote.getInfo());
             mETNote.setText(mOldPayNote.getNote());
-            mETAmount.setText(String.format(Locale.CHINA, "%.02f", mOldPayNote.getVal()));
+            mETAmount.setText(format(Locale.CHINA, "%.02f", mOldPayNote.getVal()));
         } else {
             Activity ac = getActivity();
             Intent it = ac.getIntent();
@@ -187,7 +194,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() > ACNoteEdit.DEF_NOTE_MAXLEN) {
-                    mETNote.setError(String.format(Locale.CHINA, "超过最大长度(%d)!", ACNoteEdit.DEF_NOTE_MAXLEN));
+                    mETNote.setError(format(Locale.CHINA, "超过最大长度(%d)!", ACNoteEdit.DEF_NOTE_MAXLEN));
                     mETNote.setText(s.subSequence(0, ACNoteEdit.DEF_NOTE_MAXLEN));
                 }
             }
@@ -309,7 +316,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         }
         catch(Exception ex)
         {
-            Log.e(TAG, String.format(Locale.CHINA, "解析'%s'到日期失败", str_date));
+            Log.e(TAG, format(Locale.CHINA, "解析'%s'到日期失败", str_date));
             return false;
         }
 
@@ -353,32 +360,44 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Activity ac = getActivity();
         View v_self = getView();
         if (null != v_self && event.getAction() == MotionEvent.ACTION_DOWN) {
             switch (v.getId()) {
                 case R.id.ar_et_date: {
-                    DlgDatePicker dp = new DlgDatePicker();
-                    dp.setInitDate(mETDate.getText().toString());
-                    dp.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
-                        @Override
-                        public void onDialogPositiveResult(DialogFragment dialog) {
-                            DlgDatePicker cur_dp = UtilFun.cast_t(dialog);
-                            String cur_date = cur_dp.getCurDate();
+                    SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+                    Date j_dt = new Date();
+                    try {
+                        j_dt = sd.parse(mETDate.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
-                            if(!UtilFun.StringIsNullOrEmpty(cur_date))
-                                mETDate.setText(cur_date);
+                    Calendar cd = Calendar.getInstance();
+                    cd.setTime(j_dt);
 
+                    DatePickerDialog.OnDateSetListener dt = (view, year, month, dayOfMonth) -> {
+                        String str_date = format(Locale.CHINA, "%04d-%02d-%02d",
+                                year, month + 1, dayOfMonth);
+
+                        TimePickerDialog.OnTimeSetListener  ot = (view1, hourOfDay, minute) -> {
+                            String tm = format(Locale.CHINA, "%s %02d:%02d",
+                                    str_date, hourOfDay, minute);
+
+                            mETDate.setText(tm);
                             mETDate.requestFocus();
-                        }
+                        };
 
-                        @Override
-                        public void onDialogNegativeResult(DialogFragment dialog) {
-                            mETDate.requestFocus();
-                        }
-                    });
+                        TimePickerDialog td = new TimePickerDialog(getContext(), ot,
+                                cd.get(Calendar.HOUR_OF_DAY),
+                                cd.get(Calendar.MINUTE), true);
+                        td.show();
+                    };
 
-                    dp.show(getFragmentManager(), "选择日期");
+                    DatePickerDialog dd = new DatePickerDialog(getContext()  ,dt
+                            ,cd.get(Calendar.YEAR)
+                            ,cd.get(Calendar.MONTH)
+                            ,cd.get(Calendar.DAY_OF_MONTH));
+                    dd.show();
                 }
                 break;
 
