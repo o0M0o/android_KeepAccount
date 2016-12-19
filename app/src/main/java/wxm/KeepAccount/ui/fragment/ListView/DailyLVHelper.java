@@ -156,11 +156,15 @@ public class DailyLVHelper extends LVShowDataBase
     public void filterView(List<String> ls_tag) {
         if (null != ls_tag) {
             mBFilter = true;
+            mActionType = ACTION_EDIT;
+
             mFilterPara.clear();
             mFilterPara.addAll(ls_tag);
             refreshView();
         } else {
             mBFilter = false;
+            mActionType = ACTION_EDIT;
+
             refreshView();
         }
     }

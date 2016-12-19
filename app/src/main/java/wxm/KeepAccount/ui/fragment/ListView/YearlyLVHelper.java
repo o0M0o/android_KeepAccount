@@ -2,10 +2,10 @@ package wxm.KeepAccount.ui.fragment.ListView;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -390,12 +390,16 @@ public class YearlyLVHelper extends LVShowDataBase {
      */
     private class SelfSubAdapter  extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
+        private int         mCINoSel;
+        private int         mCISel;
 
         SelfSubAdapter(Context context,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
             super(context, sdata, R.layout.li_yearly_show_detail, from, to);
-            //Resources res = getRootActivity().getResources();
+            Resources res = context.getResources();
+            mCINoSel = res.getColor(R.color.trans_full);
+            mCISel = res.getColor(R.color.trans_1);
         }
 
         @Override
@@ -416,14 +420,13 @@ public class YearlyLVHelper extends LVShowDataBase {
                 final HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 final String sub_tag = hm.get(K_SUB_TAG);
 
-                ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
-                ib.getBackground().setAlpha(mLLSubFilter.contains(sub_tag) ? 255 : 0);
-
+                final ImageView ib = UtilFun.cast_t(v.findViewById(R.id.iv_action));
+                ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ? mCISel : mCINoSel);
                 ib.setOnClickListener(v1 -> {
-                    ImageButton ibv = UtilFun.cast_t(v1);
-                    boolean bsel = mLLSubFilter.contains(sub_tag);
-                    ibv.getBackground().setAlpha(!bsel ? 255 : 0);
-                    if(!bsel) {
+                    if(!mLLSubFilter.contains(sub_tag)) {
+                        Log.d(TAG, "add selected");
+                        ib.setBackgroundColor(mCISel);
+
                         mLLSubFilter.add(sub_tag);
                         mLLSubFilterVW.add(v1);
 
@@ -431,12 +434,15 @@ public class YearlyLVHelper extends LVShowDataBase {
                             mBSelectSubFilter = true;
                             refreshAttachLayout();
                         }
-                    }   else    {
+                    }   else {
+                        Log.d(TAG, "remove selected");
+                        ib.setBackgroundColor(mCINoSel);
+
                         mLLSubFilter.remove(sub_tag);
                         mLLSubFilterVW.remove(v1);
 
                         if(mLLSubFilter.isEmpty()) {
-                            mLLSubFilterVW.clear();;
+                            mLLSubFilterVW.clear();
                             mBSelectSubFilter = false;
                             refreshAttachLayout();
                         }

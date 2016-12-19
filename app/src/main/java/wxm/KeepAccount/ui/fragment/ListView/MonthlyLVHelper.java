@@ -2,11 +2,10 @@ package wxm.KeepAccount.ui.fragment.ListView;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -44,22 +43,6 @@ public class MonthlyLVHelper extends LVShowDataBase {
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
 
-    /*
-    // for ui
-    private boolean mBActionExpand;
-    @BindView(R.id.iv_expand)
-    ImageView   mIVActions;
-
-    @BindView(R.id.rl_action)
-    GridLayout  mGLActions;
-
-    @BindDrawable(R.drawable.ic_to_up)
-    Drawable    mDAExpand;
-
-    @BindDrawable(R.drawable.ic_to_down)
-    Drawable    mDAHide;
-    */
-
     public MonthlyLVHelper()    {
         super();
         LOG_TAG = "MonthlyLVHelper";
@@ -81,11 +64,15 @@ public class MonthlyLVHelper extends LVShowDataBase {
     public void filterView(List<String> ls_tag) {
         if(null != ls_tag) {
             mBFilter = true;
+            mBSelectSubFilter = false;
+
             mFilterPara.clear();
             mFilterPara.addAll(ls_tag);
             refreshView();
         } else  {
             mBFilter = false;
+            mBSelectSubFilter = false;
+
             refreshView();
         }
     }
@@ -339,9 +326,6 @@ public class MonthlyLVHelper extends LVShowDataBase {
         private int         mClOne;
         private int         mClTwo;
 
-        private Drawable    mDAFold;
-        private Drawable    mDAUnFold;
-
         SelfAdapter(Context context,
                     List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {
@@ -350,9 +334,6 @@ public class MonthlyLVHelper extends LVShowDataBase {
             Resources res   = context.getResources();
             mClOne = res.getColor(R.color.color_1);
             mClTwo = res.getColor(R.color.color_2);
-
-            mDAFold = res.getDrawable(R.drawable.ic_hide_1);
-            mDAUnFold = res.getDrawable(R.drawable.ic_show_1);
         }
 
         @Override
@@ -371,8 +352,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
             View v = super.getView(position, view, arg2);
             if(null != v)   {
                 HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                View fv = v;
-                init_detail_view(fv, hm);
+                init_detail_view(v, hm);
 
                 v.setOnClickListener(this);
 
@@ -413,17 +393,20 @@ public class MonthlyLVHelper extends LVShowDataBase {
     /**
      * 次级adapter
      */
-    private class SelfSubAdapter  extends SimpleAdapter {
+    private class SelfSubAdapter  extends SimpleAdapter  {
         private final static String TAG = "SelfSubAdapter";
-        private int mCLSelected;
+
+        private int         mCINoSel;
+        private int         mCISel;
 
         SelfSubAdapter(Context context,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
             super(context, sdata, R.layout.li_monthly_show_detail, from, to);
 
-            Resources res = getRootActivity().getResources();
-            mCLSelected = res.getColor(R.color.darkred);
+            Resources res = context.getResources();
+            mCINoSel = res.getColor(R.color.trans_full);
+            mCISel = res.getColor(R.color.trans_1);
         }
 
         @Override
@@ -444,13 +427,13 @@ public class MonthlyLVHelper extends LVShowDataBase {
                 final HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 final String sub_tag = hm.get(K_SUB_TAG);
 
-                ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_action));
-                ib.getBackground().setAlpha(mLLSubFilter.contains(sub_tag) ? 255 : 0);
+                final ImageView ib = UtilFun.cast_t(v.findViewById(R.id.iv_action));
+                ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ? mCISel : mCINoSel);
                 ib.setOnClickListener(v1 -> {
-                    ImageButton ibv = UtilFun.cast_t(v1);
-                    boolean bsel = mLLSubFilter.contains(sub_tag);
-                    ibv.getBackground().setAlpha(!bsel ? 255 : 0);
-                    if(!bsel) {
+                    if(!mLLSubFilter.contains(sub_tag)) {
+                        Log.d(TAG, "add selected");
+                        ib.setBackgroundColor(mCISel);
+
                         mLLSubFilter.add(sub_tag);
                         mLLSubFilterVW.add(v1);
 
@@ -458,12 +441,15 @@ public class MonthlyLVHelper extends LVShowDataBase {
                             mBSelectSubFilter = true;
                             refreshAttachLayout();
                         }
-                    }   else    {
+                    }   else {
+                        Log.d(TAG, "remove selected");
+                        ib.setBackgroundColor(mCINoSel);
+
                         mLLSubFilter.remove(sub_tag);
                         mLLSubFilterVW.remove(v1);
 
                         if(mLLSubFilter.isEmpty()) {
-                            mLLSubFilterVW.clear();;
+                            mLLSubFilterVW.clear();
                             mBSelectSubFilter = false;
                             refreshAttachLayout();
                         }

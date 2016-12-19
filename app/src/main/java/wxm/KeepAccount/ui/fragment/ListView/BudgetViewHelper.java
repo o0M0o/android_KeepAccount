@@ -20,7 +20,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -411,7 +410,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 }
 
                 // for action
-                ImageButton ib_action = UtilFun.cast(v.findViewById(R.id.ib_action));
+                ImageButton ib_action = UtilFun.cast(v.findViewById(R.id.iv_action));
                 ib_action.setImageDrawable(ACTION_DELETE == mActionType ? mDADelete : mDAEdit);
 
                 if(ACTION_DELETE == mActionType) {

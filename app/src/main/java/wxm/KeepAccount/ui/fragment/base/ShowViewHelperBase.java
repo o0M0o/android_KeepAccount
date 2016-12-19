@@ -174,7 +174,7 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
 
         RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_accpet_giveup));
         assert null != rl;
-        setLayoutVisible(rl, visible);
+        rl.setVisibility(visible);
 
         ImageButton bt = UtilFun.cast(rl.findViewById(R.id.bt_giveup));
         assert null != bt;
