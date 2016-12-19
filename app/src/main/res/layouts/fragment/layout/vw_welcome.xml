@@ -22,11 +22,11 @@
 
     <cn.wxm.andriodutillib.DragGrid.DragGridView
         android:id="@+id/dgv_buttons"
+        android:padding="4dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/rl_buttons"
         android:layout_below="@+id/banners"
-        android:layout_marginTop="8dp"
         android:gravity="center"
         android:listSelector="@android:color/transparent"
         android:numColumns="4"
