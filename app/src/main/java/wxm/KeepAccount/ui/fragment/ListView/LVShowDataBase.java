@@ -1,12 +1,10 @@
-package wxm.KeepAccount.ui.fragment.base;
+package wxm.KeepAccount.ui.fragment.ListView;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,12 +12,14 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
+import wxm.KeepAccount.ui.fragment.base.ShowViewHelperBase;
 
 /**
  * sub class for listview
@@ -72,10 +72,6 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     // 存放展开节点的数据
     private final LinkedList<String>    mUnfoldItems;
 
-    // color for show
-    private final int  mCRForPay;
-    private final int  mCRForIncome;
-
     // for filter
     protected boolean mBSelectSubFilter = false;
     protected final LinkedList<String> mLLSubFilter = new LinkedList<>();
@@ -88,8 +84,8 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     @BindView(R.id.iv_expand)
     protected ImageView mIVActions;
 
-    @BindView(R.id.rl_action)
-    protected GridLayout mGLActions;
+    @BindView(R.id.rl_acts)
+    protected RelativeLayout mRLActions;
 
     @BindDrawable(R.drawable.ic_to_up)
     protected Drawable mDAExpand;
@@ -97,15 +93,17 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     @BindDrawable(R.drawable.ic_to_down)
     protected Drawable    mDAHide;
 
+    @BindColor(R.color.darkred)
+    protected int  mCRForPay;
+
+    @BindColor(R.color.darkslategrey)
+    protected int  mCRForIncome;
+
     public LVShowDataBase()   {
         super();
         mMainPara       = new LinkedList<>();
         mHMSubPara      = new HashMap<>();
         mUnfoldItems    = new LinkedList<>();
-
-        Resources res = ContextUtil.getInstance().getResources();
-        mCRForPay       = res.getColor(R.color.darkred);
-        mCRForIncome    = res.getColor(R.color.darkslategrey);
     }
 
     /**

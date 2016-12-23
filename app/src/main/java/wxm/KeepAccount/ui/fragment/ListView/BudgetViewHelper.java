@@ -37,7 +37,6 @@ import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
-import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 
 /**
  * 预算数据视图辅助类
@@ -64,7 +63,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
     /*
     // for expand or hide actions
     private ImageView   mIVActions;
-    private GridLayout mGLActions;
+    private GridLayout mRLActions;
     private boolean     mBActionExpand;
     private Drawable mDAExpand;
     private Drawable    mDAHide;
@@ -97,16 +96,16 @@ public class BudgetViewHelper  extends LVShowDataBase {
      */
     private void initActs(View pv) {
         mIVActions.setImageDrawable(mDAExpand);
-        setLayoutVisible(mGLActions, View.INVISIBLE);
+        mRLActions.setVisibility(View.GONE);
 
         mIVActions.setOnClickListener(v -> {
             mBActionExpand = !mBActionExpand;
             if(mBActionExpand)  {
                 mIVActions.setImageDrawable(mDAHide);
-                setLayoutVisible(mGLActions, View.VISIBLE);
+                mRLActions.setVisibility(View.VISIBLE);
             } else  {
                 mIVActions.setImageDrawable(mDAExpand);
-                setLayoutVisible(mGLActions, View.INVISIBLE);
+                mRLActions.setVisibility(View.GONE);
             }
         });
 

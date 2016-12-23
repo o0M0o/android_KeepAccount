@@ -29,7 +29,6 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
-import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 
 /**
  * 年数据视图辅助类
@@ -123,16 +122,16 @@ public class YearlyLVHelper extends LVShowDataBase {
      */
     private void initActs(View pv) {
         mIVActions.setImageDrawable(mDAExpand);
-        setLayoutVisible(mGLActions, View.INVISIBLE);
+        setLayoutVisible(mRLActions, View.INVISIBLE);
 
         mIVActions.setOnClickListener(v -> {
             mBActionExpand = !mBActionExpand;
             if(mBActionExpand)  {
                 mIVActions.setImageDrawable(mDAHide);
-                setLayoutVisible(mGLActions, View.VISIBLE);
+                setLayoutVisible(mRLActions, View.VISIBLE);
             } else  {
                 mIVActions.setImageDrawable(mDAExpand);
-                setLayoutVisible(mGLActions, View.INVISIBLE);
+                setLayoutVisible(mRLActions, View.INVISIBLE);
             }
         });
 

@@ -39,7 +39,6 @@ import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
-import wxm.KeepAccount.ui.fragment.base.LVShowDataBase;
 
 /**
  * 日数据视图辅助类
@@ -212,12 +211,12 @@ public class DailyLVHelper extends LVShowDataBase
     private void refreshAction() {
         if (mBActionExpand) {
             mIVActions.setImageDrawable(mDAHide);
-            mGLActions.setVisibility(View.VISIBLE);
-            //setLayoutVisible(mGLActions, View.VISIBLE);
+            mRLActions.setVisibility(View.VISIBLE);
+            //setLayoutVisible(mRLActions, View.VISIBLE);
         } else {
             mIVActions.setImageDrawable(mDAExpand);
-            mGLActions.setVisibility(View.GONE);
-            //setLayoutVisible(mGLActions, View.INVISIBLE);
+            mRLActions.setVisibility(View.GONE);
+            //setLayoutVisible(mRLActions, View.INVISIBLE);
         }
     }
 
