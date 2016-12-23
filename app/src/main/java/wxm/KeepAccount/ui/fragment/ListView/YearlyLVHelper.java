@@ -252,8 +252,9 @@ public class YearlyLVHelper extends LVShowDataBase {
         refreshAttachLayout();
 
         // update data
-        LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
+        LinkedList<HashMap<String, String>> n_mainpara;
         if(mBFilter) {
+            n_mainpara = new LinkedList<>();
             for (HashMap<String, String> i : mMainPara) {
                 String cur_tag = i.get(K_TAG);
                 for (String ii : mFilterPara) {
@@ -264,7 +265,7 @@ public class YearlyLVHelper extends LVShowDataBase {
                 }
             }
         } else  {
-            n_mainpara.addAll(mMainPara);
+            n_mainpara = mMainPara;
         }
 
         // 设置listview adapter

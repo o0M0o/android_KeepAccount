@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -27,6 +26,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import butterknife.BindColor;
+import butterknife.BindDrawable;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.BudgetItem;
@@ -323,20 +324,27 @@ public class BudgetViewHelper  extends LVShowDataBase {
     /**
      * 首级adapter
      */
-    private class SelfAdapter extends SimpleAdapter  {
+    protected class SelfAdapter extends SimpleAdapter  {
         private final static String TAG = "SelfAdapter";
         private final ListView        mRootView;
 
-        private int         mClOne;
-        private int         mClTwo;
+        @BindColor(R.color.color_1)
+        int mClOne;
 
-        private int         mClSel;
-        private int         mClNoSel;
+        @BindColor(R.color.color_2)
+        int mClTwo;
 
-        private Drawable    mDAFold;
-        private Drawable    mDAUnFold;
-        private Drawable    mDADelete;
-        private Drawable    mDAEdit;
+        @BindColor(R.color.trans_1)
+        int         mClSel;
+
+        @BindColor(R.color.trans_full)
+        int         mClNoSel;
+
+        @BindDrawable(R.drawable.ic_delete_1)
+        Drawable    mDADelete;
+
+        @BindDrawable(R.drawable.right_arrow)
+        Drawable    mDAEdit;
 
         SelfAdapter(Context context, ListView fv,
                     List<? extends Map<String, ?>> mdata,
@@ -344,17 +352,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
             super(context, mdata, R.layout.li_budget_show, from, to);
             mRootView = fv;
 
-            Resources res   = context.getResources();
-            mClOne = res.getColor(R.color.color_1);
-            mClTwo = res.getColor(R.color.color_2);
-
-            mClSel = res.getColor(R.color.powderblue);
-            mClNoSel = res.getColor(R.color.trans_1);
-
-            mDAFold = res.getDrawable(R.drawable.ic_hide_1);
-            mDAUnFold = res.getDrawable(R.drawable.ic_show_1);
-            mDADelete = res.getDrawable(R.drawable.ic_delete_1);
-            mDAEdit = res.getDrawable(R.drawable.right_arrow);
+            ButterKnife.bind(this, mRootView);
         }
 
         @Override
@@ -387,6 +385,18 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 }
 
                 // for fold/unfold
+                v.setOnClickListener(view1 -> {
+                    boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
+                    hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                    init_detail_view(fv, hm);
+
+                    if(bf)
+                        addUnfoldItem(hm.get(K_TAG));
+                    else
+                        removeUnfoldItem(hm.get(K_TAG));
+                });
+
+                /*
                 ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
                 ib.getBackground().setAlpha(0);
                 ib.setImageDrawable(V_SHOW_FOLD.equals(hm.get(K_SHOW)) ?  mDAUnFold : mDAFold);
@@ -407,32 +417,31 @@ public class BudgetViewHelper  extends LVShowDataBase {
                             removeUnfoldItem(hm.get(K_TAG));
                     });
                 }
+                */
 
                 // for action
-                ImageButton ib_action = UtilFun.cast(v.findViewById(R.id.iv_action));
-                ib_action.setImageDrawable(ACTION_DELETE == mActionType ? mDADelete : mDAEdit);
-
+                ImageView ib_action = UtilFun.cast_t(v.findViewById(R.id.iv_delete));
                 if(ACTION_DELETE == mActionType) {
+                    ib_action.setImageDrawable(mDADelete);
+
                     int tag_id = Integer.parseInt(hm.get(K_ID));
                     boolean bc = mLLDelBudget.contains(tag_id);
-                    ib_action.getBackground().setAlpha(bc ? 255 : 0);
                     ib_action.setBackgroundColor(bc ? mClSel : mClNoSel);
                 } else  {
-                    ib_action.getBackground().setAlpha(0);
+                    ib_action.setImageDrawable(mDAEdit);
+                    ib_action.setBackgroundColor(mClNoSel);
                 }
 
                 ib_action.setOnClickListener(v1 -> {
-                    ImageButton ib_action1 = UtilFun.cast(v1);
                     int tag_id = Integer.parseInt(hm.get(K_ID));
                     if(ACTION_DELETE == mActionType)    {
+                        //ib_action.setImageDrawable(mDADelete);
                         if(mLLDelBudget.contains(tag_id))  {
                             mLLDelBudget.remove((Object)tag_id);
-                            ib_action1.getBackground().setAlpha(0);
-                            ib_action1.setBackgroundColor(mClNoSel);
+                            ib_action.setBackgroundColor(mClNoSel);
                         }   else    {
                             mLLDelBudget.add(tag_id);
-                            ib_action1.getBackground().setAlpha(255);
-                            ib_action1.setBackgroundColor(mClSel);
+                            ib_action.setBackgroundColor(mClSel);
                         }
                     } else  {
                         Activity ac = getRootActivity();
@@ -466,7 +475,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
             mRootView = fv;
 
             Resources res   = context.getResources();
-            mCLSel = res.getColor(R.color.powderblue);
+            mCLSel = res.getColor(R.color.trans_1);
             mCLNoSel = res.getColor(R.color.trans_full);
         }
 
