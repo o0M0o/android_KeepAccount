@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -26,6 +27,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.IncomeNoteItem;
@@ -34,7 +38,7 @@ import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acutility.ACNoteEdit;
+import wxm.KeepAccount.ui.dialog.DlgLongTxt;
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 
@@ -48,17 +52,29 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     private final static String TAG = "TFEditIncome";
 
     private IncomeNoteItem mOldIncomeNote;
-    private View        mSelfView;
 
-    private EditText mETInfo;
-    private EditText mETDate;
-    private EditText mETAmount;
-    private EditText mETNote;
+    @BindView(R.id.ar_et_info)
+    EditText mETInfo;
+
+    @BindView(R.id.ar_et_date)
+    EditText mETDate;
+
+    @BindView(R.id.ar_et_amount)
+    EditText mETAmount;
+
+    @BindView(R.id.tv_note)
+    TextView mTVNote;
+
+    @BindString(R.string.notice_input_note)
+    String  mSZDefNote;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.vw_edit_income, container, false);
+        View v = inflater.inflate(R.layout.vw_edit_income, container, false);
+        ButterKnife.bind(this, v);
+        return v;
     }
 
     @Override
@@ -69,20 +85,16 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
                     || (mAction.equals(GlobalDef.STR_MODIFY) && null == mOldIncomeNote))
                 return ;
 
-            mSelfView = view;
             init_compent(view);
-            init_view(view);
+            init_view();
         }
     }
 
     private void init_compent(View v) {
-        mETInfo = UtilFun.cast(v.findViewById(R.id.ar_et_info));
-        mETDate = UtilFun.cast(v.findViewById(R.id.ar_et_date));
-        mETAmount = UtilFun.cast(v.findViewById(R.id.ar_et_amount));
-        mETNote = UtilFun.cast(v.findViewById(R.id.ar_et_note));
-
         mETDate.setOnTouchListener(this);
         mETInfo.setOnTouchListener(this);
+        mTVNote.setOnTouchListener(this);
+
         mETAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -104,33 +116,16 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
                 }
             }
         });
-
-        mETNote.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() > ACNoteEdit.DEF_NOTE_MAXLEN) {
-                    mETNote.setError(String.format(Locale.CHINA,
-                            "超过最大长度(%d)!", ACNoteEdit.DEF_NOTE_MAXLEN));
-                    mETNote.setText(s.subSequence(0, ACNoteEdit.DEF_NOTE_MAXLEN));
-                }
-            }
-        });
     }
 
-    private void init_view(View v) {
+    private void init_view() {
         if (mAction.equals(GlobalDef.STR_MODIFY)) {
             mETDate.setText(mOldIncomeNote.getTs().toString().substring(0, 16));
             mETInfo.setText(mOldIncomeNote.getInfo());
-            mETNote.setText(mOldIncomeNote.getNote());
+
+            String o_n = mOldIncomeNote.getNote();
+            mTVNote.setText(UtilFun.StringIsNullOrEmpty(o_n) ? mSZDefNote : o_n);
+
             mETAmount.setText(String.format(Locale.CHINA, "%.02f", mOldIncomeNote.getVal()));
         } else {
             Activity ac = getActivity();
@@ -158,7 +153,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
     @Override
     public Object getCurData() {
-        if(null != mSelfView) {
+        if(null != getView()) {
             IncomeNoteItem ii = new IncomeNoteItem();
             if(null != mOldIncomeNote) {
                 ii.setId(mOldIncomeNote.getId());
@@ -169,7 +164,9 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
             String str_val = mETAmount.getText().toString();
             ii.setVal(UtilFun.StringIsNullOrEmpty(str_val) ? BigDecimal.ZERO : new BigDecimal(str_val));
-            ii.setNote(mETNote.getText().toString());
+
+            String tv_sz = mTVNote.getText().toString();
+            ii.setNote(mSZDefNote.equals(tv_sz) ? null : tv_sz);
 
             String str_date = mETDate.getText().toString() + ":00";
             Timestamp tsDT;
@@ -188,8 +185,8 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
     @Override
     public void reLoadView() {
-        if(null != mSelfView)
-            init_view(mSelfView);
+        if(null != getView())
+            init_view();
     }
 
 
@@ -241,7 +238,9 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         String str_val  = mETAmount.getText().toString();
         String str_info = mETInfo.getText().toString();
         String str_date = mETDate.getText().toString();
-        String str_note = mETNote.getText().toString();
+
+        String tv_sz = mTVNote.getText().toString();
+        String str_note = mSZDefNote.equals(tv_sz) ? null : tv_sz;
 
         Timestamp tsDT;
         try {
@@ -286,6 +285,31 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         View v_self = getView();
         if (null != v_self && event.getAction() == MotionEvent.ACTION_DOWN) {
             switch (v.getId()) {
+                case R.id.tv_note : {
+                    String tv_sz = mTVNote.getText().toString();
+                    String lt = mSZDefNote.equals(tv_sz) ? "" : tv_sz;
+
+                    DlgLongTxt dlg = new DlgLongTxt();
+                    dlg.setLongTxt(lt);
+                    dlg.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                        @Override
+                        public void onDialogPositiveResult(DialogFragment dialogFragment) {
+                            String lt = ((DlgLongTxt)dialogFragment).getLongTxt();
+                            if(UtilFun.StringIsNullOrEmpty(lt))
+                                lt = mSZDefNote;
+
+                            mTVNote.setText(lt);
+                        }
+
+                        @Override
+                        public void onDialogNegativeResult(DialogFragment dialogFragment) {
+                        }
+                    });
+
+                    dlg.show(getActivity().getSupportFragmentManager(), "edit note");
+                }
+                break;
+
                 case R.id.ar_et_date: {
                     SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
                     Date j_dt = new Date();

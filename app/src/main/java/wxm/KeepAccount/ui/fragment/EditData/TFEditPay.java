@@ -32,6 +32,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.BudgetItem;
@@ -41,7 +44,7 @@ import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acutility.ACNoteEdit;
+import wxm.KeepAccount.ui.dialog.DlgLongTxt;
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType;
 import wxm.KeepAccount.ui.fragment.base.TFEditBase;
 
@@ -55,18 +58,34 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
     private final static String TAG = "TFEditPay";
 
     private PayNoteItem mOldPayNote;
-    private View        mSelfView;
 
-    private EditText mETInfo;
-    private EditText mETDate;
-    private EditText mETAmount;
-    private EditText mETNote;
-    private Spinner mSPBudget;
+    @BindView(R.id.ar_et_info)
+    EditText mETInfo;
+
+    @BindView(R.id.ar_et_date)
+    EditText mETDate;
+
+    @BindView(R.id.ar_et_amount)
+    EditText mETAmount;
+
+    @BindView(R.id.ar_sp_budget)
+    Spinner mSPBudget;
+
+    @BindView(R.id.ar_tv_budget)
+    TextView mTVBudget;
+
+    @BindView(R.id.tv_note)
+    TextView mTVNote;
+
+    @BindString(R.string.notice_input_note)
+    String mSZDefNote;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.vw_edit_pay, container, false);
+        View v = inflater.inflate(R.layout.vw_edit_pay, container, false);
+        ButterKnife.bind(this, v);
+        return v;
     }
 
     @Override
@@ -77,7 +96,6 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                     || (GlobalDef.STR_MODIFY.equals(mAction) && null == mOldPayNote))
                 return;
 
-            mSelfView = view;
             init_component();
             fill_data();
         }
@@ -103,7 +121,10 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
             mETDate.setText(mOldPayNote.getTs().toString().substring(0, 16));
             mETInfo.setText(mOldPayNote.getInfo());
-            mETNote.setText(mOldPayNote.getNote());
+
+            String o_n = mOldPayNote.getNote();
+            mTVNote.setText(UtilFun.StringIsNullOrEmpty(o_n) ? mSZDefNote : o_n);
+
             mETAmount.setText(format(Locale.CHINA, "%.02f", mOldPayNote.getVal()));
         } else {
             Activity ac = getActivity();
@@ -122,10 +143,6 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
      */
     private void init_component() {
         // 填充预算数据
-        mSPBudget = UtilFun.cast(mSelfView.findViewById(R.id.ar_sp_budget));
-        TextView mTVBudget = UtilFun.cast(mSelfView.findViewById(R.id.ar_tv_budget));
-        assert null != mSPBudget && null != mTVBudget;
-
         ArrayList<String> data_ls = new ArrayList<>();
         data_ls.add("无预算(不使用预算)");
         List<BudgetItem> bils = ContextUtil.getBudgetUtility().getBudgetForCurUsr();
@@ -152,13 +169,10 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         */
 
         // 填充其他数据
-        mETInfo = UtilFun.cast(mSelfView.findViewById(R.id.ar_et_info));
-        mETDate = UtilFun.cast(mSelfView.findViewById(R.id.ar_et_date));
-        mETAmount = UtilFun.cast(mSelfView.findViewById(R.id.ar_et_amount));
-        mETNote = UtilFun.cast(mSelfView.findViewById(R.id.ar_et_note));
-
         mETDate.setOnTouchListener(this);
         mETInfo.setOnTouchListener(this);
+        mTVNote.setOnTouchListener(this);
+
         mETAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -180,25 +194,6 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                 }
             }
         });
-
-        mETNote.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() > ACNoteEdit.DEF_NOTE_MAXLEN) {
-                    mETNote.setError(format(Locale.CHINA, "超过最大长度(%d)!", ACNoteEdit.DEF_NOTE_MAXLEN));
-                    mETNote.setText(s.subSequence(0, ACNoteEdit.DEF_NOTE_MAXLEN));
-                }
-            }
-        });
     }
 
 
@@ -215,9 +210,9 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
     @Override
     public Object getCurData() {
-        if(null != mSelfView) {
+        if (null != getView()) {
             PayNoteItem pi = new PayNoteItem();
-            if(null != mOldPayNote) {
+            if (null != mOldPayNote) {
                 pi.setId(mOldPayNote.getId());
                 pi.setUsr(mOldPayNote.getUsr());
             }
@@ -226,24 +221,24 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
             String str_val = mETAmount.getText().toString();
             pi.setVal(UtilFun.StringIsNullOrEmpty(str_val) ? BigDecimal.ZERO : new BigDecimal(str_val));
-            pi.setNote(mETNote.getText().toString());
+
+            String tv_sz = mTVNote.getText().toString();
+            pi.setNote(mSZDefNote.equals(tv_sz) ? null : tv_sz);
 
             String str_date = mETDate.getText().toString() + ":00";
             Timestamp tsDT;
             try {
                 tsDT = ToolUtil.StringToTimestamp(str_date);
-            }
-            catch(Exception ex)
-            {
+            } catch (Exception ex) {
                 tsDT = new Timestamp(0);
             }
             pi.setTs(tsDT);
 
             pi.setBudget(null);
             int pos = mSPBudget.getSelectedItemPosition();
-            if(AdapterView.INVALID_POSITION != pos && 0 != pos) {
+            if (AdapterView.INVALID_POSITION != pos && 0 != pos) {
                 BudgetItem bi = ContextUtil.getBudgetUtility()
-                        .getBudgetByName((String)mSPBudget.getSelectedItem());
+                        .getBudgetByName((String) mSPBudget.getSelectedItem());
                 if (null != bi) {
                     pi.setBudget(bi);
                 }
@@ -262,14 +257,15 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
     /**
      * 检查数据合法性
+     *
      * @return 若数据合法返回true, 否则返回false
      */
-    private boolean checkResult()   {
+    private boolean checkResult() {
         Activity ac = getActivity();
         if (null == ac)
             return false;
 
-        if(UtilFun.StringIsNullOrEmpty(mETAmount.getText().toString()))  {
+        if (UtilFun.StringIsNullOrEmpty(mETAmount.getText().toString())) {
             AlertDialog.Builder builder = new AlertDialog.Builder(ac);
             builder.setMessage("请输入支出数值!").setTitle("警告");
 
@@ -278,7 +274,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             return false;
         }
 
-        if(UtilFun.StringIsNullOrEmpty(mETInfo.getText().toString()))   {
+        if (UtilFun.StringIsNullOrEmpty(mETInfo.getText().toString())) {
             AlertDialog.Builder builder = new AlertDialog.Builder(ac);
             builder.setMessage("请输入支出信息!").setTitle("警告");
 
@@ -287,8 +283,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             return false;
         }
 
-        if(UtilFun.StringIsNullOrEmpty(mETDate.getText().toString()))
-        {
+        if (UtilFun.StringIsNullOrEmpty(mETDate.getText().toString())) {
             AlertDialog.Builder builder = new AlertDialog.Builder(ac);
             builder.setMessage("请输入支出日期!").setTitle("警告");
 
@@ -302,27 +297,28 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
     /**
      * 写入数据
-     * @return  操作成功返回true, 否则返回false
+     *
+     * @return 操作成功返回true, 否则返回false
      */
-    private boolean fillResult()       {
-        String str_val  = mETAmount.getText().toString();
+    private boolean fillResult() {
+        String str_val = mETAmount.getText().toString();
         String str_info = mETInfo.getText().toString();
         String str_date = mETDate.getText().toString();
-        String str_note = mETNote.getText().toString();
+
+        String tv_sz = mTVNote.getText().toString();
+        String str_note = mSZDefNote.equals(tv_sz) ? null : tv_sz;
 
         Timestamp tsDT;
         try {
             tsDT = ToolUtil.StringToTimestamp(str_date + ":00");
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             Log.e(TAG, format(Locale.CHINA, "解析'%s'到日期失败", str_date));
             return false;
         }
 
         // set data
         PayNoteItem pi = new PayNoteItem();
-        if(null != mOldPayNote && mAction.equals(GlobalDef.STR_MODIFY)) {
+        if (null != mOldPayNote && mAction.equals(GlobalDef.STR_MODIFY)) {
             pi.setId(mOldPayNote.getId());
             pi.setUsr(mOldPayNote.getUsr());
         }
@@ -334,9 +330,9 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
         pi.setBudget(null);
         int pos = mSPBudget.getSelectedItemPosition();
-        if(AdapterView.INVALID_POSITION != pos && 0 != pos) {
+        if (AdapterView.INVALID_POSITION != pos && 0 != pos) {
             BudgetItem bi = ContextUtil.getBudgetUtility()
-                    .getBudgetByName((String)mSPBudget.getSelectedItem());
+                    .getBudgetByName((String) mSPBudget.getSelectedItem());
             if (null != bi) {
                 pi.setBudget(bi);
             }
@@ -345,10 +341,10 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         // add/modify data
         boolean b_create = mAction.equals(GlobalDef.STR_CREATE);
         PayIncomeDBUtility uti = ContextUtil.getPayIncomeUtility();
-        boolean b_ret =  b_create ?
-                            1 == uti.addPayNotes(Collections.singletonList(pi))
-                            : uti.getPayDBUtility().modifyData(pi);
-        if(!b_ret)  {
+        boolean b_ret = b_create ?
+                1 == uti.addPayNotes(Collections.singletonList(pi))
+                : uti.getPayDBUtility().modifyData(pi);
+        if (!b_ret) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage(b_create ? "创建支出数据失败!" : "更新支出数据失败")
                     .setTitle("警告");
@@ -363,6 +359,31 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         View v_self = getView();
         if (null != v_self && event.getAction() == MotionEvent.ACTION_DOWN) {
             switch (v.getId()) {
+                case R.id.tv_note: {
+                    String tv_sz = mTVNote.getText().toString();
+                    String lt = mSZDefNote.equals(tv_sz) ? "" : tv_sz;
+
+                    DlgLongTxt dlg = new DlgLongTxt();
+                    dlg.setLongTxt(lt);
+                    dlg.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                        @Override
+                        public void onDialogPositiveResult(DialogFragment dialogFragment) {
+                            String lt = ((DlgLongTxt) dialogFragment).getLongTxt();
+                            if (UtilFun.StringIsNullOrEmpty(lt))
+                                lt = mSZDefNote;
+
+                            mTVNote.setText(lt);
+                        }
+
+                        @Override
+                        public void onDialogNegativeResult(DialogFragment dialogFragment) {
+                        }
+                    });
+
+                    dlg.show(getActivity().getSupportFragmentManager(), "edit note");
+                }
+                break;
+
                 case R.id.ar_et_date: {
                     SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
                     Date j_dt = new Date();
@@ -379,7 +400,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                         String str_date = format(Locale.CHINA, "%04d-%02d-%02d",
                                 year, month + 1, dayOfMonth);
 
-                        TimePickerDialog.OnTimeSetListener  ot = (view1, hourOfDay, minute) -> {
+                        TimePickerDialog.OnTimeSetListener ot = (view1, hourOfDay, minute) -> {
                             String tm = format(Locale.CHINA, "%s %02d:%02d",
                                     str_date, hourOfDay, minute);
 
@@ -393,10 +414,10 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                         td.show();
                     };
 
-                    DatePickerDialog dd = new DatePickerDialog(getContext()  ,dt
-                            ,cd.get(Calendar.YEAR)
-                            ,cd.get(Calendar.MONTH)
-                            ,cd.get(Calendar.DAY_OF_MONTH));
+                    DatePickerDialog dd = new DatePickerDialog(getContext(), dt
+                            , cd.get(Calendar.YEAR)
+                            , cd.get(Calendar.MONTH)
+                            , cd.get(Calendar.DAY_OF_MONTH));
                     dd.show();
                 }
                 break;
