@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
@@ -18,6 +19,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 
 /**
@@ -25,11 +27,23 @@ import wxm.KeepAccount.R;
  * Created by ookoo on 2017/1/9.
  */
 public class DlgUsrMessage extends DlgOKOrNOBase {
-    private final static String HTTP_POST_URL =
-            "http://www.wxmandriodapp.com:8080/KeepAccountServer/def/UMUtility";
-    public static final MediaType JSON =
+    private static final MediaType JSON =
             MediaType.parse("application/json; charset=utf-8");
 
+    @BindString(R.string.url_post_send_message)
+    String mSZUrlPost;
+
+    @BindString(R.string.col_usr)
+    String mSZColUsr;
+
+    @BindString(R.string.col_message)
+    String mSZColMsg;
+
+    @BindString(R.string.col_app_name)
+    String mSZColAppName;
+
+    @BindString(R.string.col_val_app_name)
+    String mSZColValAppName;
 
     @BindView(R.id.et_usr_name)
     TextInputEditText mETUsrName;
@@ -115,12 +129,14 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
             try {
                 // set param
                 JSONObject param = new JSONObject();
-                param.put("usr", mSZUsr);
-                param.put("message", mSZMsg);
+                param.put(mSZColUsr, mSZUsr);
+                param.put(mSZColMsg, mSZMsg);
+                param.put(mSZColAppName,
+                        mSZColValAppName + "-" + ToolUtil.getVerName(getContext()));
 
                 RequestBody body = RequestBody.create(JSON, param.toString());
                 Request request = new Request.Builder()
-                        .url(HTTP_POST_URL).post(body).build();
+                        .url(mSZUrlPost).post(body).build();
                 client.newCall(request).execute();
             } catch (JSONException | IOException e) {
                 e.printStackTrace();

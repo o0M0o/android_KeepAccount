@@ -149,4 +149,13 @@
     <string name="notice_input_note">请输入备注</string>
     <string name="cn_usr_name">用户名</string>
     <string name="cn_usr_message">留言</string>
+
+    <!-- for send message -->
+    <string name="url_post_send_message">
+        http://www.wxmandriodapp.com:8080/KeepAccountServer/def/UMUtility
+    </string>
+    <string name="col_usr">usr</string>
+    <string name="col_message">message</string>
+    <string name="col_app_name">app_name</string>
+    <string name="col_val_app_name">KeepAccount</string>
 </resources>
