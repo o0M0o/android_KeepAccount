@@ -51,6 +51,11 @@ public class ACNoteEdit extends BaseAppCompatActivity {
         // for holder
         mFGHolder = new FrgNoteEdit();
         Bundle bd = new Bundle();
+        String date = it.getStringExtra(GlobalDef.STR_RECORD_DATE);
+        if(!UtilFun.StringIsNullOrEmpty(date))  {
+            bd.putString(GlobalDef.STR_RECORD_DATE, date);
+        }
+
         bd.putString(PARA_ACTION, mAction);
         if(mAction.equals(GlobalDef.STR_MODIFY)) {
             int pid = it.getIntExtra(ACNoteEdit.PARA_NOTE_PAY, GlobalDef.INVALID_ID);

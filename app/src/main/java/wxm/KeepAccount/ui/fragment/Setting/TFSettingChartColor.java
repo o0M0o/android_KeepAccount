@@ -76,7 +76,7 @@ public class TFSettingChartColor extends TFSettingBase
             case R.id.iv_pay :
             case R.id.iv_income :  {
                 DlgSelectColor dsc = new DlgSelectColor();
-                dsc.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                dsc.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                     @Override
                     public void onDialogPositiveResult(DialogFragment dialog) {
                         DlgSelectColor ds = UtilFun.cast(dialog);

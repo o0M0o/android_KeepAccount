@@ -33,8 +33,8 @@
     *;
 }
 
--dontwarn org.junit.experimental.**
--keep class org.junit.experimental.** {
+-dontwarn org.junit.**
+-keep class org.junit.** {
     *;
 }
 
@@ -50,5 +50,50 @@
 
 -dontwarn org.apache.http.**
 -keep class org.apache.http.** {
+    *;
+}
+
+-dontwarn com.squareup.**
+-keep class com.squareup.** {
+    *;
+}
+
+-dontwarn org.hamcrest.**
+-keep class org.hamcrest.** {
+    *;
+}
+
+-dontwarn org.sqlite.**
+-keep class org.sqlite.** {
+    *;
+}
+
+-dontwarn sun.misc.**
+-keep class sun.misc.** {
+    *;
+}
+
+-dontwarn java.nio.**
+-keep class java.nio.** {
+    *;
+}
+
+-dontwarn java.lang.**
+-keep class java.lang.** {
+    *;
+}
+
+-dontwarn junit.framework.**
+-keep class junit.framework.** {
+    *;
+}
+
+-dontwarn junit.runner.**
+-keep class junit.runner.** {
+    *;
+}
+
+-dontwarn org.codehaus.**
+-keep class org.codehaus.** {
     *;
 }

@@ -292,7 +292,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                 DlgRecordInfo dp = new DlgRecordInfo();
                 dp.setInitDate(R.id.rl_pencil == vid ? (RecordTypeItem)getCurData() : null);
                 dp.setRecordType(mEditType);
-                dp.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                dp.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                     @Override
                     public void onDialogPositiveResult(DialogFragment dialog) {
                         DlgRecordInfo cur_dp = UtilFun.cast_t(dialog);

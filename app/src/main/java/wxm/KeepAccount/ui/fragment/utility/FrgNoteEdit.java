@@ -131,11 +131,15 @@ public class FrgNoteEdit extends FrgUtilityBase {
             super(fm);
             this.mNumOfTabs = NumOfTabs;
 
+            Bundle bd = getArguments();
+
             TFEditPay tp = new TFEditPay();
             tp.setCurData(mAction, mOldPayNote);
+            tp.setArguments(bd);
 
             TFEditIncome ti = new TFEditIncome();
             ti.setCurData(mAction, mOldIncomeNote);
+            ti.setArguments(bd);
 
             mHMFra = new HashMap<>();
             mHMFra.put(TAB_PAY, tp);

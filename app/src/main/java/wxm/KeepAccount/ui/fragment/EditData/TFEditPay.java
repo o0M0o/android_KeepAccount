@@ -3,7 +3,7 @@ package wxm.KeepAccount.ui.fragment.EditData;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -124,13 +124,15 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
             String o_n = mOldPayNote.getNote();
             mTVNote.setText(UtilFun.StringIsNullOrEmpty(o_n) ? mSZDefNote : o_n);
+            mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
             mETAmount.setText(format(Locale.CHINA, "%.02f", mOldPayNote.getVal()));
         } else {
-            Activity ac = getActivity();
-            Intent it = ac.getIntent();
-            if (null != it) {
-                String ad_date = it.getStringExtra(GlobalDef.STR_RECORD_DATE);
+            mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+
+            Bundle bd = getArguments();
+            if (null != bd) {
+                String ad_date = bd.getString(GlobalDef.STR_RECORD_DATE);
                 if (!UtilFun.StringIsNullOrEmpty(ad_date)) {
                     mETDate.setText(ad_date);
                 }
@@ -365,7 +367,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
                     DlgLongTxt dlg = new DlgLongTxt();
                     dlg.setLongTxt(lt);
-                    dlg.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                    dlg.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                         @Override
                         public void onDialogPositiveResult(DialogFragment dialogFragment) {
                             String lt = ((DlgLongTxt) dialogFragment).getLongTxt();
@@ -373,6 +375,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                                 lt = mSZDefNote;
 
                             mTVNote.setText(lt);
+                            mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
                         }
 
                         @Override
@@ -425,7 +428,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                 case R.id.ar_et_info: {
                     DlgSelectRecordType dp = new DlgSelectRecordType();
                     dp.setOldType(GlobalDef.STR_RECORD_PAY, mETInfo.getText().toString());
-                    dp.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                    dp.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                         @Override
                         public void onDialogPositiveResult(DialogFragment dialog) {
                             DlgSelectRecordType dp_cur = UtilFun.cast_t(dialog);

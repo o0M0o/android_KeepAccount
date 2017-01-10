@@ -3,10 +3,9 @@ package wxm.KeepAccount.ui.acinterface;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,6 +21,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Locale;
 
+import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ActionHelper;
@@ -32,6 +32,7 @@ import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.acutility.ACRemindEdit;
 import wxm.KeepAccount.ui.acutility.ACSetting;
+import wxm.KeepAccount.ui.dialog.DlgUsrMessage;
 import wxm.KeepAccount.ui.fragment.utility.FrgWelcome;
 
 /**
@@ -222,6 +223,7 @@ public class ACWelcome extends AppCompatActivity
      * 激活手机邮件客户端，往设定的地址发送邮件
      */
     private void contactWriter() {
+        /*
         Resources res = getResources();
 
         Intent data = new Intent(Intent.ACTION_SENDTO);
@@ -231,7 +233,19 @@ public class ACWelcome extends AppCompatActivity
         //data.putExtra(Intent.EXTRA_SUBJECT, "这是标题");
         //data.putExtra(Intent.EXTRA_TEXT, "这是内容");
         startActivity(data);
+        */
+
+        DlgUsrMessage dlg = new DlgUsrMessage();
+        dlg.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+            @Override
+            public void onDialogPositiveResult(DialogFragment dialogFragment) {
+            }
+
+            @Override
+            public void onDialogNegativeResult(DialogFragment dialogFragment) {
+            }
+        });
+
+        dlg.show(getSupportFragmentManager(), "send message");
     }
-
-
 }

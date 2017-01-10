@@ -147,4 +147,6 @@
     <string name="iv_act_hint">action hint</string>
     <string name="label_welcome">首页</string>
     <string name="notice_input_note">请输入备注</string>
+    <string name="cn_usr_name">用户名</string>
+    <string name="cn_usr_message">留言</string>
 </resources>

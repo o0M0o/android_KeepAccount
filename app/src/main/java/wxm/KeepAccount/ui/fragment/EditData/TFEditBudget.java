@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.fragment.EditData;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -8,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -174,6 +176,7 @@ public class TFEditBudget extends TFEditBase {
 
             String o_n = mBIData.getNote();
             mTVNote.setText(UtilFun.StringIsNullOrEmpty(o_n) ? mSZDefNote : o_n);
+            mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         }
     }
 
@@ -181,30 +184,37 @@ public class TFEditBudget extends TFEditBase {
      * 初始化组件
      */
     private void init_component()   {
+        mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+
         mTVNote.setOnTouchListener((view, motionEvent) -> {
-            String tv_sz = mTVNote.getText().toString();
-            String lt = mSZDefNote.equals(tv_sz) ? "" : tv_sz;
+            View v_self = getView();
+            if (null != v_self && motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                String tv_sz = mTVNote.getText().toString();
+                String lt = mSZDefNote.equals(tv_sz) ? "" : tv_sz;
 
-            DlgLongTxt dlg = new DlgLongTxt();
-            dlg.setLongTxt(lt);
-            dlg.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
-                @Override
-                public void onDialogPositiveResult(DialogFragment dialogFragment) {
-                    String lt = ((DlgLongTxt)dialogFragment).getLongTxt();
-                    if(UtilFun.StringIsNullOrEmpty(lt))
-                        lt = mSZDefNote;
+                DlgLongTxt dlg = new DlgLongTxt();
+                dlg.setLongTxt(lt);
+                dlg.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                    @Override
+                    public void onDialogPositiveResult(DialogFragment dialogFragment) {
+                        String lt = ((DlgLongTxt) dialogFragment).getLongTxt();
+                        if (UtilFun.StringIsNullOrEmpty(lt))
+                            lt = mSZDefNote;
 
-                    mTVNote.setText(lt);
-                }
+                        mTVNote.setText(lt);
+                        mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+                    }
 
-                @Override
-                public void onDialogNegativeResult(DialogFragment dialogFragment) {
-                }
-            });
+                    @Override
+                    public void onDialogNegativeResult(DialogFragment dialogFragment) {
+                    }
+                });
 
-            dlg.show(getActivity().getSupportFragmentManager(), "edit note");
+                dlg.show(getActivity().getSupportFragmentManager(), "edit note");
+                return true;
+            }
 
-            return true;
+            return false;
         });
 
         mETAmount.addTextChangedListener(new TextWatcher() {

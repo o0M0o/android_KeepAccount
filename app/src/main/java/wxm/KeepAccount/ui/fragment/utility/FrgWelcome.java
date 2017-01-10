@@ -108,7 +108,7 @@ public class FrgWelcome extends FrgUtilityBase {
             DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
             DlgSelectChannel dlg = new DlgSelectChannel();
             dlg.setHotChannel(dapt.getCurAction());
-            dlg.setDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+            dlg.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                 @Override
                 public void onDialogPositiveResult(DialogFragment dialog) {
                     DlgSelectChannel dsc = UtilFun.cast(dialog);

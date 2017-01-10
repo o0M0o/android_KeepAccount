@@ -24,8 +24,8 @@ android {
         applicationId "com.wxm.keepaccount"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 9
-        versionName "1.09"
+        versionCode 10
+        versionName "1.10"
         signingConfig signingConfigs.defkey
 
         /*
@@ -52,7 +52,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
 
@@ -100,7 +100,6 @@ dependencies {
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:design:25.0.1'
-    compile files('libs/extend_lib/httpcomponents-core-4.4.4/lib/httpcore-4.4.4.jar')
     compile files('libs/extend_lib/junit/junit-4.12.jar')
     compile files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
     compile files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
@@ -120,6 +119,8 @@ dependencies {
     compile project(':AndriodUtillib')
     compile project(':lm_banner_library')
     compile project(':simplecalendar')
+    compile files('libs/extend_lib/httpclient/httpclient-4.5.2.jar')
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
 }
 
 
