@@ -96,6 +96,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
      * @param pv   视图
      */
     private void initActs(View pv) {
+        /*
         mIVActions.setImageDrawable(mDAExpand);
         mRLActions.setVisibility(View.GONE);
 
@@ -109,6 +110,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 mRLActions.setVisibility(View.GONE);
             }
         });
+        */
 
         RelativeLayout rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_add));
         rl.setOnClickListener(v -> {

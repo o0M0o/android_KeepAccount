@@ -7,11 +7,36 @@
     android:longClickable="true"
     android:orientation="vertical">
 
+    <include
+        android:id="@id/rl_attach_button"
+        layout="@layout/attach_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_above="@id/rl_action"
+        android:layout_below="@id/rl_attach_button"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/lv_show"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey_3"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="1dp"
+            android:fastScrollEnabled="false"
+            android:longClickable="true" />
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/rl_action"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!--
         <ImageView
             android:id="@+id/iv_expand"
             android:layout_width="46dp"
@@ -22,12 +47,12 @@
             android:background="@color/grey_1"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/ic_to_up" />
+            -->
 
         <RelativeLayout
             android:id="@+id/rl_acts"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/iv_expand">
+            android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:id="@+id/rl_act_add"
@@ -144,29 +169,4 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <include
-        android:id="@id/rl_attach_button"
-        layout="@layout/attach_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_action" />
-
-
-    <RelativeLayout
-        android:id="@+id/rl_lv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rl_attach_button">
-
-        <ListView
-            android:id="@+id/lv_show"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/grey_3"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="1dp"
-            android:fastScrollEnabled="false"
-            android:longClickable="true" />
-
-    </RelativeLayout>
 </RelativeLayout>

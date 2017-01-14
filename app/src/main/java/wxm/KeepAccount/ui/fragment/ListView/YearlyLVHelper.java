@@ -121,6 +121,7 @@ public class YearlyLVHelper extends LVShowDataBase {
      * @param pv   视图
      */
     private void initActs(View pv) {
+        /*
         mIVActions.setImageDrawable(mDAExpand);
         setLayoutVisible(mRLActions, View.INVISIBLE);
 
@@ -134,6 +135,7 @@ public class YearlyLVHelper extends LVShowDataBase {
                 setLayoutVisible(mRLActions, View.INVISIBLE);
             }
         });
+        */
 
         RelativeLayout rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_add));
         ViewGroup.LayoutParams param = rl.getLayoutParams();

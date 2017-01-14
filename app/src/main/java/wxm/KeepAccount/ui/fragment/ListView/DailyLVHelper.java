@@ -94,12 +94,14 @@ public class DailyLVHelper extends LVShowDataBase
      * @param pv 视图
      */
     private void initActs(View pv) {
+        /*
         refreshAction();
 
         mIVActions.setOnClickListener(v -> {
             mBActionExpand = !mBActionExpand;
             refreshAction();
         });
+        */
 
         RelativeLayout rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_add));
         rl.setOnClickListener(v -> {
@@ -208,6 +210,7 @@ public class DailyLVHelper extends LVShowDataBase
         }
     }
 
+    /*
     private void refreshAction() {
         if (mBActionExpand) {
             mIVActions.setImageDrawable(mDAHide);
@@ -219,6 +222,7 @@ public class DailyLVHelper extends LVShowDataBase
             //setLayoutVisible(mRLActions, View.INVISIBLE);
         }
     }
+    */
 
     /**
      * 重新加载数据

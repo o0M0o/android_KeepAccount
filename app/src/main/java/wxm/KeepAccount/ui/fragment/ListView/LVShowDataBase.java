@@ -81,8 +81,8 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     protected boolean mBActionExpand;
 
     // for ui
-    @BindView(R.id.iv_expand)
-    protected ImageView mIVActions;
+    //@BindView(R.id.iv_expand)
+    //protected ImageView mIVActions;
 
     @BindView(R.id.rl_acts)
     protected RelativeLayout mRLActions;
