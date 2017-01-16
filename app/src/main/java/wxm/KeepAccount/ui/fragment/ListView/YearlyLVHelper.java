@@ -121,44 +121,17 @@ public class YearlyLVHelper extends LVShowDataBase {
      * @param pv   视图
      */
     private void initActs(View pv) {
-        /*
-        mIVActions.setImageDrawable(mDAExpand);
-        setLayoutVisible(mRLActions, View.INVISIBLE);
+        mRLActAdd.setVisibility(View.GONE);
+        mRLActDelete.setVisibility(View.GONE);
 
-        mIVActions.setOnClickListener(v -> {
-            mBActionExpand = !mBActionExpand;
-            if(mBActionExpand)  {
-                mIVActions.setImageDrawable(mDAHide);
-                setLayoutVisible(mRLActions, View.VISIBLE);
-            } else  {
-                mIVActions.setImageDrawable(mDAExpand);
-                setLayoutVisible(mRLActions, View.INVISIBLE);
-            }
-        });
-        */
+        mRLActRefresh.setOnClickListener(v -> reloadView(v.getContext(), false));
 
-        RelativeLayout rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_add));
-        ViewGroup.LayoutParams param = rl.getLayoutParams();
-        param.width = 0;
-        param.height = 0;
-        rl.setLayoutParams(param);
-
-        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_delete));
-        param = rl.getLayoutParams();
-        param.width = 0;
-        param.height = 0;
-        rl.setLayoutParams(param);
-
-        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_refresh));
-        rl.setOnClickListener(v -> reloadView(v.getContext(), false));
-
-        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_sort));
-        final ImageView iv_sort = UtilFun.cast_t(rl.findViewById(R.id.iv_sort));
-        final TextView tv_sort = UtilFun.cast_t(rl.findViewById(R.id.tv_sort));
+        final ImageView iv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.iv_sort));
+        final TextView tv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.tv_sort));
         iv_sort.setImageDrawable(pv.getContext().getResources()
                 .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
         tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
-        rl.setOnClickListener(v -> {
+        mRLActSort.setOnClickListener(v -> {
             mBTimeDownOrder = !mBTimeDownOrder;
 
             iv_sort.setImageDrawable(mSelfView.getContext().getResources()

@@ -48,16 +48,6 @@ public class ACNoteShow extends BaseAppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            /*
-            case R.id.mi_help: {
-                Intent intent = new Intent(this, ACHelp.class);
-                intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_RECORD);
-
-                startActivityForResult(intent, 1);
-            }
-            break;
-            */
-
             case R.id.mi_switch:   {
                 TFShowBase hot = ((FrgNoteShow)mFGHolder).getHotTabItem();
                 if(null != hot)  {

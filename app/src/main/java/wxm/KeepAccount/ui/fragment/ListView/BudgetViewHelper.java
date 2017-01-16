@@ -61,15 +61,6 @@ public class BudgetViewHelper  extends LVShowDataBase {
     // original data
     private HashMap<BudgetItem, List<PayNoteItem>>  mHMData;
 
-    /*
-    // for expand or hide actions
-    private ImageView   mIVActions;
-    private GridLayout mRLActions;
-    private boolean     mBActionExpand;
-    private Drawable mDAExpand;
-    private Drawable    mDAHide;
-    */
-
     public BudgetViewHelper()    {
         super();
         LOG_TAG = "BudgetViewHelper";
@@ -96,49 +87,29 @@ public class BudgetViewHelper  extends LVShowDataBase {
      * @param pv   视图
      */
     private void initActs(View pv) {
-        /*
-        mIVActions.setImageDrawable(mDAExpand);
-        mRLActions.setVisibility(View.GONE);
-
-        mIVActions.setOnClickListener(v -> {
-            mBActionExpand = !mBActionExpand;
-            if(mBActionExpand)  {
-                mIVActions.setImageDrawable(mDAHide);
-                mRLActions.setVisibility(View.VISIBLE);
-            } else  {
-                mIVActions.setImageDrawable(mDAExpand);
-                mRLActions.setVisibility(View.GONE);
-            }
-        });
-        */
-
-        RelativeLayout rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_add));
-        rl.setOnClickListener(v -> {
+        mRLActAdd.setOnClickListener(v -> {
             ACNoteShow ac = getRootActivity();
             Intent intent = new Intent(ac, ACPreveiwAndEdit.class);
             intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
             ac.startActivityForResult(intent, 1);
         });
 
-        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_delete));
-        rl.setOnClickListener(v -> {
+        mRLActDelete.setOnClickListener(v -> {
             mActionType = ACTION_DELETE;
             refreshView();
         });
 
-        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_refresh));
-        rl.setOnClickListener(v -> {
+        mRLActRefresh.setOnClickListener(v -> {
             mActionType = ACTION_EDIT;
             reloadView(v.getContext(), false);
         });
 
-        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_sort));
-        final ImageView iv_sort = UtilFun.cast_t(rl.findViewById(R.id.iv_sort));
-        final TextView tv_sort = UtilFun.cast_t(rl.findViewById(R.id.tv_sort));
+        final ImageView iv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.iv_sort));
+        final TextView tv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.tv_sort));
         iv_sort.setImageDrawable(pv.getContext().getResources()
                 .getDrawable(mBNameDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
         tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
-        rl.setOnClickListener(v -> {
+        mRLActSort.setOnClickListener(v -> {
             mBNameDownOrder = !mBNameDownOrder;
 
             iv_sort.setImageDrawable(pv.getContext().getResources()

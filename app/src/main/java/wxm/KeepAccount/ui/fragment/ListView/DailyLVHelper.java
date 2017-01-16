@@ -94,17 +94,7 @@ public class DailyLVHelper extends LVShowDataBase
      * @param pv 视图
      */
     private void initActs(View pv) {
-        /*
-        refreshAction();
-
-        mIVActions.setOnClickListener(v -> {
-            mBActionExpand = !mBActionExpand;
-            refreshAction();
-        });
-        */
-
-        RelativeLayout rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_add));
-        rl.setOnClickListener(v -> {
+        mRLActAdd.setOnClickListener(v -> {
             ACNoteShow ac = getRootActivity();
             Intent intent = new Intent(ac, ACNoteEdit.class);
             intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
@@ -122,25 +112,22 @@ public class DailyLVHelper extends LVShowDataBase
             ac.startActivityForResult(intent, 1);
         });
 
-        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_delete));
-        rl.setOnClickListener(v -> {
+        mRLActDelete.setOnClickListener(v -> {
             mActionType = ACTION_DELETE;
             refreshView();
         });
 
-        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_refresh));
-        rl.setOnClickListener(v -> {
+        mRLActRefresh.setOnClickListener(v -> {
             mActionType = ACTION_EDIT;
             reloadView(v.getContext(), false);
         });
 
-        rl = UtilFun.cast_t(pv.findViewById(R.id.rl_act_sort));
-        final ImageView iv_sort = UtilFun.cast_t(rl.findViewById(R.id.iv_sort));
-        final TextView tv_sort = UtilFun.cast_t(rl.findViewById(R.id.tv_sort));
+        final ImageView iv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.iv_sort));
+        final TextView tv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.tv_sort));
         iv_sort.setImageDrawable(pv.getContext().getResources()
                 .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
         tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
-        rl.setOnClickListener(v -> {
+        mRLActSort.setOnClickListener(v -> {
             mBTimeDownOrder = !mBTimeDownOrder;
 
             iv_sort.setImageDrawable(pv.getContext().getResources()

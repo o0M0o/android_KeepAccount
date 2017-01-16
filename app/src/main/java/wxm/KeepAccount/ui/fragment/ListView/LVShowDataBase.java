@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
@@ -84,14 +85,21 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     //@BindView(R.id.iv_expand)
     //protected ImageView mIVActions;
 
+    @BindView(R.id.iv_show_tag)
+    protected ImageView mIVHideShow;
+
+    @BindView(R.id.rl_hide_show)
+    protected RelativeLayout mRLHideShow;
+
     @BindView(R.id.rl_acts)
     protected RelativeLayout mRLActions;
 
-    @BindDrawable(R.drawable.ic_to_up)
+    @BindDrawable(R.drawable.ic_to_left)
     protected Drawable mDAExpand;
 
-    @BindDrawable(R.drawable.ic_to_down)
-    protected Drawable    mDAHide;
+    @BindDrawable(R.drawable.ic_to_right)
+    protected Drawable mDAHide;
+
 
     @BindColor(R.color.darkred)
     protected int  mCRForPay;
@@ -99,12 +107,39 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     @BindColor(R.color.darkslategrey)
     protected int  mCRForIncome;
 
+    @BindView(R.id.rl_act_add)
+    RelativeLayout  mRLActAdd;
+
+    @BindView(R.id.rl_act_delete)
+    RelativeLayout  mRLActDelete;
+
+    @BindView(R.id.rl_act_refresh)
+    RelativeLayout  mRLActRefresh;
+
+    @BindView(R.id.rl_act_sort)
+    RelativeLayout  mRLActSort;
+
+    @BindView(R.id.rl_action)
+    RelativeLayout  mRLAction;
+
     public LVShowDataBase()   {
         super();
         mMainPara       = new LinkedList<>();
         mHMSubPara      = new HashMap<>();
         mUnfoldItems    = new LinkedList<>();
     }
+
+    @OnClick(R.id.rl_hide_show)
+    public void switchActionHideShow(View v)    {
+        ViewGroup.LayoutParams rp = mRLActions.getLayoutParams();
+        mIVHideShow.setImageDrawable(rp.width == 0 ? mDAHide : mDAExpand);
+        mRLHideShow.getBackground().setAlpha(rp.width == 0 ? 255 : 40);
+        mRLAction.getBackground().setAlpha(rp.width == 0 ? 255 : 0);
+
+        rp.width = rp.width == 0 ? ViewGroup.LayoutParams.MATCH_PARENT : 0;
+        mRLActions.setLayoutParams(rp);
+    }
+
 
     /**
      * 添加一个展开节点
