@@ -91,6 +91,9 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     @BindView(R.id.rl_hide_show)
     protected RelativeLayout mRLHideShow;
 
+    @BindView(R.id.rl_lv_note)
+    protected RelativeLayout mRLLVNote;
+
     @BindView(R.id.rl_acts)
     protected RelativeLayout mRLActions;
 
@@ -132,12 +135,21 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     @OnClick(R.id.rl_hide_show)
     public void switchActionHideShow(View v)    {
         ViewGroup.LayoutParams rp = mRLActions.getLayoutParams();
-        mIVHideShow.setImageDrawable(rp.width == 0 ? mDAHide : mDAExpand);
-        mRLHideShow.getBackground().setAlpha(rp.width == 0 ? 255 : 40);
-        mRLAction.getBackground().setAlpha(rp.width == 0 ? 255 : 0);
+        boolean b_hide = rp.width == 0;
 
-        rp.width = rp.width == 0 ? ViewGroup.LayoutParams.MATCH_PARENT : 0;
+        mIVHideShow.setImageDrawable(b_hide ? mDAHide : mDAExpand);
+        mRLHideShow.getBackground().setAlpha(b_hide ? 255 : 40);
+        mRLAction.getBackground().setAlpha(b_hide ? 255 : 0);
+
+        rp.width = b_hide ? ViewGroup.LayoutParams.MATCH_PARENT : 0;
         mRLActions.setLayoutParams(rp);
+
+        RelativeLayout.LayoutParams rp_lv = UtilFun.cast_t(mRLLVNote.getLayoutParams());
+        if(b_hide)
+            rp_lv.addRule(RelativeLayout.ABOVE, R.id.rl_action);
+        else
+            rp_lv.removeRule(RelativeLayout.ABOVE);
+        mRLLVNote.setLayoutParams(rp_lv);
     }
 
 
