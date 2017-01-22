@@ -29,6 +29,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.fragment.utility.HelperDayNotesInfo;
 
 /**
  * 年数据视图辅助类
@@ -334,7 +335,7 @@ public class YearlyLVHelper extends LVShowDataBase {
                 tv.setText(hm.get(K_YEAR));
 
                 RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
-                fillNoteInfo(rl_info, hm.get(K_YEAR_PAY_COUNT), hm.get(K_YEAR_PAY_AMOUNT),
+                HelperDayNotesInfo.fillNoteInfo(rl_info, hm.get(K_YEAR_PAY_COUNT), hm.get(K_YEAR_PAY_AMOUNT),
                         hm.get(K_YEAR_INCOME_COUNT), hm.get(K_YEAR_INCOME_AMOUNT),
                         hm.get(K_AMOUNT));
             }
@@ -429,7 +430,7 @@ public class YearlyLVHelper extends LVShowDataBase {
                 tv.setText(hm.get(K_MONTH));
 
                 RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
-                fillNoteInfo(rl_info, hm.get(K_MONTH_PAY_COUNT), hm.get(K_MONTH_PAY_AMOUNT),
+                HelperDayNotesInfo.fillNoteInfo(rl_info, hm.get(K_MONTH_PAY_COUNT), hm.get(K_MONTH_PAY_AMOUNT),
                         hm.get(K_MONTH_INCOME_COUNT), hm.get(K_MONTH_INCOME_AMOUNT),
                         hm.get(K_AMOUNT));
             }

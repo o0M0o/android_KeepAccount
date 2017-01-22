@@ -110,6 +110,8 @@ public class PayIncomeDBUtility  {
      */
     public HashMap<String, ArrayList<INote>> getAllNotesToDay()    {
         List<INote> ret = getAllNotes();
+        //Collections.sort(ret, (t1, t2) -> t1.getTs().compareTo(t2.getTs()));
+
         HashMap<String, ArrayList<INote>> hm_data = new HashMap<>();
         for (INote i : ret) {
             String h_k = i.getTs().toString().substring(0, 10);

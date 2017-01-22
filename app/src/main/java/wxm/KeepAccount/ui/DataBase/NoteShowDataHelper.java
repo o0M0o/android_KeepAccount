@@ -38,6 +38,8 @@ public class NoteShowDataHelper {
     HashMap<String, ArrayList<INote>>   mHMMonthNotes;
     HashMap<String, ArrayList<INote>>   mHMYearNotes;
 
+    ArrayList<String>   mALOrderedDays;
+
     // use singleton
     private static NoteShowDataHelper instance = new NoteShowDataHelper();
     private NoteShowDataHelper() {
@@ -61,6 +63,9 @@ public class NoteShowDataHelper {
         mHMYearNotes = ContextUtil.getPayIncomeUtility().getAllNotesToYear();
         mHMMonthNotes = ContextUtil.getPayIncomeUtility().getAllNotesToMonth();
         mHMDayNotes = ContextUtil.getPayIncomeUtility().getAllNotesToDay();
+
+        mALOrderedDays = new ArrayList<>(mHMDayNotes.keySet());
+        Collections.sort(mALOrderedDays);
 
         refresh_day();
         refresh_month();
@@ -115,6 +120,35 @@ public class NoteShowDataHelper {
         return mHMYearNotes;
     }
 
+
+    /**
+     * 根据当前日期, 获得下一天的日期
+     * @param org_day   当前日期
+     * @return  下一天的日期，或者""
+     */
+    public String getNextDay(String org_day)    {
+        ArrayList<String> set_k = new ArrayList<>(mHMDayNotes.keySet());
+        int id = set_k.indexOf(org_day);
+        if(-1 == id)
+            return "";
+
+        return id < (set_k.size() - 1) ? set_k.get(id + 1) : "";
+    }
+
+
+    /**
+     * 根据当前日期, 获得上一天的日期
+     * @param org_day   当前日期
+     * @return  上一天的日期，或者""
+     */
+    public String getPrvDay(String org_day)    {
+        int id = mALOrderedDays.indexOf(org_day);
+        if(-1 == id)
+            return "";
+
+        return id > 0 ? mALOrderedDays.get(id - 1) : "";
+    }
+
     /// PRIVATE BEGIN
 
     /**
@@ -122,9 +156,9 @@ public class NoteShowDataHelper {
      * 数据取自sqlite原始数据
      */
     private void refresh_day()  {
-        ArrayList<String> set_k = new ArrayList<>(mHMDayNotes.keySet());
-        Collections.sort(set_k);
-        for (String k : set_k) {
+        //ArrayList<String> set_k = new ArrayList<>(mHMDayNotes.keySet());
+        //Collections.sort(set_k);
+        for (String k : mALOrderedDays) {
             ArrayList<INote> v = mHMDayNotes.get(k);
             NoteShowInfo ni = new NoteShowInfo();
             for (INote r : v) {

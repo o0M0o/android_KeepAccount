@@ -37,8 +37,10 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.acutility.ACDailyDetail;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
 import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
+import wxm.KeepAccount.ui.fragment.utility.HelperDayNotesInfo;
 
 /**
  * 日数据视图辅助类
@@ -418,7 +420,8 @@ public class DailyLVHelper extends LVShowDataBase
 
                 // for show
                 RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
-                fillNoteInfo(rl_info, hm.get(K_DAY_PAY_COUNT), hm.get(K_DAY_PAY_AMOUNT),
+                HelperDayNotesInfo.fillNoteInfo(rl_info,
+                        hm.get(K_DAY_PAY_COUNT), hm.get(K_DAY_PAY_AMOUNT),
                         hm.get(K_DAY_INCOME_COUNT), hm.get(K_DAY_INCOME_AMOUNT),
                         hm.get(K_AMOUNT));
             }
@@ -432,6 +435,7 @@ public class DailyLVHelper extends LVShowDataBase
             int pos = lv.getPositionForView(view);
 
             HashMap<String, String> hm = UtilFun.cast(getItem(pos));
+            /*
             boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
             hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
 
@@ -440,6 +444,12 @@ public class DailyLVHelper extends LVShowDataBase
                 addUnfoldItem(hm.get(K_TAG));
             else
                 removeUnfoldItem(hm.get(K_TAG));
+            */
+            String k_tag = hm.get(K_TAG);
+            ACNoteShow ac = getRootActivity();
+            Intent it = new Intent(ac, ACDailyDetail.class);
+            it.putExtra(ACDailyDetail.K_HOTDAY, k_tag);
+            ac.startActivity(it);
         }
     }
 

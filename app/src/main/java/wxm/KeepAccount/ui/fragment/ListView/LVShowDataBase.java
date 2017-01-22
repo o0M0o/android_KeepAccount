@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -104,12 +102,6 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     protected Drawable mDAHide;
 
 
-    @BindColor(R.color.darkred)
-    protected int  mCRForPay;
-
-    @BindColor(R.color.darkslategrey)
-    protected int  mCRForIncome;
-
     @BindView(R.id.rl_act_add)
     RelativeLayout  mRLActAdd;
 
@@ -197,61 +189,6 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
         return DAY_IN_WEEK[dw];
     }
 
-    /**
-     * 填充note信息区
-     * @param rl                信息区句柄
-     * @param pay_count         支出次数
-     * @param pay_amount        支出金额
-     * @param income_count      收入次数
-     * @param income_amount     收入金额
-     * @param amount            结余金额
-     */
-    protected void fillNoteInfo(RelativeLayout rl, String pay_count, String pay_amount,
-                                String income_count, String income_amount, String amount)   {
-        if(R.id.rl_info == rl.getId()) {
-            boolean b_pay = !"0".equals(pay_count);
-            boolean b_income = !"0".equals(income_count);
-
-            if(b_pay) {
-                TextView tv = UtilFun.cast_t(rl.findViewById(R.id.tv_pay_count));
-                tv.setText(pay_count);
-
-                tv = UtilFun.cast_t(rl.findViewById(R.id.tv_pay_amount));
-                tv.setText(pay_amount);
-            } else  {
-                RelativeLayout rl_p = UtilFun.cast_t(rl.findViewById(R.id.rl_pay));
-                rl_p.setVisibility(View.GONE);
-            }
-
-            if(b_income) {
-                TextView tv = UtilFun.cast_t(rl.findViewById(R.id.tv_income_count));
-                tv.setText(income_count);
-
-                tv = UtilFun.cast_t(rl.findViewById(R.id.tv_income_amount));
-                tv.setText(income_amount);
-            } else  {
-                RelativeLayout rl_i = UtilFun.cast_t(rl.findViewById(R.id.rl_income));
-                rl_i.setVisibility(View.GONE);
-            }
-
-            if(b_income && b_pay)   {
-                float pay = Float.valueOf(pay_amount);
-                float income = Float.valueOf(income_amount);
-                ImageView iv = UtilFun.cast_t(rl.findViewById(pay < income ?
-                                        R.id.iv_pay_line : R.id.iv_income_line));
-
-                ViewGroup.LayoutParams para = iv.getLayoutParams();
-                float ratio = (pay > income ? income : pay)
-                                    / (pay < income ? income : pay);
-                para.width = (int)(para.width * ratio);
-                iv.setLayoutParams(para);
-            }
-
-            TextView tv = UtilFun.cast_t(rl.findViewById(R.id.tv_amount));
-            tv.setText(amount);
-            tv.setTextColor(amount.startsWith("+") ? mCRForIncome : mCRForPay);
-        }
-    }
 
     @Override
     public void loadView(boolean bForce) {

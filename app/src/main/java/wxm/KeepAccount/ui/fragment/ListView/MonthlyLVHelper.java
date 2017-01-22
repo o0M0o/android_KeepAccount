@@ -31,6 +31,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
+import wxm.KeepAccount.ui.fragment.utility.HelperDayNotesInfo;
 
 /**
  * 月数据辅助类
@@ -339,7 +340,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
                 tv.setText(hm.get(K_MONTH));
 
                 RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
-                fillNoteInfo(rl_info, hm.get(K_MONTH_PAY_COUNT), hm.get(K_MONTH_PAY_AMOUNT),
+                HelperDayNotesInfo.fillNoteInfo(rl_info, hm.get(K_MONTH_PAY_COUNT), hm.get(K_MONTH_PAY_AMOUNT),
                         hm.get(K_MONTH_INCOME_COUNT), hm.get(K_MONTH_INCOME_AMOUNT),
                         hm.get(K_AMOUNT));
             }
@@ -439,7 +440,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
                 tv.setText(hm.get(K_DAY_IN_WEEK));
 
                 RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
-                fillNoteInfo(rl_info, hm.get(K_DAY_PAY_COUNT), hm.get(K_DAY_PAY_AMOUNT),
+                HelperDayNotesInfo.fillNoteInfo(rl_info, hm.get(K_DAY_PAY_COUNT), hm.get(K_DAY_PAY_AMOUNT),
                         hm.get(K_DAY_INCOME_COUNT), hm.get(K_DAY_INCOME_AMOUNT),
                         hm.get(K_AMOUNT));
             }

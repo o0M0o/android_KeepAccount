@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#BFDBB8"
+        android:padding="2dp">
+
+        <Button
+            android:id="@+id/bt_prv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="@string/hint_to_prv" />
+
+        <RelativeLayout
+            android:id="@+id/rl_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <TextView
+                android:id="@+id/tv_year_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2017年1月"
+                android:textColor="@color/text_fit"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/tv_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/tv_year_month"
+                android:layout_below="@id/tv_year_month"
+                android:text="19日"
+                android:textColor="@color/text_fit"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_day_in_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_year_month"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@id/tv_day"
+                android:text="星期四"
+                android:textColor="@color/text_fit"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/bt_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="@string/hint_to_next" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_daily_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_header"
+        android:background="#FDF0EF"
+        android:paddingBottom="6dp"
+        android:paddingEnd="96dp"
+        android:paddingStart="42dp"
+        android:paddingTop="6dp">
+
+        <include layout="@layout/frg_amount_info" />
+    </RelativeLayout>
+
+
+    <ListView
+        android:id="@+id/lv_note"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/rl_action"
+        android:layout_below="@id/rl_daily_info"
+        android:divider="@color/trans_full"
+        android:background="#DBCBB8"
+        android:dividerHeight="3dp"
+        android:paddingEnd="2dp"
+        android:paddingStart="4dp"
+        android:paddingTop="4dp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_action"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:padding="4dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_act_add"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/rl_action_shape"
+            android:padding="4dp">
+
+            <ImageView
+                android:id="@+id/iv_tag"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_add_simple" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="2dp"
+                android:layout_toEndOf="@id/iv_tag"
+                android:text="@string/cn_create"
+                android:textColor="@color/text_fit"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_act_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@id/rl_act_add"
+            android:background="@drawable/rl_action_shape"
+            android:padding="4dp">
+
+            <ImageView
+                android:id="@+id/iv_tag1"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_delete" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="2dp"
+                android:layout_toEndOf="@id/iv_tag1"
+                android:text="@string/cn_delete"
+                android:textColor="@color/text_fit"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

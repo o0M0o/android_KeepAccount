@@ -70,7 +70,7 @@
             android:layout_marginTop="2dp"
             android:layout_toRightOf="@id/rl_date">
 
-            <include layout="@layout/liit_note_info" />
+            <include layout="@layout/frg_amount_info" />
         </RelativeLayout>
     </RelativeLayout>
 

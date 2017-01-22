@@ -22,7 +22,7 @@
                 android:layout_marginLeft="4dp"
                 android:text="支"
                 android:textColor="@color/darkred"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tv_pay_count"
@@ -33,7 +33,7 @@
                 android:layout_marginLeft="32dp"
                 android:text="5"
                 android:textColor="@color/darkred"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tv_pay_amount"
@@ -44,12 +44,12 @@
                 android:layout_marginLeft="72dp"
                 android:text="754.76"
                 android:textColor="@color/darkred"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
 
             <ImageView
                 android:id="@+id/iv_pay_line"
-                android:layout_width="136dp"
-                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
                 android:layout_below="@id/tv_pay_tag"
                 android:layout_marginTop="2dp"
                 android:background="@color/red" />
@@ -70,7 +70,7 @@
                 android:layout_marginLeft="4dp"
                 android:text="收"
                 android:textColor="@color/forestgreen"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tv_income_count"
@@ -81,7 +81,7 @@
                 android:layout_marginLeft="32dp"
                 android:text="5"
                 android:textColor="@color/forestgreen"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tv_income_amount"
@@ -92,12 +92,12 @@
                 android:layout_marginLeft="72dp"
                 android:text="754.76"
                 android:textColor="@color/forestgreen"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
 
             <ImageView
                 android:id="@+id/iv_income_line"
-                android:layout_width="136dp"
-                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
                 android:layout_below="@id/iv_income_tag"
                 android:layout_marginTop="2dp"
                 android:background="@color/forestgreen" />
