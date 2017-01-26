@@ -65,33 +65,47 @@
 
     </RelativeLayout>
 
+
     <RelativeLayout
-        android:id="@+id/rl_daily_info"
+        android:id="@+id/rl_body"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_below="@id/rl_header"
-        android:background="#FDF0EF"
-        android:paddingBottom="6dp"
-        android:paddingEnd="96dp"
-        android:paddingStart="42dp"
-        android:paddingTop="6dp">
-
-        <include layout="@layout/frg_amount_info" />
-    </RelativeLayout>
-
-
-    <ListView
-        android:id="@+id/lv_note"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_above="@id/rl_action"
-        android:layout_below="@id/rl_daily_info"
-        android:divider="@color/trans_full"
-        android:background="#DBCBB8"
-        android:dividerHeight="3dp"
-        android:paddingEnd="2dp"
-        android:paddingStart="4dp"
-        android:paddingTop="4dp" />
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:id="@+id/login_progress"
+            android:layout_centerInParent="true"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/rl_daily_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FDF0EF"
+            android:paddingBottom="6dp"
+            android:paddingEnd="96dp"
+            android:paddingStart="42dp"
+            android:paddingTop="6dp">
+
+            <include layout="@layout/frg_amount_info" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/lv_note"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/rl_daily_info"
+            android:background="#DBCBB8"
+            android:divider="@color/trans_full"
+            android:dividerHeight="3dp"
+            android:paddingEnd="2dp"
+            android:paddingStart="4dp"
+            android:paddingTop="4dp" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_action"

@@ -68,32 +68,6 @@ public class BudgetDBUtility extends DBUtilityBase<BudgetItem, Integer> {
     }
 
 
-// --Commented out by Inspection START (2016/9/18 12:55):
-//    /**
-//     * 根据ID更新并获取预算数据
-//     * @param biid 预算ID
-//     * @return 查找到的数据,没有数据时返回{@code NULL}
-//     */
-//    public boolean RefrashBudgetById(int biid) {
-//        BudgetItem bi = AppModel.getBudgetUtility().GetBudgetById(biid);
-//        if(null == bi)
-//            return false;
-//
-//        RuntimeExceptionDao<PayNoteItem, Integer> pired = AppModel.getDBHelper().getPayDataREDao();
-//        List<PayNoteItem> pis = pired.queryForEq(PayNoteItem.FIELD_BUDGET, bi.get_id());
-//
-//        BigDecimal all_use = BigDecimal.ZERO;
-//        if(!ToolUtil.ListIsNullOrEmpty(pis)) {
-//            for(PayNoteItem i : pis)    {
-//                all_use = all_use.add(i.getVal());
-//            }
-//        }
-//
-//        bi.useBudget(all_use);
-//        return AppModel.getBudgetUtility().modifyData(bi);
-//    }
-// --Commented out by Inspection STOP (2016/9/18 12:55)
-
     /**
      * 根据预算名查找当前用户下的BudgetItem数据
      * @return 查找到的数据,没有数据时返回{@code NULL}

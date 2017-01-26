@@ -1,12 +1,18 @@
 package wxm.KeepAccount.ui.fragment.utility;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,9 +31,12 @@ import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.wxm.andriodutillib.DBHelper.IDataChangeNotice;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.INote;
+import wxm.KeepAccount.Base.data.IncomeNoteItem;
+import wxm.KeepAccount.Base.data.PayNoteItem;
 import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -35,6 +44,8 @@ import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acutility.ACDailyDetail;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
+
+import static wxm.KeepAccount.Base.utility.ContextUtil.getPayIncomeUtility;
 
 /**
  * for daily detail info
@@ -66,6 +77,9 @@ public class FrgDailyDetail extends FrgUtilityBase {
     @BindView(R.id.rl_daily_info)
     RelativeLayout mRLDailyInfo;
 
+    @BindView(R.id.login_progress)
+    ProgressBar mPBLoginProgress;
+
     // for color
     @BindColor(R.color.darkred)
     int mCLPay;
@@ -77,6 +91,65 @@ public class FrgDailyDetail extends FrgUtilityBase {
     private String          mSZHotDay;
     private List<INote>     mLSDayContents;
 
+    // when data changed
+    private IDataChangeNotice mIDCPayNotice = new IDataChangeNotice<PayNoteItem>() {
+        @Override
+        public void DataModifyNotice(List<PayNoteItem> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataCreateNotice(List<PayNoteItem> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataDeleteNotice(List<PayNoteItem> list) {
+            reLoadFrg();
+        }
+    };
+
+
+    private IDataChangeNotice mIDCIncomeNotice = new IDataChangeNotice<IncomeNoteItem>() {
+        @Override
+        public void DataModifyNotice(List<IncomeNoteItem> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataCreateNotice(List<IncomeNoteItem> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataDeleteNotice(List<IncomeNoteItem> list) {
+            reLoadFrg();
+        }
+    };
+
+    private class ATDataChange extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            NoteShowDataHelper.getInstance().refreshData();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            // After completing execution of given task, control will return here.
+            // Hence if you want to populate UI elements with fetched data, do it here.
+
+            if(!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
+                HashMap<String, ArrayList<INote>> hl = NoteShowDataHelper.getInstance().getNotesForDay();
+                mLSDayContents = hl.get(mSZHotDay);
+
+                loadContent();
+            }
+
+            showProgress(false);
+        }
+    }
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
@@ -184,9 +257,50 @@ public class FrgDailyDetail extends FrgUtilityBase {
         }
     }
 
+    @Override
+    protected void enterActivity()  {
+        getPayIncomeUtility().getPayDBUtility().addDataChangeNotice(mIDCPayNotice);
+        getPayIncomeUtility().getIncomeDBUtility().addDataChangeNotice(mIDCIncomeNotice);
+    }
 
+    @Override
+    protected void leaveActivity()  {
+        getPayIncomeUtility().getPayDBUtility().removeDataChangeNotice(mIDCPayNotice);
+        getPayIncomeUtility().getIncomeDBUtility().removeDataChangeNotice(mIDCIncomeNotice);
+    }
 
     /// PRIVATE BEGIN
+    /**
+     * 数据变化后重新加载数据
+     */
+    private void reLoadFrg()    {
+        showProgress(true);
+        new ATDataChange().execute();
+    }
+
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        int shortAnimTime = getResources()
+                .getInteger(android.R.integer.config_shortAnimTime);
+
+        mPBLoginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+        mPBLoginProgress.animate().setDuration(shortAnimTime)
+                .alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mPBLoginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
+    }
+
+
     /**
      * 加载内容
      */

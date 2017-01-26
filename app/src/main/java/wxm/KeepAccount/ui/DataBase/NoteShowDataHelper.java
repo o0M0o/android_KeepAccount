@@ -127,12 +127,11 @@ public class NoteShowDataHelper {
      * @return  下一天的日期，或者""
      */
     public String getNextDay(String org_day)    {
-        ArrayList<String> set_k = new ArrayList<>(mHMDayNotes.keySet());
-        int id = set_k.indexOf(org_day);
+        int id = mALOrderedDays.indexOf(org_day);
         if(-1 == id)
             return "";
 
-        return id < (set_k.size() - 1) ? set_k.get(id + 1) : "";
+        return id < (mALOrderedDays.size() - 1) ? mALOrderedDays.get(id + 1) : "";
     }
 
 
