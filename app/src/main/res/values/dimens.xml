@@ -13,4 +13,5 @@
     <dimen name="ac_tight_pad">6dp</dimen>
     <dimen name="banner_height">160dp</dimen>
     <dimen name="banner_chart_width">96dp</dimen>
+    <dimen name="rl_amount_info_width">140dp</dimen>
 </resources>

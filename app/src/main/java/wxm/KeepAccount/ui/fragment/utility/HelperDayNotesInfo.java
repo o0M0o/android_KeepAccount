@@ -16,6 +16,8 @@ import wxm.KeepAccount.R;
  * Created by ookoo on 2017/1/22.
  */
 public class HelperDayNotesInfo {
+    private final static String LOG_TAG = "HelperDayNotesInfo";
+
     /**
      * 填充note信息区
      *
@@ -37,8 +39,10 @@ public class HelperDayNotesInfo {
 
         RelativeLayout rl_p = UtilFun.cast_t(rl.findViewById(R.id.rl_pay));
         RelativeLayout rl_i = UtilFun.cast_t(rl.findViewById(R.id.rl_income));
-        RelativeLayout rl_father = UtilFun.cast_t(rl.findViewById(R.id.rl_pay_income));
-        int full_width = rl_father.getWidth();
+        int full_width = (int)res.getDimension(R.dimen.rl_amount_info_width);
+        //RelativeLayout rl_father = UtilFun.cast_t(rl.findViewById(R.id.rl_pay_income));
+        //int full_width = rl_father.getWidth();
+        //Log.e(LOG_TAG, "full_width : " + full_width);
 
         rl_i.setVisibility(View.VISIBLE);
         rl_p.setVisibility(View.VISIBLE);
