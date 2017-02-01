@@ -39,8 +39,7 @@ public class AdapterNoteDetail extends SimpleAdapter {
         RelativeLayout  mRLPay;
         RelativeLayout  mRLIncome;
 
-        RelativeLayout  mRLPayDelete;
-        RelativeLayout  mRLIncomeDelete;
+        RelativeLayout  mRLDelete;
     }
 
     /**
@@ -80,11 +79,10 @@ public class AdapterNoteDetail extends SimpleAdapter {
             HashMap<String, INote> hm_d = UtilFun.cast_t(getItem(position));
 
             ContentViewHolder ch = new ContentViewHolder();
-            ch.mRLPay    = UtilFun.cast_t(v.findViewById(R.id.rl_pay_holder));
-            ch.mRLIncome = UtilFun.cast_t(v.findViewById(R.id.rl_income_holder));
+            ch.mRLPay    = UtilFun.cast_t(v.findViewById(R.id.rl_pay));
+            ch.mRLIncome = UtilFun.cast_t(v.findViewById(R.id.rl_income));
 
-            ch.mRLIncomeDelete = UtilFun.cast_t(v.findViewById(R.id.rl_income_delete));
-            ch.mRLPayDelete = UtilFun.cast_t(v.findViewById(R.id.rl_pay_delete));
+            ch.mRLDelete = UtilFun.cast_t(v.findViewById(R.id.rl_delete));
 
             loadContentViewHolder(ch, hm_d.get(K_NODE));
             initDelAction(ch, hm_d.get(K_NODE), mBLCanDelete);
@@ -116,20 +114,17 @@ public class AdapterNoteDetail extends SimpleAdapter {
      * @param bflag         若为ture则数据可删除
      */
     private void initDelAction(ContentViewHolder ch, INote data, boolean bflag)     {
+        ch.mRLDelete.setVisibility(bflag ? View.VISIBLE : View.GONE);
         if(data.isPayNote())    {
-            ch.mRLPayDelete.setVisibility(bflag ? View.VISIBLE : View.GONE);
-
             if(bflag)   {
-                ch.mRLPayDelete.setOnClickListener(view -> {
+                ch.mRLDelete.setOnClickListener(view -> {
                     ContextUtil.getPayIncomeUtility().deletePayNotes(
                             Collections.singletonList(data.getId()));
                 });
             }
         } else {
-            ch.mRLIncomeDelete.setVisibility(bflag ? View.VISIBLE : View.GONE);
-
             if(bflag)   {
-                ch.mRLIncomeDelete.setOnClickListener(view -> {
+                ch.mRLDelete.setOnClickListener(view -> {
                     ContextUtil.getPayIncomeUtility().deleteIncomeNotes(
                             Collections.singletonList(data.getId()));
                 });

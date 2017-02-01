@@ -3,7 +3,6 @@ package wxm.KeepAccount.ui.fragment.ListView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,7 +38,6 @@ import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACDailyDetail;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
-import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.fragment.utility.HelperDayNotesInfo;
 
 /**
@@ -199,20 +197,6 @@ public class DailyLVHelper extends LVShowDataBase
         }
     }
 
-    /*
-    private void refreshAction() {
-        if (mBActionExpand) {
-            mIVActions.setImageDrawable(mDAHide);
-            mRLActions.setVisibility(View.VISIBLE);
-            //setLayoutVisible(mRLActions, View.VISIBLE);
-        } else {
-            mIVActions.setImageDrawable(mDAExpand);
-            mRLActions.setVisibility(View.GONE);
-            //setLayoutVisible(mRLActions, View.INVISIBLE);
-        }
-    }
-    */
-
     /**
      * 重新加载数据
      */
@@ -345,40 +329,6 @@ public class DailyLVHelper extends LVShowDataBase
     }
 
     /**
-     * 初始化次级(详细数据)视图
-     *
-     * @param v  主级视图
-     * @param hm 主级视图附带数据
-     */
-    private void init_detail_view(View v, HashMap<String, String> hm) {
-        // get sub para
-        LinkedList<HashMap<String, String>> llhm = null;
-        if (V_SHOW_UNFOLD.equals(hm.get(K_SHOW))) {
-            llhm = mHMSubPara.get(hm.get(K_TAG));
-        }
-
-        if (null == llhm) {
-            llhm = new LinkedList<>();
-        }
-
-        RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_detail));
-        if(llhm.isEmpty())  {
-            rl.setVisibility(View.GONE);
-        } else {
-            rl.setVisibility(View.VISIBLE);
-
-            // init sub adapter
-            ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
-            assert null != mLVShowDetail;
-            SelfSubAdapter mAdapter = new SelfSubAdapter(mSelfView.getContext(), mLVShowDetail,
-                    llhm, new String[]{}, new int[]{});
-            mLVShowDetail.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
-            ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
-        }
-    }
-
-    /**
      * 首级列表adapter
      */
     private class SelfAdapter extends SimpleAdapter implements OnClickListener {
@@ -411,7 +361,8 @@ public class DailyLVHelper extends LVShowDataBase
             View v = super.getView(position, view, arg2);
             if (null != v) {
                 HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                init_detail_view(v, hm);
+                RelativeLayout rl_detail = UtilFun.cast_t(v.findViewById(R.id.rl_detail));
+                rl_detail.setVisibility(View.GONE);
 
                 v.setOnClickListener(this);
 
@@ -435,198 +386,11 @@ public class DailyLVHelper extends LVShowDataBase
             int pos = lv.getPositionForView(view);
 
             HashMap<String, String> hm = UtilFun.cast(getItem(pos));
-            /*
-            boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-            hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-
-            init_detail_view(view, hm);
-            if (bf)
-                addUnfoldItem(hm.get(K_TAG));
-            else
-                removeUnfoldItem(hm.get(K_TAG));
-            */
             String k_tag = hm.get(K_TAG);
             ACNoteShow ac = getRootActivity();
             Intent it = new Intent(ac, ACDailyDetail.class);
             it.putExtra(ACDailyDetail.K_HOTDAY, k_tag);
             ac.startActivity(it);
-        }
-    }
-
-
-    /**
-     * 次级列表adapter
-     */
-    private class SelfSubAdapter extends SimpleAdapter implements OnClickListener {
-        private final static String TAG = "SelfSubAdapter";
-        private final ListView mRootView;
-
-        private Drawable mDADelete;
-        private Drawable mDADedit;
-        private int mCLSel;
-        private int mCLNoSel;
-
-        SelfSubAdapter(Context context, ListView fv,
-                       List<? extends Map<String, ?>> sdata,
-                       String[] from, int[] to) {
-            super(context, sdata, R.layout.li_daily_show_detail, from, to);
-            mRootView = fv;
-
-            Resources res = context.getResources();
-            mDADedit = res.getDrawable(R.drawable.right_arrow);
-            mDADelete = res.getDrawable(R.drawable.ic_delete_1);
-
-            mCLSel = res.getColor(R.color.trans_1);
-            mCLNoSel = res.getColor(R.color.trans_full);
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            int org_ct = getCount();
-            return org_ct < 1 ? 1 : org_ct;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(final int position, View view, ViewGroup arg2) {
-            View v = super.getView(position, view, arg2);
-            if (null != v) {
-                HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                RelativeLayout rl_pay = UtilFun.cast_t(v.findViewById(R.id.rl_pay));
-                RelativeLayout rl_income = UtilFun.cast_t(v.findViewById(R.id.rl_income));
-                if (V_TYPE_PAY.equals(hm.get(K_TYPE))) {
-                    rl_income.setVisibility(View.GONE);
-                    init_pay(rl_pay, hm);
-                } else {
-                    rl_pay.setVisibility(View.GONE);
-                    init_income(rl_income, hm);
-                }
-            }
-
-            return v;
-        }
-
-        private void init_pay(RelativeLayout rl_pay, HashMap<String, String> hd) {
-            TextView tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_title));
-            tv.setText(hd.get(K_TITLE));
-
-            String b_name = hd.get(K_BUDGET);
-            if (!UtilFun.StringIsNullOrEmpty(b_name)) {
-                tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_budget));
-                tv.setText(b_name);
-            } else {
-                tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_budget));
-                tv.setVisibility(View.INVISIBLE);
-
-                ImageView iv = UtilFun.cast_t(rl_pay.findViewById(R.id.iv_pay_budget));
-                iv.setVisibility(View.INVISIBLE);
-            }
-
-            tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_amount));
-            tv.setText(hd.get(K_AMOUNT));
-
-            tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_time));
-            tv.setText(hd.get(K_TIME));
-
-            ImageView iv = UtilFun.cast_t(rl_pay.findViewById(R.id.iv_pay_action));
-            iv.setOnClickListener(this);
-            iv.setImageDrawable(ACTION_EDIT == mActionType ? mDADedit : mDADelete);
-
-            int did = Integer.parseInt(hd.get(K_ID));
-            iv.setBackgroundColor(mDelPay.contains(did) ? mCLSel : mCLNoSel);
-
-            // for budget
-            String bd = hd.get(K_BUDGET);
-            if (UtilFun.StringIsNullOrEmpty(bd)) {
-                RelativeLayout rl = UtilFun.cast_t(rl_pay.findViewById(R.id.rl_budget));
-                rl.setVisibility(View.GONE);
-            }
-
-            // for note
-            String nt = hd.get(K_NOTE);
-            if (UtilFun.StringIsNullOrEmpty(nt)) {
-                RelativeLayout rl = UtilFun.cast_t(rl_pay.findViewById(R.id.rl_pay_note));
-                rl.setVisibility(View.GONE);
-            } else {
-                tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_note));
-                tv.setText(nt);
-            }
-        }
-
-        private void init_income(RelativeLayout rl_income, HashMap<String, String> hd) {
-            TextView tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_title));
-            tv.setText(hd.get(K_TITLE));
-
-            tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_amount));
-            tv.setText(hd.get(K_AMOUNT));
-
-            tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_time));
-            tv.setText(hd.get(K_TIME));
-
-            ImageView iv = UtilFun.cast_t(rl_income.findViewById(R.id.iv_income_action));
-            iv.setOnClickListener(this);
-            iv.setImageDrawable(ACTION_EDIT == mActionType ? mDADedit : mDADelete);
-
-            int did = Integer.parseInt(hd.get(K_ID));
-            iv.setBackgroundColor(mDelIncome.contains(did) ? mCLSel : mCLNoSel);
-
-            // for note
-            String nt = hd.get(K_NOTE);
-            if (UtilFun.StringIsNullOrEmpty(nt)) {
-                RelativeLayout rl = UtilFun.cast_t(rl_income.findViewById(R.id.rl_income_note));
-                rl.setVisibility(View.GONE);
-            } else {
-                tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_note));
-                tv.setText(nt);
-            }
-        }
-
-
-        @Override
-        public void onClick(View v) {
-            int pos = mRootView.getPositionForView(v);
-            HashMap<String, String> hm = UtilFun.cast(getItem(pos));
-            String tp = hm.get(K_TYPE);
-            int did = Integer.parseInt(hm.get(K_ID));
-
-            int vid = v.getId();
-            switch (vid) {
-                case R.id.iv_pay_action:
-                case R.id.iv_income_action: {
-                    ImageView iv = UtilFun.cast_t(v);
-                    if (ACTION_DELETE == mActionType) {
-                        boolean is_pay = V_TYPE_PAY.equals(tp);
-                        boolean is_sel = is_pay ? mDelPay.contains(did) : mDelIncome.contains(did);
-                        iv.setBackgroundColor(is_sel ? mCLNoSel : mCLSel);
-                        if (is_sel) {
-                            if (is_pay)
-                                mDelPay.remove((Object) did);
-                            else
-                                mDelIncome.remove((Object) did);
-                        } else {
-                            if (is_pay)
-                                mDelPay.add(did);
-                            else
-                                mDelIncome.add(did);
-                        }
-                    } else {
-                        ACNoteShow ac = getRootActivity();
-                        Intent intent;
-                        intent = new Intent(ac, ACPreveiwAndEdit.class);
-                        intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, did);
-                        intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
-                                V_TYPE_PAY.equals(tp) ? GlobalDef.STR_RECORD_PAY
-                                        : GlobalDef.STR_RECORD_INCOME);
-
-                        ac.startActivityForResult(intent, 1);
-                    }
-                }
-                break;
-            }
         }
     }
 }

@@ -80,6 +80,18 @@ public class FrgDailyDetail extends FrgUtilityBase {
     @BindView(R.id.login_progress)
     ProgressBar mPBLoginProgress;
 
+    // 确认或者放弃选择
+    @BindView(R.id.rl_accpet_giveup)
+    RelativeLayout mRLAcceptGiveup;
+
+    // 确认或者放弃选择
+    @BindView(R.id.rl_act_add)
+    RelativeLayout mRLActAdd;
+
+    // 确认或者放弃选择
+    @BindView(R.id.rl_act_delete)
+    RelativeLayout mRLActDelete;
+
     // for color
     @BindColor(R.color.darkred)
     int mCLPay;
@@ -229,10 +241,11 @@ public class FrgDailyDetail extends FrgUtilityBase {
      * 处理动作点击
      * @param view  触发的按键
      */
-    @OnClick({ R.id.rl_act_add, R.id.rl_act_delete})
+    @OnClick({ R.id.rl_act_add, R.id.rl_act_delete, R.id.bt_giveup})
     public void dayActionClick(View view) {
         int vid = view.getId();
         switch (vid)    {
+            // 添加数据
             case R.id.rl_act_add :  {
                 Intent intent = new Intent(getActivity(), ACNoteEdit.class);
                 intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
@@ -251,7 +264,18 @@ public class FrgDailyDetail extends FrgUtilityBase {
             }
             break;
 
+            // 删除数据
             case R.id.rl_act_delete :  {
+                boolean bdel = !(mRLActAdd.getVisibility() == View.VISIBLE);
+                loadActBars(!bdel);
+                loadDayNotes(!bdel);
+            }
+            break;
+
+            // 取消删除数据
+            case R.id.bt_giveup :  {
+                loadActBars(false);
+                loadDayNotes(false);
             }
             break;
         }
@@ -322,7 +346,17 @@ public class FrgDailyDetail extends FrgUtilityBase {
         setVisibility(View.VISIBLE);
         loadDayHeader();
         loadDayInfo();
-        loadDayNotes();
+        loadDayNotes(false);
+        loadActBars(false);
+    }
+
+    /**
+     * 加载动作条
+     * @param bDelStatus  若为true则处于删除数据状态
+     */
+    private void loadActBars(boolean bDelStatus) {
+        mRLAcceptGiveup.setVisibility(bDelStatus ? View.VISIBLE : View.GONE);
+        mRLActAdd.setVisibility(bDelStatus ? View.GONE : View.VISIBLE);
     }
 
     /**
@@ -363,8 +397,9 @@ public class FrgDailyDetail extends FrgUtilityBase {
 
     /**
      * 加载日内数据
+     * @param bDelStatus  若为true则处于删除数据状态
      */
-    private void loadDayNotes() {
+    private void loadDayNotes(boolean bDelStatus) {
         LinkedList<HashMap<String, INote>> c_para = new LinkedList<>();
         if(!UtilFun.ListIsNullOrEmpty(mLSDayContents)) {
             Collections.sort(mLSDayContents, (t1, t2) -> t1.getTs().compareTo(t2.getTs()));
@@ -378,6 +413,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
 
         AdapterNoteDetail ap = new AdapterNoteDetail(getActivity(), c_para,
                 new String[]{}, new int[]{});
+        ap.setCanDelete(bDelStatus);
         mLVBody.setAdapter(ap);
         ap.notifyDataSetChanged();
     }

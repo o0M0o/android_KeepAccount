@@ -70,7 +70,7 @@
         android:id="@+id/rl_body"
         android:layout_width="match_parent"
         android:layout_below="@id/rl_header"
-        android:layout_above="@id/rl_action"
+        android:layout_above="@id/rl_accpet_giveup"
         android:layout_height="wrap_content">
 
         <ProgressBar
@@ -105,6 +105,38 @@
             android:paddingEnd="2dp"
             android:paddingStart="4dp"
             android:paddingTop="4dp" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_accpet_giveup"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/trans_black"
+        android:layout_above="@id/rl_action"
+        android:layout_width="match_parent"
+        android:layout_height="32dp">
+
+        <TextView
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/text_fit"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="放弃"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true" />
+
+        <ImageButton
+            android:id="@+id/bt_giveup"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_reject"
+            android:scaleType="fitCenter"
+            android:layout_width="60dp"
+            android:layout_height="30dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -144,7 +176,6 @@
 
         <RelativeLayout
             android:id="@+id/rl_act_delete"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
