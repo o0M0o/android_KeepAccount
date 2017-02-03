@@ -56,7 +56,7 @@ public class ToolUtil {
         String verName = "";
         try {
             verName = context.getPackageManager().getPackageInfo(SELF_PACKAGE_NAME, 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException | NullPointerException e) {
             Log.e(TAG, e.getMessage());
         }
 

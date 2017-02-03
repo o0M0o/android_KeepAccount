@@ -38,6 +38,7 @@ import wxm.KeepAccount.Base.data.INote;
 import wxm.KeepAccount.Base.data.IncomeNoteItem;
 import wxm.KeepAccount.Base.data.PayNoteItem;
 import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
@@ -134,7 +135,8 @@ public class FrgDailyDetail extends FrgUtilityBase {
         }
 
         @Override
-        public void DataDeleteNotice(List<IncomeNoteItem> list) {
+        public void DataDeleteNotice(List<IncomeNoteItem> list)
+        {
             reLoadFrg();
         }
     };
@@ -267,8 +269,34 @@ public class FrgDailyDetail extends FrgUtilityBase {
             // 删除数据
             case R.id.rl_act_delete :  {
                 boolean bdel = !(mRLActAdd.getVisibility() == View.VISIBLE);
-                loadActBars(!bdel);
-                loadDayNotes(!bdel);
+                if(bdel)    {
+                    AdapterNoteDetail ap = (AdapterNoteDetail)mLVBody.getAdapter();
+                    List<INote> w_d = ap.getWantDeleteNotes();
+                    if(!w_d.isEmpty()) {
+                        ArrayList<Integer> al_i = new ArrayList<>();
+                        ArrayList<Integer> al_p = new ArrayList<>();
+                        for (INote it : w_d) {
+                            if (it.isPayNote())
+                                al_p.add(it.getId());
+                            else
+                                al_i.add(it.getId());
+                        }
+
+                        if (!al_i.isEmpty())
+                            ContextUtil.getPayIncomeUtility().deleteIncomeNotes(al_i);
+
+                        if (!al_p.isEmpty())
+                            ContextUtil.getPayIncomeUtility().deletePayNotes(al_p);
+
+                        reLoadFrg();
+                    }   else    {
+                        loadActBars(false);
+                        loadDayNotes(false);
+                    }
+                } else {
+                    loadActBars(true);
+                    loadDayNotes(true);
+                }
             }
             break;
 
@@ -383,12 +411,27 @@ public class FrgDailyDetail extends FrgUtilityBase {
         HashMap<String, NoteShowInfo> hm_d = NoteShowDataHelper.getInstance().getDayInfo();
         NoteShowInfo ni = hm_d.get(mSZHotDay);
 
-        String p_count  = String.valueOf(ni.getPayCount());
-        String i_count  = String.valueOf(ni.getIncomeCount());
-        String p_amount = String.format(Locale.CHINA, "%.02f", ni.getPayAmount());
-        String i_amount = String.format(Locale.CHINA, "%.02f", ni.getIncomeAmount());
+        String p_count;
+        String i_count;
+        String p_amount;
+        String i_amount;
+        BigDecimal bd_l;
+        if(null != ni) {
+            p_count = String.valueOf(ni.getPayCount());
+            i_count = String.valueOf(ni.getIncomeCount());
+            p_amount = String.format(Locale.CHINA, "%.02f", ni.getPayAmount());
+            i_amount = String.format(Locale.CHINA, "%.02f", ni.getIncomeAmount());
 
-        BigDecimal bd_l = ni.getBalance();
+            bd_l = ni.getBalance();
+        }   else    {
+            p_count = "0";
+            i_count = "0";
+            p_amount = "0.00";
+            i_amount = "0.00";
+
+            bd_l = BigDecimal.ZERO;
+        }
+
         String b_amount = String.format(Locale.CHINA,
                             0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
         HelperDayNotesInfo.fillNoteInfo(mRLDailyInfo, p_count,

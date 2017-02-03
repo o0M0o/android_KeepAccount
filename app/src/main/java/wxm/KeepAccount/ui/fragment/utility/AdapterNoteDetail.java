@@ -2,6 +2,7 @@ package wxm.KeepAccount.ui.fragment.utility;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -9,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -21,7 +22,6 @@ import wxm.KeepAccount.Base.data.INote;
 import wxm.KeepAccount.Base.data.IncomeNoteItem;
 import wxm.KeepAccount.Base.data.PayNoteItem;
 import wxm.KeepAccount.Base.define.GlobalDef;
-import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
@@ -31,9 +31,13 @@ import wxm.KeepAccount.ui.acutility.ACPreveiwAndEdit;
  * Created by ookoo on 2017/1/23.
  */
 public class AdapterNoteDetail extends SimpleAdapter {
+    private final static String LOG_TAG = "AdapterNoteDetail";
     public final static String  K_NODE     = "node";
 
-    private final static String TAG = "AdapterNoteDetail";
+    private int mCLNoSelected;
+    private int mCLSelected;
+
+    private ArrayList<INote>    mALDelNotes;
 
     private static class ContentViewHolder {
         RelativeLayout  mRLPay;
@@ -51,6 +55,12 @@ public class AdapterNoteDetail extends SimpleAdapter {
     AdapterNoteDetail(Context context, List<? extends Map<String, ?>> data,
                 String[] from, int[] to) {
         super(context, data, R.layout.li_daily_show_detail, from, to);
+
+        Resources res = context.getResources();
+        mCLNoSelected = res.getColor(R.color.red_ff725f_half);
+        mCLSelected   = res.getColor(R.color.red_ff725f);
+
+        mALDelNotes = new ArrayList<>();
     }
 
     @Override
@@ -70,6 +80,15 @@ public class AdapterNoteDetail extends SimpleAdapter {
      */
     public void setCanDelete(boolean bdel)  {
         mBLCanDelete = bdel;
+    }
+
+
+    /**
+     * 获得待删除的节点
+     * @return  待删除节点链表
+     */
+    public List<INote>  getWantDeleteNotes()    {
+        return mALDelNotes;
     }
 
 
@@ -114,22 +133,19 @@ public class AdapterNoteDetail extends SimpleAdapter {
      * @param bflag         若为ture则数据可删除
      */
     private void initDelAction(ContentViewHolder ch, INote data, boolean bflag)     {
+        if(!bflag)
+            mALDelNotes.clear();
+
         ch.mRLDelete.setVisibility(bflag ? View.VISIBLE : View.GONE);
-        if(data.isPayNote())    {
-            if(bflag)   {
-                ch.mRLDelete.setOnClickListener(view -> {
-                    ContextUtil.getPayIncomeUtility().deletePayNotes(
-                            Collections.singletonList(data.getId()));
-                });
+        ch.mRLDelete.setOnClickListener(view -> {
+            if(mALDelNotes.contains(data))  {
+                mALDelNotes.remove(data);
+                ch.mRLDelete.setBackgroundColor(mCLNoSelected);
+            } else  {
+                mALDelNotes.add(data);
+                ch.mRLDelete.setBackgroundColor(mCLSelected);
             }
-        } else {
-            if(bflag)   {
-                ch.mRLDelete.setOnClickListener(view -> {
-                    ContextUtil.getPayIncomeUtility().deleteIncomeNotes(
-                            Collections.singletonList(data.getId()));
-                });
-            }
-        }
+        });
     }
 
     /**
