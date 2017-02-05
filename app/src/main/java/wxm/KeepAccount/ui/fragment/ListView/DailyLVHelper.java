@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.BudgetItem;
 import wxm.KeepAccount.Base.data.INote;
 import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
@@ -46,16 +46,8 @@ import wxm.KeepAccount.ui.fragment.utility.HelperDayNotesInfo;
  */
 public class DailyLVHelper extends LVShowDataBase
         implements OnClickListener {
-    private final static String TAG = "DailyLVHelper";
-
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
-
-    /// list item data begin
-    final static String V_TYPE_DAY = "v_day";
-    final static String V_TYPE_PAY = "v_pay";
-    final static String V_TYPE_INCOME = "v_income";
-    /// list item data end
 
     // for action
     //private final static int ACTION_NONE    = 0;
@@ -63,18 +55,21 @@ public class DailyLVHelper extends LVShowDataBase
     private final static int ACTION_EDIT = 2;
     private int mActionType = ACTION_EDIT;
 
-    // delete data
-    private final LinkedList<Integer> mDelPay;
-    private final LinkedList<Integer> mDelIncome;
+    @BindView(R.id.lv_show)
+    ListView mLVData;
+
+    /**
+     * 如果设置为true则数据可以删除
+     */
+    private boolean mBLCanDelete = false;
 
     public DailyLVHelper() {
         super();
 
-        LOG_TAG = "DailyLVHelper";
-        mDelPay = new LinkedList<>();
-        mDelIncome = new LinkedList<>();
+        LOG_TAG         = "DailyLVHelper";
+        mBLCanDelete    = false;
 
-        mBActionExpand = false;
+        mBActionExpand  = false;
     }
 
     @Override
@@ -165,34 +160,43 @@ public class DailyLVHelper extends LVShowDataBase
         switch (vid) {
             case R.id.bt_accpet:
                 if (ACTION_DELETE == mActionType) {
-                    boolean bf = false;
-                    if (!ToolUtil.ListIsNullOrEmpty(mDelPay)) {
-                        ContextUtil.getPayIncomeUtility().deletePayNotes(mDelPay);
-                        mDelPay.clear();
+                    ArrayList<Integer> al_i = new ArrayList<>();
+                    ArrayList<Integer> al_p = new ArrayList<>();
 
+                    SelfAdapter cur_ap = (SelfAdapter)mLVData.getAdapter();
+                    List<String> ls_days = cur_ap.getWaitDeleteDays();
+                    HashMap<String, ArrayList<INote>> hm =
+                            NoteShowDataHelper.getInstance().getNotesForDay();
+                    for(String day : ls_days)   {
+                        List<INote> ls_n = hm.get(day);
+                        for(INote n : ls_n) {
+                            if (n.isPayNote())
+                                al_p.add(n.getId());
+                            else
+                                al_i.add(n.getId());
+                        }
+                    }
+
+                    boolean bf = false;
+                    if (!al_i.isEmpty()) {
+                        ContextUtil.getPayIncomeUtility().deleteIncomeNotes(al_i);
                         bf = true;
                     }
 
-                    if (!ToolUtil.ListIsNullOrEmpty(mDelIncome)) {
-                        ContextUtil.getPayIncomeUtility().deleteIncomeNotes(mDelIncome);
-                        mDelIncome.clear();
-
+                    if (!al_p.isEmpty()) {
+                        ContextUtil.getPayIncomeUtility().deletePayNotes(al_p);
                         bf = true;
                     }
 
                     mActionType = ACTION_EDIT;
-
                     if (bf)
                         reloadView(v.getContext(), false);
                 }
-
                 break;
 
             case R.id.bt_giveup:
                 mActionType = ACTION_EDIT;
-                mDelPay.clear();
-                mDelIncome.clear();
-                refreshAttachLayout();
+                refreshView();
                 break;
         }
     }
@@ -206,7 +210,6 @@ public class DailyLVHelper extends LVShowDataBase
         mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
 
         mMainPara.clear();
-        mHMSubPara.clear();
 
         // for day
         HashMap<String, NoteShowInfo> hm_d = NoteShowDataHelper.getInstance().getDayInfo();
@@ -246,46 +249,6 @@ public class DailyLVHelper extends LVShowDataBase
             map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
             mMainPara.add(map);
         }
-
-        // for note
-        HashMap<String, ArrayList<INote>> hm_v =
-                NoteShowDataHelper.getInstance().getNotesForDay();
-        for (String k : set_k_d) {
-            LinkedList<HashMap<String, String>> cur_llhm = new LinkedList<>();
-            ArrayList<INote> v = hm_v.get(k);
-            Collections.sort(v, (o1, o2) -> !mBTimeDownOrder ? o1.getTs().compareTo(o2.getTs())
-                    : o2.getTs().compareTo(o1.getTs()));
-            for (INote r : v) {
-                HashMap<String, String> map = new HashMap<>();
-                map.put(K_TITLE, r.getInfo());
-                map.put(K_ID, String.valueOf(r.getId()));
-                map.put(K_TIME, r.getTs().toString().substring(11, 16));
-
-                if (r.isPayNote()) {
-                    map.put(K_TYPE, V_TYPE_PAY);
-                    map.put(K_AMOUNT, String.format(Locale.CHINA, "- %.02f", r.getVal()));
-
-                    BudgetItem bi = r.getBudget();
-                    if (null != bi) {
-                        map.put(K_BUDGET, bi.getName());
-                    }
-                } else {
-                    map.put(K_TYPE, V_TYPE_INCOME);
-                    map.put(K_AMOUNT, String.format(Locale.CHINA, "+ %.02f", r.getVal()));
-                }
-
-                String nt = r.getNote();
-                if (!UtilFun.StringIsNullOrEmpty(nt)) {
-                    map.put(K_NOTE, nt.length() > 10 ? nt.substring(0, 10) + "..." : nt);
-                }
-
-                map.put(K_TAG, k);
-                map.put(K_SUB_TAG, k);
-                cur_llhm.add(map);
-            }
-
-            mHMSubPara.put(k, cur_llhm);
-        }
     }
 
     /**
@@ -313,11 +276,10 @@ public class DailyLVHelper extends LVShowDataBase
         }
 
         // 设置listview adapter
-        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
         SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
                 new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK},
                 new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week});
-        lv.setAdapter(mSNAdapter);
+        mLVData.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
 
@@ -328,6 +290,7 @@ public class DailyLVHelper extends LVShowDataBase
         setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType && !mBFilter ? View.VISIBLE : View.GONE);
     }
 
+
     /**
      * 首级列表adapter
      */
@@ -336,6 +299,11 @@ public class DailyLVHelper extends LVShowDataBase
         private int mClOne;
         private int mClTwo;
 
+        private int mCLNoSelected;
+        private int mCLSelected;
+
+        private ArrayList<String>   mALWaitDeleteDays = new ArrayList<>();
+
         SelfAdapter(Context context, List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {
             super(context, mdata, R.layout.li_daily_show, from, to);
@@ -343,6 +311,9 @@ public class DailyLVHelper extends LVShowDataBase
             Resources res = context.getResources();
             mClOne = res.getColor(R.color.color_1);
             mClTwo = res.getColor(R.color.color_2);
+
+            mCLNoSelected = res.getColor(R.color.red_ff725f_half);
+            mCLSelected   = res.getColor(R.color.red_ff725f);
         }
 
         @Override
@@ -360,14 +331,24 @@ public class DailyLVHelper extends LVShowDataBase
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
             if (null != v) {
-                HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                RelativeLayout rl_detail = UtilFun.cast_t(v.findViewById(R.id.rl_detail));
-                rl_detail.setVisibility(View.GONE);
+                v.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
 
+                HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 v.setOnClickListener(this);
 
-                RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
-                rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
+                // for line data
+                RelativeLayout rl_del = UtilFun.cast_t(v.findViewById(R.id.rl_delete));
+                rl_del.setVisibility(mActionType == ACTION_EDIT ? View.GONE : View.VISIBLE);
+                rl_del.setOnClickListener(view1 -> {
+                    String k_tag = hm.get(K_TAG);
+                    if(mALWaitDeleteDays.contains(k_tag))  {
+                        mALWaitDeleteDays.remove(k_tag);
+                        rl_del.setBackgroundColor(mCLNoSelected);
+                    } else  {
+                        mALWaitDeleteDays.add(k_tag);
+                        rl_del.setBackgroundColor(mCLSelected);
+                    }
+                });
 
                 // for show
                 RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
@@ -380,10 +361,17 @@ public class DailyLVHelper extends LVShowDataBase
             return v;
         }
 
+        /**
+         * 返回等待删除的日数据
+         * @return  待删除日数据
+         */
+        public List<String> getWaitDeleteDays() {
+            return mALWaitDeleteDays;
+        }
+
         @Override
         public void onClick(View view) {
-            ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
-            int pos = lv.getPositionForView(view);
+            int pos = mLVData.getPositionForView(view);
 
             HashMap<String, String> hm = UtilFun.cast(getItem(pos));
             String k_tag = hm.get(K_TAG);

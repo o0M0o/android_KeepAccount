@@ -208,10 +208,10 @@ public class FrgDailyDetail extends FrgUtilityBase {
                 if(!UtilFun.StringIsNullOrEmpty(prv_day))   {
                     mSZHotDay = prv_day;
 
-                    if(!mBTNext.isClickable())
-                        mBTNext.setClickable(true);
+                    if(View.VISIBLE != mBTNext.getVisibility())
+                        mBTNext.setVisibility(View.VISIBLE);
                 }  else {
-                    mBTPrv.setClickable(false);
+                    mBTPrv.setVisibility(View.GONE);
                 }
             }
             break;
@@ -221,10 +221,10 @@ public class FrgDailyDetail extends FrgUtilityBase {
                 if(!UtilFun.StringIsNullOrEmpty(next_day))   {
                     mSZHotDay = next_day;
 
-                    if(!mBTPrv.isClickable())
-                        mBTPrv.setClickable(true);
+                    if(View.VISIBLE != mBTPrv.getVisibility())
+                        mBTPrv.setVisibility(View.VISIBLE);
                 }  else {
-                    mBTNext.setClickable(false);
+                    mBTNext.setVisibility(View.GONE);
                 }
             }
             break;

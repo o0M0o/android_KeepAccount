@@ -37,7 +37,6 @@ public class AdapterNoteDetail extends SimpleAdapter {
     private int mCLNoSelected;
     private int mCLSelected;
 
-    private ArrayList<INote>    mALDelNotes;
 
     private static class ContentViewHolder {
         RelativeLayout  mRLPay;
@@ -50,7 +49,7 @@ public class AdapterNoteDetail extends SimpleAdapter {
      * 如果设置为true则数据可以删除
      */
     private boolean mBLCanDelete = false;
-
+    private ArrayList<INote>    mALDelNotes;
 
     AdapterNoteDetail(Context context, List<? extends Map<String, ?>> data,
                 String[] from, int[] to) {

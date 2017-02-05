@@ -127,11 +127,25 @@ public class NoteShowDataHelper {
      * @return  下一天的日期，或者""
      */
     public String getNextDay(String org_day)    {
-        int id = mALOrderedDays.indexOf(org_day);
-        if(-1 == id)
+        if(mALOrderedDays.isEmpty())
             return "";
 
-        return id < (mALOrderedDays.size() - 1) ? mALOrderedDays.get(id + 1) : "";
+        int max_id = mALOrderedDays.size() - 1;
+        int id = mALOrderedDays.indexOf(org_day);
+        if(-1 == id) {
+            for(int idx = max_id; idx >= 0; --idx)  {
+                String day = mALOrderedDays.get(idx);
+                if(0 > day.compareTo(org_day))  {
+                    id = idx < max_id ? idx + 1 : idx;
+                    break;
+                }
+            }
+        }   else    {
+            id = id + 1;
+        }
+
+        return id <= max_id && id != -1 ?
+                        mALOrderedDays.get(id) : "";
     }
 
 
@@ -141,11 +155,24 @@ public class NoteShowDataHelper {
      * @return  上一天的日期，或者""
      */
     public String getPrvDay(String org_day)    {
-        int id = mALOrderedDays.indexOf(org_day);
-        if(-1 == id)
+        if(mALOrderedDays.isEmpty())
             return "";
 
-        return id > 0 ? mALOrderedDays.get(id - 1) : "";
+        int id = mALOrderedDays.indexOf(org_day);
+        if(-1 == id) {
+            int len = mALOrderedDays.size();
+            for(int idx = 0; idx < len; ++idx)  {
+                String day = mALOrderedDays.get(idx);
+                if(0 < day.compareTo(org_day))  {
+                    id = idx > 0 ? idx - 1 : 0;
+                    break;
+                }
+            }
+        } else  {
+            id = id - 1;
+        }
+
+        return id >= 0 ? mALOrderedDays.get(id) : "";
     }
 
     /// PRIVATE BEGIN
