@@ -79,8 +79,7 @@
         android:background="@color/white"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp">
+        android:layout_marginTop="4dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,8 +105,8 @@
     <RelativeLayout
         android:id="@+id/rl_note"
         android:background="@color/white"
-        android:layout_marginTop="6dp"
-        android:layout_below="@+id/til_amount"
+        android:layout_marginTop="4dp"
+        android:layout_below="@+id/rl_budget"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
