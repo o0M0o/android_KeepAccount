@@ -196,7 +196,7 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
 
         if(bForce ||
                 ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
-            AsyncTask<Void, Void, Void>  cur_task = new AsyncTask<Void, Void, Void> () {
+            new AsyncTask<Void, Void, Void> () {
                 @Override
                 protected void onPreExecute() {
                     super.onPreExecute();
@@ -215,9 +215,7 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
                     // Hence if you want to populate UI elements with fetched data, do it here.
                     refreshView();
                 }
-            };
-
-            cur_task.execute();
+            }.execute();
         }   else {
             refreshView();
         }

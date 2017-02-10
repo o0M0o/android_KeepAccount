@@ -3,7 +3,6 @@ package wxm.KeepAccount.ui.fragment.ListView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +25,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+
+import cn.wxm.andriodutillib.util.UtilFun;
+import butterknife.ButterKnife;
 import butterknife.BindColor;
 import butterknife.BindDrawable;
-import butterknife.ButterKnife;
-import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.BudgetItem;
 import wxm.KeepAccount.Base.data.PayNoteItem;
 import wxm.KeepAccount.Base.define.GlobalDef;
@@ -151,9 +151,12 @@ public class BudgetViewHelper  extends LVShowDataBase {
     protected void refreshView() {
         refreshAttachLayout();
 
+        LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
+        n_mainpara.addAll(mMainPara);
+
         // 设置listview adapter
         ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
-        SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), lv, mMainPara,
+        SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), lv, n_mainpara,
                 new String[]{K_TITLE, K_AMOUNT, K_NOTE},
                 new int[]{R.id.tv_budget_name, R.id.tv_budget_amount, R.id.tv_budget_note});
         lv.setAdapter(mSNAdapter);
@@ -184,7 +187,6 @@ public class BudgetViewHelper  extends LVShowDataBase {
      * 重新加载数据
      */
     private void reloadData() {
-
     }
 
     /**
@@ -270,19 +272,14 @@ public class BudgetViewHelper  extends LVShowDataBase {
      */
     private void init_detail_view(View v, HashMap<String, String> hm) {
         // get sub para
-        LinkedList<HashMap<String, String>> llhm = null;
-        if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW))) {
-            llhm = mHMSubPara.get(hm.get(K_TAG));
-        }
-
-        if(null == llhm) {
-            llhm = new LinkedList<>();
-        }
+        LinkedList<HashMap<String, String>> llhm =
+                V_SHOW_UNFOLD.equals(hm.get(K_SHOW)) ?
+                    mHMSubPara.get(hm.get(K_TAG)) : new LinkedList<>();
 
         // init sub adapter
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
-        SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), mLVShowDetail, llhm,
+        SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), llhm,
                                         new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK,
                                                     K_TITLE, K_AMOUNT, K_NOTE,
                                                     K_TIME},
@@ -354,7 +351,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 String nt = hm.get(K_NOTE);
                 if(UtilFun.StringIsNullOrEmpty(nt)) {
                     rl = UtilFun.cast_t(v.findViewById(R.id.rl_budget_note));
-                    ToolUtil.setViewGroupVisible(rl, View.INVISIBLE);
+                    rl.setVisibility(View.GONE);
                 }
 
                 // for fold/unfold
@@ -368,29 +365,6 @@ public class BudgetViewHelper  extends LVShowDataBase {
                     else
                         removeUnfoldItem(hm.get(K_TAG));
                 });
-
-                /*
-                ImageButton ib = UtilFun.cast(v.findViewById(R.id.ib_hide_show));
-                ib.getBackground().setAlpha(0);
-                ib.setImageDrawable(V_SHOW_FOLD.equals(hm.get(K_SHOW)) ?  mDAUnFold : mDAFold);
-                LinkedList<HashMap<String, String>> llhm = mHMSubPara.get(hm.get(K_TAG));
-                if(ToolUtil.ListIsNullOrEmpty(llhm))    {
-                    ib.setVisibility(View.INVISIBLE);
-                } else  {
-                    ib.setOnClickListener(v12 -> {
-                        ImageButton ib1 = UtilFun.cast(v12);
-                        boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-                        hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                        init_detail_view(fv, hm);
-
-                        ib1.setImageDrawable(bf ? mDAFold : mDAUnFold);
-                        if(bf)
-                            addUnfoldItem(hm.get(K_TAG));
-                        else
-                            removeUnfoldItem(hm.get(K_TAG));
-                    });
-                }
-                */
 
                 // for action
                 ImageView ib_action = UtilFun.cast_t(v.findViewById(R.id.iv_delete));
@@ -436,20 +410,11 @@ public class BudgetViewHelper  extends LVShowDataBase {
      */
     private class SelfSubAdapter  extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
-        private final ListView   mRootView;
 
-        private int         mCLSel;
-        private int         mCLNoSel;
-
-        SelfSubAdapter(Context context, ListView fv,
+        SelfSubAdapter(Context context,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
             super(context, sdata, R.layout.li_budget_show_detail, from, to);
-            mRootView = fv;
-
-            Resources res   = context.getResources();
-            mCLSel = res.getColor(R.color.trans_1);
-            mCLNoSel = res.getColor(R.color.trans_full);
         }
 
         @Override

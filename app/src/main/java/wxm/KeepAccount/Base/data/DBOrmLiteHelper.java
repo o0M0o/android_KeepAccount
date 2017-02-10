@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import wxm.KeepAccount.Base.define.GlobalDef;
@@ -32,7 +33,7 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
     // name of the database file for your application -- change to something appropriate for your app
     private static final String DATABASE_NAME = "AppLocal.db";
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     // the DAO object we use to access the SimpleData table
     private RuntimeExceptionDao<UsrItem, Integer>           mUsrNoteRDao = null;
@@ -62,6 +63,15 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
+            // 版本9中budgetitem表结构有调整
+            // 删除旧表，创建新表，然后把旧数据导入新表
+            if(9 == newVersion && (8 == oldVersion || 7 == oldVersion)) {
+                List<BudgetItem> ls_bi = getBudgetDataREDao().queryForAll();
+                TableUtils.dropTable(connectionSource, BudgetItem.class, true);
+                TableUtils.createTable(connectionSource, BudgetItem.class);
+                getBudgetDataREDao().create(ls_bi);
+            }
+
             if(8 == newVersion || 7 == newVersion)     {
                 TableUtils.dropTable(connectionSource, UsrItem.class, true);
                 TableUtils.dropTable(connectionSource, RecordTypeItem.class, true);

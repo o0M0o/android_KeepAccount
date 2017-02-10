@@ -40,15 +40,14 @@ public class BudgetItem
             canBeNull = false)
     private UsrItem usr;
 
-    @DatabaseField(columnName = "amount", dataType = DataType.BIG_DECIMAL,
-            canBeNull = false)
+    @DatabaseField(columnName = "amount", dataType = DataType.BIG_DECIMAL, canBeNull = false)
     private BigDecimal amount;
 
     @DatabaseField(columnName = "remainder_amount", dataType = DataType.BIG_DECIMAL,
             canBeNull = false)
     private BigDecimal remainder_amount;
 
-    @DatabaseField(columnName = "note", canBeNull = false, dataType = DataType.STRING)
+    @DatabaseField(columnName = "note", dataType = DataType.STRING)
     private String note;
 
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)

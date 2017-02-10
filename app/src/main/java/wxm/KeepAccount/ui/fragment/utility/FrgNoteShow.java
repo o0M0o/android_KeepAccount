@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,9 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     @BindView(R.id.tl_tabs)
     TabLayout mTLTab;
+
+    // for prv hot tab
+    private int  mHTTabPos = -1;
 
     // for notice
     private boolean[]   mBADataChange;
@@ -223,6 +227,7 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     @Override
     protected void enterActivity()  {
+        Log.d(LOG_TAG, "in enterActivity");
         getPayIncomeUtility().getPayDBUtility().addDataChangeNotice(mIDCPayNotice);
         getPayIncomeUtility().getIncomeDBUtility().addDataChangeNotice(mIDCIncomeNotice);
         getBudgetUtility().addDataChangeNotice(mIDCBudgetNotice);
@@ -230,6 +235,7 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     @Override
     protected void leaveActivity()  {
+        Log.d(LOG_TAG, "in leaveActivity");
         getPayIncomeUtility().getPayDBUtility().removeDataChangeNotice(mIDCPayNotice);
         getPayIncomeUtility().getIncomeDBUtility().removeDataChangeNotice(mIDCIncomeNotice);
         getBudgetUtility().removeDataChangeNotice(mIDCBudgetNotice);
@@ -252,6 +258,10 @@ public class FrgNoteShow extends FrgUtilityBase {
             mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_YEARLY));
             mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_BUDGET));
             mTLTab.setTabGravity(TabLayout.GRAVITY_FILL);
+
+            mTLTab.setOnClickListener(v -> {
+                mHTTabPos = mTLTab.getSelectedTabPosition();
+            });
         }
     }
 

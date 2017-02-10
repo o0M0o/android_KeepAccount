@@ -237,9 +237,8 @@ public class MonthlyLVHelper extends LVShowDataBase {
         refreshAttachLayout();
 
         // update data
-        LinkedList<HashMap<String, String>> n_mainpara;
+        LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
         if(mBFilter) {
-            n_mainpara = new LinkedList<>();
             for (HashMap<String, String> i : mMainPara) {
                 String cur_tag = i.get(K_TAG);
                 for (String ii : mFilterPara) {
@@ -250,7 +249,7 @@ public class MonthlyLVHelper extends LVShowDataBase {
                 }
             }
         } else  {
-            n_mainpara = mMainPara;
+            n_mainpara.addAll(mMainPara);
         }
 
         // 设置listview adapter
