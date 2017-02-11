@@ -61,54 +61,54 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     // for notice
     private boolean[]   mBADataChange;
-    private IDataChangeNotice mIDCBudgetNotice = new IDataChangeNotice<BudgetItem>() {
+    private IDataChangeNotice mIDCBudgetNotice = new IDataChangeNotice<Integer>() {
         @Override
-        public void DataModifyNotice(List<BudgetItem> list) {
+        public void DataModifyNotice(List<Integer> list) {
             reLoadFrg();
         }
 
         @Override
-        public void DataCreateNotice(List<BudgetItem> list) {
+        public void DataCreateNotice(List<Integer> list) {
             reLoadFrg();
         }
 
         @Override
-        public void DataDeleteNotice(List<BudgetItem> list) {
-            reLoadFrg();
-        }
-    };
-
-    private IDataChangeNotice mIDCPayNotice = new IDataChangeNotice<PayNoteItem>() {
-        @Override
-        public void DataModifyNotice(List<PayNoteItem> list) {
-            reLoadFrg();
-        }
-
-        @Override
-        public void DataCreateNotice(List<PayNoteItem> list) {
-            reLoadFrg();
-        }
-
-        @Override
-        public void DataDeleteNotice(List<PayNoteItem> list) {
+        public void DataDeleteNotice(List<Integer> list) {
             reLoadFrg();
         }
     };
 
-
-    private IDataChangeNotice mIDCIncomeNotice = new IDataChangeNotice<IncomeNoteItem>() {
+    private IDataChangeNotice mIDCPayNotice = new IDataChangeNotice<Integer>() {
         @Override
-        public void DataModifyNotice(List<IncomeNoteItem> list) {
+        public void DataModifyNotice(List<Integer> list) {
             reLoadFrg();
         }
 
         @Override
-        public void DataCreateNotice(List<IncomeNoteItem> list) {
+        public void DataCreateNotice(List<Integer> list) {
             reLoadFrg();
         }
 
         @Override
-        public void DataDeleteNotice(List<IncomeNoteItem> list) {
+        public void DataDeleteNotice(List<Integer> list) {
+            reLoadFrg();
+        }
+    };
+
+
+    private IDataChangeNotice mIDCIncomeNotice = new IDataChangeNotice<Integer>() {
+        @Override
+        public void DataModifyNotice(List<Integer> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataCreateNotice(List<Integer> list) {
+            reLoadFrg();
+        }
+
+        @Override
+        public void DataDeleteNotice(List<Integer> list) {
             reLoadFrg();
         }
     };

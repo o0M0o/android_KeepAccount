@@ -1,9 +1,12 @@
 package wxm.KeepAccount.ui.dialog;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Message;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -23,9 +26,14 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.SIMCardInfo;
 import wxm.KeepAccount.Base.utility.ToolUtil;
 import wxm.KeepAccount.R;
+
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.READ_SMS;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 /**
  * 提交用户消息
@@ -58,6 +66,15 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
     @BindString(R.string.col_val_app_name)
     String mSZColValAppName;
 
+    @BindString(R.string.cn_usr_message)
+    String mSZUsrMessage;
+
+    @BindString(R.string.cn_accept)
+    String mSZAccept;
+
+    @BindString(R.string.cn_giveup)
+    String mSZGiveUp;
+
     /*
     @BindView(R.id.et_usr_name)
     TextInputEditText mETUsrName;
@@ -68,7 +85,7 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
 
     @Override
     protected View InitDlgView() {
-        InitDlgTitle("编辑留言", "接受", "放弃");
+        InitDlgTitle(mSZUsrMessage, mSZAccept, mSZGiveUp);
         View vw = View.inflate(getActivity(), R.layout.dlg_send_message, null);
         ButterKnife.bind(this, vw);
 
@@ -90,8 +107,14 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
             return false;
         }
 
-        SIMCardInfo si = new SIMCardInfo(getContext());
-        String usr = si.getNativePhoneNumber();
+        String usr = null;
+        if (ContextCompat.checkSelfPermission(ContextUtil.getInstance(), READ_PHONE_STATE)
+                == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(ContextUtil.getInstance(), READ_SMS)
+                    == PackageManager.PERMISSION_GRANTED) {
+            SIMCardInfo si = new SIMCardInfo(getContext());
+            usr = si.getNativePhoneNumber();
+        }
 
         return sendMsgByHttpPost(UtilFun.StringIsNullOrEmpty(usr) ? "null" : usr, msg);
     }

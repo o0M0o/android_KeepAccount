@@ -35,9 +35,7 @@ public class SIMCardInfo {
      * <BR>@author CODYY)peijiangping
      */
     public String getNativePhoneNumber() {
-        String NativePhoneNumber=null;
-        NativePhoneNumber=telephonyManager.getLine1Number();
-        return NativePhoneNumber;
+        return (null == telephonyManager) ? null : telephonyManager.getLine1Number();
     }
 
     /**

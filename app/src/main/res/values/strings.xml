@@ -114,7 +114,7 @@
 
     <string name="action_def_usr_login">使用默认用户登录</string>
     <string name="giveup_filter">取消</string>
-    <string name="cn_accpet">确认</string>
+    <string name="cn_accept">确认</string>
     <string name="cn_add_note">添加记录</string>
     <string name="cn_channel">关注</string>
     <string name="cn_more_viewport">扩大</string>
@@ -148,7 +148,7 @@
     <string name="label_welcome">首页</string>
     <string name="notice_input_note">请输入备注</string>
     <string name="cn_usr_name">用户名</string>
-    <string name="cn_usr_message">留言</string>
+    <string name="cn_usr_message">请输入您的意见或建议</string>
 
     <!-- for send message -->
     <string name="url_post_send_message">
