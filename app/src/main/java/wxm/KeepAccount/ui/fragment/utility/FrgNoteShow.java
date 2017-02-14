@@ -59,79 +59,6 @@ public class FrgNoteShow extends FrgUtilityBase {
     // for notice
     private boolean[]   mBADataChange;
 
-    private class ATLoadUI extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            NoteShowDataHelper.getInstance().refreshData();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            // After completing execution of given task, control will return here.
-            // Hence if you want to populate UI elements with fetched data, do it here.
-            AppCompatActivity a_ac = UtilFun.cast_t(getActivity());
-            final PagerAdapter adapter = new PagerAdapter(a_ac.getSupportFragmentManager(),
-                    mTLTab.getTabCount());
-            mVPPages.setAdapter(adapter);
-            mVPPages.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTLTab));
-            mTLTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    int pos = tab.getPosition();
-                    mVPPages.setCurrentItem(pos);
-                    getHotTabItem().loadView(mBADataChange[pos]);
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
-                }
-            });
-
-            mBADataChange = new boolean[mTLTab.getTabCount()];
-            Arrays.fill(mBADataChange, false);
-
-            // 默认选择第一页为首页
-            // 根据调用参数跳转到指定首页
-            Intent it = getActivity().getIntent();
-            if(null != it)  {
-                boolean b_hot = false;
-                String ft = it.getStringExtra(NoteShowDataHelper.INTENT_PARA_FIRST_TAB);
-                if(!UtilFun.StringIsNullOrEmpty(ft))    {
-                    int tc = mTLTab.getTabCount();
-                    for(int i = 0; i < tc; i++) {
-                        TabLayout.Tab t = mTLTab.getTabAt(i);
-                        if(null != t) {
-                            CharSequence cs = t.getText();
-                            if (null != cs && cs.toString().equals(ft)){
-                                t.select();
-                                b_hot = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if(!b_hot) {
-                    TabLayout.Tab t = mTLTab.getTabAt(0);
-                    if (null != t)
-                        t.select();
-                }
-
-                getHotTabItem().loadView(true);
-            }
-
-            showProgress(false);
-        }
-    }
-
     /**
      * 数据库内数据变化处理器
      * @param event     事件参数
@@ -167,7 +94,7 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "FrgLogin";
+        LOG_TAG = "FrgNoteShow";
         View rootView = layoutInflater.inflate(R.layout.vw_note_show, viewGroup, false);
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -187,8 +114,84 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     @Override
     protected void initUiInfo() {
-        showProgress(true);
-        new ATLoadUI().execute();
+        Log.d(LOG_TAG, "initUiInfo");
+        new AsyncTask<Void, Void, Void>()   {
+            @Override
+            protected void onPreExecute() {
+                showProgress(true);
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                NoteShowDataHelper.getInstance().refreshData();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                // After completing execution of given task, control will return here.
+                // Hence if you want to populate UI elements with fetched data, do it here.
+                AppCompatActivity a_ac = UtilFun.cast_t(getActivity());
+                final PagerAdapter adapter = new PagerAdapter(a_ac.getSupportFragmentManager(),
+                        mTLTab.getTabCount());
+                mVPPages.setAdapter(adapter);
+                mVPPages.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTLTab));
+                mTLTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        int pos = tab.getPosition();
+                        mVPPages.setCurrentItem(pos);
+                        getHotTabItem().loadView(mBADataChange[pos]);
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+
+                    }
+                });
+
+                mBADataChange = new boolean[mTLTab.getTabCount()];
+                Arrays.fill(mBADataChange, false);
+
+                // 默认选择第一页为首页
+                // 根据调用参数跳转到指定首页
+                Intent it = getActivity().getIntent();
+                if(null != it)  {
+                    boolean b_hot = false;
+                    String ft = it.getStringExtra(NoteShowDataHelper.INTENT_PARA_FIRST_TAB);
+                    if(!UtilFun.StringIsNullOrEmpty(ft))    {
+                        int tc = mTLTab.getTabCount();
+                        for(int i = 0; i < tc; i++) {
+                            TabLayout.Tab t = mTLTab.getTabAt(i);
+                            if(null != t) {
+                                CharSequence cs = t.getText();
+                                if (null != cs && cs.toString().equals(ft)){
+                                    t.select();
+                                    b_hot = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if(!b_hot) {
+                        TabLayout.Tab t = mTLTab.getTabAt(0);
+                        if (null != t)
+                            t.select();
+                    }
+
+                    getHotTabItem().loadView(true);
+                }
+
+                showProgress(false);
+            }
+        }.execute();
     }
 
 

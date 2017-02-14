@@ -162,4 +162,5 @@
     <string name="hint_to_next">往后</string>
     <string name="cn_create">新建</string>
     <string name="title_daily_detail">日详情</string>
+    <string name="cn_report">生成报告</string>
 </resources>
