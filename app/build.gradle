@@ -81,6 +81,7 @@ android {
     }
 
     compileOptions {
+
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
@@ -116,6 +117,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.1'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'org.greenrobot:eventbus:3.0.0'
     compile project(':hellocharts-library-release')
     compile project(':AndriodUtillib')
     compile project(':lm_banner_library')

@@ -19,17 +19,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.wxm.andriodutillib.DBHelper.IDataChangeNotice;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.BudgetItem;
-import wxm.KeepAccount.Base.data.IncomeNoteItem;
-import wxm.KeepAccount.Base.data.PayNoteItem;
+import wxm.KeepAccount.Base.data.DBDataChangeEvent;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
@@ -38,8 +40,6 @@ import wxm.KeepAccount.ui.fragment.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowMonthly;
 import wxm.KeepAccount.ui.fragment.ShowData.TFShowYearly;
 
-import static wxm.KeepAccount.Base.utility.ContextUtil.getBudgetUtility;
-import static wxm.KeepAccount.Base.utility.ContextUtil.getPayIncomeUtility;
 
 /**
  * for note show
@@ -56,88 +56,8 @@ public class FrgNoteShow extends FrgUtilityBase {
     @BindView(R.id.tl_tabs)
     TabLayout mTLTab;
 
-    // for prv hot tab
-    private int  mHTTabPos = -1;
-
     // for notice
     private boolean[]   mBADataChange;
-    private IDataChangeNotice mIDCBudgetNotice = new IDataChangeNotice<Integer>() {
-        @Override
-        public void DataModifyNotice(List<Integer> list) {
-            reLoadFrg();
-        }
-
-        @Override
-        public void DataCreateNotice(List<Integer> list) {
-            reLoadFrg();
-        }
-
-        @Override
-        public void DataDeleteNotice(List<Integer> list) {
-            reLoadFrg();
-        }
-    };
-
-    private IDataChangeNotice mIDCPayNotice = new IDataChangeNotice<Integer>() {
-        @Override
-        public void DataModifyNotice(List<Integer> list) {
-            reLoadFrg();
-        }
-
-        @Override
-        public void DataCreateNotice(List<Integer> list) {
-            reLoadFrg();
-        }
-
-        @Override
-        public void DataDeleteNotice(List<Integer> list) {
-            reLoadFrg();
-        }
-    };
-
-
-    private IDataChangeNotice mIDCIncomeNotice = new IDataChangeNotice<Integer>() {
-        @Override
-        public void DataModifyNotice(List<Integer> list) {
-            reLoadFrg();
-        }
-
-        @Override
-        public void DataCreateNotice(List<Integer> list) {
-            reLoadFrg();
-        }
-
-        @Override
-        public void DataDeleteNotice(List<Integer> list) {
-            reLoadFrg();
-        }
-    };
-
-    private class ATDataChange extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            NoteShowDataHelper.getInstance().refreshData();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            // After completing execution of given task, control will return here.
-            // Hence if you want to populate UI elements with fetched data, do it here.
-            TFShowBase tb = getHotTabItem();
-            tb.loadView(true);
-
-            int cur_pos = mVPPages.getCurrentItem();
-            for(int i = 0; i < mBADataChange.length; i++)   {
-                if(cur_pos != i)
-                    mBADataChange[i] = true;
-            }
-
-            showProgress(false);
-        }
-    }
-
 
     private class ATLoadUI extends AsyncTask<Void, Void, Void> {
         @Override
@@ -176,10 +96,7 @@ public class FrgNoteShow extends FrgUtilityBase {
             });
 
             mBADataChange = new boolean[mTLTab.getTabCount()];
-            for(int i = 0; i < mBADataChange.length; ++i)   {
-                mBADataChange[i] = false;
-            }
-
+            Arrays.fill(mBADataChange, false);
 
             // 默认选择第一页为首页
             // 根据调用参数跳转到指定首页
@@ -215,30 +132,37 @@ public class FrgNoteShow extends FrgUtilityBase {
         }
     }
 
-
     /**
-     * 数据变化后重新加载数据
+     * 数据库内数据变化处理器
+     * @param event     事件参数
      */
-    private void reLoadFrg()    {
-        showProgress(true);
-        new ATDataChange().execute();
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDBDataChangeEvent(DBDataChangeEvent event) {
+        TFShowBase tb = getHotTabItem();
+        tb.loadView(true);
+
+        int cur_pos = mVPPages.getCurrentItem();
+        for(int i = 0; i < mBADataChange.length; i++)   {
+            if(cur_pos != i)
+                mBADataChange[i] = true;
+        }
     }
 
 
     @Override
     protected void enterActivity()  {
         Log.d(LOG_TAG, "in enterActivity");
-        getPayIncomeUtility().getPayDBUtility().addDataChangeNotice(mIDCPayNotice);
-        getPayIncomeUtility().getIncomeDBUtility().addDataChangeNotice(mIDCIncomeNotice);
-        getBudgetUtility().addDataChangeNotice(mIDCBudgetNotice);
+        super.enterActivity();
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void leaveActivity()  {
         Log.d(LOG_TAG, "in leaveActivity");
-        getPayIncomeUtility().getPayDBUtility().removeDataChangeNotice(mIDCPayNotice);
-        getPayIncomeUtility().getIncomeDBUtility().removeDataChangeNotice(mIDCIncomeNotice);
-        getBudgetUtility().removeDataChangeNotice(mIDCBudgetNotice);
+        EventBus.getDefault().unregister(this);
+
+        super.leaveActivity();
     }
 
     @Override
@@ -258,10 +182,6 @@ public class FrgNoteShow extends FrgUtilityBase {
             mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_YEARLY));
             mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_BUDGET));
             mTLTab.setTabGravity(TabLayout.GRAVITY_FILL);
-
-            mTLTab.setOnClickListener(v -> {
-                mHTTabPos = mTLTab.getSelectedTabPosition();
-            });
         }
     }
 

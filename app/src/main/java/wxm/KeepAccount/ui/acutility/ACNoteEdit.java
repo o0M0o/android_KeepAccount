@@ -8,8 +8,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import org.greenrobot.eventbus.EventBus;
+
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.data.DBDataChangeEvent;
 import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
@@ -96,21 +99,13 @@ public class ACNoteEdit extends BaseAppCompatActivity {
             case R.id.mi_save: {
                 TFEditBase tb = getHotTabItem();
                 if(tb.onAccept()) {
-                    new AsyncTask<Void, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(Void... params) {
-                            NoteShowDataHelper.getInstance().refreshData();
-                            return null;
-                        }
+                    Runnable db_ra = () -> {
+                        NoteShowDataHelper.getInstance().refreshData();
+                        EventBus.getDefault().post(new DBDataChangeEvent());
+                    };
 
-                        @Override
-                        protected void onPostExecute(Void aVoid) {
-                            Intent data = new Intent();
-                            setResult(mAction.equals(GlobalDef.STR_CREATE) ?  GlobalDef.INTRET_RECORD_ADD
-                                    : GlobalDef.INTRET_RECORD_MODIFY,  data);
-                            finish();
-                        }
-                    }.execute();
+                    new Thread(db_ra).start();
+                    finish();
                 }
             }
             break;
