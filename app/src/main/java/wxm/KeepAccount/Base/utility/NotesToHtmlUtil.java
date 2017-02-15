@@ -21,8 +21,8 @@ public class NotesToHtmlUtil {
      */
     private final static String HTML_HEAD =
             "<html>\n" +
-            "\n" +
             "   <head>\n" +
+            "       <meta charset=\"utf8\" />\n" +
             "       <title>for notes show</title>\n" +
             "   </head>\n" +
             "\n" +
@@ -33,18 +33,19 @@ public class NotesToHtmlUtil {
      */
     private final static String HTML_TAIL =
             "   </body>\n" +
-            "\n" +
             "</html>";
 
     /**
      * table头字符串
      */
     private final static String TABLE_HEAD =
-            "   <table border=\"1\">\n" +
-            "       <th>日期</th>\n" +
-            "       <th>类型</th>\n" +
-            "       <th>原因</th>\n" +
-            "       <th>金额</th>";
+            "       <table border=\"1\">\n" +
+            "           <tr>\n" +
+            "               <th>日期</th>\n" +
+            "               <th>类型</th>\n" +
+            "               <th>原因</th>\n" +
+            "               <th>金额</th>\n" +
+            "           </tr>";
 
     /**
      * table尾字符串
@@ -69,7 +70,8 @@ public class NotesToHtmlUtil {
         StringBuilder sb = new StringBuilder();
         AppendLine(sb, HTML_HEAD);
         AppendLine(sb, TABLE_HEAD);
-        AppendLine(sb, TABLE_TAIL);
+        AppendLine(sb, NotesToTableStr(ls_data));
+        AppendLine(sb, STR_PAD + STR_PAD + TABLE_TAIL);
         AppendLine(sb, HTML_TAIL);
 
         return sb.toString();
@@ -88,15 +90,15 @@ public class NotesToHtmlUtil {
         String two_pad = STR_PAD + STR_PAD;
 
         StringBuilder sb = new StringBuilder();
-        AppendLine(sb, STR_PAD + "<tr>");
         for(INote id : ls_data) {
-            AppendTableRow(sb, two_pad, sd_format.format(id.getTs().getTime()));
-            AppendTableRow(sb, two_pad, id.isPayNote() ? nt_pay : nt_income);
-            AppendTableRow(sb, two_pad, id.getInfo());
-            AppendTableRow(sb, two_pad,
-                    String.format(Locale.CHINA, "%.02f", id.getVal().floatValue()));
+            AppendLine(sb, STR_PAD + "<tr>");
+                AppendTableRow(sb, two_pad, sd_format.format(id.getTs().getTime()));
+                AppendTableRow(sb, two_pad, id.isPayNote() ? nt_pay : nt_income);
+                AppendTableRow(sb, two_pad, id.getInfo());
+                AppendTableRow(sb, two_pad,
+                        String.format(Locale.CHINA, "%.02f", id.getVal().floatValue()));
+            AppendLine(sb, STR_PAD + "</tr>");
         }
-        AppendLine(sb, STR_PAD + "</tr>");
 
         return sb.toString();
     }

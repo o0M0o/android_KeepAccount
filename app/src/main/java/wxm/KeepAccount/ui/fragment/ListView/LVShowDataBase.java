@@ -102,6 +102,10 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     protected Drawable mDAHide;
 
 
+    // for addtion action
+    @BindView(R.id.rl_act_report)
+    RelativeLayout  mRLActReport;
+
     @BindView(R.id.rl_act_add)
     RelativeLayout  mRLActAdd;
 

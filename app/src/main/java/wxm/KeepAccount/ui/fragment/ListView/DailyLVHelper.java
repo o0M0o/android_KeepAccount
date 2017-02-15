@@ -3,6 +3,8 @@ package wxm.KeepAccount.ui.fragment.ListView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +29,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.INote;
 import wxm.KeepAccount.Base.define.GlobalDef;
@@ -38,6 +41,8 @@ import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acinterface.ACNoteShow;
 import wxm.KeepAccount.ui.acutility.ACDailyDetail;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
+import wxm.KeepAccount.ui.acutility.ACReport;
+import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
 import wxm.KeepAccount.ui.fragment.utility.HelperDayNotesInfo;
 
 /**
@@ -89,6 +94,36 @@ public class DailyLVHelper extends LVShowDataBase
      * @param pv 视图
      */
     private void initActs(View pv) {
+        mRLActReport.setOnClickListener(v -> {
+            final String[] d_s = {"", ""};
+
+            DlgSelectReportDays dlg_days = new DlgSelectReportDays();
+            dlg_days.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                @Override
+                public void onDialogPositiveResult(DialogFragment dialogFragment) {
+                    d_s[0] = dlg_days.getStartDay();
+                    d_s[1] = dlg_days.getEndDay();
+                    Log.d(LOG_TAG, "start : " + d_s[0] + ", end : " + d_s[1]);
+
+                    ArrayList<String> ls_sz = new ArrayList<>();
+                    ls_sz.add(d_s[0]);
+                    ls_sz.add(d_s[1]);
+
+                    Intent it = new Intent(getRootActivity(), ACReport.class);
+                    it.putExtra(ACReport.PARA_TYPE, ACReport.PT_DAY);
+                    it.putStringArrayListExtra(ACReport.PARA_LOAD, ls_sz);
+                    getRootActivity().startActivity(it);
+                }
+
+                @Override
+                public void onDialogNegativeResult(DialogFragment dialogFragment) {
+                    Log.d(LOG_TAG, "start : " + d_s[0] + ", end : " + d_s[1]);
+                }
+            });
+
+            dlg_days.show(getRootActivity().getSupportFragmentManager(), "select days");
+        });
+
         mRLActAdd.setOnClickListener(v -> {
             ACNoteShow ac = getRootActivity();
             Intent intent = new Intent(ac, ACNoteEdit.class);
