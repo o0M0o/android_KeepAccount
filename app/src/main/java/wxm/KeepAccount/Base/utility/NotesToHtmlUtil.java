@@ -9,72 +9,41 @@ import java.util.Locale;
 import wxm.KeepAccount.Base.data.INote;
 import wxm.KeepAccount.R;
 
-import static android.R.attr.format;
-
 /**
  * notes数据转换至html字符串
  * Created by User on 2017/2/14.
  */
 public class NotesToHtmlUtil {
-    /**
-     * html头字符串
-     */
-    private final static String HTML_HEAD =
-            "<html>\n" +
-            "   <head>\n" +
-            "       <meta charset=\"utf8\" />\n" +
-            "       <title>for notes show</title>\n" +
-            "   </head>\n" +
-            "\n" +
-            "   <body>";
+    private static final String ENCODING            = "UTF-8";
+    private static final String DAY_REPORT_MODE_FN  = "report_day_md.html";
+    private static final String TAG_COLUMNS         = "###columns###";
+    private static final String TAG_ROWS            = "###rows###";
+    private static final String TAG_CAPTION         = "###caption###";
+
+    private static final String TABLE_COLUMNS =
+            "<th>日期</th>\n<th>类型</th>\n<th>原因</th>\n<th>金额</th>";
 
     /**
-     * html尾字符串
-     */
-    private final static String HTML_TAIL =
-            "   </body>\n" +
-            "</html>";
-
-    /**
-     * table头字符串
-     */
-    private final static String TABLE_HEAD =
-            "       <table border=\"1\">\n" +
-            "           <tr>\n" +
-            "               <th>日期</th>\n" +
-            "               <th>类型</th>\n" +
-            "               <th>原因</th>\n" +
-            "               <th>金额</th>\n" +
-            "           </tr>";
-
-    /**
-     * table尾字符串
-     */
-    private final static String TABLE_TAIL = "</table>";
-
-    /**
-     * 填充4空格字符串
+     * 填充(4空格字符串)
      */
     private final static String STR_PAD = "    ";
 
-
-    private final static String TABLE_COL_HEAD = "<td>";
-    private final static String TABLE_COL_TAIL = "</td>";
+    /**
+     * table cell开始和结束标签
+     */
+    private final static String TB_CELL_HEAD = "<td>";
+    private final static String TB_CELL_TAIL = "</td>";
 
     /**
      * 根据数据生成html字符串（供展示）
+     * @param caption   表名
      * @param ls_data   数据
      * @return          html字符串
      */
-    public static String NotesToHtmlStr(List<INote> ls_data) {
-        StringBuilder sb = new StringBuilder();
-        AppendLine(sb, HTML_HEAD);
-        AppendLine(sb, TABLE_HEAD);
-        AppendLine(sb, NotesToTableStr(ls_data));
-        AppendLine(sb, STR_PAD + STR_PAD + TABLE_TAIL);
-        AppendLine(sb, HTML_TAIL);
-
-        return sb.toString();
+    public static String NotesToHtmlStr(String caption, List<INote> ls_data) {
+        String sz_org = ToolUtil.getFromAssets(DAY_REPORT_MODE_FN, ENCODING);
+        return sz_org.replace(TAG_CAPTION, caption).replace(TAG_COLUMNS, TABLE_COLUMNS)
+                    .replace(TAG_ROWS, NotesToRowStr(ls_data));
     }
 
     /**
@@ -82,21 +51,24 @@ public class NotesToHtmlUtil {
      * @param ls_data   数据
      * @return          html字符串
      */
-    private static String NotesToTableStr(List<INote> ls_data)  {
+    private static String NotesToRowStr(List<INote> ls_data) {
         Resources res = ContextUtil.getInstance().getResources();
         String nt_pay = res.getString(R.string.cn_pay);
         String nt_income = res.getString(R.string.cn_income);
-        SimpleDateFormat sd_format = new SimpleDateFormat( "yyyy-MM-dd", Locale.CHINA);
+        SimpleDateFormat sd_format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         String two_pad = STR_PAD + STR_PAD;
 
         StringBuilder sb = new StringBuilder();
-        for(INote id : ls_data) {
-            AppendLine(sb, STR_PAD + "<tr>");
-                AppendTableRow(sb, two_pad, sd_format.format(id.getTs().getTime()));
-                AppendTableRow(sb, two_pad, id.isPayNote() ? nt_pay : nt_income);
-                AppendTableRow(sb, two_pad, id.getInfo());
-                AppendTableRow(sb, two_pad,
-                        String.format(Locale.CHINA, "%.02f", id.getVal().floatValue()));
+        for (INote id : ls_data) {
+            String sz_tr = id.isPayNote() ?  STR_PAD + "<tr bgcolor=\"f8aba6\";>"
+                                : STR_PAD + "<tr bgcolor=\"84bf96\";>";
+
+            AppendLine(sb, sz_tr);
+            AppendTableRow(sb, two_pad, sd_format.format(id.getTs().getTime()));
+            AppendTableRow(sb, two_pad, id.isPayNote() ? nt_pay : nt_income);
+            AppendTableRow(sb, two_pad, id.getInfo());
+            AppendTableRow(sb, two_pad,
+                    String.format(Locale.CHINA, "%.02f", id.getVal().floatValue()));
             AppendLine(sb, STR_PAD + "</tr>");
         }
 
@@ -120,7 +92,7 @@ public class NotesToHtmlUtil {
      */
     private static void AppendTableRow(StringBuilder sb, String pad, String row)    {
         String col_amount = String.format(Locale.CHINA, "%s%s%s%s",
-                                pad, TABLE_COL_HEAD, row, TABLE_COL_TAIL);
+                                pad, TB_CELL_HEAD, row, TB_CELL_TAIL);
         AppendLine(sb, col_amount);
     }
 }

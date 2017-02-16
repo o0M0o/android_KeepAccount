@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ListView;
 
+import org.apache.http.util.EncodingUtils;
+
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,6 +66,28 @@ public class ToolUtil {
         return verName;
     }
 
+
+    /**
+     * 从asset中读取文件并转化为字符串
+     * @param fileName  asset中文件名
+     * @param encode    asset中文件编码
+     * @return          文件内容字符串
+     */
+    public static String getFromAssets(String fileName, String encode){
+        String result = "";
+        try {
+            InputStream in = ContextUtil.getInstance().getResources().getAssets().open(fileName);
+            int lenght = in.available();
+            byte[]  buffer = new byte[lenght];
+
+            in.read(buffer);
+            result = EncodingUtils.getString(buffer, encode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     /**
      * 在测试版本满足条件后抛出异常
      * @param bThrow    若true则抛出异常
@@ -73,7 +98,6 @@ public class ToolUtil {
             throw new AssertionError("测试版本出现异常");
         }
     }
-
 
 
     /**
