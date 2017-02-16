@@ -4,6 +4,8 @@ package wxm.KeepAccount.ui.DataBase;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import wxm.KeepAccount.Base.data.INote;
 import wxm.KeepAccount.Base.utility.ContextUtil;
@@ -118,6 +120,27 @@ public class NoteShowDataHelper {
      */
     public HashMap<String, ArrayList<INote>> getNotesForYear()   {
         return mHMYearNotes;
+    }
+
+
+    /**
+     * 以日期为单位,抽取指定时间段范围内的数据
+     * @param start     开始日期
+     * @param end       结束日期
+     * @return          数据
+     */
+    public List<INote> getNotesBetweenDays(String start, String end)   {
+        LinkedList<INote> ls_note = new LinkedList<>();
+        for(String day : mALOrderedDays)    {
+            if(day.compareTo(start) >= 0)   {
+                if(day.compareTo(end) > 0)
+                    break;
+
+                ls_note.addAll(mHMDayNotes.get(day));
+            }
+        }
+
+        return ls_note;
     }
 
 

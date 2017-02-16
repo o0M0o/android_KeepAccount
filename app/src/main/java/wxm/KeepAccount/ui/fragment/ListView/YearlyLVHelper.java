@@ -122,6 +122,7 @@ public class YearlyLVHelper extends LVShowDataBase {
      * @param pv   视图
      */
     private void initActs(View pv) {
+        mRLActReport.setVisibility(View.GONE);
         mRLActAdd.setVisibility(View.GONE);
         mRLActDelete.setVisibility(View.GONE);
 

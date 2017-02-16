@@ -88,7 +88,8 @@ public class FrgReportDay extends FrgUtilityBase {
                     String d_e = mASParaLoad.get(1);
                     String sz_caption = String.format(Locale.CHINA,
                                             "%s - %s", d_s, d_e);
-                    List<INote> ls_note = getNotesBetweenDays(d_s, d_e);
+                    List<INote> ls_note = NoteShowDataHelper.getInstance()
+                                                .getNotesBetweenDays(d_s, d_e);
                     mSZHtml = NotesToHtmlUtil.NotesToHtmlStr(sz_caption, ls_note);
                     Log.d(LOG_TAG, "initUiInfo html : " +
                                 (UtilFun.StringIsNullOrEmpty(mSZHtml) ? "null" : mSZHtml));
@@ -134,29 +135,5 @@ public class FrgReportDay extends FrgUtilityBase {
                 mPBLoadData.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
-    }
-
-    /**
-     * 以日期为单位,抽取指定时间段范围内的数据
-     * @param start     开始日期
-     * @param end       结束日期
-     * @return          数据
-     */
-    private List<INote> getNotesBetweenDays(String start, String end)   {
-        HashMap<String, ArrayList<INote>> hm_data = NoteShowDataHelper.getInstance().getNotesForDay();
-        ArrayList<String> ls_key = new ArrayList<>(hm_data.keySet());
-        Collections.sort(ls_key);
-
-        LinkedList<INote> ls_note = new LinkedList<>();
-        for(String day : ls_key)    {
-            if(day.compareTo(start) >= 0)   {
-                if(day.compareTo(end) > 0)
-                    break;
-
-                ls_note.addAll(hm_data.get(day));
-            }
-        }
-
-        return ls_note;
     }
 }

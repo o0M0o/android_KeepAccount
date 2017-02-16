@@ -87,6 +87,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
      * @param pv   视图
      */
     private void initActs(View pv) {
+        mRLActReport.setVisibility(View.GONE);
         mRLActAdd.setOnClickListener(v -> {
             ACNoteShow ac = getRootActivity();
             Intent intent = new Intent(ac, ACPreveiwAndEdit.class);

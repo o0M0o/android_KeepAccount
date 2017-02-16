@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -34,6 +39,7 @@ import butterknife.OnClick;
 import cn.wxm.andriodutillib.DBHelper.IDataChangeNotice;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.data.DBDataChangeEvent;
 import wxm.KeepAccount.Base.data.INote;
 import wxm.KeepAccount.Base.data.IncomeNoteItem;
 import wxm.KeepAccount.Base.data.PayNoteItem;
@@ -45,6 +51,7 @@ import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acutility.ACDailyDetail;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
+import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
 
 import static wxm.KeepAccount.Base.utility.ContextUtil.getPayIncomeUtility;
 
@@ -104,43 +111,6 @@ public class FrgDailyDetail extends FrgUtilityBase {
     private String          mSZHotDay;
     private List<INote>     mLSDayContents;
 
-    // when data changed
-    private IDataChangeNotice mIDCPayNotice = new IDataChangeNotice<PayNoteItem>() {
-        @Override
-        public void DataModifyNotice(List<PayNoteItem> list) {
-            reLoadFrg();
-        }
-
-        @Override
-        public void DataCreateNotice(List<PayNoteItem> list) {
-            reLoadFrg();
-        }
-
-        @Override
-        public void DataDeleteNotice(List<PayNoteItem> list) {
-            reLoadFrg();
-        }
-    };
-
-
-    private IDataChangeNotice mIDCIncomeNotice = new IDataChangeNotice<IncomeNoteItem>() {
-        @Override
-        public void DataModifyNotice(List<IncomeNoteItem> list) {
-            reLoadFrg();
-        }
-
-        @Override
-        public void DataCreateNotice(List<IncomeNoteItem> list) {
-            reLoadFrg();
-        }
-
-        @Override
-        public void DataDeleteNotice(List<IncomeNoteItem> list)
-        {
-            reLoadFrg();
-        }
-    };
-
     private class ATDataChange extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
@@ -190,6 +160,36 @@ public class FrgDailyDetail extends FrgUtilityBase {
         }
 
         loadContent();
+    }
+
+    @Override
+    protected void enterActivity()  {
+        Log.d(LOG_TAG, "in enterActivity");
+        super.enterActivity();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void leaveActivity()  {
+        Log.d(LOG_TAG, "in leaveActivity");
+        EventBus.getDefault().unregister(this);
+
+        super.leaveActivity();
+    }
+
+    /**
+     * 数据库内数据变化处理器
+     * @param event     事件参数
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDBDataChangeEvent(DBDataChangeEvent event) {
+        if(!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
+            HashMap<String, ArrayList<INote>> hl = NoteShowDataHelper.getInstance().getNotesForDay();
+            mLSDayContents = hl.get(mSZHotDay);
+
+            loadContent();
+        }
     }
 
 
@@ -288,7 +288,13 @@ public class FrgDailyDetail extends FrgUtilityBase {
                         if (!al_p.isEmpty())
                             ContextUtil.getPayIncomeUtility().deletePayNotes(al_p);
 
-                        reLoadFrg();
+                        // send db data change event
+                        Runnable db_ra = () -> {
+                            NoteShowDataHelper.getInstance().refreshData();
+                            EventBus.getDefault().post(new DBDataChangeEvent());
+                        };
+
+                        new Thread(db_ra).start();
                     }   else    {
                         loadActBars(false);
                         loadDayNotes(false);
@@ -309,27 +315,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
         }
     }
 
-    @Override
-    protected void enterActivity()  {
-        getPayIncomeUtility().getPayDBUtility().addDataChangeNotice(mIDCPayNotice);
-        getPayIncomeUtility().getIncomeDBUtility().addDataChangeNotice(mIDCIncomeNotice);
-    }
-
-    @Override
-    protected void leaveActivity()  {
-        getPayIncomeUtility().getPayDBUtility().removeDataChangeNotice(mIDCPayNotice);
-        getPayIncomeUtility().getIncomeDBUtility().removeDataChangeNotice(mIDCIncomeNotice);
-    }
-
     /// PRIVATE BEGIN
-    /**
-     * 数据变化后重新加载数据
-     */
-    private void reLoadFrg()    {
-        showProgress(true);
-        new ATDataChange().execute();
-    }
-
 
     /**
      * Shows the progress UI and hides the login form.
