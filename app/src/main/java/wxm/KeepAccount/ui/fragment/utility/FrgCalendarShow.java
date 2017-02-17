@@ -15,6 +15,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,19 +29,16 @@ import java.util.TreeMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.wxm.andriodutillib.DBHelper.IDataChangeNotice;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.Base.data.DBDataChangeEvent;
 import wxm.KeepAccount.Base.data.INote;
-import wxm.KeepAccount.Base.data.IncomeNoteItem;
-import wxm.KeepAccount.Base.data.PayNoteItem;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.CalendarListView.CalendarShowItemAdapter;
 import wxm.KeepAccount.ui.CalendarListView.CalendarShowItemModel;
 import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.simplecalendarlvb.CalendarListView;
 
-import static wxm.KeepAccount.Base.utility.ContextUtil.getPayIncomeUtility;
 
 /**
  * for calendar show
@@ -73,40 +74,6 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
     private FrgCalendarContent     mFGContent = new FrgCalendarContent();
 
-    private IDataChangeNotice mIDCPayNotice = new IDataChangeNotice<PayNoteItem>() {
-        @Override
-        public void DataModifyNotice(List<PayNoteItem> list) {
-            reLoadFrg(false);
-        }
-
-        @Override
-        public void DataCreateNotice(List<PayNoteItem> list) {
-            reLoadFrg(false);
-        }
-
-        @Override
-        public void DataDeleteNotice(List<PayNoteItem> list) {
-            reLoadFrg(false);
-        }
-    };
-
-    private IDataChangeNotice mIDCIncomeNotice = new IDataChangeNotice<IncomeNoteItem>() {
-        @Override
-        public void DataModifyNotice(List<IncomeNoteItem> list) {
-            reLoadFrg(false);
-        }
-
-        @Override
-        public void DataCreateNotice(List<IncomeNoteItem> list) {
-            reLoadFrg(false);
-        }
-
-        @Override
-        public void DataDeleteNotice(List<IncomeNoteItem> list) {
-            reLoadFrg(false);
-        }
-    };
-
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         LOG_TAG = "FrgCalendarShow";
@@ -140,7 +107,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
             mFGContent.setDay(selectedDate, mTMList.get(selectedDate));
         });
 
-        reLoadFrg(false);
+        reLoadFrg();
     }
 
     @Override
@@ -150,14 +117,27 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
     @Override
     protected void enterActivity()  {
-        getPayIncomeUtility().getPayDBUtility().addDataChangeNotice(mIDCPayNotice);
-        getPayIncomeUtility().getIncomeDBUtility().addDataChangeNotice(mIDCIncomeNotice);
+        Log.d(LOG_TAG, "in enterActivity");
+        super.enterActivity();
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void leaveActivity()  {
-        getPayIncomeUtility().getPayDBUtility().removeDataChangeNotice(mIDCPayNotice);
-        getPayIncomeUtility().getIncomeDBUtility().removeDataChangeNotice(mIDCIncomeNotice);
+        Log.d(LOG_TAG, "in leaveActivity");
+        super.enterActivity();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 数据库内数据变化处理器
+     * @param event     事件参数
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDBDataChangeEvent(DBDataChangeEvent event) {
+        reLoadFrg();
     }
 
     /**
@@ -223,7 +203,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
     /**
      * 重新加载数据
      */
-    private void reLoadFrg(boolean refreshData) {
+    private void reLoadFrg() {
         Log.d(LOG_TAG, "reLoadFrg");
 
         new AsyncTask<Void, Void, Void> () {
@@ -238,9 +218,6 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
             @Override
             protected Void doInBackground(Void... params) {
-                if(refreshData)
-                    NoteShowDataHelper.getInstance().refreshData();
-
                 HashMap<String, ArrayList<INote>> hm
                         = NoteShowDataHelper.getInstance().getNotesForMonth();
                 if(null != hm)  {

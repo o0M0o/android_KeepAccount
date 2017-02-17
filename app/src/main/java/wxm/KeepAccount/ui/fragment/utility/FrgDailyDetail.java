@@ -41,8 +41,6 @@ import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.DBDataChangeEvent;
 import wxm.KeepAccount.Base.data.INote;
-import wxm.KeepAccount.Base.data.IncomeNoteItem;
-import wxm.KeepAccount.Base.data.PayNoteItem;
 import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.Base.utility.ToolUtil;
@@ -51,9 +49,7 @@ import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
 import wxm.KeepAccount.ui.DataBase.NoteShowInfo;
 import wxm.KeepAccount.ui.acutility.ACDailyDetail;
 import wxm.KeepAccount.ui.acutility.ACNoteEdit;
-import wxm.KeepAccount.ui.fragment.ShowData.TFShowBase;
 
-import static wxm.KeepAccount.Base.utility.ContextUtil.getPayIncomeUtility;
 
 /**
  * for daily detail info
@@ -111,30 +107,6 @@ public class FrgDailyDetail extends FrgUtilityBase {
     private String          mSZHotDay;
     private List<INote>     mLSDayContents;
 
-    private class ATDataChange extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            NoteShowDataHelper.getInstance().refreshData();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            // After completing execution of given task, control will return here.
-            // Hence if you want to populate UI elements with fetched data, do it here.
-
-            if(!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
-                HashMap<String, ArrayList<INote>> hl = NoteShowDataHelper.getInstance().getNotesForDay();
-                mLSDayContents = hl.get(mSZHotDay);
-
-                loadContent();
-            }
-
-            showProgress(false);
-        }
-    }
-
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         LOG_TAG = "FrgDailyDetail";
@@ -142,7 +114,6 @@ public class FrgDailyDetail extends FrgUtilityBase {
         ButterKnife.bind(this, rootView);
         return rootView;
     }
-
 
     @Override
     protected void initUiComponent(View view) {
