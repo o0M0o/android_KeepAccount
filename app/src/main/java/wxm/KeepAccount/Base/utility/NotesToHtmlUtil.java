@@ -3,6 +3,8 @@ package wxm.KeepAccount.Base.utility;
 import android.content.res.Resources;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,7 +33,7 @@ public class NotesToHtmlUtil {
     /**
      * table cell开始和结束标签
      */
-    private final static String TB_CELL_HEAD = "<td>";
+    private final static String TB_CELL_HEAD = "<td bgcolor=\"%s\";>";
     private final static String TB_CELL_TAIL = "</td>";
 
     /**
@@ -40,7 +42,7 @@ public class NotesToHtmlUtil {
      * @param ls_data   数据
      * @return          html字符串
      */
-    public static String NotesToHtmlStr(String caption, List<INote> ls_data) {
+    public static String NotesToHtmlStr(String caption, HashMap<String, ArrayList<INote>> ls_data) {
         String sz_org = ToolUtil.getFromAssets(DAY_REPORT_MODE_FN, ENCODING);
         return sz_org.replace(TAG_CAPTION, caption).replace(TAG_COLUMNS, TABLE_COLUMNS)
                     .replace(TAG_ROWS, NotesToRowStr(ls_data));
@@ -51,25 +53,53 @@ public class NotesToHtmlUtil {
      * @param ls_data   数据
      * @return          html字符串
      */
-    private static String NotesToRowStr(List<INote> ls_data) {
+    private static String NotesToRowStr(HashMap<String, ArrayList<INote>> ls_data) {
         Resources res = ContextUtil.getInstance().getResources();
         String nt_pay = res.getString(R.string.cn_pay);
         String nt_income = res.getString(R.string.cn_income);
         SimpleDateFormat sd_format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         String two_pad = STR_PAD + STR_PAD;
+        String bc_day = "fffffb";
 
         StringBuilder sb = new StringBuilder();
-        for (INote id : ls_data) {
-            String sz_tr = id.isPayNote() ?  STR_PAD + "<tr bgcolor=\"f8aba6\";>"
-                                : STR_PAD + "<tr bgcolor=\"84bf96\";>";
+        for(String day : ls_data.keySet())  {
+            List<INote> ls_nt = ls_data.get(day);
+            int i_size = ls_nt.size();
+            if(1 == i_size)   {
+                INote id = ls_nt.get(0);
+                String bc = id.isPayNote() ? "f8aba6" : "cde6c7";
 
-            AppendLine(sb, sz_tr);
-            AppendTableRow(sb, two_pad, sd_format.format(id.getTs().getTime()));
-            AppendTableRow(sb, two_pad, id.isPayNote() ? nt_pay : nt_income);
-            AppendTableRow(sb, two_pad, id.getInfo());
-            AppendTableRow(sb, two_pad,
-                    String.format(Locale.CHINA, "%.02f", id.getVal().floatValue()));
-            AppendLine(sb, STR_PAD + "</tr>");
+                AppendLine(sb, STR_PAD + "<tr>");
+                AppendTableRow(sb, two_pad, bc_day, sd_format.format(id.getTs().getTime()));
+                AppendTableRow(sb, two_pad, bc, id.isPayNote() ? nt_pay : nt_income);
+                AppendTableRow(sb, two_pad, bc, id.getInfo());
+                AppendTableRow(sb, two_pad, bc,
+                        String.format(Locale.CHINA, "%.02f", id.getVal().floatValue()));
+                AppendLine(sb, STR_PAD + "</tr>");
+            }   else {
+                int idx = 0;
+                for (INote id : ls_nt) {
+                    String bc = id.isPayNote() ? "f8aba6" : "cde6c7";
+
+                    AppendLine(sb, STR_PAD + "<tr>");
+                    if(0 == idx) {
+                        String ln = String.format(Locale.CHINA,
+                                        "%s<td rowspan=\"%d\"; bgcolor=\"%s\";>%s</td>",
+                                         two_pad, i_size, bc_day,
+                                        sd_format.format(id.getTs().getTime()));
+
+                        AppendLine(sb, ln);
+                    }
+
+                    AppendTableRow(sb, two_pad, bc, id.isPayNote() ? nt_pay : nt_income);
+                    AppendTableRow(sb, two_pad, bc, id.getInfo());
+                    AppendTableRow(sb, two_pad, bc,
+                            String.format(Locale.CHINA, "%.02f", id.getVal().floatValue()));
+                    AppendLine(sb, STR_PAD + "</tr>");
+
+                    idx++;
+                }
+            }
         }
 
         return sb.toString();
@@ -88,11 +118,13 @@ public class NotesToHtmlUtil {
      * 字符串构造器添加一行表格
      * @param sb        字符串构造器
      * @param pad       表格行前填充内容
+     * @param bcolor    表格背景色
      * @param row       表格行
      */
-    private static void AppendTableRow(StringBuilder sb, String pad, String row)    {
+    private static void AppendTableRow(StringBuilder sb, String pad, String bcolor, String row)    {
+        String c_head = String.format(Locale.CHINA, TB_CELL_HEAD, bcolor);
         String col_amount = String.format(Locale.CHINA, "%s%s%s%s",
-                                pad, TB_CELL_HEAD, row, TB_CELL_TAIL);
+                                pad, c_head, row, TB_CELL_TAIL);
         AppendLine(sb, col_amount);
     }
 }

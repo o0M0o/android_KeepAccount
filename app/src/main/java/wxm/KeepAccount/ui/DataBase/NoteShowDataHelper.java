@@ -129,14 +129,14 @@ public class NoteShowDataHelper {
      * @param end       结束日期
      * @return          数据
      */
-    public List<INote> getNotesBetweenDays(String start, String end)   {
-        LinkedList<INote> ls_note = new LinkedList<>();
+    public HashMap<String, ArrayList<INote>>  getNotesBetweenDays(String start, String end)   {
+        HashMap<String, ArrayList<INote>> ls_note = new HashMap<>();
         for(String day : mALOrderedDays)    {
             if(day.compareTo(start) >= 0)   {
                 if(day.compareTo(end) > 0)
                     break;
 
-                ls_note.addAll(mHMDayNotes.get(day));
+                ls_note.put(day, mHMDayNotes.get(day));
             }
         }
 

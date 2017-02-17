@@ -15,6 +15,7 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -77,7 +78,7 @@ public class FrgReportDay extends FrgUtilityBase {
                     String d_e = mASParaLoad.get(1);
                     String sz_caption = String.format(Locale.CHINA,
                                             "%s - %s", d_s, d_e);
-                    List<INote> ls_note = NoteShowDataHelper.getInstance()
+                    HashMap<String, ArrayList<INote>> ls_note = NoteShowDataHelper.getInstance()
                                                 .getNotesBetweenDays(d_s, d_e);
                     mSZHtml = NotesToHtmlUtil.NotesToHtmlStr(sz_caption, ls_note);
                     Log.d(LOG_TAG, "initUiInfo html : " +

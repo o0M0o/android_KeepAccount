@@ -14,6 +14,20 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
+    <!--
+    <RelativeLayout
+        android:id="@+id/rl_stats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_pay_count_tag"
+            android:text="支出"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    -->
+
     <WebView
         android:id="@+id/wv_report"
         android:layout_width="match_parent"
