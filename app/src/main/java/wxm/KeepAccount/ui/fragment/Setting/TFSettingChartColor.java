@@ -12,6 +12,9 @@ import android.widget.ImageView;
 
 import java.util.HashMap;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.utility.PreferencesUtil;
@@ -22,20 +25,26 @@ import wxm.KeepAccount.ui.dialog.DlgSelectColor;
  * 图表颜色设置页面
  * Created by 123 on 2016/10/10.
  */
-public class TFSettingChartColor extends TFSettingBase
-            implements View.OnClickListener {
+public class TFSettingChartColor extends TFSettingBase  {
     private HashMap<String, Integer>    mHMColors;
 
-    private ImageView   mIVPay;
-    private ImageView   mIVIncome;
+    @BindView(R.id.iv_pay)
+    ImageView   mIVPay;
 
-    private ImageView   mIVBudgetBalance;
-    private ImageView   mIVBudgetUsed;
+    @BindView(R.id.iv_income)
+    ImageView   mIVIncome;
+
+    @BindView(R.id.iv_budget_balance)
+    ImageView   mIVBudgetBalance;
+
+    @BindView(R.id.iv_budget_used)
+    ImageView   mIVBudgetUsed;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.page_setting_chart_color, container, false);
+        ButterKnife.bind(this, v);
         return v;
     }
 
@@ -45,75 +54,52 @@ public class TFSettingChartColor extends TFSettingBase
         if (null != view) {
             mHMColors = PreferencesUtil.loadChartColor();
 
-            mIVPay = UtilFun.cast(view.findViewById(R.id.iv_pay));
-            mIVIncome = UtilFun.cast(view.findViewById(R.id.iv_income));
-            mIVBudgetBalance = UtilFun.cast(view.findViewById(R.id.iv_budget_balance));
-            mIVBudgetUsed = UtilFun.cast(view.findViewById(R.id.iv_budget_used));
-            if(BuildConfig.DEBUG &&
-                    (null == mIVPay || null == mIVIncome || null == mIVBudgetUsed
-                            || null == mIVBudgetBalance))  {
-                throw new AssertionError("获取控件失败");
-            }
-
             mIVPay.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_PAY_COLOR));
             mIVIncome.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_INCOME_COLOR));
             mIVBudgetBalance.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_BUDGET_BALANCE_COLOR));
             mIVBudgetUsed.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_BUDGET_UESED_COLOR));
-
-            mIVPay.setOnClickListener(this);
-            mIVIncome.setOnClickListener(this);
-            mIVBudgetBalance.setOnClickListener(this);
-            mIVBudgetUsed.setOnClickListener(this);
         }
     }
 
-    @Override
-    public void onClick(View v) {
+    @OnClick({R.id.iv_pay, R.id.iv_income, R.id.iv_budget_balance, R.id.iv_budget_used})
+    public void onIVClick(View v) {
         final int vid = v.getId();
-        switch (vid)    {
-            case R.id.iv_budget_balance :
-            case R.id.iv_budget_used :
-            case R.id.iv_pay :
-            case R.id.iv_income :  {
-                DlgSelectColor dsc = new DlgSelectColor();
-                dsc.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
-                    @Override
-                    public void onDialogPositiveResult(DialogFragment dialog) {
-                        DlgSelectColor ds = UtilFun.cast(dialog);
-                        int sel_col = ds.getSelectedColor();
+        DlgSelectColor dsc = new DlgSelectColor();
+        dsc.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+            @Override
+            public void onDialogPositiveResult(DialogFragment dialog) {
+                DlgSelectColor ds = UtilFun.cast(dialog);
+                int sel_col = ds.getSelectedColor();
 
-                        mBSettingDirty = true;
-                        switch (vid)    {
-                            case R.id.iv_pay :
-                                mIVPay.setBackgroundColor(sel_col);
-                                mHMColors.put(PreferencesUtil.SET_PAY_COLOR, sel_col);
-                                break;
+                mBSettingDirty = true;
+                switch (vid)    {
+                    case R.id.iv_pay :
+                        mIVPay.setBackgroundColor(sel_col);
+                        mHMColors.put(PreferencesUtil.SET_PAY_COLOR, sel_col);
+                        break;
 
-                            case R.id.iv_income :
-                                mIVIncome.setBackgroundColor(sel_col);
-                                mHMColors.put(PreferencesUtil.SET_INCOME_COLOR, sel_col);
-                                break;
+                    case R.id.iv_income :
+                        mIVIncome.setBackgroundColor(sel_col);
+                        mHMColors.put(PreferencesUtil.SET_INCOME_COLOR, sel_col);
+                        break;
 
-                            case R.id.iv_budget_balance :
-                                mIVBudgetBalance.setBackgroundColor(sel_col);
-                                mHMColors.put(PreferencesUtil.SET_BUDGET_BALANCE_COLOR, sel_col);
-                                break;
+                    case R.id.iv_budget_balance :
+                        mIVBudgetBalance.setBackgroundColor(sel_col);
+                        mHMColors.put(PreferencesUtil.SET_BUDGET_BALANCE_COLOR, sel_col);
+                        break;
 
-                            case R.id.iv_budget_used :
-                                mIVBudgetUsed.setBackgroundColor(sel_col);
-                                mHMColors.put(PreferencesUtil.SET_BUDGET_UESED_COLOR, sel_col);
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onDialogNegativeResult(DialogFragment dialog) {
-                    }
-                });
-                dsc.show(getFragmentManager(), "选择颜色");
+                    case R.id.iv_budget_used :
+                        mIVBudgetUsed.setBackgroundColor(sel_col);
+                        mHMColors.put(PreferencesUtil.SET_BUDGET_UESED_COLOR, sel_col);
+                        break;
+                }
             }
-            break;
-        }
+
+            @Override
+            public void onDialogNegativeResult(DialogFragment dialog) {
+            }
+        });
+        dsc.show(getFragmentManager(), "选择颜色");
     }
 
     @Override

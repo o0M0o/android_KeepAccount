@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
@@ -22,10 +25,17 @@ import wxm.KeepAccount.ui.fragment.utility.FrgSetting;
  */
 public class TFSettingMain extends TFSettingBase {
 
+    @BindView(R.id.rl_remind)
+    RelativeLayout  mRLRemind;
+
+    @BindView(R.id.rl_share_app)
+    RelativeLayout  mRLShareApp;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.page_setting_main, container, false);
+        ButterKnife.bind(this, v);
         return v;
     }
 
@@ -33,23 +43,25 @@ public class TFSettingMain extends TFSettingBase {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (null != view) {
-            RelativeLayout rl = UtilFun.cast(view.findViewById(R.id.rl_check_version));
-            assert null != rl;
-            rl.setOnClickListener(v -> {
-                //Toast.makeText(getContext(), "check version", Toast.LENGTH_SHORT).show();
+            mRLRemind.setVisibility(View.GONE);
+            mRLShareApp.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick({R.id.rl_check_version, R.id.rl_chart_color, R.id.rl_reformat_data})
+    public void onIVClick(View v) {
+        switch (v.getId())  {
+            case R.id.rl_check_version :    {
                 toPageByIdx(FrgSetting.PAGE_IDX_CHECK_VERSION);
-            });
+            }
+            break;
 
-            rl = UtilFun.cast(view.findViewById(R.id.rl_chart_color));
-            assert null != rl;
-            rl.setOnClickListener(v -> {
-                //Toast.makeText(getContext(), "chart color", Toast.LENGTH_SHORT).show();
+            case R.id.rl_chart_color :    {
                 toPageByIdx(FrgSetting.PAGE_IDX_CHART_COLOR);
-            });
+            }
+            break;
 
-            rl = UtilFun.cast(view.findViewById(R.id.rl_reformat_data));
-            assert null != rl;
-            rl.setOnClickListener(v -> {
+            case R.id.rl_reformat_data :    {
                 Dialog alertDialog = new AlertDialog.Builder(getContext()).
                         setTitle("清除所有数据!").
                         setMessage("此操作不能恢复，是否继续操作!").
@@ -58,15 +70,8 @@ public class TFSettingMain extends TFSettingBase {
                         }).
                         create();
                 alertDialog.show();
-            });
-
-            rl = UtilFun.cast(view.findViewById(R.id.rl_remind));
-            assert null != rl;
-            setLayoutVisible(rl, View.INVISIBLE);
-
-            rl = UtilFun.cast(view.findViewById(R.id.rl_share_app));
-            assert null != rl;
-            setLayoutVisible(rl, View.INVISIBLE);
+            }
+            break;
         }
     }
 
@@ -75,25 +80,5 @@ public class TFSettingMain extends TFSettingBase {
         if(mBSettingDirty)  {
             mBSettingDirty = false;
         }
-    }
-
-
-    /**
-     * 设置layout可见性
-     * 仅调整可见性，其它设置保持不变
-     * @param visible  若为 :
-     *                  1. {@code View.INVISIBLE}, 不可见
-     *                  2. {@code View.VISIBLE}, 可见
-     */
-    private void setLayoutVisible(RelativeLayout rl, int visible)    {
-        int w = RelativeLayout.LayoutParams.MATCH_PARENT;
-        int h = 0;
-        if(View.INVISIBLE != visible)
-            h = RelativeLayout.LayoutParams.WRAP_CONTENT;
-
-        ViewGroup.LayoutParams param = rl.getLayoutParams();
-        param.width = w;
-        param.height = h;
-        rl.setLayoutParams(param);
     }
 }

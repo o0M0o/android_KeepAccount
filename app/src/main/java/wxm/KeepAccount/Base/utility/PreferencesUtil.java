@@ -132,7 +132,7 @@ public class PreferencesUtil {
     /**
      * 从配置字符串解析配置
      * @param cc    配置字符串
-     * @return   解析配置
+     * @return      解析配置
      */
     private static HashMap<String, Integer> parseChartColors(String cc)  {
         HashMap<String, Integer> ret = new HashMap<>();
@@ -147,6 +147,11 @@ public class PreferencesUtil {
     }
 
 
+    /**
+     * 图表颜色串行化为字符串
+     * @param hmcc  配置信息
+     * @return      字符串
+     */
     private static String parseChartColorsToString(HashMap<String, Integer> hmcc)  {
         StringBuilder ret = new StringBuilder();
         for(String i : hmcc.keySet())   {

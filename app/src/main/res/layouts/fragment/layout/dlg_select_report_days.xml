@@ -7,6 +7,7 @@
         android:id="@+id/rl_start_day"
         android:layout_centerHorizontal="true"
         android:padding="2dp"
+        android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -35,7 +36,8 @@
         android:id="@+id/rl_end_day"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/rl_start_day"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         android:padding="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
