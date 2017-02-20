@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon, android:theme, android:label">
         <activity
-            android:name=".ui.acinterface.ACLogin"
+            android:name=".ui.login.ACLogin"
             android:label="@string/cn_keepaccount_applabel">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,58 +28,58 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.acinterface.ACNoteShow"
+            android:name=".ui.data.show.note.ACNoteShow"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             android:exported="true"
             android:label="@string/ac_title_noteshow"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.acutility.ACAddUsr"
+            android:name=".ui.usr.ACAddUsr"
             android:configChanges="orientation|screenSize"
             android:label="@string/label_add_usr"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.acinterface.ACHelp"
+            android:name=".ui.help.ACHelp"
             android:label="@string/title_help"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.acutility.ACReport"
+            android:name=".ui.data.report.ACReport"
             android:label="@string/title_report"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.acinterface.ACWelcome"
+            android:name=".ui.welcome.ACWelcome"
             android:label="@string/label_welcome"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.acutility.ACNoteEdit"
+            android:name=".ui.data.edit.ACNoteEdit"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.acutility.ACRemindEdit"
+            android:name=".ui.data.edit.ACRemindEdit"
             android:exported="true" />
-        <activity android:name=".ui.acinterface.ACRemindShow" />
+        <activity android:name=".ui.data.show.remind.ACRemindShow" />
         <activity
-            android:name=".ui.acutility.ACSetting"
+            android:name=".ui.setting.ACSetting"
             android:exported="true"
             android:label="@string/app_setting"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.acutility.ACDailyDetail"
+            android:name=".ui.data.show.note.ACDailyDetail"
             android:exported="false"
             android:label="@string/title_daily_detail"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.acutility.ACCalendarShow"
+            android:name=".ui.data.show.calendar.ACCalendarShow"
             android:exported="false"
             android:label="日历展示"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.acutility.ACPreveiwAndEdit"
+            android:name=".ui.data.edit.ACPreveiwAndEdit"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.acutility.ACRecordInfoEdit"
+            android:name=".ui.data.edit.ACRecordInfoEdit"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

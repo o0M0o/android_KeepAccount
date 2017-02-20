@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +25,7 @@ import wxm.KeepAccount.Base.db.RecordTypeDBUtility;
 import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.acutility.ACRecordInfoEdit;
+import wxm.KeepAccount.ui.data.edit.ACRecordInfoEdit;
 
 /**
  * 选择“记录类型”对话框

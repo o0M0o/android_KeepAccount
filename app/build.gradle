@@ -27,12 +27,6 @@ android {
         versionCode 12
         versionName "1.12"
         signingConfig signingConfigs.defkey
-
-        /*
-        jackOptions {
-            enabled true
-        }
-        */
     }
 
     sourceSets {
@@ -81,7 +75,6 @@ android {
     }
 
     compileOptions {
-
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
@@ -104,14 +97,12 @@ dependencies {
     compile files('libs/extend_lib/junit/junit-4.12.jar')
     compile files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
     compile files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
-    //compile 'com.android.support:support-annotations:24.2.1'
 
-    //apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    //compile 'com.android.support.constraint:constraint-layout:1.0.0-beta3'
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.trello:rxlifecycle:0.5.0'
+
     // If you want pre-written Activities and Fragments you can subclass as providers
     compile 'com.trello:rxlifecycle-components:0.5.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.1'
@@ -125,15 +116,11 @@ dependencies {
     compile project(':lm_banner_library')
     compile project(':simplecalendar')
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
-    compile 'com.jakewharton:butterknife:8.5.1'
 }
-
 
 configurations.all {
     resolutionStrategy {
         force 'com.android.support:support-annotations:24.2.1'
-        //force 'com.android.support:support-v4:20.+'
-        //force 'com.android.support:appcompat-v7:24.2.1'
     }
 }
 

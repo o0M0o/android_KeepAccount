@@ -4,7 +4,7 @@
     android:id="@+id/rl_welcome"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context="wxm.KeepAccount.ui.acinterface.ACWelcome">
+    tools:context="wxm.KeepAccount.ui.welcome.ACWelcome">
 
     <FrameLayout
         android:id="@+id/fl_holder"

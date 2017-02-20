@@ -10,7 +10,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.Base.data.UsrItem;
 import wxm.KeepAccount.Base.define.GlobalDef;
 import wxm.KeepAccount.Base.utility.ContextUtil;
-import wxm.KeepAccount.ui.DataBase.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 /**
  * usr数据处理类
