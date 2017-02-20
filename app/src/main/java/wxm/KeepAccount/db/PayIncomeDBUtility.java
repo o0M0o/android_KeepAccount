@@ -3,6 +3,8 @@ package wxm.KeepAccount.db;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.UsrItem;
+import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 
@@ -248,9 +251,7 @@ public class PayIncomeDBUtility  {
      * @return  删除的记录数
      */
     public int deletePayNotes(List<Integer> lsi)  {
-        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
-        int ret = mDBHelper.getPayDataREDao().deleteIds(lsi);
-        return ret;
+        return mDUPay.removeDatas(lsi);
     }
 
 
@@ -260,14 +261,15 @@ public class PayIncomeDBUtility  {
      * @return  删除的记录数
      */
     public int deleteIncomeNotes(List<Integer> lsi)  {
-        DBOrmLiteHelper mDBHelper = ContextUtil.getDBHelper();
-        int ret = mDBHelper.getIncomeDataREDao().deleteIds(lsi);
-        return ret;
+        return mDUIncome.removeDatas(lsi);
     }
 
 
+    /**
+     * 支出数据辅助类
+     */
     public class PayDBUtility extends DBUtilityBase<PayNoteItem, Integer>   {
-        public PayDBUtility() {
+        PayDBUtility() {
             super();
         }
 
@@ -285,11 +287,32 @@ public class PayIncomeDBUtility  {
 
             return getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
         }
+
+        @Override
+        protected void onDataModify(List<Integer> md) {
+            NoteShowDataHelper.getInstance().refreshData();
+            EventBus.getDefault().post(new DBDataChangeEvent());
+        }
+
+        @Override
+        protected void onDataCreate(List<Integer> cd) {
+            NoteShowDataHelper.getInstance().refreshData();
+            EventBus.getDefault().post(new DBDataChangeEvent());
+        }
+
+        @Override
+        protected void onDataRemove(List<Integer> dd) {
+            NoteShowDataHelper.getInstance().refreshData();
+            EventBus.getDefault().post(new DBDataChangeEvent());
+        }
     }
 
 
+    /**
+     * 收入数据辅助类
+     */
     public class IncomeDBUtility extends DBUtilityBase<IncomeNoteItem, Integer>   {
-        public IncomeDBUtility() {
+        IncomeDBUtility() {
             super();
         }
 
@@ -305,6 +328,24 @@ public class PayIncomeDBUtility  {
                 return new ArrayList<>();
 
             return getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
+        }
+
+        @Override
+        protected void onDataModify(List<Integer> md) {
+            NoteShowDataHelper.getInstance().refreshData();
+            EventBus.getDefault().post(new DBDataChangeEvent());
+        }
+
+        @Override
+        protected void onDataCreate(List<Integer> cd) {
+            NoteShowDataHelper.getInstance().refreshData();
+            EventBus.getDefault().post(new DBDataChangeEvent());
+        }
+
+        @Override
+        protected void onDataRemove(List<Integer> dd) {
+            NoteShowDataHelper.getInstance().refreshData();
+            EventBus.getDefault().post(new DBDataChangeEvent());
         }
     }
 }

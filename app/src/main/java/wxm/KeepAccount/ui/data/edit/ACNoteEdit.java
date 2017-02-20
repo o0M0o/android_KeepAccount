@@ -97,12 +97,6 @@ public class ACNoteEdit extends BaseAppCompatActivity {
             case R.id.mi_save: {
                 TFEditBase tb = getHotTabItem();
                 if(tb.onAccept()) {
-                    Runnable db_ra = () -> {
-                        NoteShowDataHelper.getInstance().refreshData();
-                        EventBus.getDefault().post(new DBDataChangeEvent());
-                    };
-
-                    new Thread(db_ra).start();
                     finish();
                 }
             }

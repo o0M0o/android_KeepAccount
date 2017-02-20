@@ -2,6 +2,8 @@ package wxm.KeepAccount.db;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import cn.wxm.andriodutillib.DBHelper.DBUtilityBase;
@@ -41,5 +43,20 @@ public class RecordTypeDBUtility extends DBUtilityBase<RecordTypeItem, Integer> 
     @Override
     protected RuntimeExceptionDao<RecordTypeItem, Integer> getDBHelper() {
         return ContextUtil.getDBHelper().getRTItemREDao();
+    }
+
+    @Override
+    protected void onDataModify(List<Integer> md) {
+        EventBus.getDefault().post(new DBDataChangeEvent());
+    }
+
+    @Override
+    protected void onDataCreate(List<Integer> cd) {
+        EventBus.getDefault().post(new DBDataChangeEvent());
+    }
+
+    @Override
+    protected void onDataRemove(List<Integer> dd) {
+        EventBus.getDefault().post(new DBDataChangeEvent());
     }
 }

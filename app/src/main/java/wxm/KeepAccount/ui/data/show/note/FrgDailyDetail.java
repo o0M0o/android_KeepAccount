@@ -257,14 +257,6 @@ public class FrgDailyDetail extends FrgUtilityBase {
 
                         if (!al_p.isEmpty())
                             ContextUtil.getPayIncomeUtility().deletePayNotes(al_p);
-
-                        // send db data change event
-                        Runnable db_ra = () -> {
-                            NoteShowDataHelper.getInstance().refreshData();
-                            EventBus.getDefault().post(new DBDataChangeEvent());
-                        };
-
-                        new Thread(db_ra).start();
                     }   else    {
                         loadActBars(false);
                         loadDayNotes(false);

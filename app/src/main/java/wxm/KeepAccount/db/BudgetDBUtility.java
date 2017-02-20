@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +15,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.UsrItem;
+import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 
@@ -139,5 +142,23 @@ public class BudgetDBUtility extends DBUtilityBase<BudgetItem, Integer> {
         }
 
         return 0;
+    }
+
+    @Override
+    protected void onDataModify(List<Integer> md) {
+        NoteShowDataHelper.getInstance().refreshData();
+        EventBus.getDefault().post(new DBDataChangeEvent());
+    }
+
+    @Override
+    protected void onDataCreate(List<Integer> cd) {
+        NoteShowDataHelper.getInstance().refreshData();
+        EventBus.getDefault().post(new DBDataChangeEvent());
+    }
+
+    @Override
+    protected void onDataRemove(List<Integer> dd) {
+        NoteShowDataHelper.getInstance().refreshData();
+        EventBus.getDefault().post(new DBDataChangeEvent());
     }
 }
