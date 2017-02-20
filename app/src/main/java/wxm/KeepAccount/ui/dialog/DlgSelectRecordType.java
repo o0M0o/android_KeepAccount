@@ -20,10 +20,10 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.RecordTypeItem;
-import wxm.KeepAccount.Base.db.RecordTypeDBUtility;
-import wxm.KeepAccount.Base.define.GlobalDef;
-import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.define.RecordTypeItem;
+import wxm.KeepAccount.db.RecordTypeDBUtility;
+import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.edit.ACRecordInfoEdit;
 

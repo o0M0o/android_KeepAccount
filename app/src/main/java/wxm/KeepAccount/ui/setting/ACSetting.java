@@ -8,7 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
-import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
 
 /**

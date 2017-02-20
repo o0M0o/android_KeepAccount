@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
 
 /**

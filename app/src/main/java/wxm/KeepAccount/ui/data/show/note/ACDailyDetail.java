@@ -6,7 +6,7 @@ import android.util.Log;
 
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * 展示日详情的activity

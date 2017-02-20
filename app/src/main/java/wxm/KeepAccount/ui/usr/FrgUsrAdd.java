@@ -20,9 +20,9 @@ import butterknife.OnClick;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.WRMsgHandler;
-import wxm.KeepAccount.Base.define.GlobalDef;
-import wxm.KeepAccount.Base.data.UsrItem;
-import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.define.UsrItem;
+import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
 
 /**

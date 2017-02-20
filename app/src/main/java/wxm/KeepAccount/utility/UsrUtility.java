@@ -1,13 +1,12 @@
-package wxm.KeepAccount.Base.handler;
+package wxm.KeepAccount.utility;
 
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.UsrItem;
-import wxm.KeepAccount.Base.define.GlobalDef;
-import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.define.UsrItem;
+import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * 处理用户登录的辅助类

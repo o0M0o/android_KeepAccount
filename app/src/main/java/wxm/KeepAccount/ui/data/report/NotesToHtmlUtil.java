@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.utility;
+package wxm.KeepAccount.ui.data.report;
 
 import android.content.res.Resources;
 
@@ -8,8 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import wxm.KeepAccount.Base.data.INote;
+import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.utility.ContextUtil;
+import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * notes数据转换至html字符串

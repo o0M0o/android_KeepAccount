@@ -1,12 +1,12 @@
-package wxm.KeepAccount.Base.db;
+package wxm.KeepAccount.db;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.util.List;
 
 import cn.wxm.andriodutillib.DBHelper.DBUtilityBase;
-import wxm.KeepAccount.Base.data.RecordTypeItem;
-import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.define.RecordTypeItem;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * for record type data

@@ -22,8 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.INote;
-import wxm.KeepAccount.Base.utility.NotesToHtmlUtil;
+import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 

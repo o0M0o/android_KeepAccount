@@ -11,8 +11,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.DBDataChangeEvent;
-import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.db.DBDataChangeEvent;
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;

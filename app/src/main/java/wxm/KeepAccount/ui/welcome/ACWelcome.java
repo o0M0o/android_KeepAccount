@@ -23,8 +23,8 @@ import java.util.Locale;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.GlobalDef;
-import wxm.KeepAccount.Base.utility.ActionHelper;
+import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.utility.ActionHelper;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;

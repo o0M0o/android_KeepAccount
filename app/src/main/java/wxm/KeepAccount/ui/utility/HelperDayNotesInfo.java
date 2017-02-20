@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
 
 /**

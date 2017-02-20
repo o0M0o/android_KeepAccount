@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.db;
+package wxm.KeepAccount.db;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
@@ -7,9 +7,9 @@ import java.util.List;
 import cn.wxm.andriodutillib.DBHelper.DBUtilityBase;
 import cn.wxm.andriodutillib.util.MD5Util;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.UsrItem;
-import wxm.KeepAccount.Base.define.GlobalDef;
-import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.define.UsrItem;
+import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 /**

@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.edit.EditData.TFEditBudget;
 import wxm.KeepAccount.ui.data.edit.EditData.TFEditIncome;

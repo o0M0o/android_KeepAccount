@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.utility;
+package wxm.KeepAccount.utility;
 
 import android.content.Context;
 import android.graphics.Bitmap;

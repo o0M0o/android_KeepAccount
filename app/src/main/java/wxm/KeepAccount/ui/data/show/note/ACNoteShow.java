@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import java.util.List;
 
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
-import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBase;
 import wxm.KeepAccount.ui.utility.FrgNoteShow;

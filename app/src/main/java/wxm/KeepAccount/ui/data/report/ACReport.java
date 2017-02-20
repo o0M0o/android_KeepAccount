@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * 显示汇报信息

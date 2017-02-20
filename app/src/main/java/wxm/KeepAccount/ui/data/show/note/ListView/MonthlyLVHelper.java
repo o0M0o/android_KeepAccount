@@ -26,7 +26,7 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.utility.ToolUtil;
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;

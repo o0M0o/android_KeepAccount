@@ -1,10 +1,10 @@
-package wxm.KeepAccount.Base.handler;
+package wxm.KeepAccount.utility;
 
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import wxm.KeepAccount.Base.define.GlobalDef;
+import wxm.KeepAccount.define.GlobalDef;
 
 
 /**

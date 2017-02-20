@@ -1,16 +1,15 @@
-package wxm.KeepAccount.Base.utility;
+package wxm.KeepAccount.utility;
 
 import android.app.Application;
 import android.util.Log;
 
-import wxm.KeepAccount.Base.data.DBOrmLiteHelper;
-import wxm.KeepAccount.Base.data.UsrItem;
-import wxm.KeepAccount.Base.db.BudgetDBUtility;
-import wxm.KeepAccount.Base.db.PayIncomeDBUtility;
-import wxm.KeepAccount.Base.db.RecordTypeDBUtility;
-import wxm.KeepAccount.Base.db.RemindDBUtility;
-import wxm.KeepAccount.Base.db.UsrDBUtility;
-import wxm.KeepAccount.Base.handler.GlobalMsgHandler;
+import wxm.KeepAccount.db.DBOrmLiteHelper;
+import wxm.KeepAccount.define.UsrItem;
+import wxm.KeepAccount.db.BudgetDBUtility;
+import wxm.KeepAccount.db.PayIncomeDBUtility;
+import wxm.KeepAccount.db.RecordTypeDBUtility;
+import wxm.KeepAccount.db.RemindDBUtility;
+import wxm.KeepAccount.db.UsrDBUtility;
 
 /**
  * 获取全局context

@@ -13,10 +13,10 @@ import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.util.ChartUtils;
-import wxm.KeepAccount.Base.data.INote;
-import wxm.KeepAccount.Base.data.IncomeNoteItem;
-import wxm.KeepAccount.Base.data.PayNoteItem;
-import wxm.KeepAccount.Base.utility.PreferencesUtil;
+import wxm.KeepAccount.define.INote;
+import wxm.KeepAccount.define.IncomeNoteItem;
+import wxm.KeepAccount.define.PayNoteItem;
+import wxm.KeepAccount.utility.PreferencesUtil;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 /**

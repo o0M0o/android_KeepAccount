@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.data;
+package wxm.KeepAccount.db;
 
 /**
  * 数据库中数据变化后通知类

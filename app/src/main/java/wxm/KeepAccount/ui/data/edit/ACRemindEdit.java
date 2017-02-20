@@ -15,8 +15,8 @@ import android.view.MenuItem;
 import java.util.HashMap;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.GlobalDef;
-import wxm.KeepAccount.Base.data.RemindItem;
+import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.define.RemindItem;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.edit.EditData.TFEditIncome;
 import wxm.KeepAccount.ui.data.edit.RemindEdit.TFEditRemindBase;

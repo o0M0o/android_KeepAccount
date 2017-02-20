@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.data;
+package wxm.KeepAccount.define;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,8 +15,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.DBHelper.IDBRow;
-import wxm.KeepAccount.Base.define.GlobalDef;
-import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * 支出记录数据

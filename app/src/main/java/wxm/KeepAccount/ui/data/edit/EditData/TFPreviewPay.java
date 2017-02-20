@@ -10,8 +10,8 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.PayNoteItem;
-import wxm.KeepAccount.Base.utility.ToolUtil;
+import wxm.KeepAccount.define.PayNoteItem;
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
 

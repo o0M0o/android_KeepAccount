@@ -1,4 +1,4 @@
-package wxm.KeepAccount.Base.define;
+package wxm.KeepAccount.define;
 
 /**
  * App全局定义

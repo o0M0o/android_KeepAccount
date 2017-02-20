@@ -17,7 +17,7 @@ import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.PreviewColumnChartView;
-import wxm.KeepAccount.Base.utility.PreferencesUtil;
+import wxm.KeepAccount.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
 

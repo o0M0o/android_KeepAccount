@@ -27,7 +27,7 @@ import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.view.ColumnChartView;
-import wxm.KeepAccount.Base.utility.PreferencesUtil;
+import wxm.KeepAccount.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
 
 /**

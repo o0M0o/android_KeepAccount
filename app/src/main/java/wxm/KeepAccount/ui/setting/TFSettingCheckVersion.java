@@ -12,7 +12,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import wxm.KeepAccount.Base.utility.ToolUtil;
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
 
 /**

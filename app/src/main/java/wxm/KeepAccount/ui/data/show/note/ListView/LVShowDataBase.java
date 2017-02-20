@@ -15,7 +15,7 @@ import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;

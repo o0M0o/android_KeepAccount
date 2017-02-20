@@ -25,9 +25,9 @@ import java.util.Date;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.RemindItem;
-import wxm.KeepAccount.Base.utility.ContextUtil;
-import wxm.KeepAccount.Base.utility.ToolUtil;
+import wxm.KeepAccount.define.RemindItem;
+import wxm.KeepAccount.utility.ContextUtil;
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
 
 /**

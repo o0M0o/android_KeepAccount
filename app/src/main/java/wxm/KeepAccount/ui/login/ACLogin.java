@@ -13,8 +13,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
-import wxm.KeepAccount.Base.define.GlobalDef;
-import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.help.ACHelp;
 

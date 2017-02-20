@@ -5,8 +5,8 @@ import android.view.View;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.define.GlobalDef;
-import wxm.KeepAccount.Base.data.RecordTypeItem;
+import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.define.RecordTypeItem;
 import wxm.KeepAccount.R;
 
 /**

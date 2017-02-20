@@ -1,7 +1,6 @@
 package wxm.KeepAccount.ui.dialog;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Message;
@@ -26,14 +25,13 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import wxm.KeepAccount.Base.utility.ContextUtil;
-import wxm.KeepAccount.Base.utility.SIMCardInfo;
-import wxm.KeepAccount.Base.utility.ToolUtil;
+import wxm.KeepAccount.utility.ContextUtil;
+import wxm.KeepAccount.utility.SIMCardInfo;
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
 
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.READ_SMS;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 /**
  * 提交用户消息

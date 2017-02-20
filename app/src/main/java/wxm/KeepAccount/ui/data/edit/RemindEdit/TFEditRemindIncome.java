@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.Base.data.RemindItem;
+import wxm.KeepAccount.define.RemindItem;
 import wxm.KeepAccount.R;
 
 /**

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import wxm.KeepAccount.Base.data.INote;
-import wxm.KeepAccount.Base.utility.ContextUtil;
+import wxm.KeepAccount.define.INote;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * Data helper for NoteShow
