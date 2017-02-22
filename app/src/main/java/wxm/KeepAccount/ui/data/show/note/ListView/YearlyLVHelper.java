@@ -51,8 +51,6 @@ public class YearlyLVHelper extends LVShowDataBase {
     @BindView(R.id.lv_show)
     ListView    mLVShow;
 
-    private SelfAdapter mSNAdapter;
-
     public YearlyLVHelper()    {
         super();
         LOG_TAG = "YearlyLVHelper";
@@ -228,6 +226,16 @@ public class YearlyLVHelper extends LVShowDataBase {
             mHMSubPara.put(ky, ls_hm);
         }
 
+
+    }
+
+    /**
+     * 不重新加载数据，仅更新视图
+     */
+    @Override
+    protected void refreshView()  {
+        refreshAttachLayout();
+
         // update data
         LinkedList<HashMap<String, String>> n_mainpara;
         if(mBFilter) {
@@ -246,20 +254,10 @@ public class YearlyLVHelper extends LVShowDataBase {
         }
 
         // 设置listview adapter
-        mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
+        SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
                 new String[]{}, new int[]{});
-    }
-
-    /**
-     * 不重新加载数据，仅更新视图
-     */
-    @Override
-    protected void refreshView()  {
-        refreshAttachLayout();
-        if(null != mSNAdapter) {
-            mLVShow.setAdapter(mSNAdapter);
-            mSNAdapter.notifyDataSetChanged();
-        }
+        mLVShow.setAdapter(mSNAdapter);
+        mSNAdapter.notifyDataSetChanged();
     }
 
     private void refreshAttachLayout()    {

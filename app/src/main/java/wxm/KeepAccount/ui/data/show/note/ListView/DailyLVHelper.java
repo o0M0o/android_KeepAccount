@@ -64,8 +64,6 @@ public class DailyLVHelper extends LVShowDataBase
     @BindView(R.id.lv_show)
     ListView mLVShow;
 
-    private SelfAdapter mSNAdapter;
-
     /**
      * 如果设置为true则数据可以删除
      */
@@ -285,6 +283,14 @@ public class DailyLVHelper extends LVShowDataBase
             map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
             mMainPara.add(map);
         }
+    }
+
+    /**
+     * 仅更新视图
+     */
+    @Override
+    protected void refreshView() {
+        refreshAttachLayout();
 
         // load show data
         LinkedList<HashMap<String, String>> n_mainpara;
@@ -304,22 +310,12 @@ public class DailyLVHelper extends LVShowDataBase
         }
 
         // 设置listview adapter
-        mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
+        SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
                 new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK},
                 new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week});
-    }
 
-    /**
-     * 仅更新视图
-     */
-    @Override
-    protected void refreshView() {
-        refreshAttachLayout();
-
-        if(null != mSNAdapter) {
-            mLVShow.setAdapter(mSNAdapter);
-            mSNAdapter.notifyDataSetChanged();
-        }
+        mLVShow.setAdapter(mSNAdapter);
+        mSNAdapter.notifyDataSetChanged();
     }
 
     private void refreshAttachLayout() {
