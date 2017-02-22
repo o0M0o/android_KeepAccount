@@ -47,7 +47,7 @@ import wxm.KeepAccount.ui.utility.AdapterNoteDetail;
 import wxm.KeepAccount.ui.utility.HelperDayNotesInfo;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
-import wxm.KeepAccount.ui.data.edit.ACNoteEdit;
+import wxm.KeepAccount.ui.data.edit.Note.ACNoteEdit;
 
 
 /**

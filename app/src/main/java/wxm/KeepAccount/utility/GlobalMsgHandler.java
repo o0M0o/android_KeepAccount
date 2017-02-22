@@ -1,10 +1,13 @@
 package wxm.KeepAccount.utility;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.define.UsrItem;
 
 
 /**
@@ -18,10 +21,43 @@ public class GlobalMsgHandler extends Handler {
     public void handleMessage(Message msg) {
         Log.i(TAG, "receive msg : " + msg.toString());
         switch (msg.what)   {
-            case GlobalDef.MSG_USR_ADDUSR :
-            case GlobalDef.MSG_USR_LOGOUT :
+            case GlobalDef.MSG_USR_ADDUSR : {
+                Object[] arr = UtilFun.cast(msg.obj);
+
+                Intent data = UtilFun.cast(arr[0]);
+                Handler h = UtilFun.cast(arr[1]);
+                String usr = data.getStringExtra(UsrItem.FIELD_NAME);
+                String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
+
+                if(ContextUtil.getUsrUtility().hasUsr(usr))  {
+                    ReplyMsg(h, GlobalDef.MSG_USR_ADDUSR,
+                            new Object[]{false, data, "用户已经存在！"});
+                } else {
+                    boolean ret = (null != ContextUtil.getUsrUtility().addUsr(usr, pwd));
+                    ReplyMsg(h, GlobalDef.MSG_USR_ADDUSR,
+                            new Object[]{ret, data});
+                }
+            }
+            break;
+
             case GlobalDef.MSG_USR_LOGIN: {
-                UsrUtility.doMsg(msg);
+                Object[] arr = UtilFun.cast(msg.obj);
+
+                Intent data = UtilFun.cast(arr[0]);
+                Handler h = UtilFun.cast(arr[1]);
+
+                String usr = data.getStringExtra(UsrItem.FIELD_NAME);
+                String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
+
+                ContextUtil.setCurUsr(ContextUtil.getUsrUtility().CheckAndGetUsr(usr, pwd));
+                boolean ret = (null != ContextUtil.getCurUsr());
+
+                ReplyMsg(h, GlobalDef.MSG_USR_LOGIN, ret);
+            }
+            break;
+
+            case GlobalDef.MSG_USR_LOGOUT : {
+                ContextUtil.setCurUsr(null);
             }
             break;
         }
@@ -31,13 +67,14 @@ public class GlobalMsgHandler extends Handler {
     /**
      * 回复消息
      * @param mh            接收回复消息的句柄
-     * @param rmsgtype      原消息类型（{@code arg1}）
-     * @param msgobj        回复消息的参数{@code obj}
+     * @param msg_type      原消息类型（{@code arg1}）
+     * @param msg_obj       回复消息的参数{@code obj}
      */
-    public static void ReplyMsg(Handler mh, int rmsgtype, Object msgobj) {
+    private static void ReplyMsg(Handler mh, int msg_type, Object msg_obj) {
         Message m = Message.obtain(mh, GlobalDef.MSG_REPLY);
-        m.arg1 = rmsgtype;
-        m.obj = msgobj;
+        m.arg1 = msg_type;
+        m.obj = msg_obj;
         m.sendToTarget();
     }
 }
+

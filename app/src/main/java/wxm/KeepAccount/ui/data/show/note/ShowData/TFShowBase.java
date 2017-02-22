@@ -1,8 +1,11 @@
 package wxm.KeepAccount.ui.data.show.note.ShowData;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,20 +13,30 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import java.util.Arrays;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
+import cn.wxm.andriodutillib.FrgUtility.FrgUtilitySupportBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.data.show.note.FrgNoteShow;
+import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 /**
  * 数据显示fragment基类
  * Created by wxm on 2016/9/27.
  */
-public abstract class TFShowBase extends Fragment {
+public abstract class TFShowBase extends FrgUtilitySupportBase {
     protected String LOG_TAG = "TFShowBase";
 
     private final static String CHILD_HOT = "child_hot";
-    private ViewSwitcher    mVSSwitcher;
+
+    @BindView(R.id.vs_page)
+    ViewSwitcher    mVSSwitcher;
+
     protected int           mHotChild;
 
     protected ShowViewHelperBase[]   mViewHelper;
@@ -42,22 +55,29 @@ public abstract class TFShowBase extends Fragment {
         outState.putInt(CHILD_HOT, mHotChild);
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.tf_show_base, container, false);
-        if(null != v) {
-            mVSSwitcher = UtilFun.cast(v.findViewById(R.id.vs_page));
+    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        View rootView = layoutInflater.inflate(R.layout.tf_show_base, viewGroup, false);
+        ButterKnife.bind(this, rootView);
 
-            int cc = mViewHelper.length;
-            for(int i = 0; i < cc; ++i)     {
-                ShowViewHelperBase sb = mViewHelper[i];
-                sb.createView(inflater, container);
-                mVSSwitcher.addView(sb.getView(), i);
-            }
+        int cc = mViewHelper.length;
+        for(int i = 0; i < cc; ++i)     {
+            ShowViewHelperBase sb = mViewHelper[i];
+            sb.createView(layoutInflater, viewGroup);
+            mVSSwitcher.addView(sb.getView(), i);
         }
+        return rootView;
+    }
 
-        return v;
+    @Override
+    protected void initUiComponent(View view) {
+        mVSSwitcher.setDisplayedChild(mHotChild);
+    }
+
+    @Override
+    protected void initUiInfo() {
+        mViewHelper[mHotChild].loadView(false);
     }
 
     @Override
@@ -68,29 +88,6 @@ public abstract class TFShowBase extends Fragment {
         Log.i(LOG_TAG, "setUserVisibleHint, visible = "
                         + (isVisibleToUser ? "true" : "false")
                         + ", view = " + (cur_v == null ? "false" : "true"));
-
-        /*
-        if(isVisibleToUser && null != cur_v) {
-            mVSSwitcher = UtilFun.cast(cur_v.findViewById(R.id.vs_page));
-            mVSSwitcher.setDisplayedChild(mHotChild);
-
-            mViewHelper[mHotChild].loadView();
-        }
-        */
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Log.i(LOG_TAG, "onViewCreated");
-        /*
-        if(null != view) {
-            mVSSwitcher = UtilFun.cast(view.findViewById(R.id.vs_page));
-            mVSSwitcher.setDisplayedChild(mHotChild);
-
-            mViewHelper[mHotChild].loadView();
-        }
-        */
     }
 
     /**
@@ -116,7 +113,6 @@ public abstract class TFShowBase extends Fragment {
      *                 2. 如果不为null, 但为空则过滤（不显示任何数据)
      */
     public void filterView(List<String> ls_tag)     {
-        //mViewHelper[mHotChild].filterView(ls_tag);
         for(ShowViewHelperBase sb : mViewHelper)    {
             sb.filterView(ls_tag);
         }

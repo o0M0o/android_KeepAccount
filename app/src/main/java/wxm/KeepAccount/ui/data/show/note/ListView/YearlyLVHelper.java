@@ -22,8 +22,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.ui.utility.FastViewHolder;
+import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
@@ -44,6 +47,11 @@ public class YearlyLVHelper extends LVShowDataBase {
     private boolean mBSelectSubFilter = false;
     private final LinkedList<String> mLLSubFilter = new LinkedList<>();
     private final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
+
+    @BindView(R.id.lv_show)
+    ListView    mLVShow;
+
+    private SelfAdapter mSNAdapter;
 
     public YearlyLVHelper()    {
         super();
@@ -83,7 +91,7 @@ public class YearlyLVHelper extends LVShowDataBase {
         switch (vid)    {
             case R.id.bt_accpet :
                 if(mBSelectSubFilter) {
-                    if(!ToolUtil.ListIsNullOrEmpty(mLLSubFilter)) {
+                    if(!UtilFun.ListIsNullOrEmpty(mLLSubFilter)) {
                         ACNoteShow ac = getRootActivity();
                         ac.jumpByTabName(NoteShowDataHelper.TAB_TITLE_MONTHLY);
                         ac.filterView(mLLSubFilter);
@@ -212,25 +220,18 @@ public class YearlyLVHelper extends LVShowDataBase {
             map.put(K_SUB_TAG, k);
 
             LinkedList<HashMap<String, String>>  ls_hm = mHMSubPara.get(ky);
-            if(ToolUtil.ListIsNullOrEmpty(ls_hm))   {
+            if(UtilFun.ListIsNullOrEmpty(ls_hm))   {
                 ls_hm = new LinkedList<>();
             }
 
             ls_hm.add(map);
             mHMSubPara.put(ky, ls_hm);
         }
-    }
-
-    /**
-     * 不重新加载数据，仅更新视图
-     */
-    @Override
-    protected void refreshView()  {
-        refreshAttachLayout();
 
         // update data
-        LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
+        LinkedList<HashMap<String, String>> n_mainpara;
         if(mBFilter) {
+            n_mainpara = new LinkedList<>();
             for (HashMap<String, String> i : mMainPara) {
                 String cur_tag = i.get(K_TAG);
                 for (String ii : mFilterPara) {
@@ -241,15 +242,24 @@ public class YearlyLVHelper extends LVShowDataBase {
                 }
             }
         } else  {
-            n_mainpara.addAll(mMainPara);
+            n_mainpara = mMainPara;
         }
 
         // 设置listview adapter
-        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
-        SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
-                                        new String[]{}, new int[]{});
-        lv.setAdapter(mSNAdapter);
-        mSNAdapter.notifyDataSetChanged();
+        mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
+                new String[]{}, new int[]{});
+    }
+
+    /**
+     * 不重新加载数据，仅更新视图
+     */
+    @Override
+    protected void refreshView()  {
+        refreshAttachLayout();
+        if(null != mSNAdapter) {
+            mLVShow.setAdapter(mSNAdapter);
+            mSNAdapter.notifyDataSetChanged();
+        }
     }
 
     private void refreshAttachLayout()    {
@@ -282,7 +292,7 @@ public class YearlyLVHelper extends LVShowDataBase {
                     new String[]{}, new int[]{});
             mLVShowDetail.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
-            ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
+            ListViewHelper.setListViewHeightBasedOnChildren(mLVShowDetail);
         }
     }
 
@@ -318,35 +328,34 @@ public class YearlyLVHelper extends LVShowDataBase {
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            View v = super.getView(position, view, arg2);
-            if(null != v)   {
-                HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                View pv = v;
-                init_detail_view(pv, hm);
+            FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
+                    view, R.layout.li_yearly_show);
 
-                v.setOnClickListener(this);
+            View root_view = viewHolder.getConvertView();
+            HashMap<String, String> hm = UtilFun.cast(getItem(position));
+            init_detail_view(root_view, hm);
 
-                // adjust row color
-                RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
-                rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
+            root_view.setOnClickListener(this);
 
-                // for show
-                TextView tv = UtilFun.cast_t(v.findViewById(R.id.tv_year));
-                tv.setText(hm.get(K_YEAR));
+            // adjust row color
+            RelativeLayout rl = viewHolder.getView(R.id.rl_header);
+            rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
 
-                RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
-                HelperDayNotesInfo.fillNoteInfo(rl_info, hm.get(K_YEAR_PAY_COUNT), hm.get(K_YEAR_PAY_AMOUNT),
-                        hm.get(K_YEAR_INCOME_COUNT), hm.get(K_YEAR_INCOME_AMOUNT),
-                        hm.get(K_AMOUNT));
-            }
+            // for show
+            TextView tv = viewHolder.getView(R.id.tv_year);
+            tv.setText(hm.get(K_YEAR));
 
-            return v;
+            HelperDayNotesInfo.fillNoteInfo(viewHolder.getView(R.id.rl_info),
+                    hm.get(K_YEAR_PAY_COUNT), hm.get(K_YEAR_PAY_AMOUNT),
+                    hm.get(K_YEAR_INCOME_COUNT), hm.get(K_YEAR_INCOME_AMOUNT),
+                    hm.get(K_AMOUNT));
+
+            return root_view;
         }
 
         @Override
         public void onClick(View view) {
-            ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
-            int pos = lv.getPositionForView(view);
+            int pos = mLVShow.getPositionForView(view);
 
             HashMap<String, String> hm = UtilFun.cast(getItem(pos));
             boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
@@ -391,51 +400,51 @@ public class YearlyLVHelper extends LVShowDataBase {
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            View v = super.getView(position, view, arg2);
-            if(null != v)   {
-                final HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                final String sub_tag = hm.get(K_SUB_TAG);
+            FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
+                    view, R.layout.li_yearly_show_detail);
 
-                final ImageView ib = UtilFun.cast_t(v.findViewById(R.id.iv_action));
-                ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ? mCISel : mCINoSel);
-                ib.setOnClickListener(v1 -> {
-                    if(!mLLSubFilter.contains(sub_tag)) {
-                        Log.d(TAG, "add selected");
-                        ib.setBackgroundColor(mCISel);
+            View root_view = viewHolder.getConvertView();
+            final HashMap<String, String> hm = UtilFun.cast(getItem(position));
+            final String sub_tag = hm.get(K_SUB_TAG);
 
-                        mLLSubFilter.add(sub_tag);
-                        mLLSubFilterVW.add(v1);
+            final ImageView ib = viewHolder.getView(R.id.iv_action);
+            ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ? mCISel : mCINoSel);
+            ib.setOnClickListener(v1 -> {
+                if(!mLLSubFilter.contains(sub_tag)) {
+                    Log.d(TAG, "add selected");
+                    ib.setBackgroundColor(mCISel);
 
-                        if(!mBSelectSubFilter) {
-                            mBSelectSubFilter = true;
-                            refreshAttachLayout();
-                        }
-                    }   else {
-                        Log.d(TAG, "remove selected");
-                        ib.setBackgroundColor(mCINoSel);
+                    mLLSubFilter.add(sub_tag);
+                    mLLSubFilterVW.add(v1);
 
-                        mLLSubFilter.remove(sub_tag);
-                        mLLSubFilterVW.remove(v1);
-
-                        if(mLLSubFilter.isEmpty()) {
-                            mLLSubFilterVW.clear();
-                            mBSelectSubFilter = false;
-                            refreshAttachLayout();
-                        }
+                    if(!mBSelectSubFilter) {
+                        mBSelectSubFilter = true;
+                        refreshAttachLayout();
                     }
-                });
+                }   else {
+                    Log.d(TAG, "remove selected");
+                    ib.setBackgroundColor(mCINoSel);
 
-                // for show
-                TextView tv = UtilFun.cast_t(v.findViewById(R.id.tv_month));
-                tv.setText(hm.get(K_MONTH));
+                    mLLSubFilter.remove(sub_tag);
+                    mLLSubFilterVW.remove(v1);
 
-                RelativeLayout rl_info = UtilFun.cast_t(v.findViewById(R.id.rl_info));
-                HelperDayNotesInfo.fillNoteInfo(rl_info, hm.get(K_MONTH_PAY_COUNT), hm.get(K_MONTH_PAY_AMOUNT),
-                        hm.get(K_MONTH_INCOME_COUNT), hm.get(K_MONTH_INCOME_AMOUNT),
-                        hm.get(K_AMOUNT));
-            }
+                    if(mLLSubFilter.isEmpty()) {
+                        mLLSubFilterVW.clear();
+                        mBSelectSubFilter = false;
+                        refreshAttachLayout();
+                    }
+                }
+            });
 
-            return v;
+            // for show
+            TextView tv = viewHolder.getView(R.id.tv_month);
+            tv.setText(hm.get(K_MONTH));
+
+            HelperDayNotesInfo.fillNoteInfo(viewHolder.getView(R.id.rl_info),
+                    hm.get(K_MONTH_PAY_COUNT), hm.get(K_MONTH_PAY_AMOUNT),
+                    hm.get(K_MONTH_INCOME_COUNT), hm.get(K_MONTH_INCOME_AMOUNT),
+                    hm.get(K_AMOUNT));
+            return root_view;
         }
     }
 }

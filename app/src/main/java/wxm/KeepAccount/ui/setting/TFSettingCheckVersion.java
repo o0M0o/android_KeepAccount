@@ -12,6 +12,8 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.wxm.andriodutillib.util.PackageUtil;
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
 
@@ -39,11 +41,11 @@ public class TFSettingCheckVersion extends TFSettingBase {
         super.onViewCreated(view, savedInstanceState);
         if (null != view) {
             String s = String.format(Locale.CHINA, "当前版本号 : %d",
-                            ToolUtil.getVerCode(getContext()));
+                    PackageUtil.getVerCode(getContext(), GlobalDef.PACKAGE_NAME));
             mTVVerNumber.setText(s);
 
             s = String.format(Locale.CHINA, "当前版本名 : %s",
-                            ToolUtil.getVerName(getContext()));
+                    PackageUtil.getVerName(getContext(), GlobalDef.PACKAGE_NAME));
             mTVVerName.setText(s);
         }
     }

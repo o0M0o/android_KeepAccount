@@ -33,11 +33,12 @@ import butterknife.BindDrawable;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
-import wxm.KeepAccount.ui.data.edit.ACPreveiwAndEdit;
+import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
 
 /**
  * 预算数据视图辅助类
@@ -132,7 +133,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
             case R.id.bt_accpet :
                 if(ACTION_DELETE == mActionType)    {
                     mActionType = ACTION_EDIT;
-                    if(!ToolUtil.ListIsNullOrEmpty(mLLDelBudget)) {
+                    if(!UtilFun.ListIsNullOrEmpty(mLLDelBudget)) {
                         ContextUtil.getBudgetUtility().removeDatas(mLLDelBudget);
                     }
                 }
@@ -228,7 +229,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
     private void parseSub(String main_tag, List<PayNoteItem> ls_pay)   {
         LinkedList<HashMap<String, String>> cur_llhm = new LinkedList<>();
-        if(!ToolUtil.ListIsNullOrEmpty(ls_pay)) {
+        if(!UtilFun.ListIsNullOrEmpty(ls_pay)) {
             Collections.sort(ls_pay, (o1, o2) -> o1.getTs().compareTo(o2.getTs()));
 
             for(PayNoteItem i : ls_pay)     {
@@ -289,7 +290,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                                                     R.id.tv_pay_time});
         mLVShowDetail.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
-        ToolUtil.setListViewHeightBasedOnChildren(mLVShowDetail);
+        ListViewHelper.setListViewHeightBasedOnChildren(mLVShowDetail);
     }
 
     /**
@@ -440,7 +441,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 String nt = hm.get(K_NOTE);
                 if(UtilFun.StringIsNullOrEmpty(nt)) {
                     RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_pay_note));
-                    ToolUtil.setViewGroupVisible(rl, View.INVISIBLE);
+                    rl.setVisibility(View.GONE);
                 }
 
                 ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_look));

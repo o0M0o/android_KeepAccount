@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import cn.wxm.andriodutillib.DBHelper.DBUtilityBase;
+import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;
@@ -21,6 +22,8 @@ import wxm.KeepAccount.define.UsrItem;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
+
+import static cn.wxm.andriodutillib.util.UtilFun.ListIsNullOrEmpty;
 
 /**
  * 备忘本数据库工具类
@@ -75,7 +78,7 @@ public class PayIncomeDBUtility  {
                 .queryForEq(PayNoteItem.FIELD_BUDGET, bi.get_id());
 
         bi.useBudget(BigDecimal.ZERO);
-        if(!ToolUtil.ListIsNullOrEmpty(ls_pay)) {
+        if(!UtilFun.ListIsNullOrEmpty(ls_pay)) {
             BigDecimal all_pay = BigDecimal.ZERO;
             for(PayNoteItem i : ls_pay) {
                 all_pay = all_pay.add(i.getVal());

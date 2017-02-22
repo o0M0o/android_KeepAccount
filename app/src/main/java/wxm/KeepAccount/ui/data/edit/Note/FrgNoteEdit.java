@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit;
+package wxm.KeepAccount.ui.data.edit.Note;
 
 
 import android.os.Bundle;
@@ -22,10 +22,10 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
+import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditIncome;
+import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditPay;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.edit.EditData.TFEditIncome;
-import wxm.KeepAccount.ui.data.edit.EditData.TFEditPay;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 
 /**

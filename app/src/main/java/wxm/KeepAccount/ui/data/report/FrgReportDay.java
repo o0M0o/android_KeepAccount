@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -41,6 +43,15 @@ public class FrgReportDay extends FrgUtilityBase {
     @BindView(R.id.pb_load_data)
     ProgressBar mPBLoadData;
 
+    @BindView(R.id.tv_day)
+    TextView    mTVDay;
+
+    @BindView(R.id.tv_pay)
+    TextView    mTVPay;
+
+    @BindView(R.id.tv_income)
+    TextView    mTVIncome;
+
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         LOG_TAG = "FrgReportDay";
@@ -59,6 +70,10 @@ public class FrgReportDay extends FrgUtilityBase {
     protected void initUiInfo() {
         new AsyncTask<Void, Void, Void>() {
             private String  mSZHtml;
+            private String  mSZCaption;
+
+            private BigDecimal  mBDTotalPay     = BigDecimal.ZERO;
+            private BigDecimal  mBDTotalIncome  = BigDecimal.ZERO;
 
             @Override
             protected void onPreExecute() {
@@ -73,13 +88,23 @@ public class FrgReportDay extends FrgUtilityBase {
 
                     String d_s = mASParaLoad.get(0);
                     String d_e = mASParaLoad.get(1);
-                    String sz_caption = String.format(Locale.CHINA,
+                    mSZCaption = String.format(Locale.CHINA,
                                             "%s - %s", d_s, d_e);
                     HashMap<String, ArrayList<INote>> ls_note = NoteShowDataHelper.getInstance()
                                                 .getNotesBetweenDays(d_s, d_e);
-                    mSZHtml = NotesToHtmlUtil.NotesToHtmlStr(sz_caption, ls_note);
-                    Log.d(LOG_TAG, "initUiInfo html : " +
-                                (UtilFun.StringIsNullOrEmpty(mSZHtml) ? "null" : mSZHtml));
+
+                    for(ArrayList<INote> ls_n : ls_note.values()) {
+                        for(INote id : ls_n)    {
+                            if(id.isPayNote())
+                                mBDTotalPay = mBDTotalPay.add(id.getVal());
+                            else
+                                mBDTotalIncome = mBDTotalIncome.add(id.getVal());
+                        }
+                    }
+
+                    mSZHtml = NotesToHtmlUtil.NotesToHtmlStr(mSZCaption, ls_note);
+                    //Log.d(LOG_TAG, "initUiInfo html : " +
+                    //            (UtilFun.StringIsNullOrEmpty(mSZHtml) ? "null" : mSZHtml));
                 }
 
                 return null;
@@ -93,6 +118,14 @@ public class FrgReportDay extends FrgUtilityBase {
                 // Hence if you want to populate UI elements with fetched data, do it here.
                 showProgress(false);
 
+                // for header show
+                mTVDay.setText(mSZCaption);
+                mTVPay.setText(String.format(Locale.CHINA,
+                                    "%.02f", mBDTotalPay.floatValue()));
+                mTVIncome.setText(String.format(Locale.CHINA,
+                                    "%.02f", mBDTotalIncome.floatValue()));
+
+                // for web show
                 if(!UtilFun.StringIsNullOrEmpty(mSZHtml)) {
                     mWVReport.getSettings().setDefaultTextEncodingName("utf-8");
                     mWVReport.getSettings().setJavaScriptEnabled(true);

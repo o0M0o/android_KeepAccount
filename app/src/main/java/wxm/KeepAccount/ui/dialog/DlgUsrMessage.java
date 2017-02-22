@@ -19,15 +19,16 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
+import cn.wxm.andriodutillib.util.PackageUtil;
 import cn.wxm.andriodutillib.util.UtilFun;
+import cn.wxm.andriodutillib.util.SIMCardUtil;
 import cn.wxm.andriodutillib.util.WRMsgHandler;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.utility.SIMCardInfo;
-import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
 
 import static android.Manifest.permission.READ_PHONE_STATE;
@@ -110,7 +111,7 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
                 == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(ContextUtil.getInstance(), READ_SMS)
                     == PackageManager.PERMISSION_GRANTED) {
-            SIMCardInfo si = new SIMCardInfo(getContext());
+            SIMCardUtil si = new SIMCardUtil(getContext());
             usr = si.getNativePhoneNumber();
         }
 
@@ -183,7 +184,8 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
                 param.put(mSZColUsr, mSZUsr);
                 param.put(mSZColMsg, mSZMsg);
                 param.put(mSZColAppName,
-                        mSZColValAppName + "-" + ToolUtil.getVerName(getContext()));
+                        mSZColValAppName + "-"
+                                + PackageUtil.getVerName(getContext(), GlobalDef.PACKAGE_NAME));
 
                 RequestBody body = RequestBody.create(JSON, param.toString());
 

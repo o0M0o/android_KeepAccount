@@ -158,6 +158,7 @@
     <string name="col_message">message</string>
     <string name="col_app_name">app_name</string>
     <string name="col_val_app_name">KeepAccount</string>
+
     <string name="hint_to_prv">往前</string>
     <string name="hint_to_next">往后</string>
     <string name="cn_create">新建</string>

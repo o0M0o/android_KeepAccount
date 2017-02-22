@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.utility;
+package wxm.KeepAccount.ui.data.show.note;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -38,6 +38,7 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBudget;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowMonthly;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowYearly;
+import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 
 /**
@@ -56,11 +57,12 @@ public class FrgNoteShow extends FrgUtilityBase {
     TabLayout mTLTab;
 
     // for notice
-    private boolean[]   mBADataChange;
+    private boolean[] mBADataChange;
 
     /**
      * 数据库内数据变化处理器
-     * @param event     事件参数
+     *
+     * @param event 事件参数
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBDataChangeEvent(DBDataChangeEvent event) {
@@ -68,15 +70,15 @@ public class FrgNoteShow extends FrgUtilityBase {
         tb.loadView(true);
 
         int cur_pos = mVPPages.getCurrentItem();
-        for(int i = 0; i < mBADataChange.length; i++)   {
-            if(cur_pos != i)
+        for (int i = 0; i < mBADataChange.length; i++) {
+            if (cur_pos != i)
                 mBADataChange[i] = true;
         }
     }
 
 
     @Override
-    protected void enterActivity()  {
+    protected void enterActivity() {
         Log.d(LOG_TAG, "in enterActivity");
         super.enterActivity();
 
@@ -84,7 +86,7 @@ public class FrgNoteShow extends FrgUtilityBase {
     }
 
     @Override
-    protected void leaveActivity()  {
+    protected void leaveActivity() {
         Log.d(LOG_TAG, "in leaveActivity");
         EventBus.getDefault().unregister(this);
 
@@ -102,95 +104,72 @@ public class FrgNoteShow extends FrgUtilityBase {
     @Override
     protected void initUiComponent(View view) {
         // init view
-        if(0 == mTLTab.getTabCount()) {
-            mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_DAILY));
-            mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_MONTHLY));
-            mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_YEARLY));
-            mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_BUDGET));
-            mTLTab.setTabGravity(TabLayout.GRAVITY_FILL);
+        mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_DAILY));
+        mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_MONTHLY));
+        mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_YEARLY));
+        mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_BUDGET));
+        mTLTab.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        // init adapter
+        AppCompatActivity a_ac = UtilFun.cast_t(getActivity());
+        final PagerAdapter adapter = new PagerAdapter(a_ac.getSupportFragmentManager(),
+                mTLTab.getTabCount());
+        mVPPages.setAdapter(adapter);
+        mVPPages.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTLTab));
+        mTLTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int pos = tab.getPosition();
+                mVPPages.setCurrentItem(pos);
+                getHotTabItem().loadView(mBADataChange[pos]);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        mBADataChange = new boolean[mTLTab.getTabCount()];
+        Arrays.fill(mBADataChange, false);
+
+        // 默认选择第一页为首页
+        // 根据调用参数跳转到指定首页
+        Intent it = getActivity().getIntent();
+        if (null != it) {
+            boolean b_hot = false;
+            String ft = it.getStringExtra(NoteShowDataHelper.INTENT_PARA_FIRST_TAB);
+            if (!UtilFun.StringIsNullOrEmpty(ft)) {
+                int tc = mTLTab.getTabCount();
+                for (int i = 0; i < tc; i++) {
+                    TabLayout.Tab t = mTLTab.getTabAt(i);
+                    if (null != t) {
+                        CharSequence cs = t.getText();
+                        if (null != cs && cs.toString().equals(ft)) {
+                            t.select();
+                            b_hot = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!b_hot) {
+                TabLayout.Tab t = mTLTab.getTabAt(0);
+                if (null != t)
+                    t.select();
+            }
         }
     }
 
     @Override
     protected void initUiInfo() {
-        Log.d(LOG_TAG, "initUiInfo");
-        new AsyncTask<Void, Void, Void>()   {
-            @Override
-            protected void onPreExecute() {
-                showProgress(true);
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                NoteShowDataHelper.getInstance().refreshData();
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                // After completing execution of given task, control will return here.
-                // Hence if you want to populate UI elements with fetched data, do it here.
-                AppCompatActivity a_ac = UtilFun.cast_t(getActivity());
-                final PagerAdapter adapter = new PagerAdapter(a_ac.getSupportFragmentManager(),
-                        mTLTab.getTabCount());
-                mVPPages.setAdapter(adapter);
-                mVPPages.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTLTab));
-                mTLTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        int pos = tab.getPosition();
-                        mVPPages.setCurrentItem(pos);
-                        getHotTabItem().loadView(mBADataChange[pos]);
-                    }
-
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-
-                    }
-                });
-
-                mBADataChange = new boolean[mTLTab.getTabCount()];
-                Arrays.fill(mBADataChange, false);
-
-                // 默认选择第一页为首页
-                // 根据调用参数跳转到指定首页
-                Intent it = getActivity().getIntent();
-                if(null != it)  {
-                    boolean b_hot = false;
-                    String ft = it.getStringExtra(NoteShowDataHelper.INTENT_PARA_FIRST_TAB);
-                    if(!UtilFun.StringIsNullOrEmpty(ft))    {
-                        int tc = mTLTab.getTabCount();
-                        for(int i = 0; i < tc; i++) {
-                            TabLayout.Tab t = mTLTab.getTabAt(i);
-                            if(null != t) {
-                                CharSequence cs = t.getText();
-                                if (null != cs && cs.toString().equals(ft)){
-                                    t.select();
-                                    b_hot = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    if(!b_hot) {
-                        TabLayout.Tab t = mTLTab.getTabAt(0);
-                        if (null != t)
-                            t.select();
-                    }
-
-                    getHotTabItem().loadView(true);
-                }
-
-                showProgress(false);
-            }
-        }.execute();
+        getHotTabItem().loadView(true);
     }
 
 
@@ -198,23 +177,23 @@ public class FrgNoteShow extends FrgUtilityBase {
         mVPPages.requestDisallowInterceptTouchEvent(bflag);
     }
 
-    public void jumpByTabName(String tabname)  {
+    public void jumpByTabName(String tabname) {
         int pos = -1;
         int tc = mTLTab.getTabCount();
-        for(int i = 0; i < tc; ++i)     {
+        for (int i = 0; i < tc; ++i) {
             TabLayout.Tab t = mTLTab.getTabAt(i);
-            assert  null != t;
+            assert null != t;
 
             CharSequence t_cs = t.getText();
             assert null != t_cs;
 
-            if(tabname.equals(t_cs.toString())) {
+            if (tabname.equals(t_cs.toString())) {
                 pos = i;
                 break;
             }
         }
 
-        if((-1 != pos) && (pos != mTLTab.getSelectedTabPosition()))   {
+        if ((-1 != pos) && (pos != mTLTab.getSelectedTabPosition())) {
             mTLTab.setScrollPosition(pos, 0, true);
             mVPPages.setCurrentItem(pos);
         }
@@ -227,6 +206,7 @@ public class FrgNoteShow extends FrgUtilityBase {
 
 
     /// PRIVATE BEGIN
+
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -251,7 +231,8 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     /**
      * 得到当前选中的tab item
-     * @return  当前选中的tab item
+     *
+     * @return 当前选中的tab item
      */
     public TFShowBase getHotTabItem() {
         int pos = mTLTab.getSelectedTabPosition();

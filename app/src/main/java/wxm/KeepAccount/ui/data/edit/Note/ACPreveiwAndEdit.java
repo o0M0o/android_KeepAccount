@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit;
+package wxm.KeepAccount.ui.data.edit.Note;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,18 +8,19 @@ import android.view.MenuItem;
 
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.IncomeNoteItem;
-import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.db.BudgetDBUtility;
 import wxm.KeepAccount.db.PayIncomeDBUtility;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.edit.base.ITFBase;
+import wxm.KeepAccount.ui.data.edit.base.IPreviewAndEditBase;
 
+/**
+ * 预览/编辑UI for note
+ */
 public class ACPreveiwAndEdit extends BaseAppCompatActivity {
-    private ITFBase     mTFBase;
+    private IPreviewAndEditBase mTFBase;
 
     private final static String     CHANGETO_PREVIEW = "预览";
     private final static String     CHANGETO_EDIT    = "编辑";
@@ -65,11 +66,9 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
         BudgetDBUtility buit = ContextUtil.getBudgetUtility();
         int id = it.getIntExtra(GlobalDef.INTENT_LOAD_RECORD_ID, -1);
         if(GlobalDef.STR_RECORD_PAY.equals(type)) {
-            PayNoteItem pi = -1 != id ? puit.getPayDBUtility().getData(id) : null;
-            ob = pi;
+            ob = -1 != id ? puit.getPayDBUtility().getData(id) : null;
         } else if(GlobalDef.STR_RECORD_BUDGET.equals(type)) {
-            BudgetItem bi = -1 != id ? buit.getData(id) : null;
-            ob = bi;
+            ob = -1 != id ? buit.getData(id) : null;
         } else  {
             IncomeNoteItem ii = -1 != id ? puit.getIncomeDBUtility().getData(id) : null;
             ob = ii;
@@ -90,7 +89,6 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
 
         mMISwitch = menu.findItem(R.id.mi_switch);
         mMISave   = menu.findItem(R.id.mi_save);
-        //MenuItem mMIGiveup = menu.findItem(R.id.mi_giveup);
         mMISwitch.setTitle(mTFBase.isPreviewPage() ? CHANGETO_EDIT : CHANGETO_PREVIEW);
         mMISave.setVisible(mTFBase.isEditPage());
         return true;

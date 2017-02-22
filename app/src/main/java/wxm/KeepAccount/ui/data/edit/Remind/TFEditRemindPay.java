@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit.RemindEdit;
+package wxm.KeepAccount.ui.data.edit.Remind;
 
 
 import android.os.Bundle;

@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import cn.wxm.andriodutillib.util.AssetUtil;
+import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
@@ -45,7 +47,8 @@ public class NotesToHtmlUtil {
      * @return          html字符串
      */
     public static String NotesToHtmlStr(String caption, HashMap<String, ArrayList<INote>> ls_data) {
-        String sz_org = ToolUtil.getFromAssets(DAY_REPORT_MODE_FN, ENCODING);
+        String sz_org = AssetUtil.getFromAssets(ContextUtil.getInstance().getResources(),
+                            DAY_REPORT_MODE_FN, ENCODING);
         return sz_org.replace(TAG_CAPTION, caption).replace(TAG_COLUMNS, TABLE_COLUMNS)
                     .replace(TAG_ROWS, NotesToRowStr(ls_data));
     }

@@ -29,9 +29,9 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow;
-import wxm.KeepAccount.ui.data.edit.ACNoteEdit;
-import wxm.KeepAccount.ui.data.edit.ACPreveiwAndEdit;
-import wxm.KeepAccount.ui.data.edit.ACRemindEdit;
+import wxm.KeepAccount.ui.data.edit.Note.ACNoteEdit;
+import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
+import wxm.KeepAccount.ui.data.edit.Remind.ACRemindEdit;
 import wxm.KeepAccount.ui.setting.ACSetting;
 import wxm.KeepAccount.ui.dialog.DlgUsrMessage;
 import wxm.KeepAccount.ui.help.ACHelp;
@@ -224,18 +224,6 @@ public class ACWelcome extends AppCompatActivity
      * 激活手机邮件客户端，往设定的地址发送邮件
      */
     private void contactWriter() {
-        /*
-        Resources res = getResources();
-
-        Intent data = new Intent(Intent.ACTION_SENDTO);
-        data.setData(
-                Uri.parse(
-                        String.format("mailto:%s", res.getString(R.string.contact_email))));
-        //data.putExtra(Intent.EXTRA_SUBJECT, "这是标题");
-        //data.putExtra(Intent.EXTRA_TEXT, "这是内容");
-        startActivity(data);
-        */
-
         DlgUsrMessage dlg = new DlgUsrMessage();
         dlg.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
             @Override

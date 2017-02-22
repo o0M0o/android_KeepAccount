@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit;
+package wxm.KeepAccount.ui.data.edit.Note;
 
 
 import android.os.Bundle;
@@ -16,13 +16,13 @@ import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.edit.EditData.TFEditBudget;
-import wxm.KeepAccount.ui.data.edit.EditData.TFEditIncome;
-import wxm.KeepAccount.ui.data.edit.EditData.TFEditPay;
-import wxm.KeepAccount.ui.data.edit.EditData.TFPreviewBudget;
-import wxm.KeepAccount.ui.data.edit.EditData.TFPreviewIncome;
-import wxm.KeepAccount.ui.data.edit.EditData.TFPreviewPay;
-import wxm.KeepAccount.ui.data.edit.base.ITFBase;
+import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditBudget;
+import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditIncome;
+import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditPay;
+import wxm.KeepAccount.ui.data.edit.Note.utility.TFPreviewBudget;
+import wxm.KeepAccount.ui.data.edit.Note.utility.TFPreviewIncome;
+import wxm.KeepAccount.ui.data.edit.Note.utility.TFPreviewPay;
+import wxm.KeepAccount.ui.data.edit.base.IPreviewAndEditBase;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
 
@@ -31,7 +31,7 @@ import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
  * Created by 123 on 2016/10/30.
  */
 public class FrgPreviewAndEdit extends Fragment
-        implements ITFBase {
+        implements IPreviewAndEditBase {
     @BindView(R.id.vp_pages)
     ViewPager mVPPages;
 

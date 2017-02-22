@@ -50,7 +50,6 @@ public class DGVButtonAdapter extends SimpleAdapter {
             String hv = UtilFun.cast(hmd.get(HKEY_ACT_NAME));
 
             TextView tv = UtilFun.cast(v.findViewById(R.id.tv_name));
-            ToolUtil.throwExIf(null == tv);
             tv.setText(hv);
 
             if(mCTContext instanceof View.OnClickListener)  {

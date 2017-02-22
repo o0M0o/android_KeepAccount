@@ -19,6 +19,8 @@ import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 
+import static cn.wxm.andriodutillib.util.UtilFun.ListIsNullOrEmpty;
+
 /**
  * 预算数据工具类
  * Created by 123 on 2016/9/1.
@@ -93,7 +95,7 @@ public class BudgetDBUtility extends DBUtilityBase<BudgetItem, Integer> {
             ret = null;
         }
 
-        if(ToolUtil.ListIsNullOrEmpty(ret))
+        if(UtilFun.ListIsNullOrEmpty(ret))
             return null;
 
         return ret.get(0);
@@ -126,11 +128,11 @@ public class BudgetDBUtility extends DBUtilityBase<BudgetItem, Integer> {
      */
     @Override
     public int removeDatas(List<Integer> ls_biid)  {
-        if(!ToolUtil.ListIsNullOrEmpty(ls_biid)) {
+        if(!UtilFun.ListIsNullOrEmpty(ls_biid)) {
             for(Integer id : ls_biid) {
                 List<PayNoteItem> ls_pay = ContextUtil.getDBHelper().getPayDataREDao()
                                             .queryForEq(PayNoteItem.FIELD_BUDGET, id);
-                if (!ToolUtil.ListIsNullOrEmpty(ls_pay)) {
+                if (!UtilFun.ListIsNullOrEmpty(ls_pay)) {
                     for (PayNoteItem i : ls_pay) {
                         i.setBudget(null);
                         ContextUtil.getDBHelper().getPayDataREDao().update(i);

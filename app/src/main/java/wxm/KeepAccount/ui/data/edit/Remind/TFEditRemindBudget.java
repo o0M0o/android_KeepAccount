@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit.RemindEdit;
+package wxm.KeepAccount.ui.data.edit.Remind;
 
 
 import android.app.Dialog;
@@ -18,7 +18,6 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.RemindItem;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
 
 /**
@@ -47,7 +46,7 @@ public class TFEditRemindBudget extends TFEditRemindBase  {
             // init budget
             ArrayList<String> data_ls = new ArrayList<>();
             List<BudgetItem> bils = ContextUtil.getBudgetUtility().getBudgetForCurUsr();
-            if (!ToolUtil.ListIsNullOrEmpty(bils)) {
+            if (!UtilFun.ListIsNullOrEmpty(bils)) {
                 for (BudgetItem i : bils) {
                     data_ls.add(i.getName());
                 }

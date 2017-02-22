@@ -128,6 +128,10 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
         mUnfoldItems    = new LinkedList<>();
     }
 
+    /**
+     * 切换底部”动作条“显示/隐藏
+     * @param v     点击view
+     */
     @OnClick(R.id.rl_hide_show)
     public void switchActionHideShow(View v)    {
         ViewGroup.LayoutParams rp = mRLActions.getLayoutParams();
@@ -220,43 +224,28 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
                     refreshView();
                 }
             }.execute();
-        }   else {
+        } /*  else {
             refreshView();
         }
+        */
     }
 
 
     /**
      * 刷新数据以及视图
-     * @param v             for context
-     * @param bShowDialog   若为true则显示提醒对话框
+     *
+     * @param v           for context
+     * @param bShowDialog 若为true则显示提醒对话框
      */
     protected void reloadView(final Context v, final boolean bShowDialog) {
-        AsyncTask<Void, Void, Void>  cur_task = new AsyncTask<Void, Void, Void> () {
-            @Override
-            protected Void doInBackground(Void... params) {
-                NoteShowDataHelper.getInstance().refreshData();
-                return null;
-            }
+        loadView(true);
+        if (bShowDialog) {
+            android.app.AlertDialog.Builder builder =
+                    new android.app.AlertDialog.Builder(v);
+            builder.setMessage("数据已刷新!").setTitle("提醒");
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                // After completing execution of given task, control will return here.
-                // Hence if you want to populate UI elements with fetched data, do it here.
-                loadView(true);
-
-                if(bShowDialog) {
-                    android.app.AlertDialog.Builder builder =
-                            new android.app.AlertDialog.Builder(v);
-                    builder.setMessage("数据已刷新!").setTitle("提醒");
-
-                    android.app.AlertDialog dlg = builder.create();
-                    dlg.show();
-                }
-            }
-        };
-
-        cur_task.execute();
+            android.app.AlertDialog dlg = builder.create();
+            dlg.show();
+        }
     }
 }

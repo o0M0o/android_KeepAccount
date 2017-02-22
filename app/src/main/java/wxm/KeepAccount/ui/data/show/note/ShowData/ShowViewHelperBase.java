@@ -137,7 +137,6 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
         RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_attach_button));
         assert null != rl;
         rl.setVisibility(visible);
-        //setLayoutVisible(rl, visible);
     }
 
 
@@ -154,7 +153,6 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
         RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_filter));
         assert null != rl;
         rl.setVisibility(visible);
-        //setLayoutVisible(rl, visible);
 
         ImageButton bt = UtilFun.cast(rl.findViewById(R.id.bt_giveup_filter));
         assert null != bt;
@@ -183,20 +181,5 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
         bt = UtilFun.cast(rl.findViewById(R.id.bt_accpet));
         assert null != bt;
         bt.setOnClickListener(this);
-    }
-
-    /**
-     * 设置layout可见性
-     * 仅调整可见性，其它设置保持不变
-     * @param visible  若为 :
-     *                  1. {@code View.INVISIBLE}, 不可见
-     *                  2. {@code View.VISIBLE}, 可见
-     */
-    protected void setLayoutVisible(ViewGroup rl, int visible)    {
-        ViewGroup.LayoutParams param = rl.getLayoutParams();
-        //param.width = rl.getWidth();
-        param.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        param.height = View.INVISIBLE == visible ? 0 : ViewGroup.LayoutParams.WRAP_CONTENT;
-        rl.setLayoutParams(param);
     }
 }

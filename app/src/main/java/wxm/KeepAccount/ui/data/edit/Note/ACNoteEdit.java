@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit;
+package wxm.KeepAccount.ui.data.edit.Note;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,14 +7,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import org.greenrobot.eventbus.EventBus;
-
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 
 /**

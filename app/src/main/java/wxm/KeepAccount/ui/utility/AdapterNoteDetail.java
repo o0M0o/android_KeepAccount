@@ -22,9 +22,8 @@ import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.edit.ACPreveiwAndEdit;
+import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
 
 /**
  * adapter for note detail
@@ -192,14 +191,14 @@ public class AdapterNoteDetail extends SimpleAdapter {
         // for budget
         if(UtilFun.StringIsNullOrEmpty(b_name)) {
             RelativeLayout rl = UtilFun.cast_t(rl_pay.findViewById(R.id.rl_budget));
-            ToolUtil.setViewGroupVisible(rl, View.INVISIBLE);
+            rl.setVisibility(View.GONE);
         }
 
         // for note
         String nt = pn.getNote();
         if(UtilFun.StringIsNullOrEmpty(nt)) {
             RelativeLayout rl = UtilFun.cast_t(rl_pay.findViewById(R.id.rl_pay_note));
-            ToolUtil.setViewGroupVisible(rl, View.INVISIBLE);
+            rl.setVisibility(View.GONE);
         } else  {
             tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_note));
             tv.setText(nt);
@@ -239,7 +238,7 @@ public class AdapterNoteDetail extends SimpleAdapter {
         String nt = i_n.getNote();
         if(UtilFun.StringIsNullOrEmpty(nt)) {
             RelativeLayout rl = UtilFun.cast_t(rl_income.findViewById(R.id.rl_income_note));
-            ToolUtil.setViewGroupVisible(rl, View.INVISIBLE);
+            rl.setVisibility(View.GONE);
         } else  {
             tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_note));
             tv.setText(nt);

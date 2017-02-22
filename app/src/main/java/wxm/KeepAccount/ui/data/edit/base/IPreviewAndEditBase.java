@@ -4,7 +4,7 @@ package wxm.KeepAccount.ui.data.edit.base;
  * TF基类接口
  * Created by 123 on 2016/10/30.
  */
-public interface ITFBase {
+public interface IPreviewAndEditBase {
     /**
      * 设置运行数据
      *

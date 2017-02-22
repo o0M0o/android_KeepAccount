@@ -80,7 +80,7 @@ public class BudgetChartHelper extends ShowViewHelperBase {
         assert null != mSPBudget;
 
         mSPBudgetData = ContextUtil.getBudgetUtility().getBudgetForCurUsr();
-        if (!ToolUtil.ListIsNullOrEmpty(mSPBudgetData)) {
+        if (!UtilFun.ListIsNullOrEmpty(mSPBudgetData)) {
             ArrayList<String> data_ls = new ArrayList<>();
             for (BudgetItem i : mSPBudgetData) {
                 data_ls.add(i.getName());
@@ -213,7 +213,7 @@ public class BudgetChartHelper extends ShowViewHelperBase {
         for(PayNoteItem i : pays)   {
             String k = i.getTs().toString().substring(0, 10);
             ArrayList<PayNoteItem> lsp = hm_ret.get(k);
-            if(ToolUtil.ListIsNullOrEmpty(lsp)) {
+            if(UtilFun.ListIsNullOrEmpty(lsp)) {
                 lsp = new ArrayList<>();
                 lsp.add(i);
 

@@ -25,7 +25,7 @@ import wxm.KeepAccount.db.RecordTypeDBUtility;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.edit.ACRecordInfoEdit;
+import wxm.KeepAccount.ui.data.edit.RecordInfo.ACRecordInfoEdit;
 
 /**
  * 选择“记录类型”对话框

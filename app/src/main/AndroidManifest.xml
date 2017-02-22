@@ -53,11 +53,11 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.data.edit.ACNoteEdit"
+            android:name=".ui.data.edit.Note.ACNoteEdit"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.data.edit.ACRemindEdit"
+            android:name=".ui.data.edit.Remind.ACRemindEdit"
             android:exported="true" />
         <activity android:name=".ui.data.show.remind.ACRemindShow" />
         <activity
@@ -76,10 +76,10 @@
             android:label="日历展示"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.data.edit.ACPreveiwAndEdit"
+            android:name=".ui.data.edit.Note.ACPreveiwAndEdit"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.data.edit.ACRecordInfoEdit"
+            android:name=".ui.data.edit.RecordInfo.ACRecordInfoEdit"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

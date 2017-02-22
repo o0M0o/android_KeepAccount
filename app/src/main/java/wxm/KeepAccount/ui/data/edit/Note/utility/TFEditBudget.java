@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit.EditData;
+package wxm.KeepAccount.ui.data.edit.Note.utility;
 
 import android.graphics.Paint;
 import android.os.Bundle;

@@ -5,6 +5,8 @@ package wxm.KeepAccount.define;
  * Created by 123 on 2016/5/6.
  */
 public class GlobalDef {
+    public static final String PACKAGE_NAME = "com.wxm.keepaccount";
+
     static public final String STR_RECORD_PAY       = "record_pay";
     static public final String STR_RECORD_INCOME    = "record_income";
     static public final String STR_RECORD_BUDGET    = "record_budget";

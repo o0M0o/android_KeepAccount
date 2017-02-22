@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit.EditData;
+package wxm.KeepAccount.ui.data.edit.RecordInfo;
 
 import android.content.Context;
 import android.os.Bundle;

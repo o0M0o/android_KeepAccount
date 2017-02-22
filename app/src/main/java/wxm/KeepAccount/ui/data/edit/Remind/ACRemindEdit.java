@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit;
+package wxm.KeepAccount.ui.data.edit.Remind;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,10 +18,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.RemindItem;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.edit.EditData.TFEditIncome;
-import wxm.KeepAccount.ui.data.edit.RemindEdit.TFEditRemindBase;
-import wxm.KeepAccount.ui.data.edit.RemindEdit.TFEditRemindBudget;
-import wxm.KeepAccount.ui.data.edit.RemindEdit.TFEditRemindPay;
+import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditIncome;
 
 public class ACRemindEdit extends AppCompatActivity {
     private final static String TAG = "ACRemindEdit";

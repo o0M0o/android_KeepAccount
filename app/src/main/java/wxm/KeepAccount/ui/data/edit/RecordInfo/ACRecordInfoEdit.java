@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit;
+package wxm.KeepAccount.ui.data.edit.RecordInfo;
 
 import android.content.Intent;
 import android.view.Menu;
@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.edit.EditData.TFEditRecordInfo;
 
 public class ACRecordInfoEdit extends BaseAppCompatActivity {
     public final static String  IT_PARA_RECORDTYPE = "record_type";
@@ -33,14 +32,10 @@ public class ACRecordInfoEdit extends BaseAppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.mu_preview_edit, menu);
+        getMenuInflater().inflate(R.menu.mu_preview_edit, menu);
 
-        MenuItem mMISwitch = menu.findItem(R.id.mi_switch);
-        MenuItem mMIGiveup = menu.findItem(R.id.mi_giveup);
-        mMISwitch.setVisible(false);
-        mMIGiveup.setVisible(false);
+        menu.findItem(R.id.mi_switch).setVisible(false);
+        menu.findItem(R.id.mi_giveup).setVisible(false);
         return true;
     }
 
