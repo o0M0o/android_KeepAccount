@@ -50,6 +50,8 @@ public class IncomeNoteItem
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
     private Timestamp ts;
 
+    private String valStr;
+
     @Override
     public boolean isPayNote() {
         return false;
@@ -100,6 +102,10 @@ public class IncomeNoteItem
         this.note = note;
     }
 
+    public String getValToStr()     {
+        return valStr;
+    }
+
     @Override
     public BigDecimal getVal() {
         return val;
@@ -108,6 +114,7 @@ public class IncomeNoteItem
     @Override
     public void setVal(BigDecimal val) {
         this.val = val;
+        valStr = String.format(Locale.CHINA, "%.02f", val.floatValue());
     }
 
     @Override

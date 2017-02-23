@@ -28,6 +28,8 @@ public interface INote {
 
     BigDecimal getVal();
 
+    String getValToStr();
+
     void setVal(BigDecimal val);
 
     Timestamp getTs();

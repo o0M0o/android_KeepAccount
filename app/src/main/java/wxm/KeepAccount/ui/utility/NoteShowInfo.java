@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.utility;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 /**
  * 数据显示内容定义类
@@ -11,6 +12,9 @@ public class NoteShowInfo {
     private int     mIncomeCount;
     private BigDecimal  mPayAmount;
     private BigDecimal  mIncomeAmount;
+
+    private String      mSZPayAmount;
+    private String      mSZIncomeAmount;
 
     public NoteShowInfo()   {
         mPayAmount = BigDecimal.ZERO;
@@ -40,16 +44,27 @@ public class NoteShowInfo {
         return mPayAmount;
     }
 
+    public String getSZPayAmount()   {
+        return mSZPayAmount;
+    }
+
     public void setPayAmount(BigDecimal mPayAmount) {
         this.mPayAmount = mPayAmount;
+        mSZPayAmount = String.format(Locale.CHINA, "%.02f", mPayAmount);
     }
 
     public BigDecimal getIncomeAmount() {
         return mIncomeAmount;
     }
 
+    public String getSZIncomeAmount()   {
+        return mSZIncomeAmount;
+    }
+
+
     public void setIncomeAmount(BigDecimal mIncomeAmount) {
         this.mIncomeAmount = mIncomeAmount;
+        mSZIncomeAmount = String.format(Locale.CHINA, "%.02f", mIncomeAmount);
     }
 
     public BigDecimal getBalance()  {

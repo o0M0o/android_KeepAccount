@@ -50,6 +50,8 @@ public class PayNoteItem
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
     private Timestamp ts;
 
+    private String valStr = "0.0";
+
     @Override
     public boolean isPayNote() {
         return true;
@@ -105,9 +107,14 @@ public class PayNoteItem
         return val;
     }
 
+    public String getValToStr()     {
+        return valStr;
+    }
+
     @Override
     public void setVal(BigDecimal val) {
         this.val = val;
+        valStr = String.format(Locale.CHINA, "%.02f", val.floatValue());
     }
 
     @Override

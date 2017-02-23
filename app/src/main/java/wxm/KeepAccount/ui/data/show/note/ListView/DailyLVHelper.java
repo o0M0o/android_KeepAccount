@@ -247,10 +247,8 @@ public class DailyLVHelper
 
             map.put(K_DAY_PAY_COUNT, String.valueOf(ni.getPayCount()));
             map.put(K_DAY_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
-            map.put(K_DAY_PAY_AMOUNT, String.format(Locale.CHINA,
-                    "%.02f", ni.getPayAmount()));
-            map.put(K_DAY_INCOME_AMOUNT, String.format(Locale.CHINA,
-                    "%.02f", ni.getIncomeAmount()));
+            map.put(K_DAY_PAY_AMOUNT,  ni.getSZPayAmount());
+            map.put(K_DAY_INCOME_AMOUNT, ni.getSZIncomeAmount());
 
             BigDecimal bd_l = ni.getBalance();
             String v_l = String.format(Locale.CHINA,
