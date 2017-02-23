@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 
+import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
 import butterknife.ButterKnife;
 import butterknife.BindColor;
@@ -67,16 +68,6 @@ public class BudgetViewHelper  extends LVShowDataBase {
         LOG_TAG = "BudgetViewHelper";
     }
 
-    @Override
-    public View createView(LayoutInflater inflater, ViewGroup container) {
-        mSelfView       = inflater.inflate(R.layout.lv_newpager, container, false);
-        mBFilter        = false;
-        ButterKnife.bind(this, mSelfView);
-
-        refreshAttachLayout();
-        initActs(mSelfView);
-        return mSelfView;
-    }
 
     @Override
     public void filterView(List<String> ls_tag) {
@@ -85,9 +76,9 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
     /**
      * 初始化可隐藏动作条
-     * @param pv   视图
      */
-    private void initActs(View pv) {
+    @Override
+    protected void initActs() {
         mRLActReport.setVisibility(View.GONE);
         mRLActAdd.setOnClickListener(v -> {
             ACNoteShow ac = getRootActivity();
@@ -108,13 +99,13 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
         final ImageView iv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.iv_sort));
         final TextView tv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.tv_sort));
-        iv_sort.setImageDrawable(pv.getContext().getResources()
+        iv_sort.setImageDrawable(getContext().getResources()
                 .getDrawable(mBNameDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
         tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
         mRLActSort.setOnClickListener(v -> {
             mBNameDownOrder = !mBNameDownOrder;
 
-            iv_sort.setImageDrawable(pv.getContext().getResources()
+            iv_sort.setImageDrawable(getContext().getResources()
                     .getDrawable(mBNameDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
             tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
 
@@ -124,9 +115,8 @@ public class BudgetViewHelper  extends LVShowDataBase {
     }
 
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
+    @OnClick({R.id.bt_accpet, R.id.bt_giveup})
+    public void onAccpetOrGiveupClick(View v) {
 
         int vid = v.getId();
         switch (vid)    {
@@ -150,18 +140,17 @@ public class BudgetViewHelper  extends LVShowDataBase {
     }
 
     @Override
-    protected void refreshView() {
+    protected void initUiInfo() {
         refreshAttachLayout();
 
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
         n_mainpara.addAll(mMainPara);
 
         // 设置listview adapter
-        ListView lv = UtilFun.cast(mSelfView.findViewById(R.id.lv_show));
-        SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), lv, n_mainpara,
+        SelfAdapter mSNAdapter = new SelfAdapter(getContext(), mLVShow, n_mainpara,
                 new String[]{K_TITLE, K_AMOUNT, K_NOTE},
                 new int[]{R.id.tv_budget_name, R.id.tv_budget_amount, R.id.tv_budget_note});
-        lv.setAdapter(mSNAdapter);
+        mLVShow.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
 
@@ -281,7 +270,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
         // init sub adapter
         ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
         assert null != mLVShowDetail;
-        SelfSubAdapter mAdapter= new SelfSubAdapter( mSelfView.getContext(), llhm,
+        SelfSubAdapter mAdapter= new SelfSubAdapter(getContext(), llhm,
                                         new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK,
                                                     K_TITLE, K_AMOUNT, K_NOTE,
                                                     K_TIME},

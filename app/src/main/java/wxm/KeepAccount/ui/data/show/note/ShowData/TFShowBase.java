@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -30,14 +31,8 @@ import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
  * Created by wxm on 2016/9/27.
  */
 public abstract class TFShowBase extends FrgUtilitySupportBase {
-    protected String LOG_TAG = "TFShowBase";
-
     private final static String CHILD_HOT = "child_hot";
-
-    @BindView(R.id.vs_page)
-    ViewSwitcher    mVSSwitcher;
-
-    protected int           mHotChild;
+    private int   mHotChild = 0;
 
     protected ShowViewHelperBase[]   mViewHelper;
 
@@ -61,23 +56,17 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
         View rootView = layoutInflater.inflate(R.layout.tf_show_base, viewGroup, false);
         ButterKnife.bind(this, rootView);
 
-        int cc = mViewHelper.length;
-        for(int i = 0; i < cc; ++i)     {
-            ShowViewHelperBase sb = mViewHelper[i];
-            sb.createView(layoutInflater, viewGroup);
-            mVSSwitcher.addView(sb.getView(), i);
-        }
+
         return rootView;
     }
 
     @Override
     protected void initUiComponent(View view) {
-        mVSSwitcher.setDisplayedChild(mHotChild);
     }
 
     @Override
     protected void initUiInfo() {
-        mViewHelper[mHotChild].loadView(false);
+        loadHotFrg();
     }
 
     @Override
@@ -96,13 +85,8 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
     public void switchPage() {
         View v = getView();
         if(null != v) {
-            mVSSwitcher = UtilFun.cast(v.findViewById(R.id.vs_page));
-            mVSSwitcher.showNext();
-            mHotChild = mVSSwitcher.getDisplayedChild();
-
-            mViewHelper[mHotChild].loadView(false);
-        }   else    {
-            Toast.makeText(getActivity(), "getView is null", Toast.LENGTH_SHORT).show();
+            mHotChild = mHotChild >= mViewHelper.length - 1 ? 0 : mHotChild + 1;
+            loadHotFrg();
         }
     }
 
@@ -126,10 +110,23 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
     public void loadView(boolean bForce)  {
         View cur_v = getView();
         if(null != cur_v) {
-            mVSSwitcher = UtilFun.cast(cur_v.findViewById(R.id.vs_page));
-            mVSSwitcher.setDisplayedChild(mHotChild);
-
-            mViewHelper[mHotChild].loadView(bForce);
+            if(bForce)
+                mViewHelper[mHotChild].refreshUI();
         }
     }
+
+    //// PRIVATE START
+
+    /**
+     * 加载热fragment
+     */
+    private void loadHotFrg()   {
+        AppCompatActivity ac = UtilFun.cast_t(getContext());
+
+        android.support.v4.app.FragmentTransaction t =
+                ac.getSupportFragmentManager().beginTransaction();
+        t.replace(cn.wxm.andriodutillib.R.id.fl_holder, mViewHelper[mHotChild]);
+        t.commit();
+    }
+    //// PRIVATE END
 }

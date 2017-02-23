@@ -3,9 +3,12 @@ package wxm.KeepAccount.ui.data.show.note.ListView;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import java.util.HashMap;
@@ -13,6 +16,7 @@ import java.util.LinkedList;
 
 import butterknife.BindDrawable;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.utility.ContextUtil;
@@ -121,12 +125,33 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     @BindView(R.id.rl_action)
     RelativeLayout  mRLAction;
 
+    @BindView(R.id.lv_show)
+    ListView mLVShow;
+
     public LVShowDataBase()   {
         super();
         mMainPara       = new LinkedList<>();
         mHMSubPara      = new HashMap<>();
         mUnfoldItems    = new LinkedList<>();
     }
+
+    @Override
+    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        View rootView = layoutInflater.inflate(R.layout.lv_newpager, viewGroup, false);
+        ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    protected void initUiComponent(View view) {
+        initActs();
+        refreshData();
+    }
+
+    /**
+     * 初始化底部动作条
+     */
+    protected abstract void initActs();
 
     /**
      * 切换底部”动作条“显示/隐藏
@@ -197,40 +222,6 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
         return DAY_IN_WEEK[dw];
     }
 
-
-    @Override
-    public void loadView(boolean bForce) {
-        super.loadView(bForce);
-
-        if(bForce ||
-                ContextUtil.getPayIncomeUtility().getDataLastChangeTime().after(mTSLastLoadViewTime)) {
-            new AsyncTask<Void, Void, Void> () {
-                @Override
-                protected void onPreExecute() {
-                    super.onPreExecute();
-                }
-
-                @Override
-                protected Void doInBackground(Void... params) {
-                    refreshData();
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
-                    // After completing execution of given task, control will return here.
-                    // Hence if you want to populate UI elements with fetched data, do it here.
-                    refreshView();
-                }
-            }.execute();
-        } /*  else {
-            refreshView();
-        }
-        */
-    }
-
-
     /**
      * 刷新数据以及视图
      *
@@ -238,7 +229,7 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
      * @param bShowDialog 若为true则显示提醒对话框
      */
     protected void reloadView(final Context v, final boolean bShowDialog) {
-        loadView(true);
+        refreshUI();
         if (bShowDialog) {
             android.app.AlertDialog.Builder builder =
                     new android.app.AlertDialog.Builder(v);

@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.data.show.note.HelloChart;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,6 +11,9 @@ import android.widget.ImageView;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.listener.ViewportChangeListener;
@@ -28,35 +32,42 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
 abstract class ChartHelperBase extends ShowViewHelperBase {
     private final static String TAG = "ChartHelperBase";
 
-    private ColumnChartView         mChart;
     ColumnChartData         mChartData;
-    private PreviewColumnChartView  mPreviewChart;
     ColumnChartData         mPreviewData;
 
     float   mPrvWidth = 12;
     HashMap<String, Integer>    mHMColor;
+
+    @BindView(R.id.chart)
+    ColumnChartView         mChart;
+
+    @BindView(R.id.chart_preview)
+    PreviewColumnChartView  mPreviewChart;
+
+    @BindView(R.id.iv_income)
+    ImageView   mIVIncome;
+
+    @BindView(R.id.iv_pay)
+    ImageView   mIVPay;
+
 
     ChartHelperBase()    {
         super();
     }
 
     @Override
-    public View createView(LayoutInflater inflater, ViewGroup container) {
-        mSelfView       = inflater.inflate(R.layout.chart_pager, container, false);
-        mBFilter        = false;
+    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        View rootView = layoutInflater.inflate(R.layout.chart_pager, viewGroup, false);
+        ButterKnife.bind(this, rootView);
+        return rootView;
+    }
 
-        // 展示条
+    @Override
+    protected void initUiComponent(View view) {
+        mBFilter = false;
         mHMColor = PreferencesUtil.loadChartColor();
-        ImageView iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_income));
-        assert null != iv;
-        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_INCOME_COLOR));
-
-        iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_pay));
-        assert null != iv;
-        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_PAY_COLOR));
 
         // 主chart需要响应触摸滚动事件
-        mChart = UtilFun.cast(mSelfView.findViewById(R.id.chart));
         mChart.setOnTouchListener(new View.OnTouchListener() {
             private float prv_x = -1;
 
@@ -102,7 +113,6 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
         });
 
         // 预览chart需要锁定触摸滚屏
-        mPreviewChart = UtilFun.cast(mSelfView.findViewById(R.id.chart_preview));
         mPreviewChart.setOnTouchListener((v, event) -> {
             //Log.i(LOG_TAG, "in preview chart event = " + event.getAction());
             switch (event.getAction()) {
@@ -123,69 +133,16 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
             return false;
         });
 
-        // 设置扩大/缩小viewport
-        final Button bt_less = UtilFun.cast(mSelfView.findViewById(R.id.bt_less_viewport));
-        Button bt = UtilFun.cast(mSelfView.findViewById(R.id.bt_more_viewport));
-        bt.setOnClickListener(v -> {
-            mPrvWidth += 0.2;
-            refreshViewPort();
-
-            if(!bt_less.isClickable() && 1 < mPrvWidth)
-                bt_less.setClickable(true);
-        });
-
-        bt_less.setOnClickListener(v -> {
-            if(1 < mPrvWidth) {
-                mPrvWidth -= 0.2;
-                refreshViewPort();
-            } else  {
-                bt_less.setClickable(false);
-            }
-        });
-
-        return mSelfView;
-    }
-
-    @Override
-    public void loadView(boolean bForce) {
-        super.loadView(bForce);
-
         refreshData();
-        refreshView();
     }
 
     @Override
-    protected void giveupFilter()   {
-        mBFilter = false;
-        loadView(false);
-    }
-
-    @Override
-    public void filterView(List<String> ls_tag) {
-        if(null != ls_tag) {
-            mBFilter = true;
-            mFilterPara.clear();
-            mFilterPara.addAll(ls_tag);
-            loadView(false);
-        } else  {
-            mBFilter = false;
-            loadView(false);
-        }
-    }
-
-    @Override
-    protected void refreshView() {
+    protected void initUiInfo() {
         refreshAttachLayout();
 
         // 展示条
-        mHMColor = PreferencesUtil.loadChartColor();
-        ImageView iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_income));
-        assert null != iv;
-        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_INCOME_COLOR));
-
-        iv = UtilFun.cast(mSelfView.findViewById(R.id.iv_pay));
-        assert null != iv;
-        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_PAY_COLOR));
+        mIVIncome.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_INCOME_COLOR));
+        mIVPay.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_PAY_COLOR));
 
         /* for chart */
         mChart.setColumnChartData(mChartData);
@@ -201,6 +158,55 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
         refreshViewPort();
     }
 
+    /**
+     * 设置扩大/缩小viewport
+     *
+     * @param v    激活view
+     */
+    @OnClick({R.id.bt_less_viewport, R.id.bt_more_viewport})
+    public void onLessOrMoreView(View v)    {
+        final Button bt_less = UtilFun.cast(getView().findViewById(R.id.bt_less_viewport));
+        int vid = v.getId();
+        switch (vid)    {
+            case R.id.bt_less_viewport :    {
+                mPrvWidth += 0.2;
+                refreshViewPort();
+
+                if(!bt_less.isClickable() && 1 < mPrvWidth)
+                    bt_less.setClickable(true);
+            }
+            break;
+
+            case R.id.bt_more_viewport :    {
+                if(1 < mPrvWidth) {
+                    mPrvWidth -= 0.2;
+                    refreshViewPort();
+                } else  {
+                    bt_less.setClickable(false);
+                }
+            }
+            break;
+        }
+    }
+
+    @Override
+    protected void giveUpFilter()   {
+        mBFilter = false;
+        initUiInfo();
+    }
+
+    @Override
+    public void filterView(List<String> ls_tag) {
+        if(null != ls_tag) {
+            mBFilter = true;
+            mFilterPara.clear();
+            mFilterPara.addAll(ls_tag);
+        } else  {
+            mBFilter = false;
+        }
+
+        initUiInfo();
+    }
 
     private void refreshAttachLayout()    {
         setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);

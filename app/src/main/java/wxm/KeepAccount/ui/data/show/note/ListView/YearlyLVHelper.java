@@ -24,6 +24,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.ui.utility.FastViewHolder;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
@@ -54,18 +55,7 @@ public class YearlyLVHelper extends LVShowDataBase {
     public YearlyLVHelper()    {
         super();
         LOG_TAG = "YearlyLVHelper";
-
         mBActionExpand = false;
-    }
-
-    @Override
-    public View createView(LayoutInflater inflater, ViewGroup container) {
-        mSelfView = inflater.inflate(R.layout.lv_newpager, container, false);
-        ButterKnife.bind(this, mSelfView);
-
-        refreshAttachLayout();
-        initActs(mSelfView);
-        return mSelfView;
     }
 
     @Override
@@ -81,10 +71,8 @@ public class YearlyLVHelper extends LVShowDataBase {
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-
+    @OnClick({R.id.bt_accpet, R.id.bt_giveup})
+    public void onAccpetOrGiveupClick(View v) {
         int vid = v.getId();
         switch (vid)    {
             case R.id.bt_accpet :
@@ -125,9 +113,9 @@ public class YearlyLVHelper extends LVShowDataBase {
 
     /**
      * 初始化可隐藏动作条
-     * @param pv   视图
      */
-    private void initActs(View pv) {
+    @Override
+    protected void initActs() {
         mRLActReport.setVisibility(View.GONE);
         mRLActAdd.setVisibility(View.GONE);
         mRLActDelete.setVisibility(View.GONE);
@@ -136,13 +124,13 @@ public class YearlyLVHelper extends LVShowDataBase {
 
         final ImageView iv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.iv_sort));
         final TextView tv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.tv_sort));
-        iv_sort.setImageDrawable(pv.getContext().getResources()
+        iv_sort.setImageDrawable(getContext().getResources()
                 .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
         tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
         mRLActSort.setOnClickListener(v -> {
             mBTimeDownOrder = !mBTimeDownOrder;
 
-            iv_sort.setImageDrawable(mSelfView.getContext().getResources()
+            iv_sort.setImageDrawable(getContext().getResources()
                     .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
             tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
@@ -229,11 +217,8 @@ public class YearlyLVHelper extends LVShowDataBase {
 
     }
 
-    /**
-     * 不重新加载数据，仅更新视图
-     */
     @Override
-    protected void refreshView()  {
+    protected void initUiInfo() {
         refreshAttachLayout();
 
         // update data
@@ -254,7 +239,7 @@ public class YearlyLVHelper extends LVShowDataBase {
         }
 
         // 设置listview adapter
-        SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
+        SelfAdapter mSNAdapter = new SelfAdapter(getContext(), n_mainpara,
                 new String[]{}, new int[]{});
         mLVShow.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
@@ -286,7 +271,7 @@ public class YearlyLVHelper extends LVShowDataBase {
             // init sub adapter
             ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
             assert null != mLVShowDetail;
-            SelfSubAdapter mAdapter = new SelfSubAdapter(mSelfView.getContext(), llhm,
+            SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm,
                     new String[]{}, new int[]{});
             mLVShowDetail.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();

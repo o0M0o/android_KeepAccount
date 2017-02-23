@@ -2,10 +2,7 @@ package wxm.KeepAccount.ui.data.show.note.ShowData;
 
 import android.content.Context;
 import android.support.annotation.CallSuper;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
@@ -14,6 +11,8 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.BindView;
+import cn.wxm.andriodutillib.FrgUtility.FrgUtilitySupportBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
@@ -22,9 +21,10 @@ import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
  * viewhelper基础类
  * Created by 123 on 2016/9/14.
  */
-public abstract class ShowViewHelperBase implements View.OnClickListener {
+public abstract class ShowViewHelperBase
+    extends FrgUtilitySupportBase   {
+
     protected String    LOG_TAG = "ShowViewHelperBase";
-    protected View      mSelfView;
 
     // 视图过滤数据
     protected boolean                       mBFilter;
@@ -32,42 +32,30 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
 
     protected final Timestamp mTSLastLoadViewTime = new Timestamp(0);
 
+    @BindView(R.id.rl_attach_button)
+    RelativeLayout  mRLAttachButton;
+
+    /*
+    @BindView(R.id.bt_giveup)
+    ImageButton     mIBGiveup;
+
+    @BindView(R.id.bt_accpet)
+    ImageButton     mIBAccpet;
+    */
+
+    @BindView(R.id.rl_accpet_giveup)
+    RelativeLayout  mRLAccpetGiveup;
+
+    @BindView(R.id.bt_giveup_filter)
+    ImageButton     mIBFilter;
+
+    @BindView(R.id.rl_filter)
+    RelativeLayout  mRLFilter;
+
     protected ShowViewHelperBase()   {
         mBFilter        = false;
-        mSelfView       = null;
         mFilterPara     = new LinkedList<>();
     }
-
-    /**
-     *  创建视图
-     * @param inflater      视图加载参数
-     * @param container     视图所在group参数
-     * @return              若成功，返回所创建视图
-     */
-    public abstract View createView(LayoutInflater inflater, ViewGroup container);
-
-    /**
-     * 获得视图
-     * @return   返回已经创建的视图
-     */
-    public View getView()   {
-        return mSelfView;
-    }
-
-    /**
-     * 加载视图
-     * @param bForce     若为true则强制全部刷新
-     */
-    @CallSuper
-    public void loadView(boolean bForce)  {
-        Log.d(LOG_TAG, "loadView, bForce = " + (bForce ? "true" : "false"));
-    }
-
-
-    /**
-     * 检查数据是否更新，然后决定是否重新加载视图
-    public abstract void checkView();
-     */
 
     /**
      * 过滤视图
@@ -81,7 +69,9 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
     /**
      * 更新视图
      */
-    protected abstract void refreshView();
+    protected void refreshView()    {
+        initUiInfo();
+    }
 
     /**
      * 更新数据
@@ -94,23 +84,9 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
     /**
      * 取消过滤
      */
-    protected void giveupFilter()   {
+    protected void giveUpFilter()   {
         mBFilter = false;
         refreshView();
-    }
-
-    /**
-     * 处理“取消过滤”事件
-     * @param v  param
-     */
-    @Override
-    public void onClick(View v) {
-        int vid = v.getId();
-        switch (vid)    {
-            case R.id.bt_giveup_filter :
-                giveupFilter();
-                break;
-        }
     }
 
 
@@ -119,7 +95,7 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
      * @return  若成功返回activity，失败返回null;
      */
     protected ACNoteShow getRootActivity()  {
-        Context ct = mSelfView.getContext();
+        Context ct = getContext();
         if(ct instanceof ACNoteShow) {
             return UtilFun.cast(ct);
         }
@@ -134,9 +110,7 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
      *                  2. {@code View.VISIBLE}, 可见
      */
     protected void setAttachLayoutVisible(int visible)   {
-        RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_attach_button));
-        assert null != rl;
-        rl.setVisibility(visible);
+        mRLAttachButton.setVisibility(visible);
     }
 
 
@@ -150,13 +124,8 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
         if(View.VISIBLE == visible)
             setAttachLayoutVisible(View.VISIBLE);
 
-        RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_filter));
-        assert null != rl;
-        rl.setVisibility(visible);
-
-        ImageButton bt = UtilFun.cast(rl.findViewById(R.id.bt_giveup_filter));
-        assert null != bt;
-        bt.setOnClickListener(this);
+        mRLFilter.setVisibility(visible);
+        mIBFilter.setOnClickListener(v -> giveUpFilter());
     }
 
 
@@ -170,16 +139,6 @@ public abstract class ShowViewHelperBase implements View.OnClickListener {
         if(View.VISIBLE == visible)
             setAttachLayoutVisible(View.VISIBLE);
 
-        RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_accpet_giveup));
-        assert null != rl;
-        rl.setVisibility(visible);
-
-        ImageButton bt = UtilFun.cast(rl.findViewById(R.id.bt_giveup));
-        assert null != bt;
-        bt.setOnClickListener(this);
-
-        bt = UtilFun.cast(rl.findViewById(R.id.bt_accpet));
-        assert null != bt;
-        bt.setOnClickListener(this);
+        mRLAccpetGiveup.setVisibility(visible);
     }
 }

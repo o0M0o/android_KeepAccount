@@ -3,6 +3,7 @@ package wxm.KeepAccount.ui.data.show.note.ListView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.INote;
@@ -50,8 +52,8 @@ import wxm.KeepAccount.ui.utility.HelperDayNotesInfo;
  * 日数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class DailyLVHelper extends LVShowDataBase
-        implements OnClickListener {
+public class DailyLVHelper
+        extends LVShowDataBase  {
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
 
@@ -61,40 +63,18 @@ public class DailyLVHelper extends LVShowDataBase
     private final static int ACTION_EDIT = 2;
     private int mActionType = ACTION_EDIT;
 
-    @BindView(R.id.lv_show)
-    ListView mLVShow;
-
-    /**
-     * 如果设置为true则数据可以删除
-     */
-    private boolean mBLCanDelete = false;
-
     public DailyLVHelper() {
         super();
 
-        LOG_TAG         = "DailyLVHelper";
-        mBLCanDelete    = false;
-
+        LOG_TAG = "DailyLVHelper";
         mBActionExpand  = false;
-    }
-
-    @Override
-    public View createView(LayoutInflater inflater, ViewGroup container) {
-        mSelfView = inflater.inflate(R.layout.lv_newpager, container, false);
-        mBFilter = false;
-        ButterKnife.bind(this, mSelfView);
-
-        refreshAttachLayout();
-        initActs(mSelfView);
-        return mSelfView;
     }
 
     /**
      * 初始化可隐藏动作条
-     *
-     * @param pv 视图
      */
-    private void initActs(View pv) {
+    @Override
+    protected void initActs() {
         mRLActReport.setOnClickListener(v -> {
             final String[] d_s = {"", ""};
 
@@ -150,18 +130,18 @@ public class DailyLVHelper extends LVShowDataBase
 
         mRLActRefresh.setOnClickListener(v -> {
             mActionType = ACTION_EDIT;
-            reloadView(v.getContext(), false);
+            reloadView(getContext(), false);
         });
 
         final ImageView iv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.iv_sort));
         final TextView tv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.tv_sort));
-        iv_sort.setImageDrawable(pv.getContext().getResources()
+        iv_sort.setImageDrawable(getContext().getResources()
                 .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
         tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
         mRLActSort.setOnClickListener(v -> {
             mBTimeDownOrder = !mBTimeDownOrder;
 
-            iv_sort.setImageDrawable(pv.getContext().getResources()
+            iv_sort.setImageDrawable(getContext().getResources()
                     .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
             tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
@@ -188,10 +168,8 @@ public class DailyLVHelper extends LVShowDataBase
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-
+    @OnClick({R.id.bt_accpet, R.id.bt_giveup})
+    public void onAccpetOrGiveupClick(View v) {
         int vid = v.getId();
         switch (vid) {
             case R.id.bt_accpet:
@@ -285,11 +263,9 @@ public class DailyLVHelper extends LVShowDataBase
         }
     }
 
-    /**
-     * 仅更新视图
-     */
+
     @Override
-    protected void refreshView() {
+    protected void initUiInfo() {
         refreshAttachLayout();
 
         // load show data
@@ -310,13 +286,14 @@ public class DailyLVHelper extends LVShowDataBase
         }
 
         // 设置listview adapter
-        SelfAdapter mSNAdapter = new SelfAdapter(mSelfView.getContext(), n_mainpara,
+        SelfAdapter mSNAdapter = new SelfAdapter(getContext(), n_mainpara,
                 new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK},
                 new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week});
 
         mLVShow.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
+
 
     private void refreshAttachLayout() {
         setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
