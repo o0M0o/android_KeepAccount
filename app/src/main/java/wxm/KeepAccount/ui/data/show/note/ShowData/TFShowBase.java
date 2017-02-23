@@ -121,10 +121,7 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
      * 加载热fragment
      */
     private void loadHotFrg()   {
-        AppCompatActivity ac = UtilFun.cast_t(getContext());
-
-        android.support.v4.app.FragmentTransaction t =
-                ac.getSupportFragmentManager().beginTransaction();
+        android.support.v4.app.FragmentTransaction t = getChildFragmentManager().beginTransaction();
         t.replace(cn.wxm.andriodutillib.R.id.fl_holder, mViewHelper[mHotChild]);
         t.commit();
     }

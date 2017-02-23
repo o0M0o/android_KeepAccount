@@ -30,7 +30,6 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
  * Created by wxm on 2016/9/29.
  */
 abstract class ChartHelperBase extends ShowViewHelperBase {
-    private final static String TAG = "ChartHelperBase";
 
     ColumnChartData         mChartData;
     ColumnChartData         mPreviewData;
