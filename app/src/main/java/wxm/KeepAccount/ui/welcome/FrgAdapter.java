@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.utility;
+package wxm.KeepAccount.ui.welcome;
 
 import android.content.Context;
 import android.util.Log;
@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
@@ -27,6 +28,9 @@ import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.view.ColumnChartView;
+import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteShowInfo;
+import wxm.KeepAccount.ui.welcome.FrgPara;
 import wxm.KeepAccount.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
 
@@ -50,18 +54,6 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
 
     @Override
     public View getView(final LMBanners lBanners, final Context context, int position, FrgPara data) {
-        /*
-        Timestamp ts_data = ContextUtil.getPayIncomeUtility().getDataLastChangeTime();
-        Log.d(LOG_TAG, "getView, pos = " + position + ", data = " + data.toString());
-        Log.d(LOG_TAG, "ts_db = " + ts_data.toString() + ", ts_view = " + mTSLastUpdate.toString());
-
-        if(mTSLastUpdate.before(ts_data))   {
-            initView();
-        }
-
-        return mSAView.get(data.mFPViewId);
-        */
-
         View v = null;
         switch (data.mFPViewId) {
             case R.layout.banner_month : {
@@ -157,20 +149,21 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
     private void fillChart(View v, NoteShowInfo ni) {
         // 展示条
         HashMap<String, Integer> mHMColor = PreferencesUtil.loadChartColor();
+        int cl_pay      = mHMColor.get(PreferencesUtil.SET_PAY_COLOR);
+        int cl_income   = mHMColor.get(PreferencesUtil.SET_INCOME_COLOR);
+
         ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_income));
-        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_INCOME_COLOR));
+        iv.setBackgroundColor(cl_income);
 
         iv = UtilFun.cast_t(v.findViewById(R.id.iv_pay));
-        iv.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_PAY_COLOR));
+        iv.setBackgroundColor(cl_pay);
 
         // for chart
         List<AxisValue> axisValues = new ArrayList<>();
         List<Column> columns = new ArrayList<>();
         List<SubcolumnValue> values = new ArrayList<>();
-        values.add(new SubcolumnValue(ni.getPayAmount().floatValue(),
-                mHMColor.get(PreferencesUtil.SET_PAY_COLOR)));
-        values.add(new SubcolumnValue(ni.getIncomeAmount().floatValue(),
-                mHMColor.get(PreferencesUtil.SET_INCOME_COLOR)));
+        values.add(new SubcolumnValue(ni.getPayAmount().floatValue(), cl_pay));
+        values.add(new SubcolumnValue(ni.getIncomeAmount().floatValue(), cl_income));
 
         Column cd = new Column(values);
         cd.setHasLabels(false);

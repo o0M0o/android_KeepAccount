@@ -89,7 +89,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
         mRLActDelete.setOnClickListener(v -> {
             mActionType = ACTION_DELETE;
-            refreshView();
+            initUiInfo();
         });
 
         mRLActRefresh.setOnClickListener(v -> {
@@ -110,7 +110,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
             tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
 
             reloadData();
-            refreshView();
+            initUiInfo();
         });
     }
 

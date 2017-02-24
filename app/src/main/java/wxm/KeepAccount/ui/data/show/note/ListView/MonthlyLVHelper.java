@@ -66,12 +66,12 @@ public class MonthlyLVHelper
 
             mFilterPara.clear();
             mFilterPara.addAll(ls_tag);
-            refreshView();
+            initUiInfo();
         } else  {
             mBFilter = false;
             mBSelectSubFilter = false;
 
-            refreshView();
+            initUiInfo();
         }
     }
 
@@ -139,8 +139,8 @@ public class MonthlyLVHelper
                     .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
             tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
-            refreshData();
-            refreshView();
+            reorderData();
+            initUiInfo();
         });
     }
 
@@ -148,6 +148,7 @@ public class MonthlyLVHelper
     /**
      * 重新加载数据
      */
+    @Override
     protected void refreshData() {
         super.refreshData();
 
@@ -256,13 +257,28 @@ public class MonthlyLVHelper
         mSNAdapter.notifyDataSetChanged();
     }
 
+    /// BEGIN PRIVATE
+    /**
+     * 调整数据排序
+     */
+    private void reorderData()  {
+        Collections.reverse(mMainPara);
+    }
 
+    /**
+     * 更新附加layout
+     */
     private void refreshAttachLayout()    {
         setAttachLayoutVisible(mBFilter || mBSelectSubFilter ? View.VISIBLE : View.GONE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
         setAccpetGiveupLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.GONE);
     }
 
+    /**
+     * 更新详细显示信息
+     * @param vh    viewholder
+     * @param hm    数据
+     */
     private void init_detail_view(FastViewHolder vh, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
@@ -289,6 +305,7 @@ public class MonthlyLVHelper
             ListViewHelper.setListViewHeightBasedOnChildren(mLVShowDetail);
         }
     }
+    /// END PRIVATE
 
     /**
      * 首级adapter
@@ -337,7 +354,7 @@ public class MonthlyLVHelper
             TextView tv = viewHolder.getView(R.id.tv_month);
             tv.setText(hm.get(K_MONTH));
 
-            HelperDayNotesInfo.fillNoteInfo(viewHolder.getView(R.id.rl_info),
+            HelperDayNotesInfo.fillNoteInfo(viewHolder,
                     hm.get(K_MONTH_PAY_COUNT), hm.get(K_MONTH_PAY_AMOUNT),
                     hm.get(K_MONTH_INCOME_COUNT), hm.get(K_MONTH_INCOME_AMOUNT),
                     hm.get(K_AMOUNT));
@@ -436,7 +453,7 @@ public class MonthlyLVHelper
             tv = viewHolder.getView(R.id.tv_day_in_week);
             tv.setText(hm.get(K_DAY_IN_WEEK));
 
-            HelperDayNotesInfo.fillNoteInfo(viewHolder.getView(R.id.rl_info),
+            HelperDayNotesInfo.fillNoteInfo(viewHolder,
                     hm.get(K_DAY_PAY_COUNT), hm.get(K_DAY_PAY_AMOUNT),
                     hm.get(K_DAY_INCOME_COUNT), hm.get(K_DAY_INCOME_AMOUNT),
                     hm.get(K_AMOUNT));

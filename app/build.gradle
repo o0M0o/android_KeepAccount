@@ -68,7 +68,7 @@ android {
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                 //这里修改apk文件名
-                def fileName = "${variant.productFlavors[0].name}-${defaultConfig.versionName}-${releaseTime() }.apk"
+                def fileName = "${variant.productFlavors[0].name}-${ variant.buildType.name }-${defaultConfig.versionName}-${releaseTime()}.apk"
                 output.outputFile = new File(outputFile.parent, fileName)
             }
         }
@@ -81,8 +81,7 @@ android {
 }
 
 static def releaseTime() {
-    //return new Date().format("yyyyMMDD", TimeZone.getTimeZone("PRC"))
-    return "any";
+    return new Date().format("yyyyMMDD", TimeZone.getTimeZone("GMT+8"))
 }
 
 

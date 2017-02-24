@@ -26,8 +26,6 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.utility.DGVButtonAdapter;
 import wxm.KeepAccount.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.utility.FrgAdapter;
-import wxm.KeepAccount.ui.utility.FrgPara;
 import wxm.KeepAccount.ui.setting.ACSetting;
 import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
 
@@ -152,10 +150,6 @@ public class FrgWelcome extends FrgUtilityBase {
         fp = new FrgPara();
         fp.mFPViewId = R.layout.banner_year;
         mALFrgs.add(fp);
-
-//        fp = new FrgPara();
-//        fp.mFPViewId = R.layout.banner_three;
-//        mALFrgs.add(fp);
     }
 
     private void initBanner()   {

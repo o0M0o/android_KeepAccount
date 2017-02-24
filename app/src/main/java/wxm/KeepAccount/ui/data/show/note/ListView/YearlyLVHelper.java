@@ -64,10 +64,10 @@ public class YearlyLVHelper extends LVShowDataBase {
             mBFilter = true;
             mFilterPara.clear();
             mFilterPara.addAll(ls_tag);
-            refreshView();
+            initUiInfo();
         } else  {
             mBFilter = false;
-            refreshView();
+            initUiInfo();
         }
     }
 
@@ -134,8 +134,8 @@ public class YearlyLVHelper extends LVShowDataBase {
                     .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
             tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
-            refreshData();
-            refreshView();
+            reorderData();
+            initUiInfo();
         });
     }
 
@@ -245,13 +245,29 @@ public class YearlyLVHelper extends LVShowDataBase {
         mSNAdapter.notifyDataSetChanged();
     }
 
+    /// BEGIN PRIVATE
+    /**
+     * 调整数据排序
+     */
+    private void reorderData()  {
+        Collections.reverse(mMainPara);
+    }
+
+    /**
+     * 更新附加layout
+     */
     private void refreshAttachLayout()    {
         setAttachLayoutVisible(mBFilter || mBSelectSubFilter ? View.VISIBLE : View.GONE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
         setAccpetGiveupLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.GONE);
     }
 
-    private void init_detail_view(View v, HashMap<String, String> hm) {
+    /**
+     * 更新详细显示信息
+     * @param vh        更新view holder
+     * @param hm        数据
+     */
+    private void init_detail_view(FastViewHolder vh, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm = null;
         if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW))) {
@@ -262,14 +278,14 @@ public class YearlyLVHelper extends LVShowDataBase {
             llhm = new LinkedList<>();
         }
 
-        RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_detail));
+        RelativeLayout rl = vh.getView(R.id.rl_detail);
         if(llhm.isEmpty())  {
             rl.setVisibility(View.GONE);
         } else {
             rl.setVisibility(View.VISIBLE);
 
             // init sub adapter
-            ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
+            ListView mLVShowDetail = vh.getView(R.id.lv_show_detail);
             assert null != mLVShowDetail;
             SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm,
                     new String[]{}, new int[]{});
@@ -278,6 +294,8 @@ public class YearlyLVHelper extends LVShowDataBase {
             ListViewHelper.setListViewHeightBasedOnChildren(mLVShowDetail);
         }
     }
+    /// END PRIVATE
+
 
 
     /**
@@ -316,7 +334,7 @@ public class YearlyLVHelper extends LVShowDataBase {
 
             View root_view = viewHolder.getConvertView();
             HashMap<String, String> hm = UtilFun.cast(getItem(position));
-            init_detail_view(root_view, hm);
+            init_detail_view(viewHolder, hm);
 
             root_view.setOnClickListener(this);
 
@@ -328,7 +346,7 @@ public class YearlyLVHelper extends LVShowDataBase {
             TextView tv = viewHolder.getView(R.id.tv_year);
             tv.setText(hm.get(K_YEAR));
 
-            HelperDayNotesInfo.fillNoteInfo(viewHolder.getView(R.id.rl_info),
+            HelperDayNotesInfo.fillNoteInfo(viewHolder,
                     hm.get(K_YEAR_PAY_COUNT), hm.get(K_YEAR_PAY_AMOUNT),
                     hm.get(K_YEAR_INCOME_COUNT), hm.get(K_YEAR_INCOME_AMOUNT),
                     hm.get(K_AMOUNT));
@@ -344,7 +362,7 @@ public class YearlyLVHelper extends LVShowDataBase {
             boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
             hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
 
-            init_detail_view(view, hm);
+            init_detail_view(UtilFun.cast_t(mLVShow.getChildAt(pos).getTag()), hm);
             if (bf)
                 addUnfoldItem(hm.get(K_TAG));
             else
@@ -423,7 +441,7 @@ public class YearlyLVHelper extends LVShowDataBase {
             TextView tv = viewHolder.getView(R.id.tv_month);
             tv.setText(hm.get(K_MONTH));
 
-            HelperDayNotesInfo.fillNoteInfo(viewHolder.getView(R.id.rl_info),
+            HelperDayNotesInfo.fillNoteInfo(viewHolder,
                     hm.get(K_MONTH_PAY_COUNT), hm.get(K_MONTH_PAY_AMOUNT),
                     hm.get(K_MONTH_INCOME_COUNT), hm.get(K_MONTH_INCOME_AMOUNT),
                     hm.get(K_AMOUNT));

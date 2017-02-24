@@ -8,7 +8,7 @@
         android:id="@+id/rl_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#BFDBB8"
+        android:background="#a2b5cd"
         android:padding="2dp">
 
         <Button
@@ -55,6 +55,7 @@
                 android:textSize="14sp" />
         </RelativeLayout>
 
+
         <Button
             android:id="@+id/bt_next"
             android:layout_width="wrap_content"
@@ -85,7 +86,7 @@
             android:id="@+id/rl_daily_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FDF0EF"
+            android:background="#afdfe4"
             android:paddingBottom="6dp"
             android:paddingEnd="96dp"
             android:paddingStart="42dp"

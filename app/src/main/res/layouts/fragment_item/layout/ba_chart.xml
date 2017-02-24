@@ -2,11 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/banner_chart_width"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <lecho.lib.hellocharts.view.ColumnChartView
-        android:paddingStart="16dp"
+        android:paddingStart="14dp"
         android:paddingEnd="2dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="1dp"
         android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="72dp" />
@@ -27,7 +30,7 @@
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_centerVertical="true"
-                android:background="@color/aliceblue" />
+                android:background="#7fb80e" />
 
             <TextView
                 android:textSize="12sp"
@@ -51,7 +54,7 @@
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_centerVertical="true"
-                android:background="@color/lightcoral" />
+                android:background="#d93a49" />
 
             <TextView
                 android:textSize="12sp"

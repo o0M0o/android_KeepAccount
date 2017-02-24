@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.utility;
+package wxm.KeepAccount.ui.welcome;
 
 /**
  * for frg

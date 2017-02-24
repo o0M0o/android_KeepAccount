@@ -144,7 +144,7 @@ public class NoteShowDataHelper {
 
     /**
      * 根据当前日期, 获得下一天的日期
-     * @param org_day   当前日期
+     * @param org_day   当前日期,比如"2017-02-24"
      * @return  下一天的日期，或者""
      */
     public String getNextDay(String org_day)    {

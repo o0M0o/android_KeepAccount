@@ -67,13 +67,6 @@ public abstract class ShowViewHelperBase
 
 
     /**
-     * 更新视图
-     */
-    protected void refreshView()    {
-        initUiInfo();
-    }
-
-    /**
      * 更新数据
      */
     @CallSuper
@@ -86,7 +79,7 @@ public abstract class ShowViewHelperBase
      */
     protected void giveUpFilter()   {
         mBFilter = false;
-        refreshView();
+        initUiInfo();
     }
 
 

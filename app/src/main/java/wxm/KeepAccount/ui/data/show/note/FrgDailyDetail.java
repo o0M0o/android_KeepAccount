@@ -225,10 +225,8 @@ public class FrgDailyDetail extends FrgUtilityBase {
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
                 intent.putExtra(GlobalDef.STR_RECORD_DATE,
-                        String.format(Locale.CHINA ,"%d-%02d-%02d %02d:%02d"
-                                ,cal.get(Calendar.YEAR)
-                                ,cal.get(Calendar.MONTH) + 1
-                                ,cal.get(Calendar.DAY_OF_MONTH)
+                        String.format(Locale.CHINA ,"%s %02d:%02d"
+                                ,mSZHotDay
                                 ,cal.get(Calendar.HOUR_OF_DAY)
                                 ,cal.get(Calendar.MINUTE)));
 
@@ -367,8 +365,8 @@ public class FrgDailyDetail extends FrgUtilityBase {
         if(null != ni) {
             p_count = String.valueOf(ni.getPayCount());
             i_count = String.valueOf(ni.getIncomeCount());
-            p_amount = String.format(Locale.CHINA, "%.02f", ni.getPayAmount());
-            i_amount = String.format(Locale.CHINA, "%.02f", ni.getIncomeAmount());
+            p_amount = ni.getSZPayAmount();
+            i_amount = ni.getSZIncomeAmount();
 
             bd_l = ni.getBalance();
         }   else    {

@@ -24,6 +24,7 @@ import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * adapter for note detail
@@ -31,33 +32,31 @@ import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
  */
 public class AdapterNoteDetail extends SimpleAdapter {
     private final static String LOG_TAG = "AdapterNoteDetail";
-    public final static String  K_NODE     = "node";
+    public final static String K_NODE = "node";
 
-    private int mCLNoSelected;
-    private int mCLSelected;
+    private final static int CL_NOT_SELECTED;
+    private final static int CL_SELECTED;
 
+    static {
+        Resources res = ContextUtil.getInstance().getResources();
 
-    private static class ContentViewHolder {
-        RelativeLayout  mRLPay;
-        RelativeLayout  mRLIncome;
-
-        RelativeLayout  mRLDelete;
+        CL_NOT_SELECTED = res.getColor(R.color.red_ff725f_half);
+        CL_SELECTED = res.getColor(R.color.red_ff725f);
     }
+
+    private Context mCTSelf;
+
 
     /**
      * 如果设置为true则数据可以删除
      */
     private boolean mBLCanDelete = false;
-    private ArrayList<INote>    mALDelNotes;
+    private ArrayList<INote> mALDelNotes;
 
     public AdapterNoteDetail(Context context, List<? extends Map<String, ?>> data,
                              String[] from, int[] to) {
         super(context, data, R.layout.li_daily_show_detail, from, to);
-
-        Resources res = context.getResources();
-        mCLNoSelected = res.getColor(R.color.red_ff725f_half);
-        mCLSelected   = res.getColor(R.color.red_ff725f);
-
+        mCTSelf = context;
         mALDelNotes = new ArrayList<>();
     }
 
@@ -74,111 +73,103 @@ public class AdapterNoteDetail extends SimpleAdapter {
 
     /**
      * 设置是否可以删除数据
-     * @param bdel  若为true则可以删除数据
+     *
+     * @param bdel 若为true则可以删除数据
      */
-    public void setCanDelete(boolean bdel)  {
+    public void setCanDelete(boolean bdel) {
         mBLCanDelete = bdel;
     }
 
 
     /**
      * 获得待删除的节点
-     * @return  待删除节点链表
+     *
+     * @return 待删除节点链表
      */
-    public List<INote>  getWantDeleteNotes()    {
+    public List<INote> getWantDeleteNotes() {
         return mALDelNotes;
     }
 
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = super.getView(position, convertView, parent);
-        if(null != v)   {
-            HashMap<String, INote> hm_d = UtilFun.cast_t(getItem(position));
+        FastViewHolder vh = FastViewHolder.get(mCTSelf, convertView,
+                R.layout.li_daily_show_detail);
 
-            ContentViewHolder ch = new ContentViewHolder();
-            ch.mRLPay    = UtilFun.cast_t(v.findViewById(R.id.rl_pay));
-            ch.mRLIncome = UtilFun.cast_t(v.findViewById(R.id.rl_income));
-
-            ch.mRLDelete = UtilFun.cast_t(v.findViewById(R.id.rl_delete));
-
-            loadContentViewHolder(ch, hm_d.get(K_NODE));
-            initDelAction(ch, hm_d.get(K_NODE), mBLCanDelete);
-        }
-
-        return v;
-    }
-
-
-    /**
-     * 加载内容视图
-     * @param ch        内容视图容器
-     * @param data      数据
-     */
-    private void loadContentViewHolder(ContentViewHolder ch, INote data)    {
-        if(data.isPayNote())    {
-            ch.mRLIncome.setVisibility(View.GONE);
-            initPay(ch.mRLPay, data);
+        HashMap<String, INote> hm_d = UtilFun.cast_t(getItem(position));
+        INote data = hm_d.get(K_NODE);
+        if (data.isPayNote()) {
+            vh.getView(R.id.rl_income).setVisibility(View.GONE);
+            initPay(vh, data);
         } else {
-            ch.mRLPay.setVisibility(View.GONE);
-            initIncome(ch.mRLIncome, data);
+            vh.getView(R.id.rl_pay).setVisibility(View.GONE);
+            initIncome(vh, data);
         }
+
+        initDelAction(vh, hm_d.get(K_NODE), mBLCanDelete);
+        return vh.getConvertView();
     }
+
 
     /**
      * 初始化删除动作
-     * @param ch            UI容器
-     * @param data          数据
-     * @param bflag         若为ture则数据可删除
+     *
+     * @param vh    view holder
+     * @param data  数据
+     * @param bflag 若为ture则数据可删除
      */
-    private void initDelAction(ContentViewHolder ch, INote data, boolean bflag)     {
-        if(!bflag)
+    private void initDelAction(FastViewHolder vh, INote data, boolean bflag) {
+        if (!bflag)
             mALDelNotes.clear();
 
-        ch.mRLDelete.setVisibility(bflag ? View.VISIBLE : View.GONE);
-        ch.mRLDelete.setOnClickListener(view -> {
-            if(mALDelNotes.contains(data))  {
+        RelativeLayout rl_del = vh.getView(R.id.rl_delete);
+        rl_del.setVisibility(bflag ? View.VISIBLE : View.GONE);
+        rl_del.setOnClickListener(view -> {
+            if (mALDelNotes.contains(data)) {
                 mALDelNotes.remove(data);
-                ch.mRLDelete.setBackgroundColor(mCLNoSelected);
-            } else  {
+                rl_del.setBackgroundColor(CL_NOT_SELECTED);
+            } else {
                 mALDelNotes.add(data);
-                ch.mRLDelete.setBackgroundColor(mCLSelected);
+                rl_del.setBackgroundColor(CL_SELECTED);
             }
         });
     }
 
     /**
      * 当前节点是pay时初始化
-     * @param rl_pay  pay节点
-     * @param data    数据
+     *
+     * @param vh   view holder
+     * @param data 数据
      */
-    private void initPay(RelativeLayout rl_pay, INote data) {
+    private void initPay(FastViewHolder vh, INote data) {
         PayNoteItem pn = UtilFun.cast_t(data);
 
-        TextView tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_title));
+        TextView tv = vh.getView(R.id.tv_pay_title);
         tv.setText(pn.getInfo());
 
         BudgetItem bi = pn.getBudget();
         String b_name = bi == null ? "" : bi.getName();
-        if(!UtilFun.StringIsNullOrEmpty(b_name)) {
-            tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_budget));
+        if (!UtilFun.StringIsNullOrEmpty(b_name)) {
+            tv = vh.getView(R.id.tv_pay_budget);
             tv.setText(b_name);
-        } else  {
-            tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_budget));
+        } else {
+            tv = vh.getView(R.id.tv_pay_budget);
             tv.setVisibility(View.INVISIBLE);
 
-            ImageView iv = UtilFun.cast_t(rl_pay.findViewById(R.id.iv_pay_budget));
+            ImageView iv = vh.getView(R.id.iv_pay_budget);
             iv.setVisibility(View.INVISIBLE);
         }
 
-        tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_amount));
+        tv = vh.getView(R.id.tv_pay_amount);
         tv.setText(String.format(Locale.CHINA, "- %.02f", pn.getVal()));
 
-        tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_time));
+        tv = vh.getView(R.id.tv_pay_time);
         tv.setText(pn.getTs().toString().substring(11, 16));
 
         // for look detail
-        ImageView iv = UtilFun.cast_t(rl_pay.findViewById(R.id.iv_pay_action));
+        ImageView iv = vh.getView(R.id.iv_pay_action);
         iv.setVisibility(View.GONE);
+
+        RelativeLayout rl_pay = vh.getView(R.id.rl_pay);
         rl_pay.setOnClickListener(v -> {
             Intent intent;
             intent = new Intent(rl_pay.getContext(), ACPreveiwAndEdit.class);
@@ -189,42 +180,44 @@ public class AdapterNoteDetail extends SimpleAdapter {
         });
 
         // for budget
-        if(UtilFun.StringIsNullOrEmpty(b_name)) {
-            RelativeLayout rl = UtilFun.cast_t(rl_pay.findViewById(R.id.rl_budget));
+        if (UtilFun.StringIsNullOrEmpty(b_name)) {
+            RelativeLayout rl = vh.getView(R.id.rl_budget);
             rl.setVisibility(View.GONE);
         }
 
         // for note
         String nt = pn.getNote();
-        if(UtilFun.StringIsNullOrEmpty(nt)) {
-            RelativeLayout rl = UtilFun.cast_t(rl_pay.findViewById(R.id.rl_pay_note));
+        if (UtilFun.StringIsNullOrEmpty(nt)) {
+            RelativeLayout rl = vh.getView(R.id.rl_pay_note);
             rl.setVisibility(View.GONE);
-        } else  {
-            tv = UtilFun.cast_t(rl_pay.findViewById(R.id.tv_pay_note));
+        } else {
+            tv = vh.getView(R.id.tv_pay_note);
             tv.setText(nt);
         }
     }
 
     /**
      * 当前节点是income时初始化
-     * @param rl_income     income节点
-     * @param data          数据
+     *
+     * @param vh   view holder
+     * @param data 数据
      */
-    private void initIncome(RelativeLayout rl_income, INote data) {
+    private void initIncome(FastViewHolder vh, INote data) {
         IncomeNoteItem i_n = UtilFun.cast_t(data);
 
-        TextView tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_title));
+        TextView tv = vh.getView(R.id.tv_income_title);
         tv.setText(i_n.getInfo());
 
-        tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_amount));
-        tv.setText(String.format(Locale.CHINA, "+ %.02f", i_n.getVal()));
+        tv = vh.getView(R.id.tv_income_amount);
+        tv.setText(String.format(Locale.CHINA, "%.02f", i_n.getVal()));
 
-        tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_time));
+        tv = vh.getView(R.id.tv_income_time);
         tv.setText(i_n.getTs().toString().substring(11, 16));
 
         // for look detail
-        ImageView iv = UtilFun.cast_t(rl_income.findViewById(R.id.iv_income_action));
+        ImageView iv = vh.getView(R.id.iv_income_action);
         iv.setVisibility(View.GONE);
+        RelativeLayout rl_income = vh.getView(R.id.rl_income);
         rl_income.setOnClickListener(v -> {
             Intent intent;
             intent = new Intent(rl_income.getContext(), ACPreveiwAndEdit.class);
@@ -236,11 +229,11 @@ public class AdapterNoteDetail extends SimpleAdapter {
 
         // for note
         String nt = i_n.getNote();
-        if(UtilFun.StringIsNullOrEmpty(nt)) {
-            RelativeLayout rl = UtilFun.cast_t(rl_income.findViewById(R.id.rl_income_note));
+        if (UtilFun.StringIsNullOrEmpty(nt)) {
+            RelativeLayout rl = vh.getView(R.id.rl_income_note);
             rl.setVisibility(View.GONE);
-        } else  {
-            tv = UtilFun.cast_t(rl_income.findViewById(R.id.tv_income_note));
+        } else {
+            tv = vh.getView(R.id.tv_income_note);
             tv.setText(nt);
         }
     }

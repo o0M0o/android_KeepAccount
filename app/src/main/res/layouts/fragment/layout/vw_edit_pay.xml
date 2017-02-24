@@ -1,127 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="8dp"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/grey_1">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F0F0" >
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_reason"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/til_reason"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:layout_alignParentTop="false"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="4dp"
-        android:background="@color/white">
+        android:layout_alignParentTop="false"
+        android:background="#FDF5E6"
+        android:padding="8dp" >
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/ar_et_info"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/ar_et_info"
-            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:hint="@string/cn_pay_type"
             android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
 
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_date"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:id="@+id/til_date"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/til_reason"
         android:layout_marginTop="2dp"
-        android:background="@color/white">
+        android:background="#FDF5E6"
+        android:padding="8dp">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/ar_et_date"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="date"
-            android:ems="10"
-            android:id="@+id/ar_et_date"
-            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:ems="10"
             android:hint="@string/cn_date"
-            android:maxLines="1"/>
+            android:inputType="date"
+            android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_amount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:id="@+id/til_amount"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/til_date"
         android:layout_marginTop="2dp"
-        android:background="@color/white">
+        android:background="#FDF5E6"
+        android:padding="8dp">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/ar_et_amount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:id="@+id/ar_et_amount"
-            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:ems="10"
             android:hint="@string/cn_amount"
+            android:inputType="numberDecimal"
             android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
 
     <RelativeLayout
         android:id="@+id/rl_budget"
-        android:layout_below="@id/til_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:layout_marginTop="6dp">
+        android:layout_below="@id/til_amount"
+        android:layout_marginTop="6dp"
+        android:background="#FDF5E6"
+        android:padding="8dp">
+
         <TextView
+            android:id="@+id/ar_tv_budget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cn_use_budget"
-            android:id="@+id/ar_tv_budget"
             android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/cn_use_budget"
             android:textColor="@color/abc_input_method_navigation_guard"
-            android:textSize="18sp"
-            android:layout_centerHorizontal="true" />
+            android:textSize="18sp" />
 
         <Spinner
+            android:id="@+id/ar_sp_budget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ar_sp_budget"
-            android:spinnerMode="dropdown"
             android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/ar_tv_budget"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="16dp"
-            android:layout_centerHorizontal="true" />
+            android:layout_toRightOf="@+id/ar_tv_budget"
+            android:spinnerMode="dropdown" />
     </RelativeLayout>
 
 
     <RelativeLayout
         android:id="@+id/rl_note"
-        android:background="@color/white"
-        android:layout_marginTop="4dp"
-        android:layout_below="@+id/rl_budget"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_budget"
+        android:layout_marginTop="4dp"
+        android:padding="8dp"
+        android:background="#FDF5E6">
 
         <TextView
             android:id="@+id/tv_note"
-            android:textSize="18sp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:text="@string/notice_input_note"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="24dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
+            android:text="@string/notice_input_note"
+            android:textSize="18sp" />
 
     </RelativeLayout>
 </RelativeLayout>

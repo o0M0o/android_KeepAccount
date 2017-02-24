@@ -125,7 +125,7 @@ public class DailyLVHelper
 
         mRLActDelete.setOnClickListener(v -> {
             mActionType = ACTION_DELETE;
-            refreshView();
+            initUiInfo();
         });
 
         mRLActRefresh.setOnClickListener(v -> {
@@ -145,8 +145,8 @@ public class DailyLVHelper
                     .getDrawable(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
             tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
-            refreshData();
-            refreshView();
+            reorderData();
+            initUiInfo();
         });
     }
 
@@ -159,12 +159,12 @@ public class DailyLVHelper
 
             mFilterPara.clear();
             mFilterPara.addAll(ls_tag);
-            refreshView();
+            initUiInfo();
         } else {
             mBFilter = false;
             mActionType = ACTION_EDIT;
 
-            refreshView();
+            initUiInfo();
         }
     }
 
@@ -210,7 +210,7 @@ public class DailyLVHelper
 
             case R.id.bt_giveup:
                 mActionType = ACTION_EDIT;
-                refreshView();
+                initUiInfo();
                 break;
         }
     }
@@ -218,6 +218,7 @@ public class DailyLVHelper
     /**
      * 重新加载数据
      */
+    @Override
     protected void refreshData() {
         super.refreshData();
 
@@ -264,7 +265,11 @@ public class DailyLVHelper
 
     @Override
     protected void initUiInfo() {
-        refreshAttachLayout();
+        // adjust attach layout
+        setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
+                View.VISIBLE : View.GONE);
+        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
+        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType && !mBFilter ? View.VISIBLE : View.GONE);
 
         // load show data
         LinkedList<HashMap<String, String>> n_mainpara;
@@ -293,12 +298,14 @@ public class DailyLVHelper
     }
 
 
-    private void refreshAttachLayout() {
-        setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
-                View.VISIBLE : View.GONE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
-        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType && !mBFilter ? View.VISIBLE : View.GONE);
+    /// BEGIN PRIVATE
+    /**
+     * 调整数据排序
+     */
+    private void reorderData()  {
+        Collections.reverse(mMainPara);
     }
+    /// END PRIVATE
 
 
     /**
@@ -372,7 +379,7 @@ public class DailyLVHelper
             tv = viewHolder.getView(R.id.tv_day_in_week);
             tv.setText(hm.get(K_DAY_IN_WEEK));
 
-            HelperDayNotesInfo.fillNoteInfo(viewHolder.getView(R.id.rl_info),
+            HelperDayNotesInfo.fillNoteInfo(viewHolder,
                     hm.get(K_DAY_PAY_COUNT), hm.get(K_DAY_PAY_AMOUNT),
                     hm.get(K_DAY_INCOME_COUNT), hm.get(K_DAY_INCOME_AMOUNT),
                     hm.get(K_AMOUNT));
