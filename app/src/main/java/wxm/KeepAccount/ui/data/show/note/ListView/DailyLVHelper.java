@@ -287,6 +287,7 @@ public class DailyLVHelper
     /// BEGIN PRIVATE
     /**
      * 加载UI的工作
+     * @param b_fully   若为true则加载数据
      */
     private void loadUIUtility(boolean b_fully)    {
         // adjust attach layout
@@ -314,7 +315,7 @@ public class DailyLVHelper
             }
 
             // 设置listview adapter
-            SelfAdapter mSNAdapter = new SelfAdapter(getContext(), n_mainpara,
+            SelfAdapter mSNAdapter = new SelfAdapter(ContextUtil.getInstance(), n_mainpara,
                     new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK},
                     new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week});
 

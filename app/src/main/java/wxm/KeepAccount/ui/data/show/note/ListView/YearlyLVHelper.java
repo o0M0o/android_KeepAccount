@@ -2,6 +2,7 @@ package wxm.KeepAccount.ui.data.show.note.ListView;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.ui.utility.FastViewHolder;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
+import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
@@ -64,10 +66,11 @@ public class YearlyLVHelper extends LVShowDataBase {
             mBFilter = true;
             mFilterPara.clear();
             mFilterPara.addAll(ls_tag);
-            loadUI();
+
+            loadUIUtility(true);
         } else  {
             mBFilter = false;
-            loadUI();
+            loadUIUtility(true);
         }
     }
 
@@ -135,7 +138,7 @@ public class YearlyLVHelper extends LVShowDataBase {
             tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
             reorderData();
-            loadUI();
+            loadUIUtility(true);
         });
     }
 
@@ -147,105 +150,126 @@ public class YearlyLVHelper extends LVShowDataBase {
     protected void refreshData() {
         super.refreshData();
 
-        mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
-
         mMainPara.clear();
         mHMSubPara.clear();
 
-        // for year
-        HashMap<String, NoteShowInfo> hm_y = NoteShowDataHelper.getInstance().getYearInfo();
-        ArrayList<String> set_k = new ArrayList<>(hm_y.keySet());
-        Collections.sort(set_k, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-        for(String k : set_k)   {
-            NoteShowInfo ni = hm_y.get(k);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                // for year
+                HashMap<String, NoteShowInfo> hm_y = NoteShowDataHelper.getInstance().getYearInfo();
+                ArrayList<String> set_k = new ArrayList<>(hm_y.keySet());
+                Collections.sort(set_k, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
+                for(String k : set_k)   {
+                    NoteShowInfo ni = hm_y.get(k);
 
-            HashMap<String, String> map = new HashMap<>();
-            map.put(K_YEAR, k);
-            map.put(K_YEAR_PAY_COUNT, String.valueOf(ni.getPayCount()));
-            map.put(K_YEAR_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
-            map.put(K_YEAR_PAY_AMOUNT, String.format(Locale.CHINA,
-                    "%.02f", ni.getPayAmount()));
-            map.put(K_YEAR_INCOME_AMOUNT, String.format(Locale.CHINA,
-                    "%.02f", ni.getIncomeAmount()));
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put(K_YEAR, k);
+                    map.put(K_YEAR_PAY_COUNT, String.valueOf(ni.getPayCount()));
+                    map.put(K_YEAR_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
+                    map.put(K_YEAR_PAY_AMOUNT, String.format(Locale.CHINA,
+                            "%.02f", ni.getPayAmount()));
+                    map.put(K_YEAR_INCOME_AMOUNT, String.format(Locale.CHINA,
+                            "%.02f", ni.getIncomeAmount()));
 
-            BigDecimal bd_l = ni.getBalance();
-            String v_l = String.format(Locale.CHINA,
-                    0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-            map.put(K_AMOUNT, v_l);
+                    BigDecimal bd_l = ni.getBalance();
+                    String v_l = String.format(Locale.CHINA,
+                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+                    map.put(K_AMOUNT, v_l);
 
-            map.put(K_TAG, k);
-            map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-            mMainPara.add(map);
-        }
+                    map.put(K_TAG, k);
+                    map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                    mMainPara.add(map);
+                }
 
-        // for month
-        HashMap<String, NoteShowInfo> hm_m = NoteShowDataHelper.getInstance().getMonthInfo();
-        ArrayList<String> set_k_m = new ArrayList<>(hm_m.keySet());
-        Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-        for(String k : set_k_m)   {
-            String ky = k.substring(0, 4);
-            NoteShowInfo ni = hm_m.get(k);
-            HashMap<String, String> map = new HashMap<>();
+                // for month
+                HashMap<String, NoteShowInfo> hm_m = NoteShowDataHelper.getInstance().getMonthInfo();
+                ArrayList<String> set_k_m = new ArrayList<>(hm_m.keySet());
+                Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
+                for(String k : set_k_m)   {
+                    String ky = k.substring(0, 4);
+                    NoteShowInfo ni = hm_m.get(k);
+                    HashMap<String, String> map = new HashMap<>();
 
-            String km = k.substring(5,7);
-            km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
-            map.put(K_MONTH, km);
-            map.put(K_MONTH_PAY_COUNT, String.valueOf(ni.getPayCount()));
-            map.put(K_MONTH_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
-            map.put(K_MONTH_PAY_AMOUNT, String.format(Locale.CHINA,
-                    "%.02f", ni.getPayAmount()));
-            map.put(K_MONTH_INCOME_AMOUNT, String.format(Locale.CHINA,
-                    "%.02f", ni.getIncomeAmount()));
+                    String km = k.substring(5,7);
+                    km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
+                    map.put(K_MONTH, km);
+                    map.put(K_MONTH_PAY_COUNT, String.valueOf(ni.getPayCount()));
+                    map.put(K_MONTH_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
+                    map.put(K_MONTH_PAY_AMOUNT, String.format(Locale.CHINA,
+                            "%.02f", ni.getPayAmount()));
+                    map.put(K_MONTH_INCOME_AMOUNT, String.format(Locale.CHINA,
+                            "%.02f", ni.getIncomeAmount()));
 
-            BigDecimal bd_l = ni.getBalance();
-            String v_l = String.format(Locale.CHINA,
-                    0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-            map.put(K_AMOUNT, v_l);
+                    BigDecimal bd_l = ni.getBalance();
+                    String v_l = String.format(Locale.CHINA,
+                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+                    map.put(K_AMOUNT, v_l);
 
-            map.put(K_TAG, ky);
-            map.put(K_SUB_TAG, k);
+                    map.put(K_TAG, ky);
+                    map.put(K_SUB_TAG, k);
 
-            LinkedList<HashMap<String, String>>  ls_hm = mHMSubPara.get(ky);
-            if(UtilFun.ListIsNullOrEmpty(ls_hm))   {
-                ls_hm = new LinkedList<>();
+                    LinkedList<HashMap<String, String>>  ls_hm = mHMSubPara.get(ky);
+                    if(UtilFun.ListIsNullOrEmpty(ls_hm))   {
+                        ls_hm = new LinkedList<>();
+                    }
+
+                    ls_hm.add(map);
+                    mHMSubPara.put(ky, ls_hm);
+                }
+                return null;
             }
 
-            ls_hm.add(map);
-            mHMSubPara.put(ky, ls_hm);
-        }
-
-
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                // After completing execution of given task, control will return here.
+                // Hence if you want to populate UI elements with fetched data, do it here.
+                loadUIUtility(true);
+            }
+        }.execute();
     }
 
     @Override
     protected void loadUI() {
-        refreshAttachLayout();
-
-        // update data
-        LinkedList<HashMap<String, String>> n_mainpara;
-        if(mBFilter) {
-            n_mainpara = new LinkedList<>();
-            for (HashMap<String, String> i : mMainPara) {
-                String cur_tag = i.get(K_TAG);
-                for (String ii : mFilterPara) {
-                    if (cur_tag.equals(ii)) {
-                        n_mainpara.add(i);
-                        break;
-                    }
-                }
-            }
-        } else  {
-            n_mainpara = mMainPara;
-        }
-
-        // 设置listview adapter
-        SelfAdapter mSNAdapter = new SelfAdapter(getContext(), n_mainpara,
-                new String[]{}, new int[]{});
-        mLVShow.setAdapter(mSNAdapter);
-        mSNAdapter.notifyDataSetChanged();
+        loadUIUtility(false);
     }
 
     /// BEGIN PRIVATE
+    /**
+     * 加载UI的工作
+     * @param b_fully   若为true则加载数据
+     */
+    private void loadUIUtility(boolean b_fully)    {
+        refreshAttachLayout();
+
+        if(b_fully) {
+            // update data
+            LinkedList<HashMap<String, String>> n_mainpara;
+            if(mBFilter) {
+                n_mainpara = new LinkedList<>();
+                for (HashMap<String, String> i : mMainPara) {
+                    String cur_tag = i.get(K_TAG);
+                    for (String ii : mFilterPara) {
+                        if (cur_tag.equals(ii)) {
+                            n_mainpara.add(i);
+                            break;
+                        }
+                    }
+                }
+            } else  {
+                n_mainpara = mMainPara;
+            }
+
+            // 设置listview adapter
+            SelfAdapter mSNAdapter = new SelfAdapter(ContextUtil.getInstance(), n_mainpara,
+                    new String[]{}, new int[]{});
+            mLVShow.setAdapter(mSNAdapter);
+            mSNAdapter.notifyDataSetChanged();
+        }
+    }
+
+
     /**
      * 调整数据排序
      */
