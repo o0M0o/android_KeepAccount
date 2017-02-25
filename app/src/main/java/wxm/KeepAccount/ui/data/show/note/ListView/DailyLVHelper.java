@@ -1,8 +1,10 @@
 package wxm.KeepAccount.ui.data.show.note.ListView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -35,6 +37,7 @@ import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.ui.data.report.NotesToHtmlUtil;
 import wxm.KeepAccount.ui.utility.FastViewHolder;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
@@ -125,7 +128,7 @@ public class DailyLVHelper
 
         mRLActDelete.setOnClickListener(v -> {
             mActionType = ACTION_DELETE;
-            initUiInfo();
+            loadUIUtility(true);
         });
 
         mRLActRefresh.setOnClickListener(v -> {
@@ -146,7 +149,7 @@ public class DailyLVHelper
             tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
             reorderData();
-            initUiInfo();
+            loadUIUtility(true);
         });
     }
 
@@ -159,12 +162,12 @@ public class DailyLVHelper
 
             mFilterPara.clear();
             mFilterPara.addAll(ls_tag);
-            initUiInfo();
+            loadUIUtility(true);
         } else {
             mBFilter = false;
             mActionType = ACTION_EDIT;
 
-            initUiInfo();
+            loadUIUtility(true);
         }
     }
 
@@ -210,7 +213,7 @@ public class DailyLVHelper
 
             case R.id.bt_giveup:
                 mActionType = ACTION_EDIT;
-                initUiInfo();
+                loadUIUtility(false);
                 break;
         }
     }
@@ -223,82 +226,103 @@ public class DailyLVHelper
         super.refreshData();
 
         mMainPara.clear();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                // for day
+                HashMap<String, NoteShowInfo> hm_d = NoteShowDataHelper.getInstance().getDayInfo();
+                ArrayList<String> set_k_d = new ArrayList<>(hm_d.keySet());
+                Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
 
-        // for day
-        HashMap<String, NoteShowInfo> hm_d = NoteShowDataHelper.getInstance().getDayInfo();
-        ArrayList<String> set_k_d = new ArrayList<>(hm_d.keySet());
-        Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
+                for (String k : set_k_d) {
+                    NoteShowInfo ni = hm_d.get(k);
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put(K_MONTH, k.substring(0, 7));
 
-        for (String k : set_k_d) {
-            NoteShowInfo ni = hm_d.get(k);
-            HashMap<String, String> map = new HashMap<>();
-            map.put(K_MONTH, k.substring(0, 7));
+                    String km = k.substring(8, 10);
+                    km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
+                    map.put(K_DAY_NUMEBER, km);
 
-            String km = k.substring(8, 10);
-            km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
-            map.put(K_DAY_NUMEBER, km);
-            try {
-                Timestamp ts = ToolUtil.StringToTimestamp(k);
-                Calendar day = Calendar.getInstance();
-                day.setTimeInMillis(ts.getTime());
-                map.put(K_DAY_IN_WEEK, getDayInWeek(day.get(Calendar.DAY_OF_WEEK)));
-            } catch (ParseException e) {
-                e.printStackTrace();
+                    int year  = Integer.valueOf(k.substring(0, 4));
+                    int month = Integer.valueOf(k.substring(5, 7));
+                    int day   = Integer.valueOf(k.substring(8, 10));
+                    Calendar cl_day = Calendar.getInstance();
+                    cl_day.set(year, month, day);
+                    map.put(K_DAY_IN_WEEK, ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK)));
+
+                    map.put(K_DAY_PAY_COUNT, String.valueOf(ni.getPayCount()));
+                    map.put(K_DAY_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
+                    map.put(K_DAY_PAY_AMOUNT,  ni.getSZPayAmount());
+                    map.put(K_DAY_INCOME_AMOUNT, ni.getSZIncomeAmount());
+
+                    BigDecimal bd_l = ni.getBalance();
+                    String v_l = String.format(Locale.CHINA,
+                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+                    map.put(K_AMOUNT, v_l);
+
+                    map.put(K_TAG, k);
+                    map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                    mMainPara.add(map);
+                }
+                return null;
             }
 
-            map.put(K_DAY_PAY_COUNT, String.valueOf(ni.getPayCount()));
-            map.put(K_DAY_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
-            map.put(K_DAY_PAY_AMOUNT,  ni.getSZPayAmount());
-            map.put(K_DAY_INCOME_AMOUNT, ni.getSZIncomeAmount());
-
-            BigDecimal bd_l = ni.getBalance();
-            String v_l = String.format(Locale.CHINA,
-                    0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-            map.put(K_AMOUNT, v_l);
-
-            map.put(K_TAG, k);
-            map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-            mMainPara.add(map);
-        }
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                // After completing execution of given task, control will return here.
+                // Hence if you want to populate UI elements with fetched data, do it here.
+                loadUIUtility(true);
+            }
+        }.execute();
     }
 
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
+        loadUIUtility(false);
+    }
+
+
+    /// BEGIN PRIVATE
+    /**
+     * 加载UI的工作
+     */
+    private void loadUIUtility(boolean b_fully)    {
         // adjust attach layout
         setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
                 View.VISIBLE : View.GONE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
         setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType && !mBFilter ? View.VISIBLE : View.GONE);
 
-        // load show data
-        LinkedList<HashMap<String, String>> n_mainpara;
-        if (mBFilter) {
-            n_mainpara = new LinkedList<>();
-            for (HashMap<String, String> i : mMainPara) {
-                String cur_tag = i.get(K_TAG);
-                for (String ii : mFilterPara) {
-                    if (cur_tag.equals(ii)) {
-                        n_mainpara.add(i);
-                        break;
+        if(b_fully) {
+            // load show data
+            LinkedList<HashMap<String, String>> n_mainpara;
+            if (mBFilter) {
+                n_mainpara = new LinkedList<>();
+                for (HashMap<String, String> i : mMainPara) {
+                    String cur_tag = i.get(K_TAG);
+                    for (String ii : mFilterPara) {
+                        if (cur_tag.equals(ii)) {
+                            n_mainpara.add(i);
+                            break;
+                        }
                     }
                 }
+            } else {
+                n_mainpara = mMainPara;
             }
-        } else {
-            n_mainpara = mMainPara;
+
+            // 设置listview adapter
+            SelfAdapter mSNAdapter = new SelfAdapter(getContext(), n_mainpara,
+                    new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK},
+                    new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week});
+
+            mLVShow.setAdapter(mSNAdapter);
+            mSNAdapter.notifyDataSetChanged();
         }
-
-        // 设置listview adapter
-        SelfAdapter mSNAdapter = new SelfAdapter(getContext(), n_mainpara,
-                new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK},
-                new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week});
-
-        mLVShow.setAdapter(mSNAdapter);
-        mSNAdapter.notifyDataSetChanged();
     }
 
-
-    /// BEGIN PRIVATE
     /**
      * 调整数据排序
      */

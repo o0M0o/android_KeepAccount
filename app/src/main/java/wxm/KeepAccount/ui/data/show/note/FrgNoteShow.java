@@ -168,7 +168,7 @@ public class FrgNoteShow extends FrgUtilityBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
         getHotTabItem().loadView(true);
     }
 

@@ -40,7 +40,7 @@ public class FrgHelp extends FrgUtilityBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
         load_help("file:///android_asset/help_main.html");
     }
 

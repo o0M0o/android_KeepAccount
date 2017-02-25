@@ -76,7 +76,7 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
 
     }
 

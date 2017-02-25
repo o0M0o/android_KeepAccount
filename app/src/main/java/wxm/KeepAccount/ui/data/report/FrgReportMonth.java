@@ -28,7 +28,7 @@ public class FrgReportMonth extends FrgUtilityBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
 
     }
 }

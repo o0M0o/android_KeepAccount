@@ -67,7 +67,7 @@ public class FrgReportDay extends FrgUtilityBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
         new AsyncTask<Void, Void, Void>() {
             private String  mSZHtml;
             private String  mSZCaption;

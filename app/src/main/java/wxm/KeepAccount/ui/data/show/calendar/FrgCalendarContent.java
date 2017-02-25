@@ -79,7 +79,7 @@ public class FrgCalendarContent extends FrgUtilityBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
         loadContent();
     }
 

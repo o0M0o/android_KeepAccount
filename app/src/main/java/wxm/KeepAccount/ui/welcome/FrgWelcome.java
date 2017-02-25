@@ -139,7 +139,7 @@ public class FrgWelcome extends FrgUtilityBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
     }
 
     private void initFrgs()  {

@@ -75,4 +75,14 @@ public class ToolUtil {
         int dw = day.get(Calendar.DAY_OF_WEEK) - 1;
         return (0 <= dw && dw < DAY_IN_WEEK.length) ? DAY_IN_WEEK[dw] : "";
     }
+
+    /**
+     * 返回“星期*"
+     * @param dw    0-6格式的星期数
+     * @return  星期*
+     */
+    public static String getDayInWeek(int dw) {
+        dw--;
+        return DAY_IN_WEEK[dw];
+    }
 }

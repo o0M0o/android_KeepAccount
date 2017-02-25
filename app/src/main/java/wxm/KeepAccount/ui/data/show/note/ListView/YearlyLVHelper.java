@@ -64,10 +64,10 @@ public class YearlyLVHelper extends LVShowDataBase {
             mBFilter = true;
             mFilterPara.clear();
             mFilterPara.addAll(ls_tag);
-            initUiInfo();
+            loadUI();
         } else  {
             mBFilter = false;
-            initUiInfo();
+            loadUI();
         }
     }
 
@@ -135,7 +135,7 @@ public class YearlyLVHelper extends LVShowDataBase {
             tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
             reorderData();
-            initUiInfo();
+            loadUI();
         });
     }
 
@@ -218,7 +218,7 @@ public class YearlyLVHelper extends LVShowDataBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
         refreshAttachLayout();
 
         // update data

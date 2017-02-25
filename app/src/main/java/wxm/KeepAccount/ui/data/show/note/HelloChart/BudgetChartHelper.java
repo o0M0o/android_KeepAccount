@@ -105,14 +105,14 @@ public class BudgetChartHelper extends ShowViewHelperBase {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     mSPBudgetHot = position;
                     refreshData();
-                    initUiInfo();
+                    loadUI();
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                     mSPBudgetHot = Spinner.INVALID_POSITION;
                     refreshData();
-                    initUiInfo();
+                    loadUI();
                 }
             });
         }
@@ -185,7 +185,7 @@ public class BudgetChartHelper extends ShowViewHelperBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
         refreshAttachLayout();
 
         // 展示条

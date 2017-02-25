@@ -109,8 +109,8 @@ public class FrgCalendarShow extends FrgUtilityBase {
     }
 
     @Override
-    protected void initUiInfo() {
-        Log.d(LOG_TAG, "initUiInfo");
+    protected void loadUI() {
+        Log.d(LOG_TAG, "loadUI");
     }
 
     @Override

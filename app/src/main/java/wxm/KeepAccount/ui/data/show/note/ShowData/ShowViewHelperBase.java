@@ -79,7 +79,7 @@ public abstract class ShowViewHelperBase
      */
     protected void giveUpFilter()   {
         mBFilter = false;
-        initUiInfo();
+        loadUI();
     }
 
 

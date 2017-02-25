@@ -213,23 +213,14 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
 
 
     /**
-     * 返回“星期*"
-     * @param dw    0-6格式的星期数
-     * @return  星期*
-     */
-    protected String getDayInWeek(int dw) {
-        dw--;
-        return DAY_IN_WEEK[dw];
-    }
-
-    /**
      * 刷新数据以及视图
      *
      * @param v           for context
      * @param bShowDialog 若为true则显示提醒对话框
      */
     protected void reloadView(final Context v, final boolean bShowDialog) {
-        refreshUI();
+        //refreshUI();
+        refreshData();
         if (bShowDialog) {
             android.app.AlertDialog.Builder builder =
                     new android.app.AlertDialog.Builder(v);

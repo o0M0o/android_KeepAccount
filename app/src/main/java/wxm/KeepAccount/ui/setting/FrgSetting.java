@@ -50,7 +50,7 @@ public class FrgSetting extends FrgUtilityBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
         change_page(PAGE_IDX_MAIN);
     }
 

@@ -136,7 +136,7 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
         refreshAttachLayout();
 
         // 展示条
@@ -191,7 +191,7 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     @Override
     protected void giveUpFilter()   {
         mBFilter = false;
-        initUiInfo();
+        loadUI();
     }
 
     @Override
@@ -204,7 +204,7 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
             mBFilter = false;
         }
 
-        initUiInfo();
+        loadUI();
     }
 
     private void refreshAttachLayout()    {

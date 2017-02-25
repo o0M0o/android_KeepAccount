@@ -66,12 +66,12 @@ public class MonthlyLVHelper
 
             mFilterPara.clear();
             mFilterPara.addAll(ls_tag);
-            initUiInfo();
+            loadUI();
         } else  {
             mBFilter = false;
             mBSelectSubFilter = false;
 
-            initUiInfo();
+            loadUI();
         }
     }
 
@@ -140,7 +140,7 @@ public class MonthlyLVHelper
             tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
             reorderData();
-            initUiInfo();
+            loadUI();
         });
     }
 
@@ -192,14 +192,13 @@ public class MonthlyLVHelper
             String km = k.substring(8, 10);
             km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
             map.put(K_DAY_NUMEBER, km);
-            try {
-                Timestamp ts = ToolUtil.StringToTimestamp(k);
-                Calendar day = Calendar.getInstance();
-                day.setTimeInMillis(ts.getTime());
-                map.put(K_DAY_IN_WEEK, getDayInWeek(day.get(Calendar.DAY_OF_WEEK)));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+
+            int year  = Integer.valueOf(k.substring(0, 4));
+            int month = Integer.valueOf(k.substring(5, 7));
+            int day   = Integer.valueOf(k.substring(8, 10));
+            Calendar cl_day = Calendar.getInstance();
+            cl_day.set(year, month, day);
+            map.put(K_DAY_IN_WEEK, ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK)));
 
             map.put(K_DAY_PAY_COUNT, String.valueOf(ni.getPayCount()));
             map.put(K_DAY_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
@@ -224,12 +223,10 @@ public class MonthlyLVHelper
             ls_hm.add(map);
             mHMSubPara.put(mk, ls_hm);
         }
-
-
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
         // set layout
         refreshAttachLayout();
 

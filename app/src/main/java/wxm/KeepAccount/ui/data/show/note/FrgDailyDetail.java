@@ -121,7 +121,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
         Bundle bd = getArguments();
         mSZHotDay = bd.getString(ACDailyDetail.K_HOTDAY);
         if(!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {

@@ -65,7 +65,7 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
         loadHotFrg();
     }
 

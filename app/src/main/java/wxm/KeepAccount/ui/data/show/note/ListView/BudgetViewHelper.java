@@ -89,7 +89,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
         mRLActDelete.setOnClickListener(v -> {
             mActionType = ACTION_DELETE;
-            initUiInfo();
+            loadUI();
         });
 
         mRLActRefresh.setOnClickListener(v -> {
@@ -110,7 +110,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
             tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
 
             reloadData();
-            initUiInfo();
+            loadUI();
         });
     }
 
@@ -140,7 +140,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
     }
 
     @Override
-    protected void initUiInfo() {
+    protected void loadUI() {
         refreshAttachLayout();
 
         LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
@@ -233,7 +233,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                     Timestamp ts = ToolUtil.StringToTimestamp(all_date);
                     Calendar day = Calendar.getInstance();
                     day.setTimeInMillis(ts.getTime());
-                    map.put(K_DAY_IN_WEEK, getDayInWeek(day.get(Calendar.DAY_OF_WEEK)));
+                    map.put(K_DAY_IN_WEEK, ToolUtil.getDayInWeek(day.get(Calendar.DAY_OF_WEEK)));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
