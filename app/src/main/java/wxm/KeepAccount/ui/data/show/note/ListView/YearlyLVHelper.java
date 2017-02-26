@@ -13,6 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.utility.FastViewHolder;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.utility.ContextUtil;
@@ -60,18 +65,20 @@ public class YearlyLVHelper extends LVShowDataBase {
         mBActionExpand = false;
     }
 
-    @Override
-    public void filterView(List<String> ls_tag) {
-        if(null != ls_tag) {
+    /**
+     * 过滤视图事件
+     * @param event     事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFilterShowEvent(FilterShowEvent event) {
+        /*List<String> e_p = event.getFilterTag();
+        if(null != e_p) {
             mBFilter = true;
             mFilterPara.clear();
-            mFilterPara.addAll(ls_tag);
+            mFilterPara.addAll(e_p);
 
             loadUIUtility(true);
-        } else  {
-            mBFilter = false;
-            loadUIUtility(true);
-        }
+        }*/
     }
 
     @OnClick({R.id.bt_accpet, R.id.bt_giveup})
@@ -83,7 +90,10 @@ public class YearlyLVHelper extends LVShowDataBase {
                     if(!UtilFun.ListIsNullOrEmpty(mLLSubFilter)) {
                         ACNoteShow ac = getRootActivity();
                         ac.jumpByTabName(NoteShowDataHelper.TAB_TITLE_MONTHLY);
-                        ac.filterView(mLLSubFilter);
+
+                        ArrayList<String> al_s = new ArrayList<>();
+                        al_s.addAll(mLLSubFilter);
+                        EventBus.getDefault().post(new FilterShowEvent(NoteShowDataHelper.TAB_TITLE_YEARLY, al_s));
 
                         mLLSubFilter.clear();
                     }

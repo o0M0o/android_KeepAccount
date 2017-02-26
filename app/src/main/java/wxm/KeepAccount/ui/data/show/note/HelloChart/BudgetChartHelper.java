@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +37,7 @@ import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.PreviewColumnChartView;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.PayNoteItem;
+import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.PreferencesUtil;
 import wxm.KeepAccount.utility.ToolUtil;
@@ -327,11 +331,13 @@ public class BudgetChartHelper extends ShowViewHelperBase {
         }
     }
 
-
-    @Override
-    public void filterView(List<String> ls_tag) {
+    /**
+     * 过滤视图事件
+     * @param event     事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFilterShowEvent(FilterShowEvent event) {
     }
-
 
     private void refreshAttachLayout()    {
     }

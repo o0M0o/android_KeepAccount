@@ -18,6 +18,9 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -35,9 +38,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.data.report.NotesToHtmlUtil;
+import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.utility.FastViewHolder;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
@@ -154,24 +159,25 @@ public class DailyLVHelper
     }
 
 
-    @Override
-    public void filterView(List<String> ls_tag) {
-        if (null != ls_tag) {
+    /**
+     * 过滤视图事件
+     * @param event     事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFilterShowEvent(FilterShowEvent event) {
+        List<String> e_p = event.getFilterTag();
+        if ((NoteShowDataHelper.TAB_TITLE_MONTHLY.equals(event.getSender()))
+                && (null != e_p)) {
             mBFilter = true;
             mActionType = ACTION_EDIT;
 
             mFilterPara.clear();
-            mFilterPara.addAll(ls_tag);
-            loadUIUtility(true);
-        } else {
-            mBFilter = false;
-            mActionType = ACTION_EDIT;
-
+            mFilterPara.addAll(e_p);
             loadUIUtility(true);
         }
     }
 
-    @OnClick({R.id.bt_accpet, R.id.bt_giveup})
+    @OnClick({R.id.bt_accpet, R.id.bt_giveup, R.id.bt_giveup_filter})
     public void onAccpetOrGiveupClick(View v) {
         int vid = v.getId();
         switch (vid) {
@@ -215,6 +221,11 @@ public class DailyLVHelper
                 mActionType = ACTION_EDIT;
                 loadUIUtility(false);
                 break;
+
+            case R.id.bt_giveup_filter:
+                mBFilter = false;
+                loadUIUtility(true);
+                break;
         }
     }
 
@@ -224,7 +235,9 @@ public class DailyLVHelper
     @Override
     protected void refreshData() {
         super.refreshData();
+        Log.v(LOG_TAG, "in refreshData");
 
+        //showLoadingProgress(true);
         mMainPara.clear();
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -273,6 +286,7 @@ public class DailyLVHelper
                 // After completing execution of given task, control will return here.
                 // Hence if you want to populate UI elements with fetched data, do it here.
                 loadUIUtility(true);
+                //showLoadingProgress(false);
             }
         }.execute();
     }
@@ -280,6 +294,7 @@ public class DailyLVHelper
 
     @Override
     protected void loadUI() {
+        Log.v(LOG_TAG, "in loadUI");
         loadUIUtility(false);
     }
 
@@ -289,7 +304,7 @@ public class DailyLVHelper
      * 加载UI的工作
      * @param b_fully   若为true则加载数据
      */
-    private void loadUIUtility(boolean b_fully)    {
+    protected void loadUIUtility(boolean b_fully)    {
         // adjust attach layout
         setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
                 View.VISIBLE : View.GONE);

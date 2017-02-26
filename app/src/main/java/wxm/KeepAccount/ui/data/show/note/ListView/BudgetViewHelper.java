@@ -13,6 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -34,6 +37,7 @@ import butterknife.BindDrawable;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
@@ -69,10 +73,13 @@ public class BudgetViewHelper  extends LVShowDataBase {
     }
 
 
-    @Override
-    public void filterView(List<String> ls_tag) {
+    /**
+     * 过滤视图事件
+     * @param event     事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFilterShowEvent(FilterShowEvent event) {
     }
-
 
     /**
      * 初始化可隐藏动作条

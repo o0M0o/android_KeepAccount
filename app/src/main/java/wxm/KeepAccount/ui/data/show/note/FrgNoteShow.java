@@ -199,11 +199,6 @@ public class FrgNoteShow extends FrgUtilityBase {
         }
     }
 
-    public void filterView(List<String> ls_tag) {
-        TFShowBase hot = getHotTabItem();
-        hot.filterView(ls_tag);
-    }
-
 
     /// PRIVATE BEGIN
 

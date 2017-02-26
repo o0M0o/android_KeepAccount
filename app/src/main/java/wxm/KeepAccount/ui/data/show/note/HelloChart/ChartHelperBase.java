@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +24,8 @@ import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.PreviewColumnChartView;
+import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
+import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
@@ -49,6 +54,8 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     @BindView(R.id.iv_pay)
     ImageView   mIVPay;
 
+    @BindView(R.id.bt_less_viewport)
+    Button   mBTLessViewPort;
 
     ChartHelperBase()    {
         super();
@@ -162,17 +169,16 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
      *
      * @param v    激活view
      */
-    @OnClick({R.id.bt_less_viewport, R.id.bt_more_viewport})
+    @OnClick({R.id.bt_less_viewport, R.id.bt_more_viewport, R.id.bt_giveup_filter})
     public void onLessOrMoreView(View v)    {
-        final Button bt_less = UtilFun.cast(getView().findViewById(R.id.bt_less_viewport));
         int vid = v.getId();
         switch (vid)    {
             case R.id.bt_less_viewport :    {
                 mPrvWidth += 0.2;
                 refreshViewPort();
 
-                if(!bt_less.isClickable() && 1 < mPrvWidth)
-                    bt_less.setClickable(true);
+                if(!mBTLessViewPort.isClickable() && 1 < mPrvWidth)
+                    mBTLessViewPort.setClickable(true);
             }
             break;
 
@@ -181,31 +187,19 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
                     mPrvWidth -= 0.2;
                     refreshViewPort();
                 } else  {
-                    bt_less.setClickable(false);
+                    mBTLessViewPort.setClickable(false);
                 }
+            }
+            break;
+
+            case R.id.bt_giveup_filter :    {
+                mBFilter = false;
+                loadUI();
             }
             break;
         }
     }
 
-    @Override
-    protected void giveUpFilter()   {
-        mBFilter = false;
-        loadUI();
-    }
-
-    @Override
-    public void filterView(List<String> ls_tag) {
-        if(null != ls_tag) {
-            mBFilter = true;
-            mFilterPara.clear();
-            mFilterPara.addAll(ls_tag);
-        } else  {
-            mBFilter = false;
-        }
-
-        loadUI();
-    }
 
     private void refreshAttachLayout()    {
         setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);

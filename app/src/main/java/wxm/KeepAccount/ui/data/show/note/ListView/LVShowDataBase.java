@@ -1,15 +1,22 @@
 package wxm.KeepAccount.ui.data.show.note.ListView;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,9 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
 
 /**
@@ -63,10 +68,6 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     protected final static String V_SHOW_UNFOLD    = "vs_unfold";
     protected final static String V_SHOW_FOLD      = "vs_fold";
     /// list item data end
-
-    private final static String[] DAY_IN_WEEK = {
-            "星期日", "星期一", "星期二","星期三",
-            "星期四","星期五","星期六"};
 
     // 视图数据
     protected final LinkedList<HashMap<String, String>>                     mMainPara;
@@ -128,6 +129,12 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     @BindView(R.id.lv_show)
     ListView mLVShow;
 
+    @BindView(R.id.rl_content)
+    RelativeLayout  mRLContent;
+
+    @BindView(R.id.pb_loading)
+    ProgressBar     mPBLoading;
+
     public LVShowDataBase()   {
         super();
         mMainPara       = new LinkedList<>();
@@ -137,7 +144,7 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        View rootView = layoutInflater.inflate(R.layout.lv_newpager, viewGroup, false);
+        View rootView = layoutInflater.inflate(R.layout.lv_note_show_pager, viewGroup, false);
         ButterKnife.bind(this, rootView);
         return rootView;
     }
@@ -176,7 +183,6 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
             rp_lv.removeRule(RelativeLayout.ABOVE);
         mRLLVNote.setLayoutParams(rp_lv);
     }
-
 
     /**
      * 添加一个展开节点
@@ -229,5 +235,35 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
             android.app.AlertDialog dlg = builder.create();
             dlg.show();
         }
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    protected void showLoadingProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        int shortAnimTime = getResources()
+                .getInteger(android.R.integer.config_shortAnimTime);
+
+        mRLContent.setVisibility(show ? View.GONE : View.VISIBLE);
+        mRLContent.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mRLContent.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
+
+        mPBLoading.setVisibility(show ? View.VISIBLE : View.GONE);
+        mPBLoading.animate().setDuration(shortAnimTime)
+                .alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mPBLoading.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 }

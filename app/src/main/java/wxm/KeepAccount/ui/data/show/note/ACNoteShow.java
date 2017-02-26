@@ -85,12 +85,4 @@ public class ACNoteShow extends BaseAppCompatActivity {
     public void jumpByTabName(String tabname)  {
         ((FrgNoteShow)mFGHolder).jumpByTabName(tabname);
     }
-
-    /**
-     * 过滤视图数据
-     * @param ls_tag 过滤数据项
-     */
-    public void filterView(List<String> ls_tag) {
-        ((FrgNoteShow)mFGHolder).filterView(ls_tag);
-    }
 }

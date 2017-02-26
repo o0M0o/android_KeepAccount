@@ -1,10 +1,17 @@
 package wxm.KeepAccount.ui.data.show.note.ShowData;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.CallSuper;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -46,9 +53,6 @@ public abstract class ShowViewHelperBase
     @BindView(R.id.rl_accpet_giveup)
     RelativeLayout  mRLAccpetGiveup;
 
-    @BindView(R.id.bt_giveup_filter)
-    ImageButton     mIBFilter;
-
     @BindView(R.id.rl_filter)
     RelativeLayout  mRLFilter;
 
@@ -57,14 +61,22 @@ public abstract class ShowViewHelperBase
         mFilterPara     = new LinkedList<>();
     }
 
-    /**
-     * 过滤视图
-     * @param ls_tag   过滤参数 :
-     *                 1. 如果为null则不过滤
-     *                 2. 如果不为null, 但为空则过滤（不显示任何数据)
-     */
-    public abstract void filterView(List<String> ls_tag);
 
+    @Override
+    protected void enterActivity()  {
+        Log.d(LOG_TAG, "in enterActivity");
+        super.enterActivity();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void leaveActivity()  {
+        Log.d(LOG_TAG, "in leaveActivity");
+        EventBus.getDefault().unregister(this);
+
+        super.leaveActivity();
+    }
 
     /**
      * 更新数据
@@ -72,14 +84,6 @@ public abstract class ShowViewHelperBase
     @CallSuper
     protected void refreshData()    {
         mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
-    }
-
-    /**
-     * 取消过滤
-     */
-    protected void giveUpFilter()   {
-        mBFilter = false;
-        loadUI();
     }
 
 
@@ -113,12 +117,11 @@ public abstract class ShowViewHelperBase
      *                  1. {@code View.GONE}, 不可见
      *                  2. {@code View.VISIBLE}, 可见
      */
-    protected void setFilterLayoutVisible(int visible)   {
-        if(View.VISIBLE == visible)
+    protected void setFilterLayoutVisible(int visible) {
+        if (View.VISIBLE == visible)
             setAttachLayoutVisible(View.VISIBLE);
 
         mRLFilter.setVisibility(visible);
-        mIBFilter.setOnClickListener(v -> giveUpFilter());
     }
 
 

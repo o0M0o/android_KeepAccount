@@ -13,6 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -29,6 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.utility.FastViewHolder;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.utility.ContextUtil;
@@ -60,19 +65,21 @@ public class MonthlyLVHelper
         mBActionExpand = false;
     }
 
-    @Override
-    public void filterView(List<String> ls_tag) {
-        if(null != ls_tag) {
+
+    /**
+     * 过滤视图事件
+     * @param event     事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFilterShowEvent(FilterShowEvent event) {
+        List<String> e_p = event.getFilterTag();
+        if ((NoteShowDataHelper.TAB_TITLE_YEARLY.equals(event.getSender()))
+                && (null != e_p)) {
             mBFilter = true;
             mBSelectSubFilter = false;
 
             mFilterPara.clear();
-            mFilterPara.addAll(ls_tag);
-            loadUIUtility(true);
-        } else  {
-            mBFilter = false;
-            mBSelectSubFilter = false;
-
+            mFilterPara.addAll(e_p);
             loadUIUtility(true);
         }
     }
@@ -86,7 +93,10 @@ public class MonthlyLVHelper
                     if(!UtilFun.ListIsNullOrEmpty(mLLSubFilter)) {
                         ACNoteShow ac = getRootActivity();
                         ac.jumpByTabName(NoteShowDataHelper.TAB_TITLE_DAILY);
-                        ac.filterView(mLLSubFilter);
+
+                        ArrayList<String> al_s = new ArrayList<>();
+                        al_s.addAll(mLLSubFilter);
+                        EventBus.getDefault().post(new FilterShowEvent(NoteShowDataHelper.TAB_TITLE_MONTHLY, al_s));
 
                         mLLSubFilter.clear();
                     }

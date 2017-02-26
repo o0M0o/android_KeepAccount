@@ -90,18 +90,6 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
         }
     }
 
-    /**
-     * 过滤视图
-     * @param ls_tag   过滤参数 :
-     *                 1. 如果为null则不过滤
-     *                 2. 如果不为null, 但为空则过滤（不显示任何数据)
-     */
-    public void filterView(List<String> ls_tag)     {
-        for(ShowViewHelperBase sb : mViewHelper)    {
-            sb.filterView(ls_tag);
-        }
-    }
-
 
     /**
      * 数据变化后调用
