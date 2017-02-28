@@ -55,8 +55,6 @@ public class MonthlyLVHelper
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
 
-    @BindView(R.id.lv_show)
-    ListView    mLVShow;
 
     public MonthlyLVHelper()    {
         super();

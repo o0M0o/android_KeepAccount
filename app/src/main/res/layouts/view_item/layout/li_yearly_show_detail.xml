@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp">
+        android:layout_marginStart="20dp">
 
         <TextView
             android:id="@+id/tv_month"
@@ -29,8 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/tv_month"
             android:layout_marginBottom="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_toRightOf="@+id/tv_month"
+            android:layout_marginStart="2dp"
+            android:layout_toEndOf="@+id/tv_month"
             android:text="月"
             android:textSize="12sp" />
     </RelativeLayout>
@@ -39,9 +39,9 @@
         android:id="@+id/rl_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="86dp">
+        android:layout_marginStart="86dp">
 
         <include layout="@layout/liit_note_simple_info" />
     </RelativeLayout>

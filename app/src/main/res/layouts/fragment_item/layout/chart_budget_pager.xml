@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@id/rl_attach_button"
+        layout="@layout/attach_button" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Spinner
+            android:id="@+id/sp_budget"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/textView2"
-            android:layout_marginLeft="24dp"
-            android:layout_width="180dp"
-            android:id="@+id/sp_budget" />
+            android:layout_marginStart="24dp"
+            android:layout_toEndOf="@+id/textView2" />
 
         <TextView
-            android:text="@string/select_budget"
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView2"
-            android:layout_marginLeft="36dp"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:layout_marginStart="36dp"
+            android:text="@string/select_budget" />
     </RelativeLayout>
 
     <LinearLayout
@@ -31,53 +34,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:paddingBottom="4dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp">
+        android:paddingTop="4dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:background="@color/azure"
+                android:id="@+id/iv_remainder"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_toLeftOf="@+id/tv_remainder"
-                android:layout_marginRight="8dp"
                 android:layout_alignTop="@+id/tv_used"
-                android:id="@+id/iv_remainder" />
+                android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@+id/tv_remainder"
+                android:background="@color/azure" />
 
             <TextView
-                android:layout_toLeftOf="@+id/iv_used"
-                android:layout_alignTop="@+id/tv_used"
-                android:text="@string/budget_remainder"
+                android:id="@+id/tv_remainder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_remainder"
-                android:layout_marginRight="24dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_alignTop="@+id/tv_used"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="24dp"
+                android:layout_toStartOf="@+id/iv_used"
+                android:text="@string/budget_remainder" />
 
             <ImageView
-                android:background="@color/beige"
                 android:id="@+id/iv_used"
-                android:layout_alignParentRight="false"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_toLeftOf="@+id/tv_used"
-                android:layout_marginRight="8dp"
-                android:layout_alignTop="@+id/tv_used" />
+                android:layout_alignParentEnd="false"
+                android:layout_alignTop="@+id/tv_used"
+                android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@+id/tv_used"
+                android:background="@color/beige" />
 
             <TextView
-                android:layout_alignParentRight="true"
-                android:text="@string/budget_used"
+                android:id="@+id/tv_used"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_used"
-                android:layout_marginRight="12dp"
+                android:layout_alignParentEnd="true"
                 android:layout_marginBottom="8dp"
-                android:layout_marginTop="4dp" />
+                android:layout_marginEnd="12dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/budget_used" />
         </RelativeLayout>
 
         <lecho.lib.hellocharts.view.ColumnChartView
@@ -85,9 +88,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:paddingRight="6dp"
-            android:paddingLeft="12dp">
-        </lecho.lib.hellocharts.view.ColumnChartView>
+            android:paddingEnd="6dp"
+            android:paddingStart="12dp" />
 
         <View
             android:layout_width="match_parent"
@@ -102,36 +104,35 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <Button
                     android:id="@+id/bt_more_viewport"
-                    android:text="@string/cn_more_viewport"
                     android:layout_width="64dp"
                     android:layout_height="36dp"
-                    android:layout_marginTop="24dp"
                     android:layout_gravity="top|center_horizontal"
                     android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp" />
+                    android:layout_marginRight="6dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/cn_more_viewport" />
 
                 <Button
                     android:id="@+id/bt_less_viewport"
-                    android:text="@string/cn_less_viewport"
                     android:layout_width="64dp"
                     android:layout_height="36dp"
+                    android:layout_gravity="bottom|center_horizontal"
                     android:layout_marginBottom="24dp"
-                    android:layout_gravity="bottom|center_horizontal" />
+                    android:text="@string/cn_less_viewport" />
             </LinearLayout>
 
             <lecho.lib.hellocharts.view.PreviewColumnChartView
                 android:id="@+id/chart_preview"
-                android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:paddingRight="6dp"
-                android:paddingLeft="12dp">
-            </lecho.lib.hellocharts.view.PreviewColumnChartView>
+                android:layout_height="match_parent"
+                android:paddingEnd="6dp"
+                android:paddingStart="12dp" />
         </LinearLayout>
     </LinearLayout>
 

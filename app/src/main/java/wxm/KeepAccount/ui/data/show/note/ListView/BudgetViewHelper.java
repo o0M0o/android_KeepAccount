@@ -3,6 +3,7 @@ package wxm.KeepAccount.ui.data.show.note.ListView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,7 @@ import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
+import wxm.KeepAccount.ui.utility.FastViewHolder;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
@@ -63,9 +65,6 @@ public class BudgetViewHelper  extends LVShowDataBase {
     // for delete
     private final LinkedList<Integer> mLLDelBudget    = new LinkedList<>();
     //private LinkedList<View>    mLLDelVW        = new LinkedList<>();
-
-    // original data
-    private HashMap<BudgetItem, List<PayNoteItem>>  mHMData;
 
     public BudgetViewHelper()    {
         super();
@@ -116,7 +115,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                     .getDrawable(mBNameDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1));
             tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
 
-            reloadData();
+            reorderData();
             loadUI();
         });
     }
@@ -124,7 +123,6 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
     @OnClick({R.id.bt_accpet, R.id.bt_giveup})
     public void onAccpetOrGiveupClick(View v) {
-
         int vid = v.getId();
         switch (vid)    {
             case R.id.bt_accpet :
@@ -154,7 +152,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
         n_mainpara.addAll(mMainPara);
 
         // 设置listview adapter
-        SelfAdapter mSNAdapter = new SelfAdapter(getContext(), mLVShow, n_mainpara,
+        SelfAdapter mSNAdapter = new SelfAdapter(ContextUtil.getInstance(), n_mainpara,
                 new String[]{K_TITLE, K_AMOUNT, K_NOTE},
                 new int[]{R.id.tv_budget_name, R.id.tv_budget_amount, R.id.tv_budget_note});
         mLVShow.setAdapter(mSNAdapter);
@@ -169,7 +167,6 @@ public class BudgetViewHelper  extends LVShowDataBase {
         mHMSubPara.clear();
 
         // format output
-        mHMData = ContextUtil.getBudgetUtility().getBudgetWithPayNote();
         parseNotes();
     }
 
@@ -182,9 +179,10 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
 
     /**
-     * 重新加载数据
+     * 调整数据排序
      */
-    private void reloadData() {
+    private void reorderData()  {
+        Collections.reverse(mMainPara);
     }
 
     /**
@@ -194,6 +192,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
         mMainPara.clear();
         mHMSubPara.clear();
 
+        HashMap<BudgetItem, List<PayNoteItem>> mHMData = ContextUtil.getBudgetUtility().getBudgetWithPayNote();
         Set<BudgetItem> set_bi = mHMData.keySet();
         ArrayList<BudgetItem> ls_bi = new ArrayList<>(set_bi);
         Collections.sort(ls_bi, (o1, o2) -> mBNameDownOrder ? o1.getName().compareTo(o2.getName())
@@ -265,28 +264,34 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
     /**
      * 初始化次级(详细数据)视图
-     * @param v         主级视图
+     * @param vh        view holder
      * @param hm        主级视图附带数据
      */
-    private void init_detail_view(View v, HashMap<String, String> hm) {
+    private void init_detail_view(FastViewHolder vh, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm =
                 V_SHOW_UNFOLD.equals(hm.get(K_SHOW)) ?
                     mHMSubPara.get(hm.get(K_TAG)) : new LinkedList<>();
 
-        // init sub adapter
-        ListView mLVShowDetail = UtilFun.cast(v.findViewById(R.id.lv_show_detail));
-        assert null != mLVShowDetail;
-        SelfSubAdapter mAdapter= new SelfSubAdapter(getContext(), llhm,
-                                        new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK,
-                                                    K_TITLE, K_AMOUNT, K_NOTE,
-                                                    K_TIME},
-                                        new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week,
-                                                  R.id.tv_pay_title, R.id.tv_pay_amount, R.id.tv_pay_note,
-                                                    R.id.tv_pay_time});
-        mLVShowDetail.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
-        ListViewHelper.setListViewHeightBasedOnChildren(mLVShowDetail);
+        RelativeLayout rl = vh.getView(R.id.rl_detail);
+        if(llhm.isEmpty())  {
+            rl.setVisibility(View.GONE);
+        } else {
+            rl.setVisibility(View.VISIBLE);
+
+            // init sub adapter
+            ListView mLVShowDetail = vh.getView(R.id.lv_show_detail);
+            SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm,
+                    new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK,
+                            K_TITLE, K_AMOUNT, K_NOTE,
+                            K_TIME},
+                    new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week,
+                            R.id.tv_pay_title, R.id.tv_pay_amount, R.id.tv_pay_note,
+                            R.id.tv_pay_time});
+            mLVShowDetail.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+            ListViewHelper.setListViewHeightBasedOnChildren(mLVShowDetail);
+        }
     }
 
     /**
@@ -294,33 +299,30 @@ public class BudgetViewHelper  extends LVShowDataBase {
      */
     protected class SelfAdapter extends SimpleAdapter  {
         private final static String TAG = "SelfAdapter";
-        private final ListView        mRootView;
 
-        @BindColor(R.color.color_1)
         int mClOne;
-
-        @BindColor(R.color.color_2)
         int mClTwo;
 
-        @BindColor(R.color.trans_1)
         int         mClSel;
-
-        @BindColor(R.color.trans_full)
         int         mClNoSel;
 
-        @BindDrawable(R.drawable.ic_delete_1)
         Drawable    mDADelete;
-
-        @BindDrawable(R.drawable.right_arrow)
         Drawable    mDAEdit;
 
-        SelfAdapter(Context context, ListView fv,
+        SelfAdapter(Context context,
                     List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {
             super(context, mdata, R.layout.li_budget_show, from, to);
-            mRootView = fv;
 
-            ButterKnife.bind(this, mRootView);
+            Resources res   = context.getResources();
+            mClOne = res.getColor(R.color.color_1);
+            mClTwo = res.getColor(R.color.color_2);
+
+            mClSel = res.getColor(R.color.trans_1);
+            mClNoSel = res.getColor(R.color.trans_full);
+
+            mDADelete = res.getDrawable(R.drawable.ic_delete_1);
+            mDAEdit = res.getDrawable(R.drawable.right_arrow);
         }
 
         @Override
@@ -336,69 +338,80 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            View v = super.getView(position, view, arg2);
-            if(null != v)   {
-                // for background color
-                final HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                final View fv = v;
+            //View v = super.getView(position, view, arg2);
+            FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
+                    view, R.layout.li_budget_show);
 
-                RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_header));
-                rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
+            View root_view = viewHolder.getConvertView();
 
-                // for note
-                String nt = hm.get(K_NOTE);
-                if(UtilFun.StringIsNullOrEmpty(nt)) {
-                    rl = UtilFun.cast_t(v.findViewById(R.id.rl_budget_note));
-                    rl.setVisibility(View.GONE);
-                }
+            // for background color
+            final HashMap<String, String> hm = UtilFun.cast(getItem(position));
 
-                // for fold/unfold
-                v.setOnClickListener(view1 -> {
-                    boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-                    hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                    init_detail_view(fv, hm);
+            RelativeLayout rl = viewHolder.getView(R.id.rl_header);
+            rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
 
-                    if(bf)
-                        addUnfoldItem(hm.get(K_TAG));
-                    else
-                        removeUnfoldItem(hm.get(K_TAG));
-                });
-
-                // for action
-                ImageView ib_action = UtilFun.cast_t(v.findViewById(R.id.iv_delete));
-                if(ACTION_DELETE == mActionType) {
-                    ib_action.setImageDrawable(mDADelete);
-
-                    int tag_id = Integer.parseInt(hm.get(K_ID));
-                    boolean bc = mLLDelBudget.contains(tag_id);
-                    ib_action.setBackgroundColor(bc ? mClSel : mClNoSel);
-                } else  {
-                    ib_action.setImageDrawable(mDAEdit);
-                    ib_action.setBackgroundColor(mClNoSel);
-                }
-
-                ib_action.setOnClickListener(v1 -> {
-                    int tag_id = Integer.parseInt(hm.get(K_ID));
-                    if(ACTION_DELETE == mActionType)    {
-                        //ib_action.setImageDrawable(mDADelete);
-                        if(mLLDelBudget.contains(tag_id))  {
-                            mLLDelBudget.remove((Object)tag_id);
-                            ib_action.setBackgroundColor(mClNoSel);
-                        }   else    {
-                            mLLDelBudget.add(tag_id);
-                            ib_action.setBackgroundColor(mClSel);
-                        }
-                    } else  {
-                        Activity ac = getRootActivity();
-                        Intent it = new Intent(ac, ACPreveiwAndEdit.class);
-                        it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, tag_id);
-                        it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
-                        ac.startActivityForResult(it, 1);
-                    }
-                });
+            // for note
+            String nt = hm.get(K_NOTE);
+            if(UtilFun.StringIsNullOrEmpty(nt)) {
+                rl = viewHolder.getView(R.id.rl_budget_note);
+                rl.setVisibility(View.GONE);
+            } else  {
+                TextView tv = viewHolder.getView(R.id.tv_budget_note);
+                tv.setText(nt);
             }
 
-            return v;
+            TextView tv = viewHolder.getView(R.id.tv_budget_name);
+            tv.setText(hm.get(K_TITLE));
+
+            tv = viewHolder.getView(R.id.tv_budget_amount);
+            tv.setText(hm.get(K_AMOUNT));
+
+            // for fold/unfold
+            root_view.setOnClickListener(view1 -> {
+                boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
+                hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                init_detail_view(UtilFun.cast_t(mLVShow.getChildAt(position).getTag()), hm);
+
+                if (bf)
+                    addUnfoldItem(hm.get(K_TAG));
+                else
+                    removeUnfoldItem(hm.get(K_TAG));
+            });
+
+            // for action
+            ImageView ib_action = viewHolder.getView(R.id.iv_delete);
+            if(ACTION_DELETE == mActionType) {
+                ib_action.setImageDrawable(mDADelete);
+
+                int tag_id = Integer.parseInt(hm.get(K_ID));
+                boolean bc = mLLDelBudget.contains(tag_id);
+                ib_action.setBackgroundColor(bc ? mClSel : mClNoSel);
+            } else  {
+                ib_action.setImageDrawable(mDAEdit);
+                ib_action.setBackgroundColor(mClNoSel);
+            }
+
+            ib_action.setOnClickListener(v1 -> {
+                int tag_id = Integer.parseInt(hm.get(K_ID));
+                if(ACTION_DELETE == mActionType)    {
+                    //ib_action.setImageDrawable(mDADelete);
+                    if(mLLDelBudget.contains(tag_id))  {
+                        mLLDelBudget.remove((Object)tag_id);
+                        ib_action.setBackgroundColor(mClNoSel);
+                    }   else    {
+                        mLLDelBudget.add(tag_id);
+                        ib_action.setBackgroundColor(mClSel);
+                    }
+                } else  {
+                    Activity ac = getRootActivity();
+                    Intent it = new Intent(ac, ACPreveiwAndEdit.class);
+                    it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, tag_id);
+                    it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
+                    ac.startActivityForResult(it, 1);
+                }
+            });
+
+            return root_view;
         }
     }
 

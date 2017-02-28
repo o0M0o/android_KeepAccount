@@ -6,7 +6,7 @@
     <RelativeLayout
         android:id="@+id/rl_header"
         android:padding="4dp"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
@@ -16,7 +16,7 @@
             android:layout_alignParentStart="false"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
             android:text="2016"
             android:textColor="@color/black"
             android:textSize="20sp" />
@@ -27,9 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginBottom="2dp"
-            android:layout_marginLeft="26dp"
+            android:layout_marginStart="26dp"
             android:layout_marginTop="2dp"
-            android:layout_toRightOf="@id/tv_year">
+            android:layout_toEndOf="@id/tv_year">
             <include layout="@layout/frg_amount_info" />
         </RelativeLayout>
     </RelativeLayout>
@@ -44,7 +44,7 @@
             android:id="@+id/lv_show_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="48dp"
+            android:layout_marginStart="48dp"
             android:divider="@android:color/transparent"
             android:dividerHeight="1dp" />
     </RelativeLayout>

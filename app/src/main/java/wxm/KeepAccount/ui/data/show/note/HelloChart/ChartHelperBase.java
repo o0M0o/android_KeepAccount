@@ -144,25 +144,34 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
 
     @Override
     protected void loadUI() {
+        loadUIUtility(false);
+    }
+
+
+    protected void loadUIUtility(boolean b_full)  {
         refreshAttachLayout();
 
-        // 展示条
-        mIVIncome.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_INCOME_COLOR));
-        mIVPay.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_PAY_COLOR));
+        if(b_full) {
+            // 展示条
+            mIVIncome.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_INCOME_COLOR));
+            mIVPay.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_PAY_COLOR));
 
-        /* for chart */
-        mChart.setColumnChartData(mChartData);
-        // Disable zoom/scroll for previewed chart, visible chart ranges depends on preview chart viewport so
-        // zoom/scroll is unnecessary.
-        mChart.setZoomEnabled(false);
-        mChart.setScrollEnabled(false);
-        //mChart.setValueSelectionEnabled(true);
+            /* for chart */
+            mChart.setColumnChartData(mChartData);
+            // Disable zoom/scroll for previewed chart, visible chart ranges depends on preview chart viewport so
+            // zoom/scroll is unnecessary.
+            mChart.setZoomEnabled(false);
+            mChart.setScrollEnabled(false);
+            //mChart.setValueSelectionEnabled(true);
 
-        mPreviewChart.setColumnChartData(mPreviewData);
-        mPreviewChart.setViewportChangeListener(new ViewportListener());
-        mPreviewChart.setZoomType(ZoomType.HORIZONTAL);
-        refreshViewPort();
+            mPreviewChart.setColumnChartData(mPreviewData);
+            mPreviewChart.setViewportChangeListener(new ViewportListener());
+            mPreviewChart.setZoomType(ZoomType.HORIZONTAL);
+            refreshViewPort();
+        }
     }
+
+
 
     /**
      * 设置扩大/缩小viewport
@@ -194,7 +203,7 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
 
             case R.id.bt_giveup_filter :    {
                 mBFilter = false;
-                loadUI();
+                refreshData();
             }
             break;
         }

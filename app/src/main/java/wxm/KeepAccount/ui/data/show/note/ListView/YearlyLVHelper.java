@@ -56,9 +56,6 @@ public class YearlyLVHelper extends LVShowDataBase {
     private final LinkedList<String> mLLSubFilter = new LinkedList<>();
     private final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
 
-    @BindView(R.id.lv_show)
-    ListView    mLVShow;
-
     public YearlyLVHelper()    {
         super();
         LOG_TAG = "YearlyLVHelper";
@@ -71,14 +68,6 @@ public class YearlyLVHelper extends LVShowDataBase {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
-        /*List<String> e_p = event.getFilterTag();
-        if(null != e_p) {
-            mBFilter = true;
-            mFilterPara.clear();
-            mFilterPara.addAll(e_p);
-
-            loadUIUtility(true);
-        }*/
     }
 
     @OnClick({R.id.bt_accpet, R.id.bt_giveup})
