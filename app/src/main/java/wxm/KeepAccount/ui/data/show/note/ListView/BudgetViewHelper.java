@@ -154,10 +154,13 @@ public class BudgetViewHelper extends LVShowDataBase {
     protected void refreshData() {
         super.refreshData();
 
-        mMainPara.clear();
-        mHMSubPara.clear();
-
         new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected void onPreExecute()   {
+                mMainPara.clear();
+                mHMSubPara.clear();
+            }
+
             @Override
             protected Void doInBackground(Void... params) {
                 parseNotes();
@@ -369,6 +372,7 @@ public class BudgetViewHelper extends LVShowDataBase {
 
             View root_view = viewHolder.getConvertView();
             final HashMap<String, String> hm = UtilFun.cast(getItem(position));
+            init_detail_view(viewHolder, hm);
 
             // for background color
             RelativeLayout rl = viewHolder.getView(R.id.rl_header);
@@ -378,8 +382,8 @@ public class BudgetViewHelper extends LVShowDataBase {
             rl.setOnClickListener(view1 -> {
                 boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
                 hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                init_detail_view(UtilFun.cast_t(mLVShow.getChildAt(position).getTag()), hm);
 
+                init_detail_view(UtilFun.cast_t(mLVShow.getChildAt(position).getTag()), hm);
                 if (bf)
                     addUnfoldItem(hm.get(K_TAG));
                 else
