@@ -66,8 +66,8 @@ public class FrgNoteShow extends FrgUtilityBase {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBDataChangeEvent(DBDataChangeEvent event) {
-        //TFShowBase tb = getHotTabItem();
-        //tb.loadView(true);
+        TFShowBase tb = getHotTabItem();
+        tb.loadView(true);
 
         int cur_pos = mVPPages.getCurrentItem();
         for (int i = 0; i < mBADataChange.length; i++) {

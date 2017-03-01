@@ -99,7 +99,7 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
         View cur_v = getView();
         if(null != cur_v) {
             if(bForce)
-                mViewHelper[mHotChild].refreshUI();
+                mViewHelper[mHotChild].refreshData();
         }
     }
 

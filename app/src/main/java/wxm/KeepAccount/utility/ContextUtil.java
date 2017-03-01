@@ -4,6 +4,10 @@ import android.app.Application;
 import android.util.Log;
 
 import wxm.KeepAccount.db.DBOrmLiteHelper;
+import wxm.KeepAccount.define.BudgetItem;
+import wxm.KeepAccount.define.IncomeNoteItem;
+import wxm.KeepAccount.define.PayNoteItem;
+import wxm.KeepAccount.define.RemindItem;
 import wxm.KeepAccount.define.UsrItem;
 import wxm.KeepAccount.db.BudgetDBUtility;
 import wxm.KeepAccount.db.PayIncomeDBUtility;
@@ -156,13 +160,15 @@ public class ContextUtil extends Application {
      */
     public static void ClearDB()   {
         try {
-            DBOrmLiteHelper dh = getInstance().mDBHelper;
+            UsrItem ui = getCurUsr();
+            if(null != ui) {
+                DBOrmLiteHelper dh = getInstance().mDBHelper;
 
-            //mDBHelper.getUsrItemREDao().deleteBuilder().delete();
-            dh.getPayDataREDao().deleteBuilder().delete();
-            dh.getIncomeDataREDao().deleteBuilder().delete();
-            //mDBHelper.getRTItemREDao().deleteBuilder().delete();
-            dh.getRemindREDao().deleteBuilder().delete();
+                dh.getPayDataREDao().deleteBuilder().where().eq(PayNoteItem.FIELD_USR, ui.getId());
+                dh.getIncomeDataREDao().deleteBuilder().where().eq(IncomeNoteItem.FIELD_USR, ui.getId());
+                dh.getBudgetDataREDao().deleteBuilder().where().eq(BudgetItem.FIELD_USR, ui.getId());
+                dh.getRemindREDao().deleteBuilder().where().eq(RemindItem.FIELD_USR, ui.getId());
+            }
         } catch (java.sql.SQLException e) {
             Log.e(TAG, "ClearDB catch an exception", e);
         }

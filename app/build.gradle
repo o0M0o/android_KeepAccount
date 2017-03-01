@@ -54,7 +54,7 @@ android {
         }
         debug {
             debuggable true
-            buildConfigField "Boolean", "FILL_TESTDATA", "true"
+            buildConfigField "Boolean", "FILL_TESTDATA", "false"
         }
     }
 
