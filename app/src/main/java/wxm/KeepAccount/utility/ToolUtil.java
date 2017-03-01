@@ -85,4 +85,28 @@ public class ToolUtil {
         dw--;
         return DAY_IN_WEEK[dw];
     }
+
+    /**
+     * 打印调用堆栈
+     * @param max_lv    打印最大调用层数
+     * @return          调用堆栈
+     */
+    public static String[] getCallStack(int max_lv)   {
+        StackTraceElement st[] = Thread.currentThread().getStackTrace();
+        int val_lv = st.length - 3;
+        if(0 < val_lv) {
+            int real_lv = max_lv > val_lv ? val_lv : max_lv;
+            String[] ret_ar = new String[real_lv];
+
+            int lv_end = real_lv + 3;
+            for (int i = 3; i < lv_end; i++) {
+                ret_ar[i - 3] = st[i].toString();
+            }
+
+            return ret_ar;
+        }
+
+        return new String[0];
+    }
+
 }

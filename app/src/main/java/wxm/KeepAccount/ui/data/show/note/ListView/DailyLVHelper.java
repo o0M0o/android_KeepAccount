@@ -284,7 +284,6 @@ public class DailyLVHelper
 
     @Override
     protected void loadUI() {
-        Log.v(LOG_TAG, "in loadUI");
         loadUIUtility(false);
     }
 
@@ -295,6 +294,8 @@ public class DailyLVHelper
      * @param b_fully   若为true则加载数据
      */
     protected void loadUIUtility(boolean b_fully)    {
+        Log.v(LOG_TAG, "in loadUIUtility, b_fully = " + Boolean.toString(b_fully));
+
         // adjust attach layout
         setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
                 View.VISIBLE : View.GONE);

@@ -103,8 +103,7 @@
         android:id="@+id/rl_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_header"
-        android:background="@color/beige">
+        android:layout_below="@+id/rl_header" >
 
         <ListView
             android:id="@+id/lv_show_detail"

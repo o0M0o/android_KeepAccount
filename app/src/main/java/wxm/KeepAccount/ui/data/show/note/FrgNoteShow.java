@@ -66,8 +66,8 @@ public class FrgNoteShow extends FrgUtilityBase {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBDataChangeEvent(DBDataChangeEvent event) {
-        TFShowBase tb = getHotTabItem();
-        tb.loadView(true);
+        //TFShowBase tb = getHotTabItem();
+        //tb.loadView(true);
 
         int cur_pos = mVPPages.getCurrentItem();
         for (int i = 0; i < mBADataChange.length; i++) {
@@ -122,6 +122,7 @@ public class FrgNoteShow extends FrgUtilityBase {
                 int pos = tab.getPosition();
                 mVPPages.setCurrentItem(pos);
                 getHotTabItem().loadView(mBADataChange[pos]);
+                mBADataChange[pos] = false;
             }
 
             @Override
@@ -169,7 +170,7 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     @Override
     protected void loadUI() {
-        getHotTabItem().loadView(true);
+        //getHotTabItem().loadView(true);
     }
 
 

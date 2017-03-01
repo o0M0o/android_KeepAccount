@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -31,12 +34,16 @@ import java.util.Set;
 
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.define.BudgetItem;
+import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.utility.FastViewHolder;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
+import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -48,8 +55,6 @@ import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
  * Created by 123 on 2016/9/15.
  */
 public class BudgetViewHelper extends LVShowDataBase {
-    private final static String TAG = "BudgetViewHelper";
-
     // 若为true,数据按照名称降序排列
     private boolean mBNameDownOrder = true;
 
@@ -89,7 +94,7 @@ public class BudgetViewHelper extends LVShowDataBase {
 
         mRLActDelete.setOnClickListener(v -> {
             mActionType = ACTION_DELETE;
-            loadUI();
+            loadUIUtility(true);
         });
 
         mRLActRefresh.setOnClickListener(v -> {
@@ -110,7 +115,7 @@ public class BudgetViewHelper extends LVShowDataBase {
             tv_sort.setText(mBNameDownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
 
             reorderData();
-            loadUI();
+            loadUIUtility(true);
         });
     }
 
@@ -130,28 +135,19 @@ public class BudgetViewHelper extends LVShowDataBase {
                     }
                 }
 
-                loadUI();
+                loadUIUtility(true);
                 break;
 
             case R.id.bt_giveup:
                 mActionType = ACTION_EDIT;
-                loadUI();
+                loadUIUtility(true);
                 break;
         }
     }
 
     @Override
     protected void loadUI() {
-        refreshAttachLayout();
-
-        LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
-        n_mainpara.addAll(mMainPara);
-
-        // 设置listview adapter
-        SelfAdapter mSNAdapter = new SelfAdapter(ContextUtil.getInstance(), n_mainpara,
-                new String[]{}, new int[]{});
-        mLVShow.setAdapter(mSNAdapter);
-        mSNAdapter.notifyDataSetChanged();
+        loadUIUtility(false);
     }
 
     @Override
@@ -161,15 +157,54 @@ public class BudgetViewHelper extends LVShowDataBase {
         mMainPara.clear();
         mHMSubPara.clear();
 
-        // format output
-        parseNotes();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                parseNotes();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                // After completing execution of given task, control will return here.
+                // Hence if you want to populate UI elements with fetched data, do it here.
+                loadUIUtility(true);
+                //showLoadingProgress(false);
+            }
+        }.execute();
     }
 
-
+    /// BEGIN PRIVATE
     private void refreshAttachLayout() {
         setAttachLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
         setFilterLayoutVisible(View.GONE);
         setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
+    }
+
+    /**
+     * 加载UI的工作
+     * @param b_fully   若为true则加载数据
+     */
+    protected void loadUIUtility(boolean b_fully)    {
+        Log.d(LOG_TAG, "in loadUIUtility, b_fully = " + Boolean.toString(b_fully));
+        String[] calls = ToolUtil.getCallStack(8);
+        for(int i = 0; i < calls.length; ++i)   {
+            Log.d(LOG_TAG, "in loadUIUtility, [" + i + "] = " + calls[i]);
+        }
+
+        refreshAttachLayout();
+
+        if(b_fully) {
+            LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
+            n_mainpara.addAll(mMainPara);
+
+            // 设置listview adapter
+            SelfAdapter mSNAdapter = new SelfAdapter(ContextUtil.getInstance(), n_mainpara,
+                    new String[]{}, new int[]{});
+            mLVShow.setAdapter(mSNAdapter);
+            mSNAdapter.notifyDataSetChanged();
+        }
     }
 
 
@@ -184,9 +219,6 @@ public class BudgetViewHelper extends LVShowDataBase {
      * 解析数据
      */
     private void parseNotes() {
-        mMainPara.clear();
-        mHMSubPara.clear();
-
         HashMap<BudgetItem, List<PayNoteItem>> mHMData = ContextUtil.getBudgetUtility().getBudgetWithPayNote();
         Set<BudgetItem> set_bi = mHMData.keySet();
         ArrayList<BudgetItem> ls_bi = new ArrayList<>(set_bi);
@@ -278,17 +310,13 @@ public class BudgetViewHelper extends LVShowDataBase {
             // init sub adapter
             ListView mLVShowDetail = vh.getView(R.id.lv_show_detail);
             SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm,
-                    new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK,
-                            K_TITLE, K_AMOUNT, K_NOTE,
-                            K_TIME},
-                    new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week,
-                            R.id.tv_pay_title, R.id.tv_pay_amount, R.id.tv_pay_note,
-                            R.id.tv_pay_time});
+                    new String[]{}, new int[]{});
             mLVShowDetail.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
             ListViewHelper.setListViewHeightBasedOnChildren(mLVShowDetail);
         }
     }
+    /// END PRIVATE
 
     /**
      * 首级adapter
@@ -435,32 +463,40 @@ public class BudgetViewHelper extends LVShowDataBase {
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            View v = super.getView(position, view, arg2);
-            if (null != v) {
-                final HashMap<String, String> hm = UtilFun.cast(getItem(position));
-                final String sub_id = hm.get(K_ID);
+            FastViewHolder vh = FastViewHolder.get(getRootActivity(),
+                    view, R.layout.li_budget_show_detail);
+            View root_view = vh.getConvertView();
 
-                // for note
-                String nt = hm.get(K_NOTE);
-                if (UtilFun.StringIsNullOrEmpty(nt)) {
-                    RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_pay_note));
-                    rl.setVisibility(View.GONE);
-                }
-
-                ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_look));
-                iv.setOnClickListener(v1 -> {
-                    ACNoteShow ac = getRootActivity();
-                    Intent intent;
-                    intent = new Intent(ac, ACPreveiwAndEdit.class);
-                    intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(sub_id));
-                    intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
-                            GlobalDef.STR_RECORD_PAY);
-
-                    ac.startActivityForResult(intent, 1);
-                });
+            final HashMap<String, String> hm = UtilFun.cast(getItem(position));
+            final String sub_id = hm.get(K_ID);
+            // for note
+            String nt = hm.get(K_NOTE);
+            if (UtilFun.StringIsNullOrEmpty(nt)) {
+                vh.getView(R.id.rl_pay_note).setVisibility(View.GONE);
             }
 
-            return v;
+            // for show
+            vh.setText(R.id.tv_month, hm.get(K_MONTH));
+            vh.setText(R.id.tv_day_number, hm.get(K_DAY_NUMEBER));
+            vh.setText(R.id.tv_day_in_week, hm.get(K_DAY_IN_WEEK));
+            vh.setText(R.id.tv_pay_title, hm.get(K_TITLE));
+            vh.setText(R.id.tv_pay_amount, hm.get(K_AMOUNT));
+            vh.setText(R.id.tv_pay_note, hm.get(K_NOTE));
+            vh.setText(R.id.tv_pay_time, hm.get(K_TIME));
+
+            // for look action
+            vh.getView(R.id.iv_look).setOnClickListener(v1 -> {
+                ACNoteShow ac = getRootActivity();
+                Intent intent;
+                intent = new Intent(ac, ACPreveiwAndEdit.class);
+                intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(sub_id));
+                intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
+                        GlobalDef.STR_RECORD_PAY);
+
+                ac.startActivityForResult(intent, 1);
+            });
+
+            return root_view;
         }
     }
 }
