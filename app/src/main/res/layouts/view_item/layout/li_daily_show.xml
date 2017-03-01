@@ -15,7 +15,7 @@
 
     <RelativeLayout
         android:id="@+id/rl_header"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/rl_delete"
         android:padding="4dp">
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginBottom="2dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="2dp">
 
             <TextView
@@ -43,7 +43,7 @@
                 android:id="@+id/tv_day_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/tv_month"
+                android:layout_alignStart="@id/tv_month"
                 android:layout_below="@id/tv_month"
                 android:text="15"
                 android:textColor="@color/black"
@@ -55,8 +55,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/tv_day_number"
                 android:layout_marginBottom="2dp"
-                android:layout_marginLeft="2dp"
-                android:layout_toRightOf="@id/tv_day_number"
+                android:layout_marginStart="2dp"
+                android:layout_toEndOf="@id/tv_day_number"
                 android:text="日"
                 android:textSize="12sp" />
 
@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/tv_day"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_toRightOf="@id/tv_day"
                 android:text="星期三"
                 android:textSize="12sp" />

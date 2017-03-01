@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -32,9 +31,6 @@ import java.util.Set;
 
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
-import butterknife.ButterKnife;
-import butterknife.BindColor;
-import butterknife.BindDrawable;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.GlobalDef;
@@ -51,22 +47,19 @@ import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
  * 预算数据视图辅助类
  * Created by 123 on 2016/9/15.
  */
-public class BudgetViewHelper  extends LVShowDataBase {
+public class BudgetViewHelper extends LVShowDataBase {
     private final static String TAG = "BudgetViewHelper";
 
     // 若为true,数据按照名称降序排列
     private boolean mBNameDownOrder = true;
 
     //for action
-    private final static int ACTION_DELETE  = 1;
-    private final static int ACTION_EDIT    = 2;
+    private final static int ACTION_DELETE = 1;
+    private final static int ACTION_EDIT = 2;
     private int mActionType = ACTION_EDIT;
 
-    // for delete
-    private final LinkedList<Integer> mLLDelBudget    = new LinkedList<>();
-    //private LinkedList<View>    mLLDelVW        = new LinkedList<>();
 
-    public BudgetViewHelper()    {
+    public BudgetViewHelper() {
         super();
         LOG_TAG = "BudgetViewHelper";
     }
@@ -74,7 +67,8 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
     /**
      * 过滤视图事件
-     * @param event     事件
+     *
+     * @param event 事件
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
@@ -124,22 +118,24 @@ public class BudgetViewHelper  extends LVShowDataBase {
     @OnClick({R.id.bt_accpet, R.id.bt_giveup})
     public void onAccpetOrGiveupClick(View v) {
         int vid = v.getId();
-        switch (vid)    {
-            case R.id.bt_accpet :
-                if(ACTION_DELETE == mActionType)    {
+        switch (vid) {
+            case R.id.bt_accpet:
+                if (ACTION_DELETE == mActionType) {
                     mActionType = ACTION_EDIT;
-                    if(!UtilFun.ListIsNullOrEmpty(mLLDelBudget)) {
-                        ContextUtil.getBudgetUtility().removeDatas(mLLDelBudget);
+
+                    SelfAdapter sad = UtilFun.cast_t(mLVShow.getAdapter());
+                    List<Integer> ls_dels = sad.getWaitDeleteItems();
+                    if (!UtilFun.ListIsNullOrEmpty(ls_dels)) {
+                        ContextUtil.getBudgetUtility().removeDatas(ls_dels);
                     }
                 }
 
-                mLLDelBudget.clear();
+                loadUI();
                 break;
 
-            case R.id.bt_giveup :
+            case R.id.bt_giveup:
                 mActionType = ACTION_EDIT;
-                mLLDelBudget.clear();
-                refreshAttachLayout();
+                loadUI();
                 break;
         }
     }
@@ -153,8 +149,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
         // 设置listview adapter
         SelfAdapter mSNAdapter = new SelfAdapter(ContextUtil.getInstance(), n_mainpara,
-                new String[]{K_TITLE, K_AMOUNT, K_NOTE},
-                new int[]{R.id.tv_budget_name, R.id.tv_budget_amount, R.id.tv_budget_note});
+                new String[]{}, new int[]{});
         mLVShow.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
@@ -171,7 +166,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
     }
 
 
-    private void refreshAttachLayout()    {
+    private void refreshAttachLayout() {
         setAttachLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
         setFilterLayoutVisible(View.GONE);
         setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
@@ -181,14 +176,14 @@ public class BudgetViewHelper  extends LVShowDataBase {
     /**
      * 调整数据排序
      */
-    private void reorderData()  {
+    private void reorderData() {
         Collections.reverse(mMainPara);
     }
 
     /**
      * 解析数据
      */
-    private void parseNotes()   {
+    private void parseNotes() {
         mMainPara.clear();
         mHMSubPara.clear();
 
@@ -196,7 +191,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
         Set<BudgetItem> set_bi = mHMData.keySet();
         ArrayList<BudgetItem> ls_bi = new ArrayList<>(set_bi);
         Collections.sort(ls_bi, (o1, o2) -> mBNameDownOrder ? o1.getName().compareTo(o2.getName())
-                    : o2.getName().compareTo(o1.getName()));
+                : o2.getName().compareTo(o1.getName()));
         for (BudgetItem i : ls_bi) {
             List<PayNoteItem> ls_pay = mHMData.get(i);
             String tag = String.valueOf(i.get_id());
@@ -208,7 +203,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
             HashMap<String, String> map = new HashMap<>();
             map.put(K_TITLE, i.getName());
             String nt = i.getNote();
-            if(!UtilFun.StringIsNullOrEmpty(nt))    {
+            if (!UtilFun.StringIsNullOrEmpty(nt)) {
                 map.put(K_NOTE, nt);
             }
             map.put(K_AMOUNT, show_str);
@@ -222,12 +217,12 @@ public class BudgetViewHelper  extends LVShowDataBase {
     }
 
 
-    private void parseSub(String main_tag, List<PayNoteItem> ls_pay)   {
+    private void parseSub(String main_tag, List<PayNoteItem> ls_pay) {
         LinkedList<HashMap<String, String>> cur_llhm = new LinkedList<>();
-        if(!UtilFun.ListIsNullOrEmpty(ls_pay)) {
+        if (!UtilFun.ListIsNullOrEmpty(ls_pay)) {
             Collections.sort(ls_pay, (o1, o2) -> o1.getTs().compareTo(o2.getTs()));
 
-            for(PayNoteItem i : ls_pay)     {
+            for (PayNoteItem i : ls_pay) {
                 String all_date = i.getTs().toString();
                 HashMap<String, String> map = new HashMap<>();
                 map.put(K_MONTH, all_date.substring(0, 7));
@@ -245,7 +240,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
                 }
 
                 String nt = i.getNote();
-                if(!UtilFun.StringIsNullOrEmpty(nt))    {
+                if (!UtilFun.StringIsNullOrEmpty(nt)) {
                     map.put(K_NOTE, nt.length() > 10 ? nt.substring(0, 10) + "..." : nt);
                 }
 
@@ -264,17 +259,18 @@ public class BudgetViewHelper  extends LVShowDataBase {
 
     /**
      * 初始化次级(详细数据)视图
-     * @param vh        view holder
-     * @param hm        主级视图附带数据
+     *
+     * @param vh view holder
+     * @param hm 主级视图附带数据
      */
     private void init_detail_view(FastViewHolder vh, HashMap<String, String> hm) {
         // get sub para
         LinkedList<HashMap<String, String>> llhm =
                 V_SHOW_UNFOLD.equals(hm.get(K_SHOW)) ?
-                    mHMSubPara.get(hm.get(K_TAG)) : new LinkedList<>();
+                        mHMSubPara.get(hm.get(K_TAG)) : new LinkedList<>();
 
         RelativeLayout rl = vh.getView(R.id.rl_detail);
-        if(llhm.isEmpty())  {
+        if (llhm.isEmpty()) {
             rl.setVisibility(View.GONE);
         } else {
             rl.setVisibility(View.VISIBLE);
@@ -297,32 +293,28 @@ public class BudgetViewHelper  extends LVShowDataBase {
     /**
      * 首级adapter
      */
-    protected class SelfAdapter extends SimpleAdapter  {
+    protected class SelfAdapter extends SimpleAdapter implements View.OnClickListener {
         private final static String TAG = "SelfAdapter";
 
         int mClOne;
         int mClTwo;
 
-        int         mClSel;
-        int         mClNoSel;
+        int mClSel;
+        int mClNoSel;
 
-        Drawable    mDADelete;
-        Drawable    mDAEdit;
+        private ArrayList<Integer>   mALWaitDeleteItems = new ArrayList<>();
 
         SelfAdapter(Context context,
                     List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {
             super(context, mdata, R.layout.li_budget_show, from, to);
 
-            Resources res   = context.getResources();
+            Resources res = context.getResources();
             mClOne = res.getColor(R.color.color_1);
             mClTwo = res.getColor(R.color.color_2);
 
-            mClSel = res.getColor(R.color.trans_1);
-            mClNoSel = res.getColor(R.color.trans_full);
-
-            mDADelete = res.getDrawable(R.drawable.ic_delete_1);
-            mDAEdit = res.getDrawable(R.drawable.right_arrow);
+            mClSel = res.getColor(R.color.red_ff725f);
+            mClNoSel = res.getColor(R.color.red_ff725f_half);
         }
 
         @Override
@@ -336,6 +328,11 @@ public class BudgetViewHelper  extends LVShowDataBase {
             return position;
         }
 
+        public List<Integer> getWaitDeleteItems() {
+            return mALWaitDeleteItems;
+        }
+
+
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
             //View v = super.getView(position, view, arg2);
@@ -343,31 +340,14 @@ public class BudgetViewHelper  extends LVShowDataBase {
                     view, R.layout.li_budget_show);
 
             View root_view = viewHolder.getConvertView();
-
-            // for background color
             final HashMap<String, String> hm = UtilFun.cast(getItem(position));
 
+            // for background color
             RelativeLayout rl = viewHolder.getView(R.id.rl_header);
             rl.setBackgroundColor(0 == position % 2 ? mClOne : mClTwo);
 
-            // for note
-            String nt = hm.get(K_NOTE);
-            if(UtilFun.StringIsNullOrEmpty(nt)) {
-                rl = viewHolder.getView(R.id.rl_budget_note);
-                rl.setVisibility(View.GONE);
-            } else  {
-                TextView tv = viewHolder.getView(R.id.tv_budget_note);
-                tv.setText(nt);
-            }
-
-            TextView tv = viewHolder.getView(R.id.tv_budget_name);
-            tv.setText(hm.get(K_TITLE));
-
-            tv = viewHolder.getView(R.id.tv_budget_amount);
-            tv.setText(hm.get(K_AMOUNT));
-
             // for fold/unfold
-            root_view.setOnClickListener(view1 -> {
+            rl.setOnClickListener(view1 -> {
                 boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
                 hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
                 init_detail_view(UtilFun.cast_t(mLVShow.getChildAt(position).getTag()), hm);
@@ -378,40 +358,54 @@ public class BudgetViewHelper  extends LVShowDataBase {
                     removeUnfoldItem(hm.get(K_TAG));
             });
 
-            // for action
-            ImageView ib_action = viewHolder.getView(R.id.iv_delete);
-            if(ACTION_DELETE == mActionType) {
-                ib_action.setImageDrawable(mDADelete);
+            // for delete
+            RelativeLayout rl_del = viewHolder.getView(R.id.rl_delete);
+            rl_del.setVisibility(mActionType == ACTION_EDIT ? View.GONE : View.VISIBLE);
+            rl_del.setOnClickListener(view1 -> {
+                String k_tag = hm.get(K_ID);
+                Integer id = Integer.parseInt(k_tag);
+                if(mALWaitDeleteItems.contains(id))  {
+                    mALWaitDeleteItems.remove((Object)id);
+                    rl_del.setBackgroundColor(mClNoSel);
+                } else  {
+                    mALWaitDeleteItems.add(id);
+                    rl_del.setBackgroundColor(mClSel);
+                }
+            });
 
-                int tag_id = Integer.parseInt(hm.get(K_ID));
-                boolean bc = mLLDelBudget.contains(tag_id);
-                ib_action.setBackgroundColor(bc ? mClSel : mClNoSel);
-            } else  {
-                ib_action.setImageDrawable(mDAEdit);
-                ib_action.setBackgroundColor(mClNoSel);
+            // for note
+            String nt = hm.get(K_NOTE);
+            if (UtilFun.StringIsNullOrEmpty(nt)) {
+                viewHolder.getView(R.id.rl_budget_note).setVisibility(View.GONE);
+            } else {
+                viewHolder.setText(R.id.tv_budget_note, nt);
             }
 
-            ib_action.setOnClickListener(v1 -> {
-                int tag_id = Integer.parseInt(hm.get(K_ID));
-                if(ACTION_DELETE == mActionType)    {
-                    //ib_action.setImageDrawable(mDADelete);
-                    if(mLLDelBudget.contains(tag_id))  {
-                        mLLDelBudget.remove((Object)tag_id);
-                        ib_action.setBackgroundColor(mClNoSel);
-                    }   else    {
-                        mLLDelBudget.add(tag_id);
-                        ib_action.setBackgroundColor(mClSel);
-                    }
-                } else  {
+            viewHolder.setText(R.id.tv_budget_name, hm.get(K_TITLE));
+            viewHolder.setText(R.id.tv_budget_amount, hm.get(K_AMOUNT));
+
+            // for action
+            viewHolder.getView(R.id.iv_edit).setOnClickListener(this);
+            return root_view;
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = mLVShow.getPositionForView(v);
+            HashMap<String, String> hm = UtilFun.cast(getItem(position));
+
+            int vid = v.getId();
+            switch(vid) {
+                case R.id.iv_edit : {
+                    int tag_id = Integer.parseInt(hm.get(K_ID));
                     Activity ac = getRootActivity();
                     Intent it = new Intent(ac, ACPreveiwAndEdit.class);
                     it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, tag_id);
                     it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
                     ac.startActivityForResult(it, 1);
                 }
-            });
-
-            return root_view;
+                break;
+            }
         }
     }
 
@@ -419,7 +413,7 @@ public class BudgetViewHelper  extends LVShowDataBase {
     /**
      * 次级adapter
      */
-    private class SelfSubAdapter  extends SimpleAdapter {
+    private class SelfSubAdapter extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
 
         SelfSubAdapter(Context context,
@@ -442,13 +436,13 @@ public class BudgetViewHelper  extends LVShowDataBase {
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
             View v = super.getView(position, view, arg2);
-            if(null != v)   {
+            if (null != v) {
                 final HashMap<String, String> hm = UtilFun.cast(getItem(position));
                 final String sub_id = hm.get(K_ID);
 
                 // for note
                 String nt = hm.get(K_NOTE);
-                if(UtilFun.StringIsNullOrEmpty(nt)) {
+                if (UtilFun.StringIsNullOrEmpty(nt)) {
                     RelativeLayout rl = UtilFun.cast_t(v.findViewById(R.id.rl_pay_note));
                     rl.setVisibility(View.GONE);
                 }
