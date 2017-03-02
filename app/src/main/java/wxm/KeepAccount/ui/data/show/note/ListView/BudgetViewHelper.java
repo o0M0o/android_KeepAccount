@@ -32,6 +32,9 @@ import java.util.Map;
 import java.util.Set;
 
 
+import butterknife.BindColor;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.db.DBDataChangeEvent;
@@ -327,10 +330,16 @@ public class BudgetViewHelper extends LVShowDataBase {
     protected class SelfAdapter extends SimpleAdapter implements View.OnClickListener {
         private final static String TAG = "SelfAdapter";
 
+        @BindColor(R.color.color_1)
         int mClOne;
+
+        @BindColor(R.color.color_2)
         int mClTwo;
 
+        @BindColor(R.color.red_ff725f)
         int mClSel;
+
+        @BindColor(R.color.red_ff725f_half)
         int mClNoSel;
 
         private ArrayList<Integer>   mALWaitDeleteItems = new ArrayList<>();
@@ -339,13 +348,7 @@ public class BudgetViewHelper extends LVShowDataBase {
                     List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {
             super(context, mdata, R.layout.li_budget_show, from, to);
-
-            Resources res = context.getResources();
-            mClOne = res.getColor(R.color.color_1);
-            mClTwo = res.getColor(R.color.color_2);
-
-            mClSel = res.getColor(R.color.red_ff725f);
-            mClNoSel = res.getColor(R.color.red_ff725f_half);
+            ButterKnife.bind(this, getRootActivity());
         }
 
         @Override

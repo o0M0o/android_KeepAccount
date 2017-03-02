@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +53,7 @@ public class AdapterNoteDetail extends SimpleAdapter {
 
     public AdapterNoteDetail(Context context, List<? extends Map<String, ?>> data,
                              String[] from, int[] to) {
-        super(context, data, R.layout.li_daily_show_detail, from, to);
+        super(context, data, R.layout.li_data_detail, from, to);
         mCTSelf = context;
         mALDelNotes = new ArrayList<>();
     }
@@ -93,7 +91,7 @@ public class AdapterNoteDetail extends SimpleAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         FastViewHolder vh = FastViewHolder.get(mCTSelf, convertView,
-                R.layout.li_daily_show_detail);
+                R.layout.li_data_detail);
 
         HashMap<String, INote> hm_d = UtilFun.cast_t(getItem(position));
         INote data = hm_d.get(K_NODE);
@@ -141,58 +139,45 @@ public class AdapterNoteDetail extends SimpleAdapter {
      * @param data 数据
      */
     private void initPay(FastViewHolder vh, INote data) {
-        PayNoteItem pn = UtilFun.cast_t(data);
+        PayNoteItem pn = data.toPayNote();
 
-        TextView tv = vh.getView(R.id.tv_pay_title);
-        tv.setText(pn.getInfo());
+        vh.setText(R.id.tv_pay_title, pn.getInfo());
 
         BudgetItem bi = pn.getBudget();
         String b_name = bi == null ? "" : bi.getName();
         if (!UtilFun.StringIsNullOrEmpty(b_name)) {
-            tv = vh.getView(R.id.tv_pay_budget);
-            tv.setText(b_name);
+            vh.setText(R.id.tv_pay_budget, b_name);
         } else {
-            tv = vh.getView(R.id.tv_pay_budget);
-            tv.setVisibility(View.INVISIBLE);
-
-            ImageView iv = vh.getView(R.id.iv_pay_budget);
-            iv.setVisibility(View.INVISIBLE);
+            vh.getView(R.id.tv_pay_budget).setVisibility(View.GONE);
+            vh.getView(R.id.iv_pay_budget).setVisibility(View.GONE);
         }
 
-        tv = vh.getView(R.id.tv_pay_amount);
-        tv.setText(String.format(Locale.CHINA, "- %.02f", pn.getVal()));
-
-        tv = vh.getView(R.id.tv_pay_time);
-        tv.setText(pn.getTs().toString().substring(11, 16));
+        vh.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %.02f", pn.getVal()));
+        vh.setText(R.id.tv_pay_time, pn.getTs().toString().substring(11, 16));
 
         // for look detail
-        ImageView iv = vh.getView(R.id.iv_pay_action);
-        iv.setVisibility(View.GONE);
+        vh.getView(R.id.iv_pay_action).setVisibility(View.GONE);
 
-        RelativeLayout rl_pay = vh.getView(R.id.rl_pay);
-        rl_pay.setOnClickListener(v -> {
+        vh.getView(R.id.rl_pay).setOnClickListener(v -> {
             Intent intent;
-            intent = new Intent(rl_pay.getContext(), ACPreveiwAndEdit.class);
+            intent = new Intent(mCTSelf, ACPreveiwAndEdit.class);
             intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, data.getId());
             intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_PAY);
 
-            (rl_pay.getContext()).startActivity(intent);
+            mCTSelf.startActivity(intent);
         });
 
         // for budget
         if (UtilFun.StringIsNullOrEmpty(b_name)) {
-            RelativeLayout rl = vh.getView(R.id.rl_budget);
-            rl.setVisibility(View.GONE);
+            vh.getView(R.id.rl_budget).setVisibility(View.GONE);
         }
 
         // for note
         String nt = pn.getNote();
         if (UtilFun.StringIsNullOrEmpty(nt)) {
-            RelativeLayout rl = vh.getView(R.id.rl_pay_note);
-            rl.setVisibility(View.GONE);
+            vh.getView(R.id.rl_pay_note).setVisibility(View.GONE);
         } else {
-            tv = vh.getView(R.id.tv_pay_note);
-            tv.setText(nt);
+            vh.setText(R.id.tv_pay_note, nt);
         }
     }
 
@@ -203,38 +188,31 @@ public class AdapterNoteDetail extends SimpleAdapter {
      * @param data 数据
      */
     private void initIncome(FastViewHolder vh, INote data) {
-        IncomeNoteItem i_n = UtilFun.cast_t(data);
+        IncomeNoteItem i_n = data.toIncomeNote();
 
-        TextView tv = vh.getView(R.id.tv_income_title);
-        tv.setText(i_n.getInfo());
+        vh.setText(R.id.tv_income_title, i_n.getInfo());
 
-        tv = vh.getView(R.id.tv_income_amount);
-        tv.setText(String.format(Locale.CHINA, "%.02f", i_n.getVal()));
-
-        tv = vh.getView(R.id.tv_income_time);
-        tv.setText(i_n.getTs().toString().substring(11, 16));
+        vh.setText(R.id.tv_income_amount, String.format(Locale.CHINA, "%.02f", i_n.getVal()));
+        vh.setText(R.id.tv_income_time, i_n.getTs().toString().substring(11, 16));
 
         // for look detail
-        ImageView iv = vh.getView(R.id.iv_income_action);
-        iv.setVisibility(View.GONE);
-        RelativeLayout rl_income = vh.getView(R.id.rl_income);
-        rl_income.setOnClickListener(v -> {
+        vh.getView(R.id.iv_income_action).setVisibility(View.GONE);
+
+        vh.getView(R.id.rl_income).setOnClickListener(v -> {
             Intent intent;
-            intent = new Intent(rl_income.getContext(), ACPreveiwAndEdit.class);
+            intent = new Intent(mCTSelf, ACPreveiwAndEdit.class);
             intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, data.getId());
             intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_INCOME);
 
-            (rl_income.getContext()).startActivity(intent);
+            mCTSelf.startActivity(intent);
         });
 
         // for note
         String nt = i_n.getNote();
         if (UtilFun.StringIsNullOrEmpty(nt)) {
-            RelativeLayout rl = vh.getView(R.id.rl_income_note);
-            rl.setVisibility(View.GONE);
+            vh.getView(R.id.rl_income_note).setVisibility(View.GONE);
         } else {
-            tv = vh.getView(R.id.tv_income_note);
-            tv.setText(nt);
+            vh.setText(R.id.tv_income_note, nt);
         }
     }
 }

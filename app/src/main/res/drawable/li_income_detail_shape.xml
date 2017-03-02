@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#cde6c7" />
+    <solid android:color="@color/bc_income" />
     <corners android:radius="0dp" />
     <!--
     <stroke
