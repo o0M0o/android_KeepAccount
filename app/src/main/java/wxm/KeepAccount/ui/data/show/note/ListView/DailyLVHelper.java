@@ -209,7 +209,7 @@ public class DailyLVHelper
 
             case R.id.bt_giveup:
                 mActionType = ACTION_EDIT;
-                loadUIUtility(false);
+                loadUIUtility(true);
                 break;
 
             case R.id.bt_giveup_filter:
