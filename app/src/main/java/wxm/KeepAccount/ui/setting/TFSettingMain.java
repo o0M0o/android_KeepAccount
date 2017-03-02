@@ -2,6 +2,8 @@ package wxm.KeepAccount.ui.setting;
 
 
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -10,11 +12,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * 设置主页面
@@ -23,10 +35,10 @@ import wxm.KeepAccount.R;
 public class TFSettingMain extends TFSettingBase {
 
     @BindView(R.id.rl_remind)
-    RelativeLayout  mRLRemind;
+    RelativeLayout mRLRemind;
 
     @BindView(R.id.rl_share_app)
-    RelativeLayout  mRLShareApp;
+    RelativeLayout mRLShareApp;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -47,22 +59,44 @@ public class TFSettingMain extends TFSettingBase {
 
     @OnClick({R.id.rl_check_version, R.id.rl_chart_color, R.id.rl_reformat_data})
     public void onIVClick(View v) {
-        switch (v.getId())  {
-            case R.id.rl_check_version :    {
+        switch (v.getId()) {
+            case R.id.rl_check_version: {
                 toPageByIdx(FrgSetting.PAGE_IDX_CHECK_VERSION);
             }
             break;
 
-            case R.id.rl_chart_color :    {
+            case R.id.rl_chart_color: {
                 toPageByIdx(FrgSetting.PAGE_IDX_CHART_COLOR);
             }
             break;
 
-            case R.id.rl_reformat_data :    {
+            case R.id.rl_reformat_data: {
                 Dialog alertDialog = new AlertDialog.Builder(getContext()).
                         setTitle("清除所有数据!").
                         setMessage("此操作不能恢复，是否继续操作!").
-                        setPositiveButton("是", (dialog, which) -> ContextUtil.ClearDB()).
+                        setPositiveButton("是", (dialog, which) ->
+                                new AsyncTask<Void, Void, Void>() {
+                                    private AlertDialog  mADDlg;
+
+                                    @Override
+                                    protected void onPreExecute() {
+                                        mADDlg = new AlertDialog.Builder(getContext())
+                                                .setTitle("提示")
+                                                .setMessage("请等待数据清理完毕...").create();
+                                    }
+
+                                    @Override
+                                    protected Void doInBackground(Void... params) {
+                                        ContextUtil.ClearDB();
+                                        return null;
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(Void aVoid) {
+                                        super.onPostExecute(aVoid);
+                                        mADDlg.dismiss();
+                                    }
+                                }.execute()).
                         setNegativeButton("否", (dialog, which) -> {
                         }).
                         create();
@@ -74,7 +108,7 @@ public class TFSettingMain extends TFSettingBase {
 
     @Override
     public void updateSetting() {
-        if(mBSettingDirty)  {
+        if (mBSettingDirty) {
             mBSettingDirty = false;
         }
     }

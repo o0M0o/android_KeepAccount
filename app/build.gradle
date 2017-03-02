@@ -24,8 +24,8 @@ android {
         applicationId "com.wxm.keepaccount"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 14
-        versionName "1.14"
+        versionCode 15
+        versionName "1.15"
         signingConfig signingConfigs.defkey
     }
 
@@ -54,7 +54,7 @@ android {
         }
         debug {
             debuggable true
-            buildConfigField "Boolean", "FILL_TESTDATA", "false"
+            buildConfigField "Boolean", "FILL_TESTDATA", "true"
         }
     }
 

@@ -3,6 +3,8 @@ package wxm.KeepAccount.utility;
 import android.app.Application;
 import android.util.Log;
 
+import com.j256.ormlite.stmt.DeleteBuilder;
+
 import wxm.KeepAccount.db.DBOrmLiteHelper;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.IncomeNoteItem;
@@ -14,6 +16,7 @@ import wxm.KeepAccount.db.PayIncomeDBUtility;
 import wxm.KeepAccount.db.RecordTypeDBUtility;
 import wxm.KeepAccount.db.RemindDBUtility;
 import wxm.KeepAccount.db.UsrDBUtility;
+import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 /**
  * 获取全局context
@@ -163,11 +166,25 @@ public class ContextUtil extends Application {
             UsrItem ui = getCurUsr();
             if(null != ui) {
                 DBOrmLiteHelper dh = getInstance().mDBHelper;
+                Integer uid = ui.getId();
 
-                dh.getPayDataREDao().deleteBuilder().where().eq(PayNoteItem.FIELD_USR, ui.getId());
-                dh.getIncomeDataREDao().deleteBuilder().where().eq(IncomeNoteItem.FIELD_USR, ui.getId());
-                dh.getBudgetDataREDao().deleteBuilder().where().eq(BudgetItem.FIELD_USR, ui.getId());
-                dh.getRemindREDao().deleteBuilder().where().eq(RemindItem.FIELD_USR, ui.getId());
+                DeleteBuilder<PayNoteItem, Integer> db_pay =  dh.getPayDataREDao().deleteBuilder();
+                db_pay.where().eq(PayNoteItem.FIELD_USR, uid);
+                db_pay.delete();
+
+                DeleteBuilder<IncomeNoteItem, Integer> db_income =  dh.getIncomeDataREDao().deleteBuilder();
+                db_income.where().eq(IncomeNoteItem.FIELD_USR, uid);
+                db_income.delete();
+
+                DeleteBuilder<BudgetItem, Integer> db_budget =  dh.getBudgetDataREDao().deleteBuilder();
+                db_budget.where().eq(BudgetItem.FIELD_USR, uid);
+                db_budget.delete();
+
+                DeleteBuilder<RemindItem, Integer> db_remind =  dh.getRemindREDao().deleteBuilder();
+                db_remind.where().eq(RemindItem.FIELD_USR, uid);
+                db_remind.delete();
+
+                NoteShowDataHelper.getInstance().refreshData();
             }
         } catch (java.sql.SQLException e) {
             Log.e(TAG, "ClearDB catch an exception", e);
