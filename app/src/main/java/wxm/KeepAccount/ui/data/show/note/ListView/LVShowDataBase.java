@@ -7,7 +7,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-
-import org.greenrobot.eventbus.EventBus;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -83,6 +81,9 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
 
 
     protected boolean mBActionExpand;
+
+    // 排列次序
+    protected boolean mBODownOrder = true;
 
     // for ui
     //@BindView(R.id.iv_expand)
