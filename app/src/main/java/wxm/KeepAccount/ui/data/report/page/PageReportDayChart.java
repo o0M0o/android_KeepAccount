@@ -15,8 +15,10 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,6 +31,8 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
+import wxm.KeepAccount.define.IncomeNoteItem;
+import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
@@ -76,12 +80,14 @@ public class PageReportDayChart extends FrgUtilityBase {
                     if (2 != mASParaLoad.size())
                         return null;
 
-                    //String d_s = mASParaLoad.get(0);
-                    //String d_e = mASParaLoad.get(1);
-                    //HashMap<String, ArrayList<INote>> ls_note = NoteShowDataHelper.getInstance()
-                    //                            .getNotesBetweenDays(d_s, d_e);
+                    String d_s = mASParaLoad.get(0);
+                    String d_e = mASParaLoad.get(1);
+                    HashMap<String, ArrayList<INote>> hm_note = NoteShowDataHelper.getInstance()
+                                                .getNotesBetweenDays(d_s, d_e);
 
-                    generateData();
+                    LinkedList<INote> ls_notes = new LinkedList<>();
+                    hm_note.values().forEach(ls_notes::addAll);
+                    generateData(ls_notes);
                 }
 
                 return null;
@@ -124,12 +130,58 @@ public class PageReportDayChart extends FrgUtilityBase {
     }
 
 
-    private void generateData() {
-        int numValues = 6;
+    /**
+     * 生成数据
+     * @param ls_data  原始数据
+     */
+    private void generateData(List<INote> ls_data) {
+        class chartItem {
+            private final static int PAY_ITEM        = 1;
+            private final static int INCOME_ITEM     = 2;
 
-        List<SliceValue> values = new ArrayList<SliceValue>();
-        for (int i = 0; i < numValues; ++i) {
-            SliceValue sliceValue = new SliceValue((float) Math.random() * 30 + 15, ChartUtils.pickColor());
+            private int          mType;
+            private String       mSZName;
+            private BigDecimal   mBDVal;
+
+
+            /**
+             * 更新节点链表
+             * @param ls_datas  节点链表
+             */
+            private void updateList(List<chartItem> ls_datas)    {
+                boolean bf = false;
+                for(chartItem ci : ls_datas)    {
+                    if(ci.mSZName.equals(mSZName) && ci.mType == mType)  {
+                        bf = true;
+                        ci.mBDVal = ci.mBDVal.add(mBDVal);
+                        break;
+                    }
+                }
+
+                if(!bf) {
+                    ls_datas.add(this);
+                }
+            }
+        }
+
+        // create chart item list
+        LinkedList<chartItem>  ls_ci      = new LinkedList<>();
+        for(INote data : ls_data)   {
+            chartItem ci = new chartItem();
+            ci.mBDVal = data.getVal();
+            ci.mType = data.isPayNote() ? chartItem.PAY_ITEM : chartItem.INCOME_ITEM;
+            ci.mSZName = data.getInfo();
+
+            ci.updateList(ls_ci);
+        }
+
+        // create values
+        List<SliceValue> values = new ArrayList<>();
+        for(chartItem ci : ls_ci)   {
+
+            SliceValue sliceValue = new SliceValue(ci.mBDVal.floatValue(), ChartUtils.pickColor());
+            sliceValue.setLabel((ci.mType == chartItem.PAY_ITEM ? "pay " : "income ")
+                                    + ci.mSZName);
             values.add(sliceValue);
         }
 
