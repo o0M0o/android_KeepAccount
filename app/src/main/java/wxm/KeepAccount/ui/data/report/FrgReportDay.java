@@ -4,10 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +22,14 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.data.report.page.NotesToHtmlUtil;
+import wxm.KeepAccount.ui.data.report.page.PageReportDayChart;
+import wxm.KeepAccount.ui.data.report.page.PageReportDayWebView;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 /**
@@ -34,14 +38,6 @@ import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
  */
 public class FrgReportDay extends FrgUtilityBase {
     private ArrayList<String>   mASParaLoad;
-
-    //private SimpleDateFormat mDFFormat = new SimpleDateFormat( "yyyy-MM-dd", Locale.CHINA);
-
-    @BindView(R.id.wv_report)
-    WebView     mWVReport;
-
-    @BindView(R.id.pb_load_data)
-    ProgressBar mPBLoadData;
 
     @BindView(R.id.tv_day)
     TextView    mTVDay;
@@ -52,11 +48,17 @@ public class FrgReportDay extends FrgUtilityBase {
     @BindView(R.id.tv_income)
     TextView    mTVIncome;
 
+    private FrgUtilityBase          mPGHot = null;
+    private PageReportDayWebView    mPGWebView = new PageReportDayWebView();
+    private PageReportDayChart      mPGChart = new PageReportDayChart();
+
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         LOG_TAG = "FrgReportDay";
         View rootView = layoutInflater.inflate(R.layout.vw_report, viewGroup, false);
         ButterKnife.bind(this, rootView);
+
+        mPGHot = mPGWebView;
         return rootView;
     }
 
@@ -64,12 +66,18 @@ public class FrgReportDay extends FrgUtilityBase {
     protected void initUiComponent(View view) {
         Bundle bd = getArguments();
         mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
+
+        mPGWebView.setArguments(bd);
+        mPGChart.setArguments(bd);
+
+        FragmentTransaction t = getChildFragmentManager().beginTransaction();
+        t.replace(R.id.fl_page_holder, mPGHot);
+        t.commit();
     }
 
     @Override
     protected void loadUI() {
         new AsyncTask<Void, Void, Void>() {
-            private String  mSZHtml;
             private String  mSZCaption;
 
             private BigDecimal  mBDTotalPay     = BigDecimal.ZERO;
@@ -77,7 +85,6 @@ public class FrgReportDay extends FrgUtilityBase {
 
             @Override
             protected void onPreExecute() {
-                showProgress(true);
             }
 
             @Override
@@ -101,10 +108,6 @@ public class FrgReportDay extends FrgUtilityBase {
                                 mBDTotalIncome = mBDTotalIncome.add(id.getVal());
                         }
                     }
-
-                    mSZHtml = NotesToHtmlUtil.NotesToHtmlStr(mSZCaption, ls_note);
-                    //Log.d(LOG_TAG, "initUiInfo html : " +
-                    //            (UtilFun.StringIsNullOrEmpty(mSZHtml) ? "null" : mSZHtml));
                 }
 
                 return null;
@@ -116,7 +119,6 @@ public class FrgReportDay extends FrgUtilityBase {
                 super.onPostExecute(aVoid);
                 // After completing execution of given task, control will return here.
                 // Hence if you want to populate UI elements with fetched data, do it here.
-                showProgress(false);
 
                 // for header show
                 mTVDay.setText(mSZCaption);
@@ -124,36 +126,28 @@ public class FrgReportDay extends FrgUtilityBase {
                                     "%.02f", mBDTotalPay.floatValue()));
                 mTVIncome.setText(String.format(Locale.CHINA,
                                     "%.02f", mBDTotalIncome.floatValue()));
-
-                // for web show
-                if(!UtilFun.StringIsNullOrEmpty(mSZHtml)) {
-                    mWVReport.getSettings().setDefaultTextEncodingName("utf-8");
-                    mWVReport.getSettings().setJavaScriptEnabled(true);
-                    mWVReport.loadDataWithBaseURL(null, mSZHtml, "text/html; utf-8", null, null);
-                }
             }
         }.execute();
     }
 
+    /**
+     * 切换显示类型
+     * @param v   动作view
+     */
+    @OnClick({R.id.iv_switch})
+    public void onSwitchShow(View v) {
+        switchPage();
+    }
+
 
     /**
-     * Shows the progress UI and hides the login form.
+     * 切换展示类型
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        int shortAnimTime = getResources()
-                .getInteger(android.R.integer.config_shortAnimTime);
+    private void switchPage()   {
+        mPGHot = mPGHot instanceof PageReportDayWebView ? mPGChart : mPGWebView;
 
-        mPBLoadData.setVisibility(show ? View.VISIBLE : View.GONE);
-        mPBLoadData.animate().setDuration(shortAnimTime)
-                .alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mPBLoadData.setVisibility(show ? View.VISIBLE : View.GONE);
-            }
-        });
+        FragmentTransaction t = getChildFragmentManager().beginTransaction();
+        t.replace(R.id.fl_page_holder, mPGHot);
+        t.commit();
     }
 }

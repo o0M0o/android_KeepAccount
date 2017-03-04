@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.report;
+package wxm.KeepAccount.ui.data.report.page;
 
 import android.content.res.Resources;
 
@@ -42,15 +42,13 @@ public class NotesToHtmlUtil {
 
     /**
      * 根据数据生成html字符串（供展示）
-     * @param caption   表名
      * @param ls_data   数据
      * @return          html字符串
      */
-    public static String NotesToHtmlStr(String caption, HashMap<String, ArrayList<INote>> ls_data) {
+    public static String NotesToHtmlStr(HashMap<String, ArrayList<INote>> ls_data) {
         String sz_org = AssetUtil.getFromAssets(ContextUtil.getInstance().getResources(),
                             DAY_REPORT_MODE_FN, ENCODING);
-        return sz_org.replace(TAG_CAPTION, caption).replace(TAG_COLUMNS, TABLE_COLUMNS)
-                    .replace(TAG_ROWS, NotesToRowStr(ls_data));
+        return sz_org.replace(TAG_COLUMNS, TABLE_COLUMNS).replace(TAG_ROWS, NotesToRowStr(ls_data));
     }
 
     /**

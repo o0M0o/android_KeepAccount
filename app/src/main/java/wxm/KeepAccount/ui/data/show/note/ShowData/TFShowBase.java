@@ -56,7 +56,6 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
         View rootView = layoutInflater.inflate(R.layout.tf_show_base, viewGroup, false);
         ButterKnife.bind(this, rootView);
 
-
         return rootView;
     }
 
@@ -110,7 +109,7 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
      */
     private void loadHotFrg()   {
         android.support.v4.app.FragmentTransaction t = getChildFragmentManager().beginTransaction();
-        t.replace(cn.wxm.andriodutillib.R.id.fl_holder, mViewHelper[mHotChild]);
+        t.replace(R.id.fl_holder, mViewHelper[mHotChild]);
         t.commit();
     }
     //// PRIVATE END

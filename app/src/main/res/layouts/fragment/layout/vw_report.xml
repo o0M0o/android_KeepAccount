@@ -4,29 +4,40 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/pb_load_data"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
-
     <RelativeLayout
-        android:id="@+id/rl_stats"
+        android:id="@+id/rl_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="@color/grey_1"
+        android:background="#E0EEE0"
         android:padding="4dp">
+
+
+        <ImageView
+            android:id="@+id/iv_switch"
+            android:src="@drawable/ic_switch_black"
+            android:layout_marginEnd="24dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
 
         <RelativeLayout
             android:id="@+id/rl_date"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/tv_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="2017-02-01 - 2017-02-17"
+                android:textColor="@color/text_fit"
+                android:textSize="14sp" />
+
+            <!--
             <TextView
                 android:id="@+id/tv_day_tag"
                 android:layout_width="wrap_content"
@@ -45,17 +56,18 @@
                 android:text="2017-02-01 - 2017-02-17"
                 android:textColor="@color/text_fit"
                 android:textSize="12sp" />
+                -->
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_data"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/rl_date">
 
             <RelativeLayout
                 android:id="@+id/rl_data_pay"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -80,7 +92,7 @@
 
             <RelativeLayout
                 android:id="@+id/rl_data_income"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rl_data_pay">
 
@@ -107,10 +119,11 @@
 
     </RelativeLayout>
 
-    <WebView
-        android:id="@+id/wv_report"
+
+    <FrameLayout
+        android:id="@+id/fl_page_holder"
+        android:layout_alignParentStart="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/rl_stats" />
+        android:layout_below="@id/rl_header" />
 </RelativeLayout>
