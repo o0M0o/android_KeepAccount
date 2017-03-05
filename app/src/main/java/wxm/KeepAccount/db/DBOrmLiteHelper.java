@@ -28,6 +28,8 @@ import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.BuildConfig;
 import wxm.KeepAccount.R;
 
+import java.lang.Math;
+
 /**
  * db ormlite helper
  * Created by 123 on 2016/8/5.
@@ -271,6 +273,26 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
 
 
     private void AddTestDataForDefualtUsr() {
+        class createUtility {
+            private final String[]  mSZPayInfos =
+                    {"租金", "生活费", "交通费", "社交开支", "娱乐开支", "其它"};
+            private final String[]  mSZIncomeInfos =
+                    {"工资", "投资收入", "营业收入", "奖金", "其它"};
+
+            private String getPayInfo() {
+                return mSZPayInfos[new Random().nextInt(mSZPayInfos.length)];
+            }
+
+            private String getIncomeInfo() {
+                return mSZIncomeInfos[new Random().nextInt(mSZIncomeInfos.length)];
+            }
+
+            private BigDecimal getVal(double max_val, double min_val)  {
+                return new BigDecimal(Math.max(new Random().nextFloat() * max_val, min_val));
+            }
+        }
+
+        createUtility ci = new createUtility();
         UsrItem def_ui = ContextUtil.getUsrUtility()
                             .CheckAndGetUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD);
         if(null != def_ui)  {
@@ -289,15 +311,14 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
                     Random rand1 = new Random();
                     int pay = rand1.nextInt(3);
                     if(0 < pay) {
-                        int pay_max = 500;
+                        double pay_max = 500;
+                        double pay_min = 0.1;
                         LinkedList<PayNoteItem> ls_pay = new LinkedList<>();
                         for (int i = 0; i < pay; ++i) {
-                            Random randp = new Random();
-
                             PayNoteItem pay_it = new PayNoteItem();
                             pay_it.setUsr(def_ui);
-                            pay_it.setInfo("tax");
-                            pay_it.setVal(new BigDecimal(randp.nextFloat() * pay_max + 0.1));
+                            pay_it.setInfo(ci.getPayInfo());
+                            pay_it.setVal(ci.getVal(pay_max, pay_min));
                             pay_it.getTs().setTime(start_dt.getTime());
                             ls_pay.add(pay_it);
                         }
@@ -309,15 +330,14 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
                     Random rand2 = new Random();
                     int income = rand2.nextInt(3);
                     if(0 < income) {
-                        int income_max = 500;
+                        double income_max = 500;
+                        double income_min = 0.1;
                         LinkedList<IncomeNoteItem> ls_pay = new LinkedList<>();
                         for (int i = 0; i < income; ++i) {
-                            Random randp = new Random();
-
                             IncomeNoteItem pay_it = new IncomeNoteItem();
                             pay_it.setUsr(def_ui);
-                            pay_it.setInfo("tip");
-                            pay_it.setVal(new BigDecimal(randp.nextFloat() * income_max + 0.1));
+                            pay_it.setInfo(ci.getIncomeInfo());
+                            pay_it.setVal(ci.getVal(income_max, income_min));
                             pay_it.getTs().setTime(start_dt.getTime());
                             ls_pay.add(pay_it);
                         }

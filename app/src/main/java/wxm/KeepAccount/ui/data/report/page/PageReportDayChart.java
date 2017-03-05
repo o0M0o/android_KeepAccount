@@ -2,6 +2,7 @@ package wxm.KeepAccount.ui.data.report.page;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.StateListAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.graphics.Typeface;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
@@ -23,6 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import lecho.lib.hellocharts.model.PieChartData;
@@ -48,6 +51,12 @@ public class PageReportDayChart extends FrgUtilityBase {
 
     @BindView(R.id.pb_load_data)
     ProgressBar     mPBLoadData;
+
+    @BindView(R.id.sw_income)
+    Switch          mSWIncome;
+
+    @BindView(R.id.sw_pay)
+    Switch          mSWPay;
 
     private PieChartData mCVData;
 
@@ -101,12 +110,41 @@ public class PageReportDayChart extends FrgUtilityBase {
                 // Hence if you want to populate UI elements with fetched data, do it here.
                 showProgress(false);
 
-                mCVchart.setCircleFillRatio(0.7f);
+                mCVchart.setCircleFillRatio(0.6f);
                 mCVchart.setPieChartData(mCVData);
             }
         }.execute();
     }
 
+    /**
+     * 切换显示内容
+     * @param v     激活的switch
+     */
+    @OnClick({R.id.sw_income, R.id.sw_pay})
+    public void onSWClick(View v)   {
+        int vid = v.getId();
+        switch (vid)    {
+            case R.id.sw_income :   {
+                if(mSWIncome.isChecked())   {
+                    mSWPay.setClickable(true);
+                } else  {
+                    mSWPay.setClickable(false);
+                }
+            }
+            break;
+
+            case R.id.sw_pay :   {
+                if(mSWPay.isChecked())   {
+                    mSWIncome.setClickable(true);
+                } else  {
+                    mSWIncome.setClickable(false);
+                }
+            }
+            break;
+        }
+
+        loadUI();
+    }
 
     /**
      * Shows the progress UI and hides the login form.
@@ -165,8 +203,16 @@ public class PageReportDayChart extends FrgUtilityBase {
         }
 
         // create chart item list
+        boolean b_p = mSWPay.isChecked();
+        boolean b_i = mSWIncome.isChecked();
         LinkedList<chartItem>  ls_ci      = new LinkedList<>();
         for(INote data : ls_data)   {
+            if(data.isPayNote() && !b_p)
+                continue;
+
+            if(data.isIncomeNote() && !b_i)
+                continue;
+
             chartItem ci = new chartItem();
             ci.mBDVal = data.getVal();
             ci.mType = data.isPayNote() ? chartItem.PAY_ITEM : chartItem.INCOME_ITEM;
@@ -180,8 +226,9 @@ public class PageReportDayChart extends FrgUtilityBase {
         for(chartItem ci : ls_ci)   {
 
             SliceValue sliceValue = new SliceValue(ci.mBDVal.floatValue(), ChartUtils.pickColor());
-            sliceValue.setLabel((ci.mType == chartItem.PAY_ITEM ? "pay " : "income ")
-                                    + ci.mSZName);
+            //sliceValue.setLabel((ci.mType == chartItem.PAY_ITEM ? "p " : "i ")
+            //                        + ci.mSZName);
+            sliceValue.setLabel(ci.mSZName);
             values.add(sliceValue);
         }
 
@@ -189,10 +236,10 @@ public class PageReportDayChart extends FrgUtilityBase {
         mCVData.setHasLabels(true);
         mCVData.setHasLabelsOutside(true);
         mCVData.setHasCenterCircle(true);
-        mCVData.setSlicesSpacing(24);
+        mCVData.setSlicesSpacing(12);
 
         // hasCenterText1
-        mCVData.setCenterText1("Hello!");
+        mCVData.setCenterText1(b_p && b_i ? "收支" : (b_p ? "支出" : "收入"));
 
         // Get roboto-italic font.
         //Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "Roboto-Italic.ttf");
