@@ -57,7 +57,6 @@ public class PageReportDayWebView extends FrgUtilityBase {
 
     @Override
     protected void loadUI() {
-        //Toast.makeText(getActivity(), "In PageReportDayWebView", Toast.LENGTH_SHORT).show();
         new AsyncTask<Void, Void, Void>() {
             private String  mSZHtml;
 

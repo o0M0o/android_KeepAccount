@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +20,18 @@ import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.util.ChartUtils;
@@ -58,11 +62,11 @@ public class PageReportDayChart extends FrgUtilityBase {
     @BindView(R.id.sw_pay)
     Switch          mSWPay;
 
-    private PieChartData mCVData;
+    private LinkedList<INote>   mLLOrgData;
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "PageReportDayWebView";
+        LOG_TAG = "PageReportDayChart";
         View rootView = layoutInflater.inflate(R.layout.page_report_chart, viewGroup, false);
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -70,14 +74,28 @@ public class PageReportDayChart extends FrgUtilityBase {
 
     @Override
     protected void initUiComponent(View view) {
+        mCVchart.setOnValueTouchListener(new PieChartOnValueSelectListener() {
+            @Override
+            public void onValueSelected(int i, SliceValue sliceValue) {
+                String sz = String.format(Locale.CHINA,
+                        "%s : %.02f",
+                        String.valueOf(sliceValue.getLabelAsChars()), sliceValue.getValue());
+
+                Toast.makeText(getActivity(), sz, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onValueDeselected() {
+            }
+        });
+
         Bundle bd = getArguments();
         mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
-    }
+        mLLOrgData = new LinkedList<>();
 
-    @Override
-    protected void loadUI() {
-        //Toast.makeText(getActivity(), "In PageReportDayChart", Toast.LENGTH_SHORT).show();
         new AsyncTask<Void, Void, Void>() {
+            private PieChartData        mCVData;
+
             @Override
             protected void onPreExecute() {
                 showProgress(true);
@@ -92,22 +110,20 @@ public class PageReportDayChart extends FrgUtilityBase {
                     String d_s = mASParaLoad.get(0);
                     String d_e = mASParaLoad.get(1);
                     HashMap<String, ArrayList<INote>> hm_note = NoteShowDataHelper.getInstance()
-                                                .getNotesBetweenDays(d_s, d_e);
+                            .getNotesBetweenDays(d_s, d_e);
 
-                    LinkedList<INote> ls_notes = new LinkedList<>();
-                    hm_note.values().forEach(ls_notes::addAll);
-                    generateData(ls_notes);
+                    hm_note.values().forEach(mLLOrgData::addAll);
+
+                    mCVData = new PieChartData();
+                    generateData(mCVData);
                 }
 
                 return null;
             }
 
-            @SuppressLint("SetJavaScriptEnabled")
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                // After completing execution of given task, control will return here.
-                // Hence if you want to populate UI elements with fetched data, do it here.
                 showProgress(false);
 
                 mCVchart.setCircleFillRatio(0.6f);
@@ -116,12 +132,18 @@ public class PageReportDayChart extends FrgUtilityBase {
         }.execute();
     }
 
+    @Override
+    protected void loadUI() {
+    }
+
     /**
      * 切换显示内容
      * @param v     激活的switch
      */
     @OnClick({R.id.sw_income, R.id.sw_pay})
     public void onSWClick(View v)   {
+        Log.d(LOG_TAG, "in onSWClick");
+
         int vid = v.getId();
         switch (vid)    {
             case R.id.sw_income :   {
@@ -143,7 +165,31 @@ public class PageReportDayChart extends FrgUtilityBase {
             break;
         }
 
-        loadUI();
+        // update show
+        new AsyncTask<Void, Void, Void>() {
+            private PieChartData        mCVData;
+
+            @Override
+            protected void onPreExecute() {
+                showProgress(true);
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                mCVData = new PieChartData();
+                generateData(mCVData);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                showProgress(false);
+
+                mCVchart.setCircleFillRatio(0.6f);
+                mCVchart.setPieChartData(mCVData);
+            }
+        }.execute();
     }
 
     /**
@@ -170,9 +216,8 @@ public class PageReportDayChart extends FrgUtilityBase {
 
     /**
      * 生成数据
-     * @param ls_data  原始数据
      */
-    private void generateData(List<INote> ls_data) {
+    private void generateData(PieChartData pd) {
         class chartItem {
             private final static int PAY_ITEM        = 1;
             private final static int INCOME_ITEM     = 2;
@@ -206,7 +251,7 @@ public class PageReportDayChart extends FrgUtilityBase {
         boolean b_p = mSWPay.isChecked();
         boolean b_i = mSWIncome.isChecked();
         LinkedList<chartItem>  ls_ci      = new LinkedList<>();
-        for(INote data : ls_data)   {
+        for(INote data : mLLOrgData)   {
             if(data.isPayNote() && !b_p)
                 continue;
 
@@ -232,21 +277,21 @@ public class PageReportDayChart extends FrgUtilityBase {
             values.add(sliceValue);
         }
 
-        mCVData = new PieChartData(values);
-        mCVData.setHasLabels(true);
-        mCVData.setHasLabelsOutside(true);
-        mCVData.setHasCenterCircle(true);
-        mCVData.setSlicesSpacing(12);
+        pd.setValues(values);
+        pd.setHasLabels(true);
+        pd.setHasLabelsOutside(true);
+        pd.setHasCenterCircle(true);
+        pd.setSlicesSpacing(12);
 
         // hasCenterText1
-        mCVData.setCenterText1(b_p && b_i ? "收支" : (b_p ? "支出" : "收入"));
+        pd.setCenterText1(b_p && b_i ? "收支" : (b_p ? "支出" : "收入"));
 
         // Get roboto-italic font.
         //Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "Roboto-Italic.ttf");
         //mCVData.setCenterText1Typeface(tf);
 
         // Get font size from dimens.xml and convert it to sp(library uses sp values).
-        mCVData.setCenterText1FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
+        pd.setCenterText1FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
                     (int) getResources().getDimension(R.dimen.pie_chart_text1_size)));
     }
 }
