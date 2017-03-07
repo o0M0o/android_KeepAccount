@@ -112,7 +112,13 @@ public class PageReportDayChart extends FrgUtilityBase {
                     HashMap<String, ArrayList<INote>> hm_note = NoteShowDataHelper.getInstance()
                             .getNotesBetweenDays(d_s, d_e);
 
-                    hm_note.values().forEach(mLLOrgData::addAll);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        hm_note.values().forEach(mLLOrgData::addAll);
+                    } else  {
+                        for(ArrayList<INote> ls_n : hm_note.values())   {
+                            mLLOrgData.addAll(ls_n);
+                        }
+                    }
 
                     mCVData = new PieChartData();
                     generateData(mCVData);

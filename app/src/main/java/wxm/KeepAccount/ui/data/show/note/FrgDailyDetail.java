@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -70,11 +69,11 @@ public class FrgDailyDetail extends FrgUtilityBase {
     ListView mLVBody;
 
     // 跳转日期的UI
-    @BindView(R.id.bt_prv)
-    Button  mBTPrv;
+    @BindView(R.id.rl_prv)
+    RelativeLayout  mRLPrv;
 
-    @BindView(R.id.bt_next)
-    Button  mBTNext;
+    @BindView(R.id.rl_next)
+    RelativeLayout mRLNext;
 
     // 展示日统计数据的UI
     @BindView(R.id.rl_daily_info)
@@ -167,34 +166,34 @@ public class FrgDailyDetail extends FrgUtilityBase {
      * 处理日期前后向导工作
      * @param view  触发的按键
      */
-    @OnClick({ R.id.bt_prv, R.id.bt_next })
+    @OnClick({ R.id.rl_prv, R.id.rl_next })
     public void dayButtonClick(View view) {
         String org_day = mSZHotDay;
 
         int vid = view.getId();
         switch (vid)    {
-            case R.id.bt_prv :  {
+            case R.id.rl_prv :  {
                 String prv_day = NoteShowDataHelper.getInstance().getPrvDay(mSZHotDay);
                 if(!UtilFun.StringIsNullOrEmpty(prv_day))   {
                     mSZHotDay = prv_day;
 
-                    if(View.VISIBLE != mBTNext.getVisibility())
-                        mBTNext.setVisibility(View.VISIBLE);
+                    if(View.VISIBLE != mRLNext.getVisibility())
+                        mRLNext.setVisibility(View.VISIBLE);
                 }  else {
-                    mBTPrv.setVisibility(View.GONE);
+                    mRLPrv.setVisibility(View.GONE);
                 }
             }
             break;
 
-            case R.id.bt_next :  {
+            case R.id.rl_next :  {
                 String next_day = NoteShowDataHelper.getInstance().getNextDay(mSZHotDay);
                 if(!UtilFun.StringIsNullOrEmpty(next_day))   {
                     mSZHotDay = next_day;
 
-                    if(View.VISIBLE != mBTPrv.getVisibility())
-                        mBTPrv.setVisibility(View.VISIBLE);
+                    if(View.VISIBLE != mRLPrv.getVisibility())
+                        mRLPrv.setVisibility(View.VISIBLE);
                 }  else {
-                    mBTNext.setVisibility(View.GONE);
+                    mRLNext.setVisibility(View.GONE);
                 }
             }
             break;

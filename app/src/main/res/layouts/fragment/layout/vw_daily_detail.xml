@@ -11,13 +11,34 @@
         android:background="#a2b5cd"
         android:padding="2dp">
 
-        <Button
-            android:id="@+id/bt_prv"
+        <RelativeLayout
+            android:id="@+id/rl_prv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:text="@string/hint_to_prv" />
+            android:layout_marginStart="4dp"
+            android:background="@drawable/rl_day_nav_shape"
+            android:paddingBottom="4dp"
+            android:paddingEnd="8dp"
+            android:paddingStart="4dp"
+            android:paddingTop="4dp">
+
+            <ImageView
+                android:id="@+id/iv_prv"
+                android:layout_width="26dp"
+                android:layout_height="22dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_to_left" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/iv_prv"
+                android:text="@string/hint_to_prv"
+                android:textColor="@color/black" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_date"
@@ -56,13 +77,35 @@
         </RelativeLayout>
 
 
-        <Button
-            android:id="@+id/bt_next"
+        <RelativeLayout
+            android:id="@+id/rl_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:text="@string/hint_to_next" />
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/rl_day_nav_shape"
+            android:paddingBottom="4dp"
+            android:paddingEnd="4dp"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp">
+
+            <TextView
+                android:id="@+id/tv_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/hint_to_next"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/iv_next"
+                android:layout_width="26dp"
+                android:layout_height="22dp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/tv_tag"
+                android:src="@drawable/ic_to_right" />
+        </RelativeLayout>
 
     </RelativeLayout>
 
@@ -70,16 +113,16 @@
     <RelativeLayout
         android:id="@+id/rl_body"
         android:layout_width="match_parent"
-        android:layout_below="@id/rl_header"
+        android:layout_height="wrap_content"
         android:layout_above="@id/rl_accpet_giveup"
-        android:layout_height="wrap_content">
+        android:layout_below="@id/rl_header">
 
         <ProgressBar
             android:id="@+id/login_progress"
-            android:layout_centerInParent="true"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:visibility="gone" />
 
         <RelativeLayout
@@ -111,33 +154,33 @@
 
     <RelativeLayout
         android:id="@+id/rl_accpet_giveup"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="@color/trans_black"
-        android:layout_above="@id/rl_action"
         android:layout_width="match_parent"
-        android:layout_height="32dp">
+        android:layout_height="32dp"
+        android:layout_above="@id/rl_action"
+        android:layout_marginBottom="1dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/trans_black">
 
         <TextView
-            android:layout_marginLeft="8dp"
-            android:textColor="@color/text_fit"
-            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="放弃"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true" />
+            android:layout_marginLeft="8dp"
+            android:text="放弃"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text_fit"
+            android:textSize="16sp" />
 
         <ImageButton
             android:id="@+id/bt_giveup"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
-            android:src="@drawable/ic_reject"
-            android:scaleType="fitCenter"
             android:layout_width="60dp"
-            android:layout_height="30dp" />
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_reject" />
     </RelativeLayout>
 
     <RelativeLayout
