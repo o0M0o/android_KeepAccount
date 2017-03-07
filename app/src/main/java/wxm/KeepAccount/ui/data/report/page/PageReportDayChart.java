@@ -18,6 +18,10 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +45,8 @@ import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.report.ACReport;
+import wxm.KeepAccount.ui.data.report.EventSelectDays;
+import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 /**
@@ -63,6 +69,33 @@ public class PageReportDayChart extends FrgUtilityBase {
     Switch          mSWPay;
 
     private LinkedList<INote>   mLLOrgData;
+
+   @Override
+    protected void enterActivity()  {
+        Log.d(LOG_TAG, "in enterActivity");
+        super.enterActivity();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void leaveActivity()  {
+        Log.d(LOG_TAG, "in leaveActivity");
+        EventBus.getDefault().unregister(this);
+
+        super.leaveActivity();
+    }
+
+    /**
+     * 更新日期范围
+     * @param event     事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectDaysEvent(EventSelectDays event) {
+        mASParaLoad.set(0, event.mSZStartDay);
+        mASParaLoad.set(1, event.mSZEndDay);
+        loadData();
+    }
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
@@ -91,56 +124,13 @@ public class PageReportDayChart extends FrgUtilityBase {
 
         Bundle bd = getArguments();
         mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
-        mLLOrgData = new LinkedList<>();
-
-        new AsyncTask<Void, Void, Void>() {
-            private PieChartData        mCVData;
-
-            @Override
-            protected void onPreExecute() {
-                showProgress(true);
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
-                    if (2 != mASParaLoad.size())
-                        return null;
-
-                    String d_s = mASParaLoad.get(0);
-                    String d_e = mASParaLoad.get(1);
-                    HashMap<String, ArrayList<INote>> hm_note = NoteShowDataHelper.getInstance()
-                            .getNotesBetweenDays(d_s, d_e);
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        hm_note.values().forEach(mLLOrgData::addAll);
-                    } else  {
-                        for(ArrayList<INote> ls_n : hm_note.values())   {
-                            mLLOrgData.addAll(ls_n);
-                        }
-                    }
-
-                    mCVData = new PieChartData();
-                    generateData(mCVData);
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                showProgress(false);
-
-                mCVchart.setCircleFillRatio(0.6f);
-                mCVchart.setPieChartData(mCVData);
-            }
-        }.execute();
+        loadData();
     }
 
     @Override
     protected void loadUI() {
     }
+
 
     /**
      * 切换显示内容
@@ -217,6 +207,56 @@ public class PageReportDayChart extends FrgUtilityBase {
                         mPBLoadData.setVisibility(show ? View.VISIBLE : View.GONE);
                     }
                 });
+    }
+
+    /**
+     * 重新加载数据
+     */
+    private void loadData() {
+        mLLOrgData = new LinkedList<>();
+        new AsyncTask<Void, Void, Void>() {
+            private PieChartData        mCVData;
+
+            @Override
+            protected void onPreExecute() {
+                showProgress(true);
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
+                    if (2 != mASParaLoad.size())
+                        return null;
+
+                    String d_s = mASParaLoad.get(0);
+                    String d_e = mASParaLoad.get(1);
+                    HashMap<String, ArrayList<INote>> hm_note = NoteShowDataHelper.getInstance()
+                            .getNotesBetweenDays(d_s, d_e);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        hm_note.values().forEach(mLLOrgData::addAll);
+                    } else  {
+                        for(ArrayList<INote> ls_n : hm_note.values())   {
+                            mLLOrgData.addAll(ls_n);
+                        }
+                    }
+
+                    mCVData = new PieChartData();
+                    generateData(mCVData);
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                showProgress(false);
+
+                mCVchart.setCircleFillRatio(0.6f);
+                mCVchart.setPieChartData(mCVData);
+            }
+        }.execute();
     }
 
 

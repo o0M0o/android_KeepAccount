@@ -4,7 +4,9 @@ import android.content.res.Resources;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,7 +67,11 @@ public class NotesToHtmlUtil {
         String bc_day = "fffffb";
 
         StringBuilder sb = new StringBuilder();
-        for(String day : ls_data.keySet())  {
+        List<String> ls_sz = new LinkedList<>();
+        ls_sz.addAll(ls_data.keySet());
+        Collections.sort(ls_sz);
+
+        for(String day : ls_sz)  {
             List<INote> ls_nt = ls_data.get(day);
             int i_size = ls_nt.size();
             if(1 == i_size)   {

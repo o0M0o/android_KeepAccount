@@ -5,15 +5,23 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,6 +31,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.INote;
@@ -30,6 +39,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.report.page.NotesToHtmlUtil;
 import wxm.KeepAccount.ui.data.report.page.PageReportDayChart;
 import wxm.KeepAccount.ui.data.report.page.PageReportDayWebView;
+import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 /**
@@ -51,6 +61,35 @@ public class FrgReportDay extends FrgUtilityBase {
     private FrgUtilityBase          mPGHot = null;
     private PageReportDayWebView    mPGWebView = new PageReportDayWebView();
     private PageReportDayChart      mPGChart = new PageReportDayChart();
+
+
+    @Override
+    protected void enterActivity()  {
+        Log.d(LOG_TAG, "in enterActivity");
+        super.enterActivity();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void leaveActivity()  {
+        Log.d(LOG_TAG, "in leaveActivity");
+        EventBus.getDefault().unregister(this);
+
+        super.leaveActivity();
+    }
+
+    /**
+     * 更新日期范围
+     * @param event     事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectDaysEvent(EventSelectDays event) {
+        mASParaLoad.set(0, event.mSZStartDay);
+        mASParaLoad.set(1, event.mSZEndDay);
+
+        loadUI();
+    }
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
@@ -137,6 +176,29 @@ public class FrgReportDay extends FrgUtilityBase {
     @OnClick({R.id.iv_switch})
     public void onSwitchShow(View v) {
         switchPage();
+    }
+
+    /**
+     * 重新选择起止时间
+     * @param v   动作view
+     */
+    @OnClick({R.id.rl_select_days})
+    public void onSelectDays(View v) {
+        DlgSelectReportDays dlg_days = new DlgSelectReportDays();
+        dlg_days.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+            @Override
+            public void onDialogPositiveResult(DialogFragment dialogFragment) {
+                EventBus.getDefault().post(new EventSelectDays(dlg_days.getStartDay(),
+                                                    dlg_days.getEndDay()));
+            }
+
+            @Override
+            public void onDialogNegativeResult(DialogFragment dialogFragment) {
+            }
+        });
+
+        dlg_days.show(((AppCompatActivity)getActivity()).getSupportFragmentManager()
+                ,"select days");
     }
 
 

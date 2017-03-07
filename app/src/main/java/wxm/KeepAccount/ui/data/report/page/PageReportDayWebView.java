@@ -7,6 +7,7 @@ import android.annotation.TargetApi;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,10 @@ import android.view.ViewPropertyAnimator;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +31,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.data.report.ACReport;
+import wxm.KeepAccount.ui.data.report.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 /**
@@ -40,6 +46,33 @@ public class PageReportDayWebView extends FrgUtilityBase {
 
     @BindView(R.id.pb_load_data)
     ProgressBar     mPBLoadData;
+
+   @Override
+    protected void enterActivity()  {
+        Log.d(LOG_TAG, "in enterActivity");
+        super.enterActivity();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void leaveActivity()  {
+        Log.d(LOG_TAG, "in leaveActivity");
+        EventBus.getDefault().unregister(this);
+
+        super.leaveActivity();
+    }
+
+    /**
+     * 更新日期范围
+     * @param event     事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectDaysEvent(EventSelectDays event) {
+        mASParaLoad.set(0, event.mSZStartDay);
+        mASParaLoad.set(1, event.mSZEndDay);
+        loadUI();
+    }
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
@@ -102,6 +135,8 @@ public class PageReportDayWebView extends FrgUtilityBase {
             }
         }.execute();
     }
+
+
 
 
     /**

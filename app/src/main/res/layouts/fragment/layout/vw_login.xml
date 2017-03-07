@@ -24,6 +24,8 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:layout_marginTop="12dp">
 
             <AutoCompleteTextView
@@ -39,7 +41,9 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="12dp">
 
             <EditText
                 android:id="@+id/password"
@@ -76,7 +80,7 @@
             android:layout_marginRight="48dp"
             android:background="@drawable/bt_shape"
             android:text="@string/action_register"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/bt_def_usr_login"
@@ -88,6 +92,6 @@
             android:layout_marginRight="48dp"
             android:background="@drawable/bt_shape"
             android:text="@string/action_def_usr_login"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 </RelativeLayout>
