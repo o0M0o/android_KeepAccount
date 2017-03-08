@@ -18,11 +18,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.RecordTypeItem;
 import wxm.KeepAccount.db.RecordTypeDBUtility;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.ui.dialog.utility.DlgResource;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.edit.RecordInfo.ACRecordInfoEdit;
@@ -41,21 +45,18 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
 
     private ArrayList<HashMap<String, String>>      mLHMData;
     private GVTypeAdapter                           mGAAdapter;
-    private TextView                                mTVNote;
 
     private String  mRootType;
     private String  mCurType;
 
-    private RelativeLayout  mRLPencil;
-    private RelativeLayout  mRLSort;
-    private TextView        mTVSort;
-    private ImageView       mIVSort;
+    @BindView(R.id.tv_hint)
+    TextView        mTVNote;
 
-    private Drawable    mDASortUp;
-    private Drawable    mDASortDown;
-    private String      mStrSortUp;
-    private String      mStrSortDown;
+    @BindView(R.id.tv_sort)
+    TextView        mTVSort;
 
+    @BindView(R.id.iv_sort)
+    ImageView       mIVSort;
 
     /**
      * 设置以前的“记录类型”
@@ -91,15 +92,10 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
         InitDlgTitle(GlobalDef.STR_RECORD_PAY.equals(mRootType) ? "选择支出类型" : "选择收入类型",
                 "接受", "放弃");
 
-        Resources res = getContext().getResources();
-        mDASortDown = res.getDrawable(R.drawable.ic_sort_down_1);
-        mDASortUp = res.getDrawable(R.drawable.ic_sort_up_1);
-        mStrSortUp = res.getString(R.string.cn_sort_up_by_name);
-        mStrSortDown = res.getString(R.string.cn_sort_down_by_name);
-
         // for UI component
         View vw = View.inflate(getActivity(), R.layout.dlg_select_record_info, null);
-        mTVNote = UtilFun.cast_t(vw.findViewById(R.id.tv_hint));
+        ButterKnife.bind(this, vw);
+
         GridView gv = UtilFun.cast_t(vw.findViewById(R.id.gv_record_info));
         gv.setOnItemClickListener((parent, view, position, id) -> {
             String tv_str = mLHMData.get(position).get(KEY_NAME);
@@ -120,37 +116,53 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
         });
         gv.setAdapter(mGAAdapter);
 
-        // for action
-        mRLPencil = UtilFun.cast_t(vw.findViewById(R.id.rl_pencil));
-        mRLPencil.setOnClickListener(v -> {
-            Intent it = new Intent(getContext(), ACRecordInfoEdit.class);
-            it.putExtra(ACRecordInfoEdit.IT_PARA_RECORDTYPE, mRootType);
-
-            startActivityForResult(it, 1);
-        });
-
-        mRLSort = UtilFun.cast_t(vw.findViewById(R.id.rl_sort));
-        mTVSort = UtilFun.cast_t(mRLSort.findViewById(R.id.tv_sort));
-        mIVSort = UtilFun.cast_t(mRLSort.findViewById(R.id.iv_sort));
-        mRLSort.setOnClickListener(v -> {
-            String cur_name = mTVSort.getText().toString();
-            mTVSort.setText(mStrSortUp.equals(cur_name) ? mStrSortDown : mStrSortUp);
-            mIVSort.setImageDrawable(mStrSortUp.equals(cur_name) ? mDASortDown : mDASortUp);
-            loadData();
-        });
-
         // for gridview show
         loadData();
         return vw;
     }
 
+    /**
+     * 附加动作
+     * @param v   动作view
+     */
+    @OnClick({R.id.rl_pencil, R.id.rl_sort})
+    public void onActionClick(View v) {
+        int vid = v.getId();
+        switch (vid)    {
+            case R.id.rl_pencil :   {
+                Intent it = new Intent(getContext(), ACRecordInfoEdit.class);
+                it.putExtra(ACRecordInfoEdit.IT_PARA_RECORDTYPE, mRootType);
+
+                startActivityForResult(it, 1);
+            }
+            break;
+
+            case R.id.rl_sort :     {
+                String cur_name = mTVSort.getText().toString();
+                boolean is_up = DlgResource.mSZSortByNameUp.equals(cur_name);
+
+                mTVSort.setText( is_up ?
+                                    DlgResource.mSZSortByNameDown : DlgResource.mSZSortByNameUp);
+                mIVSort.setImageDrawable(is_up ?
+                                    DlgResource.mDASortDown : DlgResource.mDASortUp);
+
+                loadData();
+            }
+            break;
+        }
+    }
+
+
     private void loadData() {
         RecordTypeDBUtility rd = ContextUtil.getRecordTypeUtility();
         List<RecordTypeItem> al_type = GlobalDef.STR_RECORD_PAY.equals(mRootType) ?
                                                 rd.getAllPayItem() : rd.getAllIncomeItem();
-        Collections.sort(al_type, (o1, o2) -> mStrSortUp.equals(mTVSort.getText().toString()) ?
-                        o1.getType().compareTo(o2.getType())
-                        : o2.getType().compareTo(o1.getType()));
+
+        boolean is_up = DlgResource.mSZSortByNameUp.equals(mTVSort.getText().toString());
+        Collections.sort(al_type, (o1, o2) ->
+                             is_up ?
+                                o1.getType().compareTo(o2.getType())
+                                : o2.getType().compareTo(o1.getType()));
 
         String old_note = null;
         mLHMData.clear();
@@ -183,15 +195,9 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
      * 加载gridview的适配器类
      */
     public class GVTypeAdapter extends SimpleAdapter {
-        private int mCLSelected;
-        private int mCLNotSelected;
-
         GVTypeAdapter(Context context, List<? extends Map<String, ?>> data,
                          String[] from, int[] to) {
             super(context, data, R.layout.gi_record_type, from, to);
-
-            mCLSelected = context.getResources().getColor(R.color.peachpuff);
-            mCLNotSelected = context.getResources().getColor(R.color.white);
         }
 
         @Override
@@ -210,7 +216,8 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
             View v = super.getView(position, view, arg2);
             if (null != v) {
                 HashMap<String, String> hm = mLHMData.get(position);
-                int curCL = hm.get(KEY_SELECTED).equals(VAL_SELECTED) ? mCLSelected : mCLNotSelected;
+                int curCL = hm.get(KEY_SELECTED).equals(VAL_SELECTED) ?
+                                DlgResource.mCLSelected : DlgResource.mCLNotSelected;
                 v.setBackgroundColor(curCL);
             }
 

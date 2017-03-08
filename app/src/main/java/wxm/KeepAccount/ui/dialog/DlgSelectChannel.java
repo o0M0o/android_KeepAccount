@@ -18,6 +18,7 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.ui.dialog.utility.DlgResource;
 import wxm.KeepAccount.utility.ActionHelper;
 import wxm.KeepAccount.utility.DGVButtonAdapter;
 import wxm.KeepAccount.R;
@@ -26,8 +27,7 @@ import wxm.KeepAccount.R;
  * 选择关注channel的对话框
  * Created by 123 on 2016/9/20.
  */
-public class DlgSelectChannel extends DlgOKOrNOBase
-        implements AdapterView.OnItemClickListener {
+public class DlgSelectChannel extends DlgOKOrNOBase {
     // for hot channel
     private ArrayList<String>  mLSHotChannel = new ArrayList<>();
 
@@ -65,7 +65,19 @@ public class DlgSelectChannel extends DlgOKOrNOBase
 
         View vw = View.inflate(getActivity(), R.layout.dlg_select_channel, null);
         GridView gv = UtilFun.cast_t(vw.findViewById(R.id.gv_channels));
-        gv.setOnItemClickListener(this);
+        gv.setOnItemClickListener((parent, view, position, id) -> {
+            HashMap<String, Object> hmd = UtilFun.cast(parent.getAdapter().getItem(position));
+            String act = UtilFun.cast(hmd.get(DGVButtonAdapter.HKEY_ACT_NAME));
+
+            boolean hot = mLSHotChannel.contains(act);
+            if(hot)   {
+                mLSHotChannel.remove(act);
+                view.setBackground(DlgResource.mDAChannelNoSel);
+            } else  {
+                mLSHotChannel.add(act);
+                view.setBackground(DlgResource.mDAChannelSel);
+            }
+        });
 
         ArrayList<HashMap<String, Object>> ls_data = new ArrayList<>();
         for(String i : ActionHelper.ACTION_NAMES)   {
@@ -85,44 +97,12 @@ public class DlgSelectChannel extends DlgOKOrNOBase
 
 
     /**
-     * Gridview的itemclick处理方法
-     * @param parent        param
-     * @param view          param
-     * @param position      param
-     * @param id            param
-     */
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        HashMap<String, Object> hmd = UtilFun.cast(parent.getAdapter().getItem(position));
-        String act = UtilFun.cast(hmd.get(DGVButtonAdapter.HKEY_ACT_NAME));
-//        Toast.makeText(ContextUtil.getInstance(),
-//                "选择了'" + act + "'",
-//                Toast.LENGTH_SHORT).show();
-
-        boolean hot = mLSHotChannel.contains(act);
-        if(hot)   {
-            mLSHotChannel.remove(act);
-            view.setBackgroundColor(view.getResources().getColor(R.color.white));
-        } else  {
-            mLSHotChannel.add(act);
-            view.setBackgroundColor(view.getResources().getColor(R.color.paleturquoise));
-        }
-    }
-
-    /**
      * 加载gridview的适配器类
      */
     public class GVChannelAdapter extends SimpleAdapter {
-        private Drawable  mDASel;
-        private Drawable  mDANoSel;
-
         GVChannelAdapter(Context context, List<? extends Map<String, ?>> data,
                          String[] from, int[] to) {
             super(context, data, R.layout.gi_channel, from, to);
-
-            Resources res = context.getResources();
-            mDANoSel = res.getDrawable(R.drawable.gi_channel_no_sel_shape);
-            mDASel   = res.getDrawable(R.drawable.gi_channel_sel_shape);
         }
 
         @Override
@@ -143,7 +123,8 @@ public class DlgSelectChannel extends DlgOKOrNOBase
                 HashMap<String, Object> hmd = UtilFun.cast(getItem(position));
                 String hv = UtilFun.cast(hmd.get(DGVButtonAdapter.HKEY_ACT_NAME));
 
-                v.setBackground(mLSHotChannel.contains(hv) ? mDASel : mDANoSel);
+                v.setBackground(mLSHotChannel.contains(hv) ?
+                        DlgResource.mDAChannelSel : DlgResource.mDAChannelNoSel);
 
                 // for image
                 ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_act));
