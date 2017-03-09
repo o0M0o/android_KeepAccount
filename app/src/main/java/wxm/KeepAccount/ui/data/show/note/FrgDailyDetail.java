@@ -39,12 +39,12 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail;
 import wxm.KeepAccount.ui.utility.HelperDayNotesInfo;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteEdit;
 
@@ -124,7 +124,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
         Bundle bd = getArguments();
         mSZHotDay = bd.getString(ACDailyDetail.K_HOTDAY);
         if(!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
-            HashMap<String, ArrayList<INote>> hl = NoteShowDataHelper.getInstance().getNotesForDay();
+            HashMap<String, ArrayList<INote>> hl = NoteDataHelper.getInstance().getNotesForDay();
             mLSDayContents = hl.get(mSZHotDay);
         }
 
@@ -154,7 +154,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBDataChangeEvent(DBDataChangeEvent event) {
         if(!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
-            HashMap<String, ArrayList<INote>> hl = NoteShowDataHelper.getInstance().getNotesForDay();
+            HashMap<String, ArrayList<INote>> hl = NoteDataHelper.getInstance().getNotesForDay();
             mLSDayContents = hl.get(mSZHotDay);
 
             loadContent();
@@ -173,7 +173,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
         int vid = view.getId();
         switch (vid)    {
             case R.id.rl_prv :  {
-                String prv_day = NoteShowDataHelper.getInstance().getPrvDay(mSZHotDay);
+                String prv_day = NoteDataHelper.getInstance().getPrvDay(mSZHotDay);
                 if(!UtilFun.StringIsNullOrEmpty(prv_day))   {
                     mSZHotDay = prv_day;
 
@@ -186,7 +186,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
             break;
 
             case R.id.rl_next :  {
-                String next_day = NoteShowDataHelper.getInstance().getNextDay(mSZHotDay);
+                String next_day = NoteDataHelper.getInstance().getNextDay(mSZHotDay);
                 if(!UtilFun.StringIsNullOrEmpty(next_day))   {
                     mSZHotDay = next_day;
 
@@ -200,7 +200,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
         }
 
         if(!UtilFun.StringIsNullOrEmpty(mSZHotDay) && !org_day.equals(mSZHotDay)) {
-            HashMap<String, ArrayList<INote>> hl = NoteShowDataHelper.getInstance().getNotesForDay();
+            HashMap<String, ArrayList<INote>> hl = NoteDataHelper.getInstance().getNotesForDay();
             mLSDayContents = hl.get(mSZHotDay);
 
             loadContent();
@@ -353,8 +353,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
      * 加载日期信息
      */
     private void loadDayInfo()    {
-        HashMap<String, NoteShowInfo> hm_d = NoteShowDataHelper.getInstance().getDayInfo();
-        NoteShowInfo ni = hm_d.get(mSZHotDay);
+        NoteShowInfo ni = NoteDataHelper.getInfoByDay(mSZHotDay);
 
         String p_count;
         String i_count;

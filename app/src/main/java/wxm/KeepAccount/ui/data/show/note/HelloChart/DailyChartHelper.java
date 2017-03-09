@@ -7,11 +7,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
 import lecho.lib.hellocharts.model.Axis;
@@ -24,10 +22,8 @@ import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
-import wxm.KeepAccount.ui.utility.NoteShowInfo;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.PreferencesUtil;
-import wxm.KeepAccount.utility.ToolUtil;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 /**
  * 加载日chart视图
@@ -48,7 +44,7 @@ public class DailyChartHelper extends ChartHelperBase {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                HashMap<String, ArrayList<INote>> ret = NoteShowDataHelper.getInstance().getNotesForDay();
+                HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForDay();
 
                 int id_col = 0;
                 List<AxisValue> axisValues = new ArrayList<>();
@@ -137,7 +133,7 @@ public class DailyChartHelper extends ChartHelperBase {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
         List<String> e_p = event.getFilterTag();
-        if ((NoteShowDataHelper.TAB_TITLE_MONTHLY.equals(event.getSender()))
+        if ((NoteDataHelper.TAB_TITLE_MONTHLY.equals(event.getSender()))
                 && (null != e_p)) {
             mBFilter = true;
             mFilterPara.clear();

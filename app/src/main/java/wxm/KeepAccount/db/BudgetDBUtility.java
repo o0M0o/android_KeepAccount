@@ -15,11 +15,8 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.UsrItem;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.utility.ToolUtil;
-
-import static cn.wxm.andriodutillib.util.UtilFun.ListIsNullOrEmpty;
 
 /**
  * 预算数据工具类
@@ -148,19 +145,19 @@ public class BudgetDBUtility extends DBUtilityBase<BudgetItem, Integer> {
 
     @Override
     protected void onDataModify(List<Integer> md) {
-        NoteShowDataHelper.getInstance().refreshData();
+        NoteDataHelper.getInstance().refreshData();
         EventBus.getDefault().post(new DBDataChangeEvent());
     }
 
     @Override
     protected void onDataCreate(List<Integer> cd) {
-        NoteShowDataHelper.getInstance().refreshData();
+        NoteDataHelper.getInstance().refreshData();
         EventBus.getDefault().post(new DBDataChangeEvent());
     }
 
     @Override
     protected void onDataRemove(List<Integer> dd) {
-        NoteShowDataHelper.getInstance().refreshData();
+        NoteDataHelper.getInstance().refreshData();
         EventBus.getDefault().post(new DBDataChangeEvent());
     }
 }

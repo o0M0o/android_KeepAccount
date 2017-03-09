@@ -23,7 +23,7 @@ import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.utility.PreferencesUtil;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
 /**
  * 加载年度chart视图
@@ -44,7 +44,7 @@ public class YearlyChartHelper extends ChartHelperBase {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                HashMap<String, ArrayList<INote>> ret = NoteShowDataHelper.getInstance().getNotesForYear();
+                HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForYear();
 
                 int id_col = 0;
                 List<AxisValue> axisValues = new ArrayList<>();

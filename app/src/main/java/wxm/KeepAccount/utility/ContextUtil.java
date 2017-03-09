@@ -16,7 +16,7 @@ import wxm.KeepAccount.db.PayIncomeDBUtility;
 import wxm.KeepAccount.db.RecordTypeDBUtility;
 import wxm.KeepAccount.db.RemindDBUtility;
 import wxm.KeepAccount.db.UsrDBUtility;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
 /**
  * 获取全局context
@@ -34,9 +34,9 @@ public class ContextUtil extends Application {
     // mainly for sqlite
     private DBOrmLiteHelper mDBHelper;
     private UsrDBUtility mUsru;
-    private RecordTypeDBUtility     mRecordTypeu;
+    private RecordTypeDBUtility mRecordTypeu;
     private BudgetDBUtility mBudgetu;
-    private PayIncomeDBUtility      mPayIncomeu;
+    private PayIncomeDBUtility mPayIncomeu;
     private RemindDBUtility mRemindu;
 
     @Override
@@ -184,7 +184,7 @@ public class ContextUtil extends Application {
                 db_remind.where().eq(RemindItem.FIELD_USR, uid);
                 db_remind.delete();
 
-                NoteShowDataHelper.getInstance().refreshData();
+                NoteDataHelper.getInstance().refreshData();
             }
         } catch (java.sql.SQLException e) {
             Log.e(TAG, "ClearDB catch an exception", e);

@@ -4,6 +4,8 @@ package wxm.KeepAccount.ui.utility;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.utility.ContextUtil;
@@ -12,8 +14,8 @@ import wxm.KeepAccount.utility.ContextUtil;
  * Data helper for NoteShow
  * Created by wxm on 2016/5/30.
  */
-public class NoteShowDataHelper {
-    private static final String TAG = "NoteShowDataHelper ";
+public class NoteDataHelper {
+    private static final String TAG = "NoteDataHelper ";
 
     // 定义调用参数
     public static final String INTENT_PARA_FIRST_TAB   = "first_tab";
@@ -30,25 +32,25 @@ public class NoteShowDataHelper {
      * '2016-10'    ---- data   (月数据)
      * '2016'       ---- data   (年数据)
      */
-    HashMap<String, NoteShowInfo>   mHMDayInfo;
-    HashMap<String, NoteShowInfo>   mHMMonthInfo;
-    HashMap<String, NoteShowInfo>   mHMYearInfo;
+    private HashMap<String, NoteShowInfo>   mHMDayInfo;
+    private HashMap<String, NoteShowInfo>   mHMMonthInfo;
+    private HashMap<String, NoteShowInfo>   mHMYearInfo;
 
-    HashMap<String, ArrayList<INote>>   mHMDayNotes;
-    HashMap<String, ArrayList<INote>>   mHMMonthNotes;
-    HashMap<String, ArrayList<INote>>   mHMYearNotes;
+    private HashMap<String, ArrayList<INote>>   mHMDayNotes;
+    private HashMap<String, ArrayList<INote>>   mHMMonthNotes;
+    private HashMap<String, ArrayList<INote>>   mHMYearNotes;
 
-    ArrayList<String>   mALOrderedDays;
+    private ArrayList<String>   mALOrderedDays;
 
     // use singleton
-    private static NoteShowDataHelper instance = new NoteShowDataHelper();
-    private NoteShowDataHelper() {
+    private static NoteDataHelper instance = new NoteDataHelper();
+    private NoteDataHelper() {
         mHMDayInfo = new HashMap<>();
         mHMMonthInfo = new HashMap<>();
         mHMYearInfo = new HashMap<>();
     }
 
-    public static NoteShowDataHelper getInstance() {
+    public static NoteDataHelper getInstance() {
         return instance;
     }
 
@@ -73,30 +75,6 @@ public class NoteShowDataHelper {
     }
 
     /**
-     * 获得日统计数据
-     * @return  日统计数据
-     */
-    public HashMap<String, NoteShowInfo> getDayInfo()   {
-        return mHMDayInfo;
-    }
-
-    /**
-     * 获得月统计数据
-     * @return  月统计数据
-     */
-    public HashMap<String, NoteShowInfo> getMonthInfo()   {
-        return mHMMonthInfo;
-    }
-
-    /**
-     * 获得年统计数据
-     * @return  年统计数据
-     */
-    public HashMap<String, NoteShowInfo> getYearInfo()   {
-        return mHMYearInfo;
-    }
-
-    /**
      * 获得按日归类的数据
      * @return    按日归类的数据
      */
@@ -118,6 +96,69 @@ public class NoteShowDataHelper {
      */
     public HashMap<String, ArrayList<INote>> getNotesForYear()   {
         return mHMYearNotes;
+    }
+
+
+    /**
+     * 根据月份查找统计数据
+     * @param mt    月份（比如'2017-01')
+     * @return      统计数据
+     */
+    public static NoteShowInfo getInfoByMonth(String mt)   {
+        return getInstance().mHMMonthInfo.get(mt);
+    }
+
+
+    /**
+     * 返回有数据的月份
+     * @return      有数据的月份
+     */
+    public static List<String> getNotesMonths() {
+        LinkedList<String> ls_sz = new LinkedList<>();
+        ls_sz.addAll(getInstance().mHMMonthInfo.keySet());
+        return ls_sz;
+    }
+
+
+    /**
+     * 根据年份查找统计数据
+     * @param yr    年度（比如'2017')
+     * @return      统计数据
+     */
+    public static NoteShowInfo getInfoByYear(String yr)   {
+        return getInstance().mHMYearInfo.get(yr);
+    }
+
+
+    /**
+     * 返回有数据的年度
+     * @return      有数据的年度
+     */
+    public static List<String> getNotesYears() {
+        LinkedList<String> ls_sz = new LinkedList<>();
+        ls_sz.addAll(getInstance().mHMYearInfo.keySet());
+        return ls_sz;
+    }
+
+
+    /**
+     * 根据日期查找统计数据
+     * @param day   日期（比如'2017-01-12')
+     * @return      统计数据
+     */
+    public static NoteShowInfo getInfoByDay(String day)   {
+        return getInstance().mHMDayInfo.get(day);
+    }
+
+
+    /**
+     * 返回有数据的日期
+     * @return      有数据的日期
+     */
+    public static List<String> getNotesDays() {
+        LinkedList<String> ls_sz = new LinkedList<>();
+        ls_sz.addAll(getInstance().mHMDayInfo.keySet());
+        return ls_sz;
     }
 
 

@@ -35,7 +35,7 @@ import wxm.KeepAccount.ui.utility.FastViewHolder;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.note.ACDailyDetail;
@@ -70,7 +70,7 @@ public class DailyLVHelper
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
         List<String> e_p = event.getFilterTag();
-        if ((NoteShowDataHelper.TAB_TITLE_MONTHLY.equals(event.getSender()))
+        if ((NoteDataHelper.TAB_TITLE_MONTHLY.equals(event.getSender()))
                 && (null != e_p)) {
             mBFilter = true;
             mActionType = ACTION_EDIT;
@@ -196,7 +196,7 @@ public class DailyLVHelper
                     SelfAdapter cur_ap = (SelfAdapter) mLVShow.getAdapter();
                     List<String> ls_days = cur_ap.getWaitDeleteDays();
                     HashMap<String, ArrayList<INote>> hm =
-                            NoteShowDataHelper.getInstance().getNotesForDay();
+                            NoteDataHelper.getInstance().getNotesForDay();
                     for(String day : ls_days)   {
                         List<INote> ls_n = hm.get(day);
                         for(INote n : ls_n) {
@@ -250,12 +250,11 @@ public class DailyLVHelper
             @Override
             protected Void doInBackground(Void... params) {
                 // for day
-                HashMap<String, NoteShowInfo> hm_d = NoteShowDataHelper.getInstance().getDayInfo();
-                ArrayList<String> set_k_d = new ArrayList<>(hm_d.keySet());
+                List<String> set_k_d = NoteDataHelper.getNotesDays();
                 Collections.sort(set_k_d, (o1, o2) -> !mBODownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
 
                 for (String k : set_k_d) {
-                    NoteShowInfo ni = hm_d.get(k);
+                    NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
                     HashMap<String, String> map = new HashMap<>();
                     map.put(K_MONTH, k.substring(0, 7));
 

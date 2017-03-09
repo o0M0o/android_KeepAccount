@@ -21,7 +21,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
 
 /**
@@ -104,7 +104,7 @@ public class FrgCalendarContent extends FrgUtilityBase {
         mTVMonthDay.setText(arr[2]);
         mTVYearMonth.setText(String.format(Locale.CHINA, "%s年%s月", arr[0], arr[1]));
 
-        NoteShowInfo ni = NoteShowDataHelper.getInstance().getDayInfo().get(mSZHotDay);
+        NoteShowInfo ni = NoteDataHelper.getInfoByDay(mSZHotDay);
         BigDecimal bb = null != ni ? ni.getBalance() : BigDecimal.ZERO;
         mTVBalance.setText(String.format(Locale.CHINA, "%s %.02f",
                 0 > bb.compareTo(BigDecimal.ZERO) ? "-" : "+",

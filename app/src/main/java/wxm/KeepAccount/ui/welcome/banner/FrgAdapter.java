@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.welcome;
+package wxm.KeepAccount.ui.welcome.banner;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,7 +12,6 @@ import com.allure.lbanners.LMBanners;
 import com.allure.lbanners.adapter.LBaseAdapter;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
@@ -28,9 +26,8 @@ import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.view.ColumnChartView;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
-import wxm.KeepAccount.ui.welcome.FrgPara;
 import wxm.KeepAccount.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
 
@@ -43,7 +40,6 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
 
     private Context             mContext;
     private SparseArray<View>   mSAView;
-    private Timestamp           mTSLastUpdate;
 
     public FrgAdapter(Context context) {
         mContext=context;
@@ -77,7 +73,6 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
         Log.d(LOG_TAG, "initView");
 
         mSAView.clear();
-        mTSLastUpdate = new Timestamp(System.currentTimeMillis());
 
         View v = LayoutInflater.from(mContext).inflate(R.layout.banner_month, null);
         fillMonth(v);
@@ -105,8 +100,7 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
 
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM", Locale.CHINA);
         String cur_month = sd.format(ci.getTime());
-        HashMap<String, NoteShowInfo> hm = NoteShowDataHelper.getInstance().getMonthInfo();
-        NoteShowInfo ni = hm.get(cur_month);
+        NoteShowInfo ni = NoteDataHelper.getInfoByMonth(cur_month);
         if(null == ni)  {
             ni = new NoteShowInfo();
             ni.setPayAmount(BigDecimal.ZERO);
@@ -133,8 +127,7 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
 
         SimpleDateFormat sd = new SimpleDateFormat("yyyy", Locale.CHINA);
         String cur_year = sd.format(ci.getTime());
-        HashMap<String, NoteShowInfo> hm = NoteShowDataHelper.getInstance().getYearInfo();
-        NoteShowInfo ni = hm.get(cur_year);
+        NoteShowInfo ni = NoteDataHelper.getInfoByYear(cur_year);
         if(null == ni)  {
             ni = new NoteShowInfo();
             ni.setPayAmount(BigDecimal.ZERO);

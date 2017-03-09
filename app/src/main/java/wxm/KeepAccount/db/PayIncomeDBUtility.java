@@ -19,11 +19,8 @@ import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.UsrItem;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.utility.ToolUtil;
-
-import static cn.wxm.andriodutillib.util.UtilFun.ListIsNullOrEmpty;
 
 /**
  * 备忘本数据库工具类
@@ -293,19 +290,19 @@ public class PayIncomeDBUtility  {
 
         @Override
         protected void onDataModify(List<Integer> md) {
-            NoteShowDataHelper.getInstance().refreshData();
+            NoteDataHelper.getInstance().refreshData();
             EventBus.getDefault().post(new DBDataChangeEvent());
         }
 
         @Override
         protected void onDataCreate(List<Integer> cd) {
-            NoteShowDataHelper.getInstance().refreshData();
+            NoteDataHelper.getInstance().refreshData();
             EventBus.getDefault().post(new DBDataChangeEvent());
         }
 
         @Override
         protected void onDataRemove(List<Integer> dd) {
-            NoteShowDataHelper.getInstance().refreshData();
+            NoteDataHelper.getInstance().refreshData();
             EventBus.getDefault().post(new DBDataChangeEvent());
         }
     }
@@ -335,19 +332,19 @@ public class PayIncomeDBUtility  {
 
         @Override
         protected void onDataModify(List<Integer> md) {
-            NoteShowDataHelper.getInstance().refreshData();
+            NoteDataHelper.getInstance().refreshData();
             EventBus.getDefault().post(new DBDataChangeEvent());
         }
 
         @Override
         protected void onDataCreate(List<Integer> cd) {
-            NoteShowDataHelper.getInstance().refreshData();
+            NoteDataHelper.getInstance().refreshData();
             EventBus.getDefault().post(new DBDataChangeEvent());
         }
 
         @Override
         protected void onDataRemove(List<Integer> dd) {
-            NoteShowDataHelper.getInstance().refreshData();
+            NoteDataHelper.getInstance().refreshData();
             EventBus.getDefault().post(new DBDataChangeEvent());
         }
     }

@@ -11,8 +11,8 @@ import cn.wxm.andriodutillib.util.MD5Util;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.UsrItem;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 /**
  * usr数据处理类
@@ -142,7 +142,7 @@ public class UsrDBUtility extends DBUtilityBase<UsrItem, Integer> {
             return false;
 
         ContextUtil.setCurUsr(ui);
-        NoteShowDataHelper.getInstance().refreshData();
+        NoteDataHelper.getInstance().refreshData();
         return true;
     }
 

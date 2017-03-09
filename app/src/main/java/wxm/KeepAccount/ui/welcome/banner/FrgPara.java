@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.welcome;
+package wxm.KeepAccount.ui.welcome.banner;
 
 /**
  * for frg

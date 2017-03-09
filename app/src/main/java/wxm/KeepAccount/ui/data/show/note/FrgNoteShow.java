@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -25,7 +24,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +36,7 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBudget;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowMonthly;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowYearly;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
 
 /**
@@ -104,10 +102,10 @@ public class FrgNoteShow extends FrgUtilityBase {
     @Override
     protected void initUiComponent(View view) {
         // init view
-        mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_DAILY));
-        mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_MONTHLY));
-        mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_YEARLY));
-        mTLTab.addTab(mTLTab.newTab().setText(NoteShowDataHelper.TAB_TITLE_BUDGET));
+        mTLTab.addTab(mTLTab.newTab().setText(NoteDataHelper.TAB_TITLE_DAILY));
+        mTLTab.addTab(mTLTab.newTab().setText(NoteDataHelper.TAB_TITLE_MONTHLY));
+        mTLTab.addTab(mTLTab.newTab().setText(NoteDataHelper.TAB_TITLE_YEARLY));
+        mTLTab.addTab(mTLTab.newTab().setText(NoteDataHelper.TAB_TITLE_BUDGET));
         mTLTab.setTabGravity(TabLayout.GRAVITY_FILL);
 
         // init adapter
@@ -144,7 +142,7 @@ public class FrgNoteShow extends FrgUtilityBase {
         Intent it = getActivity().getIntent();
         if (null != it) {
             boolean b_hot = false;
-            String ft = it.getStringExtra(NoteShowDataHelper.INTENT_PARA_FIRST_TAB);
+            String ft = it.getStringExtra(NoteDataHelper.INTENT_PARA_FIRST_TAB);
             if (!UtilFun.StringIsNullOrEmpty(ft)) {
                 int tc = mTLTab.getTabCount();
                 for (int i = 0; i < tc; i++) {
@@ -249,10 +247,10 @@ public class FrgNoteShow extends FrgUtilityBase {
             this.mNumOfTabs = NumOfTabs;
 
             mHMFra = new HashMap<>();
-            mHMFra.put(NoteShowDataHelper.TAB_TITLE_DAILY, new TFShowDaily());
-            mHMFra.put(NoteShowDataHelper.TAB_TITLE_MONTHLY, new TFShowMonthly());
-            mHMFra.put(NoteShowDataHelper.TAB_TITLE_YEARLY, new TFShowYearly());
-            mHMFra.put(NoteShowDataHelper.TAB_TITLE_BUDGET, new TFShowBudget());
+            mHMFra.put(NoteDataHelper.TAB_TITLE_DAILY, new TFShowDaily());
+            mHMFra.put(NoteDataHelper.TAB_TITLE_MONTHLY, new TFShowMonthly());
+            mHMFra.put(NoteDataHelper.TAB_TITLE_YEARLY, new TFShowYearly());
+            mHMFra.put(NoteDataHelper.TAB_TITLE_BUDGET, new TFShowBudget());
         }
 
         @Override

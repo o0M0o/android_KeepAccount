@@ -11,10 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,7 +20,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +29,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.report.EventSelectDays;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
 /**
  * 日数据汇报 - webview展示页
@@ -106,7 +103,7 @@ public class PageReportDayWebView extends FrgUtilityBase {
 
                     String d_s = mASParaLoad.get(0);
                     String d_e = mASParaLoad.get(1);
-                    HashMap<String, ArrayList<INote>> ls_note = NoteShowDataHelper.getInstance()
+                    HashMap<String, ArrayList<INote>> ls_note = NoteDataHelper.getInstance()
                                                 .getNotesBetweenDays(d_s, d_e);
 
 

@@ -23,6 +23,8 @@ import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.DragGrid.DragGridView;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.ui.welcome.banner.FrgAdapter;
+import wxm.KeepAccount.ui.welcome.banner.FrgPara;
 import wxm.KeepAccount.utility.DGVButtonAdapter;
 import wxm.KeepAccount.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
@@ -153,13 +155,9 @@ public class FrgWelcome extends FrgUtilityBase {
     }
 
     private void initBanner()   {
-        //设置Banners高度
-        //mLBanners.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ScreenUtils.dip2px(this, 200)));
         //本地用法
         mLBanners.setAdapter(new FrgAdapter(getActivity()), mALFrgs);
 
-        //网络图片
-//        mLBanners.setAdapter(new UrlImgAdapter(MainActivity.this), networkImages);
         //参数设置
         mLBanners.setAutoPlay(false);//自动播放
         mLBanners.setVertical(false);//是否可以垂直

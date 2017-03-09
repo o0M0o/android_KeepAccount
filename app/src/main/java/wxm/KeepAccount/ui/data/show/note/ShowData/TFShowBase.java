@@ -1,30 +1,14 @@
 package wxm.KeepAccount.ui.data.show.note.ShowData;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.Toast;
-import android.widget.ViewSwitcher;
 
-import java.util.Arrays;
-import java.util.List;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilitySupportBase;
-import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.show.note.FrgNoteShow;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 
 /**
  * 数据显示fragment基类

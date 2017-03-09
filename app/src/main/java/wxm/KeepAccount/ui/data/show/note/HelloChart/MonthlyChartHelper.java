@@ -22,9 +22,8 @@ import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.PreferencesUtil;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
-import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * 加载阅读chart视图
@@ -45,7 +44,7 @@ public class MonthlyChartHelper extends ChartHelperBase {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                HashMap<String, ArrayList<INote>> ret = NoteShowDataHelper.getInstance().getNotesForMonth();
+                HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForMonth();
 
                 int id_col = 0;
                 List<AxisValue> axisValues = new ArrayList<>();
@@ -134,7 +133,7 @@ public class MonthlyChartHelper extends ChartHelperBase {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
         List<String> e_p = event.getFilterTag();
-        if ((NoteShowDataHelper.TAB_TITLE_YEARLY.equals(event.getSender()))
+        if ((NoteDataHelper.TAB_TITLE_YEARLY.equals(event.getSender()))
                 && (null != e_p)) {
             mBFilter = true;
             mFilterPara.clear();

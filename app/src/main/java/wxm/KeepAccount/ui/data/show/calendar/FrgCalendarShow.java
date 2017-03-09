@@ -34,7 +34,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.simplecalendarlvb.CalendarListView;
 
 
@@ -179,7 +179,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
         mTMList.clear();
         HashMap<String, ArrayList<INote>> hm_note
-                = NoteShowDataHelper.getInstance().getNotesForMonth();
+                = NoteDataHelper.getInstance().getNotesForMonth();
         if(null != hm_note) {
             ArrayList<INote> al_notes = hm_note.get(month);
             for(INote ci : al_notes)    {
@@ -217,7 +217,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
             @Override
             protected Void doInBackground(Void... params) {
                 HashMap<String, ArrayList<INote>> hm
-                        = NoteShowDataHelper.getInstance().getNotesForMonth();
+                        = NoteDataHelper.getInstance().getNotesForMonth();
                 if(null != hm)  {
                     mSZFristMonth = UtilFun.cast_t(hm.keySet().toArray()[0]);
                 }

@@ -24,9 +24,9 @@ import java.util.Locale;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ActionHelper;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteEdit;
@@ -129,8 +129,8 @@ public class ACWelcome extends AppCompatActivity
         switch (act)     {
             case ActionHelper.ACT_LOOK_BUDGET :     {
                 Intent intent = new Intent(this, ACNoteShow.class);
-                intent.putExtra(NoteShowDataHelper.INTENT_PARA_FIRST_TAB,
-                                NoteShowDataHelper.TAB_TITLE_BUDGET);
+                intent.putExtra(NoteDataHelper.INTENT_PARA_FIRST_TAB,
+                                NoteDataHelper.TAB_TITLE_BUDGET);
                 startActivityForResult(intent, 1);
             }
             break;

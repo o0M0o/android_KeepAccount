@@ -2,10 +2,7 @@ package wxm.KeepAccount.ui.data.report.page;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.StateListAnimator;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -24,7 +20,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,12 +37,9 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.define.IncomeNoteItem;
-import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.report.EventSelectDays;
-import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
 /**
  * 日数据汇报 - webview展示页
@@ -230,7 +222,7 @@ public class PageReportDayChart extends FrgUtilityBase {
 
                     String d_s = mASParaLoad.get(0);
                     String d_e = mASParaLoad.get(1);
-                    HashMap<String, ArrayList<INote>> hm_note = NoteShowDataHelper.getInstance()
+                    HashMap<String, ArrayList<INote>> hm_note = NoteDataHelper.getInstance()
                             .getNotesBetweenDays(d_s, d_e);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

@@ -1,13 +1,8 @@
 package wxm.KeepAccount.ui.data.report;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -36,11 +29,10 @@ import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.report.page.NotesToHtmlUtil;
 import wxm.KeepAccount.ui.data.report.page.PageReportDayChart;
 import wxm.KeepAccount.ui.data.report.page.PageReportDayWebView;
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
 /**
  * 日数据汇报
@@ -136,7 +128,7 @@ public class FrgReportDay extends FrgUtilityBase {
                     String d_e = mASParaLoad.get(1);
                     mSZCaption = String.format(Locale.CHINA,
                                             "%s - %s", d_s, d_e);
-                    HashMap<String, ArrayList<INote>> ls_note = NoteShowDataHelper.getInstance()
+                    HashMap<String, ArrayList<INote>> ls_note = NoteDataHelper.getInstance()
                                                 .getNotesBetweenDays(d_s, d_e);
 
                     for(ArrayList<INote> ls_n : ls_note.values()) {

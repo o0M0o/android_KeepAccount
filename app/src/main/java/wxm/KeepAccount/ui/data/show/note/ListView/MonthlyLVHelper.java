@@ -1,11 +1,8 @@
 package wxm.KeepAccount.ui.data.show.note.ListView;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,8 +16,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -30,18 +25,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.ui.data.show.note.ACDailyDetail;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.utility.FastViewHolder;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.utility.NoteShowDataHelper;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.utility.HelperDayNotesInfo;
@@ -73,7 +65,7 @@ public class MonthlyLVHelper
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
         List<String> e_p = event.getFilterTag();
-        if ((NoteShowDataHelper.TAB_TITLE_YEARLY.equals(event.getSender()))
+        if ((NoteDataHelper.TAB_TITLE_YEARLY.equals(event.getSender()))
                 && (null != e_p)) {
             mBFilter = true;
             mBSelectSubFilter = false;
@@ -125,11 +117,11 @@ public class MonthlyLVHelper
                 if(mBSelectSubFilter) {
                     if(!UtilFun.ListIsNullOrEmpty(mLLSubFilter)) {
                         ACNoteShow ac = getRootActivity();
-                        ac.jumpByTabName(NoteShowDataHelper.TAB_TITLE_DAILY);
+                        ac.jumpByTabName(NoteDataHelper.TAB_TITLE_DAILY);
 
                         ArrayList<String> al_s = new ArrayList<>();
                         al_s.addAll(mLLSubFilter);
-                        EventBus.getDefault().post(new FilterShowEvent(NoteShowDataHelper.TAB_TITLE_MONTHLY, al_s));
+                        EventBus.getDefault().post(new FilterShowEvent(NoteDataHelper.TAB_TITLE_MONTHLY, al_s));
 
                         mLLSubFilter.clear();
                     }
@@ -191,11 +183,10 @@ public class MonthlyLVHelper
             @Override
             protected Void doInBackground(Void... params) {
                 // for month
-                HashMap<String, NoteShowInfo> hm_m = NoteShowDataHelper.getInstance().getMonthInfo();
-                ArrayList<String> set_k_m = new ArrayList<>(hm_m.keySet());
+                List<String> set_k_m = NoteDataHelper.getNotesMonths();
                 Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
                 for(String k : set_k_m)   {
-                    NoteShowInfo ni = hm_m.get(k);
+                    NoteShowInfo ni = NoteDataHelper.getInfoByMonth(k);
                     HashMap<String, String> map = new HashMap<>();
                     map.put(K_MONTH, k);
                     map.put(K_MONTH_PAY_COUNT, String.valueOf(ni.getPayCount()));
@@ -216,12 +207,11 @@ public class MonthlyLVHelper
                 }
 
                 // for day
-                HashMap<String, NoteShowInfo> hm_d = NoteShowDataHelper.getInstance().getDayInfo();
-                ArrayList<String> set_k_d = new ArrayList<>(hm_d.keySet());
+                List<String> set_k_d = NoteDataHelper.getNotesDays();
                 Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
                 for(String k : set_k_d)   {
                     String mk = k.substring(0, 7);
-                    NoteShowInfo ni = hm_d.get(k);
+                    NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
                     HashMap<String, String> map = new HashMap<>();
 
                     String km = k.substring(8, 10);
@@ -431,39 +421,6 @@ public class MonthlyLVHelper
     private class SelfSubAdapter  extends SimpleAdapter  {
         private final static String TAG = "SelfSubAdapter";
 
-        private View.OnClickListener mCLAdapter = v -> {
-            int pos = mLVShow.getPositionForView(v);
-
-            HashMap<String, String> hm = UtilFun.cast(getItem(pos));
-            String sub_tag = hm.get(K_SUB_TAG);
-
-            if(!mLLSubFilter.contains(sub_tag)) {
-                Log.d(TAG, "add selected");
-                v.setBackgroundColor(LVResource.mCRLVItemSel);
-
-                mLLSubFilter.add(sub_tag);
-                mLLSubFilterVW.add(v);
-
-                if(!mBSelectSubFilter) {
-                    mBSelectSubFilter = true;
-                    refreshAttachLayout();
-                }
-            }   else {
-                Log.d(TAG, "remove selected");
-                v.setBackgroundColor(LVResource.mCRLVItemNoSel);
-
-                mLLSubFilter.remove(sub_tag);
-                mLLSubFilterVW.remove(v);
-
-                if(mLLSubFilter.isEmpty()) {
-                    mLLSubFilterVW.clear();
-                    mBSelectSubFilter = false;
-                    refreshAttachLayout();
-                }
-            }
-        };
-
-
         SelfSubAdapter(Context context,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
@@ -493,7 +450,32 @@ public class MonthlyLVHelper
             ImageView ib = viewHolder.getView(R.id.iv_action);
             ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ?
                     LVResource.mCRLVItemSel : LVResource.mCRLVItemNoSel);
-            ib.setOnClickListener(mCLAdapter);
+            ib.setOnClickListener(v -> {
+                String sub_tag1 = hm.get(K_SUB_TAG);
+
+                if(!mLLSubFilter.contains(sub_tag1)) {
+                    v.setBackgroundColor(LVResource.mCRLVItemSel);
+
+                    mLLSubFilter.add(sub_tag1);
+                    mLLSubFilterVW.add(v);
+
+                    if(!mBSelectSubFilter) {
+                        mBSelectSubFilter = true;
+                        refreshAttachLayout();
+                    }
+                }   else {
+                    v.setBackgroundColor(LVResource.mCRLVItemNoSel);
+
+                    mLLSubFilter.remove(sub_tag1);
+                    mLLSubFilterVW.remove(v);
+
+                    if(mLLSubFilter.isEmpty()) {
+                        mLLSubFilterVW.clear();
+                        mBSelectSubFilter = false;
+                        refreshAttachLayout();
+                    }
+                }
+            });
 
             // for show
             viewHolder.setText(R.id.tv_day_number, hm.get(K_DAY_NUMEBER));
