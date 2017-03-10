@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <ProgressBar
         android:id="@+id/pb_load_data"
@@ -14,35 +15,34 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
+    <ToggleButton
+        android:id="@+id/tb_income"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:checked="true"
+        android:textOff="@string/tv_income_not_show"
+        android:textOn="@string/tv_income_show"
+        android:textSize="14sp" />
+
+    <ToggleButton
+        android:id="@+id/tb_pay"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tb_income"
+        android:checked="true"
+        android:textOff="@string/tv_pay_not_show"
+        android:textOn="@string/tv_pay_show"
+        android:textSize="14sp" />
+
 
     <lecho.lib.hellocharts.view.PieChartView
         android:id="@+id/chart"
+        android:layout_below="@+id/tb_pay"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
 
-    <Switch
-        android:id="@+id/sw_income"
-        style="@*android:style/Widget.Holo.Light.CompoundButton.Switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:checked="true"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
-        android:text="显示收入" />
-
-    <Switch
-        android:id="@+id/sw_pay"
-        style="@*android:style/Widget.Holo.Light.CompoundButton.Switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/sw_income"
-        android:checked="true"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
-        android:text="显示支出" />
 
 </RelativeLayout>

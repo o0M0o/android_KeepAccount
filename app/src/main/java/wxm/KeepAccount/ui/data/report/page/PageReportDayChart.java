@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -54,11 +55,11 @@ public class PageReportDayChart extends FrgUtilityBase {
     @BindView(R.id.pb_load_data)
     ProgressBar     mPBLoadData;
 
-    @BindView(R.id.sw_income)
-    Switch          mSWIncome;
+    @BindView(R.id.tb_income)
+    ToggleButton    mTBIncome;
 
-    @BindView(R.id.sw_pay)
-    Switch          mSWPay;
+    @BindView(R.id.tb_pay)
+    ToggleButton    mTBPay;
 
     private LinkedList<INote>   mLLOrgData;
 
@@ -126,28 +127,28 @@ public class PageReportDayChart extends FrgUtilityBase {
 
     /**
      * 切换显示内容
-     * @param v     激活的switch
+     * @param v     激活的ToggleButton
      */
-    @OnClick({R.id.sw_income, R.id.sw_pay})
-    public void onSWClick(View v)   {
+    @OnClick({R.id.tb_income, R.id.tb_pay})
+    public void onTBClick(View v)   {
         Log.d(LOG_TAG, "in onSWClick");
 
         int vid = v.getId();
         switch (vid)    {
-            case R.id.sw_income :   {
-                if(mSWIncome.isChecked())   {
-                    mSWPay.setClickable(true);
+            case R.id.tb_income :   {
+                if(mTBIncome.isChecked())   {
+                    mTBPay.setClickable(true);
                 } else  {
-                    mSWPay.setClickable(false);
+                    mTBPay.setClickable(false);
                 }
             }
             break;
 
-            case R.id.sw_pay :   {
-                if(mSWPay.isChecked())   {
-                    mSWIncome.setClickable(true);
+            case R.id.tb_pay :   {
+                if(mTBPay.isChecked())   {
+                    mTBIncome.setClickable(true);
                 } else  {
-                    mSWIncome.setClickable(false);
+                    mTBIncome.setClickable(false);
                 }
             }
             break;
@@ -286,8 +287,8 @@ public class PageReportDayChart extends FrgUtilityBase {
         }
 
         // create chart item list
-        boolean b_p = mSWPay.isChecked();
-        boolean b_i = mSWIncome.isChecked();
+        boolean b_p = mTBPay.isChecked();
+        boolean b_i = mTBIncome.isChecked();
         LinkedList<chartItem>  ls_ci      = new LinkedList<>();
         for(INote data : mLLOrgData)   {
             if(data.isPayNote() && !b_p)
