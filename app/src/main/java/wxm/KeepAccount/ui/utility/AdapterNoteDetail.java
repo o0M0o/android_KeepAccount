@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import cn.wxm.andriodutillib.util.FastViewHolder;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;

@@ -6,13 +6,13 @@ android {
         defkey {
             keyAlias 'defkey'
             keyPassword 'hugo99505'
-            storeFile file('H:/backup/appkey/andriodapp-key.jks')
+            storeFile file('E:/backup/appkey/andriodapp-key.jks')
             storePassword 'hugo99505'
         }
         longTimeKey {
             keyAlias 'andriodapp-key-longtime'
             keyPassword 'w789065'
-            storeFile file('H:/backup/appkey/andriodapp-key-longtime.jks')
+            storeFile file('E:/backup/appkey/andriodapp-key-longtime.jks')
             storePassword 'w127865'
         }
     }
@@ -91,8 +91,8 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-    compile 'com.android.support:appcompat-v7:25.1.1'
-    compile 'com.android.support:design:25.1.1'
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:design:25.2.0'
     compile files('libs/extend_lib/junit/junit-4.12.jar')
     compile files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
     compile files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')

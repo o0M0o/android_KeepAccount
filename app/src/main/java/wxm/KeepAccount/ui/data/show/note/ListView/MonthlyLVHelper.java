@@ -27,8 +27,8 @@ import java.util.Map;
 
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
+import cn.wxm.andriodutillib.util.FastViewHolder;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
-import wxm.KeepAccount.ui.utility.FastViewHolder;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
