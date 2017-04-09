@@ -39,6 +39,7 @@ android {
                     'src/main/res/layouts/fragment_item',
                     'src/main/res/layouts/dialog',
                     'src/main/res/layouts/view_item',
+                    'src/main/res/layouts/extend',
                     'src/main/res/layouts'
                 ]
         }
@@ -115,6 +116,7 @@ dependencies {
     compile project(':lm_banner_library')
     compile project(':simplecalendar')
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 
 configurations.all {
