@@ -3,6 +3,8 @@ package wxm.KeepAccount.ui.utility;
 import java.math.BigDecimal;
 import java.util.Locale;
 
+import cn.wxm.andriodutillib.util.UtilFun;
+
 /**
  * 数据显示内容定义类
  * Created by 123 on 2016/10/24.
@@ -45,7 +47,7 @@ public class NoteShowInfo {
     }
 
     public String getSZPayAmount()   {
-        return mSZPayAmount;
+        return UtilFun.StringIsNullOrEmpty(mSZPayAmount) ? "0" : mSZPayAmount;
     }
 
     public void setPayAmount(BigDecimal mPayAmount) {
@@ -58,7 +60,7 @@ public class NoteShowInfo {
     }
 
     public String getSZIncomeAmount()   {
-        return mSZIncomeAmount;
+        return UtilFun.StringIsNullOrEmpty(mSZIncomeAmount) ? "0" : mSZIncomeAmount;
     }
 
 

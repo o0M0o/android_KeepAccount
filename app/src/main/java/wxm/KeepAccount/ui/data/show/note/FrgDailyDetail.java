@@ -39,6 +39,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
@@ -64,6 +65,9 @@ public class FrgDailyDetail extends FrgUtilityBase {
     @BindView(R.id.tv_day_in_week)
     TextView mTVDayInWeek;
 
+    @BindView(R.id.tv_amount)
+    TextView mTVAmount;
+
     // 展示数据的UI
     @BindView(R.id.lv_note)
     ListView mLVBody;
@@ -76,8 +80,8 @@ public class FrgDailyDetail extends FrgUtilityBase {
     RelativeLayout mRLNext;
 
     // 展示日统计数据的UI
-    @BindView(R.id.rl_daily_info)
-    RelativeLayout mRLDailyInfo;
+    @BindView(R.id.vs_daily_info)
+    ValueShow   mVSDataUI;
 
     @BindView(R.id.login_progress)
     ProgressBar mPBLoginProgress;
@@ -376,10 +380,16 @@ public class FrgDailyDetail extends FrgUtilityBase {
             bd_l = BigDecimal.ZERO;
         }
 
+        HashMap<String, Object> hm = new HashMap<>();
+        hm.put(ValueShow.ATTR_PAY_COUNT, p_count);
+        hm.put(ValueShow.ATTR_PAY_AMOUNT, p_amount);
+        hm.put(ValueShow.ATTR_INCOME_COUNT, i_count);
+        hm.put(ValueShow.ATTR_INCOME_AMOUNT, i_amount);
+        mVSDataUI.adjustAttribute(hm);
+
         String b_amount = String.format(Locale.CHINA,
-                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-        HelperDayNotesInfo.fillNoteInfo(mRLDailyInfo, p_count,
-                        p_amount, i_count, i_amount, b_amount);
+                0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+        mTVAmount.setText(b_amount);
     }
 
     /**

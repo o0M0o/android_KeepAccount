@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/rl_header"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#a2b5cd"
-        android:padding="2dp">
+        android:padding="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp">
 
         <RelativeLayout
             android:id="@+id/rl_prv"
@@ -110,56 +115,103 @@
     </RelativeLayout>
 
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/rl_body"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_above="@id/rl_accpet_giveup"
-        android:layout_below="@id/rl_header">
+        android:layout_below="@id/rl_header"
+        app:layout_constraintBottom_toTopOf="@+id/rl_accpet_giveup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rl_header"
+        tools:layout_editor_absoluteX="0dp">
 
         <ProgressBar
             android:id="@+id/login_progress"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="180dp" />
 
-        <RelativeLayout
-            android:id="@+id/rl_daily_info"
-            android:layout_width="match_parent"
+        <wxm.KeepAccount.ui.extend.ValueShow.ValueShow
+            android:id="@+id/vs_daily_info"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#afdfe4"
-            android:paddingBottom="6dp"
-            android:paddingEnd="96dp"
-            android:paddingStart="42dp"
-            android:paddingTop="6dp">
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginEnd="64dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:szIncomeAmount="455.45"
+            app:szIncomeCount="5"
+            app:szPayAmount="300.54"
+            app:szPayCount="5" />
 
-            <include layout="@layout/frg_amount_info" />
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_balance_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="余"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_amount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/vs_daily_info"
+            tools:layout_editor_absoluteX="338dp" />
+
+        <TextView
+            android:id="@+id/tv_amount"
+            android:layout_marginEnd="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_balance_tag"
+            android:text="0.00"
+            android:textColor="@color/darkslategrey"
+            android:textSize="14sp"
+            android:layout_marginBottom="6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/vs_daily_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_balance_tag"
+            tools:layout_editor_absoluteX="328dp" />
+
 
         <ListView
             android:id="@+id/lv_note"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/rl_daily_info"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="#f8f8ff"
             android:divider="@color/trans_full"
             android:dividerHeight="3dp"
             android:paddingEnd="2dp"
             android:paddingStart="4dp"
-            android:paddingTop="4dp" />
-    </RelativeLayout>
-
+            android:paddingTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vs_daily_info"
+            tools:layout_editor_absoluteX="8dp" />
+    </android.support.constraint.ConstraintLayout>
 
     <RelativeLayout
         android:id="@+id/rl_accpet_giveup"
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_above="@id/rl_action"
         android:layout_marginBottom="1dp"
-        android:layout_marginTop="1dp"
-        android:background="@color/trans_black">
+        android:background="@color/trans_black"
+        app:layout_constraintBottom_toTopOf="@+id/rl_action"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteX="0dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -185,10 +237,14 @@
 
     <RelativeLayout
         android:id="@+id/rl_action"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
-        android:padding="4dp">
+        android:background="@color/grey_1"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteX="0dp">
 
         <RelativeLayout
             android:id="@+id/rl_act_add"
@@ -223,7 +279,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="8dp"
             android:layout_toEndOf="@id/rl_act_add"
             android:background="@drawable/rl_action_shape"
             android:padding="4dp">
@@ -249,4 +305,4 @@
 
     </RelativeLayout>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

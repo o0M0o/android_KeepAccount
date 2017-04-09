@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ValueShow">
+        <attr name="szPayCount" format="string" />
+        <attr name="szPayAmount" format="string" />
+        <attr name="szIncomeCount" format="string" />
+        <attr name="szIncomeAmount" format="string" />
+    </declare-styleable>
+</resources>

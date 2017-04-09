@@ -2,17 +2,19 @@ package wxm.KeepAccount.ui.extend.ValueShow;
 
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.math.BigDecimal;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,11 +31,22 @@ import wxm.KeepAccount.R;
 public class ValueShow extends ConstraintLayout {
     private final static String LOG_TAG = "ValueShow";
 
-    @BindView(R.id.tv_pay_info)
-    TextView    mTVPayInfo;
+    public final static String ATTR_PAY_COUNT          = "pay_count";
+    public final static String ATTR_PAY_AMOUNT         = "pay_amount";
+    public final static String ATTR_INCOME_COUNT       = "income_count";
+    public final static String ATTR_INCOME_AMOUNT      = "income_amount";
 
-    @BindView(R.id.tv_income_info)
-    TextView    mTVIncomeInfo;
+    @BindView(R.id.tv_pay_count)
+    TextView    mTVPayCount;
+
+    @BindView(R.id.tv_pay_amount)
+    TextView    mTVPayAmount;
+
+    @BindView(R.id.tv_income_count)
+    TextView    mTVIncomeCount;
+
+    @BindView(R.id.tv_income_amount)
+    TextView    mTVIncomeAmount;
 
     @BindView(R.id.iv_pay_line)
     ImageView   mIVPayLine;
@@ -44,17 +57,19 @@ public class ValueShow extends ConstraintLayout {
     /**
      * 可设置属性
      */
-    private String mAttrTextOn;
-    private String mAttrTextOff;
+    private String mAttrPayCount;
+    private String mAttrPayAmount;
 
-    private Drawable     mAttrBackGroundOn;
-    private Drawable     mAttrBackGroundOff;
+    private String mAttrIncomeCount;
+    private String mAttrIncomeAmount;
 
-    private boolean mAttrIsOn;
+    // for layout
+    private int mWidth;
+    private int mHeight;
 
-    /**
-     * 固定变量
-     */
+    private float mPayLinePercent       = 0;
+    private float mIncomeLinePercent    = 0;
+
 
     public ValueShow(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -68,6 +83,49 @@ public class ValueShow extends ConstraintLayout {
         super.onDraw(canvas);
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        mWidth = getWidth();
+        mHeight = getHeight();
+        super.onLayout(changed, left, top, right, bottom);
+
+        // update line len
+        if(0.01 < mPayLinePercent)
+            adjustLineLen(mIVPayLine, mPayLinePercent);
+
+        if(0.01 < mIncomeLinePercent)
+            adjustLineLen(mIVIncomeLine, mIncomeLinePercent);
+    }
+
+
+    /**
+     * 调节属性
+     * @param attrs  新属性值
+     */
+    public void adjustAttribute(Map<String, Object> attrs) {
+        for(String k : attrs.keySet())  {
+            switch (k)  {
+                case ATTR_PAY_COUNT :
+                    mAttrPayCount = (String)attrs.get(k);
+                    break;
+
+                case ATTR_PAY_AMOUNT :
+                    mAttrPayAmount = (String)attrs.get(k);
+                    break;
+
+                case ATTR_INCOME_COUNT :
+                    mAttrIncomeCount = (String)attrs.get(k);
+                    break;
+
+                case ATTR_INCOME_AMOUNT :
+                    mAttrIncomeAmount = (String)attrs.get(k);
+                    break;
+            }
+        }
+
+        updateShow();
+    }
+
     /**
      * 初始化自身
      * @param context   上下文
@@ -76,18 +134,19 @@ public class ValueShow extends ConstraintLayout {
     private void initCompent(Context context, AttributeSet attrs)  {
         // for parameter
         boolean b_ok = true;
-        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.SmallButton);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ValueShow);
         try {
-            mAttrTextOn = array.getString(R.styleable.SmallButton_sbTextOn);
-            mAttrTextOn = UtilFun.StringIsNullOrEmpty(mAttrTextOn) ? "on" : mAttrTextOn;
+            mAttrPayCount = array.getString(R.styleable.ValueShow_szPayCount);
+            mAttrPayCount = UtilFun.StringIsNullOrEmpty(mAttrPayCount) ? "" : mAttrPayCount;
 
-            mAttrTextOff = array.getString(R.styleable.SmallButton_sbTextOff);
-            mAttrTextOff = UtilFun.StringIsNullOrEmpty(mAttrTextOff) ? "off" : mAttrTextOff;
+            mAttrPayAmount = array.getString(R.styleable.ValueShow_szPayAmount);
+            mAttrPayAmount = UtilFun.StringIsNullOrEmpty(mAttrPayAmount) ? "0" : mAttrPayAmount;
 
-            mAttrIsOn = array.getBoolean(R.styleable.SmallButton_sbIsOn, false);
+            mAttrIncomeCount = array.getString(R.styleable.ValueShow_szIncomeCount);
+            mAttrIncomeCount = UtilFun.StringIsNullOrEmpty(mAttrIncomeCount) ? "" : mAttrIncomeCount;
 
-            mAttrBackGroundOn = array.getDrawable(R.styleable.SmallButton_sbBackGroundOn);
-            mAttrBackGroundOff = array.getDrawable(R.styleable.SmallButton_sbBackGroundOff);
+            mAttrIncomeAmount = array.getString(R.styleable.ValueShow_szIncomeAmount);
+            mAttrIncomeAmount = UtilFun.StringIsNullOrEmpty(mAttrIncomeAmount) ? "0" : mAttrIncomeAmount;
         } catch (Exception ex)  {
             b_ok = false;
             Log.e(LOG_TAG, "catch ex : " + ex.toString());
@@ -96,6 +155,55 @@ public class ValueShow extends ConstraintLayout {
         }
 
         if(b_ok) {
+            updateShow();
+        }
+    }
+
+    /**
+     * 更新显示
+     */
+    private void updateShow()   {
+        mTVPayCount.setText(mAttrPayCount);
+        mTVPayAmount.setText(mAttrPayAmount);
+
+        mTVIncomeCount.setText(mAttrIncomeCount);
+        mTVIncomeAmount.setText(mAttrIncomeAmount);
+
+        BigDecimal bd_pay = new BigDecimal(mAttrPayAmount);
+        BigDecimal bd_income = new BigDecimal(mAttrIncomeAmount);
+        BigDecimal bd_big = new BigDecimal(Math.max(bd_pay.floatValue(), bd_income.floatValue()));
+
+        mIVPayLine.setVisibility(bd_pay.equals(BigDecimal.ZERO) ?
+                                    View.INVISIBLE : View.VISIBLE);
+        mIVIncomeLine.setVisibility(bd_income.equals(BigDecimal.ZERO) ?
+                                    View.INVISIBLE : View.VISIBLE);
+
+        mPayLinePercent = bd_pay.equals(BigDecimal.ZERO) ?
+                            0 : bd_pay.floatValue() / bd_big.floatValue();
+        mIncomeLinePercent = bd_income.equals(BigDecimal.ZERO) ?
+                            0 : bd_income.floatValue() / bd_big.floatValue();
+        if(0.01 < mPayLinePercent)
+            adjustLineLen(mIVPayLine, mPayLinePercent);
+
+        if(0.01 < mIncomeLinePercent)
+            adjustLineLen(mIVIncomeLine, mIncomeLinePercent);
+
+        invalidate();
+        requestLayout();
+    }
+
+    /**
+     * 调整显示线长度
+     * @param iv            待调正线
+     * @param percent       新长度百分比
+     */
+    private void adjustLineLen(ImageView iv, float percent)    {
+        if(0 != mWidth) {
+            int max_width = mWidth - getPaddingStart() - getPaddingEnd();
+
+            ViewGroup.LayoutParams lp = iv.getLayoutParams();
+            lp.width = (int) (max_width * percent);
+            iv.setLayoutParams(lp);
         }
     }
 }
