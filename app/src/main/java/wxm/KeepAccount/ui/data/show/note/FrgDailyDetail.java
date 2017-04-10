@@ -65,9 +65,6 @@ public class FrgDailyDetail extends FrgUtilityBase {
     @BindView(R.id.tv_day_in_week)
     TextView mTVDayInWeek;
 
-    @BindView(R.id.tv_amount)
-    TextView mTVAmount;
-
     // 展示数据的UI
     @BindView(R.id.lv_note)
     ListView mLVBody;
@@ -363,21 +360,16 @@ public class FrgDailyDetail extends FrgUtilityBase {
         String i_count;
         String p_amount;
         String i_amount;
-        BigDecimal bd_l;
         if(null != ni) {
             p_count = String.valueOf(ni.getPayCount());
             i_count = String.valueOf(ni.getIncomeCount());
             p_amount = ni.getSZPayAmount();
             i_amount = ni.getSZIncomeAmount();
-
-            bd_l = ni.getBalance();
         }   else    {
             p_count = "0";
             i_count = "0";
             p_amount = "0.00";
             i_amount = "0.00";
-
-            bd_l = BigDecimal.ZERO;
         }
 
         HashMap<String, Object> hm = new HashMap<>();
@@ -386,10 +378,6 @@ public class FrgDailyDetail extends FrgUtilityBase {
         hm.put(ValueShow.ATTR_INCOME_COUNT, i_count);
         hm.put(ValueShow.ATTR_INCOME_AMOUNT, i_amount);
         mVSDataUI.adjustAttribute(hm);
-
-        String b_amount = String.format(Locale.CHINA,
-                0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-        mTVAmount.setText(b_amount);
     }
 
     /**

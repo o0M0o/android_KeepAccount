@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -8,80 +10,78 @@
         layout="@layout/item_act_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/rl_header"
-        android:layout_alignTop="@+id/rl_header"
-        android:layout_marginBottom="1dp"
-        android:layout_marginTop="1dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <RelativeLayout
-        android:id="@+id/rl_header"
-        android:layout_width="match_parent"
+        android:id="@+id/rl_date"
+        app:layout_constraintStart_toEndOf="@id/rl_delete"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/rl_delete"
-        android:padding="4dp">
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="2dp">
 
-        <RelativeLayout
-            android:id="@+id/rl_date"
+        <TextView
+            android:id="@+id/tv_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="2dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="2dp">
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="true"
+            android:text="2016-07"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/tv_month"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="false"
-                android:layout_alignParentTop="true"
-                android:text="2016-07"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/tv_day_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@id/tv_month"
-                android:layout_below="@id/tv_month"
-                android:text="15"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/tv_day"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/tv_day_number"
-                android:layout_marginBottom="2dp"
-                android:layout_marginStart="2dp"
-                android:layout_toEndOf="@id/tv_day_number"
-                android:text="日"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tv_day_in_week"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/tv_day"
-                android:layout_marginStart="8dp"
-                android:layout_toRightOf="@id/tv_day"
-                android:text="星期三"
-                android:textSize="12sp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_info"
+        <TextView
+            android:id="@+id/tv_day_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="2dp"
-            android:layout_marginLeft="26dp"
-            android:layout_marginTop="2dp"
-            android:layout_toRightOf="@id/rl_date">
+            android:layout_alignStart="@id/tv_month"
+            android:layout_below="@id/tv_month"
+            android:text="15"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
-            <include layout="@layout/frg_amount_info" />
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/tv_day_number"
+            android:layout_marginBottom="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_toEndOf="@id/tv_day_number"
+            android:text="日"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_day_in_week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/tv_day"
+            android:layout_marginStart="8dp"
+            android:layout_toRightOf="@id/tv_day"
+            android:text="星期三"
+            android:textSize="12sp" />
     </RelativeLayout>
-</RelativeLayout>
+
+    <wxm.KeepAccount.ui.extend.ValueShow.ValueShow
+        android:id="@+id/vs_daily_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/rl_date"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:szIncomeAmount="455.45"
+        app:szIncomeCount="5"
+        app:szPayAmount="300.54"
+        app:szPayCount="5" />
+
+</android.support.constraint.ConstraintLayout>

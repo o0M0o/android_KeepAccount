@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -36,17 +37,26 @@ public class ValueShow extends ConstraintLayout {
     public final static String ATTR_INCOME_COUNT       = "income_count";
     public final static String ATTR_INCOME_AMOUNT      = "income_amount";
 
+    @BindView(R.id.tv_pay_tag)
+    TextView    mTVPayTag;
+
     @BindView(R.id.tv_pay_count)
     TextView    mTVPayCount;
 
     @BindView(R.id.tv_pay_amount)
     TextView    mTVPayAmount;
 
+    @BindView(R.id.tv_income_tag)
+    TextView    mTVIncomeTag;
+
     @BindView(R.id.tv_income_count)
     TextView    mTVIncomeCount;
 
     @BindView(R.id.tv_income_amount)
     TextView    mTVIncomeAmount;
+
+    @BindView(R.id.tv_balance_amount)
+    TextView    mTVBalanceAmount;
 
     @BindView(R.id.iv_pay_line)
     ImageView   mIVPayLine;
@@ -173,10 +183,37 @@ public class ValueShow extends ConstraintLayout {
         BigDecimal bd_income = new BigDecimal(mAttrIncomeAmount);
         BigDecimal bd_big = new BigDecimal(Math.max(bd_pay.floatValue(), bd_income.floatValue()));
 
-        mIVPayLine.setVisibility(bd_pay.equals(BigDecimal.ZERO) ?
-                                    View.INVISIBLE : View.VISIBLE);
-        mIVIncomeLine.setVisibility(bd_income.equals(BigDecimal.ZERO) ?
-                                    View.INVISIBLE : View.VISIBLE);
+        BigDecimal bd_balance = bd_income.subtract(bd_pay);
+        String sz_b = String.format(Locale.CHINA, "%.02f", bd_balance.floatValue());
+        mTVBalanceAmount.setText(sz_b);
+
+        boolean b_p = bd_pay.equals(BigDecimal.ZERO);
+        mIVPayLine.setVisibility(b_p ? View.GONE : View.VISIBLE);
+        mTVPayTag.setVisibility(b_p ? View.GONE : View.VISIBLE);
+        mTVPayCount.setVisibility(b_p ? View.GONE : View.VISIBLE);
+        mTVPayAmount.setVisibility(b_p ? View.GONE : View.VISIBLE);
+        mPayLinePercent = b_p ? 0 : bd_pay.floatValue() / bd_big.floatValue();
+
+        if(0.01 < mPayLinePercent)
+            adjustLineLen(mIVPayLine, mPayLinePercent);
+
+        boolean b_i = bd_income.equals(BigDecimal.ZERO);
+        mIVIncomeLine.setVisibility(b_i ? View.GONE : View.VISIBLE);
+        mTVIncomeTag.setVisibility(b_p ? View.GONE : View.VISIBLE);
+        mTVIncomeCount.setVisibility(b_i ? View.GONE : View.VISIBLE);
+        mTVIncomeAmount.setVisibility(b_i ? View.GONE : View.VISIBLE);
+        mIncomeLinePercent = b_i ? 0 : bd_income.floatValue() / bd_big.floatValue();
+
+        if(0.01 < mIncomeLinePercent)
+            adjustLineLen(mIVIncomeLine, mIncomeLinePercent);
+
+        //invalidate();
+        requestLayout();
+    }
+
+    /**
+     * 调整显示线长度
+     * @param iv            待调正线
 
         mPayLinePercent = bd_pay.equals(BigDecimal.ZERO) ?
                             0 : bd_pay.floatValue() / bd_big.floatValue();
@@ -188,7 +225,7 @@ public class ValueShow extends ConstraintLayout {
         if(0.01 < mIncomeLinePercent)
             adjustLineLen(mIVIncomeLine, mIncomeLinePercent);
 
-        invalidate();
+        //invalidate();
         requestLayout();
     }
 

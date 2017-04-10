@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="2dp">
@@ -13,13 +14,14 @@
         android:text="支"
         android:textColor="@color/darkred"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/tv_pay_count"
-        android:layout_marginStart="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:text="5"
         android:textColor="@color/darkred"
         app:layout_constraintBottom_toBottomOf="@id/tv_pay_tag"
@@ -28,21 +30,24 @@
 
     <TextView
         android:id="@+id/tv_pay_amount"
-        android:layout_marginStart="46dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
         android:text="1000"
         android:textColor="@color/darkred"
         app:layout_constraintBottom_toBottomOf="@id/tv_pay_tag"
         app:layout_constraintStart_toEndOf="@id/tv_pay_tag"
-        app:layout_constraintTop_toTopOf="@id/tv_pay_tag" />
+        app:layout_constraintTop_toTopOf="@id/tv_pay_tag"
+        tools:layout_editor_absoluteX="60dp" />
 
     <ImageView
         android:id="@+id/iv_pay_line"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="2dp"
+        android:layout_marginEnd="52dp"
         android:layout_marginTop="2dp"
         android:background="@color/darkred"
+        app:layout_constraintEnd_toStartOf="@id/tv_balance_tag"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_pay_tag" />
 
@@ -55,37 +60,67 @@
         android:text="收"
         android:textColor="@color/forestgreen"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_pay_line" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_pay_line"
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/tv_income_count"
-        android:layout_marginStart="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:text="5"
         android:textColor="@color/darkred"
         app:layout_constraintBottom_toBottomOf="@id/tv_income_tag"
         app:layout_constraintStart_toEndOf="@id/tv_income_tag"
-        app:layout_constraintTop_toTopOf="@id/tv_income_tag" />
+        app:layout_constraintTop_toTopOf="@id/tv_income_tag"
+        tools:layout_editor_absoluteX="30dp" />
 
     <TextView
         android:id="@+id/tv_income_amount"
-        android:layout_marginStart="46dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
         android:text="1000"
         android:textColor="@color/darkred"
         app:layout_constraintBottom_toBottomOf="@id/tv_income_tag"
         app:layout_constraintStart_toEndOf="@id/tv_income_tag"
-        app:layout_constraintTop_toTopOf="@id/tv_income_tag" />
+        app:layout_constraintTop_toTopOf="@id/tv_income_tag"
+        tools:layout_editor_absoluteX="60dp" />
 
     <ImageView
         android:id="@+id/iv_income_line"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="2dp"
+        android:layout_marginEnd="52dp"
         android:layout_marginTop="2dp"
         android:background="@color/forestgreen"
+        app:layout_constraintEnd_toStartOf="@+id/tv_balance_tag"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_income_tag" />
+        app:layout_constraintTop_toBottomOf="@id/tv_income_tag"
+        tools:layout_editor_absoluteX="8dp" />
+
+
+    <TextView
+        android:id="@+id/tv_balance_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="余"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_balance_amount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="354dp" />
+
+    <TextView
+        android:id="@+id/tv_balance_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_balance_tag"
+        android:text="0.00"
+        android:textColor="@color/darkslategrey"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_balance_tag" />
 
 </android.support.constraint.ConstraintLayout>

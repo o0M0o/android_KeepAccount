@@ -32,6 +32,7 @@ import cn.wxm.andriodutillib.util.FastViewHolder;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
+import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
@@ -402,7 +403,7 @@ public class DailyLVHelper
                 }
                 break;
 
-                case R.id.rl_header :   {
+                default:    {
                     ACNoteShow ac = getRootActivity();
                     Intent it = new Intent(ac, ACDailyDetail.class);
                     it.putExtra(ACDailyDetail.K_HOTDAY, k_tag);
@@ -443,7 +444,8 @@ public class DailyLVHelper
             rl_del.setVisibility(mActionType == ACTION_EDIT ? View.GONE : View.VISIBLE);
             rl_del.setOnClickListener(mCLAdapter);
 
-            viewHolder.getView(R.id.rl_header).setOnClickListener(mCLAdapter);
+            viewHolder.getView(R.id.rl_date).setOnClickListener(mCLAdapter);
+            viewHolder.getView(R.id.vs_daily_info).setOnClickListener(mCLAdapter);
 
             // for show
             HashMap<String, String> hm = UtilFun.cast(getItem(position));
@@ -451,10 +453,13 @@ public class DailyLVHelper
             viewHolder.setText(R.id.tv_day_number, hm.get(K_DAY_NUMEBER));
             viewHolder.setText(R.id.tv_day_in_week, hm.get(K_DAY_IN_WEEK));
 
-            HelperDayNotesInfo.fillNoteInfo(viewHolder,
-                    hm.get(K_DAY_PAY_COUNT), hm.get(K_DAY_PAY_AMOUNT),
-                    hm.get(K_DAY_INCOME_COUNT), hm.get(K_DAY_INCOME_AMOUNT),
-                    hm.get(K_AMOUNT));
+            ValueShow vs = viewHolder.getView(R.id.vs_daily_info);
+            HashMap<String, Object> hm_attr = new HashMap<>();
+            hm_attr.put(ValueShow.ATTR_PAY_COUNT, hm.get(K_DAY_PAY_COUNT));
+            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, hm.get(K_DAY_PAY_AMOUNT));
+            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, hm.get(K_DAY_INCOME_COUNT));
+            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, hm.get(K_DAY_INCOME_AMOUNT));
+            vs.adjustAttribute(hm_attr);
 
             return root_view;
         }
