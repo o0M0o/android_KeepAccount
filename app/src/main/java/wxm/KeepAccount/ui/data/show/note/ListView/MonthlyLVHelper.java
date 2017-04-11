@@ -2,6 +2,7 @@ package wxm.KeepAccount.ui.data.show.note.ListView;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.FastViewHolder;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
+import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
@@ -335,19 +337,18 @@ public class MonthlyLVHelper
             llhm = new LinkedList<>();
         }
 
-        RelativeLayout rl = vh.getView(R.id.rl_detail);
+        ListView lv = vh.getView(R.id.lv_show_detail);
         if(llhm.isEmpty())  {
-            rl.setVisibility(View.GONE);
+            lv.setVisibility(View.GONE);
         } else {
-            rl.setVisibility(View.VISIBLE);
+            lv.setVisibility(View.VISIBLE);
 
             // init sub adapter
-            ListView mLVShowDetail = vh.getView(R.id.lv_show_detail);
             SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm,
                     new String[]{}, new int[]{});
-            mLVShowDetail.setAdapter(mAdapter);
+            lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
-            ListViewHelper.setListViewHeightBasedOnChildren(mLVShowDetail);
+            ListViewHelper.setListViewHeightBasedOnChildren(lv);
         }
     }
     /// END PRIVATE
@@ -398,18 +399,22 @@ public class MonthlyLVHelper
             HashMap<String, String> hm = UtilFun.cast(getItem(position));
             init_detail_view(viewHolder, hm);
 
-            RelativeLayout rl = viewHolder.getView(R.id.rl_header);
+            ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
             rl.setBackgroundColor(0 == position % 2 ?
                     LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
             rl.setOnClickListener(mCLAdapter);
 
-            // for show
+            // for month
             viewHolder.setText(R.id.tv_month, hm.get(K_MONTH));
 
-            HelperDayNotesInfo.fillNoteInfo(viewHolder,
-                    hm.get(K_MONTH_PAY_COUNT), hm.get(K_MONTH_PAY_AMOUNT),
-                    hm.get(K_MONTH_INCOME_COUNT), hm.get(K_MONTH_INCOME_AMOUNT),
-                    hm.get(K_AMOUNT));
+            // for graph value
+            ValueShow vs = viewHolder.getView(R.id.vs_monthly_info);
+            HashMap<String, Object> hm_attr = new HashMap<>();
+            hm_attr.put(ValueShow.ATTR_PAY_COUNT, hm.get(K_MONTH_PAY_COUNT));
+            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, hm.get(K_MONTH_PAY_AMOUNT));
+            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, hm.get(K_MONTH_INCOME_COUNT));
+            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, hm.get(K_MONTH_INCOME_AMOUNT));
+            vs.adjustAttribute(hm_attr);
             return viewHolder.getConvertView();
         }
     }

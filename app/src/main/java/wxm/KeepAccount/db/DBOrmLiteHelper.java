@@ -305,9 +305,8 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
 
             for(; start_dt.before(end_dt);
                     start_dt.setTime(start_dt.getTime() + one_day_msecs))  {
-                Random rand = new Random();
-                int r = rand.nextInt(99);
-                if(0 == r % 3)     {
+                int r = new Random().nextInt(99);
+                if(0 == r % 5)     {
                     Random rand1 = new Random();
                     int pay = rand1.nextInt(3);
                     if(0 < pay) {
@@ -325,7 +324,6 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
 
                         ContextUtil.getPayIncomeUtility().addPayNotes(ls_pay);
                     }
-
 
                     Random rand2 = new Random();
                     int income = rand2.nextInt(3);

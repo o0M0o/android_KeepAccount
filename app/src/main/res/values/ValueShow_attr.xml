@@ -5,5 +5,7 @@
         <attr name="szPayAmount" format="string" />
         <attr name="szIncomeCount" format="string" />
         <attr name="szIncomeAmount" format="string" />
+
+        <attr name="pxLineLen" format="dimension" />
     </declare-styleable>
 </resources>

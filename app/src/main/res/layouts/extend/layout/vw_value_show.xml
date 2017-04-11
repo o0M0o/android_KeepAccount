@@ -42,12 +42,11 @@
 
     <ImageView
         android:id="@+id/iv_pay_line"
-        android:layout_width="0dp"
+        android:layout_width="160dp"
         android:layout_height="2dp"
         android:layout_marginEnd="52dp"
         android:layout_marginTop="2dp"
         android:background="@color/darkred"
-        app:layout_constraintEnd_toStartOf="@id/tv_balance_tag"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_pay_tag" />
 
@@ -89,12 +88,11 @@
 
     <ImageView
         android:id="@+id/iv_income_line"
-        android:layout_width="0dp"
+        android:layout_width="160dp"
         android:layout_height="2dp"
         android:layout_marginEnd="52dp"
         android:layout_marginTop="2dp"
         android:background="@color/forestgreen"
-        app:layout_constraintEnd_toStartOf="@+id/tv_balance_tag"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_income_tag"
         tools:layout_editor_absoluteX="8dp" />
