@@ -373,7 +373,8 @@ public class MonthlyLVHelper
                 lv.setVisibility(View.GONE);
             } else {
                 lv.setVisibility(View.VISIBLE);
-                load_detail_view(lv, tag);
+                if(0 == lv.getCount())
+                    load_detail_view(lv, tag);
             }
 
             View.OnClickListener local_cl = v -> {
@@ -382,7 +383,8 @@ public class MonthlyLVHelper
 
                 if (bf) {
                     lv.setVisibility(View.VISIBLE);
-                    load_detail_view(lv, tag);
+                    if(0 == lv.getCount())
+                        load_detail_view(lv, tag);
 
                     addUnfoldItem(tag);
                 } else {
