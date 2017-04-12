@@ -322,28 +322,13 @@ public class MonthlyLVHelper
     }
 
     /**
-     * 更新详细显示信息
-     * @param vh    viewholder
-     * @param hm    数据
+     * 加载详细视图
+     * @param lv        视图
+     * @param tag       数据tag
      */
-    private void init_detail_view(FastViewHolder vh, HashMap<String, String> hm) {
-        // get sub para
-        LinkedList<HashMap<String, String>> llhm = null;
-        if(V_SHOW_UNFOLD.equals(hm.get(K_SHOW))) {
-            llhm = mHMSubPara.get(hm.get(K_TAG));
-        }
-
-        if(null == llhm) {
-            llhm = new LinkedList<>();
-        }
-
-        ListView lv = vh.getView(R.id.lv_show_detail);
-        if(llhm.isEmpty())  {
-            lv.setVisibility(View.GONE);
-        } else {
-            lv.setVisibility(View.VISIBLE);
-
-            // init sub adapter
+    private void load_detail_view(ListView lv, String tag)  {
+        LinkedList<HashMap<String, String>> llhm = mHMSubPara.get(tag);
+        if(!UtilFun.ListIsNullOrEmpty(llhm))    {
             SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm,
                     new String[]{}, new int[]{});
             lv.setAdapter(mAdapter);
@@ -358,21 +343,6 @@ public class MonthlyLVHelper
      */
     private class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
-
-        private View.OnClickListener mCLAdapter = v -> {
-            int pos = mLVShow.getPositionForView(v);
-
-            HashMap<String, String> hm = UtilFun.cast(getItem(pos));
-            boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-            hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-
-            init_detail_view(UtilFun.cast_t(mLVShow.getChildAt(pos).getTag()), hm);
-            if (bf)
-                addUnfoldItem(hm.get(K_TAG));
-            else
-                removeUnfoldItem(hm.get(K_TAG));
-        };
-
 
         SelfAdapter(Context context,
                     List<? extends Map<String, ?>> mdata,
@@ -396,13 +366,36 @@ public class MonthlyLVHelper
             FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
                                     view, R.layout.li_monthly_show);
 
-            HashMap<String, String> hm = UtilFun.cast(getItem(position));
-            init_detail_view(viewHolder, hm);
+            final HashMap<String, String> hm = UtilFun.cast(getItem(position));
+            final ListView lv = viewHolder.getView(R.id.lv_show_detail);
+            final String tag = hm.get(K_TAG);
+            if(V_SHOW_FOLD.equals(hm.get(K_SHOW))) {
+                lv.setVisibility(View.GONE);
+            } else {
+                lv.setVisibility(View.VISIBLE);
+                load_detail_view(lv, tag);
+            }
+
+            View.OnClickListener local_cl = v -> {
+                boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
+                hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+
+                if (bf) {
+                    lv.setVisibility(View.VISIBLE);
+                    load_detail_view(lv, tag);
+
+                    addUnfoldItem(tag);
+                } else {
+                    lv.setVisibility(View.GONE);
+
+                    removeUnfoldItem(tag);
+                }
+            };
 
             ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
             rl.setBackgroundColor(0 == position % 2 ?
                     LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
-            rl.setOnClickListener(mCLAdapter);
+            rl.setOnClickListener(local_cl);
 
             // for month
             viewHolder.setText(R.id.tv_month, hm.get(K_MONTH));
@@ -486,10 +479,14 @@ public class MonthlyLVHelper
             viewHolder.setText(R.id.tv_day_number, hm.get(K_DAY_NUMEBER));
             viewHolder.setText(R.id.tv_day_in_week, hm.get(K_DAY_IN_WEEK));
 
-            HelperDayNotesInfo.fillNoteInfo(viewHolder,
-                    hm.get(K_DAY_PAY_COUNT), hm.get(K_DAY_PAY_AMOUNT),
-                    hm.get(K_DAY_INCOME_COUNT), hm.get(K_DAY_INCOME_AMOUNT),
-                    hm.get(K_AMOUNT));
+            // for graph value
+            ValueShow vs = viewHolder.getView(R.id.vs_daily_info);
+            HashMap<String, Object> hm_attr = new HashMap<>();
+            hm_attr.put(ValueShow.ATTR_PAY_COUNT, hm.get(K_DAY_PAY_COUNT));
+            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, hm.get(K_DAY_PAY_AMOUNT));
+            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, hm.get(K_DAY_INCOME_COUNT));
+            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, hm.get(K_DAY_INCOME_AMOUNT));
+            vs.adjustAttribute(hm_attr);
             return root_view;
         }
     }
