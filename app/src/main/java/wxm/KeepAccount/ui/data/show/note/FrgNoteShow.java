@@ -45,13 +45,13 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
  */
 public class FrgNoteShow extends FrgUtilityBase {
     // for ui
-    @BindView(R.id.login_progress)
+    //@BindView(R.id.login_progress)
     ProgressBar mPBLoginProgress;
 
-    @BindView(R.id.tab_pager)
+    //@BindView(R.id.tab_pager)
     ViewPager mVPPages;
 
-    @BindView(R.id.tl_tabs)
+    //@BindView(R.id.tl_tabs)
     TabLayout mTLTab;
 
     // for notice
@@ -95,7 +95,11 @@ public class FrgNoteShow extends FrgUtilityBase {
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         LOG_TAG = "FrgNoteShow";
         View rootView = layoutInflater.inflate(R.layout.vw_note_show, viewGroup, false);
-        ButterKnife.bind(this, rootView);
+        //ButterKnife.bind(this, rootView);
+
+        mTLTab = UtilFun.cast_t(rootView.findViewById(R.id.tl_tabs));
+        mVPPages = UtilFun.cast_t(rootView.findViewById(R.id.tab_pager));
+        mPBLoginProgress = UtilFun.cast_t(rootView.findViewById(R.id.login_progress));
         return rootView;
     }
 

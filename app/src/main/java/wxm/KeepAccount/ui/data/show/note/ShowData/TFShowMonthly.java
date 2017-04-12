@@ -1,7 +1,7 @@
 package wxm.KeepAccount.ui.data.show.note.ShowData;
 
 import wxm.KeepAccount.ui.data.show.note.HelloChart.MonthlyChartHelper;
-import wxm.KeepAccount.ui.data.show.note.ListView.MonthlyLVHelper;
+import wxm.KeepAccount.ui.data.show.note.ListView.LVHelperMonthly;
 
 /**
  * fragment for monthly show
@@ -14,7 +14,7 @@ public class TFShowMonthly extends TFShowBase {
         LOG_TAG = "TFShowMonthly";
 
         mViewHelper = new ShowViewHelperBase[2];
-        mViewHelper[0] = new MonthlyLVHelper();
+        mViewHelper[0] = new LVHelperMonthly();
         mViewHelper[1] = new MonthlyChartHelper();
     }
 }

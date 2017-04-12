@@ -3,12 +3,10 @@ package wxm.KeepAccount.ui.data.show.note.ListView;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.constraint.ConstraintLayout;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -42,8 +40,8 @@ import wxm.KeepAccount.ui.utility.HelperDayNotesInfo;
  * 年数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class YearlyLVHelper extends LVShowDataBase {
-    private final static String TAG = "YearlyLVHelper";
+public class LVHelperYearly extends LVBase {
+    private final static String TAG = "LVHelperYearly";
 
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
@@ -52,9 +50,9 @@ public class YearlyLVHelper extends LVShowDataBase {
     private final LinkedList<String> mLLSubFilter = new LinkedList<>();
     private final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
 
-    public YearlyLVHelper()    {
+    public LVHelperYearly()    {
         super();
-        LOG_TAG = "YearlyLVHelper";
+        LOG_TAG = "LVHelperYearly";
         mBActionExpand = false;
     }
 
@@ -375,9 +373,11 @@ public class YearlyLVHelper extends LVShowDataBase {
             };
 
             // adjust row color
+            viewHolder.getConvertView().setBackgroundColor(0 == position % 2 ?
+                            LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
             ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
-            rl.setBackgroundColor(0 == position % 2 ?
-                        LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
+            //rl.setBackgroundColor(0 == position % 2 ?
+            //            LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
             rl.setOnClickListener(local_cl);
 
             // for year
@@ -430,7 +430,7 @@ public class YearlyLVHelper extends LVShowDataBase {
 
             final ImageView ib = viewHolder.getView(R.id.iv_action);
             ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ?
-                    LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
+                    LVResource.mCRLVItemSel: LVResource.mCRLVItemNoSel);
             ib.setOnClickListener(v -> {
                 String sub_tag1 = hm.get(K_SUB_TAG);
 

@@ -31,7 +31,7 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
  * sub class for listview
  * Created by wxm on 2016/9/29.
  */
-public abstract class LVShowDataBase extends ShowViewHelperBase {
+public abstract class LVBase extends ShowViewHelperBase {
     /// list item data begin
     protected final static String K_TITLE     = "k_title";
     protected final static String K_ABSTRACT  = "k_abstract";
@@ -136,7 +136,7 @@ public abstract class LVShowDataBase extends ShowViewHelperBase {
     @BindView(R.id.pb_loading)
     ProgressBar     mPBLoading;
 
-    public LVShowDataBase()   {
+    public LVBase()   {
         super();
         mMainPara       = new LinkedList<>();
         mHMSubPara      = new HashMap<>();

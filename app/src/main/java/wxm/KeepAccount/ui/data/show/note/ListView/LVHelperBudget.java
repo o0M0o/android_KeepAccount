@@ -47,7 +47,7 @@ import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
  * 预算数据视图辅助类
  * Created by 123 on 2016/9/15.
  */
-public class BudgetViewHelper extends LVShowDataBase {
+public class LVHelperBudget extends LVBase {
 
     //for action
     private final static int ACTION_DELETE = 1;
@@ -55,9 +55,9 @@ public class BudgetViewHelper extends LVShowDataBase {
     private int mActionType = ACTION_EDIT;
 
 
-    public BudgetViewHelper() {
+    public LVHelperBudget() {
         super();
-        LOG_TAG = "BudgetViewHelper";
+        LOG_TAG = "LVHelperBudget";
     }
 
 

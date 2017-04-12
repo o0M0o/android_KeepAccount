@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/red_ff725f_half"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
     android:paddingStart="12dp"
     android:paddingEnd="12dp"
     android:layout_width="wrap_content"

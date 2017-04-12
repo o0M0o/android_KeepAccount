@@ -1,7 +1,7 @@
 package wxm.KeepAccount.ui.data.show.note.ShowData;
 
 import wxm.KeepAccount.ui.data.show.note.HelloChart.DailyChartHelper;
-import wxm.KeepAccount.ui.data.show.note.ListView.DailyLVHelper;
+import wxm.KeepAccount.ui.data.show.note.ListView.LVHelperDaily;
 
 
 /**
@@ -16,7 +16,7 @@ public class TFShowDaily extends TFShowBase {
         LOG_TAG = "TFShowDaily";
 
         mViewHelper = new ShowViewHelperBase[2];
-        mViewHelper[0] = new DailyLVHelper();
+        mViewHelper[0] = new LVHelperDaily();
         mViewHelper[1] = new DailyChartHelper();
     }
 }

@@ -43,24 +43,23 @@ import wxm.KeepAccount.ui.data.show.note.ACDailyDetail;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteEdit;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
-import wxm.KeepAccount.ui.utility.HelperDayNotesInfo;
 
 /**
  * 日数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class DailyLVHelper
-        extends LVShowDataBase  {
+public class LVHelperDaily
+        extends LVBase {
     // for action
     //private final static int ACTION_NONE    = 0;
     private final static int ACTION_DELETE = 1;
     private final static int ACTION_EDIT = 2;
     private int mActionType = ACTION_EDIT;
 
-    public DailyLVHelper() {
+    public LVHelperDaily() {
         super();
 
-        LOG_TAG = "DailyLVHelper";
+        LOG_TAG = "LVHelperDaily";
         mBActionExpand  = false;
     }
 

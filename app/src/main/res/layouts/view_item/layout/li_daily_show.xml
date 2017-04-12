@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <include
         android:id="@+id/rl_delete"
         layout="@layout/item_act_delete"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        android:layout_height="wrap_content" />
 
     <RelativeLayout
         android:id="@+id/rl_date"
-        app:layout_constraintStart_toEndOf="@id/rl_delete"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/rl_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
@@ -71,17 +66,18 @@
 
     <wxm.KeepAccount.ui.extend.ValueShow.ValueShow
         android:id="@+id/vs_daily_info"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/rl_date"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_toEndOf="@id/rl_date"
+        android:layout_centerVertical="true"
         app:pxLineLen="140dp"
         app:szIncomeAmount="455.45"
         app:szIncomeCount="5"
         app:szPayAmount="300.54"
         app:szPayCount="5" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
