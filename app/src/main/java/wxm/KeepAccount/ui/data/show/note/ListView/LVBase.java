@@ -26,6 +26,7 @@ import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
+import wxm.KeepAccount.ui.extend.IconButton.IconButton;
 
 /**
  * sub class for listview
@@ -109,20 +110,20 @@ public abstract class LVBase extends ShowViewHelperBase {
 
 
     // for addtion action
-    @BindView(R.id.rl_act_report)
-    RelativeLayout  mRLActReport;
+    @BindView(R.id.ib_report)
+    IconButton  mIBReport;
 
-    @BindView(R.id.rl_act_add)
-    RelativeLayout  mRLActAdd;
+    @BindView(R.id.ib_add)
+    IconButton  mIBAdd;
 
-    @BindView(R.id.rl_act_delete)
-    RelativeLayout  mRLActDelete;
+    @BindView(R.id.ib_delete)
+    IconButton  mIBDelete;
 
-    @BindView(R.id.rl_act_refresh)
-    RelativeLayout  mRLActRefresh;
+    @BindView(R.id.ib_refresh)
+    IconButton  mIBRefresh;
 
-    @BindView(R.id.rl_act_sort)
-    RelativeLayout  mRLActSort;
+    @BindView(R.id.ib_sort)
+    IconButton      mIBSort;
 
     @BindView(R.id.rl_action)
     RelativeLayout  mRLAction;

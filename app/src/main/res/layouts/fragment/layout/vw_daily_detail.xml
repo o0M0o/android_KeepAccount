@@ -220,9 +220,9 @@
 
         <wxm.KeepAccount.ui.extend.IconButton.IconButton
             android:id="@+id/ib_add"
+            android:background="@drawable/rl_action_shape"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_toEndOf="@id/rl_act_delete"
             app:rfIcon="@drawable/ic_add_new"
             app:szActName="@string/cn_create"
             app:spActNameSize="14sp"
@@ -235,6 +235,7 @@
 
         <wxm.KeepAccount.ui.extend.IconButton.IconButton
             android:id="@+id/ib_delete"
+            android:background="@drawable/rl_action_shape"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/ib_add"
             app:rfIcon="@drawable/ic_delete"

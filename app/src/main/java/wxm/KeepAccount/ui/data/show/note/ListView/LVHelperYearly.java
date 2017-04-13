@@ -69,23 +69,21 @@ public class LVHelperYearly extends LVBase {
      * 附加动作
      * @param v   动作view
      */
-    @OnClick({R.id.rl_act_sort, R.id.rl_act_refresh})
+    @OnClick({R.id.ib_sort, R.id.ib_refresh})
     public void onActionClick(View v) {
         switch (v.getId())  {
-            case R.id.rl_act_sort :     {
+            case R.id.ib_sort :     {
                 mBTimeDownOrder = !mBTimeDownOrder;
 
-                ImageView iv_sort = UtilFun.cast_t(v.findViewById(R.id.iv_sort));
-                TextView tv_sort = UtilFun.cast_t(v.findViewById(R.id.tv_sort));
-                iv_sort.setImageDrawable(mBTimeDownOrder ? LVResource.mDASortUp : LVResource.mDASortDown);
-                tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+                mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+                mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
 
                 reorderData();
                 loadUIUtility(true);
             }
             break;
 
-            case R.id.rl_act_refresh :  {
+            case R.id.ib_refresh :  {
                 reloadView(v.getContext(), false);
             }
             break;
@@ -145,14 +143,12 @@ public class LVHelperYearly extends LVBase {
      */
     @Override
     protected void initActs() {
-        mRLActReport.setVisibility(View.GONE);
-        mRLActAdd.setVisibility(View.GONE);
-        mRLActDelete.setVisibility(View.GONE);
+        mIBReport.setVisibility(View.GONE);
+        mIBAdd.setVisibility(View.GONE);
+        mIBDelete.setVisibility(View.GONE);
 
-        ImageView iv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.iv_sort));
-        TextView tv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.tv_sort));
-        iv_sort.setImageDrawable(mBTimeDownOrder ? LVResource.mDASortUp : LVResource.mDASortDown);
-        tv_sort.setText(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+        mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+        mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
     }
 
 

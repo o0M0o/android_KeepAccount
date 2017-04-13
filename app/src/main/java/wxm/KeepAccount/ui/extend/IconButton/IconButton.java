@@ -4,20 +4,14 @@ package wxm.KeepAccount.ui.extend.IconButton;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.math.BigDecimal;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,12 +54,57 @@ public class IconButton extends ConstraintLayout {
     private int     mAttrActIconWidth;
     private int     mAttrActIconHeight;
 
+    private final static int VERTICAL       = 1;
+    private final static int HORIZONTAL     = 2;
 
     public IconButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.vw_icon_button, this);
+
+        int orientation = HORIZONTAL;
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.IconButton);
+        try {
+            orientation = array.getInt(R.styleable.IconButton_emOrientation, HORIZONTAL);
+        } catch (Exception ex)  {
+            Log.e(LOG_TAG, "catch ex : " + ex.toString());
+        } finally {
+            array.recycle();
+        }
+
+        LayoutInflater.from(context)
+                .inflate(orientation == HORIZONTAL ?
+                            R.layout.vw_icon_button_h : R.layout.vw_icon_button_v
+                            ,this);
+
         ButterKnife.bind(this);
         initCompent(context, attrs);
+    }
+
+
+    /**
+     * 设置动作名
+     * @param sz_id    动作名id
+     */
+    public void setActName(int sz_id)    {
+        String sz = getContext().getResources().getString(sz_id);
+        setActName(sz);
+    }
+
+    /**
+     * 设置动作名
+     * @param an    动作名
+     */
+    public void setActName(String an)    {
+        mAttrActName = an;
+        mTVName.setText(mAttrActName);
+    }
+
+    /**
+     * 设置动作icon
+     * @param icon_id   id for icon
+     */
+    public void setActIcon(int icon_id) {
+        mAttrActIconID = icon_id;
+        mIVIcon.setImageResource(mAttrActIconID);
     }
 
     @Override
@@ -77,6 +116,7 @@ public class IconButton extends ConstraintLayout {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
     }
+
 
     /**
      * 初始化自身

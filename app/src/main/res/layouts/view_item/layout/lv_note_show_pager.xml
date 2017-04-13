@@ -79,146 +79,83 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/rl_hide_show">
 
-                <RelativeLayout
-                    android:id="@+id/rl_act_report"
+                <wxm.KeepAccount.ui.extend.IconButton.IconButton
+                    android:id="@+id/ib_report"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="44dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
                     android:layout_margin="2dp"
                     android:background="@drawable/rl_action_shape"
-                    android:padding="4dp">
+                    app:dpIconHeight="20dp"
+                    app:dpIconWidth="20dp"
+                    app:emOrientation="vertical"
+                    app:rfIcon="@drawable/ic_report"
+                    app:spActNameSize="10sp"
+                    app:szActName="@string/cn_report" />
 
-                    <ImageView
-                        android:id="@+id/iv_report"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_report" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/iv_report"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="4dp"
-                        android:text="@string/cn_report"
-                        android:textSize="10sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_act_add"
+                <wxm.KeepAccount.ui.extend.IconButton.IconButton
+                    android:id="@+id/ib_add"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="44dp"
+                    android:layout_centerVertical="true"
                     android:layout_margin="2dp"
-                    android:layout_toEndOf="@id/rl_act_report"
+                    android:layout_toEndOf="@id/ib_report"
                     android:background="@drawable/rl_action_shape"
-                    android:padding="4dp">
+                    app:dpIconHeight="20dp"
+                    app:dpIconWidth="20dp"
+                    app:emOrientation="vertical"
+                    app:rfIcon="@drawable/ic_add_note"
+                    app:spActNameSize="10sp"
+                    app:szActName="@string/cn_add_note" />
 
-                    <ImageView
-                        android:id="@+id/iv_add"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_add_note" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/iv_add"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="4dp"
-                        android:text="@string/cn_add_note"
-                        android:textSize="10sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_act_delete"
+                <wxm.KeepAccount.ui.extend.IconButton.IconButton
+                    android:id="@+id/ib_delete"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="44dp"
+                    android:layout_centerVertical="true"
                     android:layout_margin="2dp"
-                    android:layout_toEndOf="@id/rl_act_add"
+                    android:layout_toEndOf="@id/ib_add"
                     android:background="@drawable/rl_action_shape"
-                    android:padding="4dp">
+                    app:dpIconHeight="20dp"
+                    app:dpIconWidth="20dp"
+                    app:emOrientation="vertical"
+                    app:rfIcon="@drawable/ic_delete_1"
+                    app:spActNameSize="10sp"
+                    app:szActName="@string/cn_delete_note" />
 
-                    <ImageView
-                        android:id="@+id/iv_edit"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_delete_1" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/iv_edit"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="4dp"
-                        android:text="@string/cn_delete_note"
-                        android:textSize="10sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_act_refresh"
+                <wxm.KeepAccount.ui.extend.IconButton.IconButton
+                    android:id="@+id/ib_refresh"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="44dp"
+                    android:layout_centerVertical="true"
                     android:layout_margin="2dp"
-                    android:layout_toEndOf="@id/rl_act_delete"
+                    android:layout_toEndOf="@id/ib_delete"
                     android:background="@drawable/rl_action_shape"
-                    android:padding="4dp">
-
-                    <ImageView
-                        android:id="@+id/iv_refresh"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_refresh_1" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/iv_refresh"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="4dp"
-                        android:text="@string/cn_refresh"
-                        android:textSize="10sp" />
-                </RelativeLayout>
+                    app:dpIconHeight="20dp"
+                    app:dpIconWidth="20dp"
+                    app:emOrientation="vertical"
+                    app:rfIcon="@drawable/ic_refresh_1"
+                    app:spActNameSize="10sp"
+                    app:szActName="@string/cn_refresh" />
 
 
-                <RelativeLayout
-                    android:id="@+id/rl_act_sort"
+                <wxm.KeepAccount.ui.extend.IconButton.IconButton
+                    android:id="@+id/ib_sort"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="44dp"
+                    android:layout_centerVertical="true"
                     android:layout_margin="2dp"
-                    android:layout_toEndOf="@id/rl_act_refresh"
+                    android:layout_toEndOf="@id/ib_refresh"
                     android:background="@drawable/rl_action_shape"
-                    android:padding="4dp">
-
-                    <ImageView
-                        android:id="@+id/iv_sort"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_sort_down_1" />
-
-                    <TextView
-                        android:id="@+id/tv_sort"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/iv_sort"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="4dp"
-                        android:text="@string/cn_sort_down_by_time"
-                        android:textSize="10sp" />
-                </RelativeLayout>
+                    app:dpIconHeight="20dp"
+                    app:dpIconWidth="20dp"
+                    app:emOrientation="vertical"
+                    app:rfIcon="@drawable/ic_sort_down_1"
+                    app:spActNameSize="10sp"
+                    app:szActName="@string/cn_sort_down_by_time" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>

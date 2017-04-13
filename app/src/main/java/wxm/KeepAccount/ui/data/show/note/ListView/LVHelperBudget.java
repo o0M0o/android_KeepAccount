@@ -76,12 +76,10 @@ public class LVHelperBudget extends LVBase {
      */
     @Override
     protected void initActs() {
-        mRLActReport.setVisibility(View.GONE);
+        mIBReport.setVisibility(View.GONE);
 
-        ImageView iv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.iv_sort));
-        TextView tv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.tv_sort));
-        iv_sort.setImageDrawable(mBODownOrder ? LVResource.mDASortUp : LVResource.mDASortDown);
-        tv_sort.setText(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
+        mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+        mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
     }
 
 
@@ -89,30 +87,27 @@ public class LVHelperBudget extends LVBase {
      * 附加动作
      * @param v   动作view
      */
-    @OnClick({R.id.rl_act_sort, R.id.rl_act_refresh, R.id.rl_act_delete,
-                R.id.rl_act_add})
+    @OnClick({R.id.ib_sort, R.id.ib_refresh, R.id.ib_delete, R.id.ib_add})
     public void onActionClick(View v) {
         switch (v.getId())  {
-            case R.id.rl_act_sort :     {
+            case R.id.ib_sort :     {
                 mBODownOrder = !mBODownOrder;
 
-                ImageView iv_sort = UtilFun.cast_t(v.findViewById(R.id.iv_sort));
-                TextView tv_sort = UtilFun.cast_t(v.findViewById(R.id.tv_sort));
-                iv_sort.setImageDrawable(mBODownOrder ? LVResource.mDASortUp : LVResource.mDASortDown);
-                tv_sort.setText(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
+                mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+                mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
 
                 reorderData();
                 loadUIUtility(true);
             }
             break;
 
-            case R.id.rl_act_refresh :  {
+            case R.id.ib_refresh:  {
                 mActionType = ACTION_EDIT;
                 reloadView(getContext(), false);
             }
             break;
 
-            case R.id.rl_act_delete :  {
+            case R.id.ib_delete :  {
                 if(ACTION_DELETE != mActionType) {
                     mActionType = ACTION_DELETE;
                     reloadView(v.getContext(), false);
@@ -120,7 +115,7 @@ public class LVHelperBudget extends LVBase {
             }
             break;
 
-            case R.id.rl_act_add :  {
+            case R.id.ib_add :  {
                 ACNoteShow ac = getRootActivity();
                 Intent intent = new Intent(ac, ACPreveiwAndEdit.class);
                 intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);

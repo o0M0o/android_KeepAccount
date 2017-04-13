@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="IconButton">
+        <attr name="emOrientation">
+            <enum name="vertical" value="1"/>
+            <enum name="horizontal" value="2"/>
+        </attr>
+
         <attr name="szActName" format="string" />
         <attr name="spActNameSize" format="dimension" />
         <attr name="crActNameColor" format="color" />

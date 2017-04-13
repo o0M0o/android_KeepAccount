@@ -86,40 +86,36 @@ public class LVHelperDaily
      */
     @Override
     protected void initActs() {
-        ImageView iv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.iv_sort));
-        TextView tv_sort = UtilFun.cast_t(mRLActSort.findViewById(R.id.tv_sort));
-        iv_sort.setImageDrawable(mBODownOrder ? LVResource.mDASortUp : LVResource.mDASortDown);
-        tv_sort.setText(mBODownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+        mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+        mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
     }
 
     /**
      * 附加动作
      * @param v   动作view
      */
-    @OnClick({R.id.rl_act_sort, R.id.rl_act_refresh, R.id.rl_act_delete,
-                R.id.rl_act_add, R.id.rl_act_report})
+    @OnClick({R.id.ib_sort, R.id.ib_refresh, R.id.ib_delete,
+                R.id.ib_add, R.id.ib_report})
     public void onActionClick(View v) {
         switch (v.getId())  {
-            case R.id.rl_act_sort :     {
+            case R.id.ib_sort :     {
                 mBODownOrder = !mBODownOrder;
 
-                ImageView iv_sort = UtilFun.cast_t(v.findViewById(R.id.iv_sort));
-                TextView tv_sort = UtilFun.cast_t(v.findViewById(R.id.tv_sort));
-                iv_sort.setImageDrawable(mBODownOrder ? LVResource.mDASortUp : LVResource.mDASortDown);
-                tv_sort.setText(mBODownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+                mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+                mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
 
                 reorderData();
                 loadUIUtility(true);
             }
             break;
 
-            case R.id.rl_act_refresh :  {
+            case R.id.ib_refresh :  {
                 mActionType = ACTION_EDIT;
                 reloadView(getContext(), false);
             }
             break;
 
-            case R.id.rl_act_delete :  {
+            case R.id.ib_delete :  {
                 if(ACTION_DELETE != mActionType) {
                     mActionType = ACTION_DELETE;
                     redrawUI();
@@ -127,7 +123,7 @@ public class LVHelperDaily
             }
             break;
 
-            case R.id.rl_act_add :  {
+            case R.id.ib_add  :  {
                 ACNoteShow ac = getRootActivity();
                 Intent intent = new Intent(ac, ACNoteEdit.class);
                 intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
@@ -146,7 +142,7 @@ public class LVHelperDaily
             }
             break;
 
-            case R.id.rl_act_report :   {
+            case R.id.ib_report  :   {
                 final String[] d_s = {"", ""};
 
                 DlgSelectReportDays dlg_days = new DlgSelectReportDays();
