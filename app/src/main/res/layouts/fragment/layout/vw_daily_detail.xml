@@ -141,6 +141,7 @@
 
         <wxm.KeepAccount.ui.extend.ValueShow.ValueShow
             android:id="@+id/vs_daily_info"
+            android:background="#afdfe4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingEnd="8dp"
@@ -215,65 +216,35 @@
         android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintStart_toStartOf="parent">
 
-        <RelativeLayout
-            android:id="@+id/rl_act_add"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+        <wxm.KeepAccount.ui.extend.IconButton.IconButton
+            android:id="@+id/ib_add"
+            android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/rl_action_shape"
-            android:padding="4dp">
-
-            <ImageView
-                android:id="@+id/iv_tag"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_add_simple" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="2dp"
-                android:layout_toEndOf="@id/iv_tag"
-                android:text="@string/cn_create"
-                android:textColor="@color/text_fit"
-                android:textSize="16sp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_act_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/rl_act_delete"
+            app:rfIcon="@drawable/ic_add_new"
+            app:szActName="@string/cn_create"
+            app:spActNameSize="14sp"
+            app:dpIconWidth="20dp"
+            app:dpIconHeight="20dp"
             android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/rl_act_add"
-            android:background="@drawable/rl_action_shape"
-            android:padding="4dp">
+            android:layout_width="68dp"
+            android:layout_height="36dp" />
 
-            <ImageView
-                android:id="@+id/iv_tag1"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_delete" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="2dp"
-                android:layout_toEndOf="@id/iv_tag1"
-                android:text="@string/cn_delete"
-                android:textColor="@color/text_fit"
-                android:textSize="16sp" />
-        </RelativeLayout>
+        <wxm.KeepAccount.ui.extend.IconButton.IconButton
+            android:id="@+id/ib_delete"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/ib_add"
+            app:rfIcon="@drawable/ic_delete"
+            app:szActName="@string/cn_delete"
+            app:spActNameSize="14sp"
+            app:dpIconWidth="22dp"
+            app:dpIconHeight="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_width="68dp"
+            android:layout_height="36dp" />
 
     </RelativeLayout>
 

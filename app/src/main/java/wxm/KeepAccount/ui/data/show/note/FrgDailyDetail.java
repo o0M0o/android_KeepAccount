@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +40,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.ui.extend.IconButton.IconButton;
 import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ContextUtil;
@@ -87,13 +89,13 @@ public class FrgDailyDetail extends FrgUtilityBase {
     @BindView(R.id.rl_accpet_giveup)
     RelativeLayout mRLAcceptGiveup;
 
-    // 确认或者放弃选择
-    @BindView(R.id.rl_act_add)
-    RelativeLayout mRLActAdd;
+    // create new data
+    @BindView(R.id.ib_add)
+    IconButton      mIBAdd;
 
-    // 确认或者放弃选择
-    @BindView(R.id.rl_act_delete)
-    RelativeLayout mRLActDelete;
+    // delete data
+    @BindView(R.id.ib_delete)
+    IconButton      mIBDelete;
 
     // for color
     @BindColor(R.color.darkred)
@@ -213,12 +215,12 @@ public class FrgDailyDetail extends FrgUtilityBase {
      * 处理动作点击
      * @param view  触发的按键
      */
-    @OnClick({ R.id.rl_act_add, R.id.rl_act_delete, R.id.bt_giveup})
+    @OnClick({R.id.ib_delete,  R.id.ib_add, R.id.bt_giveup})
     public void dayActionClick(View view) {
         int vid = view.getId();
         switch (vid)    {
             // 添加数据
-            case R.id.rl_act_add :  {
+            case R.id.ib_add :      {
                 Intent intent = new Intent(getActivity(), ACNoteEdit.class);
                 intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
 
@@ -235,8 +237,8 @@ public class FrgDailyDetail extends FrgUtilityBase {
             break;
 
             // 删除数据
-            case R.id.rl_act_delete :  {
-                boolean bdel = !(mRLActAdd.getVisibility() == View.VISIBLE);
+            case R.id.ib_delete :  {
+                boolean bdel = !(mIBAdd.getVisibility() == View.VISIBLE);
                 if(bdel)    {
                     AdapterNoteDetail ap = (AdapterNoteDetail)mLVBody.getAdapter();
                     List<INote> w_d = ap.getWantDeleteNotes();
@@ -330,7 +332,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
      */
     private void loadActBars(boolean bDelStatus) {
         mRLAcceptGiveup.setVisibility(bDelStatus ? View.VISIBLE : View.GONE);
-        mRLActAdd.setVisibility(bDelStatus ? View.GONE : View.VISIBLE);
+        mIBAdd.setVisibility(bDelStatus ? View.GONE : View.VISIBLE);
     }
 
     /**
