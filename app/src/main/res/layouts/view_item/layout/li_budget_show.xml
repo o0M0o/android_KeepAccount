@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,109 +9,94 @@
         layout="@layout/item_act_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/rl_header"
-        android:layout_alignTop="@+id/rl_header"
+        android:layout_alignBottom="@+id/cl_header"
+        android:layout_alignTop="@+id/cl_header"
         android:layout_marginBottom="1dp"
         android:layout_marginTop="1dp" />
 
-    <RelativeLayout
-        android:id="@+id/rl_header"
-        android:layout_toEndOf="@id/rl_delete"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/rl_delete"
         android:background="@color/color_1">
 
-        <LinearLayout
+        <!-- for name -->
+        <TextView
+            android:id="@+id/tv_budget_name"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="8dp"
+            android:text="生活预算"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <!-- for yun -->
+        <ImageView
+            android:id="@+id/iv_yuan"
+            app:layout_constraintStart_toStartOf="@id/tv_budget_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_budget_name"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_marginTop="2dp"
-            android:orientation="vertical">
+            android:src="@drawable/ic_yuan" />
 
-            <TextView
-                android:id="@+id/tv_budget_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="生活预算"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+        <TextView
+            android:id="@+id/tv_budget_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toEndOf="@id/iv_yuan"
+            app:layout_constraintTop_toTopOf="@id/iv_yuan"
+            app:layout_constraintBottom_toBottomOf="@id/iv_yuan"
+            android:text="(总额)7500/(剩余)4000"
+            android:textSize="12sp" />
 
-            <RelativeLayout
-                android:id="@+id/rl_budget_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:orientation="horizontal">
+        <!-- for note -->
+        <ImageView
+            android:id="@+id/iv_note"
+            app:layout_constraintStart_toStartOf="@id/tv_budget_name"
+            app:layout_constraintTop_toBottomOf="@id/iv_yuan"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:src="@drawable/ic_note" />
 
-                <ImageView
-                    android:id="@+id/iv_yuan"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginTop="2dp"
-                    android:src="@drawable/ic_yuan" />
-
-                <TextView
-                    android:id="@+id/tv_budget_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="4dp"
-                    android:layout_toEndOf="@id/iv_yuan"
-                    android:text="(总额)7500/(剩余)4000"
-                    android:textSize="12sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_budget_note"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/iv_note"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_note" />
-
-                <TextView
-                    android:id="@+id/tv_budget_note"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="4dp"
-                    android:layout_toEndOf="@id/iv_note"
-                    android:text="生活开支类预算"
-                    android:textSize="12sp" />
-            </RelativeLayout>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_budget_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toEndOf="@id/iv_note"
+            app:layout_constraintTop_toTopOf="@id/iv_note"
+            app:layout_constraintBottom_toBottomOf="@id/iv_note"
+            android:text="生活开支类预算"
+            android:textSize="12sp" />
 
         <ImageView
             android:id="@+id/iv_edit"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
             android:layout_marginEnd="12dp"
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/right_arrow"
-            android:visibility="visible" />
-    </RelativeLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
-    <RelativeLayout
-        android:id="@+id/rl_detail"
+    <ListView
+        android:id="@+id/lv_show_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_header" >
-
-        <ListView
-            android:id="@+id/lv_show_detail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="48dp"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="1dp" />
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@id/cl_header"
+        android:layout_marginStart="36dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="1dp" />
 </RelativeLayout>

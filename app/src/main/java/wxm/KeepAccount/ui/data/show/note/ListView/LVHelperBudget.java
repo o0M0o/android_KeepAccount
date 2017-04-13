@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,8 +168,6 @@ public class LVHelperBudget extends LVBase {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected void onPreExecute()   {
-                mMainPara.clear();
-                mHMSubPara.clear();
             }
 
             @Override
@@ -232,6 +231,9 @@ public class LVHelperBudget extends LVBase {
      * 解析数据
      */
     private void parseNotes() {
+        mMainPara.clear();
+        mHMSubPara.clear();
+
         HashMap<BudgetItem, List<PayNoteItem>> mHMData = ContextUtil.getBudgetUtility().getBudgetWithPayNote();
         Set<BudgetItem> set_bi = mHMData.keySet();
         ArrayList<BudgetItem> ls_bi = new ArrayList<>(set_bi);
@@ -301,32 +303,20 @@ public class LVHelperBudget extends LVBase {
         mHMSubPara.put(main_tag, cur_llhm);
     }
 
-
     /**
-     * 初始化次级(详细数据)视图
+     * 加载详细视图
      *
-     * @param vh view holder
-     * @param hm 主级视图附带数据
+     * @param lv  视图
+     * @param tag 数据tag
      */
-    private void init_detail_view(FastViewHolder vh, HashMap<String, String> hm) {
-        // get sub para
-        LinkedList<HashMap<String, String>> llhm =
-                V_SHOW_UNFOLD.equals(hm.get(K_SHOW)) ?
-                        mHMSubPara.get(hm.get(K_TAG)) : new LinkedList<>();
-
-        RelativeLayout rl = vh.getView(R.id.rl_detail);
-        if (llhm.isEmpty()) {
-            rl.setVisibility(View.GONE);
-        } else {
-            rl.setVisibility(View.VISIBLE);
-
-            // init sub adapter
-            ListView mLVShowDetail = vh.getView(R.id.lv_show_detail);
+    private void load_detail_view(ListView lv, String tag) {
+        LinkedList<HashMap<String, String>> llhm = mHMSubPara.get(tag);
+        if (!UtilFun.ListIsNullOrEmpty(llhm)) {
             SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm,
-                    new String[]{}, new int[]{});
-            mLVShowDetail.setAdapter(mAdapter);
+                                new String[]{}, new int[]{});
+            lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
-            ListViewHelper.setListViewHeightBasedOnChildren(mLVShowDetail);
+            ListViewHelper.setListViewHeightBasedOnChildren(lv);
         }
     }
     /// END PRIVATE
@@ -346,18 +336,6 @@ public class LVHelperBudget extends LVBase {
             HashMap<String, String> hm = UtilFun.cast(getItem(pos));
 
             switch (vid)    {
-                case R.id.rl_header :   {
-                    boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-                    hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-
-                    init_detail_view(UtilFun.cast_t(mLVShow.getChildAt(pos).getTag()), hm);
-                    if (bf)
-                        addUnfoldItem(hm.get(K_TAG));
-                    else
-                        removeUnfoldItem(hm.get(K_TAG));
-                }
-                break;
-
                 case R.id.rl_delete :   {
                     String k_tag = hm.get(K_ID);
                     Integer id = Integer.parseInt(k_tag);
@@ -413,26 +391,49 @@ public class LVHelperBudget extends LVBase {
                     view, R.layout.li_budget_show);
 
             final HashMap<String, String> hm = UtilFun.cast(getItem(position));
-            init_detail_view(viewHolder, hm);
+            final ListView lv = viewHolder.getView(R.id.lv_show_detail);
+            final String tag = hm.get(K_TAG);
+            if (V_SHOW_FOLD.equals(hm.get(K_SHOW))) {
+                lv.setVisibility(View.GONE);
+            } else {
+                lv.setVisibility(View.VISIBLE);
+                load_detail_view(lv, tag);
+            }
+
+            View.OnClickListener local_cl = v -> {
+                boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
+                hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+
+                if (bf) {
+                    lv.setVisibility(View.VISIBLE);
+                    load_detail_view(lv, tag);
+
+                    addUnfoldItem(tag);
+                } else {
+                    lv.setVisibility(View.GONE);
+
+                    removeUnfoldItem(tag);
+                }
+            };
 
             // for background color
-            RelativeLayout rl = viewHolder.getView(R.id.rl_header);
-            rl.setBackgroundColor(0 == position % 2 ?
-                                        LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
-            rl.setOnClickListener(mCLAdapter);
+            viewHolder.getConvertView().setBackgroundColor(0 == position % 2 ?
+                            LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
+            ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
+            rl.setOnClickListener(local_cl);
 
             // for delete
-            RelativeLayout rl_del = viewHolder.getView(R.id.rl_delete);
+            View rl_del = viewHolder.getView(R.id.rl_delete);
             rl_del.setVisibility(mActionType == ACTION_EDIT ? View.GONE : View.VISIBLE);
             rl_del.setOnClickListener(mCLAdapter);
 
             // for note
             String nt = hm.get(K_NOTE);
-            if (UtilFun.StringIsNullOrEmpty(nt)) {
-                viewHolder.getView(R.id.rl_budget_note).setVisibility(View.GONE);
-            } else {
+            boolean b_nt = UtilFun.StringIsNullOrEmpty(nt);
+            viewHolder.getView(R.id.iv_note).setVisibility(b_nt ? View.GONE : View.VISIBLE);
+            viewHolder.getView(R.id.tv_budget_note).setVisibility(b_nt ? View.GONE : View.VISIBLE);
+            if (!b_nt)
                 viewHolder.setText(R.id.tv_budget_note, nt);
-            }
 
             viewHolder.setText(R.id.tv_budget_name, hm.get(K_TITLE));
             viewHolder.setText(R.id.tv_budget_amount, hm.get(K_AMOUNT));

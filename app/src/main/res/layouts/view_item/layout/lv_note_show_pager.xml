@@ -31,6 +31,7 @@
             android:id="@+id/rl_lv_note"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/rl_action"
             android:layout_below="@id/rl_attach_button">
 
             <ListView
