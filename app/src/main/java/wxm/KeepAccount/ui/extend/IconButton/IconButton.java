@@ -99,6 +99,14 @@ public class IconButton extends ConstraintLayout {
     }
 
     /**
+     * 得到动作名
+     * @return   动作名
+     */
+    public String getActName()  {
+        return mTVName.getText().toString();
+    }
+
+    /**
      * 设置动作icon
      * @param icon_id   id for icon
      */

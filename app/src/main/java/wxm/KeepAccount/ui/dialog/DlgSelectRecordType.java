@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
@@ -27,6 +28,7 @@ import wxm.KeepAccount.define.RecordTypeItem;
 import wxm.KeepAccount.db.RecordTypeDBUtility;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.dialog.utility.DlgResource;
+import wxm.KeepAccount.ui.extend.IconButton.IconButton;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.edit.RecordInfo.ACRecordInfoEdit;
@@ -52,11 +54,8 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
     @BindView(R.id.tv_hint)
     TextView        mTVNote;
 
-    @BindView(R.id.tv_sort)
-    TextView        mTVSort;
-
-    @BindView(R.id.iv_sort)
-    ImageView       mIVSort;
+    @BindView(R.id.ib_sort)
+    IconButton      mIBSort;
 
     /**
      * 设置以前的“记录类型”
@@ -125,11 +124,11 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
      * 附加动作
      * @param v   动作view
      */
-    @OnClick({R.id.rl_pencil, R.id.rl_sort})
+    @OnClick({R.id.ib_sort, R.id.ib_manage})
     public void onActionClick(View v) {
         int vid = v.getId();
         switch (vid)    {
-            case R.id.rl_pencil :   {
+            case R.id.ib_manage :   {
                 Intent it = new Intent(getContext(), ACRecordInfoEdit.class);
                 it.putExtra(ACRecordInfoEdit.IT_PARA_RECORDTYPE, mRootType);
 
@@ -137,7 +136,7 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
             }
             break;
 
-            case R.id.rl_sort :     {
+            case R.id.ib_sort :     {
                 String cur_name = mTVSort.getText().toString();
                 boolean is_up = DlgResource.mSZSortByNameUp.equals(cur_name);
 
