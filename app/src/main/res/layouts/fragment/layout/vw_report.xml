@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/rl_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,17 +16,20 @@
 
         <ImageView
             android:id="@+id/iv_switch"
-            android:src="@drawable/ic_switch_black"
-            android:layout_marginEnd="16dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
             android:layout_width="26dp"
-            android:layout_height="26dp" />
+            android:layout_height="26dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_switch_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <RelativeLayout
             android:id="@+id/rl_date"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/tv_day"
@@ -34,96 +38,86 @@
                 android:layout_centerVertical="true"
                 android:text="2017-02-01 - 2017-02-17"
                 android:textColor="@color/text_fit"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
-            <RelativeLayout
-                android:id="@+id/rl_select_days"
-                android:layout_marginStart="8dp"
-                android:layout_toEndOf="@id/tv_day"
+            <TextView
+                android:id="@+id/tv_select_days"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@id/tv_day"
                 android:background="@drawable/rl_day_nav_shape"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
+                android:paddingBottom="4dp"
                 android:paddingEnd="2dp"
-                android:paddingStart="2dp" >
-
-                <TextView
-                    android:textSize="12sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="@string/hint_select_days"
-                    android:textColor="@color/black" />
-            </RelativeLayout>
+                android:paddingStart="2dp"
+                android:paddingTop="4dp"
+                android:text="@string/hint_select_days"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
         </RelativeLayout>
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/rl_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rl_date">
+            app:layout_constraintTop_toBottomOf="@id/rl_date">
 
-            <RelativeLayout
-                android:id="@+id/rl_data_pay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/tv_pay_tag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="总支出 : "
-                    android:textColor="@color/text_fit"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tv_pay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="12dp"
-                    android:layout_toEndOf="@id/tv_pay_tag"
-                    android:text="1450.75"
-                    android:textColor="#f15b6c"
-                    android:textSize="12sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_data_income"
+            <!-- pay -->
+            <TextView
+                android:id="@+id/tv_pay_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rl_data_pay">
+                android:text="总支出 : "
+                android:textColor="@color/text_fit"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tv_income_tag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="总收入 : "
-                    android:textColor="@color/text_fit"
-                    android:textSize="12sp" />
+            <TextView
+                android:id="@+id/tv_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="1450.75"
+                android:textColor="#f15b6c"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_pay_tag"
+                app:layout_constraintStart_toEndOf="@id/tv_pay_tag"
+                app:layout_constraintTop_toTopOf="@id/tv_pay_tag" />
 
-                <TextView
-                    android:id="@+id/tv_income"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="12dp"
-                    android:layout_toEndOf="@id/tv_income_tag"
-                    android:text="3150.75"
-                    android:textColor="#5c7a29"
-                    android:textSize="12sp" />
-            </RelativeLayout>
-        </RelativeLayout>
+            <!-- income -->
+            <TextView
+                android:id="@+id/tv_income_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="总收入 : "
+                android:textColor="@color/text_fit"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/tv_pay_tag" />
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_income"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:text="3150.75"
+                android:textColor="#5c7a29"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_income_tag"
+                app:layout_constraintStart_toEndOf="@id/tv_income_tag"
+                app:layout_constraintTop_toTopOf="@id/tv_income_tag" />
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
 
 
     <FrameLayout
         android:id="@+id/fl_page_holder"
-        android:layout_alignParentStart="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
         android:layout_below="@id/rl_header" />
 </RelativeLayout>

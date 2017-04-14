@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="4dp">
 
     <ProgressBar
         android:id="@+id/pb_load_data"
@@ -29,8 +28,8 @@
         android:id="@+id/tb_pay"
         android:layout_width="96dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/tb_income"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@id/tb_income"
         android:checked="true"
         android:textOff="@string/tv_pay_not_show"
         android:textOn="@string/tv_pay_show"
@@ -39,10 +38,8 @@
 
     <lecho.lib.hellocharts.view.PieChartView
         android:id="@+id/chart"
-        android:layout_below="@+id/tb_pay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tb_pay" />
 
 </RelativeLayout>

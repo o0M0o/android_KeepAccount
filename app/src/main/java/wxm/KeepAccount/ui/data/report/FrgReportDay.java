@@ -174,7 +174,7 @@ public class FrgReportDay extends FrgUtilityBase {
      * 重新选择起止时间
      * @param v   动作view
      */
-    @OnClick({R.id.rl_select_days})
+    @OnClick({R.id.tv_select_days})
     public void onSelectDays(View v) {
         DlgSelectReportDays dlg_days = new DlgSelectReportDays();
         dlg_days.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {

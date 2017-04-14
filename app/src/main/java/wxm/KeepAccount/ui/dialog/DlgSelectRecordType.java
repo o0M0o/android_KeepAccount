@@ -5,13 +5,16 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +25,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.RecordTypeItem;
@@ -53,6 +57,9 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
 
     @BindView(R.id.tv_hint)
     TextView        mTVNote;
+
+    @BindView(R.id.gv_record_info)
+    GridView        mGVMain;
 
     @BindView(R.id.ib_sort)
     IconButton      mIBSort;
@@ -95,29 +102,39 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
         View vw = View.inflate(getActivity(), R.layout.dlg_select_record_info, null);
         ButterKnife.bind(this, vw);
 
-        GridView gv = UtilFun.cast_t(vw.findViewById(R.id.gv_record_info));
-        gv.setOnItemClickListener((parent, view, position, id) -> {
-            String tv_str = mLHMData.get(position).get(KEY_NAME);
-            if(!tv_str.equals(mCurType))    {
-                for(HashMap<String, String> hm : mLHMData)  {
-                    if(hm.get(KEY_NAME).equals(tv_str)) {
-                        hm.put(KEY_SELECTED, VAL_SELECTED);
-                        mTVNote.setText(UtilFun.StringIsNullOrEmpty(hm.get(KEY_NOTE)) ?
-                                "" : hm.get(KEY_NOTE));
-                    } else  {
-                        hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
-                    }
-                }
-
-                mCurType = tv_str;
-                mGAAdapter.notifyDataSetChanged();
-            }
-        });
-        gv.setAdapter(mGAAdapter);
+        mGVMain.setAdapter(mGAAdapter);
 
         // for gridview show
         loadData();
         return vw;
+    }
+
+    @OnItemClick({R.id.gv_record_info})
+    public void onGVItemClick(AdapterView<?> parent, View view, int position, long id)  {
+        String tv_str = mLHMData.get(position).get(KEY_NAME);
+        if(!tv_str.equals(mCurType))    {
+            for(HashMap<String, String> hm : mLHMData)  {
+                if(hm.get(KEY_NAME).equals(tv_str)) {
+                    hm.put(KEY_SELECTED, VAL_SELECTED);
+
+                    mTVNote.setText(UtilFun.StringIsNullOrEmpty(hm.get(KEY_NOTE)) ?
+                            "" : hm.get(KEY_NOTE));
+                    /*
+                    String sz = hm.get(KEY_NOTE);
+                    if(!UtilFun.StringIsNullOrEmpty(sz)) {
+                        Toast ts = Toast.makeText(getContext(), sz, Toast.LENGTH_SHORT);
+                        ts.setGravity(Gravity.CENTER, 0, 200);
+                        ts.show();
+                    }
+                    */
+                } else  {
+                    hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
+                }
+            }
+
+            mCurType = tv_str;
+            mGAAdapter.notifyDataSetChanged();
+        }
     }
 
     /**
@@ -137,13 +154,11 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
             break;
 
             case R.id.ib_sort :     {
-                String cur_name = mTVSort.getText().toString();
+                String cur_name = mIBSort.getActName();
                 boolean is_up = DlgResource.mSZSortByNameUp.equals(cur_name);
 
-                mTVSort.setText( is_up ?
-                                    DlgResource.mSZSortByNameDown : DlgResource.mSZSortByNameUp);
-                mIVSort.setImageDrawable(is_up ?
-                                    DlgResource.mDASortDown : DlgResource.mDASortUp);
+                mIBSort.setActName(is_up ? DlgResource.mSZSortByNameDown : DlgResource.mSZSortByNameUp);
+                mIBSort.setActIcon(is_up ? R.drawable.ic_sort_down_1 : R.drawable.ic_sort_up_1);
 
                 loadData();
             }
@@ -157,7 +172,7 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
         List<RecordTypeItem> al_type = GlobalDef.STR_RECORD_PAY.equals(mRootType) ?
                                                 rd.getAllPayItem() : rd.getAllIncomeItem();
 
-        boolean is_up = DlgResource.mSZSortByNameUp.equals(mTVSort.getText().toString());
+        boolean is_up = DlgResource.mSZSortByNameUp.equals(mIBSort.getActName());
         Collections.sort(al_type, (o1, o2) ->
                              is_up ?
                                 o1.getType().compareTo(o2.getType())
@@ -179,6 +194,9 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
 
             mLHMData.add(hmd);
         }
+
+        //if(!UtilFun.StringIsNullOrEmpty(old_note))
+        //    Toast.makeText(getContext(), old_note, Toast.LENGTH_SHORT).show();
 
         mTVNote.setText(UtilFun.StringIsNullOrEmpty(old_note) ? "" : old_note);
         mGAAdapter.notifyDataSetChanged();
