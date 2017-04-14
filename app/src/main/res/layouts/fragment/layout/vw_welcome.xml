@@ -44,32 +44,20 @@
         android:orientation="horizontal"
         android:padding="4dp">
 
-        <RelativeLayout
-            android:id="@+id/rl_channel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <wxm.KeepAccount.ui.extend.IconButton.IconButton
+            android:id="@+id/ib_channel"
+            android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
             android:layout_marginStart="16dp"
-            android:padding="2dp">
-
-            <ImageView
-                android:id="@+id/iv_channel"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:layout_centerHorizontal="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_channel" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/iv_channel"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="2dp"
-                android:text="@string/cn_channel"
-                android:textColor="@color/text_fit"
-                android:textSize="12sp" />
-        </RelativeLayout>
+            app:rfIcon="@drawable/ic_channel"
+            app:emOrientation="vertical"
+            app:szActName="@string/cn_channel"
+            app:spActNameSize="12sp"
+            app:crActNameColor="@color/text_fit"
+            app:dpIconWidth="38dp"
+            app:dpIconHeight="38dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/vw_tag"
@@ -77,36 +65,23 @@
             android:layout_height="42dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:layout_toEndOf="@id/rl_channel"
+            android:layout_toEndOf="@id/ib_channel"
             android:background="@color/darkorange" />
 
-
-        <RelativeLayout
-            android:id="@+id/rl_setting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <wxm.KeepAccount.ui.extend.IconButton.IconButton
+            android:id="@+id/ib_setting"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/vw_tag"
+            app:rfIcon="@drawable/ic_menu_setting"
+            app:emOrientation="vertical"
+            app:szActName="@string/cn_setting"
+            app:spActNameSize="12sp"
+            app:crActNameColor="@color/text_fit"
+            app:dpIconWidth="38dp"
+            app:dpIconHeight="38dp"
             android:layout_marginStart="16dp"
-            android:layout_toEndOf="@+id/vw_tag"
-            android:padding="2dp">
-
-            <ImageView
-                android:id="@+id/iv_setting"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:layout_centerHorizontal="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_menu_setting" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/iv_setting"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="2dp"
-                android:text="@string/cn_setting"
-                android:textColor="@color/text_fit"
-                android:textSize="12sp" />
-        </RelativeLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
 </RelativeLayout>

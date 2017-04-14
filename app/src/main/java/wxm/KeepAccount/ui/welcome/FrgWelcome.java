@@ -19,6 +19,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.DragGrid.DragGridView;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
@@ -39,12 +40,6 @@ public class FrgWelcome extends FrgUtilityBase {
     // for ui
     @BindView(R.id.dgv_buttons)
     DragGridView mDGVActions;
-
-    @BindView(R.id.rl_channel)
-    RelativeLayout  mRLChannel;
-
-    @BindView(R.id.rl_setting)
-    RelativeLayout  mRLSetting;
 
     @BindView(R.id.banners)
     LMBanners mLBanners;
@@ -102,43 +97,8 @@ public class FrgWelcome extends FrgUtilityBase {
             apt.notifyDataSetChanged();
         });
         apt.notifyDataSetChanged();
-
-
-        mRLChannel.setOnClickListener(v -> {
-            DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
-            DlgSelectChannel dlg = new DlgSelectChannel();
-            dlg.setHotChannel(dapt.getCurAction());
-            dlg.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
-                @Override
-                public void onDialogPositiveResult(DialogFragment dialog) {
-                    DlgSelectChannel dsc = UtilFun.cast(dialog);
-                    PreferencesUtil.saveHotAction(dsc.getHotChannel());
-
-                    mLSData.clear();
-                    for(String i : PreferencesUtil.loadHotAction())     {
-                        HashMap<String, Object> ihm = new HashMap<>();
-                        ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
-                        mLSData.add(ihm);
-                    }
-
-                    DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
-                    dapt.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onDialogNegativeResult(DialogFragment dialog) {
-                }
-            });
-
-            dlg.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(),
-                    "选择频道");
-        });
-
-        mRLSetting.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), ACSetting.class);
-            startActivity(intent);
-        });
     }
+
 
     @Override
     protected void loadUI() {
@@ -152,6 +112,48 @@ public class FrgWelcome extends FrgUtilityBase {
         fp = new FrgPara();
         fp.mFPViewId = R.layout.banner_year;
         mALFrgs.add(fp);
+    }
+
+    @OnClick({R.id.ib_channel,  R.id.ib_setting})
+    public void OnActClick(View v)  {
+        switch (v.getId())  {
+            case R.id.ib_channel :  {
+                DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
+                DlgSelectChannel dlg = new DlgSelectChannel();
+                dlg.setHotChannel(dapt.getCurAction());
+                dlg.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                    @Override
+                    public void onDialogPositiveResult(DialogFragment dialog) {
+                        DlgSelectChannel dsc = UtilFun.cast(dialog);
+                        PreferencesUtil.saveHotAction(dsc.getHotChannel());
+
+                        mLSData.clear();
+                        for(String i : PreferencesUtil.loadHotAction())     {
+                            HashMap<String, Object> ihm = new HashMap<>();
+                            ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
+                            mLSData.add(ihm);
+                        }
+
+                        DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
+                        dapt.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onDialogNegativeResult(DialogFragment dialog) {
+                    }
+                });
+
+                dlg.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(),
+                        "选择频道");
+            }
+            break;
+
+            case R.id.ib_setting :  {
+                Intent intent = new Intent(getActivity(), ACSetting.class);
+                startActivity(intent);
+            }
+            break;
+        }
     }
 
     private void initBanner()   {
