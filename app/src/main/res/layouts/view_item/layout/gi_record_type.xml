@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:background="@android:color/white"
+    android:layout_height="wrap_content"
+    android:paddingTop="4dp"
+    android:paddingBottom="2dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/gi_shape_record_type_nosel"
     android:orientation="vertical">
 
     <TextView
@@ -10,7 +13,22 @@
         android:textColor="@color/text_fit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_type_note"
         android:text="交通费" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/tv_type_note"
+        android:textSize="12dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_type_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="交通费" />
+
+</android.support.constraint.ConstraintLayout>

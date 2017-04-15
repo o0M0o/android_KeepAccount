@@ -14,42 +14,42 @@
 
         <wxm.KeepAccount.ui.extend.IconButton.IconButton
             android:id="@+id/ib_manage"
-            android:paddingTop= "4dp"
-            android:paddingBottom="4dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:background="@drawable/rl_action_shape"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/vw_tag"
-            app:rfIcon="@drawable/ic_pencil"
-            app:emOrientation="vertical"
-            app:szActName="@string/manager"
-            app:spActNameSize="10sp"
-            app:dpIconWidth="32dp"
+            android:background="@drawable/rl_action_shape"
+            android:paddingBottom="4dp"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
             app:dpIconHeight="32dp"
-            android:layout_width="64dp"
-            android:layout_height="wrap_content" />
+            app:dpIconWidth="32dp"
+            app:emOrientation="vertical"
+            app:rfIcon="@drawable/ic_pencil"
+            app:spActNameSize="10sp"
+            app:szActName="@string/manager" />
 
         <wxm.KeepAccount.ui.extend.IconButton.IconButton
             android:id="@+id/ib_sort"
-            android:paddingTop= "4dp"
-            android:paddingBottom="4dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:background="@drawable/rl_action_shape"
-            android:layout_toStartOf="@id/ib_manage"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginEnd="2dp"
-            app:rfIcon="@drawable/ic_sort_up_1"
-            app:emOrientation="vertical"
-            app:szActName="@string/cn_sort_up_by_name"
-            app:spActNameSize="10sp"
-            app:dpIconWidth="32dp"
-            app:dpIconHeight="32dp"
             android:layout_marginStart="16dp"
-            android:layout_width="64dp"
-            android:layout_height="wrap_content" />
+            android:layout_toStartOf="@id/ib_manage"
+            android:background="@drawable/rl_action_shape"
+            android:paddingBottom="4dp"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            app:dpIconHeight="32dp"
+            app:dpIconWidth="32dp"
+            app:emOrientation="vertical"
+            app:rfIcon="@drawable/ic_sort_up_1"
+            app:spActNameSize="10sp"
+            app:szActName="@string/cn_sort_up_by_name" />
     </RelativeLayout>
 
     <GridView
@@ -58,27 +58,8 @@
         android:layout_height="240dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/grey_1"
-        android:horizontalSpacing="2dp"
-        android:numColumns="4"
+        android:horizontalSpacing="1dp"
+        android:numColumns="2"
         android:padding="2dp"
-        android:verticalSpacing="2dp" />
-
-    <RelativeLayout
-        android:id="@+id/rl_hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/grey_1">
-
-        <TextView
-            android:id="@+id/tv_hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="4dp"
-            android:text="交通类费用"
-            android:textSize="14sp" />
-    </RelativeLayout>
+        android:verticalSpacing="1dp" />
 </LinearLayout>

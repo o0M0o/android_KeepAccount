@@ -55,9 +55,6 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
     private String  mRootType;
     private String  mCurType;
 
-    @BindView(R.id.tv_hint)
-    TextView        mTVNote;
-
     @BindView(R.id.gv_record_info)
     GridView        mGVMain;
 
@@ -94,7 +91,8 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
         // init data
         mLHMData = new ArrayList<>();
         mGAAdapter= new GVTypeAdapter(getActivity(), mLHMData,
-                new String[] { KEY_NAME }, new int[]{ R.id.tv_type_name });
+                new String[] { KEY_NAME, KEY_NOTE },
+                new int[]{ R.id.tv_type_name, R.id.tv_type_note });
         InitDlgTitle(GlobalDef.STR_RECORD_PAY.equals(mRootType) ? "选择支出类型" : "选择收入类型",
                 "接受", "放弃");
 
@@ -116,17 +114,6 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
             for(HashMap<String, String> hm : mLHMData)  {
                 if(hm.get(KEY_NAME).equals(tv_str)) {
                     hm.put(KEY_SELECTED, VAL_SELECTED);
-
-                    mTVNote.setText(UtilFun.StringIsNullOrEmpty(hm.get(KEY_NOTE)) ?
-                            "" : hm.get(KEY_NOTE));
-                    /*
-                    String sz = hm.get(KEY_NOTE);
-                    if(!UtilFun.StringIsNullOrEmpty(sz)) {
-                        Toast ts = Toast.makeText(getContext(), sz, Toast.LENGTH_SHORT);
-                        ts.setGravity(Gravity.CENTER, 0, 200);
-                        ts.show();
-                    }
-                    */
                 } else  {
                     hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
                 }
@@ -195,10 +182,6 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
             mLHMData.add(hmd);
         }
 
-        //if(!UtilFun.StringIsNullOrEmpty(old_note))
-        //    Toast.makeText(getContext(), old_note, Toast.LENGTH_SHORT).show();
-
-        mTVNote.setText(UtilFun.StringIsNullOrEmpty(old_note) ? "" : old_note);
         mGAAdapter.notifyDataSetChanged();
     }
 
@@ -234,8 +217,9 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
             if (null != v) {
                 HashMap<String, String> hm = mLHMData.get(position);
                 int curCL = hm.get(KEY_SELECTED).equals(VAL_SELECTED) ?
-                                DlgResource.mCLSelected : DlgResource.mCLNotSelected;
-                v.setBackgroundColor(curCL);
+                               R.drawable.gi_shape_record_type_sel
+                                : R.drawable.gi_shape_record_type_nosel;
+                v.setBackgroundResource(curCL);
             }
 
             return v;
