@@ -75,8 +75,8 @@ public class LVHelperYearly extends LVBase {
             case R.id.ib_sort :     {
                 mBTimeDownOrder = !mBTimeDownOrder;
 
-                mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
-                mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
+                mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+                mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
                 reorderData();
                 loadUIUtility(true);
@@ -147,8 +147,8 @@ public class LVHelperYearly extends LVBase {
         mIBAdd.setVisibility(View.GONE);
         mIBDelete.setVisibility(View.GONE);
 
-        mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
-        mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
+        mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+        mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
     }
 
 
@@ -369,11 +369,9 @@ public class LVHelperYearly extends LVBase {
             };
 
             // adjust row color
-            viewHolder.getConvertView().setBackgroundColor(0 == position % 2 ?
-                            LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
             ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
-            //rl.setBackgroundColor(0 == position % 2 ?
-            //            LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
+            rl.setBackgroundColor(0 == position % 2 ?
+                        LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
             rl.setOnClickListener(local_cl);
 
             // for year

@@ -55,12 +55,13 @@ public class LVHelperBudget extends LVBase {
     private final static int ACTION_EDIT = 2;
     private int mActionType = ACTION_EDIT;
 
+    // 排列次序
+    protected boolean mBODownOrder = true;
 
     public LVHelperBudget() {
         super();
         LOG_TAG = "LVHelperBudget";
     }
-
 
     /**
      * 过滤视图事件
@@ -412,10 +413,10 @@ public class LVHelperBudget extends LVBase {
             };
 
             // for background color
-            viewHolder.getConvertView().setBackgroundColor(0 == position % 2 ?
-                            LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
             ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
             rl.setOnClickListener(local_cl);
+            rl.setBackgroundColor(0 == position % 2 ?
+                    LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
 
             // for delete
             View rl_del = viewHolder.getView(R.id.rl_delete);

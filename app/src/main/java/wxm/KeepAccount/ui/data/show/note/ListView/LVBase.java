@@ -83,8 +83,7 @@ public abstract class LVBase extends ShowViewHelperBase {
 
     protected boolean mBActionExpand;
 
-    // 排列次序
-    protected boolean mBODownOrder = true;
+
 
     // for ui
     //@BindView(R.id.iv_expand)

@@ -48,8 +48,10 @@ import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
  * 日数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class LVHelperDaily
-        extends LVBase {
+public class LVHelperDaily extends LVBase {
+    // 若为true则数据以时间降序排列
+    private boolean mBTimeDownOrder = true;
+
     // for action
     //private final static int ACTION_NONE    = 0;
     private final static int ACTION_DELETE = 1;
@@ -86,8 +88,8 @@ public class LVHelperDaily
      */
     @Override
     protected void initActs() {
-        mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
-        mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
+        mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+        mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
     }
 
     /**
@@ -99,10 +101,10 @@ public class LVHelperDaily
     public void onActionClick(View v) {
         switch (v.getId())  {
             case R.id.ib_sort :     {
-                mBODownOrder = !mBODownOrder;
+                mBTimeDownOrder = !mBTimeDownOrder;
 
-                mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
-                mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
+                mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+                mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
                 reorderData();
                 loadUIUtility(true);
@@ -247,7 +249,7 @@ public class LVHelperDaily
             protected Void doInBackground(Void... params) {
                 // for day
                 List<String> set_k_d = NoteDataHelper.getNotesDays();
-                Collections.sort(set_k_d, (o1, o2) -> !mBODownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
+                Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
 
                 for (String k : set_k_d) {
                     NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
