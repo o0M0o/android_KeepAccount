@@ -31,7 +31,7 @@ public class ACSetting extends BaseAppCompatActivity {
 
     @Override
     protected void initFrgHolder() {
-        LOG_TAG = "ACRecordInfoEdit";
+        LOG_TAG = "ACSetting";
         mFGHolder = mFGSetting;
     }
 
