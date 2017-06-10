@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/rl_hide_show">
 
-                <wxm.KeepAccount.ui.extend.IconButton.IconButton
+                <wxm.uilib.IconButton.IconButton
                     android:id="@+id/ib_report"
                     android:layout_width="50dp"
                     android:layout_height="44dp"
@@ -87,14 +87,14 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="2dp"
                     android:background="@drawable/rl_action_shape"
-                    app:dpIconHeight="20dp"
-                    app:dpIconWidth="20dp"
-                    app:emOrientation="vertical"
-                    app:rfIcon="@drawable/ic_report"
-                    app:spActNameSize="10sp"
-                    app:szActName="@string/cn_report" />
+                    app:ibIconHeight="20dp"
+                    app:ibIconWidth="20dp"
+                    app:ibOrientation="vertical"
+                    app:ibIcon="@drawable/ic_report"
+                    app:ibActNameSize="10sp"
+                    app:ibActName="@string/cn_report" />
 
-                <wxm.KeepAccount.ui.extend.IconButton.IconButton
+                <wxm.uilib.IconButton.IconButton
                     android:id="@+id/ib_add"
                     android:layout_width="50dp"
                     android:layout_height="44dp"
@@ -102,15 +102,15 @@
                     android:layout_margin="2dp"
                     android:layout_toEndOf="@id/ib_report"
                     android:background="@drawable/rl_action_shape"
-                    app:dpIconHeight="20dp"
-                    app:dpIconWidth="20dp"
-                    app:emOrientation="vertical"
-                    app:rfIcon="@drawable/ic_add_note"
-                    app:spActNameSize="10sp"
-                    app:szActName="@string/cn_add_note" />
+                    app:ibIconHeight="20dp"
+                    app:ibIconWidth="20dp"
+                    app:ibOrientation="vertical"
+                    app:ibIcon="@drawable/ic_add_note"
+                    app:ibActNameSize="10sp"
+                    app:ibActName="@string/cn_add_note" />
 
 
-                <wxm.KeepAccount.ui.extend.IconButton.IconButton
+                <wxm.uilib.IconButton.IconButton
                     android:id="@+id/ib_delete"
                     android:layout_width="50dp"
                     android:layout_height="44dp"
@@ -118,15 +118,15 @@
                     android:layout_margin="2dp"
                     android:layout_toEndOf="@id/ib_add"
                     android:background="@drawable/rl_action_shape"
-                    app:dpIconHeight="20dp"
-                    app:dpIconWidth="20dp"
-                    app:emOrientation="vertical"
-                    app:rfIcon="@drawable/ic_delete_1"
-                    app:spActNameSize="10sp"
-                    app:szActName="@string/cn_delete_note" />
+                    app:ibIconHeight="20dp"
+                    app:ibIconWidth="20dp"
+                    app:ibOrientation="vertical"
+                    app:ibIcon="@drawable/ic_delete_1"
+                    app:ibActNameSize="10sp"
+                    app:ibActName="@string/cn_delete_note" />
 
 
-                <wxm.KeepAccount.ui.extend.IconButton.IconButton
+                <wxm.uilib.IconButton.IconButton
                     android:id="@+id/ib_refresh"
                     android:layout_width="50dp"
                     android:layout_height="44dp"
@@ -134,15 +134,15 @@
                     android:layout_margin="2dp"
                     android:layout_toEndOf="@id/ib_delete"
                     android:background="@drawable/rl_action_shape"
-                    app:dpIconHeight="20dp"
-                    app:dpIconWidth="20dp"
-                    app:emOrientation="vertical"
-                    app:rfIcon="@drawable/ic_refresh_1"
-                    app:spActNameSize="10sp"
-                    app:szActName="@string/cn_refresh" />
+                    app:ibIconHeight="20dp"
+                    app:ibIconWidth="20dp"
+                    app:ibOrientation="vertical"
+                    app:ibIcon="@drawable/ic_refresh_1"
+                    app:ibActNameSize="10sp"
+                    app:ibActName="@string/cn_refresh" />
 
 
-                <wxm.KeepAccount.ui.extend.IconButton.IconButton
+                <wxm.uilib.IconButton.IconButton
                     android:id="@+id/ib_sort"
                     android:layout_width="50dp"
                     android:layout_height="44dp"
@@ -150,12 +150,12 @@
                     android:layout_margin="2dp"
                     android:layout_toEndOf="@id/ib_refresh"
                     android:background="@drawable/rl_action_shape"
-                    app:dpIconHeight="20dp"
-                    app:dpIconWidth="20dp"
-                    app:emOrientation="vertical"
-                    app:rfIcon="@drawable/ic_sort_down_1"
-                    app:spActNameSize="10sp"
-                    app:szActName="@string/cn_sort_down_by_time" />
+                    app:ibIconHeight="20dp"
+                    app:ibIconWidth="20dp"
+                    app:ibOrientation="vertical"
+                    app:ibIcon="@drawable/ic_sort_down_1"
+                    app:ibActNameSize="10sp"
+                    app:ibActName="@string/cn_sort_down_by_time" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>

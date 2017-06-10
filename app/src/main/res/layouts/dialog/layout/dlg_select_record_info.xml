@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="4dp">
 
-        <wxm.KeepAccount.ui.extend.IconButton.IconButton
+        <wxm.uilib.IconButton.IconButton
             android:id="@+id/ib_manage"
             android:layout_width="64dp"
             android:layout_height="wrap_content"
@@ -24,14 +24,14 @@
             android:paddingEnd="8dp"
             android:paddingStart="8dp"
             android:paddingTop="4dp"
-            app:dpIconHeight="32dp"
-            app:dpIconWidth="32dp"
-            app:emOrientation="vertical"
-            app:rfIcon="@drawable/ic_pencil"
-            app:spActNameSize="10sp"
-            app:szActName="@string/manager" />
+            app:ibIconHeight="32dp"
+            app:ibIconWidth="32dp"
+            app:ibOrientation="vertical"
+            app:ibIcon="@drawable/ic_pencil"
+            app:ibActNameSize="10sp"
+            app:ibActName="@string/manager" />
 
-        <wxm.KeepAccount.ui.extend.IconButton.IconButton
+        <wxm.uilib.IconButton.IconButton
             android:id="@+id/ib_sort"
             android:layout_width="64dp"
             android:layout_height="wrap_content"
@@ -44,12 +44,12 @@
             android:paddingEnd="8dp"
             android:paddingStart="8dp"
             android:paddingTop="4dp"
-            app:dpIconHeight="32dp"
-            app:dpIconWidth="32dp"
-            app:emOrientation="vertical"
-            app:rfIcon="@drawable/ic_sort_up_1"
-            app:spActNameSize="10sp"
-            app:szActName="@string/cn_sort_up_by_name" />
+            app:ibIconHeight="32dp"
+            app:ibIconWidth="32dp"
+            app:ibOrientation="vertical"
+            app:ibIcon="@drawable/ic_sort_up_1"
+            app:ibActNameSize="10sp"
+            app:ibActName="@string/cn_sort_up_by_name" />
     </RelativeLayout>
 
     <GridView

@@ -32,10 +32,10 @@ import wxm.KeepAccount.define.RecordTypeItem;
 import wxm.KeepAccount.db.RecordTypeDBUtility;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.dialog.utility.DlgResource;
-import wxm.KeepAccount.ui.extend.IconButton.IconButton;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.edit.RecordInfo.ACRecordInfoEdit;
+import wxm.uilib.IconButton.IconButton;
 
 /**
  * 选择“记录类型”对话框
@@ -59,7 +59,7 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
     GridView        mGVMain;
 
     @BindView(R.id.ib_sort)
-    IconButton      mIBSort;
+    IconButton mIBSort;
 
     /**
      * 设置以前的“记录类型”

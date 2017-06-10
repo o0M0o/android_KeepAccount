@@ -218,31 +218,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <wxm.KeepAccount.ui.extend.IconButton.IconButton
+        <wxm.uilib.IconButton.IconButton
             android:id="@+id/ib_add"
             android:background="@drawable/rl_action_shape"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            app:rfIcon="@drawable/ic_add_new"
-            app:szActName="@string/cn_create"
-            app:spActNameSize="14sp"
-            app:dpIconWidth="20dp"
-            app:dpIconHeight="20dp"
+            app:ibIcon="@drawable/ic_add_new"
+            app:ibActName="@string/cn_create"
+            app:ibActNameSize="14sp"
+            app:ibIconWidth="20dp"
+            app:ibIconHeight="20dp"
             android:layout_marginStart="8dp"
             android:layout_width="68dp"
             android:layout_height="36dp" />
 
 
-        <wxm.KeepAccount.ui.extend.IconButton.IconButton
+        <wxm.uilib.IconButton.IconButton
             android:id="@+id/ib_delete"
             android:background="@drawable/rl_action_shape"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/ib_add"
-            app:rfIcon="@drawable/ic_delete"
-            app:szActName="@string/cn_delete"
-            app:spActNameSize="14sp"
-            app:dpIconWidth="22dp"
-            app:dpIconHeight="22dp"
+            app:ibIcon="@drawable/ic_delete"
+            app:ibActName="@string/cn_delete"
+            app:ibActNameSize="14sp"
+            app:ibIconWidth="22dp"
+            app:ibIconHeight="22dp"
             android:layout_marginStart="8dp"
             android:layout_width="68dp"
             android:layout_height="36dp" />

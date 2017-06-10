@@ -26,7 +26,7 @@ import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
-import wxm.KeepAccount.ui.extend.IconButton.IconButton;
+import wxm.uilib.IconButton.IconButton;
 
 /**
  * sub class for listview
@@ -110,7 +110,7 @@ public abstract class LVBase extends ShowViewHelperBase {
 
     // for addtion action
     @BindView(R.id.ib_report)
-    IconButton  mIBReport;
+    IconButton mIBReport;
 
     @BindView(R.id.ib_add)
     IconButton  mIBAdd;

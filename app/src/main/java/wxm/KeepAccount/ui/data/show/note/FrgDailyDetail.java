@@ -40,7 +40,6 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.ui.extend.IconButton.IconButton;
 import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ContextUtil;
@@ -50,6 +49,7 @@ import wxm.KeepAccount.ui.utility.AdapterNoteDetail;
 import wxm.KeepAccount.ui.utility.HelperDayNotesInfo;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteEdit;
+import wxm.uilib.IconButton.IconButton;
 
 
 /**
@@ -91,7 +91,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
 
     // create new data
     @BindView(R.id.ib_add)
-    IconButton      mIBAdd;
+    IconButton mIBAdd;
 
     // delete data
     @BindView(R.id.ib_delete)
