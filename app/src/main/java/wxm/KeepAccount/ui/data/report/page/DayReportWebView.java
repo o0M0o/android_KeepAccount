@@ -11,15 +11,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.ValueCallback;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,17 +43,15 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
  * 日数据汇报 - webview展示页
  * Created by ookoo on 2017/3/4.
  */
-public class PageReportDayWebView extends FrgUtilityBase {
-    private ArrayList<String>   mASParaLoad;
-
+public class DayReportWebView extends FrgUtilityBase {
     @BindView(R.id.wv_report)
-    WebView         mWVReport;
-
+    WebView mWVReport;
     @BindView(R.id.pb_load_data)
-    ProgressBar     mPBLoadData;
+    ProgressBar mPBLoadData;
+    private ArrayList<String> mASParaLoad;
 
-   @Override
-    protected void enterActivity()  {
+    @Override
+    protected void enterActivity() {
         Log.d(LOG_TAG, "in enterActivity");
         super.enterActivity();
 
@@ -53,7 +59,7 @@ public class PageReportDayWebView extends FrgUtilityBase {
     }
 
     @Override
-    protected void leaveActivity()  {
+    protected void leaveActivity() {
         Log.d(LOG_TAG, "in leaveActivity");
         EventBus.getDefault().unregister(this);
 
@@ -62,7 +68,8 @@ public class PageReportDayWebView extends FrgUtilityBase {
 
     /**
      * 更新日期范围
-     * @param event     事件
+     *
+     * @param event 事件
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSelectDaysEvent(EventSelectDays event) {
@@ -73,7 +80,7 @@ public class PageReportDayWebView extends FrgUtilityBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "PageReportDayWebView";
+        LOG_TAG = "DayReportWebView";
         View rootView = layoutInflater.inflate(R.layout.page_report_webview, viewGroup, false);
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -88,7 +95,7 @@ public class PageReportDayWebView extends FrgUtilityBase {
     @Override
     protected void loadUI() {
         new AsyncTask<Void, Void, Void>() {
-            private String  mSZHtml;
+            private String mSzPara;
 
             @Override
             protected void onPreExecute() {
@@ -103,13 +110,12 @@ public class PageReportDayWebView extends FrgUtilityBase {
 
                     String d_s = mASParaLoad.get(0);
                     String d_e = mASParaLoad.get(1);
-                    HashMap<String, ArrayList<INote>> ls_note = NoteDataHelper.getInstance()
-                                                .getNotesBetweenDays(d_s, d_e);
+                    HashMap<String, ArrayList<INote>> hmData = NoteDataHelper
+                                            .getInstance().getNotesBetweenDays(d_s, d_e);
 
-
-                    mSZHtml = NotesToHtmlUtil.NotesToHtmlStr(ls_note);
-                    //Log.d(LOG_TAG, "initUiInfo html : " +
-                    //            (UtilFun.StringIsNullOrEmpty(mSZHtml) ? "null" : mSZHtml));
+                    SimplePropertyPreFilter filter = new SimplePropertyPreFilter(INote.class,
+                                    "info", "ts", "val", "payNote");
+                    mSzPara = JSON.toJSONString(hmData, filter);
                 }
 
                 return null;
@@ -119,22 +125,28 @@ public class PageReportDayWebView extends FrgUtilityBase {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                // After completing execution of given task, control will return here.
-                // Hence if you want to populate UI elements with fetched data, do it here.
                 showProgress(false);
 
-                // for web show
-                if(!UtilFun.StringIsNullOrEmpty(mSZHtml)) {
+                if(!UtilFun.StringIsNullOrEmpty(mSzPara)) {
                     mWVReport.getSettings().setDefaultTextEncodingName("utf-8");
                     mWVReport.getSettings().setJavaScriptEnabled(true);
-                    mWVReport.loadDataWithBaseURL(null, mSZHtml, "text/html; utf-8", null, null);
+                    //mWVReport.loadDataWithBaseURL(null, mSZHtml, "text/html; utf-8", null, null);
+                    mWVReport.loadUrl("file:///android_asset/report/report_day.html");
+
+                    mWVReport.setWebViewClient(new WebViewClient() {
+                        @Override
+                        public void onPageFinished(WebView view, String url) {
+                            super.onPageFinished(view, url);
+                            mWVReport.evaluateJavascript(
+                                    "onLoadData(" + mSzPara + ")",
+                                    value -> {
+                            });
+                        }
+                    });
                 }
             }
         }.execute();
     }
-
-
-
 
     /**
      * Shows the progress UI and hides the login form.
@@ -150,10 +162,10 @@ public class PageReportDayWebView extends FrgUtilityBase {
         mPBLoadData.setVisibility(show ? View.VISIBLE : View.GONE);
         mPBLoadData.animate().setDuration(shortAnimTime)
                 .alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mPBLoadData.setVisibility(show ? View.VISIBLE : View.GONE);
-                    }
-                });
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mPBLoadData.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 }

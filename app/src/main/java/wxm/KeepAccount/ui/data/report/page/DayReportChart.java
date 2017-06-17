@@ -46,7 +46,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
  * 日数据汇报 - webview展示页
  * Created by ookoo on 2017/3/4.
  */
-public class PageReportDayChart extends FrgUtilityBase {
+public class DayReportChart extends FrgUtilityBase {
     private ArrayList<String>   mASParaLoad;
 
     @BindView(R.id.chart)
@@ -92,7 +92,7 @@ public class PageReportDayChart extends FrgUtilityBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "PageReportDayChart";
+        LOG_TAG = "DayReportChart";
         View rootView = layoutInflater.inflate(R.layout.page_report_chart, viewGroup, false);
         ButterKnife.bind(this, rootView);
         return rootView;

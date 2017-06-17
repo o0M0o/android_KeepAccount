@@ -116,6 +116,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile project(':UiLib')
+    compile files('libs/extend_lib/fashjson/fastjson-1.2.33.jar')
 }
 
 configurations.all {

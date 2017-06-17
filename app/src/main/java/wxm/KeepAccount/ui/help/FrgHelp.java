@@ -18,8 +18,6 @@ import wxm.KeepAccount.R;
  * Created by ookoo on 2016/11/29.
  */
 public class FrgHelp extends FrgUtilityBase {
-
-    //private static String LOG_TAG = "ACHelp";
     private static final String ENCODING = "utf-8";
     //private static final String MIMETYPE = "text/html; charset=UTF-8";
 
@@ -41,7 +39,7 @@ public class FrgHelp extends FrgUtilityBase {
 
     @Override
     protected void loadUI() {
-        load_help("file:///android_asset/help_main.html");
+        load_help("file:///android_asset/help/help_main.html");
     }
 
     /// PRIVATE BEGIN

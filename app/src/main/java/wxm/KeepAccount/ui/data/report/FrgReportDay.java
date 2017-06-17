@@ -29,8 +29,8 @@ import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.report.page.PageReportDayChart;
-import wxm.KeepAccount.ui.data.report.page.PageReportDayWebView;
+import wxm.KeepAccount.ui.data.report.page.DayReportChart;
+import wxm.KeepAccount.ui.data.report.page.DayReportWebView;
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
@@ -51,8 +51,8 @@ public class FrgReportDay extends FrgUtilityBase {
     TextView    mTVIncome;
 
     private FrgUtilityBase          mPGHot = null;
-    private PageReportDayWebView    mPGWebView = new PageReportDayWebView();
-    private PageReportDayChart      mPGChart = new PageReportDayChart();
+    private DayReportWebView mPGWebView = new DayReportWebView();
+    private DayReportChart mPGChart = new DayReportChart();
 
 
     @Override
@@ -198,7 +198,7 @@ public class FrgReportDay extends FrgUtilityBase {
      * 切换展示类型
      */
     private void switchPage()   {
-        mPGHot = mPGHot instanceof PageReportDayWebView ? mPGChart : mPGWebView;
+        mPGHot = mPGHot instanceof DayReportWebView ? mPGChart : mPGWebView;
 
         FragmentTransaction t = getChildFragmentManager().beginTransaction();
         t.replace(R.id.fl_page_holder, mPGHot);
