@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.pm.ApplicationInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.BuildConfig;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.data.report.ACReport;
@@ -81,6 +83,11 @@ public class DayReportWebView extends FrgUtilityBase {
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         LOG_TAG = "DayReportWebView";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && BuildConfig.DEBUG) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
+
         View rootView = layoutInflater.inflate(R.layout.page_report_webview, viewGroup, false);
         ButterKnife.bind(this, rootView);
         return rootView;

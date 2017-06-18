@@ -1,4 +1,4 @@
-<html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf8"/>
     <title>day report</title>
@@ -9,7 +9,24 @@
 </head>
 <body>
     <div id="app">
-        <p>{{ message }}</p>
+        <table border="1">
+            <tr>
+                <th>日期</th>
+                <th>类型</th>
+                <th>原因</th>
+                <th>金额</th>
+            </tr>
+            <template v-for="(dayData, day) in items">
+                <tr>
+                    <td v-bind:rowspan="dayData.length + 1">{{ day }}</td>
+                </tr>
+                <tr v-for="data in dayData">
+                    <td>{{ data.noteType }}</td>
+                    <td>{{ data.info }}</td>
+                    <td>{{ data.val.toFixed(2) }}</td>
+                </tr>
+            </template>
+        </table>
     </div>
 
     <script type="text/javascript" src="../js/vue.js"></script>
