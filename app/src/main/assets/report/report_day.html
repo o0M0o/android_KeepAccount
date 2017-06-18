@@ -3,13 +3,16 @@
     <meta charset="utf8"/>
     <title>day report</title>
 
+    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+
     <style type="text/css">
-        caption{ text-align:center; font-size:20px;}
+        #day-td{text-align:center; background-color:blank;}
     </style>
 </head>
 <body>
     <div id="app">
-        <table border="1">
+        <table class="table table-striped">
             <tr>
                 <th>日期</th>
                 <th>类型</th>
@@ -17,8 +20,10 @@
                 <th>金额</th>
             </tr>
             <template v-for="(dayData, day) in items">
-                <tr>
-                    <td v-bind:rowspan="dayData.length + 1">{{ day }}</td>
+                <tr align="center">
+                    <td style="background:#FCFCFC" v-bind:rowspan="dayData.length + 1">
+                        {{ day }}
+                    </td>
                 </tr>
                 <tr v-for="data in dayData">
                     <td>{{ data.noteType }}</td>
