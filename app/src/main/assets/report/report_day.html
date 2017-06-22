@@ -7,34 +7,45 @@
     <link href="../bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
 
     <style type="text/css">
-        #day-td{text-align:center; background-color:blank;}
+        .day_td{text-align:center; background-color:blank;}
+        .pay_td{text-align:center; background-color:#FFE7BA;}
+        .income_td{text-align:center; background-color:#F0FFF0;}
+		.fixed {position: relative;}
+		.scroll_layer {
+			overflow-y: scroll;
+		}
     </style>
 </head>
 <body>
     <div id="app">
-        <table class="table table-striped">
-            <tr>
-                <th>日期</th>
-                <th>类型</th>
-                <th>原因</th>
-                <th>金额</th>
-            </tr>
-            <template v-for="(dayData, day) in items">
-                <tr align="center">
-                    <td style="background:#FCFCFC" v-bind:rowspan="dayData.length + 1">
-                        {{ day }}
-                    </td>
+		<div class="scroll_layer"  align="center">
+            <table id="tb_notes" class="table table-striped" style='table-layout:fixed'>
+                <tr class="fixed">
+                    <th>日期</th>
+                    <th>类型</th>
+                    <th>原因</th>
+                    <th>金额</th>
                 </tr>
-                <tr v-for="data in dayData">
-                    <td>{{ data.noteType }}</td>
-                    <td>{{ data.info }}</td>
-                    <td>{{ data.val.toFixed(2) }}</td>
-                </tr>
-            </template>
-        </table>
+                <template v-for="(dayData, day) in items">
+                    <tr align="center">
+                        <td class="day_td" v-bind:rowspan="dayData.length + 1">
+                            {{ day }}
+                        </td>
+                    </tr>
+                    <tr class="trClass"
+                        v-bind:class="[data.payNote ? 'pay_td' : 'income_td']"
+                        v-for="data in dayData">
+                        <td>{{ data.noteType }}</td>
+                        <td>{{ data.info }}</td>
+                        <td>{{ data.val.toFixed(2) }}</td>
+                    </tr>
+                </template>
+            </table>
+		</div>
     </div>
 
-    <script type="text/javascript" src="../js/vue.js"></script>
+    <script type="text/javascript" src="../jslib/jquery.js"></script>
+    <script type="text/javascript" src="../jslib/vue.js"></script>
     <script type="text/javascript" src="../js/util.js"></script>
     <script type="text/javascript" src="../js/reportDay.js"></script>
 </body>
