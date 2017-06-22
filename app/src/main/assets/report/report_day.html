@@ -3,26 +3,21 @@
     <meta charset="utf8"/>
     <title>day report</title>
 
-    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
-
     <script type="text/javascript" src="../jslib/jquery.js"></script>
 
+    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
     <style type="text/css">
         .day_td{text-align:center; background-color:blank;}
         .pay_td{text-align:center;}
         .income_td{text-align:center;}
-		.fixed {position: relative;}
-		.scroll_layer {
-			overflow-y: scroll;
-		}
     </style>
 </head>
 <body>
     <div id="app">
 		<div class="scroll_layer"  align="center">
-            <table id="tb_notes" class="table table-striped" style='table-layout:fixed'>
-                <tr class="fixed">
+            <table id="tb_notes" class="table table-striped">
+                <tr>
                     <th>日期</th>
                     <th>类型</th>
                     <th>原因</th>
