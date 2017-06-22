@@ -12,12 +12,12 @@ var vueApp = new Vue({
     updated : function()    {
         var tr = document.getElementsByClassName("trClass")
         for (var i = 0, len = tr.length; i < len; i++) {
-            tr[i].style.backgroundColor = tr[i].classList.contains("pay_td") ? "#FFE7BA" : "#F0FFF0"
+            tr[i].style.backgroundColor = tr[i].classList.contains("pay_td") ? "#f9f9f9" : "#ffffff"
         }
 
         var td = document.getElementsByClassName("day_td")
         for (var i = 0, len = td.length; i < len; i++) {
-            td[i].style.backgroundColor = 0 !== i % 2 ? "#f9f9f9" : "#ffffff"
+            td[i].style.backgroundColor = 0 !== i % 2 ? "#ffffff" : "#ffffff"
         }
     }
 })
@@ -36,3 +36,8 @@ function onLoadData(showData)   {
 
     vueApp.items = showData
 }
+
+$(document).ready(function () {
+            console.log('page ready')
+            //FixTable("tb_notes", 2, 600, 400);
+        });
