@@ -12,21 +12,19 @@
 </head>
 <body>
 <div id="app">
-    <form class="form-control">
-        <label for="s2_pay_type" class="sr-only">支出类型
-            <select v-model="selectPayType" class="s2-pay-type js-states form-control"
-                    id="s2_pay_type">
-                <option v-for="option in payTypeOptions" v-bind:value="option.value">
-                    {{ option.text }}
-                </option>
-            </select>
-        </label>
-    </form>
+    <div class="select2-wrapper">
+        <select v-model="selectPayType" class="s2-pay-type form-control input-lg"
+                id="s2_pay_type">
+            <option v-for="option in payTypeOptions" v-bind:value="option.value">
+                {{ option.text }}
+            </option>
+        </select>
+    </div>
 </div>
 
 <script type="text/javascript" src="../jslib/vue.js"></script>
 <script type="text/javascript" src="../jslib/util.js"></script>
-<script type="text/javascript" src="./select2.js"></script>
+<script type="text/javascript" src="../select2/select2.js"></script>
 <script type="text/javascript" src="./addNote.js"></script>
 </body>
 </html>

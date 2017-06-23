@@ -27,6 +27,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteEdit;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
+import wxm.KeepAccount.ui.data.edit.Note.webview.ACWVNoteEdit;
 import wxm.KeepAccount.ui.data.edit.Remind.ACRemindEdit;
 import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
@@ -156,7 +157,8 @@ public class ACWelcome extends AppCompatActivity
             break;
 
             case ActionHelper.ACT_ADD_DATA: {
-                Intent intent = new Intent(this, ACNoteEdit.class);
+                //Intent intent = new Intent(this, ACNoteEdit.class);
+                Intent intent = new Intent(this, ACWVNoteEdit.class);
                 intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
 
                 Calendar cal = Calendar.getInstance();

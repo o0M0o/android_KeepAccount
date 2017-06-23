@@ -7,16 +7,28 @@ var vueApp = new Vue({
     data:{
         selectPayType: '',
         payTypeOptions: []
+    },
+    updated : function()    {
+        console.log('page update')
     }
 })
-var payTypeSelect2
 
 $(document).ready(() => {
+        $(".s2-pay-type").select2({
+            placeholder: "选择支出类型",
+            allowClear: true
+        })
         console.log('page ready')
-        payTypeSelect2 = $(".s2-pay-type").select2()
     });
 
 /** Interface Function with java **/
 function setupPayTypeOptions(payTypeOptions)   {
-    vueApp.payTypeOptions = payTypeOptions
+    vueApp.payTypeOptions = []
+    for(var idx in payTypeOptions)  {
+        var opt = new Object()
+        opt.text = payTypeOptions[idx].type
+        opt.value = payTypeOptions[idx].id
+
+        vueApp.payTypeOptions.push(opt)
+    }
 }
