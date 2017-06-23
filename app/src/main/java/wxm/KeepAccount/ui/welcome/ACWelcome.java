@@ -157,8 +157,7 @@ public class ACWelcome extends AppCompatActivity
             break;
 
             case ActionHelper.ACT_ADD_DATA: {
-                //Intent intent = new Intent(this, ACNoteEdit.class);
-                Intent intent = new Intent(this, ACWVNoteEdit.class);
+                Intent intent = new Intent(this, ACNoteEdit.class);
                 intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
 
                 Calendar cal = Calendar.getInstance();
