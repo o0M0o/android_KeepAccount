@@ -28,6 +28,7 @@ function setupPayTypeOptions(payTypeOptions)   {
         var opt = new Object()
         opt.text = payTypeOptions[idx].type
         opt.value = payTypeOptions[idx].id
+        opt.note = payTypeOptions[idx].note
 
         vueApp.payTypeOptions.push(opt)
     }
