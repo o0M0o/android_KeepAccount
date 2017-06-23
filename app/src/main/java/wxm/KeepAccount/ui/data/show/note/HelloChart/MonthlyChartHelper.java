@@ -30,7 +30,7 @@ import wxm.KeepAccount.utility.PreferencesUtil;
  * Created by wxm on 2016/9/29.
  */
 public class MonthlyChartHelper extends ChartHelperBase {
-    public MonthlyChartHelper()   {
+    public MonthlyChartHelper() {
         super();
         mPrvWidth = 5.5f;
 
@@ -51,15 +51,15 @@ public class MonthlyChartHelper extends ChartHelperBase {
                 List<Column> columns = new ArrayList<>();
                 ArrayList<String> set_k = new ArrayList<>(ret.keySet());
                 Collections.sort(set_k);
-                for(String k : set_k)    {
+                for (String k : set_k) {
                     boolean ba = true;
-                    if(mBFilter && !mFilterPara.isEmpty())  {
+                    if (mBFilter && !mFilterPara.isEmpty()) {
                         //String ck = ToolUtil.FormatDateString(k);
-                        if(!mFilterPara.contains(k))
+                        if (!mFilterPara.contains(k))
                             ba = false;
                     }
 
-                    if(ba) {
+                    if (ba) {
                         BigDecimal pay = BigDecimal.ZERO;
                         BigDecimal income = BigDecimal.ZERO;
                         for (Object i : ret.get(k)) {
@@ -103,11 +103,11 @@ public class MonthlyChartHelper extends ChartHelperBase {
                 }
 
                 int ic = 0;
-                for(AxisValue i : mPreviewData.getAxisXBottom().getValues())     {
-                    if(0 == ic % 2) {
+                for (AxisValue i : mPreviewData.getAxisXBottom().getValues()) {
+                    if (0 == ic % 2) {
                         String v = new String(i.getLabelAsChars()).substring(0, 4);
                         i.setLabel(v);
-                    } else  {
+                    } else {
                         i.setLabel("");
                     }
 
@@ -128,7 +128,8 @@ public class MonthlyChartHelper extends ChartHelperBase {
 
     /**
      * 过滤视图事件
-     * @param event     事件
+     *
+     * @param event 事件
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {

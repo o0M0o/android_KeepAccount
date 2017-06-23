@@ -19,9 +19,9 @@ import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.PreviewColumnChartView;
-import wxm.KeepAccount.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
+import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
  * chart view base helper
@@ -29,28 +29,28 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
  */
 abstract class ChartHelperBase extends ShowViewHelperBase {
 
-    ColumnChartData         mChartData;
-    ColumnChartData         mPreviewData;
+    ColumnChartData mChartData;
+    ColumnChartData mPreviewData;
 
-    float   mPrvWidth = 12;
-    HashMap<String, Integer>    mHMColor;
+    float mPrvWidth = 12;
+    HashMap<String, Integer> mHMColor;
 
     @BindView(R.id.chart)
-    ColumnChartView         mChart;
+    ColumnChartView mChart;
 
     @BindView(R.id.chart_preview)
-    PreviewColumnChartView  mPreviewChart;
+    PreviewColumnChartView mPreviewChart;
 
     @BindView(R.id.iv_income)
-    ImageView   mIVIncome;
+    ImageView mIVIncome;
 
     @BindView(R.id.iv_pay)
-    ImageView   mIVPay;
+    ImageView mIVPay;
 
     @BindView(R.id.bt_less_viewport)
-    Button   mBTLessViewPort;
+    Button mBTLessViewPort;
 
-    ChartHelperBase()    {
+    ChartHelperBase() {
         super();
     }
 
@@ -75,14 +75,14 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
                 //Log.i(LOG_TAG, "in chart event = " + event.getAction());
                 int act = event.getAction();
                 switch (act) {
-                    case MotionEvent.ACTION_DOWN :
+                    case MotionEvent.ACTION_DOWN:
                         prv_x = event.getX();
                         break;
 
-                    case MotionEvent.ACTION_UP :
+                    case MotionEvent.ACTION_UP:
                         float cur_x = event.getX();
                         float dif = cur_x - prv_x;
-                        if((1 < dif) || (-1 > dif)) {
+                        if ((1 < dif) || (-1 > dif)) {
                             Viewport mcp = mPreviewChart.getMaximumViewport();
                             Viewport cp = mPreviewChart.getCurrentViewport();
 
@@ -91,12 +91,12 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
                             float m = -1 * (dif / cw) * w;
                             cp.left += m;
                             cp.right += m;
-                            if(cp.left < mcp.left)  {
+                            if (cp.left < mcp.left) {
                                 cp.left = mcp.left;
                                 cp.right = mcp.left + w;
                             }
 
-                            if(cp.right > mcp.right)    {
+                            if (cp.right > mcp.right) {
                                 cp.right = mcp.right;
                                 cp.left = cp.right - w;
                             }
@@ -124,7 +124,7 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
                     break;
 
                 default:
-                    if(MotionEvent.ACTION_MOVE != event.getAction())
+                    if (MotionEvent.ACTION_MOVE != event.getAction())
                         getRootActivity().disableViewPageTouch(false);
                     break;
             }
@@ -141,10 +141,10 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     }
 
 
-    protected void loadUIUtility(boolean b_full)  {
+    protected void loadUIUtility(boolean b_full) {
         refreshAttachLayout();
 
-        if(b_full) {
+        if (b_full) {
             // 展示条
             mIVIncome.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_INCOME_COLOR));
             mIVPay.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_PAY_COLOR));
@@ -165,36 +165,35 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     }
 
 
-
     /**
      * 设置扩大/缩小viewport
      *
-     * @param v    激活view
+     * @param v 激活view
      */
     @OnClick({R.id.bt_less_viewport, R.id.bt_more_viewport, R.id.bt_giveup_filter})
-    public void onLessOrMoreView(View v)    {
+    public void onLessOrMoreView(View v) {
         int vid = v.getId();
-        switch (vid)    {
-            case R.id.bt_less_viewport :    {
+        switch (vid) {
+            case R.id.bt_less_viewport: {
                 mPrvWidth += 0.2;
                 refreshViewPort();
 
-                if(!mBTLessViewPort.isClickable() && 1 < mPrvWidth)
+                if (!mBTLessViewPort.isClickable() && 1 < mPrvWidth)
                     mBTLessViewPort.setClickable(true);
             }
             break;
 
-            case R.id.bt_more_viewport :    {
-                if(1 < mPrvWidth) {
+            case R.id.bt_more_viewport: {
+                if (1 < mPrvWidth) {
                     mPrvWidth -= 0.2;
                     refreshViewPort();
-                } else  {
+                } else {
                     mBTLessViewPort.setClickable(false);
                 }
             }
             break;
 
-            case R.id.bt_giveup_filter :    {
+            case R.id.bt_giveup_filter: {
                 mBFilter = false;
                 refreshData();
             }
@@ -203,14 +202,14 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     }
 
 
-    private void refreshAttachLayout()    {
+    private void refreshAttachLayout() {
         setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
         setAccpetGiveupLayoutVisible(View.GONE);
     }
 
 
-    private void refreshViewPort()  {
+    private void refreshViewPort() {
         Viewport tempViewport = new Viewport(mChart.getMaximumViewport());
         tempViewport.right = tempViewport.left + mPrvWidth;
         mPreviewChart.setCurrentViewportWithAnimation(tempViewport);

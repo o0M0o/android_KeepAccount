@@ -8,18 +8,18 @@
             android:title="@string/cn_help" />
         <item
             android:id="@+id/nav_setting"
-            android:visible="false"
             android:icon="@drawable/ic_menu_setting"
-            android:title="@string/cn_setting" />
+            android:title="@string/cn_setting"
+            android:visible="false" />
     </group>
 
     <item android:title="其它">
         <menu>
             <item
                 android:id="@+id/nav_share_app"
-                android:visible="false"
                 android:icon="@drawable/ic_menu_share"
-                android:title="@string/cn_share_app" />
+                android:title="@string/cn_share_app"
+                android:visible="false" />
             <item
                 android:id="@+id/nav_contact_writer"
                 android:icon="@drawable/ic_menu_send"

@@ -24,6 +24,20 @@ public class IsEqualIgnoringCase extends TypeSafeMatcher<String> {
         this.string = string;
     }
 
+    /**
+     * Creates a matcher of {@link String} that matches when the examined string is equal to
+     * the specified expectedString, ignoring case.
+     * <p/>
+     * For example:
+     * <pre>assertThat("Foo", equalToIgnoringCase("FOO"))</pre>
+     *
+     * @param expectedString the expected value of matched strings
+     */
+    @Factory
+    public static Matcher<String> equalToIgnoringCase(String expectedString) {
+        return new IsEqualIgnoringCase(expectedString);
+    }
+
     @Override
     public boolean matchesSafely(String item) {
         return string.equalsIgnoreCase(item);
@@ -31,29 +45,14 @@ public class IsEqualIgnoringCase extends TypeSafeMatcher<String> {
 
     @Override
     public void describeMismatchSafely(String item, Description mismatchDescription) {
-      mismatchDescription.appendText("was ").appendText(item);
+        mismatchDescription.appendText("was ").appendText(item);
     }
-    
+
     @Override
     public void describeTo(Description description) {
         description.appendText("equalToIgnoringCase(")
                 .appendValue(string)
                 .appendText(")");
-    }
-
-    /**
-     * Creates a matcher of {@link String} that matches when the examined string is equal to
-     * the specified expectedString, ignoring case.
-     * <p/>
-     * For example:
-     * <pre>assertThat("Foo", equalToIgnoringCase("FOO"))</pre>
-     * 
-     * @param expectedString
-     *     the expected value of matched strings
-     */
-    @Factory
-    public static Matcher<String> equalToIgnoringCase(String expectedString) {
-        return new IsEqualIgnoringCase(expectedString);
     }
 
 }

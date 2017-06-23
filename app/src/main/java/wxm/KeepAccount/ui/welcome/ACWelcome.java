@@ -23,26 +23,26 @@ import java.util.Locale;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.ui.utility.NoteDataHelper;
-import wxm.KeepAccount.utility.ActionHelper;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
-import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow;
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteEdit;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.data.edit.Remind.ACRemindEdit;
-import wxm.KeepAccount.ui.setting.ACSetting;
+import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow;
+import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.dialog.DlgUsrMessage;
 import wxm.KeepAccount.ui.help.ACHelp;
+import wxm.KeepAccount.ui.setting.ACSetting;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
+import wxm.KeepAccount.utility.ActionHelper;
 
 /**
  * 用户登陆后首页面
  */
 public class ACWelcome extends AppCompatActivity
-        implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener  {
+        implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "ACWelcome";
-    private FrgWelcome   mFGWelcome;
+    private FrgWelcome mFGWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +73,12 @@ public class ACWelcome extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        if(v instanceof RelativeLayout) {
+        if (v instanceof RelativeLayout) {
             TextView tv = UtilFun.cast(v.findViewById(R.id.tv_name));
-            if(null != tv)  {
+            if (null != tv) {
                 do_click(tv.getText().toString());
             }
-        } else if(v instanceof Button)  {
+        } else if (v instanceof Button) {
             Button bt = UtilFun.cast(v);
             do_click(bt.getText().toString());
         }
@@ -123,31 +123,32 @@ public class ACWelcome extends AppCompatActivity
 
     /**
      * 执行onclick
-     * @param act  onclick的动作
+     *
+     * @param act onclick的动作
      */
-    private void do_click(String act)   {
-        switch (act)     {
-            case ActionHelper.ACT_LOOK_BUDGET :     {
+    private void do_click(String act) {
+        switch (act) {
+            case ActionHelper.ACT_LOOK_BUDGET: {
                 Intent intent = new Intent(this, ACNoteShow.class);
                 intent.putExtra(NoteDataHelper.INTENT_PARA_FIRST_TAB,
-                                NoteDataHelper.TAB_TITLE_BUDGET);
+                        NoteDataHelper.TAB_TITLE_BUDGET);
                 startActivityForResult(intent, 1);
             }
             break;
 
-            case ActionHelper.ACT_LOOK_DATA :   {
+            case ActionHelper.ACT_LOOK_DATA: {
                 Intent intent = new Intent(this, ACNoteShow.class);
                 startActivityForResult(intent, 1);
             }
             break;
 
-            case ActionHelper.ACT_CALENDAR_VIEW :   {
+            case ActionHelper.ACT_CALENDAR_VIEW: {
                 Intent intent = new Intent(this, ACCalendarShow.class);
                 startActivityForResult(intent, 1);
             }
             break;
 
-            case ActionHelper.ACT_ADD_BUDGET :  {
+            case ActionHelper.ACT_ADD_BUDGET: {
                 Intent intent = new Intent(this, ACPreveiwAndEdit.class);
                 intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
                 startActivityForResult(intent, 1);
@@ -161,18 +162,18 @@ public class ACWelcome extends AppCompatActivity
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
                 intent.putExtra(GlobalDef.STR_RECORD_DATE,
-                        String.format(Locale.CHINA ,"%d-%02d-%02d %02d:%02d"
-                                ,cal.get(Calendar.YEAR)
-                                ,cal.get(Calendar.MONTH) + 1
-                                ,cal.get(Calendar.DAY_OF_MONTH)
-                                ,cal.get(Calendar.HOUR_OF_DAY)
-                                ,cal.get(Calendar.MINUTE)));
+                        String.format(Locale.CHINA, "%d-%02d-%02d %02d:%02d"
+                                , cal.get(Calendar.YEAR)
+                                , cal.get(Calendar.MONTH) + 1
+                                , cal.get(Calendar.DAY_OF_MONTH)
+                                , cal.get(Calendar.HOUR_OF_DAY)
+                                , cal.get(Calendar.MINUTE)));
 
                 startActivityForResult(intent, 1);
             }
             break;
 
-            case ActionHelper.ACT_LOGOUT :      {
+            case ActionHelper.ACT_LOGOUT: {
                 int ret_data = GlobalDef.INTRET_USR_LOGOUT;
 
                 Intent data = new Intent();
@@ -181,7 +182,7 @@ public class ACWelcome extends AppCompatActivity
             }
             break;
 
-            case ActionHelper.ACT_ADD_REMIND :  {
+            case ActionHelper.ACT_ADD_REMIND: {
                 Intent intent = new Intent(this, ACRemindEdit.class);
                 startActivityForResult(intent, 1);
             }
@@ -191,7 +192,8 @@ public class ACWelcome extends AppCompatActivity
 
     /**
      * 初始化activity
-     * @param savedInstanceState  onclick的动作
+     *
+     * @param savedInstanceState onclick的动作
      */
     private void init_component(Bundle savedInstanceState) {
         // set nav view
@@ -212,9 +214,9 @@ public class ACWelcome extends AppCompatActivity
         nv.setNavigationItemSelectedListener(this);
 
         // load fragment
-        if(null == savedInstanceState)  {
+        if (null == savedInstanceState) {
             mFGWelcome = new FrgWelcome();
-            FragmentTransaction ft =  getFragmentManager().beginTransaction();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.add(R.id.fl_holder, mFGWelcome);
             ft.commit();
         }

@@ -1,4 +1,5 @@
 package org.hamcrest.collection;
+
 import org.hamcrest.AbstractMatcherTest;
 import org.hamcrest.Matcher;
 

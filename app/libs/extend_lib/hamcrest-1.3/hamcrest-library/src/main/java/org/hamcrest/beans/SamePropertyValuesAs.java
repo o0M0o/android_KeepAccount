@@ -24,6 +24,45 @@ public class SamePropertyValuesAs<T> extends TypeSafeDiagnosingMatcher<T> {
         this.propertyMatchers = propertyMatchersFor(expectedBean, descriptors);
     }
 
+    private static <T> List<PropertyMatcher> propertyMatchersFor(T bean, PropertyDescriptor[] descriptors) {
+        List<PropertyMatcher> result = new ArrayList<PropertyMatcher>(descriptors.length);
+        for (PropertyDescriptor propertyDescriptor : descriptors) {
+            result.add(new PropertyMatcher(propertyDescriptor, bean));
+        }
+        return result;
+    }
+
+    private static Set<String> propertyNamesFrom(PropertyDescriptor[] descriptors) {
+        HashSet<String> result = new HashSet<String>();
+        for (PropertyDescriptor propertyDescriptor : descriptors) {
+            result.add(propertyDescriptor.getDisplayName());
+        }
+        return result;
+    }
+
+    private static Object readProperty(Method method, Object target) {
+        try {
+            return method.invoke(target, NO_ARGUMENTS);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Could not invoke " + method + " on " + target, e);
+        }
+    }
+
+    /**
+     * Creates a matcher that matches when the examined object has values for all of
+     * its JavaBean properties that are equal to the corresponding values of the
+     * specified bean.
+     * <p/>
+     * For example:
+     * <pre>assertThat(myBean, samePropertyValuesAs(myExpectedBean))</pre>
+     *
+     * @param expectedBean the bean against which examined beans are compared
+     */
+    @Factory
+    public static <T> Matcher<T> samePropertyValuesAs(T expectedBean) {
+        return new SamePropertyValuesAs<T>(expectedBean);
+    }
+
     @Override
     public boolean matchesSafely(T bean, Description mismatch) {
         return isCompatibleType(bean, mismatch)
@@ -34,9 +73,8 @@ public class SamePropertyValuesAs<T> extends TypeSafeDiagnosingMatcher<T> {
     @Override
     public void describeTo(Description description) {
         description.appendText("same property values as " + expectedBean.getClass().getSimpleName())
-                   .appendList(" [", ", ", "]", propertyMatchers);
+                .appendList(" [", ", ", "]", propertyMatchers);
     }
-
 
     private boolean isCompatibleType(T item, Description mismatchDescription) {
         if (!expectedBean.getClass().isAssignableFrom(item.getClass())) {
@@ -66,22 +104,6 @@ public class SamePropertyValuesAs<T> extends TypeSafeDiagnosingMatcher<T> {
         return true;
     }
 
-    private static <T> List<PropertyMatcher> propertyMatchersFor(T bean, PropertyDescriptor[] descriptors) {
-        List<PropertyMatcher> result = new ArrayList<PropertyMatcher>(descriptors.length);
-        for (PropertyDescriptor propertyDescriptor : descriptors) {
-            result.add(new PropertyMatcher(propertyDescriptor, bean));
-        }
-        return result;
-    }
-
-    private static Set<String> propertyNamesFrom(PropertyDescriptor[] descriptors) {
-        HashSet<String> result = new HashSet<String>();
-        for (PropertyDescriptor propertyDescriptor : descriptors) {
-            result.add(propertyDescriptor.getDisplayName());
-        }
-        return result;
-    }
-
     public static class PropertyMatcher extends DiagnosingMatcher<Object> {
         private final Method readMethod;
         private final Matcher<Object> matcher;
@@ -108,30 +130,6 @@ public class SamePropertyValuesAs<T> extends TypeSafeDiagnosingMatcher<T> {
         public void describeTo(Description description) {
             description.appendText(propertyName + ": ").appendDescriptionOf(matcher);
         }
-    }
-
-    private static Object readProperty(Method method, Object target) {
-        try {
-            return method.invoke(target, NO_ARGUMENTS);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Could not invoke " + method + " on " + target, e);
-        }
-    }
-
-    /**
-     * Creates a matcher that matches when the examined object has values for all of
-     * its JavaBean properties that are equal to the corresponding values of the
-     * specified bean.
-     * <p/>
-     * For example:
-     * <pre>assertThat(myBean, samePropertyValuesAs(myExpectedBean))</pre>
-     * 
-     * @param expectedBean
-     *     the bean against which examined beans are compared
-     */
-    @Factory
-    public static <T> Matcher<T> samePropertyValuesAs(T expectedBean) {
-        return new SamePropertyValuesAs<T>(expectedBean);
     }
 
 }

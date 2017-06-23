@@ -13,22 +13,11 @@ import static org.hamcrest.core.IsNot.not;
  * Is the value null?
  */
 public class IsNull<T> extends BaseMatcher<T> {
-    @Override
-    public boolean matches(Object o) {
-        return o == null;
-    }
-
-    @Override
-    public void describeTo(Description description) {
-        description.appendText("null");
-    }
-
     /**
      * Creates a matcher that matches if examined object is <code>null</code>.
      * <p/>
      * For example:
      * <pre>assertThat(cheese, is(nullValue())</pre>
-     * 
      */
     @Factory
     public static Matcher<Object> nullValue() {
@@ -42,7 +31,6 @@ public class IsNull<T> extends BaseMatcher<T> {
      * <pre>assertThat(cheese, is(notNullValue()))</pre>
      * instead of:
      * <pre>assertThat(cheese, is(not(nullValue())))</pre>
-     * 
      */
     @Factory
     public static Matcher<Object> notNullValue() {
@@ -55,9 +43,8 @@ public class IsNull<T> extends BaseMatcher<T> {
      * <p/>
      * For example:
      * <pre>assertThat(cheese, is(nullValue(Cheese.class))</pre>
-     * 
-     * @param type
-     *     dummy parameter used to infer the generic type of the returned matcher
+     *
+     * @param type dummy parameter used to infer the generic type of the returned matcher
      */
     @Factory
     public static <T> Matcher<T> nullValue(Class<T> type) {
@@ -72,14 +59,22 @@ public class IsNull<T> extends BaseMatcher<T> {
      * <pre>assertThat(cheese, is(notNullValue(X.class)))</pre>
      * instead of:
      * <pre>assertThat(cheese, is(not(nullValue(X.class))))</pre>
-     * 
-     * @param type
-     *     dummy parameter used to infer the generic type of the returned matcher
-     *  
+     *
+     * @param type dummy parameter used to infer the generic type of the returned matcher
      */
     @Factory
     public static <T> Matcher<T> notNullValue(Class<T> type) {
         return not(nullValue(type));
+    }
+
+    @Override
+    public boolean matches(Object o) {
+        return o == null;
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        description.appendText("null");
     }
 }
 

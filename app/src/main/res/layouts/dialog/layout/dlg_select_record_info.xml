@@ -24,12 +24,12 @@
             android:paddingEnd="8dp"
             android:paddingStart="8dp"
             android:paddingTop="4dp"
+            app:ibActName="@string/manager"
+            app:ibActNameSize="10sp"
+            app:ibIcon="@drawable/ic_pencil"
             app:ibIconHeight="32dp"
             app:ibIconWidth="32dp"
-            app:ibOrientation="vertical"
-            app:ibIcon="@drawable/ic_pencil"
-            app:ibActNameSize="10sp"
-            app:ibActName="@string/manager" />
+            app:ibOrientation="vertical" />
 
         <wxm.uilib.IconButton.IconButton
             android:id="@+id/ib_sort"
@@ -44,12 +44,12 @@
             android:paddingEnd="8dp"
             android:paddingStart="8dp"
             android:paddingTop="4dp"
+            app:ibActName="@string/cn_sort_up_by_name"
+            app:ibActNameSize="10sp"
+            app:ibIcon="@drawable/ic_sort_up_1"
             app:ibIconHeight="32dp"
             app:ibIconWidth="32dp"
-            app:ibOrientation="vertical"
-            app:ibIcon="@drawable/ic_sort_up_1"
-            app:ibActNameSize="10sp"
-            app:ibActName="@string/cn_sort_up_by_name" />
+            app:ibOrientation="vertical" />
     </RelativeLayout>
 
     <GridView

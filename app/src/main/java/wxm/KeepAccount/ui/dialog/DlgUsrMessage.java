@@ -20,16 +20,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.PackageUtil;
-import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.SIMCardUtil;
+import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.WRMsgHandler;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.R;
 
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.READ_SMS;
@@ -40,47 +40,37 @@ import static android.Manifest.permission.READ_SMS;
  */
 public class DlgUsrMessage extends DlgOKOrNOBase {
     // for progress dialog when send http post
-    private final static int       PROGRESS_DIALOG     = 0x112;
-    private final static int       MSG_PROGRESS_UPDATE = 0x111;
-    private int             mProgressStatus     = 0;
-    private LocalMsgHandler mHDProgress;
-    private ProgressDialog  mPDDlg;
-
+    private final static int PROGRESS_DIALOG = 0x112;
+    private final static int MSG_PROGRESS_UPDATE = 0x111;
     // for http post
     private static final MediaType JSON =
             MediaType.parse("application/json; charset=utf-8");
-
     @BindString(R.string.url_post_send_message)
     String mSZUrlPost;
-
     @BindString(R.string.col_usr)
     String mSZColUsr;
-
     @BindString(R.string.col_message)
     String mSZColMsg;
-
     @BindString(R.string.col_app_name)
     String mSZColAppName;
-
     @BindString(R.string.col_val_app_name)
     String mSZColValAppName;
-
     @BindString(R.string.cn_usr_message)
     String mSZUsrMessage;
-
     @BindString(R.string.cn_accept)
     String mSZAccept;
-
     @BindString(R.string.cn_giveup)
     String mSZGiveUp;
+    @BindView(R.id.et_usr_message)
+    TextInputEditText mETUsrMessage;
+    private int mProgressStatus = 0;
+    private LocalMsgHandler mHDProgress;
 
     /*
     @BindView(R.id.et_usr_name)
     TextInputEditText mETUsrName;
     */
-
-    @BindView(R.id.et_usr_message)
-    TextInputEditText mETUsrMessage;
+    private ProgressDialog mPDDlg;
 
     @Override
     protected View InitDlgView() {
@@ -110,7 +100,7 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
         if (ContextCompat.checkSelfPermission(ContextUtil.getInstance(), READ_PHONE_STATE)
                 == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(ContextUtil.getInstance(), READ_SMS)
-                    == PackageManager.PERMISSION_GRANTED) {
+                == PackageManager.PERMISSION_GRANTED) {
             SIMCardUtil si = new SIMCardUtil(getContext());
             usr = si.getNativePhoneNumber();
         }
@@ -131,6 +121,29 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
         return true;
     }
 
+    /**
+     * safe message hanlder
+     */
+    private static class LocalMsgHandler extends WRMsgHandler<DlgUsrMessage> {
+        LocalMsgHandler(DlgUsrMessage ac) {
+            super(ac);
+            TAG = "LocalMsgHandler";
+        }
+
+        @Override
+        protected void processMsg(Message m, DlgUsrMessage home) {
+            switch (m.what) {
+                case MSG_PROGRESS_UPDATE: {
+                    home.mPDDlg.setProgress(home.mProgressStatus);
+                }
+                break;
+
+                default:
+                    Log.e(TAG, String.format("msg(%s) can not process", m.toString()));
+                    break;
+            }
+        }
+    }
 
     /**
      * for send http post
@@ -145,7 +158,7 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
         }
 
         @Override
-        protected void onPreExecute()   {
+        protected void onPreExecute() {
             super.onPreExecute();
 
             mProgressStatus = 0;
@@ -195,7 +208,7 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
                 mHDProgress.sendMessage(m);
 
                 Request request = new Request.Builder()
-                                        .url(mSZUrlPost).post(body).build();
+                        .url(mSZUrlPost).post(body).build();
                 client.newCall(request).execute();
 
                 mProgressStatus = 100;
@@ -214,30 +227,6 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
         protected void onPostExecute(Boolean bret) {
             super.onPostExecute(bret);
             mPDDlg.dismiss();
-        }
-    }
-
-    /**
-     * safe message hanlder
-     */
-    private static class LocalMsgHandler extends WRMsgHandler<DlgUsrMessage> {
-        LocalMsgHandler(DlgUsrMessage ac) {
-            super(ac);
-            TAG = "LocalMsgHandler";
-        }
-
-        @Override
-        protected void processMsg(Message m, DlgUsrMessage home) {
-            switch (m.what) {
-                case MSG_PROGRESS_UPDATE: {
-                    home.mPDDlg.setProgress(home.mProgressStatus);
-                }
-                break;
-
-                default:
-                    Log.e(TAG, String.format("msg(%s) can not process", m.toString()));
-                    break;
-            }
         }
     }
 }

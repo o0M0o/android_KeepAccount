@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,17 +23,17 @@ import java.util.Locale;
 import java.util.Map;
 
 import butterknife.OnClick;
-import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import cn.wxm.andriodutillib.util.FastViewHolder;
+import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
+import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
+import wxm.KeepAccount.ui.utility.HelperDayNotesInfo;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
-import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
-import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
-import wxm.KeepAccount.ui.utility.HelperDayNotesInfo;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * 年数据视图辅助类
@@ -42,15 +41,13 @@ import wxm.KeepAccount.ui.utility.HelperDayNotesInfo;
  */
 public class LVHelperYearly extends LVBase {
     private final static String TAG = "LVHelperYearly";
-
+    private final LinkedList<String> mLLSubFilter = new LinkedList<>();
+    private final LinkedList<View> mLLSubFilterVW = new LinkedList<>();
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
-
     private boolean mBSelectSubFilter = false;
-    private final LinkedList<String> mLLSubFilter = new LinkedList<>();
-    private final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
 
-    public LVHelperYearly()    {
+    public LVHelperYearly() {
         super();
         LOG_TAG = "LVHelperYearly";
         mBActionExpand = false;
@@ -58,7 +55,8 @@ public class LVHelperYearly extends LVBase {
 
     /**
      * 过滤视图事件
-     * @param event     事件
+     *
+     * @param event 事件
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
@@ -67,12 +65,13 @@ public class LVHelperYearly extends LVBase {
 
     /**
      * 附加动作
-     * @param v   动作view
+     *
+     * @param v 动作view
      */
     @OnClick({R.id.ib_sort, R.id.ib_refresh})
     public void onActionClick(View v) {
-        switch (v.getId())  {
-            case R.id.ib_sort :     {
+        switch (v.getId()) {
+            case R.id.ib_sort: {
                 mBTimeDownOrder = !mBTimeDownOrder;
 
                 mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
@@ -83,7 +82,7 @@ public class LVHelperYearly extends LVBase {
             }
             break;
 
-            case R.id.ib_refresh :  {
+            case R.id.ib_refresh: {
                 reloadView(v.getContext(), false);
             }
             break;
@@ -93,15 +92,16 @@ public class LVHelperYearly extends LVBase {
 
     /**
      * "接受"或者"取消"后动作
-     * @param v     动作view
+     *
+     * @param v 动作view
      */
     @OnClick({R.id.bt_accpet, R.id.bt_giveup})
     public void onAccpetOrGiveupClick(View v) {
         int vid = v.getId();
-        switch (vid)    {
-            case R.id.bt_accpet :
-                if(mBSelectSubFilter) {
-                    if(!UtilFun.ListIsNullOrEmpty(mLLSubFilter)) {
+        switch (vid) {
+            case R.id.bt_accpet:
+                if (mBSelectSubFilter) {
+                    if (!UtilFun.ListIsNullOrEmpty(mLLSubFilter)) {
                         ACNoteShow ac = getRootActivity();
                         ac.jumpByTabName(NoteDataHelper.TAB_TITLE_MONTHLY);
 
@@ -112,7 +112,7 @@ public class LVHelperYearly extends LVBase {
                         mLLSubFilter.clear();
                     }
 
-                    for(View i : mLLSubFilterVW)    {
+                    for (View i : mLLSubFilterVW) {
                         i.setSelected(false);
                         i.getBackground().setAlpha(0);
                     }
@@ -123,11 +123,11 @@ public class LVHelperYearly extends LVBase {
                 }
                 break;
 
-            case R.id.bt_giveup :
+            case R.id.bt_giveup:
                 mBSelectSubFilter = false;
                 mLLSubFilter.clear();
 
-                for(View i : mLLSubFilterVW)    {
+                for (View i : mLLSubFilterVW) {
                     i.setSelected(false);
                     i.getBackground().setAlpha(0);
                 }
@@ -168,7 +168,7 @@ public class LVHelperYearly extends LVBase {
                 // for year
                 List<String> set_k = NoteDataHelper.getNotesYears();
                 Collections.sort(set_k, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-                for(String k : set_k)   {
+                for (String k : set_k) {
                     NoteShowInfo ni = NoteDataHelper.getInfoByYear(k);
 
                     HashMap<String, String> map = new HashMap<>();
@@ -193,12 +193,12 @@ public class LVHelperYearly extends LVBase {
                 // for month
                 List<String> set_k_m = NoteDataHelper.getNotesMonths();
                 Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-                for(String k : set_k_m)   {
+                for (String k : set_k_m) {
                     String ky = k.substring(0, 4);
                     NoteShowInfo ni = NoteDataHelper.getInfoByMonth(k);
                     HashMap<String, String> map = new HashMap<>();
 
-                    String km = k.substring(5,7);
+                    String km = k.substring(5, 7);
                     km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
                     map.put(K_MONTH, km);
                     map.put(K_MONTH_PAY_COUNT, String.valueOf(ni.getPayCount()));
@@ -216,8 +216,8 @@ public class LVHelperYearly extends LVBase {
                     map.put(K_TAG, ky);
                     map.put(K_SUB_TAG, k);
 
-                    LinkedList<HashMap<String, String>>  ls_hm = mHMSubPara.get(ky);
-                    if(UtilFun.ListIsNullOrEmpty(ls_hm))   {
+                    LinkedList<HashMap<String, String>> ls_hm = mHMSubPara.get(ky);
+                    if (UtilFun.ListIsNullOrEmpty(ls_hm)) {
                         ls_hm = new LinkedList<>();
                     }
 
@@ -243,17 +243,19 @@ public class LVHelperYearly extends LVBase {
     }
 
     /// BEGIN PRIVATE
+
     /**
      * 加载UI的工作
-     * @param b_fully   若为true则加载数据
+     *
+     * @param b_fully 若为true则加载数据
      */
-    private void loadUIUtility(boolean b_fully)    {
+    private void loadUIUtility(boolean b_fully) {
         refreshAttachLayout();
 
-        if(b_fully) {
+        if (b_fully) {
             // update data
             LinkedList<HashMap<String, String>> n_mainpara;
-            if(mBFilter) {
+            if (mBFilter) {
                 n_mainpara = new LinkedList<>();
                 for (HashMap<String, String> i : mMainPara) {
                     String cur_tag = i.get(K_TAG);
@@ -264,7 +266,7 @@ public class LVHelperYearly extends LVBase {
                         }
                     }
                 }
-            } else  {
+            } else {
                 n_mainpara = mMainPara;
             }
 
@@ -280,14 +282,14 @@ public class LVHelperYearly extends LVBase {
     /**
      * 调整数据排序
      */
-    private void reorderData()  {
+    private void reorderData() {
         Collections.reverse(mMainPara);
     }
 
     /**
      * 更新附加layout
      */
-    private void refreshAttachLayout()    {
+    private void refreshAttachLayout() {
         setAttachLayoutVisible(mBFilter || mBSelectSubFilter ? View.VISIBLE : View.GONE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
         setAccpetGiveupLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.GONE);
@@ -295,12 +297,13 @@ public class LVHelperYearly extends LVBase {
 
     /**
      * 加载详细视图
-     * @param lv        视图
-     * @param tag       数据tag
+     *
+     * @param lv  视图
+     * @param tag 数据tag
      */
-    private void load_detail_view(ListView lv, String tag)  {
+    private void load_detail_view(ListView lv, String tag) {
         LinkedList<HashMap<String, String>> llhm = mHMSubPara.get(tag);
-        if(!UtilFun.ListIsNullOrEmpty(llhm))    {
+        if (!UtilFun.ListIsNullOrEmpty(llhm)) {
             SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm,
                     new String[]{}, new int[]{});
             lv.setAdapter(mAdapter);
@@ -309,7 +312,6 @@ public class LVHelperYearly extends LVBase {
         }
     }
     /// END PRIVATE
-
 
 
     /**
@@ -343,11 +345,11 @@ public class LVHelperYearly extends LVBase {
             final HashMap<String, String> hm = UtilFun.cast(getItem(position));
             final ListView lv = viewHolder.getView(R.id.lv_show_detail);
             final String tag = hm.get(K_TAG);
-            if(V_SHOW_FOLD.equals(hm.get(K_SHOW))) {
+            if (V_SHOW_FOLD.equals(hm.get(K_SHOW))) {
                 lv.setVisibility(View.GONE);
             } else {
                 lv.setVisibility(View.VISIBLE);
-                if(0 == lv.getCount())
+                if (0 == lv.getCount())
                     load_detail_view(lv, tag);
             }
 
@@ -357,7 +359,7 @@ public class LVHelperYearly extends LVBase {
 
                 if (bf) {
                     lv.setVisibility(View.VISIBLE);
-                    if(0 == lv.getCount())
+                    if (0 == lv.getCount())
                         load_detail_view(lv, tag);
 
                     addUnfoldItem(tag);
@@ -371,7 +373,7 @@ public class LVHelperYearly extends LVBase {
             // adjust row color
             ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
             rl.setBackgroundColor(0 == position % 2 ?
-                        LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
+                    LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
             rl.setOnClickListener(local_cl);
 
             // for year
@@ -393,7 +395,7 @@ public class LVHelperYearly extends LVBase {
     /**
      * 次级adapter
      */
-    private class SelfSubAdapter  extends SimpleAdapter {
+    private class SelfSubAdapter extends SimpleAdapter {
         private final static String TAG = "SelfSubAdapter";
 
         SelfSubAdapter(Context context,
@@ -424,27 +426,27 @@ public class LVHelperYearly extends LVBase {
 
             final ImageView ib = viewHolder.getView(R.id.iv_action);
             ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ?
-                    LVResource.mCRLVItemSel: LVResource.mCRLVItemNoSel);
+                    LVResource.mCRLVItemSel : LVResource.mCRLVItemNoSel);
             ib.setOnClickListener(v -> {
                 String sub_tag1 = hm.get(K_SUB_TAG);
 
-                if(!mLLSubFilter.contains(sub_tag1)) {
+                if (!mLLSubFilter.contains(sub_tag1)) {
                     v.setBackgroundColor(LVResource.mCRLVItemSel);
 
                     mLLSubFilter.add(sub_tag1);
                     mLLSubFilterVW.add(v);
 
-                    if(!mBSelectSubFilter) {
+                    if (!mBSelectSubFilter) {
                         mBSelectSubFilter = true;
                         refreshAttachLayout();
                     }
-                }   else {
+                } else {
                     v.setBackgroundColor(LVResource.mCRLVItemNoSel);
 
                     mLLSubFilter.remove(sub_tag1);
                     mLLSubFilterVW.remove(v);
 
-                    if(mLLSubFilter.isEmpty()) {
+                    if (mLLSubFilter.isEmpty()) {
                         mLLSubFilterVW.clear();
                         mBSelectSubFilter = false;
                         refreshAttachLayout();

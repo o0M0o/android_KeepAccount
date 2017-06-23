@@ -16,53 +16,51 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * 颜色选择对话框
  * Created by 123 on 2016/10/10.
  */
 public class DlgSelectColor extends DlgOKOrNOBase
-        implements AdapterView.OnItemClickListener  {
-    private int     mHotPos = GlobalDef.INVALID_ID;
-
-    private final static String  PARA_COLOR = "color";
+        implements AdapterView.OnItemClickListener {
+    private final static String PARA_COLOR = "color";
     private final static int[] ARR_COLOR = {
             R.color.aliceblue
-            ,R.color.antiquewhite
-            ,R.color.lightyellow
-            ,R.color.snow
-            ,R.color.lavenderblush
-            ,R.color.bisque
-            ,R.color.pink
-            ,R.color.orange
-            ,R.color.coral
-            ,R.color.hotpink
-            ,R.color.orangered
-            ,R.color.magenta
-            ,R.color.violet
-            ,R.color.darksalmon
-            ,R.color.lavender
-            ,R.color.burlywood
-            ,R.color.crimson
-            ,R.color.firebrick
-            ,R.color.powderblue
-            ,R.color.lightsteelblue
-            ,R.color.paleturquoise
-            ,R.color.greenyellow
-            ,R.color.darkgrey
-            ,R.color.lawngreen
-            ,R.color.lightslategrey
-            ,R.color.cadetblue
-            ,R.color.indigo
-            ,R.color.lightseagreen
-            ,R.color.cyan
+            , R.color.antiquewhite
+            , R.color.lightyellow
+            , R.color.snow
+            , R.color.lavenderblush
+            , R.color.bisque
+            , R.color.pink
+            , R.color.orange
+            , R.color.coral
+            , R.color.hotpink
+            , R.color.orangered
+            , R.color.magenta
+            , R.color.violet
+            , R.color.darksalmon
+            , R.color.lavender
+            , R.color.burlywood
+            , R.color.crimson
+            , R.color.firebrick
+            , R.color.powderblue
+            , R.color.lightsteelblue
+            , R.color.paleturquoise
+            , R.color.greenyellow
+            , R.color.darkgrey
+            , R.color.lawngreen
+            , R.color.lightslategrey
+            , R.color.cadetblue
+            , R.color.indigo
+            , R.color.lightseagreen
+            , R.color.cyan
     };
+    private int mHotPos = GlobalDef.INVALID_ID;
 
-
-    public int getSelectedColor()   {
-        if(GlobalDef.INVALID_ID != mHotPos)
+    public int getSelectedColor() {
+        if (GlobalDef.INVALID_ID != mHotPos)
             return getResources().getColor(ARR_COLOR[mHotPos]);
         else
             return GlobalDef.INVALID_ID;
@@ -70,19 +68,20 @@ public class DlgSelectColor extends DlgOKOrNOBase
 
     /**
      * Gridview的itemclick处理方法
-     * @param parent        param
-     * @param view          param
-     * @param position      param
-     * @param id            param
+     *
+     * @param parent   param
+     * @param view     param
+     * @param position param
+     * @param id       param
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Resources res = getResources();
 
         view.setBackgroundColor(res.getColor(R.color.red));
-        if(GlobalDef.INVALID_ID == mHotPos)   {
+        if (GlobalDef.INVALID_ID == mHotPos) {
             mHotPos = position;
-        }   else    {
+        } else {
             parent.getChildAt(mHotPos).setBackgroundColor(res.getColor(R.color.white));
             mHotPos = position;
         }
@@ -99,14 +98,14 @@ public class DlgSelectColor extends DlgOKOrNOBase
 
         Resources res = getResources();
         ArrayList<HashMap<String, Object>> ls_data = new ArrayList<>();
-        for(int i : ARR_COLOR)  {
+        for (int i : ARR_COLOR) {
             HashMap<String, Object> hm = new HashMap<>();
             hm.put(PARA_COLOR, res.getColor(i));
             ls_data.add(hm);
         }
 
         GVChannelAdapter ga = new GVChannelAdapter(getActivity(), ls_data,
-                new String[] { }, new int[]{ });
+                new String[]{}, new int[]{});
         gv.setAdapter(ga);
         ga.notifyDataSetChanged();
         return vw;

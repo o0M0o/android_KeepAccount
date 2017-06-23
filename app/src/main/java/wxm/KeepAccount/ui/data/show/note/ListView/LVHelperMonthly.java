@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -25,17 +24,17 @@ import java.util.Locale;
 import java.util.Map;
 
 import butterknife.OnClick;
-import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.FastViewHolder;
+import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
-import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.utility.ToolUtil;
-import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
-import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
+import wxm.KeepAccount.utility.ContextUtil;
+import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * 月数据辅助类
@@ -96,7 +95,7 @@ public class LVHelperMonthly
             }
             break;
 
-            case R.id.ib_refresh : {
+            case R.id.ib_refresh: {
                 reloadView(v.getContext(), false);
             }
             break;
@@ -152,7 +151,7 @@ public class LVHelperMonthly
             }
             break;
 
-            case R.id.bt_giveup_filter : {
+            case R.id.bt_giveup_filter: {
                 mBFilter = false;
                 loadUIUtility(true);
             }

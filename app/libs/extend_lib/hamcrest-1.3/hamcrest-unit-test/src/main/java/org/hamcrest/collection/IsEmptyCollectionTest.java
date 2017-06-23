@@ -12,6 +12,14 @@ import static org.hamcrest.core.Is.is;
 
 public class IsEmptyCollectionTest extends AbstractMatcherTest {
 
+    private static Collection<String> collectionOfValues() {
+        return new ArrayList<String>(asList("one", "three"));
+    }
+
+    private static Collection<Integer> emptyCollection() {
+        return new ArrayList<Integer>();
+    }
+
     @Override
     protected Matcher<Collection<?>> createMatcher() {
         return empty();
@@ -33,13 +41,6 @@ public class IsEmptyCollectionTest extends AbstractMatcherTest {
         needs(IsEmptyCollection.emptyCollectionOf(String.class));
     }
 
-    private void needs(@SuppressWarnings("unused") Matcher<Collection<String>> bar) { }
-    
-    private static Collection<String> collectionOfValues() {
-        return new ArrayList<String>(asList("one", "three"));
-    }
-
-    private static Collection<Integer> emptyCollection() {
-        return new ArrayList<Integer>();
+    private void needs(@SuppressWarnings("unused") Matcher<Collection<String>> bar) {
     }
 }

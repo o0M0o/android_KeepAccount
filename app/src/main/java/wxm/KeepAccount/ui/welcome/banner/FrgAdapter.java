@@ -26,23 +26,23 @@ import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.view.ColumnChartView;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.utility.PreferencesUtil;
-import wxm.KeepAccount.R;
 
 /**
  * for frg
  * Created by wangxm on 16/12/15.
  */
 public class FrgAdapter implements LBaseAdapter<FrgPara> {
-    private final static String    LOG_TAG = "FrgAdapter";
+    private final static String LOG_TAG = "FrgAdapter";
 
-    private Context             mContext;
-    private SparseArray<View>   mSAView;
+    private Context mContext;
+    private SparseArray<View> mSAView;
 
     public FrgAdapter(Context context) {
-        mContext=context;
+        mContext = context;
         mSAView = new SparseArray<>();
 
         initView();
@@ -52,13 +52,13 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
     public View getView(final LMBanners lBanners, final Context context, int position, FrgPara data) {
         View v = null;
         switch (data.mFPViewId) {
-            case R.layout.banner_month : {
+            case R.layout.banner_month: {
                 v = LayoutInflater.from(mContext).inflate(R.layout.banner_month, null);
                 fillMonth(v);
             }
             break;
 
-            case R.layout.banner_year : {
+            case R.layout.banner_year: {
                 v = LayoutInflater.from(mContext).inflate(R.layout.banner_year, null);
                 fillYear(v);
             }
@@ -85,9 +85,10 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
 
     /**
      * 填充月数据
-     * @param v   视图
+     *
+     * @param v 视图
      */
-    private void fillMonth(View v)  {
+    private void fillMonth(View v) {
         TextView tv_pay = UtilFun.cast_t(v.findViewById(R.id.tv_pay_amount));
         TextView tv_income = UtilFun.cast_t(v.findViewById(R.id.tv_income_amount));
 
@@ -101,7 +102,7 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM", Locale.CHINA);
         String cur_month = sd.format(ci.getTime());
         NoteShowInfo ni = NoteDataHelper.getInfoByMonth(cur_month);
-        if(null == ni)  {
+        if (null == ni) {
             ni = new NoteShowInfo();
             ni.setPayAmount(BigDecimal.ZERO);
             ni.setIncomeAmount(BigDecimal.ZERO);
@@ -114,9 +115,10 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
 
     /**
      * 填充年数据
-     * @param v   视图
+     *
+     * @param v 视图
      */
-    private void fillYear(View v)  {
+    private void fillYear(View v) {
         TextView tv_pay = UtilFun.cast_t(v.findViewById(R.id.tv_pay_amount));
         TextView tv_income = UtilFun.cast_t(v.findViewById(R.id.tv_income_amount));
 
@@ -128,7 +130,7 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
         SimpleDateFormat sd = new SimpleDateFormat("yyyy", Locale.CHINA);
         String cur_year = sd.format(ci.getTime());
         NoteShowInfo ni = NoteDataHelper.getInfoByYear(cur_year);
-        if(null == ni)  {
+        if (null == ni) {
             ni = new NoteShowInfo();
             ni.setPayAmount(BigDecimal.ZERO);
             ni.setIncomeAmount(BigDecimal.ZERO);
@@ -142,8 +144,8 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
     private void fillChart(View v, NoteShowInfo ni) {
         // 展示条
         HashMap<String, Integer> mHMColor = PreferencesUtil.loadChartColor();
-        int cl_pay      = mHMColor.get(PreferencesUtil.SET_PAY_COLOR);
-        int cl_income   = mHMColor.get(PreferencesUtil.SET_INCOME_COLOR);
+        int cl_pay = mHMColor.get(PreferencesUtil.SET_PAY_COLOR);
+        int cl_income = mHMColor.get(PreferencesUtil.SET_INCOME_COLOR);
 
         ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_income));
         iv.setBackgroundColor(cl_income);

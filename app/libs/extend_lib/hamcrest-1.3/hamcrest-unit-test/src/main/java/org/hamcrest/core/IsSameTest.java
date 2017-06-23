@@ -29,7 +29,7 @@ public class IsSameTest extends AbstractMatcherTest {
     public void testAlternativeFactoryMethodAlsoMatchesOnlyIfArgumentIsReferenceToASpecifiedObject() {
         Object o1 = new Object();
         Object o2 = new Object();
-        
+
         assertThat(o1, theInstance(o1));
         assertThat(o2, not(theInstance(o1)));
     }

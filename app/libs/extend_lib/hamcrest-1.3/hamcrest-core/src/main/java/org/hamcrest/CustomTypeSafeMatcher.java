@@ -19,8 +19,8 @@ package org.hamcrest;
  * is called the argument is guaranteed to be non-null and of the correct
  * type.
  *
- * @author Neil Dunn
  * @param <T> The type of object being matched
+ * @author Neil Dunn
  */
 public abstract class CustomTypeSafeMatcher<T> extends TypeSafeMatcher<T> {
     private final String fixedDescription;

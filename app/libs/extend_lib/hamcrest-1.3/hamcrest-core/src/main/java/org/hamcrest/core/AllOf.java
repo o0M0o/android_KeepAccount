@@ -21,23 +21,6 @@ public class AllOf<T> extends DiagnosingMatcher<T> {
         this.matchers = matchers;
     }
 
-    @Override
-    public boolean matches(Object o, Description mismatch) {
-        for (Matcher<? super T> matcher : matchers) {
-            if (!matcher.matches(o)) {
-                mismatch.appendDescriptionOf(matcher).appendText(" ");
-                matcher.describeMismatch(o, mismatch);
-              return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public void describeTo(Description description) {
-        description.appendList("(", " " + "and" + " ", ")", matchers);
-    }
-
     /**
      * Creates a matcher that matches if the examined object matches <b>ALL</b> of the specified matchers.
      * <p/>
@@ -138,5 +121,22 @@ public class AllOf<T> extends DiagnosingMatcher<T> {
         matchers.add(fifth);
         matchers.add(sixth);
         return allOf(matchers);
+    }
+
+    @Override
+    public boolean matches(Object o, Description mismatch) {
+        for (Matcher<? super T> matcher : matchers) {
+            if (!matcher.matches(o)) {
+                mismatch.appendDescriptionOf(matcher).appendText(" ");
+                matcher.describeMismatch(o, mismatch);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        description.appendList("(", " " + "and" + " ", ")", matchers);
     }
 }

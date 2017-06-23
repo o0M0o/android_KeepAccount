@@ -31,9 +31,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.simplecalendarlvb.CalendarListView;
 
@@ -44,7 +44,7 @@ import wxm.simplecalendarlvb.CalendarListView;
  */
 public class FrgCalendarShow extends FrgUtilityBase {
     public static final SimpleDateFormat DAY_FORMAT =
-                new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
+            new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
 
     public static final SimpleDateFormat YEAR_MONTH_FORMAT =
             new SimpleDateFormat("yyyy年MM月", Locale.CHINA);
@@ -66,7 +66,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
     FrameLayout mFLHolder;
 
     // for data
-    private CalendarShowItemAdapter     mCSIAdapter;
+    private CalendarShowItemAdapter mCSIAdapter;
     //key:date "yyyy-mm-dd" format.
     private TreeMap<String, List<INote>> mTMList = new TreeMap<>();
 
@@ -78,7 +78,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
         View rootView = layoutInflater.inflate(R.layout.vw_calendar, viewGroup, false);
         ButterKnife.bind(this, rootView);
 
-        if(null == bundle) {
+        if (null == bundle) {
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             ft.add(R.id.fl_holder, mFGContent);
             ft.commit();
@@ -114,7 +114,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
     }
 
     @Override
-    protected void enterActivity()  {
+    protected void enterActivity() {
         Log.d(LOG_TAG, "in enterActivity");
         super.enterActivity();
 
@@ -122,7 +122,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
     }
 
     @Override
-    protected void leaveActivity()  {
+    protected void leaveActivity() {
         Log.d(LOG_TAG, "in leaveActivity");
         super.enterActivity();
 
@@ -131,7 +131,8 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
     /**
      * 数据库内数据变化处理器
-     * @param event     事件参数
+     *
+     * @param event 事件参数
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBDataChangeEvent(DBDataChangeEvent event) {
@@ -140,7 +141,8 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
     /**
      * Shows the progress UI and hides the login form.
-     * @param show   如果为true则显示加载数据图
+     *
+     * @param show 如果为true则显示加载数据图
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -172,23 +174,24 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
     /**
      * 加载月度数据
-     * @param month  加载的月份，比如"2016-07"
+     *
+     * @param month 加载的月份，比如"2016-07"
      */
-    private void loadNotes(String month)  {
+    private void loadNotes(String month) {
         Log.d(LOG_TAG, "loadNotes");
 
         mTMList.clear();
         HashMap<String, ArrayList<INote>> hm_note
                 = NoteDataHelper.getInstance().getNotesForMonth();
-        if(null != hm_note) {
+        if (null != hm_note) {
             ArrayList<INote> al_notes = hm_note.get(month);
-            for(INote ci : al_notes)    {
+            for (INote ci : al_notes) {
                 Calendar cd = Calendar.getInstance();
                 cd.setTimeInMillis(ci.getTs().getTime());
                 String day = ALL_SIMPLE_FORMAT.format(cd.getTime());
 
                 List<INote> ls_note = mTMList.get(day);
-                if(null == ls_note) {
+                if (null == ls_note) {
                     ls_note = new ArrayList<>();
                     mTMList.put(day, ls_note);
                 }
@@ -204,11 +207,11 @@ public class FrgCalendarShow extends FrgUtilityBase {
     private void reLoadFrg() {
         Log.d(LOG_TAG, "reLoadFrg");
 
-        new AsyncTask<Void, Void, Void> () {
-            private String  mSZFristMonth;
+        new AsyncTask<Void, Void, Void>() {
+            private String mSZFristMonth;
 
             @Override
-            protected void onPreExecute()   {
+            protected void onPreExecute() {
                 super.onPreExecute();
                 showProgress(true);
             }
@@ -218,7 +221,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
             protected Void doInBackground(Void... params) {
                 HashMap<String, ArrayList<INote>> hm
                         = NoteDataHelper.getInstance().getNotesForMonth();
-                if(null != hm)  {
+                if (null != hm) {
                     mSZFristMonth = UtilFun.cast_t(hm.keySet().toArray()[0]);
                 }
 
@@ -231,7 +234,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
                 showProgress(false);
 
-                if(UtilFun.StringIsNullOrEmpty(mSZFristMonth)) {
+                if (UtilFun.StringIsNullOrEmpty(mSZFristMonth)) {
                     Activity ac = getActivity();
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ac);
                     builder.setMessage("当前用户没有数据，请先添加数据!").setTitle("警告");
@@ -243,11 +246,11 @@ public class FrgCalendarShow extends FrgUtilityBase {
                     Calendar c_cur = Calendar.getInstance();
                     String cur_month = YEAR_MONTH_SIMPLE_FORMAT.format(c_cur.getTime());
                     String cur_sel_month = mHGVDays.getCurrentSelectedDate();
-                    if(!UtilFun.StringIsNullOrEmpty(cur_sel_month))
+                    if (!UtilFun.StringIsNullOrEmpty(cur_sel_month))
                         cur_sel_month = cur_sel_month.substring(0, 7);
 
 
-                    if(!cur_month.equals(mSZFristMonth) && !mSZFristMonth.equals(cur_sel_month))
+                    if (!cur_month.equals(mSZFristMonth) && !mSZFristMonth.equals(cur_sel_month))
                         mHGVDays.changeMonth(mSZFristMonth);
                     else
                         loadCalendarData(mSZFristMonth);
@@ -258,19 +261,19 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
 
     /**
+     * // date (yyyy-MM),load data for Calendar View by date,load one month data one times.
+     * // generate test data for CalendarView,imitate to be a Network Requests. update "mCSIAdapter.getDayModelList()"
+     * // and notifyDataSetChanged will update CalendarView.
      *
-     // date (yyyy-MM),load data for Calendar View by date,load one month data one times.
-     // generate test data for CalendarView,imitate to be a Network Requests. update "mCSIAdapter.getDayModelList()"
-     // and notifyDataSetChanged will update CalendarView.
-     * @param date  加载的月份，比如"2016-07"
+     * @param date 加载的月份，比如"2016-07"
      */
     private void loadCalendarData(final String date) {
         Log.d(LOG_TAG, "loadCalendarData, date = " + date
                 + ", select_date = " + mHGVDays.getCurrentSelectedDate());
         loadNotes(date);
 
-        if(!mTMList.isEmpty()) {
-            for(String ik : mTMList.keySet())   {
+        if (!mTMList.isEmpty()) {
+            for (String ik : mTMList.keySet()) {
                 List<INote> ls_n = mTMList.get(ik);
                 CalendarShowItemModel calendarItemModel = mCSIAdapter.getDayModelList().get(ik);
                 if (calendarItemModel != null) {

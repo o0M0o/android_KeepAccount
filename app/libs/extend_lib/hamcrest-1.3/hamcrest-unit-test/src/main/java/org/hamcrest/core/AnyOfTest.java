@@ -38,10 +38,10 @@ public class AnyOfTest extends AbstractMatcherTest {
                 equalTo(new SampleBaseClass("good")),
                 equalTo(new SampleSubClass("ugly"))
         );
-        
+
         assertThat(new SampleSubClass("good"), combined);
-    }    
-    
+    }
+
     public void testHasAReadableDescription() {
         assertDescription("(\"good\" or \"bad\" or \"ugly\")",
                 anyOf(equalTo("good"), equalTo("bad"), equalTo("ugly")));

@@ -17,6 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import wxm.KeepAccount.BuildConfig;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.IncomeNoteItem;
@@ -25,10 +27,6 @@ import wxm.KeepAccount.define.RecordTypeItem;
 import wxm.KeepAccount.define.RemindItem;
 import wxm.KeepAccount.define.UsrItem;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.BuildConfig;
-import wxm.KeepAccount.R;
-
-import java.lang.Math;
 
 /**
  * db ormlite helper
@@ -44,12 +42,12 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 9;
 
     // the DAO object we use to access the SimpleData table
-    private RuntimeExceptionDao<UsrItem, Integer>           mUsrNoteRDao = null;
-    private RuntimeExceptionDao<RecordTypeItem, Integer>    mRTNoteRDao = null;
-    private RuntimeExceptionDao<BudgetItem, Integer>        mBudgetNoteRDao = null;
-    private RuntimeExceptionDao<PayNoteItem, Integer>       mPayNoteRDao = null;
-    private RuntimeExceptionDao<IncomeNoteItem, Integer>    mIncomeNoteRDao = null;
-    private RuntimeExceptionDao<RemindItem, Integer>        mRemindRDao = null;
+    private RuntimeExceptionDao<UsrItem, Integer> mUsrNoteRDao = null;
+    private RuntimeExceptionDao<RecordTypeItem, Integer> mRTNoteRDao = null;
+    private RuntimeExceptionDao<BudgetItem, Integer> mBudgetNoteRDao = null;
+    private RuntimeExceptionDao<PayNoteItem, Integer> mPayNoteRDao = null;
+    private RuntimeExceptionDao<IncomeNoteItem, Integer> mIncomeNoteRDao = null;
+    private RuntimeExceptionDao<RemindItem, Integer> mRemindRDao = null;
 
     public DBOrmLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -73,14 +71,14 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
         try {
             // 版本9中budgetitem表结构有调整
             // 删除旧表，创建新表，然后把旧数据导入新表
-            if(9 == newVersion && (8 == oldVersion || 7 == oldVersion)) {
+            if (9 == newVersion && (8 == oldVersion || 7 == oldVersion)) {
                 List<BudgetItem> ls_bi = getBudgetDataREDao().queryForAll();
                 TableUtils.dropTable(connectionSource, BudgetItem.class, true);
                 TableUtils.createTable(connectionSource, BudgetItem.class);
                 getBudgetDataREDao().create(ls_bi);
             }
 
-            if(8 == newVersion || 7 == newVersion)     {
+            if (8 == newVersion || 7 == newVersion) {
                 TableUtils.dropTable(connectionSource, UsrItem.class, true);
                 TableUtils.dropTable(connectionSource, RecordTypeItem.class, true);
                 TableUtils.dropTable(connectionSource, PayNoteItem.class, true);
@@ -158,7 +156,7 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
     }
 
 
-    private void CreateAndInitTable()   {
+    private void CreateAndInitTable() {
         try {
             TableUtils.createTable(connectionSource, UsrItem.class);
             TableUtils.createTable(connectionSource, RecordTypeItem.class);
@@ -175,13 +173,13 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
         RuntimeExceptionDao<RecordTypeItem, Integer> redao = getRTItemREDao();
         Resources res = ContextUtil.getInstance().getResources();
         String[] type = res.getStringArray(R.array.payinfo);
-        for(String ln : type)   {
+        for (String ln : type) {
             RecordTypeItem ri = line2item(RecordTypeItem.DEF_PAY, ln);
             redao.create(ri);
         }
 
         type = res.getStringArray(R.array.incomeinfo);
-        for(String ln : type)   {
+        for (String ln : type) {
             RecordTypeItem ri = line2item(RecordTypeItem.DEF_INCOME, ln);
             redao.create(ri);
         }
@@ -189,20 +187,21 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
         // 添加默认用户
         ContextUtil.getUsrUtility().addUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD);
 
-        if(BuildConfig.FILL_TESTDATA)
+        if (BuildConfig.FILL_TESTDATA)
             AddTestData();
     }
 
 
     /**
      * 把字符串(生活费-生活开销)转换为item
-     * @param type  记录类型的类型
-     * @param ln    待转换字符串
-     * @return  记录类型数据
+     *
+     * @param type 记录类型的类型
+     * @param ln   待转换字符串
+     * @return 记录类型数据
      */
-    private RecordTypeItem line2item(String type, String ln)  {
-        String[] sln =  ln.split("-");
-        if(BuildConfig.DEBUG && (2 != sln.length)) {
+    private RecordTypeItem line2item(String type, String ln) {
+        String[] sln = ln.split("-");
+        if (BuildConfig.DEBUG && (2 != sln.length)) {
             throw new AssertionError();
         }
 
@@ -217,8 +216,8 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
     /**
      * 填充测试数据
      */
-    private void AddTestData()  {
-        UsrItem ui_wxm  = ContextUtil.getUsrUtility().addUsr("wxm", "123456");
+    private void AddTestData() {
+        UsrItem ui_wxm = ContextUtil.getUsrUtility().addUsr("wxm", "123456");
         UsrItem ui_hugo = ContextUtil.getUsrUtility().addUsr("hugo", "123456");
 
         // for wxm
@@ -256,13 +255,13 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
         ContextUtil.getPayIncomeUtility().addIncomeNotes(ls_income);
 
         // for hugo
-        for(PayNoteItem i : ls_pay)     {
+        for (PayNoteItem i : ls_pay) {
             i.setId(GlobalDef.INVALID_ID);
             i.setUsr(ui_hugo);
         }
         ContextUtil.getPayIncomeUtility().addPayNotes(ls_pay);
 
-        for(IncomeNoteItem i : ls_income)     {
+        for (IncomeNoteItem i : ls_income) {
             i.setId(GlobalDef.INVALID_ID);
             i.setUsr(ui_hugo);
         }
@@ -274,9 +273,9 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
 
     private void AddTestDataForDefualtUsr() {
         class createUtility {
-            private final String[]  mSZPayInfos =
+            private final String[] mSZPayInfos =
                     {"租金", "生活费", "交通费", "社交开支", "娱乐开支", "其它"};
-            private final String[]  mSZIncomeInfos =
+            private final String[] mSZIncomeInfos =
                     {"工资", "投资收入", "营业收入", "奖金", "其它"};
 
             private String getPayInfo() {
@@ -287,15 +286,15 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
                 return mSZIncomeInfos[new Random().nextInt(mSZIncomeInfos.length)];
             }
 
-            private BigDecimal getVal(double max_val, double min_val)  {
+            private BigDecimal getVal(double max_val, double min_val) {
                 return new BigDecimal(Math.max(new Random().nextFloat() * max_val, min_val));
             }
         }
 
         createUtility ci = new createUtility();
         UsrItem def_ui = ContextUtil.getUsrUtility()
-                            .CheckAndGetUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD);
-        if(null != def_ui)  {
+                .CheckAndGetUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD);
+        if (null != def_ui) {
             long one_day_msecs = 1000 * 3600 * 24;
             long before_msecs = one_day_msecs * 500;
 
@@ -303,13 +302,13 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
             Date start_dt = new Date(cur_dt.getTime() - before_msecs);
             Date end_dt = new Date();
 
-            for(; start_dt.before(end_dt);
-                    start_dt.setTime(start_dt.getTime() + one_day_msecs))  {
+            for (; start_dt.before(end_dt);
+                 start_dt.setTime(start_dt.getTime() + one_day_msecs)) {
                 int r = new Random().nextInt(99);
-                if(0 == r % 5)     {
+                if (0 == r % 5) {
                     Random rand1 = new Random();
                     int pay = rand1.nextInt(3);
-                    if(0 < pay) {
+                    if (0 < pay) {
                         double pay_max = 500;
                         double pay_min = 0.1;
                         LinkedList<PayNoteItem> ls_pay = new LinkedList<>();
@@ -327,7 +326,7 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
 
                     Random rand2 = new Random();
                     int income = rand2.nextInt(3);
-                    if(0 < income) {
+                    if (0 < income) {
                         double income_max = 500;
                         double income_min = 0.1;
                         LinkedList<IncomeNoteItem> ls_pay = new LinkedList<>();

@@ -32,16 +32,16 @@ android {
     sourceSets {
         main {
             res.srcDirs =
-                [
-                    'src/main/res',
-                    'src/main/res/layouts/activities',
-                    'src/main/res/layouts/fragment',
-                    'src/main/res/layouts/fragment_item',
-                    'src/main/res/layouts/dialog',
-                    'src/main/res/layouts/view_item',
-                    'src/main/res/layouts/extend',
-                    'src/main/res/layouts'
-                ]
+                    [
+                            'src/main/res',
+                            'src/main/res/layouts/activities',
+                            'src/main/res/layouts/fragment',
+                            'src/main/res/layouts/fragment_item',
+                            'src/main/res/layouts/dialog',
+                            'src/main/res/layouts/view_item',
+                            'src/main/res/layouts/extend',
+                            'src/main/res/layouts'
+                    ]
         }
     }
 
@@ -60,7 +60,7 @@ android {
     }
 
     productFlavors {
-        yyb_keepaccount{}
+        yyb_keepaccount {}
     }
 
 
@@ -69,7 +69,7 @@ android {
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                 //这里修改apk文件名
-                def fileName = "${variant.productFlavors[0].name}-${ variant.buildType.name }-${defaultConfig.versionName}-${releaseTime()}.apk"
+                def fileName = "${variant.productFlavors[0].name}-${variant.buildType.name}-${defaultConfig.versionName}-${releaseTime()}.apk"
                 output.outputFile = new File(outputFile.parent, fileName)
             }
         }

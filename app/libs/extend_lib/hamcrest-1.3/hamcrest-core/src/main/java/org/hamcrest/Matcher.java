@@ -15,7 +15,7 @@ package org.hamcrest;
  * methods in {@link CoreMatchers}.
  * <p/>
  * N.B. Well designed matchers should be immutable.
- * 
+ *
  * @see CoreMatchers
  * @see BaseMatcher
  */
@@ -31,21 +31,19 @@ public interface Matcher<T> extends SelfDescribing {
      *
      * @param item the object against which the matcher is evaluated.
      * @return <code>true</code> if <var>item</var> matches, otherwise <code>false</code>.
-     *
      * @see BaseMatcher
      */
     boolean matches(Object item);
-    
+
     /**
      * Generate a description of why the matcher has not accepted the item.
      * The description will be part of a larger description of why a matching
-     * failed, so it should be concise. 
-     * This method assumes that <code>matches(item)</code> is false, but 
+     * failed, so it should be concise.
+     * This method assumes that <code>matches(item)</code> is false, but
      * will not check this.
      *
-     * @param item The item that the Matcher has rejected.
-     * @param mismatchDescription
-     *     The description to be built or appended to.
+     * @param item                The item that the Matcher has rejected.
+     * @param mismatchDescription The description to be built or appended to.
      */
     void describeMismatch(Object item, Description mismatchDescription);
 

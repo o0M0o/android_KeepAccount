@@ -19,34 +19,31 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditIncome;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditPay;
-import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * for login
  * Created by ookoo on 2016/11/29.
  */
 public class FrgNoteEdit extends FrgUtilityBase {
+    protected final static String TAB_PAY = "支出";
+    protected final static String TAB_INCOME = "收入";
     // for ui
     @BindView(R.id.tl_tabs)
-    TabLayout   mTLTabs;
-
+    TabLayout mTLTabs;
     @BindView(R.id.tab_pager)
-    ViewPager   mVPPager;
-
+    ViewPager mVPPager;
     // for data
-    private String          mAction;
-    private PayNoteItem     mOldPayNote;
-    private IncomeNoteItem  mOldIncomeNote;
-
-    protected final static String TAB_PAY     = "支出";
-    protected final static String TAB_INCOME  = "收入";
+    private String mAction;
+    private PayNoteItem mOldPayNote;
+    private IncomeNoteItem mOldIncomeNote;
 
     @Override
     protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
@@ -60,16 +57,16 @@ public class FrgNoteEdit extends FrgUtilityBase {
     protected void initUiComponent(View view) {
         Bundle bd = getArguments();
         mAction = bd.getString(ACNoteEdit.PARA_ACTION);
-        if(GlobalDef.STR_MODIFY.equals(mAction)) {
+        if (GlobalDef.STR_MODIFY.equals(mAction)) {
             int pid = bd.getInt(ACNoteEdit.PARA_NOTE_PAY, GlobalDef.INVALID_ID);
             int iid = bd.getInt(ACNoteEdit.PARA_NOTE_INCOME, GlobalDef.INVALID_ID);
-            if(GlobalDef.INVALID_ID != pid)   {
+            if (GlobalDef.INVALID_ID != pid) {
                 mOldPayNote = ContextUtil.getPayIncomeUtility().getPayDBUtility().getData(pid);
                 mTLTabs.addTab(mTLTabs.newTab().setText(TAB_PAY));
-            } else if(GlobalDef.INVALID_ID != iid)    {
+            } else if (GlobalDef.INVALID_ID != iid) {
                 mOldIncomeNote = ContextUtil.getPayIncomeUtility().getIncomeDBUtility().getData(iid);
                 mTLTabs.addTab(mTLTabs.newTab().setText(TAB_INCOME));
-            } else  {
+            } else {
                 Log.e(LOG_TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");
                 return;
             }
@@ -79,9 +76,9 @@ public class FrgNoteEdit extends FrgUtilityBase {
         }
 
         // for vp
-        AppCompatActivity ac = (AppCompatActivity)getActivity();
+        AppCompatActivity ac = (AppCompatActivity) getActivity();
         PagerAdapter adapter = new PagerAdapter(ac.getSupportFragmentManager(),
-                                    mTLTabs.getTabCount());
+                mTLTabs.getTabCount());
         mVPPager.setAdapter(adapter);
         mVPPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTLTabs));
         mTLTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -108,7 +105,8 @@ public class FrgNoteEdit extends FrgUtilityBase {
 
     /**
      * 得到当前选中的tab item
-     * @return  当前选中的tab item
+     *
+     * @return 当前选中的tab item
      */
     public TFEditBase getHotTabItem() {
         int pos = mTLTabs.getSelectedTabPosition();

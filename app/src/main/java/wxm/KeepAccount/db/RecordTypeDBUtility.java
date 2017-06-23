@@ -22,6 +22,7 @@ public class RecordTypeDBUtility extends DBUtilityBase<RecordTypeItem, Integer> 
 
     /**
      * 得到所有支付类类型数据
+     *
      * @return 结果数据
      */
     public List<RecordTypeItem> getAllPayItem() {
@@ -32,6 +33,7 @@ public class RecordTypeDBUtility extends DBUtilityBase<RecordTypeItem, Integer> 
 
     /**
      * 得到所有收入类类型数据
+     *
      * @return 结果数据
      */
     public List<RecordTypeItem> getAllIncomeItem() {

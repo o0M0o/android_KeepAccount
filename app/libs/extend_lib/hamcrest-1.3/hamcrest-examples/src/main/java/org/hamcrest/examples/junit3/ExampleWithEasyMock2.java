@@ -34,13 +34,6 @@ public class ExampleWithEasyMock2 extends TestCase {
      */
 
 
-    /**
-     * A sample interface that will be mocked.
-     */
-    public static interface AnInterface {
-        void doStuff(String string);
-    }
-
     private AnInterface mock = createMock(AnInterface.class);
 
     /**
@@ -74,6 +67,13 @@ public class ExampleWithEasyMock2 extends TestCase {
         //assertThat("xx", equal("xx"));
         //assertThat("yy", not(equal("xx")));
         //assertThat("i like cheese", startsWith("i like"));
+    }
+
+    /**
+     * A sample interface that will be mocked.
+     */
+    public static interface AnInterface {
+        void doStuff(String string);
     }
 
 }

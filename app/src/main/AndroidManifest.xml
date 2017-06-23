@@ -30,9 +30,9 @@
         <activity
             android:name=".ui.data.show.note.ACNoteShow"
             android:configChanges="orientation|screenSize"
-            android:launchMode="singleTop"
             android:exported="true"
             android:label="@string/ac_title_noteshow"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.usr.ACAddUsr"
@@ -49,8 +49,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.welcome.ACWelcome"
-            android:label="@string/label_welcome"
             android:configChanges="orientation|screenSize"
+            android:label="@string/label_welcome"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.data.edit.Note.ACNoteEdit"

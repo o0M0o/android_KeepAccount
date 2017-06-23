@@ -23,7 +23,7 @@ import wxm.KeepAccount.R;
 public class DGVButtonAdapter extends SimpleAdapter {
     public final static String HKEY_ACT_NAME = "HKEY_ACT_NAME";
 
-    private Context             mCTContext;
+    private Context mCTContext;
 
     public DGVButtonAdapter(Context context, List<? extends Map<String, ?>> data,
                             String[] from, int[] to) {
@@ -45,14 +45,14 @@ public class DGVButtonAdapter extends SimpleAdapter {
     @Override
     public View getView(final int position, View view, ViewGroup arg2) {
         View v = super.getView(position, view, arg2);
-        if(null != v)   {
+        if (null != v) {
             HashMap<String, Object> hmd = UtilFun.cast(getItem(position));
             String hv = UtilFun.cast(hmd.get(HKEY_ACT_NAME));
 
             TextView tv = UtilFun.cast(v.findViewById(R.id.tv_name));
             tv.setText(hv);
 
-            if(mCTContext instanceof View.OnClickListener)  {
+            if (mCTContext instanceof View.OnClickListener) {
                 View.OnClickListener ac_cl = UtilFun.cast(mCTContext);
                 //bt.setOnClickListener(ac_cl);
                 v.setOnClickListener(ac_cl);
@@ -62,7 +62,7 @@ public class DGVButtonAdapter extends SimpleAdapter {
             ImageView iv = UtilFun.cast(v.findViewById(R.id.iv_image));
             assert null != iv;
             Bitmap bm = ActionHelper.getBitMapFromName(hv);
-            if(null != bm) {
+            if (null != bm) {
                 iv.setImageBitmap(bm);
                 iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
             }
@@ -73,12 +73,13 @@ public class DGVButtonAdapter extends SimpleAdapter {
 
     /**
      * 获取当前动作
-     * @return  当前动作
+     *
+     * @return 当前动作
      */
-    public List<String> getCurAction()  {
+    public List<String> getCurAction() {
         ArrayList<String> ret_ls = new ArrayList<>();
         int ic = getCount();
-        for(int i = 0; i < ic; ++i) {
+        for (int i = 0; i < ic; ++i) {
             HashMap<String, Object> hmd = UtilFun.cast(getItem(i));
             String hv = UtilFun.cast(hmd.get(HKEY_ACT_NAME));
             ret_ls.add(hv);

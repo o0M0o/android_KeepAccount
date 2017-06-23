@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.dialog;
 
-import android.media.MediaCodec;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
 
@@ -8,41 +7,39 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.RecordTypeItem;
-import wxm.KeepAccount.R;
 
 /**
  * 日期选择对话框
  * Created by 123 on 2016/11/1.
  */
 public class DlgRecordInfo extends DlgOKOrNOBase {
-    private RecordTypeItem  mOldData;
-    private String          mRecordType;
-
     @BindView(R.id.ti_name)
-    TextInputEditText   mTIETName;
-
+    TextInputEditText mTIETName;
     @BindView(R.id.ti_note)
-    TextInputEditText   mTIETNote;
+    TextInputEditText mTIETNote;
+    private RecordTypeItem mOldData;
+    private String mRecordType;
 
-    public void setInitDate(RecordTypeItem initData)    {
+    public void setInitDate(RecordTypeItem initData) {
         mOldData = initData;
     }
 
-    public void  setRecordType(String type) {
+    public void setRecordType(String type) {
         mRecordType = type;
     }
 
 
-    public RecordTypeItem getCurDate()  {
+    public RecordTypeItem getCurDate() {
         String name = mTIETName.getText().toString();
         String note = mTIETNote.getText().toString();
-        if(UtilFun.StringIsNullOrEmpty(name) || UtilFun.StringIsNullOrEmpty(note))
+        if (UtilFun.StringIsNullOrEmpty(name) || UtilFun.StringIsNullOrEmpty(note))
             return null;
 
         RecordTypeItem ri = new RecordTypeItem();
-        if(null != mOldData)
+        if (null != mOldData)
             ri.set_id(mOldData.get_id());
         ri.setItemType(GlobalDef.STR_RECORD_PAY.equals(mRecordType) ?
                 RecordTypeItem.DEF_PAY : RecordTypeItem.DEF_INCOME);
@@ -54,7 +51,7 @@ public class DlgRecordInfo extends DlgOKOrNOBase {
 
     @Override
     protected View InitDlgView() {
-        if(UtilFun.StringIsNullOrEmpty(mRecordType)
+        if (UtilFun.StringIsNullOrEmpty(mRecordType)
                 || (!GlobalDef.STR_RECORD_PAY.equals(mRecordType) && !GlobalDef.STR_RECORD_INCOME.equals(mRecordType)))
             return null;
 
@@ -63,7 +60,7 @@ public class DlgRecordInfo extends DlgOKOrNOBase {
         View vw = View.inflate(getActivity(), R.layout.dlg_add_record_info, null);
         ButterKnife.bind(this, vw);
 
-        if(null != mOldData)    {
+        if (null != mOldData) {
             mTIETName.setText(mOldData.getType());
             mTIETNote.setText(mOldData.getNote());
         }

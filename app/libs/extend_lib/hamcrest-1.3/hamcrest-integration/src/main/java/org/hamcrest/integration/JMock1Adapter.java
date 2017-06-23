@@ -14,6 +14,12 @@ import org.jmock.core.Constraint;
  */
 public class JMock1Adapter implements Constraint {
 
+    private final Matcher<?> hamcrestMatcher;
+
+    public JMock1Adapter(Matcher<?> matcher) {
+        this.hamcrestMatcher = matcher;
+    }
+
     /**
      * Convenience factory method that will adapt a
      * Hamcrest {@link org.hamcrest.Matcher} to act as an
@@ -21,12 +27,6 @@ public class JMock1Adapter implements Constraint {
      */
     public static Constraint adapt(Matcher<?> matcher) {
         return new JMock1Adapter(matcher);
-    }
-
-    private final Matcher<?> hamcrestMatcher;
-
-    public JMock1Adapter(Matcher<?> matcher) {
-        this.hamcrestMatcher = matcher;
     }
 
     @Override

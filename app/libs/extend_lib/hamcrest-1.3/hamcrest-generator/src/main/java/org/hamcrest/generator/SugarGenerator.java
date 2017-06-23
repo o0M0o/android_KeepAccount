@@ -81,7 +81,7 @@ public class SugarGenerator implements Closeable, SugarConfiguration {
 
     /**
      * Generate all the factory methods using all the writers.
-     *
+     * <p>
      * This should always happen AFTER adding factory methods and writers.
      */
     public void generate() throws IOException {

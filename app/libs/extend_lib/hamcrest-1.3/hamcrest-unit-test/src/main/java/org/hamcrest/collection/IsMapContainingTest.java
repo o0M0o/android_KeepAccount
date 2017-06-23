@@ -18,7 +18,7 @@ public class IsMapContainingTest extends AbstractMatcherTest {
     }
 
     public void testMatchesMapContainingMatchingKeyAndValue() {
-        Map<String,Integer> map = new TreeMap<String,Integer>();
+        Map<String, Integer> map = new TreeMap<String, Integer>();
         map.put("a", 1);
         map.put("b", 2);
 
@@ -27,7 +27,7 @@ public class IsMapContainingTest extends AbstractMatcherTest {
         assertMismatchDescription("map was [<a=1>, <b=2>]", hasEntry(equalTo("c"), equalTo(3)), map);
     }
 
-//    no longer compiles. SF
+    //    no longer compiles. SF
 //    public void testMatchesMapContainingMatchingKeyAndValueWithoutGenerics() {
 //        Map map = new HashMap();
 //        map.put("a", 1);
@@ -50,7 +50,7 @@ public class IsMapContainingTest extends AbstractMatcherTest {
     // I still need to investigate how this behaves with code that doesn't use generics.
     // I expect ClassCastExceptions will be thrown.
     // -Joe.
-    
+
 //    public void testDoesNotMatchAnObjectThatIsNotAMap() {
 //        assertDoesNotMatch("should not matches a string",
 //                mapContaining(ANYTHING, ANYTHING), "not a map");

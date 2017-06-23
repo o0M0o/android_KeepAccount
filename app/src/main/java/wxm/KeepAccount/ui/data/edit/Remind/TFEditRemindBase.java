@@ -25,41 +25,34 @@ import java.util.Date;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.RemindItem;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
-import wxm.KeepAccount.R;
 
 /**
  * 编辑提醒基类
  * Created by 123 on 2016/10/9.
  */
-public abstract class TFEditRemindBase extends Fragment implements View.OnTouchListener  {
+public abstract class TFEditRemindBase extends Fragment implements View.OnTouchListener {
     private final static String TAG = "TFEditRemindBase";
-
-    protected Spinner         mSPRemindActiveType;
-
-    protected EditText      mETStartDate;
-    protected EditText      mETEndDate;
-    protected EditText      mETName;
-
-    protected EditText      mETAmount;
-    protected BigDecimal    mBDAmount;
-
-    protected Timestamp       mTSStartDate;
-    protected Timestamp       mTSEndDate;
-
-
     private final static String[] RAT_TYPE = {
             RemindItem.RAT_AMOUNT_BELOW,
             RemindItem.RAT_AMOUNT_EXCEED
     };
-
+    protected Spinner mSPRemindActiveType;
+    protected EditText mETStartDate;
+    protected EditText mETEndDate;
+    protected EditText mETName;
+    protected EditText mETAmount;
+    protected BigDecimal mBDAmount;
+    protected Timestamp mTSStartDate;
+    protected Timestamp mTSEndDate;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(null != view) {
+        if (null != view) {
             // init active type
             mSPRemindActiveType = UtilFun.cast(view.findViewById(R.id.sp_remind_active));
             assert null != mSPRemindActiveType;
@@ -111,13 +104,14 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
     /**
      * 确认输入数据接口API
      * 在此API中检查输入数据合法性/完整性，并完成后续工作
-     * @return  若一切正常返回true, 否则返回false
+     *
+     * @return 若一切正常返回true, 否则返回false
      */
     public abstract boolean onAccept();
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
             int vid = v.getId();
             switch (vid) {
                 case R.id.et_end_date:
@@ -164,9 +158,9 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
                     Calendar cd = Calendar.getInstance();
                     cd.setTime(j_dt);
                     DatePickerDialog dd = new DatePickerDialog(getContext(), dt
-                            ,cd.get(Calendar.YEAR)
-                            ,cd.get(Calendar.MONTH)
-                            ,cd.get(Calendar.DAY_OF_MONTH));
+                            , cd.get(Calendar.YEAR)
+                            , cd.get(Calendar.MONTH)
+                            , cd.get(Calendar.DAY_OF_MONTH));
 
                     dd.show();
                 }
@@ -179,11 +173,12 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
 
     /**
      * 检查名字有效性
-     * @return  若有效返回true, 否则返回false
+     *
+     * @return 若有效返回true, 否则返回false
      */
-    protected boolean checkName()   {
+    protected boolean checkName() {
         String name = mETName.getText().toString().trim();
-        if(0 == name.length())  {
+        if (0 == name.length()) {
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("提醒名不正确").
                     setMessage("提醒名不能为空!").
@@ -194,7 +189,7 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
             return false;
         }
 
-        if(ContextUtil.getRemindUtility().CheckRemindName(name))   {
+        if (ContextUtil.getRemindUtility().CheckRemindName(name)) {
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("提醒名不正确").
                     setMessage("提醒名已经存在!").
@@ -211,12 +206,13 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
     /**
      * 检查起止日期合法性
      * 并保存结果
-     * @return  若有效返回true, 否则返回false
+     *
+     * @return 若有效返回true, 否则返回false
      */
-    protected boolean checkDate()   {
+    protected boolean checkDate() {
         String s_de = mETStartDate.getText().toString().trim();
         String e_de = mETEndDate.getText().toString().trim();
-        if(0 == s_de.length())  {
+        if (0 == s_de.length()) {
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("缺少起始日期").
                     setMessage("起始日期不能为空!").
@@ -227,7 +223,7 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
             return false;
         }
 
-        if(0 == e_de.length())  {
+        if (0 == e_de.length()) {
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("缺少结束日期").
                     setMessage("结束日期不能为空!").
@@ -242,15 +238,13 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
         try {
             mTSStartDate = ToolUtil.StringToTimestamp(s_de);
             mTSEndDate = ToolUtil.StringToTimestamp(e_de);
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             Log.e(TAG, String.format(Locale.CHINA, "解析'%s'或'%s'到日期失败", s_de, e_de));
             return false;
         }
 
 
-        if(mTSEndDate.before(mTSStartDate))     {
+        if (mTSEndDate.before(mTSStartDate)) {
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("结束日期不正确").
                     setMessage("结束日期不能早于起始日期!").
@@ -267,11 +261,12 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
 
     /**
      * 检查金额数据合法性
-     * @return  合法返回true,否则返回false
+     *
+     * @return 合法返回true, 否则返回false
      */
-    protected boolean checkAmount()   {
+    protected boolean checkAmount() {
         String val = mETAmount.getText().toString().trim();
-        if(UtilFun.StringIsNullOrEmpty(val))    {
+        if (UtilFun.StringIsNullOrEmpty(val)) {
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("缺少预警金额").
                     setMessage("需要输入预警金额!").
@@ -288,11 +283,12 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
 
     /**
      * 检查预警条件合法性
-     * @return  合法返回true,否则返回false
+     *
+     * @return 合法返回true, 否则返回false
      */
-    protected boolean checkType()   {
+    protected boolean checkType() {
         String r = UtilFun.cast(mSPRemindActiveType.getSelectedItem());
-        if(UtilFun.StringIsNullOrEmpty(r))  {
+        if (UtilFun.StringIsNullOrEmpty(r)) {
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("缺少预警条件").
                     setMessage("需要选择预警条件!").

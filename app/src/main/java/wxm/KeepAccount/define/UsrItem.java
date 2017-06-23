@@ -26,7 +26,7 @@ public class UsrItem
     @DatabaseField(columnName = "pwd", dataType = DataType.STRING)
     private String pwd;
 
-    public UsrItem()    {
+    public UsrItem() {
         setName("");
         setPwd("");
         setId(-1);

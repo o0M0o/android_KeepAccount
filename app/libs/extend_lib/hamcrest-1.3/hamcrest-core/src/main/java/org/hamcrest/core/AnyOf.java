@@ -18,16 +18,6 @@ public class AnyOf<T> extends ShortcutCombination<T> {
         super(matchers);
     }
 
-    @Override
-    public boolean matches(Object o) {
-        return matches(o, true);
-    }
-
-    @Override
-    public void describeTo(Description description) {
-        describeTo(description, "or");
-    }
-
     /**
      * Creates a matcher that matches if the examined object matches <b>ANY</b> of the specified matchers.
      * <p/>
@@ -38,7 +28,7 @@ public class AnyOf<T> extends ShortcutCombination<T> {
     public static <T> AnyOf<T> anyOf(Iterable<Matcher<? super T>> matchers) {
         return new AnyOf<T>(matchers);
     }
-    
+
     /**
      * Creates a matcher that matches if the examined object matches <b>ANY</b> of the specified matchers.
      * <p/>
@@ -128,5 +118,15 @@ public class AnyOf<T> extends ShortcutCombination<T> {
         matchers.add(fifth);
         matchers.add(sixth);
         return anyOf(matchers);
+    }
+
+    @Override
+    public boolean matches(Object o) {
+        return matches(o, true);
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        describeTo(description, "or");
     }
 }

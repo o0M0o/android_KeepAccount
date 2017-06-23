@@ -16,6 +16,19 @@ public class IsIterableContainingInOrderTest extends AbstractMatcherTest {
     // temporary hack until the Java type system works
     private final Matcher<Iterable<? extends WithValue>> contains123 = contains(value(1), value(2), value(3));
 
+    public static WithValue make(int value) {
+        return new WithValue(value);
+    }
+
+    public static Matcher<WithValue> value(int value) {
+        return new FeatureMatcher<WithValue, Integer>(equalTo(value), "value with", "value") {
+            @Override
+            protected Integer featureValueOf(WithValue actual) {
+                return actual.getValue();
+            }
+        };
+    }
+
     @Override
     protected Matcher<?> createMatcher() {
         return contains(1, 2);
@@ -55,19 +68,19 @@ public class IsIterableContainingInOrderTest extends AbstractMatcherTest {
     }
 
     public static class WithValue {
-      private final int value;
-      public WithValue(int value) { this.value = value; }
-      public int getValue() { return value; }
-      @Override public String toString() { return "WithValue " + value; }
-    }
+        private final int value;
 
-    public static WithValue make(int value) {
-      return new WithValue(value);
-    }
+        public WithValue(int value) {
+            this.value = value;
+        }
 
-    public static Matcher<WithValue> value(int value) {
-      return new FeatureMatcher<WithValue, Integer>(equalTo(value), "value with", "value") {
-        @Override protected Integer featureValueOf(WithValue actual) { return actual.getValue(); }
-      };
+        public int getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return "WithValue " + value;
+        }
     }
 }

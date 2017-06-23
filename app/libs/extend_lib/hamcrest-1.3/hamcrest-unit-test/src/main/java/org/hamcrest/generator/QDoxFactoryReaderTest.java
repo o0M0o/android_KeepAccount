@@ -9,6 +9,25 @@ import java.util.List;
 
 public class QDoxFactoryReaderTest extends TestCase {
 
+    private static FactoryMethod wrapUsingQDoxedSource(FactoryMethod originalMethod,
+                                                       String className, String input) {
+        List<FactoryMethod> originalMethods = new ArrayList<FactoryMethod>();
+        originalMethods.add(originalMethod);
+
+        QDox qdox = new QDox();
+        qdox.addSource(new StringReader(input));
+
+        QDoxFactoryReader qDoxFactoryReader = new QDoxFactoryReader(
+                originalMethods, qdox, className);
+        return getFirstFactoryMethod(qDoxFactoryReader);
+    }
+
+    private static FactoryMethod getFirstFactoryMethod(QDoxFactoryReader qDoxFactoryReader) {
+        Iterator<FactoryMethod> iterator = qDoxFactoryReader.iterator();
+        iterator.hasNext();
+        return iterator.next();
+    }
+
     public void testExtractsOriginalParameterNamesFromSource() {
         FactoryMethod method = new FactoryMethod("org.SomeClass", "someMethod", "unusedReturnType");
         method.addParameter("java.lang.String", "badParamName");
@@ -23,7 +42,7 @@ public class QDoxFactoryReaderTest extends TestCase {
         assertEquals("java.lang.String", factoryMethod.getParameters().get(0).getType());
         assertEquals("realParamName", factoryMethod.getParameters().get(0).getName());
     }
-    
+
     public void testExtractsOriginalGenericParameterNamesFromSource() {
         FactoryMethod method = new FactoryMethod("org.SomeClass", "someMethod", "unusedReturnType");
         method.addParameter("java.util.Collection<java.lang.String>", "badParamName");
@@ -38,7 +57,7 @@ public class QDoxFactoryReaderTest extends TestCase {
         assertEquals("java.util.Collection<java.lang.String>", factoryMethod.getParameters().get(0).getType());
         assertEquals("realParamName", factoryMethod.getParameters().get(0).getName());
     }
-    
+
     public void testExtractsOriginalVarArgParameterNamesFromSource() {
         FactoryMethod method = new FactoryMethod("org.SomeClass", "someMethod", "unusedReturnType");
         method.addParameter("java.lang.String...", "badParamName");
@@ -71,25 +90,6 @@ public class QDoxFactoryReaderTest extends TestCase {
 
         assertEquals("This class does something.\n\n@return stuff.\n",
                 factoryMethod.getJavaDoc());
-    }
-
-    private static FactoryMethod wrapUsingQDoxedSource(FactoryMethod originalMethod,
-                                                String className, String input) {
-        List<FactoryMethod> originalMethods = new ArrayList<FactoryMethod>();
-        originalMethods.add(originalMethod);
-
-        QDox qdox = new QDox();
-        qdox.addSource(new StringReader(input));
-
-        QDoxFactoryReader qDoxFactoryReader = new QDoxFactoryReader(
-                originalMethods, qdox, className);
-        return getFirstFactoryMethod(qDoxFactoryReader);
-    }
-
-    private static FactoryMethod getFirstFactoryMethod(QDoxFactoryReader qDoxFactoryReader) {
-        Iterator<FactoryMethod> iterator = qDoxFactoryReader.iterator();
-        iterator.hasNext();
-        return iterator.next();
     }
 
 

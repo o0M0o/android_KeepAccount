@@ -21,13 +21,11 @@ import wxm.KeepAccount.R;
  * Created by ookoo on 2016/11/29.
  */
 public class FrgSetting extends FrgUtilityBase {
-    private final static int   PAGE_COUNT              = 4;
-    public final static int    PAGE_IDX_MAIN           = 0;
-    public final static int    PAGE_IDX_CHECK_VERSION  = 1;
-    public final static int    PAGE_IDX_CHART_COLOR    = 2;
-    public final static int    PAGE_IDX_REMIND         = 3;
-
-
+    public final static int PAGE_IDX_MAIN = 0;
+    public final static int PAGE_IDX_CHECK_VERSION = 1;
+    public final static int PAGE_IDX_CHART_COLOR = 2;
+    public final static int PAGE_IDX_REMIND = 3;
+    private final static int PAGE_COUNT = 4;
     @BindView(R.id.vp_pages)
     ViewPager mVPPage;
 
@@ -41,7 +39,7 @@ public class FrgSetting extends FrgUtilityBase {
 
     @Override
     protected void initUiComponent(View view) {
-        AppCompatActivity  a_ac = UtilFun.cast_t(getActivity());
+        AppCompatActivity a_ac = UtilFun.cast_t(getActivity());
 
         // for pages
         final PagerAdapter adapter = new PagerAdapter
@@ -57,17 +55,19 @@ public class FrgSetting extends FrgUtilityBase {
 
     /**
      * 切换到新页面
+     *
      * @param new_page 新页面postion
      */
-    public void change_page(int new_page)  {
+    public void change_page(int new_page) {
         mVPPage.setCurrentItem(new_page);
     }
 
     /**
-     *  得到当前页
-     * @return  当前页实例
+     * 得到当前页
+     *
+     * @return 当前页实例
      */
-    public TFSettingBase getCurrentPage()   {
+    public TFSettingBase getCurrentPage() {
         PagerAdapter pa = UtilFun.cast_t(mVPPage.getAdapter());
         return UtilFun.cast_t(pa.getItem(mVPPage.getCurrentItem()));
     }
@@ -81,13 +81,12 @@ public class FrgSetting extends FrgUtilityBase {
     }
 
 
-
     /**
      * fragment adapter
      */
     public class PagerAdapter extends FragmentStatePagerAdapter {
-        int                 mNumOfFrags;
-        private Fragment[]  mFRFrags;
+        int mNumOfFrags;
+        private Fragment[] mFRFrags;
 
         PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm);

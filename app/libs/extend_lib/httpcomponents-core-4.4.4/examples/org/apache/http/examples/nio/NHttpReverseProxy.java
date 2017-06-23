@@ -121,31 +121,31 @@ public class NHttpReverseProxy {
         System.out.println("Reverse proxy to " + targetHost);
 
         IOReactorConfig config = IOReactorConfig.custom()
-            .setIoThreadCount(1)
-            .setSoTimeout(3000)
-            .setConnectTimeout(3000)
-            .build();
+                .setIoThreadCount(1)
+                .setSoTimeout(3000)
+                .setConnectTimeout(3000)
+                .build();
         final ConnectingIOReactor connectingIOReactor = new DefaultConnectingIOReactor(config);
         final ListeningIOReactor listeningIOReactor = new DefaultListeningIOReactor(config);
 
         // Set up HTTP protocol processor for incoming connections
         HttpProcessor inhttpproc = new ImmutableHttpProcessor(
-                new HttpResponseInterceptor[] {
+                new HttpResponseInterceptor[]{
                         new ResponseDate(),
                         new ResponseServer("Test/1.1"),
                         new ResponseContent(),
                         new ResponseConnControl()
-         });
+                });
 
         // Set up HTTP protocol processor for outgoing connections
         HttpProcessor outhttpproc = new ImmutableHttpProcessor(
-                new HttpRequestInterceptor[] {
+                new HttpRequestInterceptor[]{
                         new RequestContent(),
                         new RequestTargetHost(),
                         new RequestConnControl(),
                         new RequestUserAgent("Test/1.1"),
                         new RequestExpectContinue(true)
-        });
+                });
 
         ProxyClientProtocolHandler clientHandler = new ProxyClientProtocolHandler();
         HttpAsyncRequester executor = new HttpAsyncRequester(
@@ -460,7 +460,8 @@ public class NHttpReverseProxy {
 
         public void requestCompleted(final HttpContext context) {
             synchronized (this.httpExchange) {
-                this.completed = true;;
+                this.completed = true;
+                ;
                 System.out.println("[client->proxy] " + this.httpExchange.getId() + " request completed");
                 this.httpExchange.setRequestReceived();
                 if (this.httpExchange.getOriginIOControl() != null) {
@@ -770,7 +771,9 @@ public class NHttpReverseProxy {
             return keepAlive;
         }
 
-    };
+    }
+
+    ;
 
     static class ProxyOutgoingConnectionReuseStrategy extends DefaultConnectionReuseStrategy {
 
@@ -785,7 +788,9 @@ public class NHttpReverseProxy {
             return keepAlive;
         }
 
-    };
+    }
+
+    ;
 
     static class ProxyServiceHandler extends HttpAsyncService {
 
@@ -828,7 +833,7 @@ public class NHttpReverseProxy {
 
         @Override
         public void connected(final NHttpClientConnection conn,
-                final Object attachment) throws IOException, HttpException {
+                              final Object attachment) throws IOException, HttpException {
             System.out.println("[proxy->origin] connection open " + conn);
             super.connected(conn, attachment);
         }

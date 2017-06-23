@@ -8,31 +8,29 @@ import android.view.MenuItem;
 
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.IncomeNoteItem;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.BudgetDBUtility;
 import wxm.KeepAccount.db.PayIncomeDBUtility;
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.ui.data.edit.base.IPreviewAndEditBase;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * 预览/编辑UI for note
  */
 public class ACPreveiwAndEdit extends BaseAppCompatActivity {
+    private final static String CHANGETO_PREVIEW = "预览";
+    private final static String CHANGETO_EDIT = "编辑";
     private IPreviewAndEditBase mTFBase;
-
-    private final static String     CHANGETO_PREVIEW = "预览";
-    private final static String     CHANGETO_EDIT    = "编辑";
-
-    private MenuItem    mMISwitch;
-    private MenuItem    mMISave;
+    private MenuItem mMISwitch;
+    private MenuItem mMISave;
 
     @Override
     protected void initUi(Bundle savedInstanceState) {
         Intent it = getIntent();
         String type = it.getStringExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE);
-        if(UtilFun.StringIsNullOrEmpty(type)
+        if (UtilFun.StringIsNullOrEmpty(type)
                 || (!GlobalDef.STR_RECORD_PAY.equals(type) && !GlobalDef.STR_RECORD_INCOME.equals(type)
                 && !GlobalDef.STR_RECORD_BUDGET.equals(type)))
             return;
@@ -53,7 +51,7 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
     protected void initFrgHolder() {
         Intent it = getIntent();
         String type = it.getStringExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE);
-        if(UtilFun.StringIsNullOrEmpty(type)
+        if (UtilFun.StringIsNullOrEmpty(type)
                 || (!GlobalDef.STR_RECORD_PAY.equals(type) && !GlobalDef.STR_RECORD_INCOME.equals(type)
                 && !GlobalDef.STR_RECORD_BUDGET.equals(type)))
             return;
@@ -65,11 +63,11 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
         PayIncomeDBUtility puit = ContextUtil.getPayIncomeUtility();
         BudgetDBUtility buit = ContextUtil.getBudgetUtility();
         int id = it.getIntExtra(GlobalDef.INTENT_LOAD_RECORD_ID, -1);
-        if(GlobalDef.STR_RECORD_PAY.equals(type)) {
+        if (GlobalDef.STR_RECORD_PAY.equals(type)) {
             ob = -1 != id ? puit.getPayDBUtility().getData(id) : null;
-        } else if(GlobalDef.STR_RECORD_BUDGET.equals(type)) {
+        } else if (GlobalDef.STR_RECORD_BUDGET.equals(type)) {
             ob = -1 != id ? buit.getData(id) : null;
-        } else  {
+        } else {
             IncomeNoteItem ii = -1 != id ? puit.getIncomeDBUtility().getData(id) : null;
             ob = ii;
         }
@@ -88,7 +86,7 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
         inflater.inflate(R.menu.mu_preview_edit, menu);
 
         mMISwitch = menu.findItem(R.id.mi_switch);
-        mMISave   = menu.findItem(R.id.mi_save);
+        mMISave = menu.findItem(R.id.mi_save);
         mMISwitch.setTitle(mTFBase.isPreviewPage() ? CHANGETO_EDIT : CHANGETO_PREVIEW);
         mMISave.setVisible(mTFBase.isEditPage());
         return true;
@@ -97,10 +95,10 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.mi_switch : {
+            case R.id.mi_switch: {
                 mMISave.setVisible(mTFBase.isPreviewPage());
                 mMISwitch.setTitle(mTFBase.isEditPage() ? CHANGETO_EDIT : CHANGETO_PREVIEW);
-                if(mTFBase.isPreviewPage())
+                if (mTFBase.isPreviewPage())
                     mTFBase.toEditPage();
                 else
                     mTFBase.toPreviewPage();
@@ -108,7 +106,7 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
             break;
 
             case R.id.mi_save: {
-                if(mTFBase.onAccept())    {
+                if (mTFBase.onAccept()) {
                     int ret_data = GlobalDef.INTRET_SURE;
                     Intent data = new Intent();
                     setResult(ret_data, data);
@@ -117,7 +115,7 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
             }
             break;
 
-            case R.id.mi_giveup:    {
+            case R.id.mi_giveup: {
                 int ret_data = GlobalDef.INTRET_GIVEUP;
                 Intent data = new Intent();
                 setResult(ret_data, data);

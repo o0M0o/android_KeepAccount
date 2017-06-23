@@ -14,20 +14,20 @@ import wxm.KeepAccount.utility.ContextUtil;
  */
 public class DlgResource {
     // for channel item shape
-    public static Drawable  mDAChannelSel;
-    public static Drawable  mDAChannelNoSel;
+    public static Drawable mDAChannelSel;
+    public static Drawable mDAChannelNoSel;
 
     // for sort icon
-    public static Drawable  mDASortDown;
-    public static Drawable  mDASortUp;
+    public static Drawable mDASortDown;
+    public static Drawable mDASortUp;
 
     // for show string
-    public static String    mSZSortByNameDown;
-    public static String    mSZSortByNameUp;
+    public static String mSZSortByNameDown;
+    public static String mSZSortByNameUp;
 
     // for color
-    public static int       mCLSelected;
-    public static int       mCLNotSelected;
+    public static int mCLSelected;
+    public static int mCLNotSelected;
 
     static {
         Context ct = ContextUtil.getInstance();
@@ -39,17 +39,17 @@ public class DlgResource {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mDAChannelNoSel = res.getDrawable(R.drawable.gi_channel_no_sel_shape, te);
-            mDAChannelSel   = res.getDrawable(R.drawable.gi_channel_sel_shape, te);
+            mDAChannelSel = res.getDrawable(R.drawable.gi_channel_sel_shape, te);
 
             mDASortDown = res.getDrawable(R.drawable.ic_sort_down_1, te);
-            mDASortUp   = res.getDrawable(R.drawable.ic_sort_up_1, te);
+            mDASortUp = res.getDrawable(R.drawable.ic_sort_up_1, te);
 
         } else {
             mDAChannelNoSel = res.getDrawable(R.drawable.gi_channel_no_sel_shape);
-            mDAChannelSel   = res.getDrawable(R.drawable.gi_channel_sel_shape);
+            mDAChannelSel = res.getDrawable(R.drawable.gi_channel_sel_shape);
 
             mDASortDown = res.getDrawable(R.drawable.ic_sort_down_1);
-            mDASortUp   = res.getDrawable(R.drawable.ic_sort_up_1);
+            mDASortUp = res.getDrawable(R.drawable.ic_sort_up_1);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

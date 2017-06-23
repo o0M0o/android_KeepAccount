@@ -21,21 +21,6 @@ public class IsArrayContainingInOrder<E> extends TypeSafeMatcher<E[]> {
         this.matchers = matchers;
     }
 
-    @Override
-    public boolean matchesSafely(E[] item) {
-        return iterableMatcher.matches(asList(item));
-    }
-    
-    @Override
-    public void describeMismatchSafely(E[] item, Description mismatchDescription) {
-      iterableMatcher.describeMismatch(asList(item), mismatchDescription);
-    }
-
-    @Override
-    public void describeTo(Description description) {
-        description.appendList("[", ", ", "]", matchers);
-    }
-
     /**
      * Creates a matcher for arrays that matcheswhen each item in the examined array is
      * logically equal to the corresponding item in the specified items.  For a positive match,
@@ -43,9 +28,8 @@ public class IsArrayContainingInOrder<E> extends TypeSafeMatcher<E[]> {
      * <p/>
      * For example:
      * <pre>assertThat(new String[]{"foo", "bar"}, contains("foo", "bar"))</pre>
-     * 
-     * @param items
-     *     the items that must equal the items within an examined array
+     *
+     * @param items the items that must equal the items within an examined array
      */
     @Factory
     public static <E> Matcher<E[]> arrayContaining(E... items) {
@@ -63,9 +47,8 @@ public class IsArrayContainingInOrder<E> extends TypeSafeMatcher<E[]> {
      * <p/>
      * For example:
      * <pre>assertThat(new String[]{"foo", "bar"}, contains(equalTo("foo"), equalTo("bar")))</pre>
-     * 
-     * @param itemMatchers
-     *     the matchers that must be satisfied by the items in the examined array
+     *
+     * @param itemMatchers the matchers that must be satisfied by the items in the examined array
      */
     @Factory
     public static <E> Matcher<E[]> arrayContaining(Matcher<? super E>... itemMatchers) {
@@ -79,12 +62,26 @@ public class IsArrayContainingInOrder<E> extends TypeSafeMatcher<E[]> {
      * <p/>
      * For example:
      * <pre>assertThat(new String[]{"foo", "bar"}, contains(Arrays.asList(equalTo("foo"), equalTo("bar"))))</pre>
-     * 
-     * @param itemMatchers
-     *     a list of matchers, each of which must be satisfied by the corresponding item in an examined array
+     *
+     * @param itemMatchers a list of matchers, each of which must be satisfied by the corresponding item in an examined array
      */
     @Factory
     public static <E> Matcher<E[]> arrayContaining(List<Matcher<? super E>> itemMatchers) {
         return new IsArrayContainingInOrder<E>(itemMatchers);
+    }
+
+    @Override
+    public boolean matchesSafely(E[] item) {
+        return iterableMatcher.matches(asList(item));
+    }
+
+    @Override
+    public void describeMismatchSafely(E[] item, Description mismatchDescription) {
+        iterableMatcher.describeMismatch(asList(item), mismatchDescription);
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        description.appendList("[", ", ", "]", matchers);
     }
 }

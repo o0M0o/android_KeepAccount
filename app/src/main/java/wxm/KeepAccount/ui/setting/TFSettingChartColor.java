@@ -16,28 +16,24 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.utility.PreferencesUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.dialog.DlgSelectColor;
+import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
  * 图表颜色设置页面
  * Created by 123 on 2016/10/10.
  */
-public class TFSettingChartColor extends TFSettingBase  {
-    private HashMap<String, Integer>    mHMColors;
-
+public class TFSettingChartColor extends TFSettingBase {
     @BindView(R.id.iv_pay)
-    ImageView   mIVPay;
-
+    ImageView mIVPay;
     @BindView(R.id.iv_income)
-    ImageView   mIVIncome;
-
+    ImageView mIVIncome;
     @BindView(R.id.iv_budget_balance)
-    ImageView   mIVBudgetBalance;
-
+    ImageView mIVBudgetBalance;
     @BindView(R.id.iv_budget_used)
-    ImageView   mIVBudgetUsed;
+    ImageView mIVBudgetUsed;
+    private HashMap<String, Integer> mHMColors;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -71,23 +67,23 @@ public class TFSettingChartColor extends TFSettingBase  {
                 int sel_col = ds.getSelectedColor();
 
                 mBSettingDirty = true;
-                switch (vid)    {
-                    case R.id.iv_pay :
+                switch (vid) {
+                    case R.id.iv_pay:
                         mIVPay.setBackgroundColor(sel_col);
                         mHMColors.put(PreferencesUtil.SET_PAY_COLOR, sel_col);
                         break;
 
-                    case R.id.iv_income :
+                    case R.id.iv_income:
                         mIVIncome.setBackgroundColor(sel_col);
                         mHMColors.put(PreferencesUtil.SET_INCOME_COLOR, sel_col);
                         break;
 
-                    case R.id.iv_budget_balance :
+                    case R.id.iv_budget_balance:
                         mIVBudgetBalance.setBackgroundColor(sel_col);
                         mHMColors.put(PreferencesUtil.SET_BUDGET_BALANCE_COLOR, sel_col);
                         break;
 
-                    case R.id.iv_budget_used :
+                    case R.id.iv_budget_used:
                         mIVBudgetUsed.setBackgroundColor(sel_col);
                         mHMColors.put(PreferencesUtil.SET_BUDGET_UESED_COLOR, sel_col);
                         break;
@@ -103,7 +99,7 @@ public class TFSettingChartColor extends TFSettingBase  {
 
     @Override
     public void updateSetting() {
-        if(mBSettingDirty)  {
+        if (mBSettingDirty) {
             PreferencesUtil.saveChartColor(mHMColors);
             mBSettingDirty = false;
         }

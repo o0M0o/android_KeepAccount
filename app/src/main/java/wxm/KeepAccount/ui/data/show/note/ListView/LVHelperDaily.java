@@ -7,10 +7,8 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -27,47 +25,47 @@ import java.util.Map;
 
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
-import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.FastViewHolder;
-import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
-import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
-import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.utility.ToolUtil;
+import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.utility.NoteDataHelper;
-import wxm.KeepAccount.ui.utility.NoteShowInfo;
-import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
-import wxm.KeepAccount.ui.data.show.note.ACDailyDetail;
+import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteEdit;
 import wxm.KeepAccount.ui.data.report.ACReport;
+import wxm.KeepAccount.ui.data.show.note.ACDailyDetail;
+import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
+import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
+import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
+import wxm.KeepAccount.ui.utility.NoteShowInfo;
+import wxm.KeepAccount.utility.ContextUtil;
+import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * 日数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
 public class LVHelperDaily extends LVBase {
-    // 若为true则数据以时间降序排列
-    private boolean mBTimeDownOrder = true;
-
     // for action
     //private final static int ACTION_NONE    = 0;
     private final static int ACTION_DELETE = 1;
     private final static int ACTION_EDIT = 2;
+    // 若为true则数据以时间降序排列
+    private boolean mBTimeDownOrder = true;
     private int mActionType = ACTION_EDIT;
 
     public LVHelperDaily() {
         super();
 
         LOG_TAG = "LVHelperDaily";
-        mBActionExpand  = false;
+        mBActionExpand = false;
     }
 
     /**
      * 过滤视图事件
-     * @param event     事件
+     *
+     * @param event 事件
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
@@ -94,13 +92,14 @@ public class LVHelperDaily extends LVBase {
 
     /**
      * 附加动作
-     * @param v   动作view
+     *
+     * @param v 动作view
      */
     @OnClick({R.id.ib_sort, R.id.ib_refresh, R.id.ib_delete,
-                R.id.ib_add, R.id.ib_report})
+            R.id.ib_add, R.id.ib_report})
     public void onActionClick(View v) {
-        switch (v.getId())  {
-            case R.id.ib_sort :     {
+        switch (v.getId()) {
+            case R.id.ib_sort: {
                 mBTimeDownOrder = !mBTimeDownOrder;
 
                 mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
@@ -111,21 +110,21 @@ public class LVHelperDaily extends LVBase {
             }
             break;
 
-            case R.id.ib_refresh :  {
+            case R.id.ib_refresh: {
                 mActionType = ACTION_EDIT;
                 reloadView(getContext(), false);
             }
             break;
 
-            case R.id.ib_delete :  {
-                if(ACTION_DELETE != mActionType) {
+            case R.id.ib_delete: {
+                if (ACTION_DELETE != mActionType) {
                     mActionType = ACTION_DELETE;
                     redrawUI();
                 }
             }
             break;
 
-            case R.id.ib_add  :  {
+            case R.id.ib_add: {
                 ACNoteShow ac = getRootActivity();
                 Intent intent = new Intent(ac, ACNoteEdit.class);
                 intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
@@ -144,7 +143,7 @@ public class LVHelperDaily extends LVBase {
             }
             break;
 
-            case R.id.ib_report  :   {
+            case R.id.ib_report: {
                 final String[] d_s = {"", ""};
 
                 DlgSelectReportDays dlg_days = new DlgSelectReportDays();
@@ -180,7 +179,8 @@ public class LVHelperDaily extends LVBase {
 
     /**
      * "接受"或者"取消"后动作
-     * @param v     动作view
+     *
+     * @param v 动作view
      */
     @OnClick({R.id.bt_accpet, R.id.bt_giveup, R.id.bt_giveup_filter})
     public void onAccpetOrGiveupClick(View v) {
@@ -195,9 +195,9 @@ public class LVHelperDaily extends LVBase {
                     List<String> ls_days = cur_ap.getWaitDeleteDays();
                     HashMap<String, ArrayList<INote>> hm =
                             NoteDataHelper.getInstance().getNotesForDay();
-                    for(String day : ls_days)   {
+                    for (String day : ls_days) {
                         List<INote> ls_n = hm.get(day);
-                        for(INote n : ls_n) {
+                        for (INote n : ls_n) {
                             if (n.isPayNote())
                                 al_p.add(n.getId());
                             else
@@ -260,16 +260,16 @@ public class LVHelperDaily extends LVBase {
                     km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
                     map.put(K_DAY_NUMEBER, km);
 
-                    int year  = Integer.valueOf(k.substring(0, 4));
+                    int year = Integer.valueOf(k.substring(0, 4));
                     int month = Integer.valueOf(k.substring(5, 7));
-                    int day   = Integer.valueOf(k.substring(8, 10));
+                    int day = Integer.valueOf(k.substring(8, 10));
                     Calendar cl_day = Calendar.getInstance();
                     cl_day.set(year, month, day);
                     map.put(K_DAY_IN_WEEK, ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK)));
 
                     map.put(K_DAY_PAY_COUNT, String.valueOf(ni.getPayCount()));
                     map.put(K_DAY_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
-                    map.put(K_DAY_PAY_AMOUNT,  ni.getSZPayAmount());
+                    map.put(K_DAY_PAY_AMOUNT, ni.getSZPayAmount());
                     map.put(K_DAY_INCOME_AMOUNT, ni.getSZIncomeAmount());
 
                     BigDecimal bd_l = ni.getBalance();
@@ -321,12 +321,13 @@ public class LVHelperDaily extends LVBase {
 
     /**
      * 加载UI的工作
-     * @param b_fully   若为true则加载数据
+     *
+     * @param b_fully 若为true则加载数据
      */
-    private void loadUIUtility(boolean b_fully)    {
+    private void loadUIUtility(boolean b_fully) {
         Log.d(LOG_TAG, "in loadUIUtility, b_fully = " + Boolean.toString(b_fully));
         String[] calls = ToolUtil.getCallStack(8);
-        for(int i = 0; i < calls.length; ++i)   {
+        for (int i = 0; i < calls.length; ++i) {
             Log.v(LOG_TAG, "in loadUIUtility, [" + i + "] = " + calls[i]);
         }
 
@@ -336,7 +337,7 @@ public class LVHelperDaily extends LVBase {
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
         setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType && !mBFilter ? View.VISIBLE : View.GONE);
 
-        if(b_fully) {
+        if (b_fully) {
             // load show data
             LinkedList<HashMap<String, String>> n_mainpara;
             if (mBFilter) {
@@ -367,7 +368,7 @@ public class LVHelperDaily extends LVBase {
     /**
      * 调整数据排序
      */
-    private void reorderData()  {
+    private void reorderData() {
         Collections.reverse(mMainPara);
     }
     /// END PRIVATE
@@ -376,10 +377,10 @@ public class LVHelperDaily extends LVBase {
     /**
      * 首级列表adapter
      */
-    private class SelfAdapter extends SimpleAdapter     {
+    private class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
 
-        private ArrayList<String>   mALWaitDeleteDays = new ArrayList<>();
+        private ArrayList<String> mALWaitDeleteDays = new ArrayList<>();
 
         private View.OnClickListener mCLAdapter = v -> {
             int vid = v.getId();
@@ -388,19 +389,19 @@ public class LVHelperDaily extends LVBase {
             HashMap<String, String> hm = UtilFun.cast(getItem(pos));
             String k_tag = hm.get(K_TAG);
 
-            switch (vid)    {
-                case R.id.rl_delete :   {
-                    if(mALWaitDeleteDays.contains(k_tag))  {
+            switch (vid) {
+                case R.id.rl_delete: {
+                    if (mALWaitDeleteDays.contains(k_tag)) {
                         mALWaitDeleteDays.remove(k_tag);
                         v.setBackgroundColor(LVResource.mCRLVItemNoSel);
-                    } else  {
+                    } else {
                         mALWaitDeleteDays.add(k_tag);
                         v.setBackgroundColor(LVResource.mCRLVItemSel);
                     }
                 }
                 break;
 
-                default:    {
+                default: {
                     ACNoteShow ac = getRootActivity();
                     Intent it = new Intent(ac, ACDailyDetail.class);
                     it.putExtra(ACDailyDetail.K_HOTDAY, k_tag);
@@ -430,7 +431,7 @@ public class LVHelperDaily extends LVBase {
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
             FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
-                                    view, R.layout.li_daily_show);
+                    view, R.layout.li_daily_show);
 
             View root_view = viewHolder.getConvertView();
             root_view.setBackgroundColor(0 == position % 2 ?
@@ -463,7 +464,8 @@ public class LVHelperDaily extends LVBase {
 
         /**
          * 返回等待删除的日数据
-         * @return  待删除日数据
+         *
+         * @return 待删除日数据
          */
         public List<String> getWaitDeleteDays() {
             return mALWaitDeleteDays;

@@ -64,7 +64,7 @@ import java.util.concurrent.CountDownLatch;
  * that supports SSL or use a more complex HttpAsyncClient.
  *
  * @see org.apache.http.impl.nio.pool.BasicNIOConnPool#BasicNIOConnPool(org.apache.http.nio.reactor.ConnectingIOReactor,
- *   org.apache.http.nio.pool.NIOConnFactory, int)
+ * org.apache.http.nio.pool.NIOConnFactory, int)
  * @see org.apache.http.impl.nio.pool.BasicNIOConnFactory
  */
 public class PipeliningHttpClient {
@@ -133,7 +133,7 @@ public class PipeliningHttpClient {
                     @Override
                     public void completed(final List<HttpResponse> result) {
                         latch.countDown();
-                        for (HttpResponse response: result) {
+                        for (HttpResponse response : result) {
                             System.out.println(target + "->" + response.getStatusLine());
                         }
                     }

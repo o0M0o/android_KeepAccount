@@ -10,7 +10,7 @@ import wxm.KeepAccount.ui.data.show.note.ListView.LVHelperBudget;
 
 public class TFShowBudget extends TFShowBase {
 
-    public TFShowBudget()   {
+    public TFShowBudget() {
         super();
         LOG_TAG = "TFShowBudget";
 

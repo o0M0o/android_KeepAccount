@@ -12,7 +12,8 @@ import android.widget.ListView;
 public class ListViewHelper {
     /**
      * 次级列表视图计算列表高度有错误，使用此函数校正
-     * @param listView      列表
+     *
+     * @param listView 列表
      */
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         int totalHeight = 0;
@@ -27,7 +28,7 @@ public class ListViewHelper {
         }
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight+ (listView.getDividerHeight() * (sap.getCount() - 1));
+        params.height = totalHeight + (listView.getDividerHeight() * (sap.getCount() - 1));
         // listView.getDividerHeight()获取子项间分隔符占用的高度
         // params.height最后得到整个ListView完整显示需要的高度
         listView.setLayoutParams(params);

@@ -130,7 +130,7 @@ public class HttpFileServer {
 
     }
 
-    static class HttpFileHandler implements HttpRequestHandler  {
+    static class HttpFileHandler implements HttpRequestHandler {
 
         private final String docRoot;
 
@@ -162,7 +162,7 @@ public class HttpFileServer {
                 response.setStatusCode(HttpStatus.SC_NOT_FOUND);
                 StringEntity entity = new StringEntity(
                         "<html><body><h1>File" + file.getPath() +
-                        " not found</h1></body></html>",
+                                " not found</h1></body></html>",
                         ContentType.create("text/html", "UTF-8"));
                 response.setEntity(entity);
                 System.out.println("File " + file.getPath() + " not found");

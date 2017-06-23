@@ -9,17 +9,17 @@ import android.view.MenuItem;
 
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 
 /**
  * 支出/收入数据编辑UI
  */
 public class ACNoteEdit extends BaseAppCompatActivity {
-    public static final String  PARA_ACTION          = "para_action";
-    public static final String  PARA_NOTE_PAY        = "note_pay";
-    public static final String  PARA_NOTE_INCOME     = "note_income";
+    public static final String PARA_ACTION = "para_action";
+    public static final String PARA_NOTE_PAY = "note_pay";
+    public static final String PARA_NOTE_INCOME = "note_income";
 
     public static final int DEF_NOTE_MAXLEN = 200;
     private String mAction;
@@ -40,28 +40,28 @@ public class ACNoteEdit extends BaseAppCompatActivity {
         Intent it = getIntent();
         assert null != it;
         mAction = it.getStringExtra(PARA_ACTION);
-        if(UtilFun.StringIsNullOrEmpty(mAction)) {
+        if (UtilFun.StringIsNullOrEmpty(mAction)) {
             Log.e(LOG_TAG, "调用intent缺少'PARA_ACTION'参数");
-            return ;
+            return;
         }
 
         // for holder
         mFGHolder = new FrgNoteEdit();
         Bundle bd = new Bundle();
         String date = it.getStringExtra(GlobalDef.STR_RECORD_DATE);
-        if(!UtilFun.StringIsNullOrEmpty(date))  {
+        if (!UtilFun.StringIsNullOrEmpty(date)) {
             bd.putString(GlobalDef.STR_RECORD_DATE, date);
         }
 
         bd.putString(PARA_ACTION, mAction);
-        if(mAction.equals(GlobalDef.STR_MODIFY)) {
+        if (mAction.equals(GlobalDef.STR_MODIFY)) {
             int pid = it.getIntExtra(ACNoteEdit.PARA_NOTE_PAY, GlobalDef.INVALID_ID);
             int iid = it.getIntExtra(ACNoteEdit.PARA_NOTE_INCOME, GlobalDef.INVALID_ID);
-            if(GlobalDef.INVALID_ID != pid)   {
+            if (GlobalDef.INVALID_ID != pid) {
                 bd.putInt(ACNoteEdit.PARA_NOTE_PAY, pid);
-            } else if(GlobalDef.INVALID_ID != iid)    {
+            } else if (GlobalDef.INVALID_ID != iid) {
                 bd.putInt(ACNoteEdit.PARA_NOTE_INCOME, iid);
-            } else  {
+            } else {
                 Log.e(LOG_TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");
                 return;
             }
@@ -80,10 +80,11 @@ public class ACNoteEdit extends BaseAppCompatActivity {
 
     /**
      * 得到当前选中的tab item
-     * @return  当前选中的tab item
+     *
+     * @return 当前选中的tab item
      */
     private TFEditBase getHotTabItem() {
-        return ((FrgNoteEdit)mFGHolder).getHotTabItem();
+        return ((FrgNoteEdit) mFGHolder).getHotTabItem();
     }
 
 
@@ -92,7 +93,7 @@ public class ACNoteEdit extends BaseAppCompatActivity {
         switch (item.getItemId()) {
             case R.id.mi_save: {
                 TFEditBase tb = getHotTabItem();
-                if(tb.onAccept()) {
+                if (tb.onAccept()) {
                     finish();
                 }
             }

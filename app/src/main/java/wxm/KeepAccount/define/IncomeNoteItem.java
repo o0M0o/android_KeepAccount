@@ -24,33 +24,66 @@ import cn.wxm.andriodutillib.DBHelper.IDBRow;
 @DatabaseTable(tableName = "tbIncomeNote")
 public class IncomeNoteItem
         implements Parcelable, INote, IDBRow<Integer> {
-    public final static String FIELD_TS         = "ts";
-    public final static String FIELD_USR        = "usr_id";
+    public final static String FIELD_TS = "ts";
+    public final static String FIELD_USR = "usr_id";
+    public static final Parcelable.Creator<IncomeNoteItem> CREATOR
+            = new Parcelable.Creator<IncomeNoteItem>() {
+        public IncomeNoteItem createFromParcel(Parcel in) {
+            return new IncomeNoteItem(in);
+        }
 
+        public IncomeNoteItem[] newArray(int size) {
+            return new IncomeNoteItem[size];
+        }
+    };
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     private int _id;
-
     @DatabaseField(columnName = "usr_id", foreign = true, foreignColumnName = UsrItem.FIELD_ID,
             canBeNull = false)
     private UsrItem usr;
-
     @DatabaseField(columnName = "budget_id", foreign = true, foreignColumnName = BudgetItem.FIELD_ID,
             canBeNull = true)
     private BudgetItem budget;
-
     @DatabaseField(columnName = "info", canBeNull = false, dataType = DataType.STRING)
     private String info;
-
     @DatabaseField(columnName = "note", dataType = DataType.STRING)
     private String note;
-
     @DatabaseField(columnName = "val", dataType = DataType.BIG_DECIMAL)
     private BigDecimal val;
-
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
     private Timestamp ts;
-
     private String valStr;
+
+    public IncomeNoteItem() {
+        setTs(new Timestamp(0));
+        setVal(BigDecimal.ZERO);
+        setInfo("");
+        setNote("");
+    }
+
+    private IncomeNoteItem(Parcel in) {
+        setId(in.readInt());
+
+        setUsr(new UsrItem());
+        getUsr().setId(in.readInt());
+
+        setBudget(new BudgetItem());
+        getBudget().set_id(in.readInt());
+
+        setInfo(in.readString());
+        setNote(in.readString());
+        setVal(new BigDecimal(in.readString()));
+
+        try {
+            setTs(new Timestamp(0));
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+            Date date = format.parse(in.readString());
+            getTs().setTime(date.getTime());
+        } catch (ParseException ex) {
+            setTs(new Timestamp(0));
+        }
+    }
 
     @Override
     public boolean isPayNote() {
@@ -102,7 +135,7 @@ public class IncomeNoteItem
         this.note = note;
     }
 
-    public String getValToStr()     {
+    public String getValToStr() {
         return valStr;
     }
 
@@ -137,7 +170,6 @@ public class IncomeNoteItem
         this.usr = usr;
     }
 
-
     @Override
     public BudgetItem getBudget() {
         return null;
@@ -148,21 +180,11 @@ public class IncomeNoteItem
         throw new AssertionError("NOT SUPPORT");
     }
 
-
-    public IncomeNoteItem()
-    {
-        setTs(new Timestamp(0));
-        setVal(BigDecimal.ZERO);
-        setInfo("");
-        setNote("");
-    }
-
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format(Locale.CHINA
-                ,"info : %s, val : %f, timestamp : %s\nnote : %s"
-                ,getInfo() ,getVal() ,getTs().toString() ,getNote());
+                , "info : %s, val : %f, timestamp : %s\nnote : %s"
+                , getInfo(), getVal(), getTs().toString(), getNote());
     }
 
     public int describeContents() {
@@ -174,13 +196,13 @@ public class IncomeNoteItem
 
         int usrid = GlobalDef.INVALID_ID;
         UsrItem ui = getUsr();
-        if(null != ui)
+        if (null != ui)
             usrid = ui.getId();
         out.writeInt(usrid);
 
         int budgetid = GlobalDef.INVALID_ID;
         BudgetItem bi = getBudget();
-        if(null != bi)
+        if (null != bi)
             budgetid = bi.get_id();
         out.writeInt(budgetid);
 
@@ -188,43 +210,6 @@ public class IncomeNoteItem
         out.writeString(getNote());
         out.writeString(getVal().toString());
         out.writeString(getTs().toString());
-    }
-
-    public static final Parcelable.Creator<IncomeNoteItem> CREATOR
-            = new Parcelable.Creator<IncomeNoteItem>() {
-        public IncomeNoteItem createFromParcel(Parcel in) {
-            return new IncomeNoteItem(in);
-        }
-
-        public IncomeNoteItem[] newArray(int size) {
-            return new IncomeNoteItem[size];
-        }
-    };
-
-    private IncomeNoteItem(Parcel in)   {
-        setId(in.readInt());
-
-        setUsr(new UsrItem());
-        getUsr().setId(in.readInt());
-
-        setBudget(new BudgetItem());
-        getBudget().set_id(in.readInt());
-
-        setInfo(in.readString());
-        setNote(in.readString());
-        setVal(new BigDecimal(in.readString()));
-
-        try {
-            setTs(new Timestamp(0));
-
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-            Date date = format.parse(in.readString());
-            getTs().setTime(date.getTime());
-        }
-        catch (ParseException ex)
-        {
-            setTs(new Timestamp(0));
-        }
     }
 
     @Override

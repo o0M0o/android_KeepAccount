@@ -10,8 +10,8 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
 
 /**
@@ -19,13 +19,13 @@ import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
  * Created by 123 on 2016/10/29.
  */
 public class TFPreviewBudget extends TFPreviewBase {
-    private TextView  mTVAllAmount;
-    private TextView  mTVLeaveAmount;
-    private TextView  mTVName;
-    private TextView  mTVNote;
+    private TextView mTVAllAmount;
+    private TextView mTVLeaveAmount;
+    private TextView mTVName;
+    private TextView mTVNote;
 
     private BudgetItem mBIData;
-    private View       mSelfView;
+    private View mSelfView;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -61,25 +61,25 @@ public class TFPreviewBudget extends TFPreviewBase {
 
     @Override
     public void reLoadView() {
-        if(null != mSelfView)
+        if (null != mSelfView)
             init_view();
     }
 
     /**
      * 初始化视图
      */
-    private void init_view()    {
-        if(null != mBIData) {
+    private void init_view() {
+        if (null != mBIData) {
             mTVName.setText(mBIData.getName());
             mTVNote.setText(mBIData.getNote());
             mTVAllAmount.setText(String.format(Locale.CHINA, "%.02f", mBIData.getAmount()));
 
             String ra = String.format(Locale.CHINA, "%.02f", mBIData.getRemainderAmount());
             mTVLeaveAmount.setText(ra);
-            if(ra.startsWith("-"))  {
+            if (ra.startsWith("-")) {
                 mTVLeaveAmount.setTextColor(getResources().getColor(R.color.darkred));
             }
-        } else  {
+        } else {
             mTVName.setText("");
             mTVNote.setText("");
             mTVAllAmount.setText("");

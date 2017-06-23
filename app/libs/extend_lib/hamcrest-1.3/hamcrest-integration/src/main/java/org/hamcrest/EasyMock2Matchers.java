@@ -4,7 +4,6 @@ import org.hamcrest.core.IsEqual;
 import org.hamcrest.integration.EasyMock2Adapter;
 
 /**
- *
  * @author Joe Walnes
  */
 public class EasyMock2Matchers {

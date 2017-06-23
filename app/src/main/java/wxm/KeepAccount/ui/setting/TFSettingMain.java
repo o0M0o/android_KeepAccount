@@ -14,8 +14,8 @@ import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * 设置主页面
@@ -65,7 +65,7 @@ public class TFSettingMain extends TFSettingBase {
                         setMessage("此操作不能恢复，是否继续操作!").
                         setPositiveButton("是", (dialog, which) ->
                                 new AsyncTask<Void, Void, Void>() {
-                                    private AlertDialog  mADDlg;
+                                    private AlertDialog mADDlg;
 
                                     @Override
                                     protected void onPreExecute() {

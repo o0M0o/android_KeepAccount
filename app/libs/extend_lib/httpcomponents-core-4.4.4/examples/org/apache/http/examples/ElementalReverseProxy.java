@@ -91,7 +91,7 @@ public class ElementalReverseProxy {
         t.start();
     }
 
-    static class ProxyHandler implements HttpRequestHandler  {
+    static class ProxyHandler implements HttpRequestHandler {
 
         private final HttpHost target;
         private final HttpProcessor httpproc;
@@ -169,22 +169,22 @@ public class ElementalReverseProxy {
 
             // Set up HTTP protocol processor for incoming connections
             final HttpProcessor inhttpproc = new ImmutableHttpProcessor(
-                    new HttpRequestInterceptor[] {
+                    new HttpRequestInterceptor[]{
                             new RequestContent(),
                             new RequestTargetHost(),
                             new RequestConnControl(),
                             new RequestUserAgent("Test/1.1"),
                             new RequestExpectContinue(true)
-             });
+                    });
 
             // Set up HTTP protocol processor for outgoing connections
             final HttpProcessor outhttpproc = new ImmutableHttpProcessor(
-                    new HttpResponseInterceptor[] {
+                    new HttpResponseInterceptor[]{
                             new ResponseDate(),
                             new ResponseServer("Test/1.1"),
                             new ResponseContent(),
                             new ResponseConnControl()
-            });
+                    });
 
             // Set up outgoing request executor
             final HttpRequestExecutor httpexecutor = new HttpRequestExecutor();
@@ -283,10 +283,12 @@ public class ElementalReverseProxy {
             } finally {
                 try {
                     this.inconn.shutdown();
-                } catch (final IOException ignore) {}
+                } catch (final IOException ignore) {
+                }
                 try {
                     this.outconn.shutdown();
-                } catch (final IOException ignore) {}
+                } catch (final IOException ignore) {
+                }
             }
         }
 

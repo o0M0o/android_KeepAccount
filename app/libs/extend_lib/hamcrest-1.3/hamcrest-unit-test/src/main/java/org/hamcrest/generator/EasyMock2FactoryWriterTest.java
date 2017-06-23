@@ -21,12 +21,12 @@ public class EasyMock2FactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod(method.getName(), method);
         assertEquals("" +
-                "  public static java.lang.Object anyObject() {\n" +
-                "    org.hamcrest.integration.EasyMockAdapter.adapt(\n" +
-                "      com.example.MyMatcher.anyObject());\n" +
-                "    return null;\n" +
-                "  }\n" +
-                "\n",
+                        "  public static java.lang.Object anyObject() {\n" +
+                        "    org.hamcrest.integration.EasyMockAdapter.adapt(\n" +
+                        "      com.example.MyMatcher.anyObject());\n" +
+                        "    return null;\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 
@@ -36,12 +36,12 @@ public class EasyMock2FactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod(method.getName(), method);
         assertEquals("" +
-                "  public static String anyString() {\n" +
-                "    org.hamcrest.integration.EasyMockAdapter.adapt(\n" +
-                "      com.example.MyMatcher.anyString());\n" +
-                "    return null;\n" +
-                "  }\n" +
-                "\n",
+                        "  public static String anyString() {\n" +
+                        "    org.hamcrest.integration.EasyMockAdapter.adapt(\n" +
+                        "      com.example.MyMatcher.anyString());\n" +
+                        "    return null;\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 
@@ -51,12 +51,12 @@ public class EasyMock2FactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod(method.getName(), method);
         assertEquals("" +
-                "  public static java.util.Map<com.Foo<Cheese>,?> weirdThing() {\n" +
-                "    org.hamcrest.integration.EasyMockAdapter.adapt(\n" +
-                "      com.example.MyMatcher.weirdThing());\n" +
-                "    return null;\n" +
-                "  }\n" +
-                "\n",
+                        "  public static java.util.Map<com.Foo<Cheese>,?> weirdThing() {\n" +
+                        "    org.hamcrest.integration.EasyMockAdapter.adapt(\n" +
+                        "      com.example.MyMatcher.weirdThing());\n" +
+                        "    return null;\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 
@@ -67,12 +67,12 @@ public class EasyMock2FactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod(method.getName(), method);
         assertEquals("" +
-                "  public static java.lang.Object between(int[] lower, com.blah.Cheesable<Long>... upper) {\n" +
-                "    org.hamcrest.integration.EasyMockAdapter.adapt(\n" +
-                "      com.example.MyMatcher.between(lower, upper));\n" +
-                "    return null;\n" +
-                "  }\n" +
-                "\n",
+                        "  public static java.lang.Object between(int[] lower, com.blah.Cheesable<Long>... upper) {\n" +
+                        "    org.hamcrest.integration.EasyMockAdapter.adapt(\n" +
+                        "      com.example.MyMatcher.between(lower, upper));\n" +
+                        "    return null;\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 
@@ -83,12 +83,12 @@ public class EasyMock2FactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod(method.getName(), method);
         assertEquals("" +
-                "  public static java.lang.Object tricky() throws java.io.IOException, com.foo.CheeselessException {\n" +
-                "    org.hamcrest.integration.EasyMockAdapter.adapt(\n" +
-                "      com.example.MyMatcher.tricky());\n" +
-                "    return null;\n" +
-                "  }\n" +
-                "\n",
+                        "  public static java.lang.Object tricky() throws java.io.IOException, com.foo.CheeselessException {\n" +
+                        "    org.hamcrest.integration.EasyMockAdapter.adapt(\n" +
+                        "      com.example.MyMatcher.tricky());\n" +
+                        "    return null;\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 //

@@ -24,59 +24,59 @@
         <!-- for name -->
         <TextView
             android:id="@+id/tv_budget_name"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
             android:text="生活预算"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- for yun -->
         <ImageView
             android:id="@+id/iv_yuan"
-            app:layout_constraintStart_toStartOf="@id/tv_budget_name"
-            app:layout_constraintTop_toBottomOf="@id/tv_budget_name"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginTop="2dp"
-            android:src="@drawable/ic_yuan" />
+            android:src="@drawable/ic_yuan"
+            app:layout_constraintStart_toStartOf="@id/tv_budget_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_budget_name" />
 
         <TextView
             android:id="@+id/tv_budget_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            app:layout_constraintStart_toEndOf="@id/iv_yuan"
-            app:layout_constraintTop_toTopOf="@id/iv_yuan"
-            app:layout_constraintBottom_toBottomOf="@id/iv_yuan"
             android:text="(总额)7500/(剩余)4000"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_yuan"
+            app:layout_constraintStart_toEndOf="@id/iv_yuan"
+            app:layout_constraintTop_toTopOf="@id/iv_yuan" />
 
         <!-- for note -->
         <ImageView
             android:id="@+id/iv_note"
-            app:layout_constraintStart_toStartOf="@id/tv_budget_name"
-            app:layout_constraintTop_toBottomOf="@id/iv_yuan"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
-            android:src="@drawable/ic_note" />
+            android:layout_marginTop="2dp"
+            android:src="@drawable/ic_note"
+            app:layout_constraintStart_toStartOf="@id/tv_budget_name"
+            app:layout_constraintTop_toBottomOf="@id/iv_yuan" />
 
         <TextView
             android:id="@+id/tv_budget_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            app:layout_constraintStart_toEndOf="@id/iv_note"
-            app:layout_constraintTop_toTopOf="@id/iv_note"
-            app:layout_constraintBottom_toBottomOf="@id/iv_note"
             android:text="生活开支类预算"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_note"
+            app:layout_constraintStart_toEndOf="@id/iv_note"
+            app:layout_constraintTop_toTopOf="@id/iv_note" />
 
         <ImageView
             android:id="@+id/iv_edit"

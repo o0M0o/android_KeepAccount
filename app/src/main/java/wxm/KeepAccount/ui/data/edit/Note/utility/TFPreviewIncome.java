@@ -10,25 +10,25 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.IncomeNoteItem;
-import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
+import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * preview fragment for budget
  * Created by 123 on 2016/10/29.
  */
 public class TFPreviewIncome extends TFPreviewBase {
-    private TextView  mTVAmount;
-    private TextView  mTVInfo;
-    private TextView  mTVNote;
-    private TextView  mTVDate;
-    private TextView  mTVDayInWeek;
-    private TextView  mTVTime;
+    private TextView mTVAmount;
+    private TextView mTVInfo;
+    private TextView mTVNote;
+    private TextView mTVDate;
+    private TextView mTVDayInWeek;
+    private TextView mTVTime;
 
-    private View            mSelfView;
-    private IncomeNoteItem  mINData;
+    private View mSelfView;
+    private IncomeNoteItem mINData;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -66,22 +66,22 @@ public class TFPreviewIncome extends TFPreviewBase {
 
     @Override
     public void reLoadView() {
-        if(null != mSelfView)
+        if (null != mSelfView)
             init_view();
     }
 
     /**
      * 初始化视图
      */
-    private void init_view()    {
-        if(null != mINData) {
+    private void init_view() {
+        if (null != mINData) {
             mTVAmount.setText(String.format(Locale.CHINA, "%.02f", mINData.getVal()));
             mTVInfo.setText(mINData.getInfo());
             mTVNote.setText(mINData.getNote());
             mTVDate.setText(ToolUtil.FormatDateString(mINData.getTs().toString().substring(0, 10)));
             mTVTime.setText(mINData.getTs().toString().substring(11, 16));
             mTVDayInWeek.setText(ToolUtil.getDayInWeek(mINData.getTs()));
-        } else  {
+        } else {
             mTVAmount.setText("");
             mTVInfo.setText("");
             mTVNote.setText("");

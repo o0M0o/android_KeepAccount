@@ -34,13 +34,6 @@ public class ExampleWithJMock1 extends MockObjectTestCase {
      * that will provide an adapter to JMock Constraints.
      */
 
-    /**
-     * A sample interface to be mocked.
-     */
-    public static interface AnInterface {
-        void doStuff(String string);
-    }
-
     private Mock mock = mock(AnInterface.class);
     private AnInterface anInterface = (AnInterface) mock.proxy();
 
@@ -74,6 +67,13 @@ public class ExampleWithJMock1 extends MockObjectTestCase {
         assertThat("i like cheese", stringContains("cheese")); // jMock Constraint.
         assertThat("xx", equalTo("xx")); // Hamcrest Matcher.
         assertThat("yy", not(equalTo("xx"))); // Mixture of both.
+    }
+
+    /**
+     * A sample interface to be mocked.
+     */
+    public static interface AnInterface {
+        void doStuff(String string);
     }
 
 }

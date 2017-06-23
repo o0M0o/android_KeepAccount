@@ -1,149 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/white"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_up_buttons"
-        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:background="@color/grey_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_marginTop="4dp"
+        android:background="@color/grey_2">
 
         <RelativeLayout
             android:id="@+id/rl_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginBottom="4dp"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:background="@color/white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:background="@color/white">
+
             <ImageView
                 android:id="@+id/iv_add"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_add_1"
                 android:layout_width="36dp"
-                android:layout_height="36dp" />
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_add_1" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_minus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginBottom="4dp"
             android:layout_marginLeft="58dp"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:background="@color/white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:background="@color/white">
+
             <ImageView
                 android:id="@+id/iv_minus"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_minus_1"
                 android:layout_width="36dp"
-                android:layout_height="36dp" />
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_minus_1" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_pencil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginBottom="4dp"
             android:layout_marginLeft="110dp"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:background="@color/white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:background="@color/white">
+
             <ImageView
                 android:id="@+id/iv_pencil"
-                android:padding="8dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_pencil"
                 android:layout_width="36dp"
-                android:layout_height="36dp" />
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_pencil" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_accept"
-            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="4dp"
             android:layout_marginRight="58dp"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:background="@color/white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:background="@color/white">
+
             <ImageView
                 android:id="@+id/iv_accept"
-                android:padding="8dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_accept"
                 android:layout_width="36dp"
-                android:layout_height="36dp" />
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_accept" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_reject"
-            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="4dp"
             android:layout_marginRight="12dp"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:background="@color/white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:background="@color/white">
+
             <ImageView
                 android:id="@+id/iv_reject"
-                android:padding="11dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_reject"
                 android:layout_width="36dp"
-                android:layout_height="36dp" />
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                android:padding="11dp"
+                android:src="@drawable/ic_reject" />
         </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_note"
-        android:background="@color/grey_2"
-        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_marginTop="8dp"
+        android:background="@color/grey_2">
 
         <TextView
             android:id="@+id/tv_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_marginBottom="2dp"
             android:layout_marginLeft="6dp"
             android:layout_marginTop="6dp"
-            android:layout_marginBottom="2dp"
-            android:text="交通开销"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:text="交通开销" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_gv"
-        android:layout_marginTop="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_marginTop="2dp">
+
         <GridView
+            android:id="@+id/gv_record_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/gv_record_info"
-            android:numColumns="4"
-            android:verticalSpacing="4dp"
-            android:horizontalSpacing="4dp"
-            android:columnWidth="42dp"
             android:background="@color/grey_2"
-            android:padding="8dp" />
+            android:columnWidth="42dp"
+            android:horizontalSpacing="4dp"
+            android:numColumns="4"
+            android:padding="8dp"
+            android:verticalSpacing="4dp" />
     </RelativeLayout>
 
     <!--

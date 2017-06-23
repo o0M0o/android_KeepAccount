@@ -12,7 +12,7 @@ public abstract class TFPreviewBase extends Fragment {
     /**
      * 设置预览参数
      *
-     * @param obj     预览参数
+     * @param obj 预览参数
      */
     public abstract void setPreviewPara(Object obj);
 
@@ -20,7 +20,7 @@ public abstract class TFPreviewBase extends Fragment {
     /**
      * 获得当前数据
      *
-     * @return  当前数据，可以为null
+     * @return 当前数据，可以为null
      */
     public abstract Object getCurData();
 

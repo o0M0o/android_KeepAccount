@@ -18,30 +18,8 @@ public class RecordTypeItem
         implements Parcelable, IDBRow<Integer> {
     public final static String FIELD_ITEMTYPE = "itemType";
 
-    public final static String DEF_INCOME   = "income";
-    public final static String DEF_PAY      = "pay";
-
-    @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
-    private int _id;
-
-    @DatabaseField(columnName = "itemType", canBeNull = false, dataType = DataType.STRING)
-    private String itemType;
-
-    @DatabaseField(columnName = "type", canBeNull = false, dataType = DataType.STRING)
-    private String type;
-
-    @DatabaseField(columnName = "note", dataType = DataType.STRING)
-    private String note;
-
-
-    public RecordTypeItem() {
-        set_id(-1);
-        setItemType("");
-        setType("");
-        setNote("");
-    }
-
-
+    public final static String DEF_INCOME = "income";
+    public final static String DEF_PAY = "pay";
     public static final Creator<RecordTypeItem> CREATOR = new Creator<RecordTypeItem>() {
         @Override
         public RecordTypeItem createFromParcel(Parcel in) {
@@ -53,6 +31,29 @@ public class RecordTypeItem
             return new RecordTypeItem[size];
         }
     };
+    @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
+    private int _id;
+    @DatabaseField(columnName = "itemType", canBeNull = false, dataType = DataType.STRING)
+    private String itemType;
+    @DatabaseField(columnName = "type", canBeNull = false, dataType = DataType.STRING)
+    private String type;
+    @DatabaseField(columnName = "note", dataType = DataType.STRING)
+    private String note;
+
+
+    public RecordTypeItem() {
+        set_id(-1);
+        setItemType("");
+        setType("");
+        setNote("");
+    }
+
+    private RecordTypeItem(Parcel in) {
+        set_id(in.readInt());
+        setItemType(in.readString());
+        setType(in.readString());
+        setNote(in.readString());
+    }
 
     public int get_id() {
         return _id;
@@ -106,13 +107,6 @@ public class RecordTypeItem
         out.writeString(getItemType());
         out.writeString(getType());
         out.writeString(getNote());
-    }
-
-    private RecordTypeItem(Parcel in)   {
-        set_id(in.readInt());
-        setItemType(in.readString());
-        setType(in.readString());
-        setNote(in.readString());
     }
 
     @Override

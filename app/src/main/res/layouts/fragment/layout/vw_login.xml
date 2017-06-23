@@ -63,12 +63,12 @@
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="48dp"
-            android:layout_marginRight="48dp"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="64dp"
             android:layout_marginTop="32dp"
             android:background="@drawable/bt_shape"
             android:text="@string/action_sign_in"
-            android:textColor="@color/text_fit"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <Button
@@ -76,12 +76,12 @@
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="48dp"
-            android:layout_marginRight="48dp"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="64dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/bt_shape"
             android:text="@string/action_register"
-            android:textColor="@color/text_fit"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <Button
@@ -89,12 +89,12 @@
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="48dp"
-            android:layout_marginRight="48dp"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="64dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/bt_shape"
             android:text="@string/action_def_usr_login"
-            android:textColor="@color/text_fit"
+            android:textColor="@color/white"
             android:textSize="16sp" />
     </LinearLayout>
 </RelativeLayout>

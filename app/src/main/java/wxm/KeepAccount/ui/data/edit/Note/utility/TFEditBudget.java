@@ -21,12 +21,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.dialog.DlgLongTxt;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
+import wxm.KeepAccount.ui.dialog.DlgLongTxt;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * 编辑支出
@@ -34,21 +34,16 @@ import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
  */
 public class TFEditBudget extends TFEditBase {
     private final static String TAG = "TFEditBudget";
-    private final static int  MAX_NOTELEN = 200;
-
-    private BudgetItem              mBIData;
-
+    private final static int MAX_NOTELEN = 200;
     @BindView(R.id.et_budget_name)
-    TextInputEditText       mETName;
-
+    TextInputEditText mETName;
     @BindView(R.id.et_budget_amount)
-    TextInputEditText       mETAmount;
-
+    TextInputEditText mETAmount;
     @BindView(R.id.tv_note)
-    TextView    mTVNote;
-
+    TextView mTVNote;
     @BindString(R.string.notice_input_note)
-    String      mSZDefNote;
+    String mSZDefNote;
+    private BudgetItem mBIData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -83,7 +78,7 @@ public class TFEditBudget extends TFEditBase {
 
         String amount = mETAmount.getText().toString();
 
-        if(UtilFun.StringIsNullOrEmpty(name))   {
+        if (UtilFun.StringIsNullOrEmpty(name)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage("请输入预算名!").setTitle("警告");
             AlertDialog dlg = builder.create();
@@ -94,8 +89,8 @@ public class TFEditBudget extends TFEditBase {
         }
 
         BudgetItem cbi = ContextUtil.getBudgetUtility().getBudgetByName(name);
-        if((null != cbi)
-                && ((null == mBIData) || (mBIData.get_id() != cbi.get_id())))  {
+        if ((null != cbi)
+                && ((null == mBIData) || (mBIData.get_id() != cbi.get_id()))) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage("预算名已经存在!").setTitle("警告");
             AlertDialog dlg = builder.create();
@@ -105,7 +100,7 @@ public class TFEditBudget extends TFEditBase {
             return false;
         }
 
-        if(UtilFun.StringIsNullOrEmpty(amount))   {
+        if (UtilFun.StringIsNullOrEmpty(amount)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage("请输入预算金额!").setTitle("警告");
             AlertDialog dlg = builder.create();
@@ -121,8 +116,8 @@ public class TFEditBudget extends TFEditBase {
         bi.setNote(note);
 
         boolean s_ret = b_create ? ContextUtil.getBudgetUtility().createData(bi)
-                                    : ContextUtil.getBudgetUtility().modifyData(bi);
-        if(!s_ret)  {
+                : ContextUtil.getBudgetUtility().modifyData(bi);
+        if (!s_ret) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage(b_create ? "创建预算数据失败!" : "更新预算数据失败")
                     .setTitle("警告");
@@ -135,12 +130,12 @@ public class TFEditBudget extends TFEditBase {
 
     @Override
     public Object getCurData() {
-        if(null != getView()) {
+        if (null != getView()) {
             String name = mETName.getText().toString();
             String amount = mETAmount.getText().toString();
 
             BudgetItem bi = new BudgetItem();
-            if(null != mBIData) {
+            if (null != mBIData) {
                 bi.set_id(mBIData.get_id());
                 bi.setUsr(mBIData.getUsr());
             }
@@ -157,7 +152,7 @@ public class TFEditBudget extends TFEditBase {
 
     @Override
     public void reLoadView() {
-        if(null != getView())
+        if (null != getView())
             init_view();
     }
 
@@ -165,12 +160,12 @@ public class TFEditBudget extends TFEditBase {
     /**
      * 初始化视图
      */
-    private void init_view()    {
+    private void init_view() {
         if (UtilFun.StringIsNullOrEmpty(mAction)
                 || (GlobalDef.STR_MODIFY.equals(mAction) && null == mBIData))
-            return ;
+            return;
 
-        if(null != mBIData) {
+        if (null != mBIData) {
             mETName.setText(mBIData.getName());
             mETAmount.setText(mBIData.getAmount().toPlainString());
 
@@ -183,7 +178,7 @@ public class TFEditBudget extends TFEditBase {
     /**
      * 初始化组件
      */
-    private void init_component()   {
+    private void init_component() {
         mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
         mTVNote.setOnTouchListener((view, motionEvent) -> {
@@ -229,7 +224,7 @@ public class TFEditBudget extends TFEditBase {
             @Override
             public void afterTextChanged(Editable s) {
                 int pos = s.toString().indexOf(".");
-                if(pos >= 0) {
+                if (pos >= 0) {
                     int after_len = s.length() - (pos + 1);
                     if (after_len > 2) {
                         mETAmount.setError("小数点后超过两位数!");

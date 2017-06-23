@@ -29,14 +29,6 @@ public class IsEventFromTest extends AbstractMatcherTest {
         assertMismatchDescription("source was \"source 2\"", isEventMatcher, ev2);
     }
 
-    private static class DerivedEvent extends EventObject {
-        private static final long serialVersionUID = 1L;
-
-        public DerivedEvent(Object source) {
-            super(source);
-        }
-    }
-
     public void testCanTestForSpecificEventClasses() {
         Object o = new Object();
         DerivedEvent goodEv = new DerivedEvent(o);
@@ -50,5 +42,13 @@ public class IsEventFromTest extends AbstractMatcherTest {
         assertMismatchDescription("source was \"wrong source\"", isEventMatcher, wrongSource);
         assertMismatchDescription("item type was java.util.EventObject", isEventMatcher, wrongType);
         assertMismatchDescription("item type was java.util.EventObject", isEventMatcher, wrongSourceAndType);
+    }
+
+    private static class DerivedEvent extends EventObject {
+        private static final long serialVersionUID = 1L;
+
+        public DerivedEvent(Object source) {
+            super(source);
+        }
     }
 }

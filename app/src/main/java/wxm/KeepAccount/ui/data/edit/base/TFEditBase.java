@@ -16,7 +16,7 @@ public abstract class TFEditBase extends Fragment {
      * @param action 可以为以下参数 --
      *               * “更新”(GlobalDef.STR_MODIFY)
      *               * “新建”(GlobalDef.STR_CREATE)
-     * @param obj     若是“更新”，则此参数为待更新数据
+     * @param obj    若是“更新”，则此参数为待更新数据
      */
     public abstract void setCurData(String action, Object obj);
 
@@ -24,14 +24,14 @@ public abstract class TFEditBase extends Fragment {
     /**
      * 接受数据时调用
      *
-     * @return   若成功返回true
+     * @return 若成功返回true
      */
     public abstract boolean onAccept();
 
     /**
      * 获得当前数据
      *
-     * @return  当前数据，可以为null
+     * @return 当前数据，可以为null
      */
     public abstract Object getCurData();
 

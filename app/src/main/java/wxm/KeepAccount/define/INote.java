@@ -9,9 +9,11 @@ import java.sql.Timestamp;
  */
 public interface INote {
     boolean isPayNote();
+
     boolean isIncomeNote();
 
     PayNoteItem toPayNote();
+
     IncomeNoteItem toIncomeNote();
 
     int getId();
@@ -28,9 +30,9 @@ public interface INote {
 
     BigDecimal getVal();
 
-    String getValToStr();
-
     void setVal(BigDecimal val);
+
+    String getValToStr();
 
     Timestamp getTs();
 

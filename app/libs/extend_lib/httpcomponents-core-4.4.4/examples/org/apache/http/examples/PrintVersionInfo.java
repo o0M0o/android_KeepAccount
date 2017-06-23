@@ -33,31 +33,31 @@ import org.apache.http.util.VersionInfo;
  * Prints version information for debugging purposes.
  * This can be used to verify that the correct versions of the
  * HttpComponent JARs are picked up from the classpath.
- *
- *
  */
 public class PrintVersionInfo {
 
-    /** A default list of module packages. */
+    /**
+     * A default list of module packages.
+     */
     private final static String[] MODULE_LIST = {
-        "org.apache.http",              // HttpCore
-        "org.apache.http.nio",          // HttpCore NIO
-        "org.apache.http.client",       // HttpClient
+            "org.apache.http",              // HttpCore
+            "org.apache.http.nio",          // HttpCore NIO
+            "org.apache.http.client",       // HttpClient
     };
 
 
     /**
      * Prints version information.
      *
-     * @param args      command line arguments. Leave empty to print version
-     *                  information for the default packages. Otherwise, pass
-     *                  a list of packages for which to get version info.
+     * @param args command line arguments. Leave empty to print version
+     *             information for the default packages. Otherwise, pass
+     *             a list of packages for which to get version info.
      */
     public static void main(String args[]) {
-        String[]    pckgs = (args.length > 0) ? args : MODULE_LIST;
+        String[] pckgs = (args.length > 0) ? args : MODULE_LIST;
         VersionInfo[] via = VersionInfo.loadVersionInfo(pckgs, null);
         System.out.println("version info for thread context classloader:");
-        for (int i=0; i<via.length; i++)
+        for (int i = 0; i < via.length; i++)
             System.out.println(via[i]);
 
         System.out.println();
@@ -67,9 +67,9 @@ public class PrintVersionInfo {
         // there may be a problem with multiple versions in the classpath
 
         via = VersionInfo.loadVersionInfo
-            (pckgs, PrintVersionInfo.class.getClassLoader());
+                (pckgs, PrintVersionInfo.class.getClassLoader());
         System.out.println("version info for static classloader:");
-        for (int i=0; i<via.length; i++)
+        for (int i = 0; i < via.length; i++)
             System.out.println(via[i]);
     }
 }

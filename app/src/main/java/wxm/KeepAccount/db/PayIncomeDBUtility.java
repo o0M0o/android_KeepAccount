@@ -26,38 +26,41 @@ import wxm.KeepAccount.utility.ContextUtil;
  * 备忘本数据库工具类
  * Created by ookoo on 2016/11/16.
  */
-public class PayIncomeDBUtility  {
-    private PayDBUtility        mDUPay;
-    private IncomeDBUtility     mDUIncome;
+public class PayIncomeDBUtility {
+    private PayDBUtility mDUPay;
+    private IncomeDBUtility mDUIncome;
 
     public PayIncomeDBUtility() {
         super();
-        mDUPay      = new PayDBUtility();
-        mDUIncome   = new IncomeDBUtility();
+        mDUPay = new PayDBUtility();
+        mDUIncome = new IncomeDBUtility();
     }
 
     /**
      * 返回pay数据辅助类
-     * @return  辅助类
+     *
+     * @return 辅助类
      */
-    public PayDBUtility getPayDBUtility()   {
+    public PayDBUtility getPayDBUtility() {
         return mDUPay;
     }
 
     /**
      * 返回income数据辅助类
-     * @return  辅助类
+     *
+     * @return 辅助类
      */
-    public IncomeDBUtility getIncomeDBUtility()   {
+    public IncomeDBUtility getIncomeDBUtility() {
         return mDUIncome;
     }
 
 
     /**
      * 得到数据最后被更改时间
-     * @return  数据最后更新时间
+     *
+     * @return 数据最后更新时间
      */
-    public Timestamp getDataLastChangeTime()    {
+    public Timestamp getDataLastChangeTime() {
         Timestamp ts_p = mDUPay.getDataLastChangeTime();
         Timestamp ts_i = mDUIncome.getDataLastChangeTime();
 
@@ -67,17 +70,18 @@ public class PayIncomeDBUtility  {
     /**
      * 根据预算查找支出数据
      * 并根据支出数据更新预算
-     * @param bi  待匹配预算
+     *
+     * @param bi 待匹配预算
      * @return 查找到的数据
      */
-    public List<PayNoteItem> getPayNoteByBudget(BudgetItem bi)  {
-        List<PayNoteItem> ls_pay =  ContextUtil.getDBHelper().getPayDataREDao()
+    public List<PayNoteItem> getPayNoteByBudget(BudgetItem bi) {
+        List<PayNoteItem> ls_pay = ContextUtil.getDBHelper().getPayDataREDao()
                 .queryForEq(PayNoteItem.FIELD_BUDGET, bi.get_id());
 
         bi.useBudget(BigDecimal.ZERO);
-        if(!UtilFun.ListIsNullOrEmpty(ls_pay)) {
+        if (!UtilFun.ListIsNullOrEmpty(ls_pay)) {
             BigDecimal all_pay = BigDecimal.ZERO;
-            for(PayNoteItem i : ls_pay) {
+            for (PayNoteItem i : ls_pay) {
                 all_pay = all_pay.add(i.getVal());
             }
 
@@ -90,16 +94,17 @@ public class PayIncomeDBUtility  {
 
     /**
      * 获得当前用户所有支出/收入数据
+     *
      * @return 当前用户的所有记录
      */
-    private List<INote> getAllNotes()   {
+    private List<INote> getAllNotes() {
         List<PayNoteItem> payls = getPayDBUtility().getAllData();
         List<IncomeNoteItem> incomels = getIncomeDBUtility().getAllData();
         List<INote> objls = new LinkedList<>();
-        if(null != payls)
+        if (null != payls)
             objls.addAll(payls);
 
-        if(null != incomels)
+        if (null != incomels)
             objls.addAll(incomels);
 
         return objls;
@@ -108,9 +113,10 @@ public class PayIncomeDBUtility  {
     /**
      * 获得当前用户所有日度支出/收入数据
      * 并以 日期 --->  数据链表 方式返回数据
+     *
      * @return 日期 --->  数据链表
      */
-    public HashMap<String, ArrayList<INote>> getAllNotesToDay()    {
+    public HashMap<String, ArrayList<INote>> getAllNotesToDay() {
         List<INote> ret = getAllNotes();
         //Collections.sort(ret, (t1, t2) -> t1.getTs().compareTo(t2.getTs()));
 
@@ -133,9 +139,10 @@ public class PayIncomeDBUtility  {
     /**
      * 获得当前用户所有月度支出/收入数据
      * 并以 日期 --->  数据链表 方式返回数据
+     *
      * @return 日期 --->  数据链表
      */
-    public HashMap<String, ArrayList<INote>> getAllNotesToMonth()    {
+    public HashMap<String, ArrayList<INote>> getAllNotesToMonth() {
         List<INote> ret = getAllNotes();
         HashMap<String, ArrayList<INote>> hm_data = new HashMap<>();
         for (INote i : ret) {
@@ -156,9 +163,10 @@ public class PayIncomeDBUtility  {
     /**
      * 获得当前用户所有年度支出/收入数据
      * 并以 日期 --->  数据链表 方式返回数据
+     *
      * @return 日期 --->  数据链表
      */
-    public HashMap<String, ArrayList<INote>> getAllNotesToYear()    {
+    public HashMap<String, ArrayList<INote>> getAllNotesToYear() {
         List<INote> ret = getAllNotes();
         HashMap<String, ArrayList<INote>> hm_data = new HashMap<>();
         for (INote i : ret) {
@@ -179,30 +187,30 @@ public class PayIncomeDBUtility  {
 
     /**
      * 添加支出记录
+     *
      * @param lsi 待添加的记录集合
-     * @return  返回添加成功的数据量
+     * @return 返回添加成功的数据量
      */
-    public int addPayNotes(List<PayNoteItem> lsi)    {
+    public int addPayNotes(List<PayNoteItem> lsi) {
         UsrItem cur_usr = ContextUtil.getCurUsr();
         int ret = 0;
-        if(null != cur_usr) {
-            for(PayNoteItem i : lsi) {
-                if(null == i.getUsr())
+        if (null != cur_usr) {
+            for (PayNoteItem i : lsi) {
+                if (null == i.getUsr())
                     i.setUsr(cur_usr);
             }
 
             ret = mDUPay.createDatas(lsi);
-        }
-        else    {
+        } else {
             boolean nousr = false;
-            for(PayNoteItem i : lsi) {
-                if(null == i.getUsr())  {
+            for (PayNoteItem i : lsi) {
+                if (null == i.getUsr()) {
                     nousr = true;
                     break;
                 }
             }
 
-            if(!nousr) {
+            if (!nousr) {
                 ret = mDUPay.createDatas(lsi);
             }
         }
@@ -213,30 +221,30 @@ public class PayIncomeDBUtility  {
 
     /**
      * 添加收入记录
+     *
      * @param lsi 待添加的记录集合
-     * @return  返回添加成功的数据量
+     * @return 返回添加成功的数据量
      */
-    public int addIncomeNotes(List<IncomeNoteItem> lsi)    {
+    public int addIncomeNotes(List<IncomeNoteItem> lsi) {
         UsrItem cur_usr = ContextUtil.getCurUsr();
         int ret = 0;
-        if(null != cur_usr) {
-            for(IncomeNoteItem i : lsi) {
-                if(null == i.getUsr())
+        if (null != cur_usr) {
+            for (IncomeNoteItem i : lsi) {
+                if (null == i.getUsr())
                     i.setUsr(cur_usr);
             }
 
             ret = mDUIncome.createDatas(lsi);
-        }
-        else    {
+        } else {
             boolean nousr = false;
-            for(IncomeNoteItem i : lsi) {
-                if(null == i.getUsr())  {
+            for (IncomeNoteItem i : lsi) {
+                if (null == i.getUsr()) {
                     nousr = true;
                     break;
                 }
             }
 
-            if(!nousr) {
+            if (!nousr) {
                 ret = mDUIncome.createDatas(lsi);
             }
         }
@@ -247,20 +255,22 @@ public class PayIncomeDBUtility  {
 
     /**
      * 删除支出记录
+     *
      * @param lsi 待删除的记录集合的id值
-     * @return  删除的记录数
+     * @return 删除的记录数
      */
-    public int deletePayNotes(List<Integer> lsi)  {
+    public int deletePayNotes(List<Integer> lsi) {
         return mDUPay.removeDatas(lsi);
     }
 
 
     /**
      * 删除支出记录
+     *
      * @param lsi 待删除的记录集合的id值
-     * @return  删除的记录数
+     * @return 删除的记录数
      */
-    public int deleteIncomeNotes(List<Integer> lsi)  {
+    public int deleteIncomeNotes(List<Integer> lsi) {
         return mDUIncome.removeDatas(lsi);
     }
 
@@ -268,7 +278,7 @@ public class PayIncomeDBUtility  {
     /**
      * 支出数据辅助类
      */
-    public class PayDBUtility extends DBUtilityBase<PayNoteItem, Integer>   {
+    public class PayDBUtility extends DBUtilityBase<PayNoteItem, Integer> {
         PayDBUtility() {
             super();
         }
@@ -282,7 +292,7 @@ public class PayIncomeDBUtility  {
         @Override
         public List<PayNoteItem> getAllData() {
             UsrItem ui = ContextUtil.getCurUsr();
-            if(null == ui)
+            if (null == ui)
                 return new ArrayList<>();
 
             return getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
@@ -311,7 +321,7 @@ public class PayIncomeDBUtility  {
     /**
      * 收入数据辅助类
      */
-    public class IncomeDBUtility extends DBUtilityBase<IncomeNoteItem, Integer>   {
+    public class IncomeDBUtility extends DBUtilityBase<IncomeNoteItem, Integer> {
         IncomeDBUtility() {
             super();
         }
@@ -324,7 +334,7 @@ public class PayIncomeDBUtility  {
         @Override
         public List<IncomeNoteItem> getAllData() {
             UsrItem ui = ContextUtil.getCurUsr();
-            if(null == ui)
+            if (null == ui)
                 return new ArrayList<>();
 
             return getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());

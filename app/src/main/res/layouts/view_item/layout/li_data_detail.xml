@@ -11,10 +11,10 @@
         <include
             android:id="@+id/rl_delete"
             layout="@layout/item_act_delete"
-            android:layout_alignTop="@+id/rl_holder"
-            android:layout_alignBottom="@+id/rl_holder"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/rl_holder"
+            android:layout_alignTop="@+id/rl_holder" />
 
         <RelativeLayout
             android:id="@+id/rl_holder"
@@ -30,10 +30,10 @@
 
             <include
                 android:id="@+id/rl_pay"
-                android:layout_below="@id/rl_income"
                 layout="@layout/liit_data_pay"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rl_income" />
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

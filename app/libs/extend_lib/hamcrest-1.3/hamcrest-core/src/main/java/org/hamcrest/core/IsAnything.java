@@ -23,16 +23,6 @@ public class IsAnything<T> extends BaseMatcher<T> {
         this.message = message;
     }
 
-    @Override
-    public boolean matches(Object o) {
-        return true;
-    }
-
-    @Override
-    public void describeTo(Description description) {
-        description.appendText(message);
-    }
-
     /**
      * Creates a matcher that always matches, regardless of the examined object.
      */
@@ -45,11 +35,20 @@ public class IsAnything<T> extends BaseMatcher<T> {
      * Creates a matcher that always matches, regardless of the examined object, but describes
      * itself with the specified {@link String}.
      *
-     * @param description
-     *     a meaningful {@link String} used when describing itself
+     * @param description a meaningful {@link String} used when describing itself
      */
     @Factory
     public static Matcher<Object> anything(String description) {
         return new IsAnything<Object>(description);
+    }
+
+    @Override
+    public boolean matches(Object o) {
+        return true;
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        description.appendText(message);
     }
 }

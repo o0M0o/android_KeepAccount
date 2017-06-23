@@ -36,13 +36,13 @@ import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.PreviewColumnChartView;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
+import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.PreferencesUtil;
-import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
 
 /**
  * 预算chart辅助类
@@ -51,32 +51,25 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
 public class BudgetChartHelper extends ShowViewHelperBase {
     private final static String TAG = "BudgetChartHelper";
 
-    ColumnChartData                 mChartData;
-    ColumnChartData                 mPreviewData;
-
-    private List<BudgetItem>        mSPBudgetData;
-    private int                     mSPBudgetHot = Spinner.INVALID_POSITION;
-
-    float   mPrvWidth = 12;
+    ColumnChartData mChartData;
+    ColumnChartData mPreviewData;
+    float mPrvWidth = 12;
     HashMap<String, Integer> mHMColor;
-
     @BindView(R.id.chart)
-    ColumnChartView     mChart;
-
+    ColumnChartView mChart;
     @BindView(R.id.chart_preview)
-    PreviewColumnChartView  mPreviewChart;
-
+    PreviewColumnChartView mPreviewChart;
     @BindView(R.id.sp_budget)
-    Spinner     mSPBudget;
-
+    Spinner mSPBudget;
     @BindView(R.id.iv_remainder)
-    ImageView   mIVRemainder;
-
+    ImageView mIVRemainder;
     @BindView(R.id.iv_used)
-    ImageView   mIVUsed;
+    ImageView mIVUsed;
+    private List<BudgetItem> mSPBudgetData;
+    private int mSPBudgetHot = Spinner.INVALID_POSITION;
 
 
-    public BudgetChartHelper()    {
+    public BudgetChartHelper() {
         super();
     }
 
@@ -132,14 +125,14 @@ public class BudgetChartHelper extends ShowViewHelperBase {
                 //Log.i(LOG_TAG, "in chart event = " + event.getAction());
                 int act = event.getAction();
                 switch (act) {
-                    case MotionEvent.ACTION_DOWN :
+                    case MotionEvent.ACTION_DOWN:
                         prv_x = event.getX();
                         break;
 
-                    case MotionEvent.ACTION_UP :
+                    case MotionEvent.ACTION_UP:
                         float cur_x = event.getX();
                         float dif = cur_x - prv_x;
-                        if((1 < dif) || (-1 > dif)) {
+                        if ((1 < dif) || (-1 > dif)) {
                             Viewport mcp = mPreviewChart.getMaximumViewport();
                             Viewport cp = mPreviewChart.getCurrentViewport();
 
@@ -148,12 +141,12 @@ public class BudgetChartHelper extends ShowViewHelperBase {
                             float m = -1 * (dif / cw) * w;
                             cp.left += m;
                             cp.right += m;
-                            if(cp.left < mcp.left)  {
+                            if (cp.left < mcp.left) {
                                 cp.left = mcp.left;
                                 cp.right = mcp.left + w;
                             }
 
-                            if(cp.right > mcp.right)    {
+                            if (cp.right > mcp.right) {
                                 cp.right = mcp.right;
                                 cp.left = cp.right - w;
                             }
@@ -181,7 +174,7 @@ public class BudgetChartHelper extends ShowViewHelperBase {
                     break;
 
                 default:
-                    if(MotionEvent.ACTION_MOVE != event.getAction())
+                    if (MotionEvent.ACTION_MOVE != event.getAction())
                         getRootActivity().disableViewPageTouch(false);
                     break;
             }
@@ -195,10 +188,10 @@ public class BudgetChartHelper extends ShowViewHelperBase {
         loadUIUtility(false);
     }
 
-    protected void loadUIUtility(boolean b_full)  {
+    protected void loadUIUtility(boolean b_full) {
         refreshAttachLayout();
 
-        if(b_full) {
+        if (b_full) {
             // 展示条
             mIVRemainder.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_BUDGET_BALANCE_COLOR));
             mIVUsed.setBackgroundColor(mHMColor.get(PreferencesUtil.SET_BUDGET_UESED_COLOR));
@@ -222,27 +215,27 @@ public class BudgetChartHelper extends ShowViewHelperBase {
     /**
      * 设置扩大/缩小viewport
      *
-     * @param v    激活view
+     * @param v 激活view
      */
     @OnClick({R.id.bt_less_viewport, R.id.bt_more_viewport})
-    public void onLessOrMoreView(View v)    {
+    public void onLessOrMoreView(View v) {
         final Button bt_less = UtilFun.cast(getView().findViewById(R.id.bt_less_viewport));
         int vid = v.getId();
-        switch (vid)    {
-            case R.id.bt_less_viewport :    {
+        switch (vid) {
+            case R.id.bt_less_viewport: {
                 mPrvWidth += 0.2;
                 refreshViewPort();
 
-                if(!bt_less.isClickable() && 1 < mPrvWidth)
+                if (!bt_less.isClickable() && 1 < mPrvWidth)
                     bt_less.setClickable(true);
             }
             break;
 
-            case R.id.bt_more_viewport :    {
-                if(1 < mPrvWidth) {
+            case R.id.bt_more_viewport: {
+                if (1 < mPrvWidth) {
                     mPrvWidth -= 0.2;
                     refreshViewPort();
-                } else  {
+                } else {
                     bt_less.setClickable(false);
                 }
             }
@@ -251,12 +244,11 @@ public class BudgetChartHelper extends ShowViewHelperBase {
     }
 
 
-
     @Override
     protected void refreshData() {
         super.refreshData();
 
-        if(Spinner.INVALID_POSITION == mSPBudgetHot)
+        if (Spinner.INVALID_POSITION == mSPBudgetHot)
             return;
 
         BudgetItem bi = mSPBudgetData.get(mSPBudgetHot);
@@ -266,20 +258,20 @@ public class BudgetChartHelper extends ShowViewHelperBase {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                for(PayNoteItem i : pays)   {
+                for (PayNoteItem i : pays) {
                     String k = i.getTs().toString().substring(0, 10);
                     ArrayList<PayNoteItem> lsp = hm_ret.get(k);
-                    if(UtilFun.ListIsNullOrEmpty(lsp)) {
+                    if (UtilFun.ListIsNullOrEmpty(lsp)) {
                         lsp = new ArrayList<>();
                         lsp.add(i);
 
                         hm_ret.put(k, lsp);
-                    } else  {
+                    } else {
                         lsp.add(i);
                     }
                 }
 
-                if(0 == hm_ret.size())  {
+                if (0 == hm_ret.size()) {
                     String org_k = bi.getTs().toString().substring(0, 10);
                     hm_ret.put(org_k, new ArrayList<>());
                 }
@@ -290,10 +282,10 @@ public class BudgetChartHelper extends ShowViewHelperBase {
                 ArrayList<String> set_k = new ArrayList<>(hm_ret.keySet());
                 Collections.sort(set_k);
                 BigDecimal all_pay = BigDecimal.ZERO;
-                for(String k : set_k)    {
+                for (String k : set_k) {
                     BigDecimal pay = BigDecimal.ZERO;
                     ArrayList<PayNoteItem> lsp = hm_ret.get(k);
-                    for(PayNoteItem i : lsp)    {
+                    for (PayNoteItem i : lsp) {
                         pay = pay.add(i.getVal());
                     }
 
@@ -329,11 +321,11 @@ public class BudgetChartHelper extends ShowViewHelperBase {
                 }
 
                 int cc = 0;
-                for(AxisValue i : mPreviewData.getAxisXBottom().getValues())     {
-                    if(0 == cc % 5) {
+                for (AxisValue i : mPreviewData.getAxisXBottom().getValues()) {
+                    if (0 == cc % 5) {
                         String v = new String(i.getLabelAsChars()).substring(0, 7);
                         i.setLabel(v);
-                    } else  {
+                    } else {
                         i.setLabel("");
                     }
 
@@ -354,20 +346,21 @@ public class BudgetChartHelper extends ShowViewHelperBase {
 
     /**
      * 过滤视图事件
-     * @param event     事件
+     *
+     * @param event 事件
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
     }
 
-    private void refreshAttachLayout()    {
+    private void refreshAttachLayout() {
         setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
         setAccpetGiveupLayoutVisible(View.GONE);
     }
 
 
-    private void refreshViewPort()  {
+    private void refreshViewPort() {
         Viewport tempViewport = new Viewport(mChart.getMaximumViewport());
         tempViewport.right = tempViewport.left + mPrvWidth;
         mPreviewChart.setCurrentViewportWithAnimation(tempViewport);

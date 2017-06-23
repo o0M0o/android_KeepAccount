@@ -27,8 +27,8 @@ import butterknife.OnClick;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.data.report.page.DayReportChart;
 import wxm.KeepAccount.ui.data.report.page.DayReportWebView;
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
@@ -39,24 +39,20 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
  * Created by ookoo on 2017/2/15.
  */
 public class FrgReportDay extends FrgUtilityBase {
-    private ArrayList<String>   mASParaLoad;
-
     @BindView(R.id.tv_day)
-    TextView    mTVDay;
-
+    TextView mTVDay;
     @BindView(R.id.tv_pay)
-    TextView    mTVPay;
-
+    TextView mTVPay;
     @BindView(R.id.tv_income)
-    TextView    mTVIncome;
-
-    private FrgUtilityBase          mPGHot = null;
+    TextView mTVIncome;
+    private ArrayList<String> mASParaLoad;
+    private FrgUtilityBase mPGHot = null;
     private DayReportWebView mPGWebView = new DayReportWebView();
     private DayReportChart mPGChart = new DayReportChart();
 
 
     @Override
-    protected void enterActivity()  {
+    protected void enterActivity() {
         Log.d(LOG_TAG, "in enterActivity");
         super.enterActivity();
 
@@ -64,7 +60,7 @@ public class FrgReportDay extends FrgUtilityBase {
     }
 
     @Override
-    protected void leaveActivity()  {
+    protected void leaveActivity() {
         Log.d(LOG_TAG, "in leaveActivity");
         EventBus.getDefault().unregister(this);
 
@@ -73,7 +69,8 @@ public class FrgReportDay extends FrgUtilityBase {
 
     /**
      * 更新日期范围
-     * @param event     事件
+     *
+     * @param event 事件
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSelectDaysEvent(EventSelectDays event) {
@@ -109,10 +106,10 @@ public class FrgReportDay extends FrgUtilityBase {
     @Override
     protected void loadUI() {
         new AsyncTask<Void, Void, Void>() {
-            private String  mSZCaption;
+            private String mSZCaption;
 
-            private BigDecimal  mBDTotalPay     = BigDecimal.ZERO;
-            private BigDecimal  mBDTotalIncome  = BigDecimal.ZERO;
+            private BigDecimal mBDTotalPay = BigDecimal.ZERO;
+            private BigDecimal mBDTotalIncome = BigDecimal.ZERO;
 
             @Override
             protected void onPreExecute() {
@@ -127,13 +124,13 @@ public class FrgReportDay extends FrgUtilityBase {
                     String d_s = mASParaLoad.get(0);
                     String d_e = mASParaLoad.get(1);
                     mSZCaption = String.format(Locale.CHINA,
-                                            "%s - %s", d_s, d_e);
+                            "%s - %s", d_s, d_e);
                     HashMap<String, ArrayList<INote>> ls_note = NoteDataHelper.getInstance()
-                                                .getNotesBetweenDays(d_s, d_e);
+                            .getNotesBetweenDays(d_s, d_e);
 
-                    for(ArrayList<INote> ls_n : ls_note.values()) {
-                        for(INote id : ls_n)    {
-                            if(id.isPayNote())
+                    for (ArrayList<INote> ls_n : ls_note.values()) {
+                        for (INote id : ls_n) {
+                            if (id.isPayNote())
                                 mBDTotalPay = mBDTotalPay.add(id.getVal());
                             else
                                 mBDTotalIncome = mBDTotalIncome.add(id.getVal());
@@ -154,16 +151,17 @@ public class FrgReportDay extends FrgUtilityBase {
                 // for header show
                 mTVDay.setText(mSZCaption);
                 mTVPay.setText(String.format(Locale.CHINA,
-                                    "%.02f", mBDTotalPay.floatValue()));
+                        "%.02f", mBDTotalPay.floatValue()));
                 mTVIncome.setText(String.format(Locale.CHINA,
-                                    "%.02f", mBDTotalIncome.floatValue()));
+                        "%.02f", mBDTotalIncome.floatValue()));
             }
         }.execute();
     }
 
     /**
      * 切换显示类型
-     * @param v   动作view
+     *
+     * @param v 动作view
      */
     @OnClick({R.id.iv_switch})
     public void onSwitchShow(View v) {
@@ -172,7 +170,8 @@ public class FrgReportDay extends FrgUtilityBase {
 
     /**
      * 重新选择起止时间
-     * @param v   动作view
+     *
+     * @param v 动作view
      */
     @OnClick({R.id.tv_select_days})
     public void onSelectDays(View v) {
@@ -181,7 +180,7 @@ public class FrgReportDay extends FrgUtilityBase {
             @Override
             public void onDialogPositiveResult(DialogFragment dialogFragment) {
                 EventBus.getDefault().post(new EventSelectDays(dlg_days.getStartDay(),
-                                                    dlg_days.getEndDay()));
+                        dlg_days.getEndDay()));
             }
 
             @Override
@@ -189,15 +188,15 @@ public class FrgReportDay extends FrgUtilityBase {
             }
         });
 
-        dlg_days.show(((AppCompatActivity)getActivity()).getSupportFragmentManager()
-                ,"select days");
+        dlg_days.show(((AppCompatActivity) getActivity()).getSupportFragmentManager()
+                , "select days");
     }
 
 
     /**
      * 切换展示类型
      */
-    private void switchPage()   {
+    private void switchPage() {
         mPGHot = mPGHot instanceof DayReportWebView ? mPGChart : mPGWebView;
 
         FragmentTransaction t = getChildFragmentManager().beginTransaction();

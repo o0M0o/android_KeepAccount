@@ -8,12 +8,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 public class HasToString<T> extends FeatureMatcher<T, String> {
     public HasToString(Matcher<? super String> toStringMatcher) {
-      super(toStringMatcher, "with toString()", "toString()");
-    }
-    
-    @Override
-    protected String featureValueOf(T actual) {
-      return String.valueOf(actual);
+        super(toStringMatcher, "with toString()", "toString()");
     }
 
     /**
@@ -22,9 +17,8 @@ public class HasToString<T> extends FeatureMatcher<T, String> {
      * <p/>
      * For example:
      * <pre>assertThat(true, hasToString(equalTo("TRUE")))</pre>
-     * 
-     * @param toStringMatcher
-     *     the matcher used to verify the toString result
+     *
+     * @param toStringMatcher the matcher used to verify the toString result
      */
     @Factory
     public static <T> Matcher<T> hasToString(Matcher<? super String> toStringMatcher) {
@@ -37,12 +31,16 @@ public class HasToString<T> extends FeatureMatcher<T, String> {
      * <p/>
      * For example:
      * <pre>assertThat(true, hasToString("TRUE"))</pre>
-     * 
-     * @param expectedToString
-     *     the expected toString result
+     *
+     * @param expectedToString the expected toString result
      */
     @Factory
     public static <T> Matcher<T> hasToString(String expectedToString) {
         return new HasToString<T>(equalTo(expectedToString));
+    }
+
+    @Override
+    protected String featureValueOf(T actual) {
+        return String.valueOf(actual);
     }
 }

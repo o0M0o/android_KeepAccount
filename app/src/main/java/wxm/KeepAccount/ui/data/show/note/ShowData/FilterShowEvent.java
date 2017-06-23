@@ -10,31 +10,33 @@ public class FilterShowEvent {
     /**
      * 事件发送者
      */
-    private String          mSZSender;
+    private String mSZSender;
 
     /**
      * 过滤视图参数
      */
-    private List<String>    mLSFilterTag;
+    private List<String> mLSFilterTag;
 
-    public FilterShowEvent(String sender, List<String>  ft)  {
+    public FilterShowEvent(String sender, List<String> ft) {
         mSZSender = sender;
         mLSFilterTag = ft;
     }
 
     /**
      * 得到过滤参数
-     * @return  过滤参数
+     *
+     * @return 过滤参数
      */
-    public List<String> getFilterTag()  {
+    public List<String> getFilterTag() {
         return mLSFilterTag;
     }
 
     /**
      * 获得事件发送者
-     * @return  事件发送者
+     *
+     * @return 事件发送者
      */
-    public String getSender()   {
+    public String getSender() {
         return mSZSender;
     }
 }

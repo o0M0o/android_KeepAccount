@@ -36,13 +36,6 @@ public class ExampleWithEasyMock2 {
      */
 
 
-    /**
-     * A sample interface that will be mocked.
-     */
-    public static interface AnInterface {
-        void doStuff(String string);
-    }
-
     private AnInterface mock;
 
     @BeforeMethod
@@ -84,6 +77,13 @@ public class ExampleWithEasyMock2 {
         //assertThat("xx", isTwoXs());
         //assertThat("yy", not(isTwoXs()));
         //assertThat("i like cheese", startsWith("i like"));
+    }
+
+    /**
+     * A sample interface that will be mocked.
+     */
+    public static interface AnInterface {
+        void doStuff(String string);
     }
 
 }

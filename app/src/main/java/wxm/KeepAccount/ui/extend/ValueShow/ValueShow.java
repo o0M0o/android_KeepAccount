@@ -4,7 +4,6 @@ package wxm.KeepAccount.ui.extend.ValueShow;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.support.annotation.Dimension;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -31,13 +30,11 @@ import wxm.KeepAccount.R;
  * @version create：2017/03/28
  */
 public class ValueShow extends ConstraintLayout {
-    private final static String LOG_TAG = "ValueShow";
-
     public final static String ATTR_PAY_COUNT = "pay_count";
     public final static String ATTR_PAY_AMOUNT = "pay_amount";
     public final static String ATTR_INCOME_COUNT = "income_count";
     public final static String ATTR_INCOME_AMOUNT = "income_amount";
-
+    private final static String LOG_TAG = "ValueShow";
     @BindView(R.id.tv_pay_tag)
     TextView mTVPayTag;
 
@@ -143,7 +140,7 @@ public class ValueShow extends ConstraintLayout {
 
             float dst = getContext().getResources().getDisplayMetrics().density;
             mAttrDMLineLen = array.getLayoutDimension(R.styleable.ValueShow_pxLineLen,
-                                    (int)(200 * dst));
+                    (int) (200 * dst));
         } catch (Exception ex) {
             b_ok = false;
             Log.e(LOG_TAG, "catch ex : " + ex.toString());

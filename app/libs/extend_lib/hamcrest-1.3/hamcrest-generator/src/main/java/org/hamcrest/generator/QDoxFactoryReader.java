@@ -15,20 +15,39 @@ import java.util.regex.Pattern;
  * parameter names and JavaDoc (which aren't available using reflection) using
  * QDox.
  *
- * @see <a href="http://qdox.codehaus.org/">QDox</a>
  * @author Joe Walnes
+ * @see <a href="http://qdox.codehaus.org/">QDox</a>
  */
 public class QDoxFactoryReader implements Iterable<FactoryMethod> {
 
-    private final Iterable<FactoryMethod> wrapped;
-    private final JavaClass classSource;
-
     private static final Pattern GENERIC_REGEX = Pattern.compile("<.*>");
     private static final Pattern VARARGS_REGEX = Pattern.compile("...", Pattern.LITERAL);
+    private final Iterable<FactoryMethod> wrapped;
+    private final JavaClass classSource;
 
     public QDoxFactoryReader(Iterable<FactoryMethod> wrapped, QDox qdox, String className) {
         this.wrapped = wrapped;
         this.classSource = qdox.getClassByName(className);
+    }
+
+    /**
+     * Reconstructs the JavaDoc as a string for a particular method.
+     */
+    private static String createJavaDocComment(JavaMethod methodSource) {
+        String comment = methodSource.getComment();
+        DocletTag[] tags = methodSource.getTags();
+        if ((comment == null || comment.trim().length() == 0) && tags.length == 0) {
+            return null;
+        }
+        StringBuilder result = new StringBuilder();
+        result.append(comment);
+        result.append("\n\n");
+        for (DocletTag tag : tags) {
+            result.append('@').append(tag.getName())
+                    .append(' ').append(tag.getValue())
+                    .append('\n');
+        }
+        return result.toString();
     }
 
     @Override
@@ -90,27 +109,7 @@ public class QDoxFactoryReader implements Iterable<FactoryMethod> {
             types[i] = new Type(type);
         }
         JavaMethod[] methods = classSource.getMethodsBySignature(factoryMethod.getName(), types, false, varArgs);
-        return methods.length == 1 ?  methods[0] : null;
-    }
-
-    /**
-     * Reconstructs the JavaDoc as a string for a particular method.
-     */
-    private static String createJavaDocComment(JavaMethod methodSource) {
-        String comment = methodSource.getComment();
-        DocletTag[] tags = methodSource.getTags();
-        if ((comment == null || comment.trim().length() == 0) && tags.length == 0) {
-            return null;
-        }
-        StringBuilder result = new StringBuilder();
-        result.append(comment);
-        result.append("\n\n");
-        for (DocletTag tag : tags) {
-            result.append('@').append(tag.getName())
-                    .append(' ').append(tag.getValue())
-                    .append('\n');
-        }
-        return result.toString();
+        return methods.length == 1 ? methods[0] : null;
     }
 
 }

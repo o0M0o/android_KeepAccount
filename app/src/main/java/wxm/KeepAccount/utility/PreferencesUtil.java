@@ -17,29 +17,30 @@ import wxm.KeepAccount.R;
  * Created by 123 on 2016/6/18.
  */
 public class PreferencesUtil {
+    public final static String SET_PAY_COLOR = "pay";
+    public final static String SET_INCOME_COLOR = "income";
+    public final static String SET_BUDGET_UESED_COLOR = "budget_used";
+    public final static String SET_BUDGET_BALANCE_COLOR = "budget_balance";
     private final static String PROPERTIES_NAME = "keepaccount_properties";
-    private final static String SET_HOT_ACTION  = "hot_action";
+    private final static String SET_HOT_ACTION = "hot_action";
     private final static String SET_CHART_COLOR = "chart_color";
 
-    public final static String SET_PAY_COLOR    = "pay";
-    public final static String SET_INCOME_COLOR = "income";
-    public final static String SET_BUDGET_UESED_COLOR       = "budget_used";
-    public final static String SET_BUDGET_BALANCE_COLOR     = "budget_balance";
-
     /// BEGIN
+
     /**
      * 加载首页上动作配置
-     * @return   动作配置
+     *
+     * @return 动作配置
      */
-    public static List<String> loadHotAction()     {
+    public static List<String> loadHotAction() {
         SharedPreferences param = ContextUtil.getInstance()
-                                    .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE);
+                .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE);
 
         String def = String.format(Locale.CHINA,
-                        "%s:%s:%s:%s:%s:%s",
-                        ActionHelper.ACT_ADD_DATA, ActionHelper.ACT_LOOK_DATA,
-                        ActionHelper.ACT_CALENDAR_VIEW, ActionHelper.ACT_LOOK_BUDGET,
-                        ActionHelper.ACT_ADD_BUDGET, ActionHelper.ACT_LOGOUT);
+                "%s:%s:%s:%s:%s:%s",
+                ActionHelper.ACT_ADD_DATA, ActionHelper.ACT_LOOK_DATA,
+                ActionHelper.ACT_CALENDAR_VIEW, ActionHelper.ACT_LOOK_BUDGET,
+                ActionHelper.ACT_ADD_BUDGET, ActionHelper.ACT_LOGOUT);
 
         String load = param.getString(SET_HOT_ACTION, def);
         return parsePreferences(load);
@@ -48,9 +49,10 @@ public class PreferencesUtil {
 
     /**
      * 保存首页上动作
+     *
      * @param acts 动作
      */
-    public static void saveHotAction(List<String> acts)     {
+    public static void saveHotAction(List<String> acts) {
         SharedPreferences param = ContextUtil.getInstance()
                 .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE);
 
@@ -61,11 +63,13 @@ public class PreferencesUtil {
 
 
     /// BEGIN
+
     /**
      * 加载chart颜色配置
-     * @return   颜色配置
+     *
+     * @return 颜色配置
      */
-    public static HashMap<String, Integer> loadChartColor()     {
+    public static HashMap<String, Integer> loadChartColor() {
         SharedPreferences param = ContextUtil.getInstance()
                 .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE);
 
@@ -82,9 +86,10 @@ public class PreferencesUtil {
 
     /**
      * 保存chart颜色配置
-     * @param ccs  配色配置
+     *
+     * @param ccs 配色配置
      */
-    public static void saveChartColor(HashMap<String, Integer> ccs)     {
+    public static void saveChartColor(HashMap<String, Integer> ccs) {
         SharedPreferences param = ContextUtil.getInstance()
                 .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE);
 
@@ -95,12 +100,14 @@ public class PreferencesUtil {
 
 
     /// BEGIN PRIVATE
+
     /**
      * 把配置字符串解析成结果
-     * @param pr        配置字符串
-     * @return          结果
+     *
+     * @param pr 配置字符串
+     * @return 结果
      */
-    private static List<String> parsePreferences(String pr)  {
+    private static List<String> parsePreferences(String pr) {
         ArrayList<String> ret = new ArrayList<>();
         String[] pr_arr = pr.split(":");
         Collections.addAll(ret, pr_arr);
@@ -110,16 +117,17 @@ public class PreferencesUtil {
 
     /**
      * 把动作解析成配置字符串
-     * @param acts      待解析动作
-     * @return          配置字符串
+     *
+     * @param acts 待解析动作
+     * @return 配置字符串
      */
-    private static String parseToPreferences(List<String> acts)  {
+    private static String parseToPreferences(List<String> acts) {
         boolean ff = true;
         StringBuilder sb = new StringBuilder();
-        for(String i : acts)    {
-            if(!ff) {
+        for (String i : acts) {
+            if (!ff) {
                 sb.append(":");
-            }   else    {
+            } else {
                 ff = false;
             }
 
@@ -131,13 +139,14 @@ public class PreferencesUtil {
 
     /**
      * 从配置字符串解析配置
-     * @param cc    配置字符串
-     * @return      解析配置
+     *
+     * @param cc 配置字符串
+     * @return 解析配置
      */
-    private static HashMap<String, Integer> parseChartColors(String cc)  {
+    private static HashMap<String, Integer> parseChartColors(String cc) {
         HashMap<String, Integer> ret = new HashMap<>();
         String[] cclns = cc.split(" ");
-        for(String i : cclns)   {
+        for (String i : cclns) {
             String[] iilns = i.split(":");
 
             ret.put(iilns[0], Integer.parseInt(iilns[1]));
@@ -149,16 +158,17 @@ public class PreferencesUtil {
 
     /**
      * 图表颜色串行化为字符串
-     * @param hmcc  配置信息
-     * @return      字符串
+     *
+     * @param hmcc 配置信息
+     * @return 字符串
      */
-    private static String parseChartColorsToString(HashMap<String, Integer> hmcc)  {
+    private static String parseChartColorsToString(HashMap<String, Integer> hmcc) {
         StringBuilder ret = new StringBuilder();
-        for(String i : hmcc.keySet())   {
+        for (String i : hmcc.keySet()) {
             StringBuilder sb = new StringBuilder();
             sb.append(i).append(":").append(hmcc.get(i).toString());
 
-            if(0 == ret.length())
+            if (0 == ret.length())
                 ret.append(sb);
             else
                 ret.append(" ").append(sb);

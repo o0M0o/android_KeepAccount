@@ -13,10 +13,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
-import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.help.ACHelp;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * A login screen that offers login via email/password.
@@ -83,7 +83,7 @@ public class ACLogin extends AppCompatActivity {
      */
     private void init_ui(Bundle savedInstanceState) {
         // for frg
-        if(null == savedInstanceState) {
+        if (null == savedInstanceState) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.replace(R.id.fl_login, mFGLogin);
             transaction.commit();

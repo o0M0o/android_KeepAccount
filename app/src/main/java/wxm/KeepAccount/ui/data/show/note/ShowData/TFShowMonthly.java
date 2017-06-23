@@ -9,7 +9,7 @@ import wxm.KeepAccount.ui.data.show.note.ListView.LVHelperMonthly;
  */
 public class TFShowMonthly extends TFShowBase {
 
-    public TFShowMonthly()   {
+    public TFShowMonthly() {
         super();
         LOG_TAG = "TFShowMonthly";
 

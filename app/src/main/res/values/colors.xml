@@ -6,8 +6,8 @@
     <color name="trans_1">#20000000</color><!--半透明 -->
     <color name="trans_black">#40000000</color><!--半透明 -->
     <color name="trans_full">#00000000</color><!--全透明 -->
-    <color name="color_1">#eff0dc</color><!-- 列表行色1 -->
-    <color name="color_2">#c9cabb</color><!-- 列表行色2 -->
+    <color name="color_1">#ffffff</color><!-- 列表行色1 -->
+    <color name="color_2">#f9f9f9</color><!-- 列表行色2 -->
     <color name="grey_1">#dbdbdb</color><!--白色 -->
     <color name="grey_2">#eaeaea</color><!--白色 -->
     <color name="grey_3">#fafafa</color><!--白色 -->

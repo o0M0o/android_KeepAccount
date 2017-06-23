@@ -10,10 +10,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 public class JMock1AdapterTest extends TestCase {
 
-    public static interface InterfaceToMock {
-        void doStuff(String name, int number);
-    }
-
     public void testAdaptsHamcrestMatcherToJMockConstraint() {
         Constraint jMockConstraint = new JMock1Adapter(equalTo("expected"));
         assertTrue("Should have matched", jMockConstraint.eval("expected"));
@@ -37,6 +33,10 @@ public class JMock1AdapterTest extends TestCase {
         StringBuffer buffer = new StringBuffer();
         buffer = jMockConstraint.describeTo(buffer);
         assertEquals("is like \"cheese\"", buffer.toString());
+    }
+
+    public static interface InterfaceToMock {
+        void doStuff(String name, int number);
     }
 
 }

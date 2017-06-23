@@ -36,5 +36,5 @@ public class IsNullTest extends AbstractMatcherTest {
 
     private void requiresStringMatcher(@SuppressWarnings("unused") Matcher<String> arg) {
         // no-op
-    }    
+    }
 }

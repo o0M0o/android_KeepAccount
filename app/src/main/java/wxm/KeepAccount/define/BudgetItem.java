@@ -24,34 +24,64 @@ import cn.wxm.andriodutillib.util.UtilFun;
 @DatabaseTable(tableName = "tbBudget")
 public class BudgetItem
         implements Parcelable, IDBRow<Integer> {
+    public final static String FIELD_USR = "usr_id";
+    public final static String FIELD_NAME = "name";
+    public final static String FIELD_ID = "_id";
+    public static final Parcelable.Creator<BudgetItem> CREATOR
+            = new Parcelable.Creator<BudgetItem>() {
+        public BudgetItem createFromParcel(Parcel in) {
+            return new BudgetItem(in);
+        }
+
+        public BudgetItem[] newArray(int size) {
+            return new BudgetItem[size];
+        }
+    };
     private static final String TAG = "BudgetItem";
-
-    public final static String FIELD_USR        = "usr_id";
-    public final static String FIELD_NAME       = "name";
-    public final static String FIELD_ID         = "_id";
-
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     private int _id;
-
     @DatabaseField(columnName = "name", canBeNull = false, dataType = DataType.STRING)
     private String name;
-
     @DatabaseField(columnName = "usr_id", foreign = true, foreignColumnName = UsrItem.FIELD_ID,
             canBeNull = false)
     private UsrItem usr;
-
     @DatabaseField(columnName = "amount", dataType = DataType.BIG_DECIMAL, canBeNull = false)
     private BigDecimal amount;
-
     @DatabaseField(columnName = "remainder_amount", dataType = DataType.BIG_DECIMAL,
             canBeNull = false)
     private BigDecimal remainder_amount;
-
     @DatabaseField(columnName = "note", dataType = DataType.STRING)
     private String note;
-
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
     private Timestamp ts;
+
+    public BudgetItem() {
+        set_id(-1);
+        setAmount(BigDecimal.ZERO);
+        setRemainderAmount(BigDecimal.ZERO);
+        setTs(new Timestamp(System.currentTimeMillis()));
+    }
+
+    private BudgetItem(Parcel in) {
+        set_id(in.readInt());
+
+        setUsr(new UsrItem());
+        getUsr().setId(in.readInt());
+
+        setName(in.readString());
+        setNote(in.readString());
+        setAmount(new BigDecimal(in.readString()));
+        setRemainderAmount(new BigDecimal(in.readString()));
+
+        try {
+            setTs(new Timestamp(0));
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+            java.util.Date date = format.parse(in.readString());
+            getTs().setTime(date.getTime());
+        } catch (ParseException ex) {
+            Log.e(TAG, "get budgetItem from parcel fall!, ex = " + UtilFun.ExceptionToString(ex));
+        }
+    }
 
     public int get_id() {
         return _id;
@@ -73,19 +103,18 @@ public class BudgetItem
         return amount;
     }
 
-    public void setAmount(BigDecimal new_amount)
-    {
-        if(null != amount) {
+    public void setAmount(BigDecimal new_amount) {
+        if (null != amount) {
             if (!amount.equals(new_amount)) {
-                if(null != remainder_amount) {
+                if (null != remainder_amount) {
                     remainder_amount = remainder_amount.add(new_amount.subtract(amount));
-                } else  {
+                } else {
                     remainder_amount = new_amount;
                 }
 
                 amount = new_amount;
             }
-        } else  {
+        } else {
             amount = new_amount;
         }
     }
@@ -124,12 +153,12 @@ public class BudgetItem
 
     /**
      * 使用预算
+     *
      * @param use_val 使用预算金额,为总使用预算金额
      */
-    public void useBudget(BigDecimal use_val)   {
+    public void useBudget(BigDecimal use_val) {
         remainder_amount = amount.subtract(use_val);
     }
-
 
     @Override
     public int describeContents() {
@@ -142,7 +171,7 @@ public class BudgetItem
 
         int usrid = -1;
         UsrItem ui = getUsr();
-        if(null != ui)
+        if (null != ui)
             usrid = ui.getId();
         dest.writeInt(usrid);
 
@@ -153,49 +182,8 @@ public class BudgetItem
         dest.writeString(getTs().toString());
     }
 
-    public static final Parcelable.Creator<BudgetItem> CREATOR
-            = new Parcelable.Creator<BudgetItem>() {
-        public BudgetItem createFromParcel(Parcel in) {
-            return new BudgetItem(in);
-        }
-
-        public BudgetItem[] newArray(int size) {
-            return new BudgetItem[size];
-        }
-    };
-
-    public BudgetItem() {
-        set_id(-1);
-        setAmount(BigDecimal.ZERO);
-        setRemainderAmount(BigDecimal.ZERO);
-        setTs(new Timestamp(System.currentTimeMillis()));
-    }
-
-    private BudgetItem(Parcel in)   {
-        set_id(in.readInt());
-
-        setUsr(new UsrItem());
-        getUsr().setId(in.readInt());
-
-        setName(in.readString());
-        setNote(in.readString());
-        setAmount(new BigDecimal(in.readString()));
-        setRemainderAmount(new BigDecimal(in.readString()));
-
-        try {
-            setTs(new Timestamp(0));
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-            java.util.Date date = format.parse(in.readString());
-            getTs().setTime(date.getTime());
-        }
-        catch (ParseException ex)
-        {
-            Log.e(TAG, "get budgetItem from parcel fall!, ex = " + UtilFun.ExceptionToString(ex));
-        }
-    }
-
     @Override
-    public int hashCode()   {
+    public int hashCode() {
         return getName().hashCode() + getAmount().hashCode() + get_id();
     }
 

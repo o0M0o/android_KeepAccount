@@ -5,13 +5,13 @@
         android:id="@+id/mi_giveup"
         android:icon="@drawable/ic_reject_1"
         android:orderInCategory="100"
-        app:showAsAction="ifRoom|withText"
-        android:title="@string/cn_giveup"/>
+        android:title="@string/cn_giveup"
+        app:showAsAction="ifRoom|withText" />
 
     <item
         android:id="@+id/mi_save"
         android:icon="@drawable/ic_accept_1"
         android:orderInCategory="101"
-        app:showAsAction="ifRoom|withText"
-        android:title="@string/cn_save"/>
+        android:title="@string/cn_save"
+        app:showAsAction="ifRoom|withText" />
 </menu>

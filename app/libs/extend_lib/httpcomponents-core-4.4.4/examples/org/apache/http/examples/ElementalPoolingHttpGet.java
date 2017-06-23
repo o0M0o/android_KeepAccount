@@ -59,11 +59,11 @@ public class ElementalPoolingHttpGet {
 
     public static void main(String[] args) throws Exception {
         final HttpProcessor httpproc = HttpProcessorBuilder.create()
-            .add(new RequestContent())
-            .add(new RequestTargetHost())
-            .add(new RequestConnControl())
-            .add(new RequestUserAgent("Test/1.1"))
-            .add(new RequestExpectContinue(true)).build();
+                .add(new RequestContent())
+                .add(new RequestTargetHost())
+                .add(new RequestConnControl())
+                .add(new RequestUserAgent("Test/1.1"))
+                .add(new RequestExpectContinue(true)).build();
 
         final HttpRequestExecutor httpexecutor = new HttpRequestExecutor();
 
@@ -125,7 +125,8 @@ public class ElementalPoolingHttpGet {
                 }
             }
 
-        };
+        }
+        ;
 
         WorkerThread[] workers = new WorkerThread[targets.length];
         for (int i = 0; i < workers.length; i++) {

@@ -34,14 +34,14 @@ public class ExampleWithEasyMock2 {
      */
 
 
-    /**
-     * A sample interface that will be mocked.
-     */
-    public static interface AnInterface {
-        void doStuff(String string);
-    }
-
     private AnInterface mock = createMock(AnInterface.class);
+
+    /**
+     * Allow JUnit 4 test to be run under JUnit 3.
+     */
+    public static junit.framework.Test suite() {
+        return new junit.framework.JUnit4TestAdapter(ExampleWithEasyMock2.class);
+    }
 
     /**
      * This examples shows using a mock with a standard EasyMock2 matcher.
@@ -80,9 +80,9 @@ public class ExampleWithEasyMock2 {
     }
 
     /**
-     * Allow JUnit 4 test to be run under JUnit 3.
+     * A sample interface that will be mocked.
      */
-    public static junit.framework.Test suite() {
-        return new junit.framework.JUnit4TestAdapter(ExampleWithEasyMock2.class);
+    public static interface AnInterface {
+        void doStuff(String string);
     }
 }

@@ -11,7 +11,7 @@ import wxm.KeepAccount.ui.data.show.note.ListView.LVHelperDaily;
 
 public class TFShowDaily extends TFShowBase {
 
-    public TFShowDaily()   {
+    public TFShowDaily() {
         super();
         LOG_TAG = "TFShowDaily";
 

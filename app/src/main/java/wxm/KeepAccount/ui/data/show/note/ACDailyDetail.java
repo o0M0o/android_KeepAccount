@@ -12,7 +12,7 @@ import wxm.KeepAccount.define.GlobalDef;
  * 展示日详情的activity
  */
 public class ACDailyDetail extends BaseAppCompatActivity {
-    public final static String  K_HOTDAY    = "hotday";
+    public final static String K_HOTDAY = "hotday";
 
     @Override
     protected void leaveActivity() {
@@ -30,9 +30,9 @@ public class ACDailyDetail extends BaseAppCompatActivity {
         Intent it = getIntent();
         assert null != it;
         String hot_day = it.getStringExtra(K_HOTDAY);
-        if(UtilFun.StringIsNullOrEmpty(hot_day)) {
+        if (UtilFun.StringIsNullOrEmpty(hot_day)) {
             Log.e(LOG_TAG, "调用intent缺少'K_HOTDAY'参数");
-            return ;
+            return;
         }
 
         // for holder

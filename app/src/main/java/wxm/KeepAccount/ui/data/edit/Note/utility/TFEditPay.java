@@ -37,16 +37,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.BudgetItem;
-import wxm.KeepAccount.define.PayNoteItem;
-import wxm.KeepAccount.db.PayIncomeDBUtility;
-import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.db.PayIncomeDBUtility;
+import wxm.KeepAccount.define.BudgetItem;
+import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.define.PayNoteItem;
+import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 import wxm.KeepAccount.ui.dialog.DlgLongTxt;
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType;
-import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
+import wxm.KeepAccount.utility.ContextUtil;
+import wxm.KeepAccount.utility.ToolUtil;
 
 import static java.lang.String.format;
 
@@ -56,29 +56,21 @@ import static java.lang.String.format;
  */
 public class TFEditPay extends TFEditBase implements View.OnTouchListener {
     private final static String TAG = "TFEditPay";
-
-    private PayNoteItem mOldPayNote;
-
     @BindView(R.id.ar_et_info)
     EditText mETInfo;
-
     @BindView(R.id.ar_et_date)
     EditText mETDate;
-
     @BindView(R.id.ar_et_amount)
     EditText mETAmount;
-
     @BindView(R.id.ar_sp_budget)
     Spinner mSPBudget;
-
     @BindView(R.id.ar_tv_budget)
     TextView mTVBudget;
-
     @BindView(R.id.tv_note)
     TextView mTVNote;
-
     @BindString(R.string.notice_input_note)
     String mSZDefNote;
+    private PayNoteItem mOldPayNote;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,

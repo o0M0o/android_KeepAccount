@@ -4,96 +4,97 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/til_name"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="24dp"
         android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp">
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="24dp">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"
-            android:ems="10"
-            android:id="@+id/et_name"
-            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:hint="@string/remind_name" />
+            android:layout_alignParentTop="true"
+            android:ems="10"
+            android:hint="@string/remind_name"
+            android:inputType="none" />
     </android.support.design.widget.TextInputLayout>
 
     <RelativeLayout
-        android:layout_below="@id/til_name"
         android:id="@+id/rl_date"
-        android:layout_marginTop="6dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/til_name"
+        android:layout_marginTop="6dp">
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_start_date"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/til_start_date"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="24dp"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp">
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="24dp">
 
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_start_date"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:ems="10"
-                android:id="@+id/et_start_date"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
-                android:hint="@string/remind_start_date" />
+                android:layout_alignParentTop="true"
+                android:ems="10"
+                android:hint="@string/remind_start_date"
+                android:inputType="date" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_end_date"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/til_start_date"
-            android:id="@+id/til_end_date"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="24dp"
+            android:layout_below="@id/til_start_date"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp">
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="24dp">
 
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_end_date"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:ems="10"
-                android:id="@+id/et_end_date"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
-                android:hint="@string/remind_end_date" />
+                android:layout_alignParentTop="true"
+                android:ems="10"
+                android:hint="@string/remind_end_date"
+                android:inputType="date" />
         </android.support.design.widget.TextInputLayout>
     </RelativeLayout>
 
 
     <RelativeLayout
         android:id="@+id/rl_sp"
-        android:layout_marginTop="6dp"
-        android:layout_below="@id/rl_date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_date"
+        android:layout_marginTop="6dp">
+
         <Spinner
-            android:layout_centerVertical="true"
+            android:id="@+id/sp_period"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:id="@+id/sp_period"
-            android:layout_toEndOf="@+id/textView3"
-            android:layout_marginLeft="24dp" />
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="24dp"
+            android:layout_toEndOf="@+id/textView3" />
 
         <TextView
-            android:layout_centerVertical="true"
-            android:text="@string/remind_period"
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView3"
-            android:layout_marginLeft="32dp" />
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="32dp"
+            android:text="@string/remind_period" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -103,40 +104,40 @@
         android:layout_marginTop="12dp">
 
         <TextView
-            android:text="@string/remind_active_type"
+            android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView4"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="4dp"
+            android:text="@string/remind_active_type" />
 
 
         <Spinner
+            android:id="@+id/sp_remind_active"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:id="@+id/sp_remind_active"
-            android:layout_toEndOf="@+id/textView4"
-            android:layout_marginLeft="24dp" />
+            android:layout_marginLeft="24dp"
+            android:layout_toEndOf="@+id/textView4" />
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_amount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/til_amount"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/textView4"
-            android:layout_marginTop="24dp"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp">
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="24dp">
 
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_amount"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:ems="10"
-                android:id="@+id/et_amount"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
-                android:hint="@string/remind_amount" />
+                android:layout_alignParentTop="true"
+                android:ems="10"
+                android:hint="@string/remind_amount"
+                android:inputType="numberDecimal" />
         </android.support.design.widget.TextInputLayout>
 
     </RelativeLayout>

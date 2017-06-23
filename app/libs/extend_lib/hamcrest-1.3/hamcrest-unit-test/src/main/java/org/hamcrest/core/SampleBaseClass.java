@@ -19,6 +19,6 @@ public class SampleBaseClass {
 
     @Override
     public int hashCode() {
-      return value.hashCode();
+        return value.hashCode();
     }
 }

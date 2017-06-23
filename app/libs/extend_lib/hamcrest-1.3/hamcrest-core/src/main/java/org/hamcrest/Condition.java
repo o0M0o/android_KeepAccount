@@ -5,25 +5,17 @@ package org.hamcrest;
  * that have a sequence of steps, where each step depends on the result of the previous
  * step and we can stop processing as soon as a step fails. These classes provide
  * infrastructure for writing such a sequence.
- *
+ * <p>
  * Based on https://github.com/npryce/maybe-java
+ *
  * @author Steve Freeman 2012 http://www.hamcrest.com
  */
 
 public abstract class Condition<T> {
     public static final NotMatched<Object> NOT_MATCHED = new NotMatched<Object>();
 
-    public interface Step<I, O> {
-        Condition<O> apply(I value, Description mismatch);
+    private Condition() {
     }
-
-    private Condition() { }
-
-    public abstract boolean matching(Matcher<T> match, String message);
-    public abstract <U> Condition<U> and(Step<? super T, U> mapping);
-
-    public final boolean matching(Matcher<T> match) { return matching(match, ""); }
-    public final <U> Condition<U> then(Step<? super T, U> mapping) { return and(mapping); }
 
     @SuppressWarnings("unchecked")
     public static <T> Condition<T> notMatched() {
@@ -32,6 +24,22 @@ public abstract class Condition<T> {
 
     public static <T> Condition<T> matched(final T theValue, final Description mismatch) {
         return new Matched<T>(theValue, mismatch);
+    }
+
+    public abstract boolean matching(Matcher<T> match, String message);
+
+    public abstract <U> Condition<U> and(Step<? super T, U> mapping);
+
+    public final boolean matching(Matcher<T> match) {
+        return matching(match, "");
+    }
+
+    public final <U> Condition<U> then(Step<? super T, U> mapping) {
+        return and(mapping);
+    }
+
+    public interface Step<I, O> {
+        Condition<O> apply(I value, Description mismatch);
     }
 
     private static final class Matched<T> extends Condition<T> {
@@ -60,9 +68,13 @@ public abstract class Condition<T> {
     }
 
     private static final class NotMatched<T> extends Condition<T> {
-        @Override public boolean matching(Matcher<T> match, String message) { return false; }
+        @Override
+        public boolean matching(Matcher<T> match, String message) {
+            return false;
+        }
 
-        @Override public <U> Condition<U> and(Step<? super T, U> mapping) {
+        @Override
+        public <U> Condition<U> and(Step<? super T, U> mapping) {
             return notMatched();
         }
     }

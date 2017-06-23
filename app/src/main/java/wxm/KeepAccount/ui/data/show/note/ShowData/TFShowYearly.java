@@ -9,7 +9,7 @@ import wxm.KeepAccount.ui.data.show.note.ListView.LVHelperYearly;
  */
 public class TFShowYearly extends TFShowBase {
 
-    public TFShowYearly()   {
+    public TFShowYearly() {
         super();
         LOG_TAG = "TFShowYearly";
 

@@ -21,10 +21,15 @@ public class QuickReferenceWriter implements FactoryWriter {
         this(System.out);
     }
 
+    private static String removePackageNames(String in) {
+        // Simplify fully qualified names (allowing for trailing '...').
+        return in == null ? "" : in.replaceAll("[^<>]*\\.([^\\.])", "$1");
+    }
+
     public void setColumnPosition(int columnPosition) {
         this.columnPosition = columnPosition;
     }
-    
+
     @Override
     public void writeHeader() throws IOException {
     }
@@ -51,11 +56,6 @@ public class QuickReferenceWriter implements FactoryWriter {
         }
         out.append(')');
         out.println();
-    }
-
-    private static String removePackageNames(String in) {
-        // Simplify fully qualified names (allowing for trailing '...').
-        return in == null ? "" : in.replaceAll("[^<>]*\\.([^\\.])", "$1");
     }
 
     @Override

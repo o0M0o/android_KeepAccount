@@ -15,21 +15,21 @@ import android.view.MenuItem;
 import java.util.HashMap;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.RemindItem;
-import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditIncome;
 
 public class ACRemindEdit extends AppCompatActivity {
     private final static String TAG = "ACRemindEdit";
 
 
-    private final static String[] REMIND_TYPE =  {
-        RemindItem.REMIND_BUDGET, RemindItem.REMIND_PAY, RemindItem.REMIND_INCOME
+    private final static String[] REMIND_TYPE = {
+            RemindItem.REMIND_BUDGET, RemindItem.REMIND_PAY, RemindItem.REMIND_INCOME
     };
 
-    private TabLayout   mTLTabs;
-    private ViewPager   mVPPages;
+    private TabLayout mTLTabs;
+    private ViewPager mVPPages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +51,9 @@ public class ACRemindEdit extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.mi_save: {
                 int hot = mTLTabs.getSelectedTabPosition();
-                if(hot >=0 && hot < REMIND_TYPE.length)     {
+                if (hot >= 0 && hot < REMIND_TYPE.length) {
                     TFEditRemindBase tb = getHotTabItem();
-                    if(tb.onAccept())   {
+                    if (tb.onAccept()) {
                         int ret_data = GlobalDef.INTRET_SURE;
 
                         Intent data = new Intent();
@@ -64,7 +64,7 @@ public class ACRemindEdit extends AppCompatActivity {
             }
             break;
 
-            case R.id.mi_giveup:    {
+            case R.id.mi_giveup: {
                 int ret_data = GlobalDef.INTRET_GIVEUP;
 
                 Intent data = new Intent();
@@ -86,7 +86,8 @@ public class ACRemindEdit extends AppCompatActivity {
 
     /**
      * 得到当前选中的tab item
-     * @return  当前选中的tab item
+     *
+     * @return 当前选中的tab item
      */
     private TFEditRemindBase getHotTabItem() {
         int pos = mTLTabs.getSelectedTabPosition();
@@ -103,7 +104,7 @@ public class ACRemindEdit extends AppCompatActivity {
         assert null != mTLTabs && null != mVPPages;
 
         // for tablayout
-        for(String i : REMIND_TYPE) {
+        for (String i : REMIND_TYPE) {
             mTLTabs.addTab(mTLTabs.newTab().setText(i));
         }
         mTLTabs.setTabGravity(TabLayout.GRAVITY_FILL);

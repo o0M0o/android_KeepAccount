@@ -10,10 +10,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 public class EasyMock2AdapterTest extends TestCase {
 
-    public static interface InterfaceToMock {
-        void doStuff(String name, int number);
-    }
-
     public void testAdaptsHamcrestMatcherToEasyMockArgumentsMatcher() {
         IArgumentMatcher easyMockMatcher = new EasyMock2Adapter(equalTo("expected"));
         assertTrue("Should have matched", easyMockMatcher.matches("expected"));
@@ -37,6 +33,10 @@ public class EasyMock2AdapterTest extends TestCase {
         StringBuffer buffer = new StringBuffer();
         easyMockMatcher.appendTo(buffer);
         assertEquals("is like \"cheese\"", buffer.toString());
+    }
+
+    public static interface InterfaceToMock {
+        void doStuff(String name, int number);
     }
 
 }

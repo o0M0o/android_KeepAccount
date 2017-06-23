@@ -20,7 +20,7 @@ public class AllOfTest extends AbstractMatcherTest {
     protected Matcher<?> createMatcher() {
         return allOf(IsEqual.<Object>equalTo("irrelevant"));
     }
-    
+
     public void testEvaluatesToTheTheLogicalConjunctionOfTwoOtherMatchers() {
         assertThat("good", allOf(equalTo("good"), startsWith("good")));
 
@@ -33,7 +33,7 @@ public class AllOfTest extends AbstractMatcherTest {
         assertThat("good", allOf(equalTo("good"), equalTo("good"), equalTo("good"), equalTo("good"), equalTo("good")));
         assertThat("good", not(allOf(equalTo("good"), equalTo("good"), equalTo("bad"), equalTo("good"), equalTo("good"))));
     }
-    
+
     public void testSupportsMixedTypes() {
         final Matcher<SampleSubClass> all = allOf(
                 equalTo(new SampleBaseClass("bad")),
@@ -41,10 +41,10 @@ public class AllOfTest extends AbstractMatcherTest {
                 equalTo(new SampleBaseClass("good")),
                 equalTo(new SampleSubClass("ugly")));
         final Matcher<SampleSubClass> negated = not(all);
-        
+
         assertThat(new SampleSubClass("good"), negated);
     }
-    
+
     public void testHasAReadableDescription() {
         assertDescription("(\"good\" and \"bad\" and \"ugly\")",
                 allOf(equalTo("good"), equalTo("bad"), equalTo("ugly")));

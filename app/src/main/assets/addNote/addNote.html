@@ -1,0 +1,32 @@
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf8"/>
+    <script type="text/javascript" src="../jslib/jquery.js"></script>
+
+    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../select2/select2.css" rel="stylesheet">
+    <link href="../select2/select2-bootstrap.css" rel="stylesheet">
+
+    <style type="text/css">
+    </style>
+</head>
+<body>
+<div id="app">
+    <form class="form-control">
+        <label for="s2_pay_type" class="sr-only">支出类型
+            <select v-model="selectPayType" class="s2-pay-type js-states form-control"
+                    id="s2_pay_type">
+                <option v-for="option in payTypeOptions" v-bind:value="option.value">
+                    {{ option.text }}
+                </option>
+            </select>
+        </label>
+    </form>
+</div>
+
+<script type="text/javascript" src="../jslib/vue.js"></script>
+<script type="text/javascript" src="../jslib/util.js"></script>
+<script type="text/javascript" src="./select2.js"></script>
+<script type="text/javascript" src="./addNote.js"></script>
+</body>
+</html>

@@ -49,7 +49,7 @@ public class IsEqualTest extends AbstractMatcherTest {
         assertThat(alwaysEqual, equalTo(null));
         assertThat(neverEqual, not(equalTo(null)));
     }
-    
+
     public void testComparesTheElementsOfAnObjectArray() {
         String[] s1 = {"a", "b"};
         String[] s2 = {"a", "b"};

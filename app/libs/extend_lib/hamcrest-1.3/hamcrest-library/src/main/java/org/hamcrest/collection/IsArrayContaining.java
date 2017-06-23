@@ -19,28 +19,6 @@ public class IsArrayContaining<T> extends TypeSafeMatcher<T[]> {
         this.elementMatcher = elementMatcher;
     }
 
-    @Override
-    public boolean matchesSafely(T[] array) {
-        for (T item : array) {
-            if (elementMatcher.matches(item)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    @Override
-    public void describeMismatchSafely(T[] item, Description mismatchDescription) {
-        super.describeMismatch(Arrays.asList(item), mismatchDescription);
-    };
-
-    @Override
-    public void describeTo(Description description) {
-        description
-            .appendText("an array containing ")
-            .appendDescriptionOf(elementMatcher);
-    }
-
     /**
      * Creates a matcher for arrays that matches when the examined array contains at least one item
      * that is matched by the specified <code>elementMatcher</code>.  Whilst matching, the traversal
@@ -48,9 +26,8 @@ public class IsArrayContaining<T> extends TypeSafeMatcher<T[]> {
      * <p/>
      * For example:
      * <pre>assertThat(new String[] {"foo", "bar"}, hasItemInArray(startsWith("ba")))</pre>
-     * 
-     * @param elementMatcher
-     *     the matcher to apply to elements in examined arrays
+     *
+     * @param elementMatcher the matcher to apply to elements in examined arrays
      */
     @Factory
     public static <T> Matcher<T[]> hasItemInArray(Matcher<? super T> elementMatcher) {
@@ -64,13 +41,36 @@ public class IsArrayContaining<T> extends TypeSafeMatcher<T[]> {
      * <pre>assertThat(hasItemInArray(x))</pre>
      * instead of:
      * <pre>assertThat(hasItemInArray(equalTo(x)))</pre>
-     * 
-     * @param element
-     *     the element that should be present in examined arrays
+     *
+     * @param element the element that should be present in examined arrays
      */
     @Factory
     public static <T> Matcher<T[]> hasItemInArray(T element) {
         Matcher<? super T> matcher = equalTo(element);
         return IsArrayContaining.<T>hasItemInArray(matcher);
+    }
+
+    ;
+
+    @Override
+    public boolean matchesSafely(T[] array) {
+        for (T item : array) {
+            if (elementMatcher.matches(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void describeMismatchSafely(T[] item, Description mismatchDescription) {
+        super.describeMismatch(Arrays.asList(item), mismatchDescription);
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        description
+                .appendText("an array containing ")
+                .appendDescriptionOf(elementMatcher);
     }
 }

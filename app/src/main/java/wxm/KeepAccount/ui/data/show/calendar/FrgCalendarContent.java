@@ -18,8 +18,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
@@ -49,8 +49,8 @@ public class FrgCalendarContent extends FrgUtilityBase {
     int mCLIncome;
 
     // for data
-    private String          mSZHotDay;
-    private List<INote>     mLSDayContents;
+    private String mSZHotDay;
+    private List<INote> mLSDayContents;
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
@@ -62,10 +62,11 @@ public class FrgCalendarContent extends FrgUtilityBase {
 
     /**
      * 设置展示类容
-     * @param day           for day
-     * @param content       for content
+     *
+     * @param day     for day
+     * @param content for content
      */
-    public void setDay(String day, List<INote> content)  {
+    public void setDay(String day, List<INote> content) {
         mSZHotDay = day;
         mLSDayContents = content;
 
@@ -74,8 +75,8 @@ public class FrgCalendarContent extends FrgUtilityBase {
 
     @Override
     protected void initUiComponent(View view) {
-        mSZHotDay       = null;
-        mLSDayContents  = null;
+        mSZHotDay = null;
+        mLSDayContents = null;
     }
 
     @Override
@@ -84,17 +85,17 @@ public class FrgCalendarContent extends FrgUtilityBase {
     }
 
     /// PRIVATE BEGIN
-    private void loadContent()  {
-        if(isDetached())
+    private void loadContent() {
+        if (isDetached())
             return;
 
-        if(UtilFun.StringIsNullOrEmpty(mSZHotDay))  {
+        if (UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
             setVisibility(View.INVISIBLE);
             return;
         }
 
         String[] arr = mSZHotDay.split("-");
-        if(3 != arr.length) {
+        if (3 != arr.length) {
             setVisibility(View.INVISIBLE);
             return;
         }
@@ -109,11 +110,11 @@ public class FrgCalendarContent extends FrgUtilityBase {
         mTVBalance.setText(String.format(Locale.CHINA, "%s %.02f",
                 0 > bb.compareTo(BigDecimal.ZERO) ? "-" : "+",
                 Math.abs(bb.floatValue())));
-        mTVBalance.setTextColor(0 > bb.compareTo(BigDecimal.ZERO) ?  mCLPay : mCLIncome);
+        mTVBalance.setTextColor(0 > bb.compareTo(BigDecimal.ZERO) ? mCLPay : mCLIncome);
 
         // for list body
         LinkedList<HashMap<String, INote>> c_para = new LinkedList<>();
-        if(!UtilFun.ListIsNullOrEmpty(mLSDayContents)) {
+        if (!UtilFun.ListIsNullOrEmpty(mLSDayContents)) {
             for (INote ci : mLSDayContents) {
                 HashMap<String, INote> hm = new HashMap<>();
                 hm.put(AdapterNoteDetail.K_NODE, ci);
@@ -123,7 +124,7 @@ public class FrgCalendarContent extends FrgUtilityBase {
         }
 
         AdapterNoteDetail ap = new AdapterNoteDetail(getActivity(), c_para,
-                            new String[]{}, new int[]{});
+                new String[]{}, new int[]{});
         mLVBody.setAdapter(ap);
         ap.notifyDataSetChanged();
     }

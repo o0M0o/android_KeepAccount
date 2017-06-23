@@ -13,6 +13,12 @@ import org.hamcrest.StringDescription;
  */
 public class EasyMock2Adapter implements IArgumentMatcher {
 
+    private final Matcher<?> hamcrestMatcher;
+
+    public EasyMock2Adapter(Matcher<?> matcher) {
+        this.hamcrestMatcher = matcher;
+    }
+
     /**
      * Convenience factory method that will adapt a
      * Hamcrest {@link org.hamcrest.Matcher} to act as an
@@ -23,12 +29,6 @@ public class EasyMock2Adapter implements IArgumentMatcher {
         EasyMock2Adapter easyMock2Matcher = new EasyMock2Adapter(matcher);
         EasyMock.reportMatcher(easyMock2Matcher);
         return easyMock2Matcher;
-    }
-
-    private final Matcher<?> hamcrestMatcher;
-
-    public EasyMock2Adapter(Matcher<?> matcher) {
-        this.hamcrestMatcher = matcher;
     }
 
     @Override

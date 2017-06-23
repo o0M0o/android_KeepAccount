@@ -18,8 +18,8 @@ class LVResource {
     static int mCRLVItemNoSel;
     static int mCRLVItemSel;
 
-    static Drawable     mDASortUp;
-    static Drawable     mDASortDown;
+    static Drawable mDASortUp;
+    static Drawable mDASortDown;
 
     static {
         Context ct = ContextUtil.getInstance();
@@ -35,7 +35,7 @@ class LVResource {
 
             mDASortUp = res.getDrawable(R.drawable.ic_sort_up_1, te);
             mDASortDown = res.getDrawable(R.drawable.ic_sort_down_1, te);
-        } else  {
+        } else {
             mCRLVLineOne = res.getColor(R.color.color_1);
             mCRLVLineTwo = res.getColor(R.color.color_2);
 

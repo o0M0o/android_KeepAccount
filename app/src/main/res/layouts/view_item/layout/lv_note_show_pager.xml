@@ -87,12 +87,12 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="2dp"
                     android:background="@drawable/rl_action_shape"
+                    app:ibActName="@string/cn_report"
+                    app:ibActNameSize="10sp"
+                    app:ibIcon="@drawable/ic_report"
                     app:ibIconHeight="20dp"
                     app:ibIconWidth="20dp"
-                    app:ibOrientation="vertical"
-                    app:ibIcon="@drawable/ic_report"
-                    app:ibActNameSize="10sp"
-                    app:ibActName="@string/cn_report" />
+                    app:ibOrientation="vertical" />
 
                 <wxm.uilib.IconButton.IconButton
                     android:id="@+id/ib_add"
@@ -102,12 +102,12 @@
                     android:layout_margin="2dp"
                     android:layout_toEndOf="@id/ib_report"
                     android:background="@drawable/rl_action_shape"
+                    app:ibActName="@string/cn_add_note"
+                    app:ibActNameSize="10sp"
+                    app:ibIcon="@drawable/ic_add_note"
                     app:ibIconHeight="20dp"
                     app:ibIconWidth="20dp"
-                    app:ibOrientation="vertical"
-                    app:ibIcon="@drawable/ic_add_note"
-                    app:ibActNameSize="10sp"
-                    app:ibActName="@string/cn_add_note" />
+                    app:ibOrientation="vertical" />
 
 
                 <wxm.uilib.IconButton.IconButton
@@ -118,12 +118,12 @@
                     android:layout_margin="2dp"
                     android:layout_toEndOf="@id/ib_add"
                     android:background="@drawable/rl_action_shape"
+                    app:ibActName="@string/cn_delete_note"
+                    app:ibActNameSize="10sp"
+                    app:ibIcon="@drawable/ic_delete_1"
                     app:ibIconHeight="20dp"
                     app:ibIconWidth="20dp"
-                    app:ibOrientation="vertical"
-                    app:ibIcon="@drawable/ic_delete_1"
-                    app:ibActNameSize="10sp"
-                    app:ibActName="@string/cn_delete_note" />
+                    app:ibOrientation="vertical" />
 
 
                 <wxm.uilib.IconButton.IconButton
@@ -134,12 +134,12 @@
                     android:layout_margin="2dp"
                     android:layout_toEndOf="@id/ib_delete"
                     android:background="@drawable/rl_action_shape"
+                    app:ibActName="@string/cn_refresh"
+                    app:ibActNameSize="10sp"
+                    app:ibIcon="@drawable/ic_refresh_1"
                     app:ibIconHeight="20dp"
                     app:ibIconWidth="20dp"
-                    app:ibOrientation="vertical"
-                    app:ibIcon="@drawable/ic_refresh_1"
-                    app:ibActNameSize="10sp"
-                    app:ibActName="@string/cn_refresh" />
+                    app:ibOrientation="vertical" />
 
 
                 <wxm.uilib.IconButton.IconButton
@@ -150,12 +150,12 @@
                     android:layout_margin="2dp"
                     android:layout_toEndOf="@id/ib_refresh"
                     android:background="@drawable/rl_action_shape"
+                    app:ibActName="@string/cn_sort_down_by_time"
+                    app:ibActNameSize="10sp"
+                    app:ibIcon="@drawable/ic_sort_down_1"
                     app:ibIconHeight="20dp"
                     app:ibIconWidth="20dp"
-                    app:ibOrientation="vertical"
-                    app:ibIcon="@drawable/ic_sort_down_1"
-                    app:ibActNameSize="10sp"
-                    app:ibActName="@string/cn_sort_down_by_time" />
+                    app:ibOrientation="vertical" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>

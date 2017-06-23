@@ -109,11 +109,11 @@
 
     <RelativeLayout
         android:id="@+id/rl_balance"
-        android:layout_marginEnd="4dp"
         android:layout_width="64dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="4dp">
 
         <TextView
             android:id="@+id/tv_balance_tag"
@@ -125,9 +125,9 @@
 
         <TextView
             android:id="@+id/tv_amount"
-            android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_below="@id/tv_balance_tag"
             android:text="0.00"
             android:textColor="@color/darkslategrey"

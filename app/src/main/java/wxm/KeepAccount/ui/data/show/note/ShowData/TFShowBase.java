@@ -16,9 +16,8 @@ import wxm.KeepAccount.R;
  */
 public abstract class TFShowBase extends FrgUtilitySupportBase {
     private final static String CHILD_HOT = "child_hot";
-    private int   mHotChild = 0;
-
-    protected ShowViewHelperBase[]   mViewHelper;
+    protected ShowViewHelperBase[] mViewHelper;
+    private int mHotChild = 0;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -58,8 +57,8 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
 
         View cur_v = getView();
         Log.i(LOG_TAG, "setUserVisibleHint, visible = "
-                        + (isVisibleToUser ? "true" : "false")
-                        + ", view = " + (cur_v == null ? "false" : "true"));
+                + (isVisibleToUser ? "true" : "false")
+                + ", view = " + (cur_v == null ? "false" : "true"));
     }
 
     /**
@@ -67,7 +66,7 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
      */
     public void switchPage() {
         View v = getView();
-        if(null != v) {
+        if (null != v) {
             mHotChild = mHotChild >= mViewHelper.length - 1 ? 0 : mHotChild + 1;
             loadHotFrg();
         }
@@ -76,12 +75,13 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
 
     /**
      * 数据变化后调用
-     * @param bForce   若为true则刷新数据
+     *
+     * @param bForce 若为true则刷新数据
      */
-    public void loadView(boolean bForce)  {
+    public void loadView(boolean bForce) {
         View cur_v = getView();
-        if(null != cur_v) {
-            if(bForce)
+        if (null != cur_v) {
+            if (bForce)
                 mViewHelper[mHotChild].refreshData();
         }
     }
@@ -91,7 +91,7 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
     /**
      * 加载热fragment
      */
-    private void loadHotFrg()   {
+    private void loadHotFrg() {
         android.support.v4.app.FragmentTransaction t = getChildFragmentManager().beginTransaction();
         t.replace(R.id.fl_holder, mViewHelper[mHotChild]);
         t.commit();

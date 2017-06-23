@@ -25,12 +25,8 @@ public class FileLogger {
     private final String mLogTag;
     private Logger mLoger;
 
-    public static Logger getLogger(){
-        return instance.mLoger;
-    }
-
     private FileLogger() {
-        mLogTag =  ("P" + System.currentTimeMillis() % 100000);
+        mLogTag = ("P" + System.currentTimeMillis() % 100000);
 
         String logfn;
         String en = Environment.getExternalStorageState();
@@ -58,10 +54,10 @@ public class FileLogger {
                 public String format(LogRecord record) {
 
                     return String.format(Locale.CHINA
-                            ,"%s|%s|%s-%d|%s:%s|%s"
+                            , "%s|%s|%s-%d|%s:%s|%s"
                             , UtilFun.MilliSecsToString(record.getMillis())
                             , record.getLevel().getName()
-                            , mLogTag ,record.getThreadID()
+                            , mLogTag, record.getThreadID()
                             , record.getSourceClassName(), record.getSourceMethodName()
                             , formatMessage(record)) + (System.lineSeparator());
                 }
@@ -73,5 +69,9 @@ public class FileLogger {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Logger getLogger() {
+        return instance.mLoger;
     }
 }

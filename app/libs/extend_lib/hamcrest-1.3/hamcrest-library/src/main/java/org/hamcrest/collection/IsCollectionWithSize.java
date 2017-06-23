@@ -13,12 +13,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
  */
 public class IsCollectionWithSize<E> extends FeatureMatcher<Collection<? extends E>, Integer> {
     public IsCollectionWithSize(Matcher<? super Integer> sizeMatcher) {
-      super(sizeMatcher, "a collection with size", "collection size");
-    }
-
-    @Override
-    protected Integer featureValueOf(Collection<? extends E> actual) {
-      return actual.size();
+        super(sizeMatcher, "a collection with size", "collection size");
     }
 
     /**
@@ -27,9 +22,8 @@ public class IsCollectionWithSize<E> extends FeatureMatcher<Collection<? extends
      * <p/>
      * For example:
      * <pre>assertThat(Arrays.asList("foo", "bar"), hasSize(equalTo(2)))</pre>
-     * 
-     * @param sizeMatcher
-     *     a matcher for the size of an examined {@link java.util.Collection}
+     *
+     * @param sizeMatcher a matcher for the size of an examined {@link java.util.Collection}
      */
     @Factory
     public static <E> Matcher<Collection<? extends E>> hasSize(Matcher<? super Integer> sizeMatcher) {
@@ -42,14 +36,18 @@ public class IsCollectionWithSize<E> extends FeatureMatcher<Collection<? extends
      * <p/>
      * For example:
      * <pre>assertThat(Arrays.asList("foo", "bar"), hasSize(2))</pre>
-     * 
-     * @param size
-     *     the expected size of an examined {@link java.util.Collection}
+     *
+     * @param size the expected size of an examined {@link java.util.Collection}
      */
     @Factory
     public static <E> Matcher<Collection<? extends E>> hasSize(int size) {
         Matcher<? super Integer> matcher = equalTo(size);
         return IsCollectionWithSize.<E>hasSize(matcher);
+    }
+
+    @Override
+    protected Integer featureValueOf(Collection<? extends E> actual) {
+        return actual.size();
     }
 
 }

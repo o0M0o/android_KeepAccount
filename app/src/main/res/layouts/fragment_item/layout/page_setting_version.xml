@@ -6,21 +6,21 @@
 
     <TextView
         android:id="@+id/tv_ver_number"
-        android:layout_marginTop="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:text="10"
         android:textColor="@color/black"
         android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_ver_name"
-        android:layout_below="@id/tv_ver_number"
-        android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/tv_ver_number"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
         android:text="ver : 1.10"
         android:textColor="@color/black"
         android:textSize="18sp" />

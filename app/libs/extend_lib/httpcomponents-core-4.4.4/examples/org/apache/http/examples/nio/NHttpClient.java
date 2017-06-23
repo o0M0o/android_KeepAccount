@@ -62,7 +62,7 @@ import java.util.concurrent.CountDownLatch;
  * that supports SSL or use a more complex HttpAsyncClient.
  *
  * @see BasicNIOConnPool#BasicNIOConnPool(org.apache.http.nio.reactor.ConnectingIOReactor,
- *   org.apache.http.nio.pool.NIOConnFactory, int)
+ * org.apache.http.nio.pool.NIOConnFactory, int)
  * @see org.apache.http.impl.nio.pool.BasicNIOConnFactory
  */
 public class NHttpClient {
@@ -109,13 +109,13 @@ public class NHttpClient {
         // Create HTTP requester
         HttpAsyncRequester requester = new HttpAsyncRequester(httpproc);
         // Execute HTTP GETs to the following hosts and
-        HttpHost[] targets = new HttpHost[] {
+        HttpHost[] targets = new HttpHost[]{
                 new HttpHost("www.apache.org", 80, "http"),
                 new HttpHost("www.verisign.com", 443, "https"),
                 new HttpHost("www.google.com", 80, "http")
         };
         final CountDownLatch latch = new CountDownLatch(targets.length);
-        for (final HttpHost target: targets) {
+        for (final HttpHost target : targets) {
             BasicHttpRequest request = new BasicHttpRequest("GET", "/");
             HttpCoreContext coreContext = HttpCoreContext.create();
             requester.execute(
@@ -126,22 +126,22 @@ public class NHttpClient {
                     // Handle HTTP response from a callback
                     new FutureCallback<HttpResponse>() {
 
-                public void completed(final HttpResponse response) {
-                    latch.countDown();
-                    System.out.println(target + "->" + response.getStatusLine());
-                }
+                        public void completed(final HttpResponse response) {
+                            latch.countDown();
+                            System.out.println(target + "->" + response.getStatusLine());
+                        }
 
-                public void failed(final Exception ex) {
-                    latch.countDown();
-                    System.out.println(target + "->" + ex);
-                }
+                        public void failed(final Exception ex) {
+                            latch.countDown();
+                            System.out.println(target + "->" + ex);
+                        }
 
-                public void cancelled() {
-                    latch.countDown();
-                    System.out.println(target + " cancelled");
-                }
+                        public void cancelled() {
+                            latch.countDown();
+                            System.out.println(target + " cancelled");
+                        }
 
-            });
+                    });
         }
         latch.await();
         System.out.println("Shutting down I/O reactor");

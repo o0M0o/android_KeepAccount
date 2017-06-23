@@ -15,35 +15,30 @@ import wxm.KeepAccount.utility.ContextUtil;
  * Created by wxm on 2016/5/30.
  */
 public class NoteDataHelper {
-    private static final String TAG = "NoteDataHelper ";
-
     // 定义调用参数
-    public static final String INTENT_PARA_FIRST_TAB   = "first_tab";
-
+    public static final String INTENT_PARA_FIRST_TAB = "first_tab";
     // 定义tab页标签内容
-    public static final String TAB_TITLE_DAILY      = "日流水";
-    public static final String TAB_TITLE_MONTHLY    = "月流水";
-    public static final String TAB_TITLE_YEARLY     = "年流水";
-    public static final String TAB_TITLE_BUDGET     = "预算";
-
+    public static final String TAB_TITLE_DAILY = "日流水";
+    public static final String TAB_TITLE_MONTHLY = "月流水";
+    public static final String TAB_TITLE_YEARLY = "年流水";
+    public static final String TAB_TITLE_BUDGET = "预算";
+    private static final String TAG = "NoteDataHelper ";
+    // use singleton
+    private static NoteDataHelper instance = new NoteDataHelper();
     /**
      * 分别对应 :
      * '2016-10-24' ---- data   (日数据）
      * '2016-10'    ---- data   (月数据)
      * '2016'       ---- data   (年数据)
      */
-    private HashMap<String, NoteShowInfo>   mHMDayInfo;
-    private HashMap<String, NoteShowInfo>   mHMMonthInfo;
-    private HashMap<String, NoteShowInfo>   mHMYearInfo;
+    private HashMap<String, NoteShowInfo> mHMDayInfo;
+    private HashMap<String, NoteShowInfo> mHMMonthInfo;
+    private HashMap<String, NoteShowInfo> mHMYearInfo;
+    private HashMap<String, ArrayList<INote>> mHMDayNotes;
+    private HashMap<String, ArrayList<INote>> mHMMonthNotes;
+    private HashMap<String, ArrayList<INote>> mHMYearNotes;
+    private ArrayList<String> mALOrderedDays;
 
-    private HashMap<String, ArrayList<INote>>   mHMDayNotes;
-    private HashMap<String, ArrayList<INote>>   mHMMonthNotes;
-    private HashMap<String, ArrayList<INote>>   mHMYearNotes;
-
-    private ArrayList<String>   mALOrderedDays;
-
-    // use singleton
-    private static NoteDataHelper instance = new NoteDataHelper();
     private NoteDataHelper() {
         mHMDayInfo = new HashMap<>();
         mHMMonthInfo = new HashMap<>();
@@ -55,9 +50,72 @@ public class NoteDataHelper {
     }
 
     /**
+     * 根据月份查找统计数据
+     *
+     * @param mt 月份（比如'2017-01')
+     * @return 统计数据
+     */
+    public static NoteShowInfo getInfoByMonth(String mt) {
+        return getInstance().mHMMonthInfo.get(mt);
+    }
+
+    /**
+     * 返回有数据的月份
+     *
+     * @return 有数据的月份
+     */
+    public static List<String> getNotesMonths() {
+        LinkedList<String> ls_sz = new LinkedList<>();
+        ls_sz.addAll(getInstance().mHMMonthInfo.keySet());
+        return ls_sz;
+    }
+
+    /**
+     * 根据年份查找统计数据
+     *
+     * @param yr 年度（比如'2017')
+     * @return 统计数据
+     */
+    public static NoteShowInfo getInfoByYear(String yr) {
+        return getInstance().mHMYearInfo.get(yr);
+    }
+
+    /**
+     * 返回有数据的年度
+     *
+     * @return 有数据的年度
+     */
+    public static List<String> getNotesYears() {
+        LinkedList<String> ls_sz = new LinkedList<>();
+        ls_sz.addAll(getInstance().mHMYearInfo.keySet());
+        return ls_sz;
+    }
+
+    /**
+     * 根据日期查找统计数据
+     *
+     * @param day 日期（比如'2017-01-12')
+     * @return 统计数据
+     */
+    public static NoteShowInfo getInfoByDay(String day) {
+        return getInstance().mHMDayInfo.get(day);
+    }
+
+    /**
+     * 返回有数据的日期
+     *
+     * @return 有数据的日期
+     */
+    public static List<String> getNotesDays() {
+        LinkedList<String> ls_sz = new LinkedList<>();
+        ls_sz.addAll(getInstance().mHMDayInfo.keySet());
+        return ls_sz;
+    }
+
+    /**
      * 更新统计数据
      */
-    public void refreshData()    {
+    public void refreshData() {
         mHMDayInfo.clear();
         mHMMonthInfo.clear();
         mHMYearInfo.clear();
@@ -76,103 +134,43 @@ public class NoteDataHelper {
 
     /**
      * 获得按日归类的数据
-     * @return    按日归类的数据
+     *
+     * @return 按日归类的数据
      */
-    public HashMap<String, ArrayList<INote>> getNotesForDay()   {
+    public HashMap<String, ArrayList<INote>> getNotesForDay() {
         return mHMDayNotes;
     }
 
     /**
      * 获得按日归类的数据
-     * @return    按日归类的数据
+     *
+     * @return 按日归类的数据
      */
-    public HashMap<String, ArrayList<INote>> getNotesForMonth()   {
+    public HashMap<String, ArrayList<INote>> getNotesForMonth() {
         return mHMMonthNotes;
     }
 
     /**
      * 获得按日归类的数据
-     * @return    按日归类的数据
+     *
+     * @return 按日归类的数据
      */
-    public HashMap<String, ArrayList<INote>> getNotesForYear()   {
+    public HashMap<String, ArrayList<INote>> getNotesForYear() {
         return mHMYearNotes;
     }
 
-
-    /**
-     * 根据月份查找统计数据
-     * @param mt    月份（比如'2017-01')
-     * @return      统计数据
-     */
-    public static NoteShowInfo getInfoByMonth(String mt)   {
-        return getInstance().mHMMonthInfo.get(mt);
-    }
-
-
-    /**
-     * 返回有数据的月份
-     * @return      有数据的月份
-     */
-    public static List<String> getNotesMonths() {
-        LinkedList<String> ls_sz = new LinkedList<>();
-        ls_sz.addAll(getInstance().mHMMonthInfo.keySet());
-        return ls_sz;
-    }
-
-
-    /**
-     * 根据年份查找统计数据
-     * @param yr    年度（比如'2017')
-     * @return      统计数据
-     */
-    public static NoteShowInfo getInfoByYear(String yr)   {
-        return getInstance().mHMYearInfo.get(yr);
-    }
-
-
-    /**
-     * 返回有数据的年度
-     * @return      有数据的年度
-     */
-    public static List<String> getNotesYears() {
-        LinkedList<String> ls_sz = new LinkedList<>();
-        ls_sz.addAll(getInstance().mHMYearInfo.keySet());
-        return ls_sz;
-    }
-
-
-    /**
-     * 根据日期查找统计数据
-     * @param day   日期（比如'2017-01-12')
-     * @return      统计数据
-     */
-    public static NoteShowInfo getInfoByDay(String day)   {
-        return getInstance().mHMDayInfo.get(day);
-    }
-
-
-    /**
-     * 返回有数据的日期
-     * @return      有数据的日期
-     */
-    public static List<String> getNotesDays() {
-        LinkedList<String> ls_sz = new LinkedList<>();
-        ls_sz.addAll(getInstance().mHMDayInfo.keySet());
-        return ls_sz;
-    }
-
-
     /**
      * 以日期为单位,抽取指定时间段范围内的数据
-     * @param start     开始日期
-     * @param end       结束日期
-     * @return          数据
+     *
+     * @param start 开始日期
+     * @param end   结束日期
+     * @return 数据
      */
-    public HashMap<String, ArrayList<INote>>  getNotesBetweenDays(String start, String end)   {
+    public HashMap<String, ArrayList<INote>> getNotesBetweenDays(String start, String end) {
         HashMap<String, ArrayList<INote>> ls_note = new HashMap<>();
-        for(String day : mALOrderedDays)    {
-            if(day.compareTo(start) >= 0)   {
-                if(day.compareTo(end) > 0)
+        for (String day : mALOrderedDays) {
+            if (day.compareTo(start) >= 0) {
+                if (day.compareTo(end) > 0)
                     break;
 
                 ls_note.put(day, mHMDayNotes.get(day));
@@ -185,52 +183,54 @@ public class NoteDataHelper {
 
     /**
      * 根据当前日期, 获得下一天的日期
-     * @param org_day   当前日期,比如"2017-02-24"
-     * @return  下一天的日期，或者""
+     *
+     * @param org_day 当前日期,比如"2017-02-24"
+     * @return 下一天的日期，或者""
      */
-    public String getNextDay(String org_day)    {
-        if(mALOrderedDays.isEmpty())
+    public String getNextDay(String org_day) {
+        if (mALOrderedDays.isEmpty())
             return "";
 
         int max_id = mALOrderedDays.size() - 1;
         int id = mALOrderedDays.indexOf(org_day);
-        if(-1 == id) {
-            for(int idx = max_id; idx >= 0; --idx)  {
+        if (-1 == id) {
+            for (int idx = max_id; idx >= 0; --idx) {
                 String day = mALOrderedDays.get(idx);
-                if(0 > day.compareTo(org_day))  {
+                if (0 > day.compareTo(org_day)) {
                     id = idx < max_id ? idx + 1 : idx;
                     break;
                 }
             }
-        }   else    {
+        } else {
             id = id + 1;
         }
 
         return id <= max_id && id != -1 ?
-                        mALOrderedDays.get(id) : "";
+                mALOrderedDays.get(id) : "";
     }
 
 
     /**
      * 根据当前日期, 获得上一天的日期
-     * @param org_day   当前日期
-     * @return  上一天的日期，或者""
+     *
+     * @param org_day 当前日期
+     * @return 上一天的日期，或者""
      */
-    public String getPrvDay(String org_day)    {
-        if(mALOrderedDays.isEmpty())
+    public String getPrvDay(String org_day) {
+        if (mALOrderedDays.isEmpty())
             return "";
 
         int id = mALOrderedDays.indexOf(org_day);
-        if(-1 == id) {
+        if (-1 == id) {
             int len = mALOrderedDays.size();
-            for(int idx = 0; idx < len; ++idx)  {
+            for (int idx = 0; idx < len; ++idx) {
                 String day = mALOrderedDays.get(idx);
-                if(0 < day.compareTo(org_day))  {
+                if (0 < day.compareTo(org_day)) {
                     id = idx > 0 ? idx - 1 : 0;
                     break;
                 }
             }
-        } else  {
+        } else {
             id = id - 1;
         }
 
@@ -243,7 +243,7 @@ public class NoteDataHelper {
      * 更新日统计数据
      * 数据取自sqlite原始数据
      */
-    private void refresh_day()  {
+    private void refresh_day() {
         //ArrayList<String> set_k = new ArrayList<>(mHMDayNotes.keySet());
         //Collections.sort(set_k);
         for (String k : mALOrderedDays) {
@@ -267,13 +267,13 @@ public class NoteDataHelper {
      * 更新月统计数据
      * !!数据取自日统计数据!!
      */
-    private void refresh_month()  {
+    private void refresh_month() {
         ArrayList<String> set_k = new ArrayList<>(mHMDayInfo.keySet());
         for (String k : set_k) {
             boolean bn = false;
             String cur_m = k.substring(0, 7);
             NoteShowInfo v_d = mHMMonthInfo.get(cur_m);
-            if(null == v_d) {
+            if (null == v_d) {
                 bn = true;
                 v_d = new NoteShowInfo();
             }
@@ -284,7 +284,7 @@ public class NoteDataHelper {
             v_d.setPayAmount(cur_d.getPayAmount().add(v_d.getPayAmount()));
             v_d.setIncomeAmount(cur_d.getIncomeAmount().add(v_d.getIncomeAmount()));
 
-            if(bn)
+            if (bn)
                 mHMMonthInfo.put(cur_m, v_d);
         }
     }
@@ -293,13 +293,13 @@ public class NoteDataHelper {
      * 更新年统计数据
      * !!数据取自月统计数据!!
      */
-    private void refresh_year()  {
+    private void refresh_year() {
         ArrayList<String> set_k = new ArrayList<>(mHMMonthInfo.keySet());
         for (String k : set_k) {
             boolean bn = false;
             String cur_m = k.substring(0, 4);
             NoteShowInfo v_d = mHMYearInfo.get(cur_m);
-            if(null == v_d) {
+            if (null == v_d) {
                 bn = true;
                 v_d = new NoteShowInfo();
             }
@@ -310,7 +310,7 @@ public class NoteDataHelper {
             v_d.setPayAmount(cur_d.getPayAmount().add(v_d.getPayAmount()));
             v_d.setIncomeAmount(cur_d.getIncomeAmount().add(v_d.getIncomeAmount()));
 
-            if(bn)
+            if (bn)
                 mHMYearInfo.put(cur_m, v_d);
         }
     }

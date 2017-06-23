@@ -15,33 +15,35 @@ import wxm.KeepAccount.R;
  */
 public class DlgLongTxt extends DlgOKOrNOBase {
     @BindView(R.id.et_long_txt)
-    EditText    mETLongTxt;
+    EditText mETLongTxt;
 
-    private String  mSZInitLongTxt;
-
-    /**
-     * 设置长文本
-     * @param lt  初始长文本
-     */
-    public void setLongTxt(String lt)   {
-        mSZInitLongTxt = lt;
-    }
+    private String mSZInitLongTxt;
 
     /**
      * 获取长文本
+     *
      * @return 长文本
      */
-    public String getLongTxt()    {
+    public String getLongTxt() {
         return mETLongTxt.getText().toString();
+    }
+
+    /**
+     * 设置长文本
+     *
+     * @param lt 初始长文本
+     */
+    public void setLongTxt(String lt) {
+        mSZInitLongTxt = lt;
     }
 
     @Override
     protected View InitDlgView() {
-        InitDlgTitle("编辑内容",  "接受", "放弃");
+        InitDlgTitle("编辑内容", "接受", "放弃");
         View vw = View.inflate(getActivity(), R.layout.dlg_long_txt, null);
         ButterKnife.bind(this, vw);
 
-        if(!UtilFun.StringIsNullOrEmpty(mSZInitLongTxt))
+        if (!UtilFun.StringIsNullOrEmpty(mSZInitLongTxt))
             mETLongTxt.setText(mSZInitLongTxt);
         return vw;
     }

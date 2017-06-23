@@ -1,4 +1,3 @@
-
 package org.hamcrest.text;
 
 import org.hamcrest.BaseMatcher;
@@ -17,22 +16,11 @@ public final class IsEmptyString extends BaseMatcher<String> {
     @SuppressWarnings("unchecked")
     private static final Matcher<String> NULL_OR_EMPTY_INSTANCE = anyOf(nullValue(), INSTANCE);
 
-    @Override
-    public boolean matches(Object item) {
-        return item != null && item instanceof String && ((String) item).equals("");
-    }
-
-    @Override
-    public void describeTo(Description description) {
-        description.appendText("an empty string");
-    }
-
     /**
      * Creates a matcher of {@link String} that matches when the examined string has zero length.
      * <p/>
      * For example:
      * <pre>assertThat("", isEmptyString())</pre>
-     * 
      */
     @Factory
     public static Matcher<String> isEmptyString() {
@@ -45,10 +33,19 @@ public final class IsEmptyString extends BaseMatcher<String> {
      * <p/>
      * For example:
      * <pre>assertThat(((String)null), isEmptyString())</pre>
-     * 
      */
     @Factory
     public static Matcher<String> isEmptyOrNullString() {
         return NULL_OR_EMPTY_INSTANCE;
+    }
+
+    @Override
+    public boolean matches(Object item) {
+        return item != null && item instanceof String && ((String) item).equals("");
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        description.appendText("an empty string");
     }
 }

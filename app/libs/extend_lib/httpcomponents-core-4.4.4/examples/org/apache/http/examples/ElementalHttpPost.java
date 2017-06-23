@@ -60,11 +60,11 @@ public class ElementalHttpPost {
 
     public static void main(String[] args) throws Exception {
         HttpProcessor httpproc = HttpProcessorBuilder.create()
-            .add(new RequestContent())
-            .add(new RequestTargetHost())
-            .add(new RequestConnControl())
-            .add(new RequestUserAgent("Test/1.1"))
-            .add(new RequestExpectContinue(true)).build();
+                .add(new RequestContent())
+                .add(new RequestTargetHost())
+                .add(new RequestConnControl())
+                .add(new RequestUserAgent("Test/1.1"))
+                .add(new RequestExpectContinue(true)).build();
 
         HttpRequestExecutor httpexecutor = new HttpRequestExecutor();
 
@@ -87,7 +87,7 @@ public class ElementalHttpPost {
                     new InputStreamEntity(
                             new ByteArrayInputStream(
                                     "This is the third test request (will be chunked)"
-                                    .getBytes(Consts.UTF_8)),
+                                            .getBytes(Consts.UTF_8)),
                             ContentType.APPLICATION_OCTET_STREAM)
             };
 

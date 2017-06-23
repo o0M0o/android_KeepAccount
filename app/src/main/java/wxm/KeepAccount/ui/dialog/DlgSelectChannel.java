@@ -1,12 +1,9 @@
 package wxm.KeepAccount.ui.dialog;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
@@ -18,10 +15,10 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.dialog.utility.DlgResource;
 import wxm.KeepAccount.utility.ActionHelper;
 import wxm.KeepAccount.utility.DGVButtonAdapter;
-import wxm.KeepAccount.R;
 
 /**
  * 选择关注channel的对话框
@@ -29,7 +26,7 @@ import wxm.KeepAccount.R;
  */
 public class DlgSelectChannel extends DlgOKOrNOBase {
     // for hot channel
-    private ArrayList<String>  mLSHotChannel = new ArrayList<>();
+    private ArrayList<String> mLSHotChannel = new ArrayList<>();
 
     /*
      * 根据当前hot channel来初始化
@@ -41,23 +38,24 @@ public class DlgSelectChannel extends DlgOKOrNOBase {
     */
 
     /**
-     * 设置放置在首页上的项（项名）
-     * 显示对话框前使用此方法设置初始值
-     * @param org_hot   放置在首页上的项名
-     */
-    public void setHotChannel(List<String> org_hot)     {
-        mLSHotChannel.addAll(org_hot);
-    }
-
-    /**
      * 获取放置在首页上的项（项名）
      * 结束对话框后使用此方法得到更新的值
-     * @return  用户在对话框中的选择
+     *
+     * @return 用户在对话框中的选择
      */
-    public List<String> getHotChannel()    {
+    public List<String> getHotChannel() {
         return mLSHotChannel;
     }
 
+    /**
+     * 设置放置在首页上的项（项名）
+     * 显示对话框前使用此方法设置初始值
+     *
+     * @param org_hot 放置在首页上的项名
+     */
+    public void setHotChannel(List<String> org_hot) {
+        mLSHotChannel.addAll(org_hot);
+    }
 
     @Override
     protected View InitDlgView() {
@@ -70,17 +68,17 @@ public class DlgSelectChannel extends DlgOKOrNOBase {
             String act = UtilFun.cast(hmd.get(DGVButtonAdapter.HKEY_ACT_NAME));
 
             boolean hot = mLSHotChannel.contains(act);
-            if(hot)   {
+            if (hot) {
                 mLSHotChannel.remove(act);
                 view.setBackground(DlgResource.mDAChannelNoSel);
-            } else  {
+            } else {
                 mLSHotChannel.add(act);
                 view.setBackground(DlgResource.mDAChannelSel);
             }
         });
 
         ArrayList<HashMap<String, Object>> ls_data = new ArrayList<>();
-        for(String i : ActionHelper.ACTION_NAMES)   {
+        for (String i : ActionHelper.ACTION_NAMES) {
             HashMap<String, Object> hm = new HashMap<>();
             hm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
 
@@ -88,8 +86,8 @@ public class DlgSelectChannel extends DlgOKOrNOBase {
         }
 
         GVChannelAdapter ga = new GVChannelAdapter(getActivity(), ls_data,
-                new String[] { DGVButtonAdapter.HKEY_ACT_NAME },
-                new int[]{ R.id.tv_name});
+                new String[]{DGVButtonAdapter.HKEY_ACT_NAME},
+                new int[]{R.id.tv_name});
         gv.setAdapter(ga);
         ga.notifyDataSetChanged();
         return vw;

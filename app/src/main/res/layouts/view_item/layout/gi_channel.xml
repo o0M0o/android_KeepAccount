@@ -8,12 +8,12 @@
 
     <ImageView
         android:id="@+id/iv_act"
-        android:scaleType="fitXY"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/tv_name"

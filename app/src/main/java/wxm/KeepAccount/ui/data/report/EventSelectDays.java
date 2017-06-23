@@ -8,7 +8,7 @@ public class EventSelectDays {
     public String mSZStartDay;
     public String mSZEndDay;
 
-    public EventSelectDays(String s_d, String e_d)    {
+    public EventSelectDays(String s_d, String e_d) {
         mSZStartDay = s_d;
         mSZEndDay = e_d;
     }

@@ -20,10 +20,10 @@ public class HamcrestFactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod(method.getName(), method);
         assertEquals("" +
-                "  public static matcher.ReturnType anyObject() {\n" +
-                "    return com.example.MyMatcher.anyObject();\n" +
-                "  }\n" +
-                "\n",
+                        "  public static matcher.ReturnType anyObject() {\n" +
+                        "    return com.example.MyMatcher.anyObject();\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 
@@ -35,20 +35,20 @@ public class HamcrestFactoryWriterTest extends TestCase {
         factoryWriter.writeFooter();
 
         assertEquals("" +
-                "// Generated source.\n" +
-                "package com.some.package;\n" +
-                "\n" +
-                "public class SomeClass {\n" +
-                "\n" +
-                "  public static matcher.ReturnType method1() {\n" +
-                "    return com.example.MyMatcher.method1();\n" +
-                "  }\n" +
-                "\n" +
-                "  public static matcher.ReturnType method2() {\n" +
-                "    return com.example.MyMatcher.method2();\n" +
-                "  }\n" +
-                "\n" +
-                "}\n",
+                        "// Generated source.\n" +
+                        "package com.some.package;\n" +
+                        "\n" +
+                        "public class SomeClass {\n" +
+                        "\n" +
+                        "  public static matcher.ReturnType method1() {\n" +
+                        "    return com.example.MyMatcher.method1();\n" +
+                        "  }\n" +
+                        "\n" +
+                        "  public static matcher.ReturnType method2() {\n" +
+                        "    return com.example.MyMatcher.method2();\n" +
+                        "  }\n" +
+                        "\n" +
+                        "}\n",
                 output.toString());
     }
 
@@ -58,10 +58,10 @@ public class HamcrestFactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod(method.getName(), method);
         assertEquals("" +
-                "  public static matcher.ReturnType<String> anyString() {\n" +
-                "    return com.example.MyMatcher.anyString();\n" +
-                "  }\n" +
-                "\n",
+                        "  public static matcher.ReturnType<String> anyString() {\n" +
+                        "    return com.example.MyMatcher.anyString();\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 
@@ -71,10 +71,10 @@ public class HamcrestFactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod(method.getName(), method);
         assertEquals("" +
-                "  public static matcher.ReturnType<java.util.Map<com.Foo<Cheese>,?>> weirdThing() {\n" +
-                "    return com.example.MyMatcher.weirdThing();\n" +
-                "  }\n" +
-                "\n",
+                        "  public static matcher.ReturnType<java.util.Map<com.Foo<Cheese>,?>> weirdThing() {\n" +
+                        "    return com.example.MyMatcher.weirdThing();\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 
@@ -85,10 +85,10 @@ public class HamcrestFactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod(method.getName(), method);
         assertEquals("" +
-                "  public static matcher.ReturnType between(int[] lower, com.blah.Cheesable<Long>... upper) {\n" +
-                "    return com.example.MyMatcher.between(lower, upper);\n" +
-                "  }\n" +
-                "\n",
+                        "  public static matcher.ReturnType between(int[] lower, com.blah.Cheesable<Long>... upper) {\n" +
+                        "    return com.example.MyMatcher.between(lower, upper);\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 
@@ -99,10 +99,10 @@ public class HamcrestFactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod(method.getName(), method);
         assertEquals("" +
-                "  public static matcher.ReturnType tricky() throws java.io.IOException, com.foo.CheeselessException {\n" +
-                "    return com.example.MyMatcher.tricky();\n" +
-                "  }\n" +
-                "\n",
+                        "  public static matcher.ReturnType tricky() throws java.io.IOException, com.foo.CheeselessException {\n" +
+                        "    return com.example.MyMatcher.tricky();\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 
@@ -115,10 +115,10 @@ public class HamcrestFactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod(method.getName(), method);
         assertEquals("" +
-                "  public static <T, V extends String & Cheese> matcher.ReturnType tricky(T t, List<V> v) {\n" +
-                "    return com.example.MyMatcher.<T,V>tricky(t, v);\n" +
-                "  }\n" +
-                "\n",
+                        "  public static <T, V extends String & Cheese> matcher.ReturnType tricky(T t, List<V> v) {\n" +
+                        "    return com.example.MyMatcher.<T,V>tricky(t, v);\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 
@@ -128,16 +128,16 @@ public class HamcrestFactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod(method.getName(), method);
         assertEquals("" +
-                "  /**\n" +
-                "   * This is a complicated method.\n" +
-                "   * It needs docs.\n" +
-                "   * \n" +
-                "   * @see MoreStuff\n" +
-                "   */\n" +
-                "  public static matcher.ReturnType needsDoc() {\n" +
-                "    return com.example.MyMatcher.needsDoc();\n" +
-                "  }\n" +
-                "\n",
+                        "  /**\n" +
+                        "   * This is a complicated method.\n" +
+                        "   * It needs docs.\n" +
+                        "   * \n" +
+                        "   * @see MoreStuff\n" +
+                        "   */\n" +
+                        "  public static matcher.ReturnType needsDoc() {\n" +
+                        "    return com.example.MyMatcher.needsDoc();\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 
@@ -146,10 +146,10 @@ public class HamcrestFactoryWriterTest extends TestCase {
 
         factoryWriter.writeMethod("anotherName", method);
         assertEquals("" +
-                "  public static matcher.ReturnType anotherName() {\n" +
-                "    return com.example.MyMatcher.eq();\n" +
-                "  }\n" +
-                "\n",
+                        "  public static matcher.ReturnType anotherName() {\n" +
+                        "    return com.example.MyMatcher.eq();\n" +
+                        "  }\n" +
+                        "\n",
                 output.toString());
     }
 

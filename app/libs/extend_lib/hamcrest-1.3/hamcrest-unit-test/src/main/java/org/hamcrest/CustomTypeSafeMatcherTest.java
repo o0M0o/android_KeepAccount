@@ -14,7 +14,7 @@ public class CustomTypeSafeMatcherTest extends AbstractMatcherTest {
 
             @Override
             public void describeMismatchSafely(String item, Description mismatchDescription) {
-              mismatchDescription.appendText("an " + item);
+                mismatchDescription.appendText("an " + item);
             }
         };
     }
@@ -24,7 +24,7 @@ public class CustomTypeSafeMatcherTest extends AbstractMatcherTest {
     }
 
     public void testReportsMismatch() {
-      assertMismatchDescription("an item", customMatcher, "item");
+        assertMismatchDescription("an item", customMatcher, "item");
     }
 
     @Override

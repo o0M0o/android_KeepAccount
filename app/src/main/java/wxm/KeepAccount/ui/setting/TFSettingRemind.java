@@ -8,7 +8,7 @@ package wxm.KeepAccount.ui.setting;
 public class TFSettingRemind extends TFSettingBase {
     @Override
     public void updateSetting() {
-        if(mBSettingDirty)  {
+        if (mBSettingDirty) {
             mBSettingDirty = false;
         }
     }

@@ -22,6 +22,10 @@ public class XmlConfiguratorTest extends TestCase {
     private MockSugarConfiguration sugarConfiguration;
     private XmlConfigurator config;
 
+    private static InputSource createXml(String xml) {
+        return new InputSource(new StringReader(xml));
+    }
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -37,15 +41,11 @@ public class XmlConfiguratorTest extends TestCase {
                 "</matchers>"));
 
         assertThat(sugarConfiguration.factoryMethods(),
-            hasItem(new FactoryMethod(SomeMatcher.class.getName().replace('$', '.'), "matcher1", "org.hamcrest.Matcher")));
+                hasItem(new FactoryMethod(SomeMatcher.class.getName().replace('$', '.'), "matcher1", "org.hamcrest.Matcher")));
         assertThat(sugarConfiguration.factoryMethods(),
-            hasItem(new FactoryMethod(SomeMatcher.class.getName().replace('$', '.'), "matcher2", "org.hamcrest.Matcher")));
+                hasItem(new FactoryMethod(SomeMatcher.class.getName().replace('$', '.'), "matcher2", "org.hamcrest.Matcher")));
         assertThat(sugarConfiguration.factoryMethods(),
-            hasItem(new FactoryMethod(AnotherMatcher.class.getName().replace('$', '.'), "matcher3", "org.hamcrest.CombinableMatcher")));
-    }
-
-    private static InputSource createXml(String xml) {
-        return new InputSource(new StringReader(xml));
+                hasItem(new FactoryMethod(AnotherMatcher.class.getName().replace('$', '.'), "matcher3", "org.hamcrest.CombinableMatcher")));
     }
 
     // Sample Matchers

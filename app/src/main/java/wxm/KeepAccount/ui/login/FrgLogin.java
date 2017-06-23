@@ -23,11 +23,11 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
-import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.welcome.ACWelcome;
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.usr.ACAddUsr;
+import wxm.KeepAccount.ui.welcome.ACWelcome;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * for login
@@ -58,7 +58,7 @@ public class FrgLogin extends FrgUtilityBase {
 
     // for res
     @BindString(R.string.error_incorrect_password)
-    String  mHSErrorPassword;
+    String mHSErrorPassword;
 
     // Keep track of the login task to ensure we can cancel it if requested.
     private UserLoginTask mAuthTask = null;
@@ -103,6 +103,7 @@ public class FrgLogin extends FrgUtilityBase {
     }
 
     /// PRIVATE BEGIN
+
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid mETEmail, missing fields, etc.), the
@@ -165,7 +166,7 @@ public class FrgLogin extends FrgUtilityBase {
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
         int shortAnimTime = getResources()
-                                .getInteger(android.R.integer.config_shortAnimTime);
+                .getInteger(android.R.integer.config_shortAnimTime);
 
         mLLLogin.setVisibility(show ? View.GONE : View.VISIBLE);
         mLLLogin.animate().setDuration(shortAnimTime).alpha(
@@ -202,7 +203,7 @@ public class FrgLogin extends FrgUtilityBase {
         }
 
         @Override
-        protected void onPreExecute()   {
+        protected void onPreExecute() {
             super.onPreExecute();
             showProgress(true);
         }

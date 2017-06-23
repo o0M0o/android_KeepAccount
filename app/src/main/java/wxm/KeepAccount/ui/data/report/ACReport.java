@@ -15,13 +15,13 @@ import wxm.KeepAccount.define.GlobalDef;
  * Created by ookoo on 2017/2/15.
  */
 public class ACReport extends BaseAppCompatActivity {
-    public final static String PARA_TYPE    = "para_type";
-    public final static String PT_DAY       = "pt_day";
-    public final static String PT_MONTH     = "pt_month";
-    public final static String PT_YEAR      = "pt_year";
+    public final static String PARA_TYPE = "para_type";
+    public final static String PT_DAY = "pt_day";
+    public final static String PT_MONTH = "pt_month";
+    public final static String PT_YEAR = "pt_year";
 
 
-    public final static String PARA_LOAD    = "para_load";
+    public final static String PARA_LOAD = "para_load";
 
 
     @Override
@@ -39,36 +39,36 @@ public class ACReport extends BaseAppCompatActivity {
         // check invoke intent
         Intent it = getIntent();
         String sz_type = it.getStringExtra(PARA_TYPE);
-        if(UtilFun.StringIsNullOrEmpty(sz_type)) {
+        if (UtilFun.StringIsNullOrEmpty(sz_type)) {
             Log.e(LOG_TAG, "调用intent缺少'PARA_TYPE'参数");
-            return ;
+            return;
         }
 
         ArrayList<String> al_load = it.getStringArrayListExtra(PARA_LOAD);
-        if(UtilFun.ListIsNullOrEmpty(al_load))  {
+        if (UtilFun.ListIsNullOrEmpty(al_load)) {
             Log.e(LOG_TAG, "调用intent缺少'PARA_LOAD'参数");
-            return ;
+            return;
         }
 
         // for holder
-        switch (sz_type)    {
-            case PT_DAY :   {
+        switch (sz_type) {
+            case PT_DAY: {
                 mFGHolder = new FrgReportDay();
             }
             break;
 
-            case PT_MONTH :   {
+            case PT_MONTH: {
                 mFGHolder = new FrgReportMonth();
             }
             break;
 
-            case PT_YEAR :   {
+            case PT_YEAR: {
                 mFGHolder = new FrgReportYear();
             }
             break;
         }
 
-        if(null != mFGHolder) {
+        if (null != mFGHolder) {
             Bundle bd = new Bundle();
             bd.putStringArrayList(PARA_LOAD, al_load);
             mFGHolder.setArguments(bd);

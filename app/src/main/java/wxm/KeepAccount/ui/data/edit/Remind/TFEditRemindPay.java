@@ -10,28 +10,25 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.RemindItem;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.RemindItem;
 
 /**
  * 支出提醒
  * Created by 123 on 2016/10/8.
  */
-public class TFEditRemindPay extends TFEditRemindBase  {
-    private Spinner     mSPPeriod;
-    private Spinner     mSPRemindActiveType;
-
+public class TFEditRemindPay extends TFEditRemindBase {
     private final static String[] PERIOD_TYPE = {
             RemindItem.PERIOD_WEEKLY,
             RemindItem.PERIOD_MONTHLY,
             RemindItem.PERIOD_YEARLY
     };
-
-
     private final static String[] RAT_TYPE = {
             RemindItem.RAT_AMOUNT_BELOW,
             RemindItem.RAT_AMOUNT_EXCEED
     };
+    private Spinner mSPPeriod;
+    private Spinner mSPRemindActiveType;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -43,7 +40,7 @@ public class TFEditRemindPay extends TFEditRemindBase  {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(null != view) {
+        if (null != view) {
             mSPPeriod = UtilFun.cast(view.findViewById(R.id.sp_period));
             mSPRemindActiveType = UtilFun.cast(view.findViewById(R.id.sp_remind_active));
             assert null != mSPPeriod && null != mSPRemindActiveType;

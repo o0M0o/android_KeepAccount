@@ -1,30 +1,84 @@
-<html><head>
-      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Chapter&nbsp;4.&nbsp;Advanced topics</title><link rel="stylesheet" type="text/css" href="css/hc-tutorial.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><link rel="home" href="index.html" title="HttpCore Tutorial"><link rel="up" href="index.html" title="HttpCore Tutorial"><link rel="prev" href="nio.html" title="Chapter&nbsp;3.&nbsp;Asynchronous I/O based on NIO"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div xmlns:fo="http://www.w3.org/1999/XSL/Format" class="banner"><a class="bannerLeft" href="http://www.apache.org/" title="Apache Software Foundation"><img style="border:none;" src="images/asf_logo_wide.gif"></a><a class="bannerRight" href="http://hc.apache.org/httpcomponents-core-ga/" title="Apache HttpComponents Core"><img style="border:none;" src="images/hc_logo.png"></a><div class="clear"></div></div><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Advanced topics</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="nio.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;</td></tr></table><hr></div><div class="chapter" title="Chapter&nbsp;4.&nbsp;Advanced topics"><div class="titlepage"><div><div><h2 class="title"><a name="advanced"></a>Chapter&nbsp;4.&nbsp;Advanced topics</h2></div></div></div>
-    
-    <div class="section" title="4.1.&nbsp;HTTP message parsing and formatting framework"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e1311"></a>4.1.&nbsp;HTTP message parsing and formatting framework</h2></div></div></div>
-        
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Chapter&nbsp;4.&nbsp;Advanced topics</title>
+    <link rel="stylesheet" type="text/css" href="css/hc-tutorial.css">
+    <meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1">
+    <link rel="home" href="index.html" title="HttpCore Tutorial">
+    <link rel="up" href="index.html" title="HttpCore Tutorial">
+    <link rel="prev" href="nio.html" title="Chapter&nbsp;3.&nbsp;Asynchronous I/O based on NIO">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="banner"><a class="bannerLeft"
+                       href="http://www.apache.org/"
+                       title="Apache Software Foundation"><img
+        style="border:none;" src="images/asf_logo_wide.gif"></a><a class="bannerRight"
+                                                                   href="http://hc.apache.org/httpcomponents-core-ga/"
+                                                                   title="Apache HttpComponents Core"><img
+        style="border:none;" src="images/hc_logo.png"></a>
+    <div class="clear"></div>
+</div>
+<div class="navheader">
+    <table width="100%" summary="Navigation header">
+        <tr>
+            <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Advanced topics</th>
+        </tr>
+        <tr>
+            <td width="20%" align="left"><a accesskey="p" href="nio.html">Prev</a>&nbsp;</td>
+            <th width="60%" align="center">&nbsp;</th>
+            <td width="20%" align="right">&nbsp;</td>
+        </tr>
+    </table>
+    <hr>
+</div>
+<div class="chapter" title="Chapter&nbsp;4.&nbsp;Advanced topics">
+    <div class="titlepage">
+        <div>
+            <div><h2 class="title"><a name="advanced"></a>Chapter&nbsp;4.&nbsp;Advanced topics</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" title="4.1.&nbsp;HTTP message parsing and formatting framework">
+        <div class="titlepage">
+            <div>
+                <div><h2 class="title" style="clear: both"><a name="d5e1311"></a>4.1.&nbsp;HTTP
+                    message parsing and formatting framework</h2></div>
+            </div>
+        </div>
+
         <p>
-        HTTP message processing framework is designed to be expressive and flexible while remaining
-        memory efficient and fast. HttpCore HTTP message processing code achieves near zero
-        intermediate garbage and near zero-copy buffering for its parsing and formatting
-        operations. The same HTTP message parsing and formatting API and implementations are used
-        by both the blocking and non-blocking transport implementations, which helps ensure a
-        consistent behavior of HTTP services regardless of the I/O model.
+            HTTP message processing framework is designed to be expressive and flexible while
+            remaining
+            memory efficient and fast. HttpCore HTTP message processing code achieves near zero
+            intermediate garbage and near zero-copy buffering for its parsing and formatting
+            operations. The same HTTP message parsing and formatting API and implementations are
+            used
+            by both the blocking and non-blocking transport implementations, which helps ensure a
+            consistent behavior of HTTP services regardless of the I/O model.
         </p>
-        <div class="section" title="4.1.1.&nbsp;HTTP line parsing and formatting"><div class="titlepage"><div><div><h3 class="title"><a name="d5e1314"></a>4.1.1.&nbsp;HTTP line parsing and formatting</h3></div></div></div>
-            
+        <div class="section" title="4.1.1.&nbsp;HTTP line parsing and formatting">
+            <div class="titlepage">
+                <div>
+                    <div><h3 class="title"><a name="d5e1314"></a>4.1.1.&nbsp;HTTP line parsing and
+                        formatting</h3></div>
+                </div>
+            </div>
+
             <p>
-            HttpCore utilizes a number of low level components for all its line parsing and
-            formatting methods.
+                HttpCore utilizes a number of low level components for all its line parsing and
+                formatting methods.
             </p>
             <p>
-            <code class="classname">CharArrayBuffer</code> represents a sequence of characters, usually a
-            single line in an HTTP message stream such as a request line, a status line or a
-            header. Internally <code class="classname">CharArrayBuffer</code> is backed by an array of
-            chars, which can be expanded to accommodate more input if needed. <code class="classname">
-            CharArrayBuffer</code> also provides a number of utility methods for manipulating
-            content of the buffer, storing more data and retrieving subsets of data.
+                <code class="classname">CharArrayBuffer</code> represents a sequence of characters,
+                usually a
+                single line in an HTTP message stream such as a request line, a status line or a
+                header. Internally <code class="classname">CharArrayBuffer</code> is backed by an
+                array of
+                chars, which can be expanded to accommodate more input if needed. <code
+                    class="classname">
+                CharArrayBuffer</code> also provides a number of utility methods for manipulating
+                content of the buffer, storing more data and retrieving subsets of data.
             </p>
             <pre class="programlisting">
 CharArrayBuffer buf = new CharArrayBuffer(64);
@@ -40,9 +94,11 @@ data
 4
 </pre>
             <p>
-            <code class="classname">ParserCursor</code> represents a context of a parsing operation: the
-            bounds limiting the scope of the parsing operation and the current position the parsing
-            operation is expected to start at.
+                <code class="classname">ParserCursor</code> represents a context of a parsing
+                operation: the
+                bounds limiting the scope of the parsing operation and the current position the
+                parsing
+                operation is expected to start at.
             </p>
             <pre class="programlisting">
 CharArrayBuffer buf = new CharArrayBuffer(64);
@@ -57,10 +113,11 @@ System.out.println(cursor);
 [0&gt;7&gt;14]
 </pre>
             <p>
-            <code class="interfacename">LineParser</code> is the interface for parsing lines in the
-            head section of an HTTP message. There are individual methods for parsing a request
-            line, a status line, or a header line. The lines to parse are passed in-memory, the
-            parser does not depend on any specific I/O mechanism.
+                <code class="interfacename">LineParser</code> is the interface for parsing lines in
+                the
+                head section of an HTTP message. There are individual methods for parsing a request
+                line, a status line, or a header line. The lines to parse are passed in-memory, the
+                parser does not depend on any specific I/O mechanism.
             </p>
             <pre class="programlisting">
 CharArrayBuffer buf = new CharArrayBuffer(64);
@@ -92,14 +149,14 @@ System.out.println(sl.getReasonPhrase());
 OK
 </pre>
             <p>
-            <code class="interfacename">LineFormatter</code> for formatting elements of the head
-            section of an HTTP message. This is the complement to <code class="interfacename">LineParser
+                <code class="interfacename">LineFormatter</code> for formatting elements of the head
+                section of an HTTP message. This is the complement to <code class="interfacename">LineParser
             </code>. There are individual methods for formatting a request line, a status
-            line, or a header line.
+                line, or a header line.
             </p>
             <p>
-            Please note the formatting does not include the trailing line break sequence
-            <code class="literal">CR-LF</code>.
+                Please note the formatting does not include the trailing line break sequence
+                <code class="literal">CR-LF</code>.
             </p>
             <pre class="programlisting">
 CharArrayBuffer buf = new CharArrayBuffer(64);
@@ -117,8 +174,9 @@ GET / HTTP/1.1
 Content-Type: text/plain
 </pre>
             <p>
-            <code class="interfacename">HeaderValueParser</code> is the interface for parsing header
-            values into elements.
+                <code class="interfacename">HeaderValueParser</code> is the interface for parsing
+                header
+                values into elements.
             </p>
             <pre class="programlisting">
 CharArrayBuffer buf = new CharArrayBuffer(64);
@@ -137,8 +195,9 @@ name2=value2
 name3=value3
 </pre>
             <p>
-            <code class="interfacename">HeaderValueFormatter</code> is the interface for formatting
-            elements of a header value. This is the complement to <code class="interfacename">HeaderValueParser
+                <code class="interfacename">HeaderValueFormatter</code> is the interface for
+                formatting
+                elements of a header value. This is the complement to <code class="interfacename">HeaderValueParser
             </code>.
             </p>
             <pre class="programlisting">
@@ -159,25 +218,35 @@ System.out.println(buf.toString());
 name1="value1"; param1="p1", name2="value2", name3="value3"
 </pre>
         </div>
-        <div class="section" title="4.1.2.&nbsp;HTTP message streams and session I/O buffers"><div class="titlepage"><div><div><h3 class="title"><a name="d5e1356"></a>4.1.2.&nbsp;HTTP message streams and session I/O buffers</h3></div></div></div>
-            
+        <div class="section" title="4.1.2.&nbsp;HTTP message streams and session I/O buffers">
+            <div class="titlepage">
+                <div>
+                    <div><h3 class="title"><a name="d5e1356"></a>4.1.2.&nbsp;HTTP message streams
+                        and session I/O buffers</h3></div>
+                </div>
+            </div>
+
             <p>
-            HttpCore provides a number of utility classes for the blocking and non-blocking I/O
-            models that facilitate the processing of HTTP message streams, simplify handling of
-            <code class="literal">CR-LF</code> delimited lines in HTTP messages and manage intermediate data
-            buffering.
+                HttpCore provides a number of utility classes for the blocking and non-blocking I/O
+                models that facilitate the processing of HTTP message streams, simplify handling of
+                <code class="literal">CR-LF</code> delimited lines in HTTP messages and manage
+                intermediate data
+                buffering.
             </p>
             <p>
-            HTTP connection implementations usually rely on session input/output buffers for
-            reading and writing data from and to an HTTP message stream. Session input/output
-            buffer implementations are I/O model specific and are optimized either for blocking or
-            non-blocking operations.
+                HTTP connection implementations usually rely on session input/output buffers for
+                reading and writing data from and to an HTTP message stream. Session input/output
+                buffer implementations are I/O model specific and are optimized either for blocking
+                or
+                non-blocking operations.
             </p>
             <p>
-            Blocking HTTP connections use socket bound session buffers to transfer data. Session
-            buffer interfaces are similar to <code class="classname">java.io.InputStream</code> /
-            <code class="classname">java.io.OutputStream</code> classes, but they also provide methods for
-            reading and writing <code class="literal">CR-LF</code> delimited lines.
+                Blocking HTTP connections use socket bound session buffers to transfer data. Session
+                buffer interfaces are similar to <code class="classname">java.io.InputStream</code>
+                /
+                <code class="classname">java.io.OutputStream</code> classes, but they also provide
+                methods for
+                reading and writing <code class="literal">CR-LF</code> delimited lines.
             </p>
             <pre class="programlisting">
 Socket socket1 = &lt;...&gt;
@@ -192,9 +261,10 @@ inbuffer.readLine(linebuf);
 outbuffer.writeLine(linebuf);
 </pre>
             <p>
-            Non-blocking HTTP connections use session buffers optimized for reading and writing
-            data from and to non-blocking NIO channels. NIO session input/output sessions help deal
-            with <code class="literal">CR-LF</code> delimited lines in a non-blocking I/O mode.
+                Non-blocking HTTP connections use session buffers optimized for reading and writing
+                data from and to non-blocking NIO channels. NIO session input/output sessions help
+                deal
+                with <code class="literal">CR-LF</code> delimited lines in a non-blocking I/O mode.
             </p>
             <pre class="programlisting">
 ReadableByteChannel channel1 = &lt;...&gt;
@@ -217,17 +287,25 @@ if (outbuffer.hasData()) {
 }
 </pre>
         </div>
-        <div class="section" title="4.1.3.&nbsp;HTTP message parsers and formatters"><div class="titlepage"><div><div><h3 class="title"><a name="d5e1369"></a>4.1.3.&nbsp;HTTP message parsers and formatters</h3></div></div></div>
-            
+        <div class="section" title="4.1.3.&nbsp;HTTP message parsers and formatters">
+            <div class="titlepage">
+                <div>
+                    <div><h3 class="title"><a name="d5e1369"></a>4.1.3.&nbsp;HTTP message parsers
+                        and formatters</h3></div>
+                </div>
+            </div>
+
             <p>
-            HttpCore also provides coarse-grained facade type interfaces for parsing and
-            formatting of HTTP messages. Default implementations of those interfaces build upon the
-            functionality provided by <code class="interfacename">SessionInputBuffer</code> /
-            <code class="interfacename">SessionOutputBuffer</code> and <code class="interfacename">HttpLineParser
+                HttpCore also provides coarse-grained facade type interfaces for parsing and
+                formatting of HTTP messages. Default implementations of those interfaces build upon
+                the
+                functionality provided by <code class="interfacename">SessionInputBuffer</code> /
+                <code class="interfacename">SessionOutputBuffer</code> and <code
+                    class="interfacename">HttpLineParser
             </code>/ <code class="interfacename">HttpLineFormatter</code> implementations.
             </p>
             <p>
-            Example of HTTP request parsing / writing for blocking HTTP connections:
+                Example of HTTP request parsing / writing for blocking HTTP connections:
             </p>
             <pre class="programlisting">
 SessionInputBuffer inbuffer = &lt;...&gt;
@@ -241,7 +319,7 @@ HttpMessageWriter&lt;HttpRequest&gt; requestWriter = new DefaultHttpRequestWrite
 requestWriter.write(request);
 </pre>
             <p>
-            Example of HTTP response parsing / writing for blocking HTTP connections:
+                Example of HTTP response parsing / writing for blocking HTTP connections:
             </p>
             <pre class="programlisting">
 SessionInputBuffer inbuffer = &lt;...&gt;
@@ -255,8 +333,9 @@ HttpMessageWriter&lt;HttpResponse&gt; responseWriter = new DefaultHttpResponseWr
 responseWriter.write(response);
 </pre>
             <p>
-            Custom message parsers and writers can be plugged into the message processing pipeline
-            through a custom connection factory:
+                Custom message parsers and writers can be plugged into the message processing
+                pipeline
+                through a custom connection factory:
             </p>
             <pre class="programlisting">
 HttpMessageWriterFactory&lt;HttpResponse&gt; responseWriterFactory =
@@ -287,7 +366,7 @@ Socket socket = &lt;...&gt;
 DefaultBHttpServerConnection conn = cf.createConnection(socket);
 </pre>
             <p>
-            Example of HTTP request parsing / writing for non-blocking HTTP connections:
+                Example of HTTP request parsing / writing for non-blocking HTTP connections:
             </p>
             <pre class="programlisting">
 SessionInputBuffer inbuffer = &lt;...&gt;
@@ -301,7 +380,7 @@ NHttpMessageWriter&lt;HttpRequest&gt; requestWriter = new DefaultHttpRequestWrit
 requestWriter.write(request);
 </pre>
             <p>
-            Example of HTTP response parsing / writing for non-blocking HTTP connections:
+                Example of HTTP response parsing / writing for non-blocking HTTP connections:
             </p>
             <pre class="programlisting">
 SessionInputBuffer inbuffer = &lt;...&gt;
@@ -316,8 +395,9 @@ responseWriter.write(response);
 </pre>
         </div>
         <p>
-        Custom non-blocking message parsers and writers can be plugged into the message processing
-        pipeline through a custom connection factory:
+            Custom non-blocking message parsers and writers can be plugged into the message
+            processing
+            pipeline through a custom connection factory:
         </p>
         <pre class="programlisting">
 NHttpMessageWriterFactory&lt;HttpResponse&gt; responseWriterFactory =
@@ -346,15 +426,24 @@ NHttpConnectionFactory&lt;DefaultNHttpServerConnection&gt; cf =
 IOSession iosession = &lt;...&gt;
 DefaultNHttpServerConnection conn = cf.createConnection(iosession);
 </pre>
-        <div class="section" title="4.1.4.&nbsp;HTTP header parsing on demand"><div class="titlepage"><div><div><h3 class="title"><a name="d5e1388"></a>4.1.4.&nbsp;HTTP header parsing on demand</h3></div></div></div>
-            
+        <div class="section" title="4.1.4.&nbsp;HTTP header parsing on demand">
+            <div class="titlepage">
+                <div>
+                    <div><h3 class="title"><a name="d5e1388"></a>4.1.4.&nbsp;HTTP header parsing on
+                        demand</h3></div>
+                </div>
+            </div>
+
             <p>
-            The default implementations of <code class="interfacename">HttpMessageParser</code> and
-            <code class="interfacename">NHttpMessageParser</code> interfaces do not parse HTTP headers
-            immediately. Parsing of header value is deferred until its properties are accessed.
-            Those headers that are never used by the application will not be parsed at all. The
-            <code class="classname">CharArrayBuffer</code> backing the header can be obtained through an
-            optional <code class="interfacename">FormattedHeader</code> interface.
+                The default implementations of <code class="interfacename">HttpMessageParser</code>
+                and
+                <code class="interfacename">NHttpMessageParser</code> interfaces do not parse HTTP
+                headers
+                immediately. Parsing of header value is deferred until its properties are accessed.
+                Those headers that are never used by the application will not be parsed at all. The
+                <code class="classname">CharArrayBuffer</code> backing the header can be obtained
+                through an
+                optional <code class="interfacename">FormattedHeader</code> interface.
             </p>
             <pre class="programlisting">
 HttpResponse response = &lt;...&gt;
@@ -366,4 +455,22 @@ if (h1 instanceof FormattedHeader) {
 </pre>
         </div>
     </div>
-</div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="nio.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;</td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Asynchronous I/O based on NIO&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;</td></tr></table></div></body></html>
+</div>
+<div class="navfooter">
+    <hr>
+    <table width="100%" summary="Navigation footer">
+        <tr>
+            <td width="40%" align="left"><a accesskey="p" href="nio.html">Prev</a>&nbsp;</td>
+            <td width="20%" align="center">&nbsp;</td>
+            <td width="40%" align="right">&nbsp;</td>
+        </tr>
+        <tr>
+            <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Asynchronous I/O based on
+                NIO&nbsp;</td>
+            <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+            <td width="40%" align="right" valign="top">&nbsp;</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

@@ -14,14 +14,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.FastViewHolder;
+import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
-import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
 import wxm.KeepAccount.utility.ContextUtil;
 
@@ -30,9 +30,8 @@ import wxm.KeepAccount.utility.ContextUtil;
  * Created by ookoo on 2017/1/23.
  */
 public class AdapterNoteDetail extends SimpleAdapter {
-    private final static String LOG_TAG = "AdapterNoteDetail";
     public final static String K_NODE = "node";
-
+    private final static String LOG_TAG = "AdapterNoteDetail";
     private final static int CL_NOT_SELECTED;
     private final static int CL_SELECTED;
 

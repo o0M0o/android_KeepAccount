@@ -25,12 +25,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBase;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBudget;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowDaily;

@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditBudget;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditIncome;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditPay;
@@ -32,16 +32,14 @@ import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
  */
 public class FrgPreviewAndEdit extends Fragment
         implements IPreviewAndEditBase {
-    @BindView(R.id.vp_pages)
-    ViewPager mVPPages;
-
-    private String mStrType;
-    private String mStrAction;
-    private Object mData;
-
     private final static int PAGE_COUNT = 2;
     private final static int PAGE_IDX_PREVIEW = 0;
     private final static int PAGE_IDX_EDIT = 1;
+    @BindView(R.id.vp_pages)
+    ViewPager mVPPages;
+    private String mStrType;
+    private String mStrAction;
+    private Object mData;
 
     @Override
     public View onCreateView(LayoutInflater inflater,

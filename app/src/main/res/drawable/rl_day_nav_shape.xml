@@ -9,7 +9,7 @@
     </item>
     <item>
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
-            <solid android:color="@color/trans_black" />
+            <solid android:color="#f9f9f9" />
             <corners android:radius="4dp" />
             <stroke android:width="2px" android:color="#a2b5cd" />
         </shape>

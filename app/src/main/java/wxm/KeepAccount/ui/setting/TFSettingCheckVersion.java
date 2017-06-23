@@ -13,9 +13,8 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.util.PackageUtil;
-import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.utility.ToolUtil;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * 检查版本设置页面
@@ -23,10 +22,10 @@ import wxm.KeepAccount.R;
  */
 public class TFSettingCheckVersion extends TFSettingBase {
     @BindView(R.id.tv_ver_number)
-    TextView    mTVVerNumber;
+    TextView mTVVerNumber;
 
     @BindView(R.id.tv_ver_name)
-    TextView    mTVVerName;
+    TextView mTVVerName;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -52,7 +51,7 @@ public class TFSettingCheckVersion extends TFSettingBase {
 
     @Override
     public void updateSetting() {
-        if(mBSettingDirty)  {
+        if (mBSettingDirty) {
             mBSettingDirty = false;
         }
     }

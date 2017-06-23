@@ -35,35 +35,6 @@ public class XmlConfigurator {
         qdox = new QDox();
     }
 
-    public void addSourceDir(File sourceDir) {
-        qdox.addSourceTree(sourceDir);
-    }
-
-    public void load(InputSource inputSource)
-            throws ParserConfigurationException, SAXException, IOException {
-        SAXParser saxParser = saxParserFactory.newSAXParser();
-        saxParser.parse(inputSource, new DefaultHandler() {
-            @Override
-            public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-                if (localName.equals("factory")) {
-                    String className = attributes.getValue("class");
-                    try {
-                        addClass(className);
-                    } catch (ClassNotFoundException e) {
-                        throw new SAXException("Cannot find Matcher class : " + className);
-                    }
-                }
-            }
-        });
-    }
-
-    private void addClass(String className) throws ClassNotFoundException {
-        Class<?> cls = classLoader.loadClass(className);
-        sugarConfiguration.addFactoryMethods(
-                new QDoxFactoryReader(new ReflectiveFactoryReader(cls), qdox, className));
-    }
-
-
     public static void main(String[] args) throws Exception {
 
         if (args.length != 4) {
@@ -124,5 +95,33 @@ public class XmlConfigurator {
         } finally {
             sugarGenerator.close();
         }
+    }
+
+    public void addSourceDir(File sourceDir) {
+        qdox.addSourceTree(sourceDir);
+    }
+
+    public void load(InputSource inputSource)
+            throws ParserConfigurationException, SAXException, IOException {
+        SAXParser saxParser = saxParserFactory.newSAXParser();
+        saxParser.parse(inputSource, new DefaultHandler() {
+            @Override
+            public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                if (localName.equals("factory")) {
+                    String className = attributes.getValue("class");
+                    try {
+                        addClass(className);
+                    } catch (ClassNotFoundException e) {
+                        throw new SAXException("Cannot find Matcher class : " + className);
+                    }
+                }
+            }
+        });
+    }
+
+    private void addClass(String className) throws ClassNotFoundException {
+        Class<?> cls = classLoader.loadClass(className);
+        sugarConfiguration.addFactoryMethods(
+                new QDoxFactoryReader(new ReflectiveFactoryReader(cls), qdox, className));
     }
 }

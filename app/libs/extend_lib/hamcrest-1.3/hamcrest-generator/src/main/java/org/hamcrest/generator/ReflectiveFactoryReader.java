@@ -38,82 +38,10 @@ public class ReflectiveFactoryReader implements Iterable<FactoryMethod> {
         this.classLoader = cls.getClassLoader();
     }
 
-    @Override
-    public Iterator<FactoryMethod> iterator() {
-        return new Iterator<FactoryMethod>() {
-
-            private int currentMethod = -1;
-            private Method[] allMethods = cls.getMethods();
-
-            @Override
-            public boolean hasNext() {
-                while (true) {
-                    currentMethod++;
-                    if (currentMethod >= allMethods.length) {
-                        return false;
-                    } else if (isFactoryMethod(allMethods[currentMethod])) {
-                        return true;
-                    } // else carry on looping and try the next one.
-                }
-            }
-
-            @Override
-            public FactoryMethod next() {
-                if (outsideArrayBounds()) {
-                  throw new IllegalStateException("next() called without hasNext() check.");
-                }
-                return buildFactoryMethod(allMethods[currentMethod]);
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-
-            private boolean outsideArrayBounds() {
-              return currentMethod < 0 || allMethods.length <= currentMethod;
-            }
-        };
-    }
-
-    /**
-     * Determine whether a particular method is classified as a matcher factory method.
-     * <p/>
-     * <p>The rules for determining this are:
-     * 1. The method must be public static.
-     * 2. It must have a return type of org.hamcrest.Matcher (or something that extends this).
-     * 3. It must be marked with the org.hamcrest.Factory annotation.
-     * <p/>
-     * <p>To use another set of rules, override this method.
-     */
-    protected boolean isFactoryMethod(Method javaMethod) {
-        return isStatic(javaMethod.getModifiers())
-                && isPublic(javaMethod.getModifiers())
-                && hasFactoryAnnotation(javaMethod)
-                && !Void.TYPE.equals(javaMethod.getReturnType());
-    }
-
-    @SuppressWarnings("unchecked")
-    private boolean hasFactoryAnnotation(Method javaMethod) {
-      // We dynamically load the Factory class, to avoid a compile time
-      // dependency on org.hamcrest.Factory. This gets around
-      // a circular bootstrap issue (because generator is required to
-      // compile core).
-      try {
-        final Class<?> factoryClass = classLoader.loadClass("org.hamcrest.Factory");
-        if (!Annotation.class.isAssignableFrom(factoryClass)) {
-          throw new RuntimeException("Not an annotation class: " + factoryClass.getCanonicalName());
-        }
-        return javaMethod.getAnnotation((Class<? extends Annotation>)factoryClass) != null;        
-      } catch (ClassNotFoundException e) {
-        throw new RuntimeException("Cannot load hamcrest core", e);
-      }
-    }
-    
     private static FactoryMethod buildFactoryMethod(Method javaMethod) {
         FactoryMethod result = new FactoryMethod(
                 classToString(javaMethod.getDeclaringClass()),
-                javaMethod.getName(), 
+                javaMethod.getName(),
                 classToString(javaMethod.getReturnType()));
 
         for (TypeVariable<Method> typeVariable : javaMethod.getTypeParameters()) {
@@ -164,12 +92,84 @@ public class ReflectiveFactoryReader implements Iterable<FactoryMethod> {
      * across implementations. Rock on Liskov.
      */
     private static String typeToString(Type type) {
-        return type instanceof Class<?> ?  classToString((Class<?>) type): type.toString();
+        return type instanceof Class<?> ? classToString((Class<?>) type) : type.toString();
     }
 
     private static String classToString(Class<?> cls) {
-      final String name = cls.isArray() ? cls.getComponentType().getName() + "[]" : cls.getName();
-      return name.replace('$', '.');
+        final String name = cls.isArray() ? cls.getComponentType().getName() + "[]" : cls.getName();
+        return name.replace('$', '.');
+    }
+
+    @Override
+    public Iterator<FactoryMethod> iterator() {
+        return new Iterator<FactoryMethod>() {
+
+            private int currentMethod = -1;
+            private Method[] allMethods = cls.getMethods();
+
+            @Override
+            public boolean hasNext() {
+                while (true) {
+                    currentMethod++;
+                    if (currentMethod >= allMethods.length) {
+                        return false;
+                    } else if (isFactoryMethod(allMethods[currentMethod])) {
+                        return true;
+                    } // else carry on looping and try the next one.
+                }
+            }
+
+            @Override
+            public FactoryMethod next() {
+                if (outsideArrayBounds()) {
+                    throw new IllegalStateException("next() called without hasNext() check.");
+                }
+                return buildFactoryMethod(allMethods[currentMethod]);
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+
+            private boolean outsideArrayBounds() {
+                return currentMethod < 0 || allMethods.length <= currentMethod;
+            }
+        };
+    }
+
+    /**
+     * Determine whether a particular method is classified as a matcher factory method.
+     * <p/>
+     * <p>The rules for determining this are:
+     * 1. The method must be public static.
+     * 2. It must have a return type of org.hamcrest.Matcher (or something that extends this).
+     * 3. It must be marked with the org.hamcrest.Factory annotation.
+     * <p/>
+     * <p>To use another set of rules, override this method.
+     */
+    protected boolean isFactoryMethod(Method javaMethod) {
+        return isStatic(javaMethod.getModifiers())
+                && isPublic(javaMethod.getModifiers())
+                && hasFactoryAnnotation(javaMethod)
+                && !Void.TYPE.equals(javaMethod.getReturnType());
+    }
+
+    @SuppressWarnings("unchecked")
+    private boolean hasFactoryAnnotation(Method javaMethod) {
+        // We dynamically load the Factory class, to avoid a compile time
+        // dependency on org.hamcrest.Factory. This gets around
+        // a circular bootstrap issue (because generator is required to
+        // compile core).
+        try {
+            final Class<?> factoryClass = classLoader.loadClass("org.hamcrest.Factory");
+            if (!Annotation.class.isAssignableFrom(factoryClass)) {
+                throw new RuntimeException("Not an annotation class: " + factoryClass.getCanonicalName());
+            }
+            return javaMethod.getAnnotation((Class<? extends Annotation>) factoryClass) != null;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Cannot load hamcrest core", e);
+        }
     }
 
 }

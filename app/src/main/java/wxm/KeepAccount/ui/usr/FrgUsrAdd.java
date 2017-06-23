@@ -20,19 +20,16 @@ import butterknife.OnClick;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.WRMsgHandler;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.UsrItem;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.R;
 
 /**
  * 添加用户
  * Created by ookoo on 2016/11/29.
  */
 public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorActionListener {
-    // for data
-    private  LocalMsgHandler mMHHandler;
-
     // for ui
     @BindView(R.id.et_usr_name)
     EditText mETUsrName;
@@ -40,6 +37,9 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
     EditText mETPwd;
     @BindView(R.id.et_repeat_pwd)
     EditText mETRepeatPwd;
+    // fro res
+    @BindString(R.string.error_no_usrname)
+    String mRSErrorNoUsrName;
 
     /*
     @BindView(R.id.bt_confirm)
@@ -47,16 +47,12 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
     @BindView(R.id.bt_giveup)
     Button mBTGiveup;
     */
-
-    // fro res
-    @BindString(R.string.error_no_usrname)
-    String  mRSErrorNoUsrName;
-
     @BindString(R.string.error_invalid_password)
-    String  mRSErrorInvalidPWD;
-
+    String mRSErrorInvalidPWD;
     @BindString(R.string.error_repeatpwd_notmatch)
-    String  mRSErrorRepeatPwdNotMatch;
+    String mRSErrorRepeatPwdNotMatch;
+    // for data
+    private LocalMsgHandler mMHHandler;
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
@@ -81,17 +77,17 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
     }
 
     @OnClick({R.id.bt_confirm, R.id.bt_giveup})
-    void onSelfClick(View v)    {
-        switch (v.getId())  {
+    void onSelfClick(View v) {
+        switch (v.getId()) {
             case R.id.bt_confirm: {
-                if(checkInput()) {
+                if (checkInput()) {
                     Intent data = new Intent();
                     data.putExtra(UsrItem.FIELD_NAME, mETUsrName.getText().toString());
                     data.putExtra(UsrItem.FIELD_PWD, mETPwd.getText().toString());
 
                     Message m = Message.obtain(ContextUtil.getMsgHandler(),
                             GlobalDef.MSG_USR_ADDUSR);
-                    m.obj = new Object[] {data, mMHHandler};
+                    m.obj = new Object[]{data, mMHHandler};
                     m.sendToTarget();
                 }
             }
@@ -111,7 +107,7 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        switch(v.getId())  {
+        switch (v.getId()) {
             case R.id.et_usr_name: {
                 Log.d(LOG_TAG, "now usr name : " + mETUsrName.getText().toString());
             }
@@ -133,10 +129,11 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
 
 
     /// PRIVATE BEGIN
+
     /**
      * 清空已经存在的数据
      */
-    private void repeatInput()   {
+    private void repeatInput() {
         mETUsrName.setText("");
         mETPwd.setText("");
         mETRepeatPwd.setText("");
@@ -147,27 +144,28 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
 
     /**
      * 检查输入数据合法性，并设置提示信息
-     * @return  如果数据合法返回true, 否则返回false
+     *
+     * @return 如果数据合法返回true, 否则返回false
      */
-    private boolean checkInput()    {
+    private boolean checkInput() {
         String usr_name = mETUsrName.getText().toString();
         String usr_pwd = mETPwd.getText().toString();
         String usr_r_pwd = mETRepeatPwd.getText().toString();
 
         boolean bret = true;
-        if(UtilFun.StringIsNullOrEmpty(usr_name))  {
+        if (UtilFun.StringIsNullOrEmpty(usr_name)) {
             mETUsrName.setError(mRSErrorNoUsrName);
             mETUsrName.requestFocus();
             bret = false;
         }
 
-        if(bret && 4 > usr_pwd.length())    {
+        if (bret && 4 > usr_pwd.length()) {
             mETPwd.setError(mRSErrorInvalidPWD);
             mETPwd.requestFocus();
             bret = false;
         }
 
-        if(bret && !usr_pwd.equals(usr_r_pwd))   {
+        if (bret && !usr_pwd.equals(usr_r_pwd)) {
             mETRepeatPwd.setError(mRSErrorRepeatPwdNotMatch);
             mETRepeatPwd.requestFocus();
             bret = false;
@@ -222,7 +220,7 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
                     sstr = UtilFun.cast(arr[2]);
 
                 Toast.makeText(ContextUtil.getInstance(), sstr,
-                                Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();
                 home.repeatInput();
             }
         }

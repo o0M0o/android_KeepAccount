@@ -12,12 +12,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
  */
 public class IsArrayWithSize<E> extends FeatureMatcher<E[], Integer> {
     public IsArrayWithSize(Matcher<? super Integer> sizeMatcher) {
-        super(sizeMatcher, "an array with size","array size");
-    }
-
-    @Override
-    protected Integer featureValueOf(E[] actual) {
-      return actual.length;
+        super(sizeMatcher, "an array with size", "array size");
     }
 
     /**
@@ -26,9 +21,8 @@ public class IsArrayWithSize<E> extends FeatureMatcher<E[], Integer> {
      * <p/>
      * For example:
      * <pre>assertThat(new String[]{"foo", "bar"}, arrayWithSize(equalTo(2)))</pre>
-     * 
-     * @param sizeMatcher
-     *     a matcher for the length of an examined array
+     *
+     * @param sizeMatcher a matcher for the length of an examined array
      */
     @Factory
     public static <E> Matcher<E[]> arrayWithSize(Matcher<? super Integer> sizeMatcher) {
@@ -41,9 +35,8 @@ public class IsArrayWithSize<E> extends FeatureMatcher<E[], Integer> {
      * <p/>
      * For example:
      * <pre>assertThat(new String[]{"foo", "bar"}, arrayWithSize(2))</pre>
-     * 
-     * @param size
-     *     the length that an examined array must have for a positive match
+     *
+     * @param size the length that an examined array must have for a positive match
      */
     @Factory
     public static <E> Matcher<E[]> arrayWithSize(int size) {
@@ -56,11 +49,15 @@ public class IsArrayWithSize<E> extends FeatureMatcher<E[], Integer> {
      * <p/>
      * For example:
      * <pre>assertThat(new String[0], emptyArray())</pre>
-     * 
      */
     @Factory
     public static <E> Matcher<E[]> emptyArray() {
         Matcher<E[]> isEmpty = arrayWithSize(0);
         return describedAs("an empty array", isEmpty);
+    }
+
+    @Override
+    protected Integer featureValueOf(E[] actual) {
+        return actual.length;
     }
 }

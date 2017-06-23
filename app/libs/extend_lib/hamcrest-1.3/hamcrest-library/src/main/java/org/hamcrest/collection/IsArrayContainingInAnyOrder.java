@@ -21,22 +21,6 @@ public class IsArrayContainingInAnyOrder<E> extends TypeSafeMatcher<E[]> {
         this.matchers = matchers;
     }
 
-    @Override
-    public boolean matchesSafely(E[] item) {
-        return iterableMatcher.matches(Arrays.asList(item));
-    }
-    
-    @Override
-    public void describeMismatchSafely(E[] item, Description mismatchDescription) {
-      iterableMatcher.describeMismatch(Arrays.asList(item), mismatchDescription);
-    };
-
-    @Override
-    public void describeTo(Description description) {
-        description.appendList("[", ", ", "]", matchers)
-            .appendText(" in any order");
-    }
-
     /**
      * Creates an order agnostic matcher for arrays that matches when each item in the
      * examined array satisfies one matcher anywhere in the specified matchers.
@@ -49,9 +33,8 @@ public class IsArrayContainingInAnyOrder<E> extends TypeSafeMatcher<E[]> {
      * <p>
      * For example:
      * <pre>assertThat(new String[]{"foo", "bar"}, arrayContainingInAnyOrder(equalTo("bar"), equalTo("foo")))</pre>
-     * 
-     * @param itemMatchers
-     *     a list of matchers, each of which must be satisfied by an entry in an examined array
+     *
+     * @param itemMatchers a list of matchers, each of which must be satisfied by an entry in an examined array
      */
     @Factory
     public static <E> Matcher<E[]> arrayContainingInAnyOrder(Matcher<? super E>... itemMatchers) {
@@ -70,14 +53,15 @@ public class IsArrayContainingInAnyOrder<E> extends TypeSafeMatcher<E[]> {
      * <p>
      * For example:
      * <pre>assertThat(new String[]{"foo", "bar"}, arrayContainingInAnyOrder(Arrays.asList(equalTo("bar"), equalTo("foo"))))</pre>
-     * 
-     * @param itemMatchers
-     *     a list of matchers, each of which must be satisfied by an item provided by an examined array
+     *
+     * @param itemMatchers a list of matchers, each of which must be satisfied by an item provided by an examined array
      */
     @Factory
     public static <E> Matcher<E[]> arrayContainingInAnyOrder(Collection<Matcher<? super E>> itemMatchers) {
         return new IsArrayContainingInAnyOrder<E>(itemMatchers);
     }
+
+    ;
 
     /**
      * Creates an order agnostic matcher for arrays that matches when each item in the
@@ -91,16 +75,31 @@ public class IsArrayContainingInAnyOrder<E> extends TypeSafeMatcher<E[]> {
      * <p>
      * For example:
      * <pre>assertThat(new String[]{"foo", "bar"}, containsInAnyOrder("bar", "foo"))</pre>
-     * 
-     * @param items
-     *     the items that must equal the entries of an examined array, in any order
+     *
+     * @param items the items that must equal the entries of an examined array, in any order
      */
     @Factory
     public static <E> Matcher<E[]> arrayContainingInAnyOrder(E... items) {
-      List<Matcher<? super E>> matchers = new ArrayList<Matcher<? super E>>();
-      for (E item : items) {
-          matchers.add(equalTo(item));
-      }
-      return new IsArrayContainingInAnyOrder<E>(matchers);
+        List<Matcher<? super E>> matchers = new ArrayList<Matcher<? super E>>();
+        for (E item : items) {
+            matchers.add(equalTo(item));
+        }
+        return new IsArrayContainingInAnyOrder<E>(matchers);
+    }
+
+    @Override
+    public boolean matchesSafely(E[] item) {
+        return iterableMatcher.matches(Arrays.asList(item));
+    }
+
+    @Override
+    public void describeMismatchSafely(E[] item, Description mismatchDescription) {
+        iterableMatcher.describeMismatch(Arrays.asList(item), mismatchDescription);
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        description.appendList("[", ", ", "]", matchers)
+                .appendText(" in any order");
     }
 }

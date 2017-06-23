@@ -7,10 +7,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.FastViewHolder;
-import wxm.KeepAccount.utility.ContextUtil;
+import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * 日数据头辅助类
@@ -22,12 +22,13 @@ public class HelperDayNotesInfo {
     private static int CR_PAY;
     private static int CR_INCOME;
     private static int DIM_FULL_WIDTH;
+
     static {
         Resources res = ContextUtil.getInstance().getResources();
         CR_PAY = res.getColor(R.color.darkred);
         CR_INCOME = res.getColor(R.color.darkslategrey);
 
-        DIM_FULL_WIDTH = (int)res.getDimension(R.dimen.rl_amount_info_width);
+        DIM_FULL_WIDTH = (int) res.getDimension(R.dimen.rl_amount_info_width);
     }
 
     /**
@@ -112,7 +113,7 @@ public class HelperDayNotesInfo {
      * @param amount        结余金额
      */
     public static void fillNoteInfo(FastViewHolder vh, String pay_count, String pay_amount,
-                                String income_count, String income_amount, String amount) {
+                                    String income_count, String income_amount, String amount) {
         boolean b_pay = !"0".equals(pay_count);
         boolean b_income = !"0".equals(income_count);
 

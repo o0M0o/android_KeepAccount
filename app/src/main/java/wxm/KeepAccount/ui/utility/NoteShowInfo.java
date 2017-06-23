@@ -10,15 +10,15 @@ import cn.wxm.andriodutillib.util.UtilFun;
  * Created by 123 on 2016/10/24.
  */
 public class NoteShowInfo {
-    private int     mPayCount;
-    private int     mIncomeCount;
-    private BigDecimal  mPayAmount;
-    private BigDecimal  mIncomeAmount;
+    private int mPayCount;
+    private int mIncomeCount;
+    private BigDecimal mPayAmount;
+    private BigDecimal mIncomeAmount;
 
-    private String      mSZPayAmount;
-    private String      mSZIncomeAmount;
+    private String mSZPayAmount;
+    private String mSZIncomeAmount;
 
-    public NoteShowInfo()   {
+    public NoteShowInfo() {
         mPayAmount = BigDecimal.ZERO;
         mIncomeAmount = BigDecimal.ZERO;
 
@@ -46,30 +46,29 @@ public class NoteShowInfo {
         return mPayAmount;
     }
 
-    public String getSZPayAmount()   {
-        return UtilFun.StringIsNullOrEmpty(mSZPayAmount) ? "0" : mSZPayAmount;
-    }
-
     public void setPayAmount(BigDecimal mPayAmount) {
         this.mPayAmount = mPayAmount;
         mSZPayAmount = String.format(Locale.CHINA, "%.02f", mPayAmount);
+    }
+
+    public String getSZPayAmount() {
+        return UtilFun.StringIsNullOrEmpty(mSZPayAmount) ? "0" : mSZPayAmount;
     }
 
     public BigDecimal getIncomeAmount() {
         return mIncomeAmount;
     }
 
-    public String getSZIncomeAmount()   {
-        return UtilFun.StringIsNullOrEmpty(mSZIncomeAmount) ? "0" : mSZIncomeAmount;
-    }
-
-
     public void setIncomeAmount(BigDecimal mIncomeAmount) {
         this.mIncomeAmount = mIncomeAmount;
         mSZIncomeAmount = String.format(Locale.CHINA, "%.02f", mIncomeAmount);
     }
 
-    public BigDecimal getBalance()  {
+    public String getSZIncomeAmount() {
+        return UtilFun.StringIsNullOrEmpty(mSZIncomeAmount) ? "0" : mSZIncomeAmount;
+    }
+
+    public BigDecimal getBalance() {
         return mIncomeAmount.subtract(mPayAmount);
     }
 }

@@ -8,8 +8,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
-import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * for app setting
@@ -19,7 +19,7 @@ public class ACSetting extends BaseAppCompatActivity {
 
     @Override
     protected void leaveActivity() {
-        if(FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
+        if (FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
             mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
         } else {
             int ret_data = GlobalDef.INTRET_GIVEUP;
@@ -47,9 +47,9 @@ public class ACSetting extends BaseAppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_save: {
-                if(FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
+                if (FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
                     final TFSettingBase tb = mFGSetting.getCurrentPage();
-                    if(tb.isSettingDirty()) {
+                    if (tb.isSettingDirty()) {
                         Dialog alertDialog = new AlertDialog.Builder(this).
                                 setTitle("配置已经更改").
                                 setMessage("是否保存更改的配置?").
@@ -60,10 +60,10 @@ public class ACSetting extends BaseAppCompatActivity {
                                 setNegativeButton("否", (dialog, which) -> mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN)).
                                 create();
                         alertDialog.show();
-                    } else  {
+                    } else {
                         mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
                     }
-                } else  {
+                } else {
                     int ret_data = GlobalDef.INTRET_SURE;
                     Intent data = new Intent();
                     setResult(ret_data, data);
@@ -72,8 +72,8 @@ public class ACSetting extends BaseAppCompatActivity {
             }
             break;
 
-            case R.id.mi_giveup:    {
-                if(FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
+            case R.id.mi_giveup: {
+                if (FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
                     mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
                 } else {
                     int ret_data = GlobalDef.INTRET_GIVEUP;
@@ -94,9 +94,10 @@ public class ACSetting extends BaseAppCompatActivity {
 
     /**
      * 切换到新页面
+     *
      * @param new_page 新页面postion
      */
-    public void change_page(int new_page)  {
+    public void change_page(int new_page) {
         mFGSetting.setCurrentItem(new_page);
     }
 }

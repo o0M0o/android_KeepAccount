@@ -10,10 +10,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import wxm.KeepAccount.db.DBOrmLiteHelper;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.UsrItem;
-import wxm.KeepAccount.db.DBOrmLiteHelper;
 
 /**
  * UT for DBOrmLiteHelper
@@ -22,7 +22,7 @@ import wxm.KeepAccount.db.DBOrmLiteHelper;
 public class DBOrmliteHelperUT extends AndroidTestCase {
     private DBOrmLiteHelper mHelper;
 
-    public DBOrmliteHelperUT()     {
+    public DBOrmliteHelperUT() {
     }
 
     @Override
@@ -66,7 +66,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         mHelper.close();
     }
 
-    public void testNoteAdd()   {
+    public void testNoteAdd() {
         RuntimeExceptionDao<PayNoteItem, Integer> pay_dao = mHelper.getPayDataREDao();
         RuntimeExceptionDao<IncomeNoteItem, Integer> income_dao = mHelper.getIncomeDataREDao();
         RuntimeExceptionDao<UsrItem, Integer> usr_dao = mHelper.getUsrItemREDao();
@@ -87,7 +87,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         try {
             pay_dao.create(pay_it);
             fail("期望有异常发生，但未发生");
-        } catch (RuntimeException e)    {
+        } catch (RuntimeException e) {
             assertTrue(e.getMessage(), true);
         }
 
@@ -140,7 +140,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
     }
 
 
-    public void testUsrItemAdd()    {
+    public void testUsrItemAdd() {
         RuntimeExceptionDao<UsrItem, Integer> sdao = mHelper.getUsrItemREDao();
         assertNotNull(sdao);
 
@@ -159,7 +159,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         try {
             assertEquals(sdao.create(ui), 0);
             fail("期望有异常发生，但未发生");
-        } catch (RuntimeException e)    {
+        } catch (RuntimeException e) {
             assertTrue(e.getMessage(), true);
         }
 

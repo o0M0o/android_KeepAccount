@@ -8,11 +8,8 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -29,20 +26,19 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-
 import butterknife.OnClick;
-import cn.wxm.andriodutillib.util.UtilFun;
 import cn.wxm.andriodutillib.util.FastViewHolder;
+import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
-import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.define.PayNoteItem;
+import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
+import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
-import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
-import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
 
 /**
  * 预算数据视图辅助类
@@ -53,10 +49,9 @@ public class LVHelperBudget extends LVBase {
     //for action
     private final static int ACTION_DELETE = 1;
     private final static int ACTION_EDIT = 2;
-    private int mActionType = ACTION_EDIT;
-
     // 排列次序
     protected boolean mBODownOrder = true;
+    private int mActionType = ACTION_EDIT;
 
     public LVHelperBudget() {
         super();
@@ -86,12 +81,13 @@ public class LVHelperBudget extends LVBase {
 
     /**
      * 附加动作
-     * @param v   动作view
+     *
+     * @param v 动作view
      */
     @OnClick({R.id.ib_sort, R.id.ib_refresh, R.id.ib_delete, R.id.ib_add})
     public void onActionClick(View v) {
-        switch (v.getId())  {
-            case R.id.ib_sort :     {
+        switch (v.getId()) {
+            case R.id.ib_sort: {
                 mBODownOrder = !mBODownOrder;
 
                 mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
@@ -102,21 +98,21 @@ public class LVHelperBudget extends LVBase {
             }
             break;
 
-            case R.id.ib_refresh:  {
+            case R.id.ib_refresh: {
                 mActionType = ACTION_EDIT;
                 reloadView(getContext(), false);
             }
             break;
 
-            case R.id.ib_delete :  {
-                if(ACTION_DELETE != mActionType) {
+            case R.id.ib_delete: {
+                if (ACTION_DELETE != mActionType) {
                     mActionType = ACTION_DELETE;
                     reloadView(v.getContext(), false);
                 }
             }
             break;
 
-            case R.id.ib_add :  {
+            case R.id.ib_add: {
                 ACNoteShow ac = getRootActivity();
                 Intent intent = new Intent(ac, ACPreveiwAndEdit.class);
                 intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
@@ -163,7 +159,7 @@ public class LVHelperBudget extends LVBase {
 
         new AsyncTask<Void, Void, Void>() {
             @Override
-            protected void onPreExecute()   {
+            protected void onPreExecute() {
             }
 
             @Override
@@ -192,18 +188,19 @@ public class LVHelperBudget extends LVBase {
 
     /**
      * 加载UI的工作
-     * @param b_fully   若为true则加载数据
+     *
+     * @param b_fully 若为true则加载数据
      */
-    protected void loadUIUtility(boolean b_fully)    {
+    protected void loadUIUtility(boolean b_fully) {
         Log.d(LOG_TAG, "in loadUIUtility, b_fully = " + Boolean.toString(b_fully));
         String[] calls = ToolUtil.getCallStack(8);
-        for(int i = 0; i < calls.length; ++i)   {
+        for (int i = 0; i < calls.length; ++i) {
             Log.d(LOG_TAG, "in loadUIUtility, [" + i + "] = " + calls[i]);
         }
 
         refreshAttachLayout();
 
-        if(b_fully) {
+        if (b_fully) {
             LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
             n_mainpara.addAll(mMainPara);
 
@@ -309,7 +306,7 @@ public class LVHelperBudget extends LVBase {
         LinkedList<HashMap<String, String>> llhm = mHMSubPara.get(tag);
         if (!UtilFun.ListIsNullOrEmpty(llhm)) {
             SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm,
-                                new String[]{}, new int[]{});
+                    new String[]{}, new int[]{});
             lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
             ListViewHelper.setListViewHeightBasedOnChildren(lv);
@@ -323,7 +320,7 @@ public class LVHelperBudget extends LVBase {
     protected class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
 
-        private ArrayList<Integer>   mALWaitDeleteItems = new ArrayList<>();
+        private ArrayList<Integer> mALWaitDeleteItems = new ArrayList<>();
 
         private View.OnClickListener mCLAdapter = v -> {
             int vid = v.getId();
@@ -331,21 +328,21 @@ public class LVHelperBudget extends LVBase {
 
             HashMap<String, String> hm = UtilFun.cast(getItem(pos));
 
-            switch (vid)    {
-                case R.id.rl_delete :   {
+            switch (vid) {
+                case R.id.rl_delete: {
                     String k_tag = hm.get(K_ID);
                     Integer id = Integer.parseInt(k_tag);
-                    if(mALWaitDeleteItems.contains(id))  {
-                        mALWaitDeleteItems.remove((Object)id);
+                    if (mALWaitDeleteItems.contains(id)) {
+                        mALWaitDeleteItems.remove((Object) id);
                         v.setBackgroundColor(LVResource.mCRLVItemNoSel);
-                    } else  {
+                    } else {
                         mALWaitDeleteItems.add(id);
                         v.setBackgroundColor(LVResource.mCRLVItemSel);
                     }
                 }
                 break;
 
-                case R.id.iv_edit : {
+                case R.id.iv_edit: {
                     int tag_id = Integer.parseInt(hm.get(K_ID));
                     Activity ac = getRootActivity();
                     Intent it = new Intent(ac, ACPreveiwAndEdit.class);

@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -47,24 +46,19 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
  * Created by ookoo on 2017/3/4.
  */
 public class DayReportChart extends FrgUtilityBase {
-    private ArrayList<String>   mASParaLoad;
-
     @BindView(R.id.chart)
-    PieChartView    mCVchart;
-
+    PieChartView mCVchart;
     @BindView(R.id.pb_load_data)
-    ProgressBar     mPBLoadData;
-
+    ProgressBar mPBLoadData;
     @BindView(R.id.tb_income)
-    ToggleButton    mTBIncome;
-
+    ToggleButton mTBIncome;
     @BindView(R.id.tb_pay)
-    ToggleButton    mTBPay;
+    ToggleButton mTBPay;
+    private ArrayList<String> mASParaLoad;
+    private LinkedList<INote> mLLOrgData;
 
-    private LinkedList<INote>   mLLOrgData;
-
-   @Override
-    protected void enterActivity()  {
+    @Override
+    protected void enterActivity() {
         Log.d(LOG_TAG, "in enterActivity");
         super.enterActivity();
 
@@ -72,7 +66,7 @@ public class DayReportChart extends FrgUtilityBase {
     }
 
     @Override
-    protected void leaveActivity()  {
+    protected void leaveActivity() {
         Log.d(LOG_TAG, "in leaveActivity");
         EventBus.getDefault().unregister(this);
 
@@ -81,7 +75,8 @@ public class DayReportChart extends FrgUtilityBase {
 
     /**
      * 更新日期范围
-     * @param event     事件
+     *
+     * @param event 事件
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSelectDaysEvent(EventSelectDays event) {
@@ -127,27 +122,28 @@ public class DayReportChart extends FrgUtilityBase {
 
     /**
      * 切换显示内容
-     * @param v     激活的ToggleButton
+     *
+     * @param v 激活的ToggleButton
      */
     @OnClick({R.id.tb_income, R.id.tb_pay})
-    public void onTBClick(View v)   {
+    public void onTBClick(View v) {
         Log.d(LOG_TAG, "in onSWClick");
 
         int vid = v.getId();
-        switch (vid)    {
-            case R.id.tb_income :   {
-                if(mTBIncome.isChecked())   {
+        switch (vid) {
+            case R.id.tb_income: {
+                if (mTBIncome.isChecked()) {
                     mTBPay.setClickable(true);
-                } else  {
+                } else {
                     mTBPay.setClickable(false);
                 }
             }
             break;
 
-            case R.id.tb_pay :   {
-                if(mTBPay.isChecked())   {
+            case R.id.tb_pay: {
+                if (mTBPay.isChecked()) {
                     mTBIncome.setClickable(true);
-                } else  {
+                } else {
                     mTBIncome.setClickable(false);
                 }
             }
@@ -156,7 +152,7 @@ public class DayReportChart extends FrgUtilityBase {
 
         // update show
         new AsyncTask<Void, Void, Void>() {
-            private PieChartData        mCVData;
+            private PieChartData mCVData;
 
             @Override
             protected void onPreExecute() {
@@ -195,11 +191,11 @@ public class DayReportChart extends FrgUtilityBase {
         mPBLoadData.setVisibility(show ? View.VISIBLE : View.GONE);
         mPBLoadData.animate().setDuration(shortAnimTime)
                 .alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mPBLoadData.setVisibility(show ? View.VISIBLE : View.GONE);
-                    }
-                });
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mPBLoadData.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 
     /**
@@ -208,7 +204,7 @@ public class DayReportChart extends FrgUtilityBase {
     private void loadData() {
         mLLOrgData = new LinkedList<>();
         new AsyncTask<Void, Void, Void>() {
-            private PieChartData        mCVData;
+            private PieChartData mCVData;
 
             @Override
             protected void onPreExecute() {
@@ -228,8 +224,8 @@ public class DayReportChart extends FrgUtilityBase {
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         hm_note.values().forEach(mLLOrgData::addAll);
-                    } else  {
-                        for(ArrayList<INote> ls_n : hm_note.values())   {
+                    } else {
+                        for (ArrayList<INote> ls_n : hm_note.values()) {
                             mLLOrgData.addAll(ls_n);
                         }
                     }
@@ -258,29 +254,29 @@ public class DayReportChart extends FrgUtilityBase {
      */
     private void generateData(PieChartData pd) {
         class chartItem {
-            private final static int PAY_ITEM        = 1;
-            private final static int INCOME_ITEM     = 2;
+            private final static int PAY_ITEM = 1;
+            private final static int INCOME_ITEM = 2;
 
-            private int          mType;
-            private String       mSZName;
-            private BigDecimal   mBDVal;
+            private int mType;
+            private String mSZName;
+            private BigDecimal mBDVal;
 
 
             /**
              * 更新节点链表
              * @param ls_datas  节点链表
              */
-            private void updateList(List<chartItem> ls_datas)    {
+            private void updateList(List<chartItem> ls_datas) {
                 boolean bf = false;
-                for(chartItem ci : ls_datas)    {
-                    if(ci.mSZName.equals(mSZName) && ci.mType == mType)  {
+                for (chartItem ci : ls_datas) {
+                    if (ci.mSZName.equals(mSZName) && ci.mType == mType) {
                         bf = true;
                         ci.mBDVal = ci.mBDVal.add(mBDVal);
                         break;
                     }
                 }
 
-                if(!bf) {
+                if (!bf) {
                     ls_datas.add(this);
                 }
             }
@@ -289,12 +285,12 @@ public class DayReportChart extends FrgUtilityBase {
         // create chart item list
         boolean b_p = mTBPay.isChecked();
         boolean b_i = mTBIncome.isChecked();
-        LinkedList<chartItem>  ls_ci      = new LinkedList<>();
-        for(INote data : mLLOrgData)   {
-            if(data.isPayNote() && !b_p)
+        LinkedList<chartItem> ls_ci = new LinkedList<>();
+        for (INote data : mLLOrgData) {
+            if (data.isPayNote() && !b_p)
                 continue;
 
-            if(data.isIncomeNote() && !b_i)
+            if (data.isIncomeNote() && !b_i)
                 continue;
 
             chartItem ci = new chartItem();
@@ -307,7 +303,7 @@ public class DayReportChart extends FrgUtilityBase {
 
         // create values
         List<SliceValue> values = new ArrayList<>();
-        for(chartItem ci : ls_ci)   {
+        for (chartItem ci : ls_ci) {
 
             SliceValue sliceValue = new SliceValue(ci.mBDVal.floatValue(), ChartUtils.pickColor());
             //sliceValue.setLabel((ci.mType == chartItem.PAY_ITEM ? "p " : "i ")
@@ -331,6 +327,6 @@ public class DayReportChart extends FrgUtilityBase {
 
         // Get font size from dimens.xml and convert it to sp(library uses sp values).
         pd.setCenterText1FontSize(ChartUtils.px2sp(getResources().getDisplayMetrics().scaledDensity,
-                    (int) getResources().getDimension(R.dimen.pie_chart_text1_size)));
+                (int) getResources().getDimension(R.dimen.pie_chart_text1_size)));
     }
 }

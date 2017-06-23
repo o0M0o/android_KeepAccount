@@ -2,23 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/banner_chart_width"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <lecho.lib.hellocharts.view.ColumnChartView
-        android:paddingStart="14dp"
-        android:paddingEnd="2dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="1dp"
         android:id="@+id/chart"
         android:layout_width="match_parent"
-        android:layout_height="72dp" />
+        android:layout_height="72dp"
+        android:paddingBottom="1dp"
+        android:paddingEnd="2dp"
+        android:paddingStart="14dp"
+        android:paddingTop="4dp" />
 
     <RelativeLayout
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/chart" >
+        android:layout_below="@id/chart"
+        android:layout_centerHorizontal="true">
 
         <RelativeLayout
             android:id="@+id/rl_pay"
@@ -33,21 +32,21 @@
                 android:background="#7fb80e" />
 
             <TextView
-                android:textSize="12sp"
-                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="4dp"
                 android:layout_toEndOf="@+id/iv_pay"
-                android:text="@string/cn_pay" />
+                android:text="@string/cn_pay"
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_income"
-            android:layout_toEndOf="@id/rl_pay"
-            android:layout_marginStart="8dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/rl_pay">
 
             <ImageView
                 android:id="@+id/iv_income"
@@ -57,13 +56,13 @@
                 android:background="#d93a49" />
 
             <TextView
-                android:textSize="12sp"
-                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="4dp"
                 android:layout_toEndOf="@+id/iv_income"
-                android:text="@string/cn_income" />
+                android:text="@string/cn_income"
+                android:textSize="12sp" />
         </RelativeLayout>
     </RelativeLayout>
 

@@ -22,15 +22,15 @@ import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
-import wxm.KeepAccount.utility.PreferencesUtil;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
+import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
  * 加载年度chart视图
  * Created by wxm on 2016/9/29.
  */
 public class YearlyChartHelper extends ChartHelperBase {
-    public YearlyChartHelper()   {
+    public YearlyChartHelper() {
         super();
         mPrvWidth = 6;
 
@@ -51,14 +51,14 @@ public class YearlyChartHelper extends ChartHelperBase {
                 List<Column> columns = new ArrayList<>();
                 ArrayList<String> set_k = new ArrayList<>(ret.keySet());
                 Collections.sort(set_k);
-                for(String k : set_k)    {
+                for (String k : set_k) {
                     BigDecimal pay = BigDecimal.ZERO;
                     BigDecimal income = BigDecimal.ZERO;
-                    for(Object i : ret.get(k))  {
-                        if(i instanceof PayNoteItem)    {
+                    for (Object i : ret.get(k)) {
+                        if (i instanceof PayNoteItem) {
                             PayNoteItem pi = UtilFun.cast(i);
                             pay = pay.add(pi.getVal());
-                        }   else    {
+                        } else {
                             IncomeNoteItem ii = UtilFun.cast(i);
                             income = income.add(ii.getVal());
                         }
@@ -93,7 +93,7 @@ public class YearlyChartHelper extends ChartHelperBase {
                     column.setHasLabels(false);
                 }
 
-                for(AxisValue i : mPreviewData.getAxisXBottom().getValues())     {
+                for (AxisValue i : mPreviewData.getAxisXBottom().getValues()) {
                     String v = new String(i.getLabelAsChars()).substring(0, 4);
                     i.setLabel(v);
                 }
@@ -112,7 +112,8 @@ public class YearlyChartHelper extends ChartHelperBase {
 
     /**
      * 过滤视图事件
-     * @param event     事件
+     *
+     * @param event 事件
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {

@@ -20,6 +20,31 @@ import static org.hamcrest.Matchers.not;
  */
 public class ExampleWithAssertThat {
 
+    /**
+     * Allow JUnit 4 test to be run under JUnit 3.
+     */
+    public static junit.framework.Test suite() {
+        return new junit.framework.JUnit4TestAdapter(ExampleWithAssertThat.class);
+    }
+
+    private static Matcher<ComplicatedClass> shouldBe(final String string) {
+        return new TypeSafeMatcher<ComplicatedClass>() {
+            @Override
+            public void describeTo(Description description) {
+            } // no op
+
+            @Override
+            public boolean matchesSafely(ComplicatedClass item) {
+                return false;
+            }
+
+            @Override
+            public void describeMismatchSafely(ComplicatedClass item, Description mismatchDescription) {
+                mismatchDescription.appendText(string);
+            }
+        };
+    }
+
     @Test
     public void usingAssertThat() {
         assertThat("xx", is("xx"));
@@ -27,41 +52,21 @@ public class ExampleWithAssertThat {
         assertThat("i like cheese", containsString("cheese"));
     }
 
-    /**
-     * Allow JUnit 4 test to be run under JUnit 3.
-     */
-    public static junit.framework.Test suite() {
-        return new junit.framework.JUnit4TestAdapter(ExampleWithAssertThat.class);
-    }
-    
-    public static class ComplicatedClass {
-      private int firstNumber = 23;
-      private int secondNumber = 45;
-      private String someText = "This is useful text";
-      
-      public String whichOne(boolean first) {
-        return someText + (first ? firstNumber : secondNumber);
-      }
-    }
-    
     @Test
     public void showMismatch() {
-      ComplicatedClass complicated = new ComplicatedClass();
-      
-      assertThat(complicated, shouldBe("the wrong thing"));
+        ComplicatedClass complicated = new ComplicatedClass();
+
+        assertThat(complicated, shouldBe("the wrong thing"));
     }
 
-    private static Matcher<ComplicatedClass> shouldBe(final String string) {
-      return new TypeSafeMatcher<ComplicatedClass>() {
-        @Override
-        public void describeTo(Description description) { } // no op
-        @Override
-        public boolean matchesSafely(ComplicatedClass item) { return false; }
-        @Override
-        public void describeMismatchSafely(ComplicatedClass item, Description mismatchDescription) {
-          mismatchDescription.appendText(string);
-        } 
-      };
+    public static class ComplicatedClass {
+        private int firstNumber = 23;
+        private int secondNumber = 45;
+        private String someText = "This is useful text";
+
+        public String whichOne(boolean first) {
+            return someText + (first ? firstNumber : secondNumber);
+        }
     }
 
 }

@@ -7,7 +7,8 @@ public class BaseDescriptionTest extends TestCase {
     private final StringBuilder result = new StringBuilder();
 
     private final BaseDescription baseDescription = new BaseDescription() {
-        @Override protected void append(char c) {
+        @Override
+        protected void append(char c) {
             result.append(c);
         }
     };
@@ -43,7 +44,7 @@ public class BaseDescriptionTest extends TestCase {
     }
 
     public void testDescribesAppendedArrayValue() {
-        baseDescription.appendValue(new String[] {"2", "3"});
+        baseDescription.appendValue(new String[]{"2", "3"});
         assertEquals("[\"2\", \"3\"]", result.toString());
     }
 
@@ -52,14 +53,15 @@ public class BaseDescriptionTest extends TestCase {
         baseDescription.appendValue(value);
         assertEquals("<" + value.toString() + ">", result.toString());
     }
-    
+
     public void testSafelyDescribesAppendedValueOfObjectWhoseToStringThrowsAnException() {
         final Object value = new Object() {
-            @Override public String toString() {
+            @Override
+            public String toString() {
                 throw new UnsupportedOperationException();
             }
         };
-        
+
         final String expected = value.getClass().getName() + "@" + Integer.toHexString(value.hashCode());
         baseDescription.appendValue(value);
         assertEquals("<" + expected + ">", result.toString());

@@ -18,30 +18,6 @@ public class IsCollectionContaining<T> extends TypeSafeDiagnosingMatcher<Iterabl
         this.elementMatcher = elementMatcher;
     }
 
-    @Override
-    protected boolean matchesSafely(Iterable<? super T> collection, Description mismatchDescription) {
-        boolean isPastFirst = false;
-        for (Object item : collection) {
-            if (elementMatcher.matches(item)){
-                return true;
-            }
-            if (isPastFirst) {
-              mismatchDescription.appendText(", ");
-            }
-            elementMatcher.describeMismatch(item, mismatchDescription);
-            isPastFirst = true;
-        }
-        return false;
-    }
-
-    @Override
-    public void describeTo(Description description) {
-        description
-            .appendText("a collection containing ")
-            .appendDescriptionOf(elementMatcher);
-    }
-
-    
     /**
      * Creates a matcher for {@link Iterable}s that only matches when a single pass over the
      * examined {@link Iterable} yields at least one item that is matched by the specified
@@ -50,9 +26,8 @@ public class IsCollectionContaining<T> extends TypeSafeDiagnosingMatcher<Iterabl
      * <p/>
      * For example:
      * <pre>assertThat(Arrays.asList("foo", "bar"), hasItem(startsWith("ba")))</pre>
-     * 
-     * @param itemMatcher
-     *     the matcher to apply to items provided by the examined {@link Iterable}
+     *
+     * @param itemMatcher the matcher to apply to items provided by the examined {@link Iterable}
      */
     @Factory
     public static <T> Matcher<Iterable<? super T>> hasItem(Matcher<? super T> itemMatcher) {
@@ -67,9 +42,8 @@ public class IsCollectionContaining<T> extends TypeSafeDiagnosingMatcher<Iterabl
      * <p/>
      * For example:
      * <pre>assertThat(Arrays.asList("foo", "bar"), hasItem("bar"))</pre>
-     * 
-     * @param item
-     *     the item to compare against the items provided by the examined {@link Iterable}
+     *
+     * @param item the item to compare against the items provided by the examined {@link Iterable}
      */
     @Factory
     public static <T> Matcher<Iterable<? super T>> hasItem(T item) {
@@ -85,22 +59,21 @@ public class IsCollectionContaining<T> extends TypeSafeDiagnosingMatcher<Iterabl
      * <p/>
      * For example:
      * <pre>assertThat(Arrays.asList("foo", "bar", "baz"), hasItems(endsWith("z"), endsWith("o")))</pre>
-     * 
-     * @param itemMatchers
-     *     the matchers to apply to items provided by the examined {@link Iterable}
+     *
+     * @param itemMatchers the matchers to apply to items provided by the examined {@link Iterable}
      */
     @Factory
     public static <T> Matcher<Iterable<T>> hasItems(Matcher<? super T>... itemMatchers) {
         List<Matcher<? super Iterable<T>>> all = new ArrayList<Matcher<? super Iterable<T>>>(itemMatchers.length);
-        
+
         for (Matcher<? super T> elementMatcher : itemMatchers) {
-          // Doesn't forward to hasItem() method so compiler can sort out generics.
-          all.add(new IsCollectionContaining<T>(elementMatcher));
+            // Doesn't forward to hasItem() method so compiler can sort out generics.
+            all.add(new IsCollectionContaining<T>(elementMatcher));
         }
-        
+
         return allOf(all);
     }
-    
+
     /**
      * Creates a matcher for {@link Iterable}s that matches when consecutive passes over the
      * examined {@link Iterable} yield at least one item that is equal to the corresponding
@@ -109,9 +82,8 @@ public class IsCollectionContaining<T> extends TypeSafeDiagnosingMatcher<Iterabl
      * <p/>
      * For example:
      * <pre>assertThat(Arrays.asList("foo", "bar", "baz"), hasItems("baz", "foo"))</pre>
-     * 
-     * @param items
-     *     the items to compare against the items provided by the examined {@link Iterable}
+     *
+     * @param items the items to compare against the items provided by the examined {@link Iterable}
      */
     @Factory
     public static <T> Matcher<Iterable<T>> hasItems(T... items) {
@@ -119,8 +91,31 @@ public class IsCollectionContaining<T> extends TypeSafeDiagnosingMatcher<Iterabl
         for (T element : items) {
             all.add(hasItem(element));
         }
-        
+
         return allOf(all);
+    }
+
+    @Override
+    protected boolean matchesSafely(Iterable<? super T> collection, Description mismatchDescription) {
+        boolean isPastFirst = false;
+        for (Object item : collection) {
+            if (elementMatcher.matches(item)) {
+                return true;
+            }
+            if (isPastFirst) {
+                mismatchDescription.appendText(", ");
+            }
+            elementMatcher.describeMismatch(item, mismatchDescription);
+            isPastFirst = true;
+        }
+        return false;
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        description
+                .appendText("a collection containing ")
+                .appendDescriptionOf(elementMatcher);
     }
 
 }

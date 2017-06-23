@@ -17,11 +17,25 @@ import wxm.KeepAccount.define.UsrItem;
 public class GlobalMsgHandler extends Handler {
     private static final String TAG = "GlobalMsgHandler";
 
+    /**
+     * 回复消息
+     *
+     * @param mh       接收回复消息的句柄
+     * @param msg_type 原消息类型（{@code arg1}）
+     * @param msg_obj  回复消息的参数{@code obj}
+     */
+    private static void ReplyMsg(Handler mh, int msg_type, Object msg_obj) {
+        Message m = Message.obtain(mh, GlobalDef.MSG_REPLY);
+        m.arg1 = msg_type;
+        m.obj = msg_obj;
+        m.sendToTarget();
+    }
+
     @Override
     public void handleMessage(Message msg) {
         Log.i(TAG, "receive msg : " + msg.toString());
-        switch (msg.what)   {
-            case GlobalDef.MSG_USR_ADDUSR : {
+        switch (msg.what) {
+            case GlobalDef.MSG_USR_ADDUSR: {
                 Object[] arr = UtilFun.cast(msg.obj);
 
                 Intent data = UtilFun.cast(arr[0]);
@@ -29,7 +43,7 @@ public class GlobalMsgHandler extends Handler {
                 String usr = data.getStringExtra(UsrItem.FIELD_NAME);
                 String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
 
-                if(ContextUtil.getUsrUtility().hasUsr(usr))  {
+                if (ContextUtil.getUsrUtility().hasUsr(usr)) {
                     ReplyMsg(h, GlobalDef.MSG_USR_ADDUSR,
                             new Object[]{false, data, "用户已经存在！"});
                 } else {
@@ -56,25 +70,11 @@ public class GlobalMsgHandler extends Handler {
             }
             break;
 
-            case GlobalDef.MSG_USR_LOGOUT : {
+            case GlobalDef.MSG_USR_LOGOUT: {
                 ContextUtil.setCurUsr(null);
             }
             break;
         }
-    }
-
-
-    /**
-     * 回复消息
-     * @param mh            接收回复消息的句柄
-     * @param msg_type      原消息类型（{@code arg1}）
-     * @param msg_obj       回复消息的参数{@code obj}
-     */
-    private static void ReplyMsg(Handler mh, int msg_type, Object msg_obj) {
-        Message m = Message.obtain(mh, GlobalDef.MSG_REPLY);
-        m.arg1 = msg_type;
-        m.obj = msg_obj;
-        m.sendToTarget();
     }
 }
 

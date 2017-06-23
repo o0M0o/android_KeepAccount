@@ -23,12 +23,12 @@ import java.util.Map;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.RecordTypeItem;
-import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.dialog.DlgRecordInfo;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
+import wxm.KeepAccount.ui.dialog.DlgRecordInfo;
+import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * 编辑记录类型
@@ -45,33 +45,28 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     private final static int SELECTED_ACCPET = 3;
     // 选中"reject"
     private final static int SELECTED_REJECT = 4;
-
-
-    private View        mSelfView;
-    private String      mEditType;
-    private String      mAction;
-
     private final static String KEY_NAME = "key_name";
     private final static String KEY_NOTE = "key_note";
     private final static String KEY_SELECTED = "key_selected";
     private final static String KEY_ID = "key_id";
-
-    private final static String VAL_SELECTED     = "val_selected";
+    private final static String VAL_SELECTED = "val_selected";
     private final static String VAL_NOT_SELECTED = "val_not_selected";
-
+    private View mSelfView;
+    private String mEditType;
+    private String mAction;
     // data for view
-    private String  mCurType;
-    private ArrayList<HashMap<String, String>>  mLHMData;
-    private GVTypeAdapter                       mGVAdapter;
+    private String mCurType;
+    private ArrayList<HashMap<String, String>> mLHMData;
+    private GVTypeAdapter mGVAdapter;
 
     // ui component for view
-    private TextView        mTVNote;
-    private GridView        mGVHolder;
-    private RelativeLayout  mRLActAdd;
-    private RelativeLayout  mRLActMinus;
-    private RelativeLayout  mRLActPencil;
-    private RelativeLayout  mRLActAccept;
-    private RelativeLayout  mRLActReject;
+    private TextView mTVNote;
+    private GridView mGVHolder;
+    private RelativeLayout mRLActAdd;
+    private RelativeLayout mRLActMinus;
+    private RelativeLayout mRLActPencil;
+    private RelativeLayout mRLActAccept;
+    private RelativeLayout mRLActReject;
 
     private int mCLSelected;
     private int mCLNotSelected;
@@ -90,7 +85,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
             mCLNotSelected = getResources().getColor(R.color.white);
 
             mSelfView = view;
-            if(!mEditType.equals(GlobalDef.STR_RECORD_PAY) &&
+            if (!mEditType.equals(GlobalDef.STR_RECORD_PAY) &&
                     !mEditType.equals(GlobalDef.STR_RECORD_INCOME))
                 return;
 
@@ -124,11 +119,12 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
 
     /**
      * 更新界面动作状态
+     *
      * @param type
      */
-    private void update_acts(int type)  {
-        switch (type)   {
-            case SELECTED_NONE :
+    private void update_acts(int type) {
+        switch (type) {
+            case SELECTED_NONE:
                 mRLActPencil.setVisibility(View.INVISIBLE);
                 mRLActAdd.setVisibility(View.VISIBLE);
                 mRLActMinus.setVisibility(View.VISIBLE);
@@ -136,9 +132,9 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                 mRLActReject.setVisibility(View.INVISIBLE);
                 break;
 
-            case SELECTED_MINUS :
+            case SELECTED_MINUS:
                 mRLActPencil.setVisibility(View.INVISIBLE);
-                if(mRLActMinus.isSelected())    {
+                if (mRLActMinus.isSelected()) {
                     mRLActAdd.setVisibility(View.VISIBLE);
                     mRLActAccept.setVisibility(View.INVISIBLE);
                     mRLActReject.setVisibility(View.INVISIBLE);
@@ -155,7 +151,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                 }
                 break;
 
-            case SELECTED_ACCPET :
+            case SELECTED_ACCPET:
                 mRLActPencil.setVisibility(View.INVISIBLE);
                 mRLActAdd.setVisibility(View.VISIBLE);
                 mRLActAccept.setVisibility(View.INVISIBLE);
@@ -163,7 +159,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                 mRLActMinus.setBackgroundColor(mCLNotSelected);
                 break;
 
-            case SELECTED_REJECT :
+            case SELECTED_REJECT:
                 mRLActPencil.setVisibility(View.INVISIBLE);
                 mRLActAdd.setVisibility(View.VISIBLE);
                 mRLActAccept.setVisibility(View.INVISIBLE);
@@ -179,13 +175,13 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     private void load_info() {
         mLHMData.clear();
         List<RecordTypeItem> al_type;
-        if(mEditType.equals(GlobalDef.STR_RECORD_PAY))    {
+        if (mEditType.equals(GlobalDef.STR_RECORD_PAY)) {
             al_type = ContextUtil.getRecordTypeUtility().getAllPayItem();
-        } else  {
+        } else {
             al_type = ContextUtil.getRecordTypeUtility().getAllIncomeItem();
         }
 
-        if(null != al_type) {
+        if (null != al_type) {
             Collections.sort(al_type, (o1, o2) -> o1.getType().compareTo(o2.getType()));
 
             for (RecordTypeItem ri : al_type) {
@@ -204,18 +200,19 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
 
     /**
      * GridView item选中后调用的函数
-     * @param position  当前点击位置
+     *
+     * @param position 当前点击位置
      */
     private void onGVItemClick(int position) {
-        if(mRLActMinus.isSelected())    {
+        if (mRLActMinus.isSelected()) {
             HashMap<String, String> hm = mLHMData.get(position);
             String old_sel = hm.get(KEY_SELECTED);
             hm.put(KEY_SELECTED, old_sel.equals(VAL_SELECTED) ?
-                                    VAL_NOT_SELECTED : VAL_SELECTED);
+                    VAL_NOT_SELECTED : VAL_SELECTED);
 
             int i_sel = 0;
-            for(HashMap<String, String> hml : mLHMData )   {
-                if(hml.get(KEY_SELECTED).equals(VAL_SELECTED))
+            for (HashMap<String, String> hml : mLHMData) {
+                if (hml.get(KEY_SELECTED).equals(VAL_SELECTED))
                     i_sel++;
             }
 
@@ -226,14 +223,14 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
             String tv_str = mLHMData.get(position).get(KEY_NAME);
             for (HashMap<String, String> hm : mLHMData) {
                 if (hm.get(KEY_NAME).equals(tv_str)) {
-                    if(hm.get(KEY_SELECTED).equals(VAL_NOT_SELECTED)) {
+                    if (hm.get(KEY_SELECTED).equals(VAL_NOT_SELECTED)) {
                         hm.put(KEY_SELECTED, VAL_SELECTED);
                         mTVNote.setText(UtilFun.StringIsNullOrEmpty(hm.get(KEY_NOTE)) ?
                                 "" : hm.get(KEY_NOTE));
 
                         mRLActPencil.setVisibility(View.VISIBLE);
                         mCurType = tv_str;
-                    } else  {
+                    } else {
                         hm.put(KEY_SELECTED, VAL_NOT_SELECTED);
                         mTVNote.setText("");
 
@@ -264,9 +261,9 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     @Override
     public Object getCurData() {
         RecordTypeItem ri = null;
-        if(!UtilFun.StringIsNullOrEmpty(mCurType)) {
+        if (!UtilFun.StringIsNullOrEmpty(mCurType)) {
             for (HashMap<String, String> hm : mLHMData) {
-                if(hm.get(KEY_NAME).equals(mCurType))   {
+                if (hm.get(KEY_NAME).equals(mCurType)) {
                     ri = ContextUtil.getRecordTypeUtility().getData(Integer.valueOf(hm.get(KEY_ID)));
                     break;
                 }
@@ -283,19 +280,19 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     @Override
     public void onClick(View v) {
         final int vid = v.getId();
-        switch (vid)    {
-            case R.id.rl_pencil :
-            case R.id.rl_add :  {
+        switch (vid) {
+            case R.id.rl_pencil:
+            case R.id.rl_add: {
                 DlgRecordInfo dp = new DlgRecordInfo();
-                dp.setInitDate(R.id.rl_pencil == vid ? (RecordTypeItem)getCurData() : null);
+                dp.setInitDate(R.id.rl_pencil == vid ? (RecordTypeItem) getCurData() : null);
                 dp.setRecordType(mEditType);
                 dp.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                     @Override
                     public void onDialogPositiveResult(DialogFragment dialog) {
                         DlgRecordInfo cur_dp = UtilFun.cast_t(dialog);
                         RecordTypeItem ri = cur_dp.getCurDate();
-                        if(null != ri) {
-                            if(R.id.rl_add == vid)
+                        if (null != ri) {
+                            if (R.id.rl_add == vid)
                                 ContextUtil.getRecordTypeUtility().createData(ri);
                             else
                                 ContextUtil.getRecordTypeUtility().modifyData(ri);
@@ -312,7 +309,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
             }
             break;
 
-            case R.id.rl_minus :    {
+            case R.id.rl_minus: {
                 update_acts(SELECTED_MINUS);
                 mCurType = "";
                 for (HashMap<String, String> hm : mLHMData) {
@@ -325,20 +322,20 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
             }
             break;
 
-            case R.id.rl_accept :   {
+            case R.id.rl_accept: {
                 //for gv
                 final LinkedList<Integer> ll_i = new LinkedList<>();
                 for (HashMap<String, String> hm : mLHMData) {
-                    if(hm.get(KEY_SELECTED).equals(VAL_SELECTED))   {
+                    if (hm.get(KEY_SELECTED).equals(VAL_SELECTED)) {
                         ll_i.add(Integer.valueOf(hm.get(KEY_ID)));
                     }
                 }
 
-                if(0 < ll_i.size()) {
+                if (0 < ll_i.size()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setMessage("请确认是否删除数据!").setTitle("警告");
                     builder.setPositiveButton("确认", (dialog, which) -> {
-                        for(int id : ll_i) {
+                        for (int id : ll_i) {
                             ContextUtil.getRecordTypeUtility().removeData(id);
                         }
 
@@ -359,7 +356,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
             }
             break;
 
-            case R.id.rl_reject :   {
+            case R.id.rl_reject: {
                 // for ui
                 update_acts(SELECTED_REJECT);
 
@@ -408,7 +405,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
             if (null != v) {
                 HashMap<String, String> hm = mLHMData.get(position);
                 int curCL = hm.get(KEY_SELECTED).equals(VAL_SELECTED) ?
-                                    mCLSelected : mCLNotSelected;
+                        mCLSelected : mCLNotSelected;
                 v.setBackgroundColor(curCL);
             }
 

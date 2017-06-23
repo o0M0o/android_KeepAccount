@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.allure.lbanners.LMBanners;
 import com.allure.lbanners.transformer.TransitionEffect;
@@ -24,13 +23,13 @@ import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.DragGrid.DragGridView;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
+import wxm.KeepAccount.ui.setting.ACSetting;
 import wxm.KeepAccount.ui.welcome.banner.FrgAdapter;
 import wxm.KeepAccount.ui.welcome.banner.FrgPara;
 import wxm.KeepAccount.utility.DGVButtonAdapter;
 import wxm.KeepAccount.utility.PreferencesUtil;
-import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.setting.ACSetting;
-import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
 
 /**
  * for welcome
@@ -63,32 +62,32 @@ public class FrgWelcome extends FrgUtilityBase {
         initBanner();
 
         mLSData.clear();
-        for(String i : PreferencesUtil.loadHotAction())  {
+        for (String i : PreferencesUtil.loadHotAction()) {
             HashMap<String, Object> ihm = new HashMap<>();
             ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
             mLSData.add(ihm);
         }
 
         final DGVButtonAdapter apt = new DGVButtonAdapter(getActivity(), mLSData,
-                new String[] {}, new int[] { });
+                new String[]{}, new int[]{});
 
         mDGVActions.setAdapter(apt);
         mDGVActions.setOnChangeListener((from, to) -> {
             HashMap<String, Object> temp = mLSData.get(from);
-            if(from < to){
-                for(int i=from; i<to; i++){
-                    Collections.swap(mLSData, i, i+1);
+            if (from < to) {
+                for (int i = from; i < to; i++) {
+                    Collections.swap(mLSData, i, i + 1);
                 }
-            }else if(from > to){
-                for(int i=from; i>to; i--){
-                    Collections.swap(mLSData, i, i-1);
+            } else if (from > to) {
+                for (int i = from; i > to; i--) {
+                    Collections.swap(mLSData, i, i - 1);
                 }
             }
 
             mLSData.set(to, temp);
 
             ArrayList<String> hot_name = new ArrayList<>();
-            for(HashMap<String, Object> hi : mLSData)   {
+            for (HashMap<String, Object> hi : mLSData) {
                 String an = UtilFun.cast_t(hi.get(DGVButtonAdapter.HKEY_ACT_NAME));
                 hot_name.add(an);
             }
@@ -104,7 +103,7 @@ public class FrgWelcome extends FrgUtilityBase {
     protected void loadUI() {
     }
 
-    private void initFrgs()  {
+    private void initFrgs() {
         FrgPara fp = new FrgPara();
         fp.mFPViewId = R.layout.banner_month;
         mALFrgs.add(fp);
@@ -114,10 +113,10 @@ public class FrgWelcome extends FrgUtilityBase {
         mALFrgs.add(fp);
     }
 
-    @OnClick({R.id.ib_channel,  R.id.ib_setting})
-    public void OnActClick(View v)  {
-        switch (v.getId())  {
-            case R.id.ib_channel :  {
+    @OnClick({R.id.ib_channel, R.id.ib_setting})
+    public void OnActClick(View v) {
+        switch (v.getId()) {
+            case R.id.ib_channel: {
                 DGVButtonAdapter dapt = UtilFun.cast(mDGVActions.getAdapter());
                 DlgSelectChannel dlg = new DlgSelectChannel();
                 dlg.setHotChannel(dapt.getCurAction());
@@ -128,7 +127,7 @@ public class FrgWelcome extends FrgUtilityBase {
                         PreferencesUtil.saveHotAction(dsc.getHotChannel());
 
                         mLSData.clear();
-                        for(String i : PreferencesUtil.loadHotAction())     {
+                        for (String i : PreferencesUtil.loadHotAction()) {
                             HashMap<String, Object> ihm = new HashMap<>();
                             ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
                             mLSData.add(ihm);
@@ -143,12 +142,12 @@ public class FrgWelcome extends FrgUtilityBase {
                     }
                 });
 
-                dlg.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(),
+                dlg.show(((AppCompatActivity) getActivity()).getSupportFragmentManager(),
                         "选择频道");
             }
             break;
 
-            case R.id.ib_setting :  {
+            case R.id.ib_setting: {
                 Intent intent = new Intent(getActivity(), ACSetting.class);
                 startActivity(intent);
             }
@@ -156,7 +155,7 @@ public class FrgWelcome extends FrgUtilityBase {
         }
     }
 
-    private void initBanner()   {
+    private void initBanner() {
         //本地用法
         mLBanners.setAdapter(new FrgAdapter(getActivity()), mALFrgs);
 

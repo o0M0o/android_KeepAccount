@@ -15,10 +15,10 @@ package org.hamcrest;
  * matcher makes sense. It should not be used by API designers implementing
  * matchers.
  *
+ * @param <T> The type of object being matched.
  * @author Neil Dunn
  * @see CustomTypeSafeMatcher for a type safe variant of this class that you probably
- *  want to use.
- * @param <T> The type of object being matched.
+ * want to use.
  */
 public abstract class CustomMatcher<T> extends BaseMatcher<T> {
     private final String fixedDescription;

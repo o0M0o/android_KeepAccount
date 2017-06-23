@@ -47,8 +47,8 @@
         android:id="@+id/lv_show_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/cl_header"
         android:layout_marginStart="12dp"
         android:divider="@android:color/transparent"
-        android:layout_below="@id/cl_header"
-        android:dividerHeight="1dp"/>
+        android:dividerHeight="1dp" />
 </RelativeLayout>

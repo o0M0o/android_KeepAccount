@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -34,55 +33,50 @@ import wxm.uilib.IconButton.IconButton;
  */
 public abstract class LVBase extends ShowViewHelperBase {
     /// list item data begin
-    protected final static String K_TITLE     = "k_title";
-    protected final static String K_ABSTRACT  = "k_abstract";
-    protected final static String K_TIME      = "k_time";
-    protected final static String K_BUDGET    = "k_budget";
-    protected final static String K_AMOUNT    = "k_amount";
-    protected final static String K_NOTE      = "k_note";
-    protected final static String K_TAG       = "k_tag";
-    protected final static String K_ID        = "k_id";
-    protected final static String K_TYPE      = "k_type";
-    protected final static String K_DETAIL    = "k_detail";
-    protected final static String K_SUB_TAG   = "k_sub_tag";
+    protected final static String K_TITLE = "k_title";
+    protected final static String K_ABSTRACT = "k_abstract";
+    protected final static String K_TIME = "k_time";
+    protected final static String K_BUDGET = "k_budget";
+    protected final static String K_AMOUNT = "k_amount";
+    protected final static String K_NOTE = "k_note";
+    protected final static String K_TAG = "k_tag";
+    protected final static String K_ID = "k_id";
+    protected final static String K_TYPE = "k_type";
+    protected final static String K_DETAIL = "k_detail";
+    protected final static String K_SUB_TAG = "k_sub_tag";
 
-    protected final static String K_YEAR              = "k_year";
-    protected final static String K_MONTH             = "k_month";
-    protected final static String K_DAY_NUMEBER       = "k_d_number";
-    protected final static String K_DAY_IN_WEEK       = "k_d_in_week";
-    protected final static String K_YEAR_PAY_COUNT       = "k_ypc";
-    protected final static String K_YEAR_PAY_AMOUNT      = "k_ypa";
-    protected final static String K_YEAR_INCOME_COUNT    = "k_yic";
-    protected final static String K_YEAR_INCOME_AMOUNT   = "k_yia";
-    protected final static String K_DAY_PAY_COUNT       = "k_dpc";
-    protected final static String K_DAY_PAY_AMOUNT      = "k_dpa";
-    protected final static String K_DAY_INCOME_COUNT    = "k_dic";
-    protected final static String K_DAY_INCOME_AMOUNT   = "k_dia";
-    protected final static String K_MONTH_PAY_COUNT     = "k_mpc";
-    protected final static String K_MONTH_PAY_AMOUNT    = "k_mpa";
-    protected final static String K_MONTH_INCOME_COUNT   = "k_mic";
-    protected final static String K_MONTH_INCOME_AMOUNT  = "k_mia";
+    protected final static String K_YEAR = "k_year";
+    protected final static String K_MONTH = "k_month";
+    protected final static String K_DAY_NUMEBER = "k_d_number";
+    protected final static String K_DAY_IN_WEEK = "k_d_in_week";
+    protected final static String K_YEAR_PAY_COUNT = "k_ypc";
+    protected final static String K_YEAR_PAY_AMOUNT = "k_ypa";
+    protected final static String K_YEAR_INCOME_COUNT = "k_yic";
+    protected final static String K_YEAR_INCOME_AMOUNT = "k_yia";
+    protected final static String K_DAY_PAY_COUNT = "k_dpc";
+    protected final static String K_DAY_PAY_AMOUNT = "k_dpa";
+    protected final static String K_DAY_INCOME_COUNT = "k_dic";
+    protected final static String K_DAY_INCOME_AMOUNT = "k_dia";
+    protected final static String K_MONTH_PAY_COUNT = "k_mpc";
+    protected final static String K_MONTH_PAY_AMOUNT = "k_mpa";
+    protected final static String K_MONTH_INCOME_COUNT = "k_mic";
+    protected final static String K_MONTH_INCOME_AMOUNT = "k_mia";
 
-    protected final static String K_SHOW           = "k_show";
-    protected final static String V_SHOW_UNFOLD    = "vs_unfold";
-    protected final static String V_SHOW_FOLD      = "vs_fold";
+    protected final static String K_SHOW = "k_show";
+    protected final static String V_SHOW_UNFOLD = "vs_unfold";
+    protected final static String V_SHOW_FOLD = "vs_fold";
     /// list item data end
 
     // 视图数据
-    protected final LinkedList<HashMap<String, String>>                     mMainPara;
-    protected final HashMap<String, LinkedList<HashMap<String, String>>>    mHMSubPara;
-
+    protected final LinkedList<HashMap<String, String>> mMainPara;
+    protected final HashMap<String, LinkedList<HashMap<String, String>>> mHMSubPara;
+    protected final LinkedList<String> mLLSubFilter = new LinkedList<>();
+    protected final LinkedList<View> mLLSubFilterVW = new LinkedList<>();
     // 存放展开节点的数据
-    private final LinkedList<String>    mUnfoldItems;
-
+    private final LinkedList<String> mUnfoldItems;
     // for filter
     protected boolean mBSelectSubFilter = false;
-    protected final LinkedList<String> mLLSubFilter = new LinkedList<>();
-    protected final LinkedList<View>   mLLSubFilterVW = new LinkedList<>();
-
-
     protected boolean mBActionExpand;
-
 
 
     // for ui
@@ -113,34 +107,34 @@ public abstract class LVBase extends ShowViewHelperBase {
     IconButton mIBReport;
 
     @BindView(R.id.ib_add)
-    IconButton  mIBAdd;
+    IconButton mIBAdd;
 
     @BindView(R.id.ib_delete)
-    IconButton  mIBDelete;
+    IconButton mIBDelete;
 
     @BindView(R.id.ib_refresh)
-    IconButton  mIBRefresh;
+    IconButton mIBRefresh;
 
     @BindView(R.id.ib_sort)
-    IconButton      mIBSort;
+    IconButton mIBSort;
 
     @BindView(R.id.rl_action)
-    RelativeLayout  mRLAction;
+    RelativeLayout mRLAction;
 
     @BindView(R.id.lv_show)
     ListView mLVShow;
 
     @BindView(R.id.rl_content)
-    RelativeLayout  mRLContent;
+    RelativeLayout mRLContent;
 
     @BindView(R.id.pb_loading)
-    ProgressBar     mPBLoading;
+    ProgressBar mPBLoading;
 
-    public LVBase()   {
+    public LVBase() {
         super();
-        mMainPara       = new LinkedList<>();
-        mHMSubPara      = new HashMap<>();
-        mUnfoldItems    = new LinkedList<>();
+        mMainPara = new LinkedList<>();
+        mHMSubPara = new HashMap<>();
+        mUnfoldItems = new LinkedList<>();
     }
 
     @Override
@@ -163,10 +157,11 @@ public abstract class LVBase extends ShowViewHelperBase {
 
     /**
      * 切换底部”动作条“显示/隐藏
-     * @param v     点击view
+     *
+     * @param v 点击view
      */
     @OnClick(R.id.rl_hide_show)
-    public void switchActionHideShow(View v)    {
+    public void switchActionHideShow(View v) {
         ViewGroup.LayoutParams rp = mRLActions.getLayoutParams();
         boolean b_hide = rp.width == 0;
 
@@ -178,7 +173,7 @@ public abstract class LVBase extends ShowViewHelperBase {
         mRLActions.setLayoutParams(rp);
 
         RelativeLayout.LayoutParams rp_lv = UtilFun.cast_t(mRLLVNote.getLayoutParams());
-        if(b_hide)
+        if (b_hide)
             rp_lv.addRule(RelativeLayout.ABOVE, R.id.rl_action);
         else
             rp_lv.removeRule(RelativeLayout.ABOVE);
@@ -188,11 +183,12 @@ public abstract class LVBase extends ShowViewHelperBase {
     /**
      * 添加一个展开节点
      * 只记录20个展开节点, 超过数量后将移除最早记录的节点
-     * @param tag   展开节点tag
+     *
+     * @param tag 展开节点tag
      */
-    protected void addUnfoldItem(String tag)   {
-        if(!mUnfoldItems.contains(tag)) {
-            if(20 < mUnfoldItems.size())
+    protected void addUnfoldItem(String tag) {
+        if (!mUnfoldItems.contains(tag)) {
+            if (20 < mUnfoldItems.size())
                 mUnfoldItems.removeFirst();
 
             //Log.i(LOG_TAG, "addUnfoldItem, tag = " + tag);
@@ -202,19 +198,21 @@ public abstract class LVBase extends ShowViewHelperBase {
 
     /**
      * 移除一个展开节点
-     * @param tag   移除节点tag
+     *
+     * @param tag 移除节点tag
      */
-    protected void removeUnfoldItem(String tag)   {
+    protected void removeUnfoldItem(String tag) {
         mUnfoldItems.remove(tag);
     }
 
 
     /**
      * 检查一个节点是否是展开节点
-     * @param tag   待检查节点tag
-     * @return  如果此节点是展开节点，返回true, 否则返回false
+     *
+     * @param tag 待检查节点tag
+     * @return 如果此节点是展开节点，返回true, 否则返回false
      */
-    protected boolean checkUnfoldItem(String tag)  {
+    protected boolean checkUnfoldItem(String tag) {
         return mUnfoldItems.contains(tag);
     }
 

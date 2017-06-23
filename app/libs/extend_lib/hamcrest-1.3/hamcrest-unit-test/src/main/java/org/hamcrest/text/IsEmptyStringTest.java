@@ -10,31 +10,31 @@ import static org.hamcrest.text.IsEmptyString.isEmptyString;
 
 public class IsEmptyStringTest extends AbstractMatcherTest {
 
-  @Override
-  protected Matcher<?> createMatcher() {
-    return isEmptyOrNullString();
-  }
+    @Override
+    protected Matcher<?> createMatcher() {
+        return isEmptyOrNullString();
+    }
 
-  public void testEmptyOrNullIsNull() {
-    assertThat(null, isEmptyOrNullString());
-  }
+    public void testEmptyOrNullIsNull() {
+        assertThat(null, isEmptyOrNullString());
+    }
 
 
-  public void testEmptyIsNotNull() {
-    assertThat(null, not(isEmptyString()));
-  }
+    public void testEmptyIsNotNull() {
+        assertThat(null, not(isEmptyString()));
+    }
 
-  public void testMatchesEmptyString() {
-    assertMatches("empty string", isEmptyString(), "");
-    assertMatches("empty string", isEmptyOrNullString(), "");
-  }
+    public void testMatchesEmptyString() {
+        assertMatches("empty string", isEmptyString(), "");
+        assertMatches("empty string", isEmptyOrNullString(), "");
+    }
 
-  public void testDoesNotMatchNonEmptyString() {
-    assertDoesNotMatch("non empty string", isEmptyString(), "a");
-  }
+    public void testDoesNotMatchNonEmptyString() {
+        assertDoesNotMatch("non empty string", isEmptyString(), "a");
+    }
 
-  public void testHasAReadableDescription() {
-    assertDescription("an empty string", isEmptyString());
-    assertDescription("(null or an empty string)", isEmptyOrNullString());
-  }
+    public void testHasAReadableDescription() {
+        assertDescription("an empty string", isEmptyString());
+        assertDescription("(null or an empty string)", isEmptyOrNullString());
+    }
 }

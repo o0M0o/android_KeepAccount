@@ -25,6 +25,13 @@ public class HasXPathTest extends AbstractMatcherTest {
     private Document xml;
     private NamespaceContext ns;
 
+    private static Document parse(String xml) throws Exception {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setNamespaceAware(true);
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        return documentBuilder.parse(new ByteArrayInputStream(xml.getBytes()));
+    }
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -38,26 +45,26 @@ public class HasXPathTest extends AbstractMatcherTest {
                 + "</root>\n"
         );
         ns = new NamespaceContext() {
-          @Override
-          public String getNamespaceURI(String prefix) {
-              return ("cheese".equals(prefix) ? "http://cheese.com" : null);
-          }
+            @Override
+            public String getNamespaceURI(String prefix) {
+                return ("cheese".equals(prefix) ? "http://cheese.com" : null);
+            }
 
-          @Override
-          public String getPrefix(String namespaceURI) {
-              return ("http://cheese.com".equals(namespaceURI) ? "cheese" : null);
-          }
+            @Override
+            public String getPrefix(String namespaceURI) {
+                return ("http://cheese.com".equals(namespaceURI) ? "cheese" : null);
+            }
 
-          @Override
-          public Iterator<String> getPrefixes(String namespaceURI) {
-              HashSet<String> prefixes = new HashSet<String>();
-              String prefix = getPrefix(namespaceURI);
-              if (prefix != null) {
-                  prefixes.add(prefix);
-              }
-              return prefixes.iterator();
-          }
-      };
+            @Override
+            public Iterator<String> getPrefixes(String namespaceURI) {
+                HashSet<String> prefixes = new HashSet<String>();
+                String prefix = getPrefix(namespaceURI);
+                if (prefix != null) {
+                    prefixes.add(prefix);
+                }
+                return prefixes.iterator();
+            }
+        };
     }
 
     @Override
@@ -79,7 +86,7 @@ public class HasXPathTest extends AbstractMatcherTest {
     }
 
     public void testMatchesEmptyElementInNamespace() throws Exception {
-      assertThat(xml, hasXPath("//cheese:emptySomething", ns));
+        assertThat(xml, hasXPath("//cheese:emptySomething", ns));
     }
 
     public void testFailsIfNodeIsMissing() throws Exception {
@@ -88,8 +95,8 @@ public class HasXPathTest extends AbstractMatcherTest {
     }
 
     public void testFailsIfNodeIsMissingInNamespace() throws Exception {
-      assertThat(xml, not(hasXPath("//cheese:foreignSomething", equalTo("Badger"))));
-      assertThat(xml, not(hasXPath("//cheese:foreignSomething")));
+        assertThat(xml, not(hasXPath("//cheese:foreignSomething", equalTo("Badger"))));
+        assertThat(xml, not(hasXPath("//cheese:foreignSomething")));
     }
 
     public void testMatchesWithNamespace() throws Exception {
@@ -120,12 +127,5 @@ public class HasXPathTest extends AbstractMatcherTest {
 
     public void testDescribesIncorrectNodeValueMismatch() {
         assertMismatchDescription("was \"Edam\"", hasXPath("//something[1]/cheese", equalTo("parmesan")), xml);
-    }
-
-    private static Document parse(String xml) throws Exception {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        documentBuilderFactory.setNamespaceAware(true);
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        return documentBuilder.parse(new ByteArrayInputStream(xml.getBytes()));
     }
 }

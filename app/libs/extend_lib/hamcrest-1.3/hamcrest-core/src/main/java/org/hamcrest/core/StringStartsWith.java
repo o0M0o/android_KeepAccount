@@ -13,6 +13,20 @@ public class StringStartsWith extends SubstringMatcher {
         super(substring);
     }
 
+    /**
+     * Creates a matcher that matches if the examined {@link String} starts with the specified
+     * {@link String}.
+     * <p/>
+     * For example:
+     * <pre>assertThat("myStringOfNote", startsWith("my"))</pre>
+     *
+     * @param prefix the substring that the returned matcher will expect at the start of any examined string
+     */
+    @Factory
+    public static Matcher<String> startsWith(String prefix) {
+        return new StringStartsWith(prefix);
+    }
+
     @Override
     protected boolean evalSubstringOf(String s) {
         return s.startsWith(substring);
@@ -21,21 +35,6 @@ public class StringStartsWith extends SubstringMatcher {
     @Override
     protected String relationship() {
         return "starting with";
-    }
-
-    /**
-     * Creates a matcher that matches if the examined {@link String} starts with the specified
-     * {@link String}.
-     * <p/>
-     * For example:
-     * <pre>assertThat("myStringOfNote", startsWith("my"))</pre>
-     * 
-     * @param prefix
-     *      the substring that the returned matcher will expect at the start of any examined string
-     */
-    @Factory
-    public static Matcher<String> startsWith(String prefix) {
-        return new StringStartsWith(prefix);
     }
 
 }

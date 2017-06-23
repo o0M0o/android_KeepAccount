@@ -2,16 +2,15 @@ package wxm.KeepAccount.ui.data.edit.RecordInfo;
 
 import android.content.Intent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
-import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.GlobalDef;
 
 public class ACRecordInfoEdit extends BaseAppCompatActivity {
-    public final static String  IT_PARA_RECORDTYPE = "record_type";
-    private TFEditRecordInfo    mTFRecordInfo = new TFEditRecordInfo();
+    public final static String IT_PARA_RECORDTYPE = "record_type";
+    private TFEditRecordInfo mTFRecordInfo = new TFEditRecordInfo();
 
     @Override
     protected void leaveActivity() {
@@ -43,7 +42,7 @@ public class ACRecordInfoEdit extends BaseAppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_save: {
-                if(mTFRecordInfo.onAccept())    {
+                if (mTFRecordInfo.onAccept()) {
                     int ret_data = GlobalDef.INTRET_SURE;
                     Intent data = new Intent();
                     setResult(ret_data, data);
@@ -52,7 +51,7 @@ public class ACRecordInfoEdit extends BaseAppCompatActivity {
             }
             break;
 
-            case R.id.mi_giveup:    {
+            case R.id.mi_giveup: {
                 int ret_data = GlobalDef.INTRET_GIVEUP;
                 Intent data = new Intent();
                 setResult(ret_data, data);

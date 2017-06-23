@@ -32,15 +32,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.define.IncomeNoteItem;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.PayIncomeDBUtility;
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.utility.ToolUtil;
-import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.IncomeNoteItem;
+import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 import wxm.KeepAccount.ui.dialog.DlgLongTxt;
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType;
-import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
+import wxm.KeepAccount.utility.ContextUtil;
+import wxm.KeepAccount.utility.ToolUtil;
 
 import static java.lang.String.format;
 
@@ -50,24 +50,17 @@ import static java.lang.String.format;
  */
 public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     private final static String TAG = "TFEditIncome";
-
-    private IncomeNoteItem mOldIncomeNote;
-
     @BindView(R.id.ar_et_info)
     EditText mETInfo;
-
     @BindView(R.id.ar_et_date)
     EditText mETDate;
-
     @BindView(R.id.ar_et_amount)
     EditText mETAmount;
-
     @BindView(R.id.tv_note)
     TextView mTVNote;
-
     @BindString(R.string.notice_input_note)
-    String  mSZDefNote;
-
+    String mSZDefNote;
+    private IncomeNoteItem mOldIncomeNote;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -83,7 +76,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         if (null != view) {
             if (UtilFun.StringIsNullOrEmpty(mAction)
                     || (mAction.equals(GlobalDef.STR_MODIFY) && null == mOldIncomeNote))
-                return ;
+                return;
 
             init_compent(view);
             init_view();
@@ -155,9 +148,9 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
     @Override
     public Object getCurData() {
-        if(null != getView()) {
+        if (null != getView()) {
             IncomeNoteItem ii = new IncomeNoteItem();
-            if(null != mOldIncomeNote) {
+            if (null != mOldIncomeNote) {
                 ii.setId(mOldIncomeNote.getId());
                 ii.setUsr(mOldIncomeNote.getUsr());
             }
@@ -174,7 +167,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
             Timestamp tsDT;
             try {
                 tsDT = ToolUtil.StringToTimestamp(str_date);
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 tsDT = new Timestamp(0);
             }
             ii.setTs(tsDT);
@@ -187,21 +180,22 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
     @Override
     public void reLoadView() {
-        if(null != getView())
+        if (null != getView())
             init_view();
     }
 
 
     /**
      * 检查数据合法性
+     *
      * @return 若数据合法返回true, 否则返回false
      */
-    private boolean checkResult()   {
+    private boolean checkResult() {
         Activity ac = getActivity();
         if (null == ac)
             return false;
 
-        if(UtilFun.StringIsNullOrEmpty(mETAmount.getText().toString()))  {
+        if (UtilFun.StringIsNullOrEmpty(mETAmount.getText().toString())) {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ac);
             builder.setMessage("请输入收入数值!").setTitle("警告");
 
@@ -210,7 +204,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
             return false;
         }
 
-        if(UtilFun.StringIsNullOrEmpty(mETInfo.getText().toString()))   {
+        if (UtilFun.StringIsNullOrEmpty(mETInfo.getText().toString())) {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ac);
             builder.setMessage("请输入收入信息!").setTitle("警告");
 
@@ -219,8 +213,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
             return false;
         }
 
-        if(UtilFun.StringIsNullOrEmpty(mETDate.getText().toString()))
-        {
+        if (UtilFun.StringIsNullOrEmpty(mETDate.getText().toString())) {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ac);
             builder.setMessage("请输入收入日期!").setTitle("警告");
 
@@ -234,10 +227,11 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
     /**
      * 写入数据
-     * @return  操作成功返回true, 否则返回false
+     *
+     * @return 操作成功返回true, 否则返回false
      */
-    private boolean fillResult()       {
-        String str_val  = mETAmount.getText().toString();
+    private boolean fillResult() {
+        String str_val = mETAmount.getText().toString();
         String str_info = mETInfo.getText().toString();
         String str_date = mETDate.getText().toString();
 
@@ -247,16 +241,14 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         Timestamp tsDT;
         try {
             tsDT = ToolUtil.StringToTimestamp(str_date + ":00");
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             Log.e(TAG, String.format(Locale.CHINA, "解析'%s'到日期失败", str_date));
             return false;
         }
 
         // set data
         IncomeNoteItem pi = new IncomeNoteItem();
-        if(null != mOldIncomeNote && mAction.equals(GlobalDef.STR_MODIFY)) {
+        if (null != mOldIncomeNote && mAction.equals(GlobalDef.STR_MODIFY)) {
             pi.setId(mOldIncomeNote.getId());
             pi.setUsr(mOldIncomeNote.getUsr());
         }
@@ -269,10 +261,10 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         // add/modify data
         boolean b_create = mAction.equals(GlobalDef.STR_CREATE);
         PayIncomeDBUtility uti = ContextUtil.getPayIncomeUtility();
-        boolean b_ret =  b_create ?
-                            1 == uti.addIncomeNotes(Collections.singletonList(pi))
-                            : uti.getIncomeDBUtility().modifyData(pi);
-        if(!b_ret)  {
+        boolean b_ret = b_create ?
+                1 == uti.addIncomeNotes(Collections.singletonList(pi))
+                : uti.getIncomeDBUtility().modifyData(pi);
+        if (!b_ret) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage(b_create ? "创建收入数据失败!" : "更新收入数据失败")
                     .setTitle("警告");
@@ -287,7 +279,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         View v_self = getView();
         if (null != v_self && event.getAction() == MotionEvent.ACTION_DOWN) {
             switch (v.getId()) {
-                case R.id.tv_note : {
+                case R.id.tv_note: {
                     String tv_sz = mTVNote.getText().toString();
                     String lt = mSZDefNote.equals(tv_sz) ? "" : tv_sz;
 
@@ -296,8 +288,8 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
                     dlg.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
                         @Override
                         public void onDialogPositiveResult(DialogFragment dialogFragment) {
-                            String lt = ((DlgLongTxt)dialogFragment).getLongTxt();
-                            if(UtilFun.StringIsNullOrEmpty(lt))
+                            String lt = ((DlgLongTxt) dialogFragment).getLongTxt();
+                            if (UtilFun.StringIsNullOrEmpty(lt))
                                 lt = mSZDefNote;
 
                             mTVNote.setText(lt);
@@ -329,7 +321,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
                         String str_date = format(Locale.CHINA, "%04d-%02d-%02d",
                                 year, month + 1, dayOfMonth);
 
-                        TimePickerDialog.OnTimeSetListener  ot = (view1, hourOfDay, minute) -> {
+                        TimePickerDialog.OnTimeSetListener ot = (view1, hourOfDay, minute) -> {
                             String tm = format(Locale.CHINA, "%s %02d:%02d",
                                     str_date, hourOfDay, minute);
 
@@ -343,10 +335,10 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
                         td.show();
                     };
 
-                    DatePickerDialog dd = new DatePickerDialog(getContext()  ,dt
-                            ,cd.get(Calendar.YEAR)
-                            ,cd.get(Calendar.MONTH)
-                            ,cd.get(Calendar.DAY_OF_MONTH));
+                    DatePickerDialog dd = new DatePickerDialog(getContext(), dt
+                            , cd.get(Calendar.YEAR)
+                            , cd.get(Calendar.MONTH)
+                            , cd.get(Calendar.DAY_OF_MONTH));
                     dd.show();
                 }
                 break;

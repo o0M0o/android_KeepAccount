@@ -15,18 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.RemindItem;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.R;
 
 /**
  * 预算提醒
  * Created by 123 on 2016/10/8.
  */
-public class TFEditRemindBudget extends TFEditRemindBase  {
-    private Spinner     mSPBudget;
-
+public class TFEditRemindBudget extends TFEditRemindBase {
+    private Spinner mSPBudget;
 
 
     @Override
@@ -39,7 +38,7 @@ public class TFEditRemindBudget extends TFEditRemindBase  {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(null != view) {
+        if (null != view) {
             mSPBudget = UtilFun.cast(view.findViewById(R.id.sp_budget));
             assert null != mSPBudget;
 
@@ -61,19 +60,19 @@ public class TFEditRemindBudget extends TFEditRemindBase  {
 
     @Override
     public boolean onAccept() {
-        if(!checkName())
+        if (!checkName())
             return false;
 
-        if(!checkDate())
+        if (!checkDate())
             return false;
 
-        if(!checkBudget())
+        if (!checkBudget())
             return false;
 
-        if(!checkAmount())
+        if (!checkAmount())
             return false;
 
-        if(!checkType())
+        if (!checkType())
             return false;
 
         RemindItem ri = new RemindItem();
@@ -92,12 +91,13 @@ public class TFEditRemindBudget extends TFEditRemindBase  {
 
     /**
      * 检查预算数据合法性
-     * @return  合法返回true,否则返回false
+     *
+     * @return 合法返回true, 否则返回false
      */
-    private boolean checkBudget()   {
+    private boolean checkBudget() {
         String sel_budget = UtilFun.cast(mSPBudget.getSelectedItem());
         BudgetItem bi = ContextUtil.getBudgetUtility().getBudgetByName(sel_budget);
-        if(null == bi)  {
+        if (null == bi) {
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("缺少预算项").
                     setMessage("需要选择预算项!").

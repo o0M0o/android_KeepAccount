@@ -23,7 +23,7 @@ public class FrgHelp extends FrgUtilityBase {
 
     // for ui
     @BindView(R.id.wv_help)
-    WebView     mWVHelp;
+    WebView mWVHelp;
 
     @Override
     protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
@@ -43,9 +43,11 @@ public class FrgHelp extends FrgUtilityBase {
     }
 
     /// PRIVATE BEGIN
+
     /**
      * 加载帮助html
-     * @param url  帮助html路径
+     *
+     * @param url 帮助html路径
      */
     private void load_help(String url) {
         WebSettings wSet = mWVHelp.getSettings();

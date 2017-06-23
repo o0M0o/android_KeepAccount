@@ -48,6 +48,6 @@ public class IsEqualIgnoringWhiteSpaceTest extends AbstractMatcherTest {
 
     public void testHasAReadableDescription() {
         assertDescription("equalToIgnoringWhiteSpace(\"Hello World   how\\n are we? \")",
-                        matcher);
+                matcher);
     }
 }

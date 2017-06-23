@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_attach_button"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_filter"
@@ -12,13 +13,13 @@
 
         <ImageButton
             android:id="@+id/bt_giveup_filter"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp"
-            android:src="@drawable/ic_reject"
-            android:scaleType="fitCenter"
             android:layout_width="64dp"
-            android:layout_height="32dp" />
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_reject" />
 
         <!--
         <Button
@@ -33,14 +34,14 @@
             -->
 
         <TextView
-            android:layout_marginLeft="8dp"
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="仅显示筛选"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:id="@+id/textView"
-            android:layout_alignParentLeft="true" />
+            android:layout_marginLeft="8dp"
+            android:text="仅显示筛选"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -52,13 +53,13 @@
 
         <ImageButton
             android:id="@+id/bt_giveup"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp"
-            android:src="@drawable/ic_reject"
-            android:scaleType="fitCenter"
             android:layout_width="64dp"
-            android:layout_height="32dp" />
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_reject" />
 
         <!--
         <Button
@@ -73,13 +74,13 @@
 
         <ImageButton
             android:id="@+id/bt_accpet"
-            android:layout_toLeftOf="@+id/bt_giveup"
+            android:layout_width="64dp"
+            android:layout_height="32dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="8dp"
-            android:src="@drawable/ic_accept"
+            android:layout_toLeftOf="@+id/bt_giveup"
             android:scaleType="fitCenter"
-            android:layout_width="64dp"
-            android:layout_height="32dp" />
+            android:src="@drawable/ic_accept" />
 
         <!--
         <Button
@@ -94,13 +95,13 @@
             -->
 
         <TextView
-            android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="放弃或确认"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true" />
+            android:layout_marginLeft="8dp"
+            android:text="放弃或确认"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
 
 </RelativeLayout>
