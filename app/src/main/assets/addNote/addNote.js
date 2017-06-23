@@ -15,8 +15,8 @@ var vueApp = new Vue({
 
 $(document).ready(() => {
         $(".s2-pay-type").select2({
-            placeholder: "选择支出类型",
-            allowClear: true
+            allowClear: true,
+            theme: "classic"
         })
         console.log('page ready')
     });

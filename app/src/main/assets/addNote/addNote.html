@@ -13,8 +13,8 @@
 <body>
 <div id="app">
     <div class="select2-wrapper">
-        <select v-model="selectPayType" class="s2-pay-type form-control input-lg"
-                id="s2_pay_type">
+        <select v-model="selectPayType" class="s2-pay-type form-control input-sm"
+                id="s2_pay_type" style="width: 75%;">
             <option v-for="option in payTypeOptions" v-bind:value="option.value">
                 {{ option.text }}
             </option>
