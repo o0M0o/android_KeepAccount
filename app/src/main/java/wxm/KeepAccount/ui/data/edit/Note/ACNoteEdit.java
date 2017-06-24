@@ -46,7 +46,7 @@ public class ACNoteEdit extends BaseAppCompatActivity {
         }
 
         // for holder
-        mFGHolder = new FrgNoteEdit();
+        mFGHolder = new FrgNoteAdd();
         Bundle bd = new Bundle();
         String date = it.getStringExtra(GlobalDef.STR_RECORD_DATE);
         if (!UtilFun.StringIsNullOrEmpty(date)) {
