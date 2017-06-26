@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/rl_header"
+        android:id="@+id/cl_header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#a2b5cd"
@@ -120,11 +120,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_above="@id/rl_accpet_giveup"
-        android:layout_below="@id/rl_header"
+        android:layout_below="@id/cl_header"
         app:layout_constraintBottom_toTopOf="@+id/rl_accpet_giveup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rl_header"
+        app:layout_constraintTop_toBottomOf="@+id/cl_header"
         tools:layout_editor_absoluteX="0dp">
 
         <ProgressBar

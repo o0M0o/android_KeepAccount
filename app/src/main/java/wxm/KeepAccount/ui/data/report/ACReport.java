@@ -34,7 +34,7 @@ public class ACReport extends BaseAppCompatActivity {
 
     @Override
     protected void initFrgHolder() {
-        LOG_TAG = "ACNoteEdit";
+        LOG_TAG = "ACNoteAdd";
 
         // check invoke intent
         Intent it = getIntent();

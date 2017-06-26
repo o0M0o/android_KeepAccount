@@ -30,7 +30,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.ui.data.edit.Note.ACNoteEdit;
+import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.show.note.ACDailyDetail;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
@@ -126,8 +126,8 @@ public class LVHelperDaily extends LVBase {
 
             case R.id.ib_add: {
                 ACNoteShow ac = getRootActivity();
-                Intent intent = new Intent(ac, ACNoteEdit.class);
-                intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
+                Intent intent = new Intent(ac, ACNoteAdd.class);
+                intent.putExtra(ACNoteAdd.PARA_ACTION, GlobalDef.STR_CREATE);
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());

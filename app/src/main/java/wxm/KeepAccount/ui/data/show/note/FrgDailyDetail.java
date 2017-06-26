@@ -39,7 +39,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.ui.data.edit.Note.ACNoteEdit;
+import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd;
 import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
@@ -221,8 +221,8 @@ public class FrgDailyDetail extends FrgUtilityBase {
         switch (vid) {
             // 添加数据
             case R.id.ib_add: {
-                Intent intent = new Intent(getActivity(), ACNoteEdit.class);
-                intent.putExtra(ACNoteEdit.PARA_ACTION, GlobalDef.STR_CREATE);
+                Intent intent = new Intent(getActivity(), ACNoteAdd.class);
+                intent.putExtra(ACNoteAdd.PARA_ACTION, GlobalDef.STR_CREATE);
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());

@@ -53,7 +53,7 @@
             android:label="@string/label_welcome"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.data.edit.Note.ACNoteEdit"
+            android:name=".ui.data.edit.Note.ACNoteAdd"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

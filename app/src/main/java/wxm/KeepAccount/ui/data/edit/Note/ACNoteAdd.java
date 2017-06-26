@@ -16,13 +16,10 @@ import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 /**
  * 支出/收入数据编辑UI
  */
-public class ACNoteEdit extends BaseAppCompatActivity {
+public class ACNoteAdd extends BaseAppCompatActivity {
     public static final String PARA_ACTION = "para_action";
     public static final String PARA_NOTE_PAY = "note_pay";
     public static final String PARA_NOTE_INCOME = "note_income";
-
-    public static final int DEF_NOTE_MAXLEN = 200;
-    private String mAction;
 
     @Override
     protected void leaveActivity() {
@@ -35,11 +32,11 @@ public class ACNoteEdit extends BaseAppCompatActivity {
 
     @Override
     protected void initFrgHolder() {
-        LOG_TAG = "ACNoteEdit";
+        LOG_TAG = "ACNoteAdd";
 
         Intent it = getIntent();
         assert null != it;
-        mAction = it.getStringExtra(PARA_ACTION);
+        String mAction = it.getStringExtra(PARA_ACTION);
         if (UtilFun.StringIsNullOrEmpty(mAction)) {
             Log.e(LOG_TAG, "调用intent缺少'PARA_ACTION'参数");
             return;
@@ -55,12 +52,12 @@ public class ACNoteEdit extends BaseAppCompatActivity {
 
         bd.putString(PARA_ACTION, mAction);
         if (mAction.equals(GlobalDef.STR_MODIFY)) {
-            int pid = it.getIntExtra(ACNoteEdit.PARA_NOTE_PAY, GlobalDef.INVALID_ID);
-            int iid = it.getIntExtra(ACNoteEdit.PARA_NOTE_INCOME, GlobalDef.INVALID_ID);
+            int pid = it.getIntExtra(ACNoteAdd.PARA_NOTE_PAY, GlobalDef.INVALID_ID);
+            int iid = it.getIntExtra(ACNoteAdd.PARA_NOTE_INCOME, GlobalDef.INVALID_ID);
             if (GlobalDef.INVALID_ID != pid) {
-                bd.putInt(ACNoteEdit.PARA_NOTE_PAY, pid);
+                bd.putInt(ACNoteAdd.PARA_NOTE_PAY, pid);
             } else if (GlobalDef.INVALID_ID != iid) {
-                bd.putInt(ACNoteEdit.PARA_NOTE_INCOME, iid);
+                bd.putInt(ACNoteAdd.PARA_NOTE_INCOME, iid);
             } else {
                 Log.e(LOG_TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");
                 return;
@@ -77,22 +74,11 @@ public class ACNoteEdit extends BaseAppCompatActivity {
         return true;
     }
 
-
-    /**
-     * 得到当前选中的tab item
-     *
-     * @return 当前选中的tab item
-     */
-    private TFEditBase getHotTabItem() {
-        return ((FrgNoteEdit) mFGHolder).getHotTabItem();
-    }
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_save: {
-                TFEditBase tb = getHotTabItem();
+                TFEditBase tb = ((FrgNoteAdd) mFGHolder).getHotTabItem();
                 if (tb.onAccept()) {
                     finish();
                 }
