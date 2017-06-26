@@ -66,7 +66,7 @@
             android:layout_marginLeft="64dp"
             android:layout_marginRight="64dp"
             android:layout_marginTop="32dp"
-            android:background="@drawable/bt_shape"
+            android:background="@drawable/bt_big_shape"
             android:text="@string/action_sign_in"
             android:textColor="@color/white"
             android:textSize="18sp" />
@@ -79,7 +79,7 @@
             android:layout_marginLeft="64dp"
             android:layout_marginRight="64dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/bt_shape"
+            android:background="@drawable/bt_big_shape"
             android:text="@string/action_register"
             android:textColor="@color/white"
             android:textSize="16sp" />
@@ -92,7 +92,7 @@
             android:layout_marginLeft="64dp"
             android:layout_marginRight="64dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/bt_shape"
+            android:background="@drawable/bt_big_shape"
             android:text="@string/action_def_usr_login"
             android:textColor="@color/white"
             android:textSize="16sp" />

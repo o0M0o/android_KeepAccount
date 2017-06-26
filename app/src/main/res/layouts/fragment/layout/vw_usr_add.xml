@@ -62,7 +62,7 @@
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/bt_shape"
+            android:background="@drawable/bt_big_shape"
             android:text="@string/cn_sure" />
 
         <Button
@@ -72,7 +72,7 @@
             android:layout_alignParentEnd="true"
             android:layout_below="@id/bt_confirm"
             android:layout_marginTop="10dp"
-            android:background="@drawable/bt_shape"
+            android:background="@drawable/bt_big_shape"
             android:text="@string/cn_giveup" />
     </RelativeLayout>
 
