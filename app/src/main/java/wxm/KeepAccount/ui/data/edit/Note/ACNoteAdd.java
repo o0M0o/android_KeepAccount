@@ -42,39 +42,4 @@ public class ACNoteAdd extends BaseAppCompatActivity {
         }
         mFGHolder.setArguments(bd);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.mu_record_edit, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.mi_save: {
-                TFEditBase tb = ((FrgNoteAdd) mFGHolder).getHotTabItem();
-                if (tb.onAccept()) {
-                    finish();
-                }
-            }
-            break;
-
-            case R.id.mi_giveup: {
-                int ret_data = GlobalDef.INTRET_GIVEUP;
-
-                Intent data = new Intent();
-                setResult(ret_data, data);
-                finish();
-            }
-            break;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-        return true;
-    }
 }

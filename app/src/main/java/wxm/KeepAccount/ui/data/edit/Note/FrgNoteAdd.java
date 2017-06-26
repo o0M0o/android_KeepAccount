@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,6 +41,9 @@ import wxm.KeepAccount.utility.ContextUtil;
 public class FrgNoteAdd extends FrgUtilityBase {
     protected final static int POS_PAY = 0;
     protected final static int POS_INCOME = 1;
+
+    @BindView(R.id.bt_accept)
+    Button mBTAccept;
 
     @BindView(R.id.cl_header)
     ConstraintLayout mCLHeader;
@@ -98,20 +102,19 @@ public class FrgNoteAdd extends FrgUtilityBase {
                 mVPPager.setCurrentItem(POS_PAY);
             }
         });
+
+        mBTAccept.setOnClickListener(v -> {
+            int pos = isEnableRL(mRLPay) ? POS_PAY : POS_INCOME;
+            PagerAdapter pa = UtilFun.cast(mVPPager.getAdapter());
+            TFEditBase tb = UtilFun.cast(pa.getItem(pos));
+            if (tb.onAccept()) {
+                ac.finish();
+            }
+        });
     }
 
     @Override
     protected void loadUI() {
-    }
-
-    /**
-     * 得到当前选中的tab item
-     * @return 当前选中的tab item
-     */
-    public TFEditBase getHotTabItem() {
-        int pos = isEnableRL(mRLPay) ? POS_PAY : POS_INCOME;
-        PagerAdapter pa = UtilFun.cast(mVPPager.getAdapter());
-        return UtilFun.cast(pa.getItem(pos));
     }
 
     /// PRIVATE BEGIN
