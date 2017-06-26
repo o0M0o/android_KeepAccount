@@ -75,7 +75,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.vw_edit_pay, container, false);
+        View v = inflater.inflate(R.layout.page_edit_pay, container, false);
         ButterKnife.bind(this, v);
         return v;
     }

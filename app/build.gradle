@@ -36,10 +36,9 @@ android {
                             'src/main/res',
                             'src/main/res/layouts/activities',
                             'src/main/res/layouts/fragment',
-                            'src/main/res/layouts/fragment_item',
+                            'src/main/res/layouts/page',
                             'src/main/res/layouts/dialog',
                             'src/main/res/layouts/view_item',
-                            'src/main/res/layouts/extend',
                             'src/main/res/layouts'
                     ]
         }

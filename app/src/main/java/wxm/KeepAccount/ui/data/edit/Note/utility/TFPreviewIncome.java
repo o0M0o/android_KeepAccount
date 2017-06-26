@@ -33,7 +33,7 @@ public class TFPreviewIncome extends TFPreviewBase {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.vw_note_income_preview, container, false);
+        View v = inflater.inflate(R.layout.page_preview_income, container, false);
         return v;
     }
 
