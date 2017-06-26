@@ -157,8 +157,6 @@ public class ACWelcome extends AppCompatActivity
 
             case ActionHelper.ACT_ADD_DATA: {
                 Intent intent = new Intent(this, ACNoteAdd.class);
-                intent.putExtra(ACNoteAdd.PARA_ACTION, GlobalDef.STR_CREATE);
-
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
                 intent.putExtra(GlobalDef.STR_RECORD_DATE,

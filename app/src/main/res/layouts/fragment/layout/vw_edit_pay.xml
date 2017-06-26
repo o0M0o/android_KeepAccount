@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F0F0"
-    android:padding="6dp">
+    android:padding="4dp">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/til_reason"
@@ -12,7 +12,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="false"
         android:background="@color/white"
-        android:padding="8dp">
+        android:padding="2dp">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/ar_et_info"
@@ -24,57 +24,64 @@
             android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
 
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/til_date"
+    <LinearLayout
+        android:id="@+id/ll_date_amount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/til_reason"
         android:layout_marginTop="2dp"
-        android:background="@color/white"
-        android:padding="8dp">
+        android:orientation="horizontal">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/ar_et_date"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_date"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:ems="10"
-            android:hint="@string/cn_date"
-            android:inputType="date"
-            android:maxLines="1" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginEnd="1dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:padding="2dp">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/til_amount"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/til_date"
-        android:layout_marginTop="2dp"
-        android:background="@color/white"
-        android:padding="8dp">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/ar_et_date"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:ems="10"
+                android:hint="@string/cn_date"
+                android:inputType="date"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/ar_et_amount"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_amount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:ems="10"
-            android:hint="@string/cn_amount"
-            android:inputType="numberDecimal"
-            android:maxLines="1" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginStart="1dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:padding="2dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/ar_et_amount"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:ems="10"
+                android:hint="@string/cn_amount"
+                android:inputType="numberDecimal"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/rl_budget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/til_amount"
-        android:layout_marginTop="6dp"
+        android:layout_below="@id/ll_date_amount"
+        android:layout_marginTop="2dp"
         android:background="@color/white"
         android:padding="8dp">
 

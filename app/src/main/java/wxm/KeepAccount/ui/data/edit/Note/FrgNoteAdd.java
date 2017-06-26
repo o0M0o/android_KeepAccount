@@ -57,11 +57,6 @@ public class FrgNoteAdd extends FrgUtilityBase {
     private int mCRTextFit;
     private RelativeLayout mRLHot;
 
-    // for data
-    private String mAction;
-    private PayNoteItem mOldPayNote;
-    private IncomeNoteItem mOldIncomeNote;
-
     @Override
     protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         LOG_TAG = "FrgNoteAdd";
@@ -85,23 +80,6 @@ public class FrgNoteAdd extends FrgUtilityBase {
         }
 
         // for vp
-        Bundle bd = getArguments();
-        mAction = bd.getString(ACNoteAdd.PARA_ACTION);
-        if (GlobalDef.STR_MODIFY.equals(mAction)) {
-            int pid = bd.getInt(ACNoteAdd.PARA_NOTE_PAY, GlobalDef.INVALID_ID);
-            int iid = bd.getInt(ACNoteAdd.PARA_NOTE_INCOME, GlobalDef.INVALID_ID);
-            if (GlobalDef.INVALID_ID != pid) {
-                mOldPayNote = ContextUtil.getPayIncomeUtility().getPayDBUtility().getData(pid);
-            } else if (GlobalDef.INVALID_ID != iid) {
-                mOldIncomeNote = ContextUtil.getPayIncomeUtility().getIncomeDBUtility().getData(iid);
-            } else {
-                Log.e(LOG_TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");
-                return;
-            }
-
-            mCLHeader.setVisibility(View.GONE);
-        }
-
         AppCompatActivity ac = (AppCompatActivity) getActivity();
         PagerAdapter adapter = new PagerAdapter(ac.getSupportFragmentManager());
         mVPPager.setAdapter(adapter);
@@ -188,19 +166,15 @@ public class FrgNoteAdd extends FrgUtilityBase {
             mALFra = new ArrayList<>();
             Bundle bd = getArguments();
 
-            if(GlobalDef.STR_CREATE.equals(mAction) || null != mOldPayNote) {
-                TFEditPay tp = new TFEditPay();
-                tp.setCurData(mAction, mOldPayNote);
-                tp.setArguments(bd);
-                mALFra.add(tp);
-            }
+            TFEditPay tp = new TFEditPay();
+            tp.setCurData(GlobalDef.STR_CREATE, null);
+            tp.setArguments(bd);
+            mALFra.add(tp);
 
-            if(GlobalDef.STR_CREATE.equals(mAction) || null != mOldIncomeNote) {
-                TFEditIncome ti = new TFEditIncome();
-                ti.setCurData(mAction, mOldIncomeNote);
-                ti.setArguments(bd);
-                mALFra.add(ti);
-            }
+            TFEditIncome ti = new TFEditIncome();
+            ti.setCurData(GlobalDef.STR_CREATE, null);
+            ti.setArguments(bd);
+            mALFra.add(ti);
         }
 
         @Override

@@ -222,8 +222,6 @@ public class FrgDailyDetail extends FrgUtilityBase {
             // 添加数据
             case R.id.ib_add: {
                 Intent intent = new Intent(getActivity(), ACNoteAdd.class);
-                intent.putExtra(ACNoteAdd.PARA_ACTION, GlobalDef.STR_CREATE);
-
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
                 intent.putExtra(GlobalDef.STR_RECORD_DATE,

@@ -127,8 +127,6 @@ public class LVHelperDaily extends LVBase {
             case R.id.ib_add: {
                 ACNoteShow ac = getRootActivity();
                 Intent intent = new Intent(ac, ACNoteAdd.class);
-                intent.putExtra(ACNoteAdd.PARA_ACTION, GlobalDef.STR_CREATE);
-
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
                 intent.putExtra(GlobalDef.STR_RECORD_DATE,

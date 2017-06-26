@@ -17,10 +17,6 @@ import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
  * 支出/收入数据编辑UI
  */
 public class ACNoteAdd extends BaseAppCompatActivity {
-    public static final String PARA_ACTION = "para_action";
-    public static final String PARA_NOTE_PAY = "note_pay";
-    public static final String PARA_NOTE_INCOME = "note_income";
-
     @Override
     protected void leaveActivity() {
         int ret_data = GlobalDef.INTRET_GIVEUP;
@@ -36,11 +32,6 @@ public class ACNoteAdd extends BaseAppCompatActivity {
 
         Intent it = getIntent();
         assert null != it;
-        String mAction = it.getStringExtra(PARA_ACTION);
-        if (UtilFun.StringIsNullOrEmpty(mAction)) {
-            Log.e(LOG_TAG, "调用intent缺少'PARA_ACTION'参数");
-            return;
-        }
 
         // for holder
         mFGHolder = new FrgNoteAdd();
@@ -48,20 +39,6 @@ public class ACNoteAdd extends BaseAppCompatActivity {
         String date = it.getStringExtra(GlobalDef.STR_RECORD_DATE);
         if (!UtilFun.StringIsNullOrEmpty(date)) {
             bd.putString(GlobalDef.STR_RECORD_DATE, date);
-        }
-
-        bd.putString(PARA_ACTION, mAction);
-        if (mAction.equals(GlobalDef.STR_MODIFY)) {
-            int pid = it.getIntExtra(ACNoteAdd.PARA_NOTE_PAY, GlobalDef.INVALID_ID);
-            int iid = it.getIntExtra(ACNoteAdd.PARA_NOTE_INCOME, GlobalDef.INVALID_ID);
-            if (GlobalDef.INVALID_ID != pid) {
-                bd.putInt(ACNoteAdd.PARA_NOTE_PAY, pid);
-            } else if (GlobalDef.INVALID_ID != iid) {
-                bd.putInt(ACNoteAdd.PARA_NOTE_INCOME, iid);
-            } else {
-                Log.e(LOG_TAG, "调用intent缺少'PARA_NOTE_PAY'和'PARA_NOTE_INCOME'参数");
-                return;
-            }
         }
         mFGHolder.setArguments(bd);
     }
