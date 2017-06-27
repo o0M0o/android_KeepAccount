@@ -1,12 +1,11 @@
 package wxm.KeepAccount.ui.data.show.note;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -16,14 +15,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
@@ -35,6 +35,7 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowMonthly;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowYearly;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
+import wxm.KeepAccount.utility.ContextUtil;
 
 
 /**
@@ -42,18 +43,28 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
  * Created by ookoo on 2016/11/30.
  */
 public class FrgNoteShow extends FrgUtilityBase {
-    // for ui
-    //@BindView(R.id.login_progress)
-    ProgressBar mPBLoginProgress;
+    protected final static int POS_DAY_FLOW = 0;
+    protected final static int POS_MONTH_FLOW = 1;
+    protected final static int POS_YEAR_FLOW = 2;
+    protected final static int POS_BUDGET = 3;
 
+    // for ui
     //@BindView(R.id.tab_pager)
     ViewPager mVPPages;
 
-    //@BindView(R.id.tl_tabs)
-    TabLayout mTLTab;
+    // for selecter ui
+    RelativeLayout mRLDayFlow;
+    RelativeLayout mRLMonthFlow;
+    RelativeLayout mRLYearFlow;
+    RelativeLayout mRLBudget;
+
+    private int mCRWhite;
+    private int mCRTextFit;
+    private RelativeLayout mRLHot;
 
     // for notice
     private boolean[] mBADataChange;
+    private RelativeLayout[]  mRASelector;
 
     /**
      * 数据库内数据变化处理器
@@ -95,49 +106,66 @@ public class FrgNoteShow extends FrgUtilityBase {
         View rootView = layoutInflater.inflate(R.layout.vw_note_show, viewGroup, false);
         //ButterKnife.bind(this, rootView);
 
-        mTLTab = UtilFun.cast_t(rootView.findViewById(R.id.tl_tabs));
         mVPPages = UtilFun.cast_t(rootView.findViewById(R.id.tab_pager));
-        mPBLoginProgress = UtilFun.cast_t(rootView.findViewById(R.id.login_progress));
+        mRLDayFlow = UtilFun.cast_t(rootView.findViewById(R.id.rl_day_flow));
+        mRLMonthFlow = UtilFun.cast_t(rootView.findViewById(R.id.rl_month_flow));
+        mRLYearFlow = UtilFun.cast_t(rootView.findViewById(R.id.rl_year_flow));
+        mRLBudget = UtilFun.cast_t(rootView.findViewById(R.id.rl_budget));
         return rootView;
     }
 
     @Override
     protected void initUiComponent(View view) {
-        // init view
-        mTLTab.addTab(mTLTab.newTab().setText(NoteDataHelper.TAB_TITLE_DAILY));
-        mTLTab.addTab(mTLTab.newTab().setText(NoteDataHelper.TAB_TITLE_MONTHLY));
-        mTLTab.addTab(mTLTab.newTab().setText(NoteDataHelper.TAB_TITLE_YEARLY));
-        mTLTab.addTab(mTLTab.newTab().setText(NoteDataHelper.TAB_TITLE_BUDGET));
-        mTLTab.setTabGravity(TabLayout.GRAVITY_FILL);
+        Context ct = ContextUtil.getInstance();
+        Resources res = ct.getResources();
+        Resources.Theme te = ct.getTheme();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mCRWhite = res.getColor(R.color.white, te);
+            mCRTextFit= res.getColor(R.color.text_fit, te);
+        } else {
+            mCRWhite = res.getColor(R.color.white);
+            mCRTextFit= res.getColor(R.color.text_fit);
+        }
+
+        // init view
         // init adapter
         AppCompatActivity a_ac = UtilFun.cast_t(getActivity());
-        final PagerAdapter adapter = new PagerAdapter(a_ac.getSupportFragmentManager(),
-                mTLTab.getTabCount());
+        final PagerAdapter adapter = new PagerAdapter(a_ac.getSupportFragmentManager());
         mVPPages.setAdapter(adapter);
-        mVPPages.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTLTab));
-        mTLTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int pos = tab.getPosition();
-                mVPPages.setCurrentItem(pos);
-                getHotTabItem().loadView(mBADataChange[pos]);
-                mBADataChange[pos] = false;
-            }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
+        mRLDayFlow.setOnClickListener(v -> {
+            if(!isEnableRL(mRLDayFlow)) {
+                enableRLStatus(mRLDayFlow);
             }
         });
 
-        mBADataChange = new boolean[mTLTab.getTabCount()];
+        mRLMonthFlow.setOnClickListener(v -> {
+            if(!isEnableRL(mRLMonthFlow)) {
+                enableRLStatus(mRLMonthFlow);
+            }
+        });
+
+        mRLYearFlow.setOnClickListener(v -> {
+            if(!isEnableRL(mRLYearFlow)) {
+                enableRLStatus(mRLYearFlow);
+            }
+        });
+
+        mRLBudget.setOnClickListener(v -> {
+            if(!isEnableRL(mRLBudget)) {
+                enableRLStatus(mRLBudget);
+            }
+        });
+
+        mBADataChange = new boolean[POS_BUDGET + 1];
         Arrays.fill(mBADataChange, false);
+
+        mRASelector = new RelativeLayout[POS_BUDGET + 1];
+        mRASelector[POS_DAY_FLOW] = mRLDayFlow;
+        mRASelector[POS_MONTH_FLOW] = mRLMonthFlow;
+        mRASelector[POS_YEAR_FLOW] = mRLYearFlow;
+        mRASelector[POS_BUDGET] = mRLBudget;
 
         // 默认选择第一页为首页
         // 根据调用参数跳转到指定首页
@@ -146,24 +174,18 @@ public class FrgNoteShow extends FrgUtilityBase {
             boolean b_hot = false;
             String ft = it.getStringExtra(NoteDataHelper.INTENT_PARA_FIRST_TAB);
             if (!UtilFun.StringIsNullOrEmpty(ft)) {
-                int tc = mTLTab.getTabCount();
-                for (int i = 0; i < tc; i++) {
-                    TabLayout.Tab t = mTLTab.getTabAt(i);
-                    if (null != t) {
-                        CharSequence cs = t.getText();
-                        if (null != cs && cs.toString().equals(ft)) {
-                            t.select();
-                            b_hot = true;
-                            break;
-                        }
+                for (RelativeLayout aMRASelector : mRASelector) {
+                    String sn = getSelectorName(aMRASelector);
+                    if (sn.equals(ft)) {
+                        enableRLStatus(aMRASelector);
+                        b_hot = true;
+                        break;
                     }
                 }
             }
 
             if (!b_hot) {
-                TabLayout.Tab t = mTLTab.getTabAt(0);
-                if (null != t)
-                    t.select();
+                enableRLStatus(mRLDayFlow);
             }
         }
     }
@@ -180,50 +202,72 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     public void jumpByTabName(String tabname) {
         int pos = -1;
-        int tc = mTLTab.getTabCount();
+        int tc = mRASelector.length;
         for (int i = 0; i < tc; ++i) {
-            TabLayout.Tab t = mTLTab.getTabAt(i);
-            assert null != t;
-
-            CharSequence t_cs = t.getText();
-            assert null != t_cs;
-
-            if (tabname.equals(t_cs.toString())) {
+            if (tabname.equals(getSelectorName(mRASelector[i]))) {
                 pos = i;
                 break;
             }
         }
 
-        if ((-1 != pos) && (pos != mTLTab.getSelectedTabPosition())) {
-            mTLTab.setScrollPosition(pos, 0, true);
-            mVPPages.setCurrentItem(pos);
+        if ((-1 != pos) && isEnableRL(mRASelector[pos])) {
+            enableRLStatus(mRASelector[pos]);
         }
     }
 
 
     /// PRIVATE BEGIN
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        int shortAnimTime = getResources()
-                .getInteger(android.R.integer.config_shortAnimTime);
-
-        mPBLoginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-        mPBLoginProgress.animate().setDuration(shortAnimTime)
-                .alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mPBLoginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-            }
-        });
+    @NonNull
+    private String getSelectorName(RelativeLayout rl)   {
+        return ((TextView)rl.findViewById(R.id.tv_tag)).getText().toString();
     }
 
+    /**
+     * 修改rl状态
+     * @param rl        待修改rl
+     */
+    private void enableRLStatus(RelativeLayout rl)  {
+        setRLStatus(rl, true);
+
+        int pos = -1;
+        for(int i = 0; i < mRASelector.length; i++) {
+            RelativeLayout it = mRASelector[i];
+            if(it != rl)    {
+                setRLStatus(it, false);
+            } else {
+                pos = i;
+            }
+        }
+
+        mRLHot = rl;
+        mVPPages.setCurrentItem(pos);
+        getHotTabItem().loadView(mBADataChange[pos]);
+        mBADataChange[pos] = false;
+    }
+
+    /**
+     * 判断rl是否enable
+     * @param rl    待检查rl
+     * @return      是否enable
+     */
+    private Boolean isEnableRL(RelativeLayout rl)  {
+        return rl == mRLHot;
+    }
+
+    private void setRLStatus(RelativeLayout rl, boolean bIsSelected)    {
+        int res;
+        if(rl == mRLDayFlow)    {
+            res = bIsSelected ? R.drawable.rl_item_left : R.drawable.rl_item_left_nosel;
+        }  else if(rl == mRLBudget)    {
+            res = bIsSelected ? R.drawable.rl_item_right : R.drawable.rl_item_right_nosel;
+        }  else {
+            res = bIsSelected ? R.drawable.rl_item_middle : R.drawable.rl_item_middle_nosel;
+        }
+
+        rl.setBackgroundResource(res);
+        ((TextView)rl.findViewById(R.id.tv_tag))
+                .setTextColor(bIsSelected ? mCRWhite : mCRTextFit);
+    }
 
     /**
      * 得到当前选中的tab item
@@ -231,7 +275,14 @@ public class FrgNoteShow extends FrgUtilityBase {
      * @return 当前选中的tab item
      */
     public TFShowBase getHotTabItem() {
-        int pos = mTLTab.getSelectedTabPosition();
+        int pos = -1;
+        for(int i = 0; i < mRASelector.length; ++i) {
+            if(isEnableRL(mRASelector[i]))  {
+                pos = i;
+                break;
+            }
+        }
+
         PagerAdapter pa = UtilFun.cast(mVPPages.getAdapter());
         return UtilFun.cast(pa.getItem(pos));
     }
@@ -240,33 +291,27 @@ public class FrgNoteShow extends FrgUtilityBase {
     /**
      * fragment adapter
      */
-    public class PagerAdapter extends FragmentStatePagerAdapter {
-        int mNumOfTabs;
-        HashMap<String, Fragment> mHMFra;
+    private class PagerAdapter extends FragmentStatePagerAdapter {
+        ArrayList<Fragment> mALFrg;
 
-        PagerAdapter(FragmentManager fm, int NumOfTabs) {
+        PagerAdapter(FragmentManager fm) {
             super(fm);
-            this.mNumOfTabs = NumOfTabs;
 
-            mHMFra = new HashMap<>();
-            mHMFra.put(NoteDataHelper.TAB_TITLE_DAILY, new TFShowDaily());
-            mHMFra.put(NoteDataHelper.TAB_TITLE_MONTHLY, new TFShowMonthly());
-            mHMFra.put(NoteDataHelper.TAB_TITLE_YEARLY, new TFShowYearly());
-            mHMFra.put(NoteDataHelper.TAB_TITLE_BUDGET, new TFShowBudget());
+            mALFrg = new ArrayList<>();
+            mALFrg.add(new TFShowDaily());
+            mALFrg.add(new TFShowMonthly());
+            mALFrg.add(new TFShowYearly());
+            mALFrg.add(new TFShowBudget());
         }
 
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
-            TabLayout.Tab t = mTLTab.getTabAt(position);
-            assert null != t;
-            CharSequence t_cs = t.getText();
-            assert null != t_cs;
-            return mHMFra.get(t_cs.toString());
+            return mALFrg.get(position);
         }
 
         @Override
         public int getCount() {
-            return mNumOfTabs;
+            return mALFrg.size();
         }
     }
 }

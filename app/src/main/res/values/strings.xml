@@ -59,6 +59,12 @@
 
     <string name="cn_income">收入</string>
     <string name="cn_pay">支出</string>
+
+    <string name="cn_day_flow">日流水</string>
+    <string name="cn_month_flow">月流水</string>
+    <string name="cn_year_flow">年流水</string>
+    <string name="cn_budget">预算</string>
+
     <string name="cn_record_type">记录类型</string>
     <string name="cn_record_detail">记录详情</string>
     <string name="cn_reason">原因</string>
