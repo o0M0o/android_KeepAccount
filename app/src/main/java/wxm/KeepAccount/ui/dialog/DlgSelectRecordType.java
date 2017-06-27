@@ -2,11 +2,14 @@ package wxm.KeepAccount.ui.dialog;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +52,10 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
     private String mRootType;
     private String mCurType;
 
+    private int mCRWhite;
+    private int mCRTextFit;
+    private int mCRTextHalfFit;
+
     /**
      * 设置以前的“记录类型”
      *
@@ -77,6 +84,20 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
                 || (!GlobalDef.STR_RECORD_PAY.equals(mRootType)
                 && !GlobalDef.STR_RECORD_INCOME.equals(mRootType)))
             return null;
+
+        Context ct = ContextUtil.getInstance();
+        Resources res = ct.getResources();
+        Resources.Theme te = ct.getTheme();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mCRWhite = res.getColor(R.color.white, te);
+            mCRTextFit= res.getColor(R.color.text_fit, te);
+            mCRTextHalfFit= res.getColor(R.color.text_half_fit, te);
+        } else {
+            mCRWhite = res.getColor(R.color.white);
+            mCRTextFit= res.getColor(R.color.text_fit);
+            mCRTextHalfFit= res.getColor(R.color.text_half_fit);
+        }
 
         // init data
         mLHMData = new ArrayList<>();
@@ -156,7 +177,6 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
                         o1.getType().compareTo(o2.getType())
                         : o2.getType().compareTo(o1.getType()));
 
-        String old_note = null;
         mLHMData.clear();
         for (RecordTypeItem ri : al_type) {
             HashMap<String, String> hmd = new HashMap<>();
@@ -164,7 +184,6 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
             hmd.put(KEY_NOTE, ri.getNote());
 
             if (ri.getType().equals(mCurType)) {
-                old_note = ri.getNote();
                 hmd.put(KEY_SELECTED, VAL_SELECTED);
             } else {
                 hmd.put(KEY_SELECTED, VAL_NOT_SELECTED);
@@ -211,6 +230,11 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
                         R.drawable.gi_shape_record_type_sel
                         : R.drawable.gi_shape_record_type_nosel;
                 v.setBackgroundResource(curCL);
+
+                int cr = hm.get(KEY_SELECTED).equals(VAL_SELECTED) ? mCRWhite : mCRTextFit;
+                ((TextView)v.findViewById(R.id.tv_type_name)).setTextColor(cr);
+                ((TextView)v.findViewById(R.id.tv_type_note))
+                        .setTextColor(cr == mCRTextFit ? mCRTextHalfFit : cr);
             }
 
             return v;
