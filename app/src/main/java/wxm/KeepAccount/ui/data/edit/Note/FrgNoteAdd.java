@@ -32,6 +32,8 @@ import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditIncome;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditPay;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
+import wxm.KeepAccount.ui.data.show.note.FrgNoteShow;
+import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBase;
 import wxm.KeepAccount.utility.ContextUtil;
 
 /**
@@ -59,7 +61,14 @@ public class FrgNoteAdd extends FrgUtilityBase {
 
     private int mCRWhite;
     private int mCRTextFit;
-    private RelativeLayout mRLHot;
+
+    // for helper data
+    class pageHelper    {
+        public RelativeLayout mRLSelector;
+        public int  mPageIdx;
+    }
+    private pageHelper[] mPHHelper;
+    private pageHelper mPHHot;
 
     @Override
     protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
@@ -87,21 +96,41 @@ public class FrgNoteAdd extends FrgUtilityBase {
         AppCompatActivity ac = (AppCompatActivity) getActivity();
         PagerAdapter adapter = new PagerAdapter(ac.getSupportFragmentManager());
         mVPPager.setAdapter(adapter);
+        mVPPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
-        enableRLStatus(mRLPay, true);
+            @Override
+            public void onPageSelected(int position) {
+                enableRLStatus(mPHHelper[position].mRLSelector);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
         mRLIncome.setOnClickListener(v -> {
             if(!isEnableRL(mRLIncome))  {
-                enableRLStatus(mRLIncome, true);
-                mVPPager.setCurrentItem(POS_INCOME);
+                enableRLStatus(mRLIncome);
             }
         });
 
         mRLPay.setOnClickListener(v -> {
             if(!isEnableRL(mRLPay))  {
-                enableRLStatus(mRLPay, true);
-                mVPPager.setCurrentItem(POS_PAY);
+                enableRLStatus(mRLPay);
             }
         });
+
+        mPHHelper = new pageHelper[POS_INCOME + 1];
+        mPHHelper[POS_PAY] = new pageHelper();
+        mPHHelper[POS_PAY].mRLSelector = mRLPay;
+        mPHHelper[POS_PAY].mPageIdx = POS_PAY;
+
+        mPHHelper[POS_INCOME] = new pageHelper();
+        mPHHelper[POS_INCOME].mRLSelector = mRLIncome;
+        mPHHelper[POS_INCOME].mPageIdx = POS_INCOME;
 
         mBTAccept.setOnClickListener(v -> {
             int pos = isEnableRL(mRLPay) ? POS_PAY : POS_INCOME;
@@ -111,6 +140,8 @@ public class FrgNoteAdd extends FrgUtilityBase {
                 ac.finish();
             }
         });
+
+        enableRLStatus(mRLPay);
     }
 
     @Override
@@ -121,31 +152,31 @@ public class FrgNoteAdd extends FrgUtilityBase {
     /**
      * 修改rl状态
      * @param rl        待修改rl
-     * @param bStatus   新状态
      */
-    private void enableRLStatus(RelativeLayout rl, Boolean bStatus)  {
-        if(rl == mRLPay) {
-            rl.setBackgroundResource(bStatus ?
-                    R.drawable.rl_item_left : R.drawable.rl_item_left_nosel);
-            mRLIncome.setBackgroundResource(bStatus ?
-                    R.drawable.rl_item_right_nosel : R.drawable.rl_item_right);
-
-            ((TextView)rl.findViewById(R.id.tv_tag)).setTextColor(bStatus ? mCRWhite : mCRTextFit);
-            ((TextView)mRLIncome.findViewById(R.id.tv_tag)).setTextColor(!bStatus ? mCRWhite : mCRTextFit);
-
-            mRLHot = bStatus ? mRLPay : mRLIncome;
-        } else {
-            rl.setBackgroundResource(bStatus ?
-                    R.drawable.rl_item_right : R.drawable.rl_item_right_nosel);
-            mRLPay.setBackgroundResource(bStatus ?
-                    R.drawable.rl_item_left_nosel : R.drawable.rl_item_left);
-
-            ((TextView)rl.findViewById(R.id.tv_tag)).setTextColor(bStatus ? mCRWhite : mCRTextFit);
-            ((TextView)mRLPay.findViewById(R.id.tv_tag)).setTextColor(!bStatus ? mCRWhite : mCRTextFit);
-
-
-            mRLHot = !bStatus ? mRLPay : mRLIncome;
+    private void enableRLStatus(RelativeLayout rl)  {
+        for(pageHelper ph : mPHHelper)  {
+            if(rl == ph.mRLSelector)    {
+                setRLStatus(ph.mRLSelector, true);
+                mPHHot = ph;
+            } else {
+                setRLStatus(ph.mRLSelector, false);
+            }
         }
+
+        mVPPager.setCurrentItem(mPHHot.mPageIdx);
+    }
+
+    private void setRLStatus(RelativeLayout rl, boolean bIsSelected)    {
+        int res;
+        if(rl == mRLPay)    {
+            res = bIsSelected ? R.drawable.rl_item_left : R.drawable.rl_item_left_nosel;
+        }  else {
+            res = bIsSelected ? R.drawable.rl_item_right : R.drawable.rl_item_right_nosel;
+        }
+
+        rl.setBackgroundResource(res);
+        ((TextView)rl.findViewById(R.id.tv_tag))
+                .setTextColor(bIsSelected ? mCRWhite : mCRTextFit);
     }
 
     /**
@@ -154,7 +185,7 @@ public class FrgNoteAdd extends FrgUtilityBase {
      * @return      是否enable
      */
     private Boolean isEnableRL(RelativeLayout rl)  {
-        return rl == mRLHot;
+        return rl == mPHHot.mRLSelector;
     }
     /// PRIVATE END
 

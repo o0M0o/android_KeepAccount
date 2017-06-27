@@ -208,7 +208,6 @@ public class FrgNoteShow extends FrgUtilityBase {
             ph.mSZName = getSelectorName(ph.mRLSelector);
         }
 
-
         // 默认选择第一页为首页
         // 根据调用参数跳转到指定首页
         Intent it = getActivity().getIntent();
