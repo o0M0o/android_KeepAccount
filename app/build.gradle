@@ -24,8 +24,8 @@ android {
         applicationId "com.wxm.keepaccount"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 18
-        versionName "1.18"
+        versionCode 19
+        versionName "1.19"
         signingConfig signingConfigs.defkey
     }
 
@@ -100,7 +100,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.trello:rxlifecycle:0.5.0'
-    compile 'org.jdeferred:jdeferred-android-aar:1.2.6@aar'
+    //compile 'org.jdeferred:jdeferred-android-aar:1.2.6@aar'
     // If you want pre-written Activities and Fragments you can subclass as providers
     compile 'com.trello:rxlifecycle-components:0.5.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.1'

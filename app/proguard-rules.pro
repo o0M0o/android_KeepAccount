@@ -98,6 +98,11 @@
     *;
 }
 
+-dontwarn com.alibaba.fastjson.**
+-keep class com.alibaba.fastjson.** {
+    *;
+}
+
 -keepattributes *Annotation*
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
