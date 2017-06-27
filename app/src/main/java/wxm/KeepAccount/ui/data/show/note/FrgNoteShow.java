@@ -6,9 +6,11 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -60,15 +62,20 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     private int mCRWhite;
     private int mCRTextFit;
-    private RelativeLayout mRLHot;
 
-    // for notice
-    private boolean[] mBADataChange;
-    private RelativeLayout[]  mRASelector;
+    // for helper data
+    class pageHelper    {
+        public boolean mBADataChange;
+        public RelativeLayout mRLSelector;
+        public String   mSZName;
+        public TFShowBase   mSBPage;
+        public int  mPageIdx;
+    }
+    private pageHelper[] mPHHelper;
+    private pageHelper mPHHot;
 
     /**
      * 数据库内数据变化处理器
-     *
      * @param event 事件参数
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -77,12 +84,11 @@ public class FrgNoteShow extends FrgUtilityBase {
         tb.loadView(true);
 
         int cur_pos = mVPPages.getCurrentItem();
-        for (int i = 0; i < mBADataChange.length; i++) {
+        for (int i = 0; i < mPHHelper.length; i++) {
             if (cur_pos != i)
-                mBADataChange[i] = true;
+                mPHHelper[i].mBADataChange = true;
         }
     }
-
 
     @Override
     protected void enterActivity() {
@@ -133,6 +139,20 @@ public class FrgNoteShow extends FrgUtilityBase {
         AppCompatActivity a_ac = UtilFun.cast_t(getActivity());
         final PagerAdapter adapter = new PagerAdapter(a_ac.getSupportFragmentManager());
         mVPPages.setAdapter(adapter);
+        mVPPages.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                enableRLStatus(mPHHelper[position].mRLSelector);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
 
         mRLDayFlow.setOnClickListener(v -> {
             if(!isEnableRL(mRLDayFlow)) {
@@ -158,14 +178,36 @@ public class FrgNoteShow extends FrgUtilityBase {
             }
         });
 
-        mBADataChange = new boolean[POS_BUDGET + 1];
-        Arrays.fill(mBADataChange, false);
+        mPHHelper = new pageHelper[POS_BUDGET + 1];
 
-        mRASelector = new RelativeLayout[POS_BUDGET + 1];
-        mRASelector[POS_DAY_FLOW] = mRLDayFlow;
-        mRASelector[POS_MONTH_FLOW] = mRLMonthFlow;
-        mRASelector[POS_YEAR_FLOW] = mRLYearFlow;
-        mRASelector[POS_BUDGET] = mRLBudget;
+        mPHHelper[POS_DAY_FLOW] = new pageHelper();
+        mPHHelper[POS_DAY_FLOW].mPageIdx = POS_DAY_FLOW;
+        mPHHelper[POS_DAY_FLOW].mBADataChange = false;
+        mPHHelper[POS_DAY_FLOW].mRLSelector = mRLDayFlow;
+        mPHHelper[POS_DAY_FLOW].mSBPage = UtilFun.cast(adapter.getItem(POS_DAY_FLOW));
+
+        mPHHelper[POS_MONTH_FLOW] = new pageHelper();
+        mPHHelper[POS_MONTH_FLOW].mPageIdx = POS_MONTH_FLOW;
+        mPHHelper[POS_MONTH_FLOW].mBADataChange = false;
+        mPHHelper[POS_MONTH_FLOW].mRLSelector = mRLMonthFlow;
+        mPHHelper[POS_MONTH_FLOW].mSBPage = UtilFun.cast(adapter.getItem(POS_MONTH_FLOW));
+
+        mPHHelper[POS_YEAR_FLOW] = new pageHelper();
+        mPHHelper[POS_YEAR_FLOW].mPageIdx = POS_YEAR_FLOW;
+        mPHHelper[POS_YEAR_FLOW].mBADataChange = false;
+        mPHHelper[POS_YEAR_FLOW].mRLSelector = mRLYearFlow;
+        mPHHelper[POS_YEAR_FLOW].mSBPage = UtilFun.cast(adapter.getItem(POS_YEAR_FLOW));
+
+        mPHHelper[POS_BUDGET] = new pageHelper();
+        mPHHelper[POS_BUDGET].mPageIdx = POS_BUDGET;
+        mPHHelper[POS_BUDGET].mBADataChange = false;
+        mPHHelper[POS_BUDGET].mRLSelector = mRLBudget;
+        mPHHelper[POS_BUDGET].mSBPage = UtilFun.cast(adapter.getItem(POS_BUDGET));
+
+        for(pageHelper ph : mPHHelper)  {
+            ph.mSZName = getSelectorName(ph.mRLSelector);
+        }
+
 
         // 默认选择第一页为首页
         // 根据调用参数跳转到指定首页
@@ -174,10 +216,9 @@ public class FrgNoteShow extends FrgUtilityBase {
             boolean b_hot = false;
             String ft = it.getStringExtra(NoteDataHelper.INTENT_PARA_FIRST_TAB);
             if (!UtilFun.StringIsNullOrEmpty(ft)) {
-                for (RelativeLayout aMRASelector : mRASelector) {
-                    String sn = getSelectorName(aMRASelector);
-                    if (sn.equals(ft)) {
-                        enableRLStatus(aMRASelector);
+                for(pageHelper ph : mPHHelper)  {
+                    if (ph.mSZName.equals(ft)) {
+                        enableRLStatus(ph.mRLSelector);
                         b_hot = true;
                         break;
                     }
@@ -187,6 +228,8 @@ public class FrgNoteShow extends FrgUtilityBase {
             if (!b_hot) {
                 enableRLStatus(mRLDayFlow);
             }
+        } else {
+            enableRLStatus(mRLDayFlow);
         }
     }
 
@@ -201,17 +244,14 @@ public class FrgNoteShow extends FrgUtilityBase {
     }
 
     public void jumpByTabName(String tabname) {
-        int pos = -1;
-        int tc = mRASelector.length;
-        for (int i = 0; i < tc; ++i) {
-            if (tabname.equals(getSelectorName(mRASelector[i]))) {
-                pos = i;
+        for(pageHelper ph : mPHHelper)  {
+            if(tabname.equals(ph.mSZName))  {
+                if(!isEnableRL(ph.mRLSelector)) {
+                    enableRLStatus(ph.mRLSelector);
+                }
+
                 break;
             }
-        }
-
-        if ((-1 != pos) && isEnableRL(mRASelector[pos])) {
-            enableRLStatus(mRASelector[pos]);
         }
     }
 
@@ -227,22 +267,19 @@ public class FrgNoteShow extends FrgUtilityBase {
      * @param rl        待修改rl
      */
     private void enableRLStatus(RelativeLayout rl)  {
-        setRLStatus(rl, true);
-
-        int pos = -1;
-        for(int i = 0; i < mRASelector.length; i++) {
-            RelativeLayout it = mRASelector[i];
-            if(it != rl)    {
-                setRLStatus(it, false);
+        for(pageHelper ph : mPHHelper)  {
+            if(ph.mRLSelector != rl)    {
+                setRLStatus(ph.mRLSelector, false);
             } else {
-                pos = i;
+                mPHHot = ph;
+
+                setRLStatus(ph.mRLSelector, true);
+                mVPPages.setCurrentItem(ph.mPageIdx);
+
+                getHotTabItem().loadView(ph.mBADataChange);
+                ph.mBADataChange = false;
             }
         }
-
-        mRLHot = rl;
-        mVPPages.setCurrentItem(pos);
-        getHotTabItem().loadView(mBADataChange[pos]);
-        mBADataChange[pos] = false;
     }
 
     /**
@@ -251,7 +288,7 @@ public class FrgNoteShow extends FrgUtilityBase {
      * @return      是否enable
      */
     private Boolean isEnableRL(RelativeLayout rl)  {
-        return rl == mRLHot;
+        return rl == mPHHot.mRLSelector;
     }
 
     private void setRLStatus(RelativeLayout rl, boolean bIsSelected)    {
@@ -271,20 +308,10 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     /**
      * 得到当前选中的tab item
-     *
      * @return 当前选中的tab item
      */
     public TFShowBase getHotTabItem() {
-        int pos = -1;
-        for(int i = 0; i < mRASelector.length; ++i) {
-            if(isEnableRL(mRASelector[i]))  {
-                pos = i;
-                break;
-            }
-        }
-
-        PagerAdapter pa = UtilFun.cast(mVPPages.getAdapter());
-        return UtilFun.cast(pa.getItem(pos));
+        return mPHHot.mSBPage;
     }
     ///PRIVATE END
 
