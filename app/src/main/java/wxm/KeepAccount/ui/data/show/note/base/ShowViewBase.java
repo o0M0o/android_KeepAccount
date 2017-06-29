@@ -34,7 +34,7 @@ public abstract class ShowViewBase
     RelativeLayout mRLAttachButton;
 
     @BindView(R.id.rl_accpet_giveup)
-    RelativeLayout mRLAccpetGiveup;
+    RelativeLayout mRLAccept;
 
     @BindView(R.id.rl_filter)
     RelativeLayout mRLFilter;
@@ -124,6 +124,6 @@ public abstract class ShowViewBase
         if (View.VISIBLE == visible)
             setAttachLayoutVisible(View.VISIBLE);
 
-        mRLAccpetGiveup.setVisibility(visible);
+        mRLAccept.setVisibility(visible);
     }
 }

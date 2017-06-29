@@ -191,11 +191,13 @@ public class LVBudget extends LVBase {
      * @param b_fully 若为true则加载数据
      */
     protected void loadUIUtility(boolean b_fully) {
+        /*
         Log.d(LOG_TAG, "in loadUIUtility, b_fully = " + Boolean.toString(b_fully));
         String[] calls = ToolUtil.getCallStack(8);
         for (int i = 0; i < calls.length; ++i) {
             Log.d(LOG_TAG, "in loadUIUtility, [" + i + "] = " + calls[i]);
         }
+        */
 
         refreshAttachLayout();
 

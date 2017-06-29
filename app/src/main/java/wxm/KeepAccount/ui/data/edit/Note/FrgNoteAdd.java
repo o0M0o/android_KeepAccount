@@ -1,9 +1,6 @@
 package wxm.KeepAccount.ui.data.edit.Note;
 
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -30,7 +27,6 @@ import wxm.KeepAccount.ui.base.ResourceHelper;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditIncome;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditPay;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
-import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * for login
@@ -56,9 +52,9 @@ public class FrgNoteAdd extends FrgUtilityBase {
     RelativeLayout mRLIncome;
 
     // for helper data
-    class pageHelper    {
-        public RelativeLayout mRLSelector;
-        public int  mPageIdx;
+    private class pageHelper    {
+        RelativeLayout mRLSelector;
+        int  mPageIdx;
     }
     private pageHelper[] mPHHelper;
     private pageHelper mPHHot;

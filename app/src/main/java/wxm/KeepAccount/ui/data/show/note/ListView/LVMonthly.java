@@ -348,8 +348,6 @@ public class LVMonthly
      * 首级adapter
      */
     private class SelfAdapter extends SimpleAdapter {
-        private final static String TAG = "SelfAdapter";
-
         SelfAdapter(Context context,
                     List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {

@@ -240,7 +240,6 @@ public class LVDaily extends LVBase {
     @Override
     protected void refreshData() {
         super.refreshData();
-        Log.v(LOG_TAG, "in refreshData");
 
         //showLoadingProgress(true);
         mMainPara.clear();
@@ -251,19 +250,19 @@ public class LVDaily extends LVBase {
                 List<String> set_k_d = NoteDataHelper.getNotesDays();
                 Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
 
+                Calendar cl_day = Calendar.getInstance();
                 for (String k : set_k_d) {
                     NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
                     HashMap<String, String> map = new HashMap<>();
                     map.put(K_MONTH, k.substring(0, 7));
 
                     String km = k.substring(8, 10);
-                    km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
-                    map.put(K_DAY_NUMEBER, km);
+                    String km_show = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
+                    map.put(K_DAY_NUMEBER, km_show);
 
                     int year = Integer.valueOf(k.substring(0, 4));
                     int month = Integer.valueOf(k.substring(5, 7));
-                    int day = Integer.valueOf(k.substring(8, 10));
-                    Calendar cl_day = Calendar.getInstance();
+                    int day = Integer.valueOf(km);
                     cl_day.set(year, month, day);
                     map.put(K_DAY_IN_WEEK, ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK)));
 
@@ -303,7 +302,6 @@ public class LVDaily extends LVBase {
 
 
     /// BEGIN PRIVATE
-
     /**
      * 用现有数据重绘UI
      */
@@ -320,16 +318,17 @@ public class LVDaily extends LVBase {
 
 
     /**
-     * 加载UI的工作
-     *
+     * 加载UI
      * @param b_fully 若为true则加载数据
      */
     private void loadUIUtility(boolean b_fully) {
+        /*
         Log.d(LOG_TAG, "in loadUIUtility, b_fully = " + Boolean.toString(b_fully));
         String[] calls = ToolUtil.getCallStack(8);
         for (int i = 0; i < calls.length; ++i) {
             Log.v(LOG_TAG, "in loadUIUtility, [" + i + "] = " + calls[i]);
         }
+        */
 
         // adjust attach layout
         setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?

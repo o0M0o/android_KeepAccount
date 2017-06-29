@@ -233,7 +233,7 @@ public abstract class LVBase extends ShowViewBase {
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Shows the progress UI
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     protected void showLoadingProgress(final boolean show) {
@@ -244,6 +244,7 @@ public abstract class LVBase extends ShowViewBase {
                 .getInteger(android.R.integer.config_shortAnimTime);
 
         mRLContent.setVisibility(show ? View.GONE : View.VISIBLE);
+        /*
         mRLContent.animate().setDuration(shortAnimTime).alpha(
                 show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
             @Override
@@ -251,6 +252,7 @@ public abstract class LVBase extends ShowViewBase {
                 mRLContent.setVisibility(show ? View.GONE : View.VISIBLE);
             }
         });
+        */
 
         mPBLoading.setVisibility(show ? View.VISIBLE : View.GONE);
         mPBLoading.animate().setDuration(shortAnimTime)

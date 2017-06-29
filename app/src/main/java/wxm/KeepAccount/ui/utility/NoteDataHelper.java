@@ -51,7 +51,6 @@ public class NoteDataHelper {
 
     /**
      * 根据月份查找统计数据
-     *
      * @param mt 月份（比如'2017-01')
      * @return 统计数据
      */
@@ -61,7 +60,6 @@ public class NoteDataHelper {
 
     /**
      * 返回有数据的月份
-     *
      * @return 有数据的月份
      */
     public static List<String> getNotesMonths() {
@@ -72,7 +70,6 @@ public class NoteDataHelper {
 
     /**
      * 根据年份查找统计数据
-     *
      * @param yr 年度（比如'2017')
      * @return 统计数据
      */
@@ -82,7 +79,6 @@ public class NoteDataHelper {
 
     /**
      * 返回有数据的年度
-     *
      * @return 有数据的年度
      */
     public static List<String> getNotesYears() {
@@ -93,7 +89,6 @@ public class NoteDataHelper {
 
     /**
      * 根据日期查找统计数据
-     *
      * @param day 日期（比如'2017-01-12')
      * @return 统计数据
      */
@@ -103,7 +98,6 @@ public class NoteDataHelper {
 
     /**
      * 返回有数据的日期
-     *
      * @return 有数据的日期
      */
     public static List<String> getNotesDays() {
