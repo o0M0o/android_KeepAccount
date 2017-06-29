@@ -26,6 +26,7 @@ import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.ui.base.ResourceHelper;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditIncome;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditPay;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
@@ -54,9 +55,6 @@ public class FrgNoteAdd extends FrgUtilityBase {
     @BindView(R.id.rl_income)
     RelativeLayout mRLIncome;
 
-    private int mCRWhite;
-    private int mCRTextFit;
-
     // for helper data
     class pageHelper    {
         public RelativeLayout mRLSelector;
@@ -75,18 +73,6 @@ public class FrgNoteAdd extends FrgUtilityBase {
 
     @Override
     protected void initUiComponent(View view) {
-        Context ct = ContextUtil.getInstance();
-        Resources res = ct.getResources();
-        Resources.Theme te = ct.getTheme();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mCRWhite = res.getColor(R.color.white, te);
-            mCRTextFit= res.getColor(R.color.text_fit, te);
-        } else {
-            mCRWhite = res.getColor(R.color.white);
-            mCRTextFit= res.getColor(R.color.text_fit);
-        }
-
         // for vp
         AppCompatActivity ac = (AppCompatActivity) getActivity();
         PagerAdapter adapter = new PagerAdapter(ac.getSupportFragmentManager());
@@ -171,7 +157,7 @@ public class FrgNoteAdd extends FrgUtilityBase {
 
         rl.setBackgroundResource(res);
         ((TextView)rl.findViewById(R.id.tv_tag))
-                .setTextColor(bIsSelected ? mCRWhite : mCRTextFit);
+                .setTextColor(bIsSelected ? ResourceHelper.mCRTextWhite : ResourceHelper.mCRTextFit);
     }
 
     /**

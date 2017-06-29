@@ -1,9 +1,6 @@
 package wxm.KeepAccount.ui.data.show.note;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -24,6 +21,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -33,8 +32,8 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBudget;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowMonthly;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowYearly;
+import wxm.KeepAccount.ui.base.ResourceHelper;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
-import wxm.KeepAccount.utility.ContextUtil;
 
 
 /**
@@ -48,16 +47,23 @@ public class FrgNoteShow extends FrgUtilityBase {
     protected final static int POS_BUDGET = 3;
 
     // for ui
+    @BindView(R.id.vp_pages)
     ViewPager mVPPages;
 
     // for selecter ui
+    @BindView(R.id.rl_day_flow)
     RelativeLayout mRLDayFlow;
+
+    @BindView(R.id.rl_month_flow)
     RelativeLayout mRLMonthFlow;
+
+    @BindView(R.id.rl_year_flow)
     RelativeLayout mRLYearFlow;
+
+    @BindView(R.id.rl_budget)
     RelativeLayout mRLBudget;
 
-    private int mCRWhite;
-    private int mCRTextFit;
+
 
     // for helper data
     private class pageHelper    {
@@ -105,30 +111,12 @@ public class FrgNoteShow extends FrgUtilityBase {
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         LOG_TAG = "FrgNoteShow";
         View rootView = layoutInflater.inflate(R.layout.vw_note_show, viewGroup, false);
-        //ButterKnife.bind(this, rootView);
-
-        mVPPages = UtilFun.cast_t(rootView.findViewById(R.id.vp_pages));
-        mRLDayFlow = UtilFun.cast_t(rootView.findViewById(R.id.rl_day_flow));
-        mRLMonthFlow = UtilFun.cast_t(rootView.findViewById(R.id.rl_month_flow));
-        mRLYearFlow = UtilFun.cast_t(rootView.findViewById(R.id.rl_year_flow));
-        mRLBudget = UtilFun.cast_t(rootView.findViewById(R.id.rl_budget));
+        ButterKnife.bind(this, rootView);
         return rootView;
     }
 
     @Override
     protected void initUiComponent(View view) {
-        Context ct = ContextUtil.getInstance();
-        Resources res = ct.getResources();
-        Resources.Theme te = ct.getTheme();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mCRWhite = res.getColor(R.color.white, te);
-            mCRTextFit= res.getColor(R.color.text_fit, te);
-        } else {
-            mCRWhite = res.getColor(R.color.white);
-            mCRTextFit= res.getColor(R.color.text_fit);
-        }
-
         // init view
         // init adapter
         AppCompatActivity a_ac = UtilFun.cast_t(getActivity());
@@ -229,7 +217,6 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     @Override
     protected void loadUI() {
-        //getHotTabItem().loadView(true);
     }
 
 
@@ -297,7 +284,7 @@ public class FrgNoteShow extends FrgUtilityBase {
 
         rl.setBackgroundResource(res);
         ((TextView)rl.findViewById(R.id.tv_tag))
-                .setTextColor(bIsSelected ? mCRWhite : mCRTextFit);
+                .setTextColor(bIsSelected ? ResourceHelper.mCRTextWhite : ResourceHelper.mCRTextFit);
     }
 
     /**

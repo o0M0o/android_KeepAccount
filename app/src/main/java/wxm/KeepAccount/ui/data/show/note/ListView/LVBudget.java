@@ -33,7 +33,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.PayNoteItem;
-import wxm.KeepAccount.ui.data.show.note.base.LVResource;
+import wxm.KeepAccount.ui.base.ResourceHelper;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
@@ -333,10 +333,10 @@ public class LVBudget extends LVBase {
                     Integer id = Integer.parseInt(k_tag);
                     if (mALWaitDeleteItems.contains(id)) {
                         mALWaitDeleteItems.remove((Object) id);
-                        v.setBackgroundColor(LVResource.mCRLVItemNoSel);
+                        v.setBackgroundColor(ResourceHelper.mCRLVItemNoSel);
                     } else {
                         mALWaitDeleteItems.add(id);
-                        v.setBackgroundColor(LVResource.mCRLVItemSel);
+                        v.setBackgroundColor(ResourceHelper.mCRLVItemSel);
                     }
                 }
                 break;
@@ -412,7 +412,7 @@ public class LVBudget extends LVBase {
             ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
             rl.setOnClickListener(local_cl);
             rl.setBackgroundColor(0 == position % 2 ?
-                    LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
+                    ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
 
             // for delete
             View rl_del = viewHolder.getView(R.id.rl_delete);

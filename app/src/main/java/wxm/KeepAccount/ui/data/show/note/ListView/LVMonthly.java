@@ -27,7 +27,7 @@ import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.FastViewHolder;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.show.note.base.LVResource;
+import wxm.KeepAccount.ui.base.ResourceHelper;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
@@ -402,7 +402,7 @@ public class LVMonthly
 
             ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
             rl.setBackgroundColor(0 == position % 2 ?
-                    LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
+                    ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
             rl.setOnClickListener(local_cl);
 
             // for month
@@ -455,12 +455,12 @@ public class LVMonthly
 
             ImageView ib = viewHolder.getView(R.id.iv_action);
             ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ?
-                    LVResource.mCRLVItemSel : LVResource.mCRLVItemNoSel);
+                    ResourceHelper.mCRLVItemSel : ResourceHelper.mCRLVItemNoSel);
             ib.setOnClickListener(v -> {
                 String sub_tag1 = hm.get(K_SUB_TAG);
 
                 if (!mLLSubFilter.contains(sub_tag1)) {
-                    v.setBackgroundColor(LVResource.mCRLVItemSel);
+                    v.setBackgroundColor(ResourceHelper.mCRLVItemSel);
 
                     mLLSubFilter.add(sub_tag1);
                     mLLSubFilterVW.add(v);
@@ -470,7 +470,7 @@ public class LVMonthly
                         refreshAttachLayout();
                     }
                 } else {
-                    v.setBackgroundColor(LVResource.mCRLVItemNoSel);
+                    v.setBackgroundColor(ResourceHelper.mCRLVItemNoSel);
 
                     mLLSubFilter.remove(sub_tag1);
                     mLLSubFilterVW.remove(v);

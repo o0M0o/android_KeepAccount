@@ -30,7 +30,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.ui.data.show.note.base.LVResource;
+import wxm.KeepAccount.ui.base.ResourceHelper;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.show.note.ACDailyDetail;
@@ -393,10 +393,10 @@ public class LVDaily extends LVBase {
                 case R.id.rl_delete: {
                     if (mALWaitDeleteDays.contains(k_tag)) {
                         mALWaitDeleteDays.remove(k_tag);
-                        v.setBackgroundColor(LVResource.mCRLVItemNoSel);
+                        v.setBackgroundColor(ResourceHelper.mCRLVItemNoSel);
                     } else {
                         mALWaitDeleteDays.add(k_tag);
-                        v.setBackgroundColor(LVResource.mCRLVItemSel);
+                        v.setBackgroundColor(ResourceHelper.mCRLVItemSel);
                     }
                 }
                 break;
@@ -435,7 +435,7 @@ public class LVDaily extends LVBase {
 
             View root_view = viewHolder.getConvertView();
             root_view.setBackgroundColor(0 == position % 2 ?
-                    LVResource.mCRLVLineOne : LVResource.mCRLVLineTwo);
+                    ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
 
             // for line data
             RelativeLayout rl_del = viewHolder.getView(R.id.rl_delete);
