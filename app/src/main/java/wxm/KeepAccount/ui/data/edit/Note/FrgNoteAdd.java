@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +26,9 @@ import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.define.IncomeNoteItem;
-import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditIncome;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditPay;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
-import wxm.KeepAccount.ui.data.show.note.FrgNoteShow;
-import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBase;
 import wxm.KeepAccount.utility.ContextUtil;
 
 /**
@@ -50,7 +45,7 @@ public class FrgNoteAdd extends FrgUtilityBase {
     @BindView(R.id.cl_header)
     ConstraintLayout mCLHeader;
 
-    @BindView(R.id.tab_pager)
+    @BindView(R.id.vp_pages)
     ViewPager mVPPager;
 
     @BindView(R.id.rl_pay)

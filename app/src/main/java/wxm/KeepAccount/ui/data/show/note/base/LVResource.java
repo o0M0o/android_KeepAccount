@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.show.note.ListView;
+package wxm.KeepAccount.ui.data.show.note.base;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,17 +9,14 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
 
 /**
- * ListView会用到的资源
+ * Resource for listview
  * Created by ookoo on 2017/3/3.
  */
-class LVResource {
-    static int mCRLVLineOne;
-    static int mCRLVLineTwo;
-    static int mCRLVItemNoSel;
-    static int mCRLVItemSel;
-
-    static Drawable mDASortUp;
-    static Drawable mDASortDown;
+public class LVResource {
+    public static int mCRLVLineOne;
+    public static int mCRLVLineTwo;
+    public static int mCRLVItemNoSel;
+    public static int mCRLVItemSel;
 
     static {
         Context ct = ContextUtil.getInstance();
@@ -32,18 +29,12 @@ class LVResource {
 
             mCRLVItemNoSel = res.getColor(R.color.red_ff725f_half, te);
             mCRLVItemSel = res.getColor(R.color.red_ff725f, te);
-
-            mDASortUp = res.getDrawable(R.drawable.ic_sort_up_1, te);
-            mDASortDown = res.getDrawable(R.drawable.ic_sort_down_1, te);
         } else {
             mCRLVLineOne = res.getColor(R.color.color_1);
             mCRLVLineTwo = res.getColor(R.color.color_2);
 
             mCRLVItemNoSel = res.getColor(R.color.red_ff725f_half);
             mCRLVItemSel = res.getColor(R.color.red_ff725f);
-
-            mDASortUp = res.getDrawable(R.drawable.ic_sort_up_1);
-            mDASortDown = res.getDrawable(R.drawable.ic_sort_down_1);
         }
     }
 }

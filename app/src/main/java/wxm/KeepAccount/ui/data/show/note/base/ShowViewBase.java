@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.show.note.ShowData;
+package wxm.KeepAccount.ui.data.show.note.base;
 
 import android.content.Context;
 import android.support.annotation.CallSuper;
@@ -22,24 +22,16 @@ import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
  * viewhelper基础类
  * Created by 123 on 2016/9/14.
  */
-public abstract class ShowViewHelperBase
+public abstract class ShowViewBase
         extends FrgUtilitySupportBase {
 
-    protected final LinkedList<String> mFilterPara;
-    protected final Timestamp mTSLastLoadViewTime = new Timestamp(0);
-    protected String LOG_TAG = "ShowViewHelperBase";
     // 视图过滤数据
     protected boolean mBFilter;
+    protected final LinkedList<String> mFilterPara;
+    protected final Timestamp mTSLastLoadViewTime = new Timestamp(0);
+
     @BindView(R.id.rl_attach_button)
     RelativeLayout mRLAttachButton;
-
-    /*
-    @BindView(R.id.bt_giveup)
-    ImageButton     mIBGiveup;
-
-    @BindView(R.id.bt_accpet)
-    ImageButton     mIBAccpet;
-    */
 
     @BindView(R.id.rl_accpet_giveup)
     RelativeLayout mRLAccpetGiveup;
@@ -47,11 +39,10 @@ public abstract class ShowViewHelperBase
     @BindView(R.id.rl_filter)
     RelativeLayout mRLFilter;
 
-    protected ShowViewHelperBase() {
+    protected ShowViewBase() {
         mBFilter = false;
         mFilterPara = new LinkedList<>();
     }
-
 
     @Override
     protected void enterActivity() {
@@ -69,6 +60,10 @@ public abstract class ShowViewHelperBase
         super.leaveActivity();
     }
 
+    public void loadView()  {
+        refreshData();
+    }
+
     /**
      * 更新数据
      */
@@ -76,7 +71,6 @@ public abstract class ShowViewHelperBase
     protected void refreshData() {
         mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
     }
-
 
     /**
      * 获取视图所在的activity

@@ -24,15 +24,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
+import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 import wxm.uilib.IconButton.IconButton;
 
 /**
  * sub class for listview
  * Created by wxm on 2016/9/29.
  */
-public abstract class LVBase extends ShowViewHelperBase {
-    /// list item data begin
+public abstract class LVBase extends ShowViewBase {
+    // data define for listview
     protected final static String K_TITLE = "k_title";
     protected final static String K_ABSTRACT = "k_abstract";
     protected final static String K_TIME = "k_time";
@@ -65,24 +65,21 @@ public abstract class LVBase extends ShowViewHelperBase {
     protected final static String K_SHOW = "k_show";
     protected final static String V_SHOW_UNFOLD = "vs_unfold";
     protected final static String V_SHOW_FOLD = "vs_fold";
-    /// list item data end
 
     // 视图数据
     protected final LinkedList<HashMap<String, String>> mMainPara;
     protected final HashMap<String, LinkedList<HashMap<String, String>>> mHMSubPara;
     protected final LinkedList<String> mLLSubFilter = new LinkedList<>();
     protected final LinkedList<View> mLLSubFilterVW = new LinkedList<>();
+
     // 存放展开节点的数据
     private final LinkedList<String> mUnfoldItems;
+
     // for filter
     protected boolean mBSelectSubFilter = false;
     protected boolean mBActionExpand;
 
-
     // for ui
-    //@BindView(R.id.iv_expand)
-    //protected ImageView mIVActions;
-
     @BindView(R.id.iv_show_tag)
     protected ImageView mIVHideShow;
 
@@ -100,7 +97,6 @@ public abstract class LVBase extends ShowViewHelperBase {
 
     @BindDrawable(R.drawable.ic_to_right)
     protected Drawable mDAHide;
-
 
     // for addtion action
     @BindView(R.id.ib_report)

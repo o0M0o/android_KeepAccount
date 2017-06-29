@@ -1,7 +1,8 @@
 package wxm.KeepAccount.ui.data.show.note.ShowData;
 
-import wxm.KeepAccount.ui.data.show.note.HelloChart.YearlyChartHelper;
-import wxm.KeepAccount.ui.data.show.note.ListView.LVHelperYearly;
+import wxm.KeepAccount.ui.data.show.note.HelloChart.YearlyChart;
+import wxm.KeepAccount.ui.data.show.note.ListView.LVYearly;
+import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 
 /**
  * show fragment for yearly
@@ -13,8 +14,8 @@ public class TFShowYearly extends TFShowBase {
         super();
         LOG_TAG = "TFShowYearly";
 
-        mViewHelper = new ShowViewHelperBase[2];
-        mViewHelper[0] = new LVHelperYearly();
-        mViewHelper[1] = new YearlyChartHelper();
+        mViewHelper = new ShowViewBase[2];
+        mViewHelper[0] = new LVYearly();
+        mViewHelper[1] = new YearlyChart();
     }
 }

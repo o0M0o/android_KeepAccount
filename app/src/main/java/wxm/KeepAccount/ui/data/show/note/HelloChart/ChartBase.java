@@ -20,15 +20,14 @@ import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.PreviewColumnChartView;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
+import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
  * chart view base helper
  * Created by wxm on 2016/9/29.
  */
-abstract class ChartHelperBase extends ShowViewHelperBase {
-
+abstract class ChartBase extends ShowViewBase {
     ColumnChartData mChartData;
     ColumnChartData mPreviewData;
 
@@ -50,7 +49,7 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
     @BindView(R.id.bt_less_viewport)
     Button mBTLessViewPort;
 
-    ChartHelperBase() {
+    ChartBase() {
         super();
     }
 
@@ -221,7 +220,6 @@ abstract class ChartHelperBase extends ShowViewHelperBase {
      * viewport of upper chart.
      */
     private class ViewportListener implements ViewportChangeListener {
-
         @Override
         public void onViewportChanged(Viewport newViewport) {
             // don't use animation, it is unnecessary when using preview chart because usually viewport changes

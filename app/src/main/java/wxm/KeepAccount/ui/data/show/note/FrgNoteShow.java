@@ -6,11 +6,9 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,7 +23,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
 import cn.wxm.andriodutillib.util.UtilFun;
@@ -51,7 +48,6 @@ public class FrgNoteShow extends FrgUtilityBase {
     protected final static int POS_BUDGET = 3;
 
     // for ui
-    //@BindView(R.id.tab_pager)
     ViewPager mVPPages;
 
     // for selecter ui
@@ -64,12 +60,12 @@ public class FrgNoteShow extends FrgUtilityBase {
     private int mCRTextFit;
 
     // for helper data
-    class pageHelper    {
-        public boolean mBADataChange;
-        public RelativeLayout mRLSelector;
-        public String   mSZName;
-        public TFShowBase   mSBPage;
-        public int  mPageIdx;
+    private class pageHelper    {
+        boolean mBADataChange;
+        RelativeLayout mRLSelector;
+        String   mSZName;
+        TFShowBase   mSBPage;
+        int  mPageIdx;
     }
     private pageHelper[] mPHHelper;
     private pageHelper mPHHot;
@@ -80,8 +76,7 @@ public class FrgNoteShow extends FrgUtilityBase {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBDataChangeEvent(DBDataChangeEvent event) {
-        TFShowBase tb = getHotTabItem();
-        tb.loadView(true);
+        getHotTabItem().loadView(true);
 
         int cur_pos = mVPPages.getCurrentItem();
         for (int i = 0; i < mPHHelper.length; i++) {
@@ -112,7 +107,7 @@ public class FrgNoteShow extends FrgUtilityBase {
         View rootView = layoutInflater.inflate(R.layout.vw_note_show, viewGroup, false);
         //ButterKnife.bind(this, rootView);
 
-        mVPPages = UtilFun.cast_t(rootView.findViewById(R.id.tab_pager));
+        mVPPages = UtilFun.cast_t(rootView.findViewById(R.id.vp_pages));
         mRLDayFlow = UtilFun.cast_t(rootView.findViewById(R.id.rl_day_flow));
         mRLMonthFlow = UtilFun.cast_t(rootView.findViewById(R.id.rl_month_flow));
         mRLYearFlow = UtilFun.cast_t(rootView.findViewById(R.id.rl_year_flow));

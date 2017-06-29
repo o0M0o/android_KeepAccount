@@ -27,6 +27,7 @@ import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.FastViewHolder;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.data.show.note.base.LVResource;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
@@ -40,18 +41,18 @@ import wxm.KeepAccount.utility.ToolUtil;
  * 月数据辅助类
  * Created by 123 on 2016/9/10.
  */
-public class LVHelperMonthly
+public class LVMonthly
         extends LVBase {
-    private final static String TAG = "LVHelperMonthly";
+    private final static String TAG = "LVMonthly";
 
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
 
 
-    public LVHelperMonthly() {
+    public LVMonthly() {
         super();
 
-        LOG_TAG = "LVHelperMonthly";
+        LOG_TAG = "LVMonthly";
         mBActionExpand = false;
     }
 

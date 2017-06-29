@@ -40,7 +40,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
-import wxm.KeepAccount.ui.data.show.note.ShowData.ShowViewHelperBase;
+import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.PreferencesUtil;
 
@@ -48,9 +48,7 @@ import wxm.KeepAccount.utility.PreferencesUtil;
  * 预算chart辅助类
  * Created by 123 on 2016/10/7.
  */
-public class BudgetChartHelper extends ShowViewHelperBase {
-    private final static String TAG = "BudgetChartHelper";
-
+public class BudgetChart extends ShowViewBase {
     ColumnChartData mChartData;
     ColumnChartData mPreviewData;
     float mPrvWidth = 12;
@@ -69,8 +67,9 @@ public class BudgetChartHelper extends ShowViewHelperBase {
     private int mSPBudgetHot = Spinner.INVALID_POSITION;
 
 
-    public BudgetChartHelper() {
+    public BudgetChart() {
         super();
+        LOG_TAG = "BudgetChart";
     }
 
 

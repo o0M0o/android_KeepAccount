@@ -26,15 +26,15 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
- * 加载日chart视图
+ * 加载阅读chart视图
  * Created by wxm on 2016/9/29.
  */
-public class DailyChartHelper extends ChartHelperBase {
-    public DailyChartHelper() {
+public class MonthlyChart extends ChartBase {
+    public MonthlyChart() {
         super();
-        mPrvWidth = 4.5f;
+        mPrvWidth = 5.5f;
 
-        LOG_TAG = "DailyChartHelper";
+        LOG_TAG = "MonthlyChart";
     }
 
     @Override
@@ -44,7 +44,7 @@ public class DailyChartHelper extends ChartHelperBase {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForDay();
+                HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForMonth();
 
                 int id_col = 0;
                 List<AxisValue> axisValues = new ArrayList<>();
@@ -102,16 +102,16 @@ public class DailyChartHelper extends ChartHelperBase {
                     column.setHasLabels(false);
                 }
 
-                int cc = 0;
+                int ic = 0;
                 for (AxisValue i : mPreviewData.getAxisXBottom().getValues()) {
-                    if (0 == cc % 5) {
-                        String v = new String(i.getLabelAsChars()).substring(0, 7);
+                    if (0 == ic % 2) {
+                        String v = new String(i.getLabelAsChars()).substring(0, 4);
                         i.setLabel(v);
                     } else {
                         i.setLabel("");
                     }
 
-                    cc += 1;
+                    ic++;
                 }
                 return null;
             }
@@ -134,7 +134,7 @@ public class DailyChartHelper extends ChartHelperBase {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
         List<String> e_p = event.getFilterTag();
-        if ((NoteDataHelper.TAB_TITLE_MONTHLY.equals(event.getSender()))
+        if ((NoteDataHelper.TAB_TITLE_YEARLY.equals(event.getSender()))
                 && (null != e_p)) {
             mBFilter = true;
             mFilterPara.clear();

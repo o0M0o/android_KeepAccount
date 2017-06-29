@@ -33,6 +33,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.PayNoteItem;
+import wxm.KeepAccount.ui.data.show.note.base.LVResource;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
@@ -44,8 +45,7 @@ import wxm.KeepAccount.utility.ToolUtil;
  * 预算数据视图辅助类
  * Created by 123 on 2016/9/15.
  */
-public class LVHelperBudget extends LVBase {
-
+public class LVBudget extends LVBase {
     //for action
     private final static int ACTION_DELETE = 1;
     private final static int ACTION_EDIT = 2;
@@ -53,9 +53,9 @@ public class LVHelperBudget extends LVBase {
     protected boolean mBODownOrder = true;
     private int mActionType = ACTION_EDIT;
 
-    public LVHelperBudget() {
+    public LVBudget() {
         super();
-        LOG_TAG = "LVHelperBudget";
+        LOG_TAG = "LVBudget";
     }
 
     /**
@@ -77,7 +77,6 @@ public class LVHelperBudget extends LVBase {
         mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
         mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
     }
-
 
     /**
      * 附加动作

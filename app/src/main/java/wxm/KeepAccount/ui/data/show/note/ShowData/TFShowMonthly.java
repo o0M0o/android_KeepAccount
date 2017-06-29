@@ -1,7 +1,8 @@
 package wxm.KeepAccount.ui.data.show.note.ShowData;
 
-import wxm.KeepAccount.ui.data.show.note.HelloChart.MonthlyChartHelper;
-import wxm.KeepAccount.ui.data.show.note.ListView.LVHelperMonthly;
+import wxm.KeepAccount.ui.data.show.note.HelloChart.MonthlyChart;
+import wxm.KeepAccount.ui.data.show.note.ListView.LVMonthly;
+import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 
 /**
  * fragment for monthly show
@@ -13,8 +14,8 @@ public class TFShowMonthly extends TFShowBase {
         super();
         LOG_TAG = "TFShowMonthly";
 
-        mViewHelper = new ShowViewHelperBase[2];
-        mViewHelper[0] = new LVHelperMonthly();
-        mViewHelper[1] = new MonthlyChartHelper();
+        mViewHelper = new ShowViewBase[2];
+        mViewHelper[0] = new LVMonthly();
+        mViewHelper[1] = new MonthlyChart();
     }
 }

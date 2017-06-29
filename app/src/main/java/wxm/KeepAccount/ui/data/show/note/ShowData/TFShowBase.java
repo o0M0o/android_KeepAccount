@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.ButterKnife;
 import cn.wxm.andriodutillib.FrgUtility.FrgUtilitySupportBase;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 
 /**
  * 数据显示fragment基类
@@ -16,7 +16,7 @@ import wxm.KeepAccount.R;
  */
 public abstract class TFShowBase extends FrgUtilitySupportBase {
     private final static String CHILD_HOT = "child_hot";
-    protected ShowViewHelperBase[] mViewHelper;
+    protected ShowViewBase[] mViewHelper;
     private int mHotChild = 0;
 
     @Override
@@ -33,13 +33,9 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
         outState.putInt(CHILD_HOT, mHotChild);
     }
 
-
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        View rootView = layoutInflater.inflate(R.layout.tf_show_base, viewGroup, false);
-        ButterKnife.bind(this, rootView);
-
-        return rootView;
+        return layoutInflater.inflate(R.layout.tf_show_base, viewGroup, false);
     }
 
     @Override
@@ -56,8 +52,7 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
         super.setUserVisibleHint(isVisibleToUser);
 
         View cur_v = getView();
-        Log.i(LOG_TAG, "setUserVisibleHint, visible = "
-                + (isVisibleToUser ? "true" : "false")
+        Log.i(LOG_TAG, "setUserVisibleHint, visible = "  + (isVisibleToUser ? "true" : "false")
                 + ", view = " + (cur_v == null ? "false" : "true"));
     }
 
@@ -75,19 +70,17 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
 
     /**
      * 数据变化后调用
-     *
      * @param bForce 若为true则刷新数据
      */
     public void loadView(boolean bForce) {
         View cur_v = getView();
         if (null != cur_v) {
             if (bForce)
-                mViewHelper[mHotChild].refreshData();
+                mViewHelper[mHotChild].loadView();
         }
     }
 
     //// PRIVATE START
-
     /**
      * 加载热fragment
      */

@@ -26,6 +26,7 @@ import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.FastViewHolder;
 import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.data.show.note.base.LVResource;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
@@ -39,17 +40,17 @@ import wxm.KeepAccount.utility.ContextUtil;
  * 年数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class LVHelperYearly extends LVBase {
-    private final static String TAG = "LVHelperYearly";
+public class LVYearly extends LVBase {
+    private final static String TAG = "LVYearly";
     private final LinkedList<String> mLLSubFilter = new LinkedList<>();
     private final LinkedList<View> mLLSubFilterVW = new LinkedList<>();
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
     private boolean mBSelectSubFilter = false;
 
-    public LVHelperYearly() {
+    public LVYearly() {
         super();
-        LOG_TAG = "LVHelperYearly";
+        LOG_TAG = "LVYearly";
         mBActionExpand = false;
     }
 

@@ -1,7 +1,8 @@
 package wxm.KeepAccount.ui.data.show.note.ShowData;
 
-import wxm.KeepAccount.ui.data.show.note.HelloChart.BudgetChartHelper;
-import wxm.KeepAccount.ui.data.show.note.ListView.LVHelperBudget;
+import wxm.KeepAccount.ui.data.show.note.HelloChart.BudgetChart;
+import wxm.KeepAccount.ui.data.show.note.ListView.LVBudget;
+import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 
 /**
  * 显示预算
@@ -14,8 +15,8 @@ public class TFShowBudget extends TFShowBase {
         super();
         LOG_TAG = "TFShowBudget";
 
-        mViewHelper = new ShowViewHelperBase[2];
-        mViewHelper[0] = new LVHelperBudget();
-        mViewHelper[1] = new BudgetChartHelper();
+        mViewHelper = new ShowViewBase[2];
+        mViewHelper[0] = new LVBudget();
+        mViewHelper[1] = new BudgetChart();
     }
 }

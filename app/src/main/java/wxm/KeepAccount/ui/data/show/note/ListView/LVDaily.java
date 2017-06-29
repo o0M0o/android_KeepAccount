@@ -30,6 +30,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.INote;
+import wxm.KeepAccount.ui.data.show.note.base.LVResource;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.show.note.ACDailyDetail;
@@ -46,19 +47,20 @@ import wxm.KeepAccount.utility.ToolUtil;
  * 日数据视图辅助类
  * Created by 123 on 2016/9/10.
  */
-public class LVHelperDaily extends LVBase {
+public class LVDaily extends LVBase {
     // for action
     //private final static int ACTION_NONE    = 0;
     private final static int ACTION_DELETE = 1;
     private final static int ACTION_EDIT = 2;
+
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
     private int mActionType = ACTION_EDIT;
 
-    public LVHelperDaily() {
+    public LVDaily() {
         super();
 
-        LOG_TAG = "LVHelperDaily";
+        LOG_TAG = "LVDaily";
         mBActionExpand = false;
     }
 
@@ -465,7 +467,7 @@ public class LVHelperDaily extends LVBase {
          *
          * @return 待删除日数据
          */
-        public List<String> getWaitDeleteDays() {
+        List<String> getWaitDeleteDays() {
             return mALWaitDeleteDays;
         }
     }

@@ -26,15 +26,15 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
- * 加载年度chart视图
+ * 加载日chart视图
  * Created by wxm on 2016/9/29.
  */
-public class YearlyChartHelper extends ChartHelperBase {
-    public YearlyChartHelper() {
+public class DailyChart extends ChartBase {
+    public DailyChart() {
         super();
-        mPrvWidth = 6;
+        mPrvWidth = 4.5f;
 
-        LOG_TAG = "YearlyChartHelper";
+        LOG_TAG = "DailyChart";
     }
 
     @Override
@@ -44,7 +44,7 @@ public class YearlyChartHelper extends ChartHelperBase {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForYear();
+                HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForDay();
 
                 int id_col = 0;
                 List<AxisValue> axisValues = new ArrayList<>();
@@ -52,30 +52,39 @@ public class YearlyChartHelper extends ChartHelperBase {
                 ArrayList<String> set_k = new ArrayList<>(ret.keySet());
                 Collections.sort(set_k);
                 for (String k : set_k) {
-                    BigDecimal pay = BigDecimal.ZERO;
-                    BigDecimal income = BigDecimal.ZERO;
-                    for (Object i : ret.get(k)) {
-                        if (i instanceof PayNoteItem) {
-                            PayNoteItem pi = UtilFun.cast(i);
-                            pay = pay.add(pi.getVal());
-                        } else {
-                            IncomeNoteItem ii = UtilFun.cast(i);
-                            income = income.add(ii.getVal());
-                        }
+                    boolean ba = true;
+                    if (mBFilter && !mFilterPara.isEmpty()) {
+                        //String ck = ToolUtil.FormatDateString(k);
+                        if (!mFilterPara.contains(k))
+                            ba = false;
                     }
 
-                    List<SubcolumnValue> values = new ArrayList<>();
-                    values.add(new SubcolumnValue(pay.floatValue(),
-                            mHMColor.get(PreferencesUtil.SET_PAY_COLOR)));
-                    values.add(new SubcolumnValue(income.floatValue(),
-                            mHMColor.get(PreferencesUtil.SET_INCOME_COLOR)));
+                    if (ba) {
+                        BigDecimal pay = BigDecimal.ZERO;
+                        BigDecimal income = BigDecimal.ZERO;
+                        for (Object i : ret.get(k)) {
+                            if (i instanceof PayNoteItem) {
+                                PayNoteItem pi = UtilFun.cast(i);
+                                pay = pay.add(pi.getVal());
+                            } else {
+                                IncomeNoteItem ii = UtilFun.cast(i);
+                                income = income.add(ii.getVal());
+                            }
+                        }
 
-                    Column cd = new Column(values);
-                    cd.setHasLabels(true);
-                    columns.add(cd);
+                        List<SubcolumnValue> values = new ArrayList<>();
+                        values.add(new SubcolumnValue(pay.floatValue(),
+                                mHMColor.get(PreferencesUtil.SET_PAY_COLOR)));
+                        values.add(new SubcolumnValue(income.floatValue(),
+                                mHMColor.get(PreferencesUtil.SET_INCOME_COLOR)));
 
-                    axisValues.add(new AxisValue(id_col).setLabel(k));
-                    id_col++;
+                        Column cd = new Column(values);
+                        cd.setHasLabels(true);
+                        columns.add(cd);
+
+                        axisValues.add(new AxisValue(id_col).setLabel(k));
+                        id_col++;
+                    }
                 }
 
                 mChartData = new ColumnChartData(columns);
@@ -93,9 +102,16 @@ public class YearlyChartHelper extends ChartHelperBase {
                     column.setHasLabels(false);
                 }
 
+                int cc = 0;
                 for (AxisValue i : mPreviewData.getAxisXBottom().getValues()) {
-                    String v = new String(i.getLabelAsChars()).substring(0, 4);
-                    i.setLabel(v);
+                    if (0 == cc % 5) {
+                        String v = new String(i.getLabelAsChars()).substring(0, 7);
+                        i.setLabel(v);
+                    } else {
+                        i.setLabel("");
+                    }
+
+                    cc += 1;
                 }
                 return null;
             }
@@ -117,5 +133,14 @@ public class YearlyChartHelper extends ChartHelperBase {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
+        List<String> e_p = event.getFilterTag();
+        if ((NoteDataHelper.TAB_TITLE_MONTHLY.equals(event.getSender()))
+                && (null != e_p)) {
+            mBFilter = true;
+            mFilterPara.clear();
+            mFilterPara.addAll(e_p);
+
+            refreshData();
+        }
     }
 }
