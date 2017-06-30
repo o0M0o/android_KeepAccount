@@ -299,7 +299,6 @@ public class LVMonthly
                     e.printStackTrace();
                 }
 
-
                 return null;
             }
 

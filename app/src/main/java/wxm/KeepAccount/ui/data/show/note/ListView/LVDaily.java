@@ -256,44 +256,56 @@ public class LVDaily extends LVBase {
 
                 Calendar cl_day = Calendar.getInstance();
                 ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
-                LinkedList<Future<HashMap<String, String>>> ll_rets = new LinkedList<>();
-                for (String k : set_k_d) {
-                    Future<HashMap<String, String>> ret = fixedThreadPool
+                LinkedList<Future<LinkedList<HashMap<String, String>>>> ll_rets = new LinkedList<>();
+
+                int once_process = 10;
+                int idx = 0;
+                int len = set_k_d.size();
+                while (idx < len)   {
+                    List<String> jobs = set_k_d.subList(idx, idx + once_process < len ? idx + once_process : len - 1);
+                    idx += once_process;
+
+                    Future<LinkedList<HashMap<String, String>>> ret = fixedThreadPool
                             .submit(() -> {
-                                NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
-                                HashMap<String, String> map = new HashMap<>();
-                                map.put(K_MONTH, k.substring(0, 7));
+                                LinkedList<HashMap<String, String>> maps = new LinkedList<>();
+                                for(String k : jobs) {
+                                    NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
+                                    HashMap<String, String> map = new HashMap<>();
+                                    map.put(K_MONTH, k.substring(0, 7));
 
-                                String km = k.substring(8, 10);
-                                km = km.startsWith("0") ? km.replaceFirst("0", "") : km;
-                                map.put(K_DAY_NUMEBER, km);
+                                    String km = k.substring(8, 10);
+                                    km = km.startsWith("0") ? km.replaceFirst("0", "") : km;
+                                    map.put(K_DAY_NUMEBER, km);
 
-                                int year = Integer.valueOf(k.substring(0, 4));
-                                int month = Integer.valueOf(k.substring(5, 7));
-                                int day = Integer.valueOf(km);
-                                cl_day.set(year, month, day);
-                                map.put(K_DAY_IN_WEEK, ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK)));
+                                    int year = Integer.valueOf(k.substring(0, 4));
+                                    int month = Integer.valueOf(k.substring(5, 7));
+                                    int day = Integer.valueOf(km);
+                                    cl_day.set(year, month, day);
+                                    map.put(K_DAY_IN_WEEK, ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK)));
 
-                                map.put(K_DAY_PAY_COUNT, String.valueOf(ni.getPayCount()));
-                                map.put(K_DAY_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
-                                map.put(K_DAY_PAY_AMOUNT, ni.getSZPayAmount());
-                                map.put(K_DAY_INCOME_AMOUNT, ni.getSZIncomeAmount());
+                                    map.put(K_DAY_PAY_COUNT, String.valueOf(ni.getPayCount()));
+                                    map.put(K_DAY_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
+                                    map.put(K_DAY_PAY_AMOUNT, ni.getSZPayAmount());
+                                    map.put(K_DAY_INCOME_AMOUNT, ni.getSZIncomeAmount());
 
-                                BigDecimal bd_l = ni.getBalance();
-                                String v_l = String.format(Locale.CHINA,
-                                        0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-                                map.put(K_AMOUNT, v_l);
+                                    BigDecimal bd_l = ni.getBalance();
+                                    String v_l = String.format(Locale.CHINA,
+                                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+                                    map.put(K_AMOUNT, v_l);
 
-                                map.put(K_TAG, k);
-                                map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                                return map;
+                                    map.put(K_TAG, k);
+                                    map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                                    maps.add(map);
+                                }
+                                return maps;
                             });
+
                     ll_rets.add(ret);
                 }
 
                 try {
-                    for(Future<HashMap<String, String>> ret : ll_rets) {
-                        mMainPara.add(ret.get());
+                    for(Future<LinkedList<HashMap<String, String>>> ret : ll_rets) {
+                        mMainPara.addAll(ret.get());
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
