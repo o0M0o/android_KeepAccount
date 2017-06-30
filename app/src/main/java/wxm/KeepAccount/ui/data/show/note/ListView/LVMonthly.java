@@ -22,6 +22,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import butterknife.OnClick;
 import cn.wxm.andriodutillib.util.FastViewHolder;
@@ -188,72 +192,113 @@ public class LVMonthly
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
+                ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
+                LinkedList<Future<HashMap<String, String>>> ll_main_rets = new LinkedList<>();
+                LinkedList<Future<Map.Entry<String, HashMap<String, String>>>>
+                        ll_sub_rets = new LinkedList<>();
+
                 // for month
                 List<String> set_k_m = NoteDataHelper.getNotesMonths();
                 Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
                 for (String k : set_k_m) {
-                    NoteShowInfo ni = NoteDataHelper.getInfoByMonth(k);
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put(K_MONTH, k);
-                    map.put(K_MONTH_PAY_COUNT, String.valueOf(ni.getPayCount()));
-                    map.put(K_MONTH_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
-                    map.put(K_MONTH_PAY_AMOUNT, String.format(Locale.CHINA,
-                            "%.02f", ni.getPayAmount()));
-                    map.put(K_MONTH_INCOME_AMOUNT, String.format(Locale.CHINA,
-                            "%.02f", ni.getIncomeAmount()));
+                    Future<HashMap<String, String>> ret = fixedThreadPool
+                            .submit(() -> {
+                                NoteShowInfo ni = NoteDataHelper.getInfoByMonth(k);
+                                HashMap<String, String> map = new HashMap<>();
+                                map.put(K_MONTH, k);
+                                map.put(K_MONTH_PAY_COUNT, String.valueOf(ni.getPayCount()));
+                                map.put(K_MONTH_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
+                                map.put(K_MONTH_PAY_AMOUNT, String.format(Locale.CHINA,
+                                        "%.02f", ni.getPayAmount()));
+                                map.put(K_MONTH_INCOME_AMOUNT, String.format(Locale.CHINA,
+                                        "%.02f", ni.getIncomeAmount()));
 
-                    BigDecimal bd_l = ni.getBalance();
-                    String v_l = String.format(Locale.CHINA,
-                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-                    map.put(K_AMOUNT, v_l);
+                                BigDecimal bd_l = ni.getBalance();
+                                String v_l = String.format(Locale.CHINA,
+                                        0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+                                map.put(K_AMOUNT, v_l);
 
-                    map.put(K_TAG, k);
-                    map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                    mMainPara.add(map);
+                                map.put(K_TAG, k);
+                                map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                                return map;
+                            });
+                    ll_main_rets.add(ret);
                 }
 
                 // for day
+                Calendar cl_day = Calendar.getInstance();
                 List<String> set_k_d = NoteDataHelper.getNotesDays();
                 Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
                 for (String k : set_k_d) {
-                    String mk = k.substring(0, 7);
-                    NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
-                    HashMap<String, String> map = new HashMap<>();
+                    Future<Map.Entry<String, HashMap<String, String>>> ret = fixedThreadPool
+                            .submit(() -> {
+                                String mk = k.substring(0, 7);
+                                NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
+                                HashMap<String, String> map = new HashMap<>();
 
-                    String km = k.substring(8, 10);
-                    km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
-                    map.put(K_DAY_NUMEBER, km);
+                                String km = k.substring(8, 10);
+                                km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
+                                map.put(K_DAY_NUMEBER, km);
 
-                    int year = Integer.valueOf(k.substring(0, 4));
-                    int month = Integer.valueOf(k.substring(5, 7));
-                    int day = Integer.valueOf(k.substring(8, 10));
-                    Calendar cl_day = Calendar.getInstance();
-                    cl_day.set(year, month, day);
-                    map.put(K_DAY_IN_WEEK, ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK)));
+                                int year = Integer.valueOf(k.substring(0, 4));
+                                int month = Integer.valueOf(k.substring(5, 7));
+                                int day = Integer.valueOf(k.substring(8, 10));
+                                cl_day.set(year, month, day);
+                                map.put(K_DAY_IN_WEEK, ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK)));
 
-                    map.put(K_DAY_PAY_COUNT, String.valueOf(ni.getPayCount()));
-                    map.put(K_DAY_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
-                    map.put(K_DAY_PAY_AMOUNT, String.format(Locale.CHINA,
-                            "%.02f", ni.getPayAmount()));
-                    map.put(K_DAY_INCOME_AMOUNT, String.format(Locale.CHINA,
-                            "%.02f", ni.getIncomeAmount()));
+                                map.put(K_DAY_PAY_COUNT, String.valueOf(ni.getPayCount()));
+                                map.put(K_DAY_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
+                                map.put(K_DAY_PAY_AMOUNT, String.format(Locale.CHINA,
+                                        "%.02f", ni.getPayAmount()));
+                                map.put(K_DAY_INCOME_AMOUNT, String.format(Locale.CHINA,
+                                        "%.02f", ni.getIncomeAmount()));
 
-                    BigDecimal bd_l = ni.getBalance();
-                    String v_l = String.format(Locale.CHINA,
-                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-                    map.put(K_AMOUNT, v_l);
+                                BigDecimal bd_l = ni.getBalance();
+                                String v_l = String.format(Locale.CHINA,
+                                        0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+                                map.put(K_AMOUNT, v_l);
 
-                    map.put(K_TAG, mk);
-                    map.put(K_SUB_TAG, k);
+                                map.put(K_TAG, mk);
+                                map.put(K_SUB_TAG, k);
 
-                    LinkedList<HashMap<String, String>> ls_hm = mHMSubPara.get(mk);
-                    if (UtilFun.ListIsNullOrEmpty(ls_hm)) {
-                        ls_hm = new LinkedList<>();
+                                return new Map.Entry<String, HashMap<String, String>>() {
+                                    @Override
+                                    public String getKey() {
+                                        return mk;
+                                    }
+
+                                    @Override
+                                    public HashMap<String, String> getValue() {
+                                        return map;
+                                    }
+
+                                    @Override
+                                    public HashMap<String, String> setValue(HashMap<String, String> value) {
+                                        return null;
+                                    }
+                                };
+                            });
+                    ll_sub_rets.add(ret);
+                }
+
+                try {
+                    for(Future<HashMap<String, String>> ret : ll_main_rets) {
+                        mMainPara.add(ret.get());
                     }
 
-                    ls_hm.add(map);
-                    mHMSubPara.put(mk, ls_hm);
+                    for(Future<Map.Entry<String, HashMap<String, String>>> ret : ll_sub_rets) {
+                        LinkedList<HashMap<String, String>> lh = mHMSubPara.get(ret.get().getKey());
+                        if(null == lh)  {
+                            lh = new LinkedList<>();
+                            mHMSubPara.put(ret.get().getKey(), lh);
+                        }
+
+                        lh.add(ret.get().getValue());
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
                 }
+
 
                 return null;
             }
