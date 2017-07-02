@@ -255,7 +255,7 @@ public class LVDaily extends LVBase {
                 Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
 
                 Calendar cl_day = Calendar.getInstance();
-                ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
+                ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
                 LinkedList<Future<LinkedList<HashMap<String, String>>>> ll_rets = new LinkedList<>();
 
                 int once_process = 10;

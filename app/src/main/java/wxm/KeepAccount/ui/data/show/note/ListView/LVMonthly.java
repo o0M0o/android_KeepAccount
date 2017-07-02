@@ -192,17 +192,17 @@ public class LVMonthly
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
-                LinkedList<Future<HashMap<String, String>>> ll_main_rets = new LinkedList<>();
-                LinkedList<Future<Map.Entry<String, HashMap<String, String>>>>
-                        ll_sub_rets = new LinkedList<>();
+                ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
+                Future<LinkedList<HashMap<String, String>>> ll_main_rets;
+                Future<LinkedList<Map.Entry<String, HashMap<String, String>>>>  ll_sub_rets;
 
                 // for month
                 List<String> set_k_m = NoteDataHelper.getNotesMonths();
                 Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-                for (String k : set_k_m) {
-                    Future<HashMap<String, String>> ret = fixedThreadPool
-                            .submit(() -> {
+                ll_main_rets = fixedThreadPool
+                        .submit(() -> {
+                            LinkedList<HashMap<String, String>> ll_rets = new LinkedList<>();
+                            for (String k : set_k_m) {
                                 NoteShowInfo ni = NoteDataHelper.getInfoByMonth(k);
                                 HashMap<String, String> map = new HashMap<>();
                                 map.put(K_MONTH, k);
@@ -220,18 +220,21 @@ public class LVMonthly
 
                                 map.put(K_TAG, k);
                                 map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                                return map;
-                            });
-                    ll_main_rets.add(ret);
-                }
+
+                                ll_rets.add(map);
+                            }
+
+                            return ll_rets;
+                        });
 
                 // for day
                 Calendar cl_day = Calendar.getInstance();
                 List<String> set_k_d = NoteDataHelper.getNotesDays();
                 Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-                for (String k : set_k_d) {
-                    Future<Map.Entry<String, HashMap<String, String>>> ret = fixedThreadPool
-                            .submit(() -> {
+                ll_sub_rets = fixedThreadPool
+                        .submit(() -> {
+                            LinkedList<Map.Entry<String, HashMap<String, String>>> ll_rets = new LinkedList<>();
+                            for (String k : set_k_d) {
                                 String mk = k.substring(0, 7);
                                 NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
                                 HashMap<String, String> map = new HashMap<>();
@@ -261,39 +264,38 @@ public class LVMonthly
                                 map.put(K_TAG, mk);
                                 map.put(K_SUB_TAG, k);
 
-                                return new Map.Entry<String, HashMap<String, String>>() {
+                                ll_rets.add(new Map.Entry<String, HashMap<String, String>>() {
                                     @Override
                                     public String getKey() {
-                                        return mk;
-                                    }
+                                                                 return mk;
+                                                                           }
 
                                     @Override
                                     public HashMap<String, String> getValue() {
-                                        return map;
-                                    }
+                                                                                    return map;
+                                                                                               }
 
                                     @Override
                                     public HashMap<String, String> setValue(HashMap<String, String> value) {
                                         return null;
                                     }
-                                };
-                            });
-                    ll_sub_rets.add(ret);
-                }
+                                });
+                            }
+
+                            return ll_rets;
+                        });
 
                 try {
-                    for(Future<HashMap<String, String>> ret : ll_main_rets) {
-                        mMainPara.add(ret.get());
-                    }
+                    mMainPara.addAll(ll_main_rets.get());
 
-                    for(Future<Map.Entry<String, HashMap<String, String>>> ret : ll_sub_rets) {
-                        LinkedList<HashMap<String, String>> lh = mHMSubPara.get(ret.get().getKey());
+                    for(Map.Entry<String, HashMap<String, String>> ret : ll_sub_rets.get()) {
+                        LinkedList<HashMap<String, String>> lh = mHMSubPara.get(ret.getKey());
                         if(null == lh)  {
                             lh = new LinkedList<>();
-                            mHMSubPara.put(ret.get().getKey(), lh);
+                            mHMSubPara.put(ret.getKey(), lh);
                         }
 
-                        lh.add(ret.get().getValue());
+                        lh.add(ret.getValue());
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
@@ -497,7 +499,7 @@ public class LVMonthly
 
             ImageView ib = viewHolder.getView(R.id.iv_action);
             ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ?
-                    ResourceHelper.mCRLVItemSel : ResourceHelper.mCRLVItemNoSel);
+                    ResourceHelper.mCRLVItemSel : ResourceHelper.mCRLVItemTransFull);
             ib.setOnClickListener(v -> {
                 String sub_tag1 = hm.get(K_SUB_TAG);
 
@@ -512,7 +514,7 @@ public class LVMonthly
                         refreshAttachLayout();
                     }
                 } else {
-                    v.setBackgroundColor(ResourceHelper.mCRLVItemNoSel);
+                    v.setBackgroundColor(ResourceHelper.mCRLVItemTransFull);
 
                     mLLSubFilter.remove(sub_tag1);
                     mLLSubFilterVW.remove(v);

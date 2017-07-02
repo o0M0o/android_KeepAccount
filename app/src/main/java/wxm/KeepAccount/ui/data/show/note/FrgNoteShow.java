@@ -238,6 +238,12 @@ public class FrgNoteShow extends FrgUtilityBase {
 
 
     /// PRIVATE BEGIN
+
+    /**
+     * 得到selector name
+     * @param rl    for selector
+     * @return      name for selector
+     */
     @NonNull
     private String getSelectorName(RelativeLayout rl)   {
         return ((TextView)rl.findViewById(R.id.tv_tag)).getText().toString();
@@ -272,6 +278,11 @@ public class FrgNoteShow extends FrgUtilityBase {
         return rl == mPHHot.mRLSelector;
     }
 
+    /**
+     * 设置rl的状态
+     * @param rl            待设置relativelayout
+     * @param bIsSelected   新状态
+     */
     private void setRLStatus(RelativeLayout rl, boolean bIsSelected)    {
         int res;
         if(rl == mRLDayFlow)    {

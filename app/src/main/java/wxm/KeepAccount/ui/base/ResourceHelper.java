@@ -15,6 +15,9 @@ import wxm.KeepAccount.utility.ContextUtil;
 public class ResourceHelper {
     public static int mCRLVLineOne;
     public static int mCRLVLineTwo;
+
+    public static int mCRLVItemTransFull;
+
     public static int mCRLVItemNoSel;
     public static int mCRLVItemSel;
 
@@ -30,6 +33,8 @@ public class ResourceHelper {
             mCRLVLineOne = res.getColor(R.color.color_1, te);
             mCRLVLineTwo = res.getColor(R.color.color_2, te);
 
+            mCRLVItemTransFull = res.getColor(R.color.trans_full, te);
+
             mCRLVItemNoSel = res.getColor(R.color.red_ff725f_half, te);
             mCRLVItemSel = res.getColor(R.color.red_ff725f, te);
 
@@ -38,6 +43,8 @@ public class ResourceHelper {
         } else {
             mCRLVLineOne = res.getColor(R.color.color_1);
             mCRLVLineTwo = res.getColor(R.color.color_2);
+
+            mCRLVItemTransFull = res.getColor(R.color.trans_full);
 
             mCRLVItemNoSel = res.getColor(R.color.red_ff725f_half);
             mCRLVItemSel = res.getColor(R.color.red_ff725f);

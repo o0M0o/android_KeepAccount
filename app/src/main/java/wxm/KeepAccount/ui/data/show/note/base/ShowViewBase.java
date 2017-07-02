@@ -20,7 +20,7 @@ import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 
 /**
  * viewhelper基础类
- * Created by 123 on 2016/9/14.
+ * Created by xiaoming wang on 2016/9/14.
  */
 public abstract class ShowViewBase
         extends FrgUtilitySupportBase {
