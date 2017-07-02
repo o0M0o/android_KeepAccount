@@ -23,7 +23,6 @@ import java.util.Locale;
 
 import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
 import cn.wxm.andriodutillib.util.UtilFun;
-import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
@@ -35,6 +34,7 @@ import wxm.KeepAccount.ui.help.ACHelp;
 import wxm.KeepAccount.ui.setting.ACSetting;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ActionHelper;
+import wxm.KeepAccount.R;
 
 /**
  * 用户登陆后首页面

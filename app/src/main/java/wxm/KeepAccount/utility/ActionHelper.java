@@ -67,7 +67,7 @@ public class ActionHelper {
                 break;
 
             case ACT_LOOK_REMIND:
-                bm = BitmapFactory.decodeResource(res, R.drawable.ic_alarm);
+                bm = BitmapFactory.decodeResource(res, R.drawable.ic_setting_alarm);
                 break;
 
             case ACT_ADD_REMIND:

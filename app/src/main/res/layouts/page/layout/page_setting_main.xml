@@ -30,7 +30,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            app:srcCompat="@drawable/ic_alarm" />
+            app:srcCompat="@drawable/ic_setting_alarm" />
 
         <ImageView
             android:id="@+id/imageView3"
