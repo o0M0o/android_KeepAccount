@@ -38,9 +38,8 @@
                 android:id="@+id/lv_show"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/grey_3"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="1dp"
+                android:divider="@color/white"
+                android:dividerHeight="2dp"
                 android:fastScrollEnabled="false"
                 android:longClickable="true" />
         </RelativeLayout>
