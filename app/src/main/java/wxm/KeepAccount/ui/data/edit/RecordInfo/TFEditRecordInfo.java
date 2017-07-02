@@ -119,8 +119,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
 
     /**
      * 更新界面动作状态
-     *
-     * @param type
+     * @param type  for type
      */
     private void update_acts(int type) {
         switch (type) {

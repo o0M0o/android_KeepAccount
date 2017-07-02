@@ -2,7 +2,6 @@ package wxm.KeepAccount.ui.base;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 import wxm.KeepAccount.R;

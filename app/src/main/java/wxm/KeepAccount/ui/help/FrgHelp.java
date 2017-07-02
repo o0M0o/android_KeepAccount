@@ -5,13 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
-import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.base.FrgWebView;
 
 /**

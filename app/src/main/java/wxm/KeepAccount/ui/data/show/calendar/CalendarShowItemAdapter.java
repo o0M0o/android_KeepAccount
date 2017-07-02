@@ -13,14 +13,14 @@ import wxm.simplecalendarlvb.BaseCalendarItemModel;
 
 
 /**
- * Created by kelin on 16-7-19.
+ * 日历节点
+ * Created by xiaoming wang on 2017/07/03.
  */
 public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarShowItemModel> {
     private int mCLToday;
     private int mCLHoliday;
 
     private int mCLDisable;
-    private int mCLNotCurrentMonth;
 
     public CalendarShowItemAdapter(Context context) {
         super(context);
@@ -29,12 +29,11 @@ public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarSho
         mCLToday = res.getColor(R.color.red_ff725f);
         mCLHoliday = res.getColor(R.color.red_ff725f);
         mCLDisable = res.getColor(android.R.color.darker_gray);
-        mCLNotCurrentMonth = res.getColor(R.color.gray_bbbbbb);
     }
 
     @Override
     public View getView(String date, CalendarShowItemModel model, View convertView, ViewGroup parent) {
-        ViewGroup view = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.gi_calendar_item, null);
+        ViewGroup view = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.gi_calendar_item, parent);
 
         TextView dayNum = (TextView) view.findViewById(R.id.tv_day_num);
         dayNum.setText(model.getDayNumber());

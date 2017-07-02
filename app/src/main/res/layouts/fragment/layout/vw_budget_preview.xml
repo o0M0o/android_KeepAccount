@@ -41,7 +41,7 @@
             android:layout_toEndOf="@id/iv_budget_name"
             android:text="生活预算"
             android:textColor="@color/darkslategrey"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -161,7 +161,7 @@
             android:layout_toEndOf="@id/iv_budget_note"
             android:text="2016年7月-12月生活费预算"
             android:textColor="@color/darkslategrey"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
     </RelativeLayout>
 
 </LinearLayout>

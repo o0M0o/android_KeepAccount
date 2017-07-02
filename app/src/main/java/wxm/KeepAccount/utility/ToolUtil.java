@@ -53,7 +53,7 @@ public class ToolUtil {
      *
      * @param str 待转换时间字符串
      * @return 转换的结果
-     * @throws ParseException
+     * @throws ParseException parse failure
      */
     public static Timestamp StringToTimestamp(String str) throws ParseException {
         String valstr = str.replace("年", "-").replace("月", "-").replace("日", "");
