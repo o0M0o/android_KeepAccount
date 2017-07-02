@@ -30,8 +30,7 @@ public class TFPreviewBudget extends TFPreviewBase {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.vw_budget_preview, container, false);
-        return v;
+        return inflater.inflate(R.layout.vw_budget_preview, container, false);
     }
 
     @Override

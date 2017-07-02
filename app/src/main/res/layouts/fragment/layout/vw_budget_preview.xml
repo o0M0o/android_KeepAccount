@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_1"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -27,7 +26,7 @@
             android:layout_alignTop="@id/iv_budget_name"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
-            android:layout_toRightOf="@id/iv_budget_name"
+            android:layout_toEndOf="@id/iv_budget_name"
             android:text="@string/budget_name"
             android:textColor="@color/black"
             android:textSize="18sp" />
@@ -37,9 +36,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/iv_budget_name"
-            android:layout_alignLeft="@id/tv_name_tag"
+            android:layout_alignStart="@id/tv_name_tag"
             android:layout_marginBottom="4dp"
-            android:layout_toRightOf="@id/iv_budget_name"
+            android:layout_toEndOf="@id/iv_budget_name"
             android:text="生活预算"
             android:textColor="@color/darkslategrey"
             android:textSize="14dp" />
@@ -68,7 +67,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            android:layout_toRightOf="@id/iv_budget_amount"
+            android:layout_toEndOf="@id/iv_budget_amount"
             android:orientation="vertical">
 
             <TextView
@@ -147,7 +146,7 @@
             android:layout_alignTop="@id/iv_budget_note"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
-            android:layout_toRightOf="@id/iv_budget_note"
+            android:layout_toEndOf="@id/iv_budget_note"
             android:text="@string/budget_note"
             android:textColor="@color/black"
             android:textSize="18sp" />
@@ -157,9 +156,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/iv_budget_note"
-            android:layout_alignLeft="@id/tv_note_tag"
+            android:layout_alignStart="@id/tv_note_tag"
             android:layout_marginBottom="4dp"
-            android:layout_toRightOf="@id/iv_budget_note"
+            android:layout_toEndOf="@id/iv_budget_note"
             android:text="2016年7月-12月生活费预算"
             android:textColor="@color/darkslategrey"
             android:textSize="14dp" />

@@ -68,8 +68,7 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
         } else if (GlobalDef.STR_RECORD_BUDGET.equals(type)) {
             ob = -1 != id ? buit.getData(id) : null;
         } else {
-            IncomeNoteItem ii = -1 != id ? puit.getIncomeDBUtility().getData(id) : null;
-            ob = ii;
+            ob = -1 != id ? puit.getIncomeDBUtility().getData(id) : null;
         }
 
         FrgPreviewAndEdit tpe = new FrgPreviewAndEdit();

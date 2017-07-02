@@ -33,8 +33,7 @@ public class TFEditRemindPay extends TFEditRemindBase {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.vw_edit_remind_pay, container, false);
-        return v;
+        return inflater.inflate(R.layout.vw_edit_remind_pay, container, false);
     }
 
     @Override

@@ -1,33 +1,17 @@
 <resources>
     <string name="app_name">随手帐</string>
 
-    <string name="save">save</string>
-    <string name="edit">edit</string>
     <string name="cn_sure">确认</string>
     <string name="cn_leave">退出应用</string>
     <string name="cn_help">帮助</string>
-    <string name="cn_logout">退出</string>
     <string name="cn_save">保存</string>
     <string name="cn_edit">编辑</string>
     <string name="cn_giveup">放弃</string>
-    <string name="cn_goback">返回</string>
     <string name="cn_delete">删除</string>
-    <string name="cn_modify">修改</string>
-    <string name="cn_add">添加</string>
     <string name="cn_keepaccount_applabel">随手帐</string>
 
-    <string name="cn_hint_income_info">收入原因</string>
-    <string name="cn_hint_income_date">收入日期</string>
-    <string name="cn_hint_income_amount">收入金额</string>
 
-    <string name="cn_hint_pay_info">支出原因</string>
-    <string name="cn_hint_pay_date">支出日期</string>
-    <string name="cn_hint_pay_amount">支出金额</string>
-    <string name="title_activity_login">登录</string>
     <string name="label_add_usr">新建用户</string>
-    <string name="title_activity_start">开始</string>
-    <string name="title_acrt_pay">选择支出类型</string>
-    <string name="title_acrt_income">选择收入类型</string>
 
     <!-- Strings related to login -->
     <string name="prompt_usrname">用户名</string>
@@ -36,24 +20,17 @@
     <string name="action_register">注册账号</string>
     <string name="action_sign_in_short">登录</string>
     <string name="error_no_usrname">请输入用户名</string>
-    <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">密码太短</string>
     <string name="error_incorrect_password">密码不正确或用户名不存在</string>
     <string name="error_field_required">需此项信息</string>
-    <string name="permission_rationale">需要联系方式权限来补全邮箱</string>
     <string name="hint_new_usr_name">新用户名</string>
     <string name="hint_new_pwd">新用户密码</string>
     <string name="hint_new_repeat_pwd">请重复输入密码</string>
     <string name="error_repeatpwd_notmatch">两次输入密码不一样</string>
 
-    <string name="name">name</string>
-    <string name="pwd">pwd</string>
-
-
     <string name="navigation_drawer_open">打开导航绘图</string>
     <string name="navigation_drawer_close">关闭导航绘图</string>
 
-    <string name="action_settings">Settings</string>
     <string name="contact_email">fly_in_wind@qq.com</string>
     <string name="contact_studio">oko studio</string>
 
@@ -65,34 +42,16 @@
     <string name="cn_year_flow">年流水</string>
     <string name="cn_budget">预算</string>
 
-    <string name="cn_record_type">记录类型</string>
-    <string name="cn_record_detail">记录详情</string>
-    <string name="cn_reason">原因</string>
     <string name="cn_date">日期</string>
     <string name="cn_amount">金额</string>
-    <string name="cn_note">备注(200字以内）</string>
     <string name="cn_swith_view">切换视图</string>
-    <string name="cn_record_pay">记录支出</string>
-    <string name="cn_record_income">记录收入</string>
     <string name="cn_income_type">收入类型</string>
     <string name="cn_pay_type">支出类型</string>
     <string name="cn_setting">设定</string>
-    <string name="cn_other">其它</string>
     <string name="cn_share_app">分享应用</string>
     <string name="cn_contact_writer">联系作者</string>
-    <string name="title_activity_acrecord_type_edit">ACRecordTypeEdit</string>
-    <string name="cn_hint_recordtype_add">添加新纪录类型</string>
-    <string name="cn_lookdata">查看数据</string>
-    <string name="cn_leave_login">退出登录</string>
-    <string name="cn_hint_more_button">浮动按钮</string>
-    <string name="cn_edit_remind">编辑提醒</string>
-    <string name="cn_edit_budget">编辑预算</string>
     <string name="cn_hint_budget_name">请输入预算名</string>
     <string name="cn_hint_budget_amount">请输入预算金额</string>
-    <string name="cn_hint_budget_note">请输入预算备注(200字以内)</string>
-    <string name="ac_label_budget_manager">预算管理</string>
-    <string name="cn_hint_budget_start_date">请输入预算开始日期</string>
-    <string name="cn_hint_budget_end_date">请输入预算结束日期</string>
     <string name="cn_use_budget">使用预算 :</string>
     <string name="ac_title_noteshow">查看流水</string>
     <string name="cn_refresh">更新视图</string>
@@ -108,18 +67,12 @@
     <string name="cn_sort_up_by_time">时间升序</string>
     <string name="cn_sort_down_by_name">名字降序</string>
     <string name="cn_sort_up_by_name">名字升序</string>
-    <string name="select_date">选择日期</string>
-    <string name="select_time">选择时间</string>
-    <string name="cn_record_info_name">记录类型名字</string>
-    <string name="cn_record_info_note">记录类型备注</string>
-    <string name="cn_name">名字</string>
     <string name="hint_name">名字</string>
     <string name="hint_note">说明</string>
     <string name="manager"> 管理 </string>
 
 
     <string name="action_def_usr_login">使用默认用户登录</string>
-    <string name="giveup_filter">取消</string>
     <string name="cn_accept">确认</string>
     <string name="cn_add_note">添加记录</string>
     <string name="cn_channel">关注</string>
@@ -128,7 +81,6 @@
     <string name="select_budget">选择预算</string>
     <string name="budget_remainder">预算余额</string>
     <string name="budget_used">已使用预算</string>
-    <string name="remaind_type_select">选择提醒类型</string>
     <string name="budget_select">选择预算</string>
     <string name="remind_active_type">预警激活条件</string>
     <string name="remind_amount">预警金额</string>
@@ -153,7 +105,6 @@
     <string name="iv_act_hint">action hint</string>
     <string name="label_welcome">首页</string>
     <string name="notice_input_note">请输入备注</string>
-    <string name="cn_usr_name">用户名</string>
     <string name="cn_usr_message">请输入您的意见或建议</string>
 
     <!-- for send message -->

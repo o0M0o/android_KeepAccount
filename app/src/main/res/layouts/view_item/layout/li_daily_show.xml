@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/tv_day"
             android:layout_marginStart="8dp"
-            android:layout_toRightOf="@id/tv_day"
+            android:layout_toEndOf="@id/tv_day"
             android:text="星期三"
             android:textSize="12sp" />
     </RelativeLayout>

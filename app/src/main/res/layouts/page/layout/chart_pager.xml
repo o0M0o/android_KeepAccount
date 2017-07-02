@@ -30,7 +30,7 @@
                 android:layout_height="16dp"
                 android:layout_alignTop="@+id/tv_income"
                 android:layout_marginEnd="8dp"
-                android:layout_toLeftOf="@+id/tv_remainder"
+                android:layout_toStartOf="@+id/tv_remainder"
                 android:background="@color/aliceblue" />
 
             <TextView
@@ -40,7 +40,7 @@
                 android:layout_alignTop="@+id/tv_income"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="24dp"
-                android:layout_toLeftOf="@+id/iv_income"
+                android:layout_toStartOf="@+id/iv_income"
                 android:text="@string/cn_pay" />
 
             <ImageView
@@ -50,7 +50,7 @@
                 android:layout_alignParentEnd="false"
                 android:layout_alignTop="@+id/tv_income"
                 android:layout_marginEnd="8dp"
-                android:layout_toLeftOf="@+id/tv_income"
+                android:layout_toStartOf="@+id/tv_income"
                 android:background="@color/azure" />
 
             <TextView
