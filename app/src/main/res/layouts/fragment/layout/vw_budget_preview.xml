@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:background="@color/white"
-        android:paddingLeft="12dp"
-        android:paddingRight="4dp">
+        android:paddingStart="12dp"
+        android:paddingEnd="4dp">
 
         <ImageView
             android:id="@+id/iv_budget_name"
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/iv_budget_name"
-            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:layout_toRightOf="@id/iv_budget_name"
             android:text="@string/budget_name"
@@ -51,8 +51,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:background="@color/white"
-        android:paddingLeft="12dp"
-        android:paddingRight="4dp">
+        android:paddingStart="12dp"
+        android:paddingEnd="4dp">
 
         <ImageView
             android:id="@+id/iv_budget_amount"
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginBottom="4dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:layout_toRightOf="@id/iv_budget_amount"
             android:orientation="vertical">
@@ -95,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:layout_marginLeft="6dp"
+                    android:layout_marginStart="6dp"
                     android:text="7500"
                     android:textColor="@color/darkslategrey"
                     android:textSize="14sp" />
@@ -117,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:layout_marginLeft="6dp"
+                    android:layout_marginStart="6dp"
                     android:text="7500"
                     android:textColor="@color/darkred"
                     android:textSize="14sp" />
@@ -131,8 +131,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:background="@color/white"
-        android:paddingLeft="12dp"
-        android:paddingRight="4dp">
+        android:paddingStart="12dp"
+        android:paddingEnd="4dp">
 
         <ImageView
             android:id="@+id/iv_budget_note"
@@ -145,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/iv_budget_note"
-            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:layout_toRightOf="@id/iv_budget_note"
             android:text="@string/budget_note"

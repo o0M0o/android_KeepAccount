@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingBottom="4dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="4dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="4dp"
         android:paddingTop="4dp">
 
         <ImageView
@@ -24,8 +24,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="56dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="56dp"
             android:orientation="vertical">
 
             <TextView
@@ -56,9 +56,9 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginBottom="4dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="4dp">
 
             <ImageView
@@ -70,9 +70,9 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="56dp"
+                android:layout_marginStart="56dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -101,7 +101,7 @@
                         android:id="@+id/tv_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
                         android:text="10:52"
                         android:textColor="@color/darkslategrey"
                         android:textSize="12sp" />
@@ -112,10 +112,10 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginBottom="4dp"
-            android:layout_marginRight="56dp"
+            android:layout_marginEnd="56dp"
             android:layout_marginTop="4dp">
 
             <ImageView
@@ -127,9 +127,9 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="56dp"
+                android:layout_marginStart="56dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -157,8 +157,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:background="@color/white"
-        android:paddingLeft="12dp"
-        android:paddingRight="4dp">
+        android:paddingStart="12dp"
+        android:paddingEnd="4dp">
 
         <ImageView
             android:id="@+id/iv_budget_name"
@@ -172,10 +172,10 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginBottom="4dp"
-            android:layout_marginLeft="56dp"
+            android:layout_marginStart="56dp"
             android:layout_marginTop="4dp"
             android:orientation="vertical">
 
@@ -204,8 +204,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:background="@color/white"
-        android:paddingLeft="12dp"
-        android:paddingRight="4dp">
+        android:paddingStart="12dp"
+        android:paddingEnd="4dp">
 
         <ImageView
             android:id="@+id/iv_budget_note"
@@ -219,10 +219,10 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginBottom="4dp"
-            android:layout_marginLeft="56dp"
+            android:layout_marginStart="56dp"
             android:layout_marginTop="4dp"
             android:orientation="vertical">
 

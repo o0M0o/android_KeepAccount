@@ -15,9 +15,9 @@
             android:id="@+id/bt_giveup_filter"
             android:layout_width="64dp"
             android:layout_height="32dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_reject" />
 
@@ -29,17 +29,17 @@
             android:text="@string/giveup_filter"
             android:id="@+id/bt_giveup_filter"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp" />
             -->
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:text="仅显示筛选"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
@@ -55,9 +55,9 @@
             android:id="@+id/bt_giveup"
             android:layout_width="64dp"
             android:layout_height="32dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_reject" />
 
@@ -68,8 +68,8 @@
             android:layout_height="wrap_content"
             android:text="@string/cn_giveup"
             android:id="@+id/bt_giveup"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp" />
             -->
 
         <ImageButton
@@ -77,7 +77,7 @@
             android:layout_width="64dp"
             android:layout_height="32dp"
             android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_toLeftOf="@+id/bt_giveup"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_accept" />
@@ -91,15 +91,15 @@
             android:id="@+id/bt_accpet"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/bt_giveup"
-            android:layout_marginRight="6dp" />
+            android:layout_marginEnd="6dp" />
             -->
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:text="放弃或确认"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
