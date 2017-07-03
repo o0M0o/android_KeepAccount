@@ -43,12 +43,10 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_body"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <include
-            android:id="@+id/il_info"
             layout="@layout/ba_month_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

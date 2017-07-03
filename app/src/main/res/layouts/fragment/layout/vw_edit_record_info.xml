@@ -5,7 +5,6 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/rl_up_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
@@ -25,7 +24,6 @@
             android:background="@color/white">
 
             <ImageView
-                android:id="@+id/iv_add"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_centerInParent="true"
@@ -43,7 +41,6 @@
             android:background="@color/white">
 
             <ImageView
-                android:id="@+id/iv_minus"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_centerInParent="true"
@@ -61,7 +58,6 @@
             android:background="@color/white">
 
             <ImageView
-                android:id="@+id/iv_pencil"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_centerInParent="true"
@@ -81,7 +77,6 @@
             android:background="@color/white">
 
             <ImageView
-                android:id="@+id/iv_accept"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_centerInParent="true"
@@ -101,7 +96,6 @@
             android:background="@color/white">
 
             <ImageView
-                android:id="@+id/iv_reject"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_centerInParent="true"
@@ -111,7 +105,6 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
@@ -132,7 +125,6 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_gv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="4dp"

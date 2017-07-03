@@ -35,7 +35,6 @@
 
 
     <RelativeLayout
-        android:id="@+id/rl_end_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/rl_start_day"

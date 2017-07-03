@@ -22,7 +22,6 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/til_amount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -41,7 +40,6 @@
 
 
     <RelativeLayout
-        android:id="@+id/rl_note"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="12dp"

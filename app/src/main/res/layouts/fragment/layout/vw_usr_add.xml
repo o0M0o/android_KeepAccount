@@ -6,7 +6,6 @@
     android:padding="@dimen/ac_padding">
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/tl_usrname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp">
@@ -21,7 +20,6 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/tl_pwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp">
@@ -38,7 +36,6 @@
 
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/tl_repeat_pwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp">
