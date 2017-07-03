@@ -7,7 +7,7 @@ import cn.wxm.andriodutillib.ExActivity.BaseRxAppCompatActivity;
  * Created by ookoo on 2016/12/4.
  */
 public class ACCalendarShow extends BaseRxAppCompatActivity {
-    private FrgCalendarShow mFGTCalendar = new FrgCalendarShow();
+    private final FrgCalendarShow mFGTCalendar = new FrgCalendarShow();
 
     @Override
     protected void leaveActivity() {

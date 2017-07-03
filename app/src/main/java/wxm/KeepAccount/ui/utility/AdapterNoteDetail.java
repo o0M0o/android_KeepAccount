@@ -22,6 +22,7 @@ import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
+import wxm.KeepAccount.ui.base.ResourceHelper;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
 import wxm.KeepAccount.utility.ContextUtil;
 
@@ -32,18 +33,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 public class AdapterNoteDetail extends SimpleAdapter {
     public final static String K_NODE = "node";
     private final static String LOG_TAG = "AdapterNoteDetail";
-    private final static int CL_NOT_SELECTED;
-    private final static int CL_SELECTED;
-
-    static {
-        Resources res = ContextUtil.getInstance().getResources();
-
-        CL_NOT_SELECTED = res.getColor(R.color.red_ff725f_half);
-        CL_SELECTED = res.getColor(R.color.red_ff725f);
-    }
-
     private Context mCTSelf;
-
 
     /**
      * 如果设置为true则数据可以删除
@@ -124,10 +114,10 @@ public class AdapterNoteDetail extends SimpleAdapter {
         rl_del.setOnClickListener(view -> {
             if (mALDelNotes.contains(data)) {
                 mALDelNotes.remove(data);
-                rl_del.setBackgroundColor(CL_NOT_SELECTED);
+                rl_del.setBackgroundColor(ResourceHelper.mCRLVItemNoSel);
             } else {
                 mALDelNotes.add(data);
-                rl_del.setBackgroundColor(CL_SELECTED);
+                rl_del.setBackgroundColor(ResourceHelper.mCRLVItemSel);
             }
         });
     }

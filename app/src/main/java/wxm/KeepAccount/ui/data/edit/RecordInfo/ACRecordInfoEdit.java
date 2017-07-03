@@ -10,7 +10,7 @@ import wxm.KeepAccount.define.GlobalDef;
 
 public class ACRecordInfoEdit extends BaseAppCompatActivity {
     public final static String IT_PARA_RECORDTYPE = "record_type";
-    private TFEditRecordInfo mTFRecordInfo = new TFEditRecordInfo();
+    private final TFEditRecordInfo mTFRecordInfo = new TFEditRecordInfo();
 
     @Override
     protected void leaveActivity() {

@@ -1,6 +1,8 @@
 package wxm.KeepAccount.ui.utility;
 
+import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -24,9 +26,16 @@ public class HelperDayNotesInfo {
     private static int DIM_FULL_WIDTH;
 
     static {
-        Resources res = ContextUtil.getInstance().getResources();
-        CR_PAY = res.getColor(R.color.darkred);
-        CR_INCOME = res.getColor(R.color.darkslategrey);
+        Context ct = ContextUtil.getInstance();
+        Resources res = ct.getResources();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Resources.Theme te = ct.getTheme();
+            CR_PAY = res.getColor(R.color.darkred, te);
+            CR_INCOME = res.getColor(R.color.darkslategrey, te);
+        } else {
+            CR_PAY = res.getColor(R.color.darkred);
+            CR_INCOME = res.getColor(R.color.darkslategrey);
+        }
 
         DIM_FULL_WIDTH = (int) res.getDimension(R.dimen.rl_amount_info_width);
     }

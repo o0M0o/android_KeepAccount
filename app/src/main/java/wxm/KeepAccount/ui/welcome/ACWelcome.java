@@ -4,6 +4,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
@@ -85,6 +86,7 @@ public class ACWelcome extends AppCompatActivity
     }
 
     @Override
+    @NonNull
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {

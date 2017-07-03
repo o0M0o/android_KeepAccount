@@ -2,12 +2,14 @@ package wxm.KeepAccount.ui.data.show.calendar;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.utility.ContextUtil;
 import wxm.simplecalendarlvb.BaseCalendarItemAdapter;
 import wxm.simplecalendarlvb.BaseCalendarItemModel;
 
@@ -17,23 +19,34 @@ import wxm.simplecalendarlvb.BaseCalendarItemModel;
  * Created by xiaoming wang on 2017/07/03.
  */
 public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarShowItemModel> {
-    private int mCLToday;
-    private int mCLHoliday;
+    private final static int mCLToday;
+    private final static int mCLHoliday;
+    private final static int mCLDisable;
 
-    private int mCLDisable;
+    static {
+        Context ct = ContextUtil.getInstance();
+        Resources res = ct.getResources();
+        Resources.Theme te = ct.getTheme();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mCLToday = res.getColor(R.color.red_ff725f, te);
+            mCLHoliday = res.getColor(R.color.red_ff725f, te);
+            mCLDisable = res.getColor(android.R.color.darker_gray, te);
+        } else {
+            mCLToday = res.getColor(R.color.red_ff725f);
+            mCLHoliday = res.getColor(R.color.red_ff725f);
+            mCLDisable = res.getColor(android.R.color.darker_gray);
+        }
+    }
+
 
     public CalendarShowItemAdapter(Context context) {
         super(context);
-
-        Resources res = mContext.getResources();
-        mCLToday = res.getColor(R.color.red_ff725f);
-        mCLHoliday = res.getColor(R.color.red_ff725f);
-        mCLDisable = res.getColor(android.R.color.darker_gray);
     }
 
     @Override
     public View getView(String date, CalendarShowItemModel model, View convertView, ViewGroup parent) {
-        ViewGroup view = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.gi_calendar_item, parent);
+        ViewGroup view = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.gi_calendar_item, null);
 
         TextView dayNum = (TextView) view.findViewById(R.id.tv_day_num);
         dayNum.setText(model.getDayNumber());

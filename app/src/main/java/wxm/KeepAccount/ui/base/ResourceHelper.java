@@ -22,7 +22,6 @@ public class ResourceHelper {
 
     public static int mCRTextWhite;
     public static int mCRTextFit;
-
     static {
         Context ct = ContextUtil.getInstance();
         Resources res = ct.getResources();

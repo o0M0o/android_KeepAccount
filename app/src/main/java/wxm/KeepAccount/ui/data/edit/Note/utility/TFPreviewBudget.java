@@ -13,6 +13,7 @@ import cn.wxm.andriodutillib.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
+import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * preview fragment for budget
@@ -76,7 +77,7 @@ public class TFPreviewBudget extends TFPreviewBase {
             String ra = String.format(Locale.CHINA, "%.02f", mBIData.getRemainderAmount());
             mTVLeaveAmount.setText(ra);
             if (ra.startsWith("-")) {
-                mTVLeaveAmount.setTextColor(getResources().getColor(R.color.darkred));
+                mTVLeaveAmount.setTextColor(ToolUtil.getColor(R.color.darkred));
             }
         } else {
             mTVName.setText("");

@@ -12,7 +12,6 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.BudgetDBUtility;
 import wxm.KeepAccount.db.PayIncomeDBUtility;
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.ui.data.edit.base.IPreviewAndEditBase;
 import wxm.KeepAccount.utility.ContextUtil;
 

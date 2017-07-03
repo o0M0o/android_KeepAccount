@@ -27,8 +27,6 @@ public class TFEditRemindPay extends TFEditRemindBase {
             RemindItem.RAT_AMOUNT_BELOW,
             RemindItem.RAT_AMOUNT_EXCEED
     };
-    private Spinner mSPPeriod;
-    private Spinner mSPRemindActiveType;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -40,8 +38,8 @@ public class TFEditRemindPay extends TFEditRemindBase {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (null != view) {
-            mSPPeriod = UtilFun.cast(view.findViewById(R.id.sp_period));
-            mSPRemindActiveType = UtilFun.cast(view.findViewById(R.id.sp_remind_active));
+            Spinner mSPPeriod = UtilFun.cast(view.findViewById(R.id.sp_period));
+            Spinner mSPRemindActiveType = UtilFun.cast(view.findViewById(R.id.sp_remind_active));
             assert null != mSPPeriod && null != mSPRemindActiveType;
 
             // init period

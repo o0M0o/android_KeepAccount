@@ -157,7 +157,7 @@ public class FrgWelcome extends FrgUtilityBase {
 
     private void initBanner() {
         //本地用法
-        mLBanners.setAdapter(new FrgAdapter(getActivity()), mALFrgs);
+        mLBanners.setAdapter(new FrgAdapter(getActivity(), null), mALFrgs);
 
         //参数设置
         mLBanners.setAutoPlay(false);//自动播放

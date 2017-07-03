@@ -29,6 +29,7 @@ import wxm.KeepAccount.define.RecordTypeItem;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 import wxm.KeepAccount.ui.dialog.DlgRecordInfo;
 import wxm.KeepAccount.utility.ContextUtil;
+import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * 编辑记录类型
@@ -51,9 +52,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     private final static String KEY_ID = "key_id";
     private final static String VAL_SELECTED = "val_selected";
     private final static String VAL_NOT_SELECTED = "val_not_selected";
-    private View mSelfView;
     private String mEditType;
-    private String mAction;
     // data for view
     private String mCurType;
     private ArrayList<HashMap<String, String>> mLHMData;
@@ -61,7 +60,6 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
 
     // ui component for view
     private TextView mTVNote;
-    private GridView mGVHolder;
     private RelativeLayout mRLActAdd;
     private RelativeLayout mRLActMinus;
     private RelativeLayout mRLActPencil;
@@ -74,6 +72,8 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        mCLSelected = ToolUtil.getColor(R.color.peachpuff);
+        mCLNotSelected = ToolUtil.getColor(R.color.white);
         return inflater.inflate(R.layout.vw_edit_record_info, container, false);
     }
 
@@ -81,16 +81,13 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (null != view) {
-            mCLSelected = getResources().getColor(R.color.peachpuff);
-            mCLNotSelected = getResources().getColor(R.color.white);
-
-            mSelfView = view;
+            View mSelfView = view;
             if (!mEditType.equals(GlobalDef.STR_RECORD_PAY) &&
                     !mEditType.equals(GlobalDef.STR_RECORD_INCOME))
                 return;
 
             // init view
-            mGVHolder = UtilFun.cast_t(mSelfView.findViewById(R.id.gv_record_info));
+            GridView mGVHolder = UtilFun.cast_t(mSelfView.findViewById(R.id.gv_record_info));
             mTVNote = UtilFun.cast_t(mSelfView.findViewById(R.id.tv_note));
             mTVNote.setText("");
             mRLActAdd = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_add));
@@ -248,7 +245,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
 
     @Override
     public void setCurData(String action, Object obj) {
-        mAction = action;
+        String mAction = action;
         mEditType = UtilFun.cast_t(obj);
     }
 
@@ -383,8 +380,8 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                       String[] from, int[] to) {
             super(context, data, R.layout.gi_record_type, from, to);
 
-            mCLSelected = context.getResources().getColor(R.color.peachpuff);
-            mCLNotSelected = context.getResources().getColor(R.color.white);
+            mCLSelected = ToolUtil.getColor(R.color.peachpuff);
+            mCLNotSelected = ToolUtil.getColor(R.color.white);
         }
 
         @Override

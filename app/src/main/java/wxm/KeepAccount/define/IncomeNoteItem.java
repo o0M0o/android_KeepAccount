@@ -41,8 +41,7 @@ public class IncomeNoteItem
     @DatabaseField(columnName = "usr_id", foreign = true, foreignColumnName = UsrItem.FIELD_ID,
             canBeNull = false)
     private UsrItem usr;
-    @DatabaseField(columnName = "budget_id", foreign = true, foreignColumnName = BudgetItem.FIELD_ID,
-            canBeNull = true)
+    @DatabaseField(columnName = "budget_id", foreign = true, foreignColumnName = BudgetItem.FIELD_ID)
     private BudgetItem budget;
     @DatabaseField(columnName = "info", canBeNull = false, dataType = DataType.STRING)
     private String info;

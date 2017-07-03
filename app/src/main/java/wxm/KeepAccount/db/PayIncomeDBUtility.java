@@ -255,23 +255,19 @@ public class PayIncomeDBUtility {
 
     /**
      * 删除支出记录
-     *
      * @param lsi 待删除的记录集合的id值
-     * @return 删除的记录数
      */
-    public int deletePayNotes(List<Integer> lsi) {
-        return mDUPay.removeDatas(lsi);
+    public void deletePayNotes(List<Integer> lsi) {
+        mDUPay.removeDatas(lsi);
     }
 
 
     /**
      * 删除支出记录
-     *
      * @param lsi 待删除的记录集合的id值
-     * @return 删除的记录数
      */
-    public int deleteIncomeNotes(List<Integer> lsi) {
-        return mDUIncome.removeDatas(lsi);
+    public void deleteIncomeNotes(List<Integer> lsi) {
+        mDUIncome.removeDatas(lsi);
     }
 
 

@@ -109,9 +109,9 @@ public class FrgPreviewAndEdit extends Fragment
      * @return 切换成功返回true
      */
     @Override
-    public boolean toPreviewPage() {
+    public void toPreviewPage() {
         if (null == mVPPages)
-            return false;
+            return ;
 
         if (isEditPage()) {
             PagerAdapter old_pa = UtilFun.cast_t(mVPPages.getAdapter());
@@ -122,11 +122,10 @@ public class FrgPreviewAndEdit extends Fragment
             tp.setPreviewPara(old_te.getCurData());
             tp.reLoadView();
         }
-        return true;
     }
 
     private void init_view() {
-        PagerAdapter adapter = new PagerAdapter(getFragmentManager(), PAGE_COUNT);
+        PagerAdapter adapter = new PagerAdapter(getFragmentManager());
         mVPPages.setAdapter(adapter);
 
         if (UtilFun.StringIsNullOrEmpty(mStrAction)
@@ -166,9 +165,9 @@ public class FrgPreviewAndEdit extends Fragment
         int mNumOfFrags;
         private Fragment[] mFRFrags;
 
-        PagerAdapter(FragmentManager fm, int NumOfTabs) {
+        PagerAdapter(FragmentManager fm) {
             super(fm);
-            mNumOfFrags = NumOfTabs;
+            mNumOfFrags = PAGE_COUNT;
             mFRFrags = new Fragment[mNumOfFrags];
 
             if (GlobalDef.STR_RECORD_INCOME.equals(mStrType)) {

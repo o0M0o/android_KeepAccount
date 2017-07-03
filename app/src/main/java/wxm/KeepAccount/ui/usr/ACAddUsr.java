@@ -8,7 +8,7 @@ import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
  * 添加用户
  */
 public class ACAddUsr extends BaseAppCompatActivity {
-    private FrgUsrAdd mFGUsrAdd = new FrgUsrAdd();
+    private final FrgUsrAdd mFGUsrAdd = new FrgUsrAdd();
 
     @Override
     protected void leaveActivity() {

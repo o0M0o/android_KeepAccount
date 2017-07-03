@@ -1,10 +1,18 @@
 package wxm.KeepAccount.utility;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.os.Build;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import wxm.KeepAccount.R;
 
 /**
  * 工具类
@@ -67,7 +75,6 @@ public class ToolUtil {
 
     /**
      * 获取时间戳所在的星期信息
-     *
      * @param ts 时间戳
      * @return 返回"星期*"
      */
@@ -80,7 +87,6 @@ public class ToolUtil {
 
     /**
      * 返回“星期*"
-     *
      * @param dw 0-6格式的星期数
      * @return 星期*
      */
@@ -91,7 +97,6 @@ public class ToolUtil {
 
     /**
      * 打印调用堆栈
-     *
      * @param max_lv 打印最大调用层数
      * @return 调用堆栈
      */
@@ -111,6 +116,26 @@ public class ToolUtil {
         }
 
         return new String[0];
+    }
+
+    /**
+     * 获取颜色的工具函数
+     * @param id    颜色id
+     * @return      颜色值
+     */
+    @ColorInt
+    public static int getColor(@ColorRes int id)    {
+        Context ct = ContextUtil.getInstance();
+        Resources res = ct.getResources();
+
+        int ret;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ret = res.getColor(id, ct.getTheme());
+        } else {
+            ret = res.getColor(id);
+        }
+
+        return  ret;
     }
 
 }

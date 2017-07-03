@@ -15,7 +15,7 @@ import wxm.KeepAccount.define.GlobalDef;
  * for app setting
  */
 public class ACSetting extends BaseAppCompatActivity {
-    private FrgSetting mFGSetting = new FrgSetting();
+    private final FrgSetting mFGSetting = new FrgSetting();
 
     @Override
     protected void leaveActivity() {

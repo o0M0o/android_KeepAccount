@@ -74,10 +74,10 @@ public class PreferencesUtil {
                 .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE);
 
         Resources res = ContextUtil.getInstance().getResources();
-        String sb = SET_PAY_COLOR + ":" + String.valueOf(res.getColor(R.color.sienna)) +
-                " " + SET_INCOME_COLOR + ":" + String.valueOf(res.getColor(R.color.teal)) +
-                " " + SET_BUDGET_UESED_COLOR + ":" + String.valueOf(res.getColor(R.color.sienna)) +
-                " " + SET_BUDGET_BALANCE_COLOR + ":" + String.valueOf(res.getColor(R.color.teal));
+        String sb = SET_PAY_COLOR + ":" + String.valueOf(ToolUtil.getColor(R.color.sienna)) +
+                " " + SET_INCOME_COLOR + ":" + String.valueOf(ToolUtil.getColor(R.color.teal)) +
+                " " + SET_BUDGET_UESED_COLOR + ":" + String.valueOf(ToolUtil.getColor(R.color.sienna)) +
+                " " + SET_BUDGET_BALANCE_COLOR + ":" + String.valueOf(ToolUtil.getColor(R.color.teal));
 
         String load = param.getString(SET_CHART_COLOR, sb);
         return parseChartColors(load);

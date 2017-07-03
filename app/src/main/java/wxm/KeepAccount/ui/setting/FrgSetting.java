@@ -43,7 +43,7 @@ public class FrgSetting extends FrgUtilityBase {
 
         // for pages
         final PagerAdapter adapter = new PagerAdapter
-                (a_ac.getSupportFragmentManager(), PAGE_COUNT);
+                (a_ac.getSupportFragmentManager());
         mVPPage.setAdapter(adapter);
     }
 
@@ -88,9 +88,9 @@ public class FrgSetting extends FrgUtilityBase {
         int mNumOfFrags;
         private Fragment[] mFRFrags;
 
-        PagerAdapter(FragmentManager fm, int NumOfTabs) {
+        PagerAdapter(FragmentManager fm) {
             super(fm);
-            mNumOfFrags = NumOfTabs;
+            mNumOfFrags = PAGE_COUNT;
 
             mFRFrags = new Fragment[mNumOfFrags];
             mFRFrags[PAGE_IDX_MAIN] = new TFSettingMain();

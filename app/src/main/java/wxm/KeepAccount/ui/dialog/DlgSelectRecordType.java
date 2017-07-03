@@ -52,9 +52,24 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
     private String mRootType;
     private String mCurType;
 
-    private int mCRWhite;
-    private int mCRTextFit;
-    private int mCRTextHalfFit;
+    private static int mCRWhite;
+    private static int mCRTextFit;
+    private static int mCRTextHalfFit;
+    static {
+        Context ct = ContextUtil.getInstance();
+        Resources res = ct.getResources();
+        Resources.Theme te = ct.getTheme();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mCRWhite = res.getColor(R.color.white, te);
+            mCRTextFit= res.getColor(R.color.text_fit, te);
+            mCRTextHalfFit= res.getColor(R.color.text_half_fit, te);
+        } else {
+            mCRWhite = res.getColor(R.color.white);
+            mCRTextFit= res.getColor(R.color.text_fit);
+            mCRTextHalfFit= res.getColor(R.color.text_half_fit);
+        }
+    }
 
     /**
      * 设置以前的“记录类型”
@@ -84,20 +99,6 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
                 || (!GlobalDef.STR_RECORD_PAY.equals(mRootType)
                 && !GlobalDef.STR_RECORD_INCOME.equals(mRootType)))
             return null;
-
-        Context ct = ContextUtil.getInstance();
-        Resources res = ct.getResources();
-        Resources.Theme te = ct.getTheme();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mCRWhite = res.getColor(R.color.white, te);
-            mCRTextFit= res.getColor(R.color.text_fit, te);
-            mCRTextHalfFit= res.getColor(R.color.text_half_fit, te);
-        } else {
-            mCRWhite = res.getColor(R.color.white);
-            mCRTextFit= res.getColor(R.color.text_fit);
-            mCRTextHalfFit= res.getColor(R.color.text_half_fit);
-        }
 
         // init data
         mLHMData = new ArrayList<>();

@@ -23,7 +23,7 @@ import wxm.KeepAccount.utility.ContextUtil;
  */
 public class ACLogin extends AppCompatActivity {
     private static final String TAG = "ACLogin";
-    private FrgLogin mFGLogin = new FrgLogin();
+    private final FrgLogin mFGLogin = new FrgLogin();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

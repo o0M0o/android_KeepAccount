@@ -21,23 +21,19 @@ public interface IPreviewAndEditBase {
 
     /**
      * 接受数据时调用
-     *
-     * @return 若成功返回true
+     * @return 成功返回true
      */
     boolean onAccept();
 
 
     /**
      * 切换至预览页
-     *
-     * @return 切换成功返回true
      */
-    boolean toPreviewPage();
+    void toPreviewPage();
 
 
     /**
      * 切换至编辑页
-     *
      * @return 切换成功返回true
      */
     boolean toEditPage();

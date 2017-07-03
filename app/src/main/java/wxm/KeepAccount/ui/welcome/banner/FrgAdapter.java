@@ -5,6 +5,7 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,10 +40,12 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
     private final static String LOG_TAG = "FrgAdapter";
 
     private Context mContext;
+    private ViewGroup mVGGroup;
     private SparseArray<View> mSAView;
 
-    public FrgAdapter(Context context) {
+    public FrgAdapter(Context context, ViewGroup vg) {
         mContext = context;
+        mVGGroup = vg;
         mSAView = new SparseArray<>();
 
         initView();
@@ -53,13 +56,13 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
         View v = null;
         switch (data.mFPViewId) {
             case R.layout.banner_month: {
-                v = LayoutInflater.from(mContext).inflate(R.layout.banner_month, null);
+                v = LayoutInflater.from(mContext).inflate(R.layout.banner_month, mVGGroup);
                 fillMonth(v);
             }
             break;
 
             case R.layout.banner_year: {
-                v = LayoutInflater.from(mContext).inflate(R.layout.banner_year, null);
+                v = LayoutInflater.from(mContext).inflate(R.layout.banner_year, mVGGroup);
                 fillYear(v);
             }
             break;
@@ -74,11 +77,11 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
 
         mSAView.clear();
 
-        View v = LayoutInflater.from(mContext).inflate(R.layout.banner_month, null);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.banner_month, mVGGroup);
         fillMonth(v);
         mSAView.put(R.layout.banner_month, v);
 
-        v = LayoutInflater.from(mContext).inflate(R.layout.banner_year, null);
+        v = LayoutInflater.from(mContext).inflate(R.layout.banner_year, mVGGroup);
         fillYear(v);
         mSAView.put(R.layout.banner_year, v);
     }
