@@ -118,11 +118,10 @@ public class PayIncomeDBUtility {
      */
     public HashMap<String, ArrayList<INote>> getAllNotesToDay() {
         List<INote> ret = getAllNotes();
-        //Collections.sort(ret, (t1, t2) -> t1.getTs().compareTo(t2.getTs()));
 
         HashMap<String, ArrayList<INote>> hm_data = new HashMap<>();
         for (INote i : ret) {
-            String h_k = i.getTs().toString().substring(0, 10);
+            String h_k = i.getTsToStr().substring(0, 10);
             ArrayList<INote> h_v = hm_data.get(h_k);
             if (null == h_v) {
                 ArrayList<INote> v = new ArrayList<>();
@@ -146,7 +145,7 @@ public class PayIncomeDBUtility {
         List<INote> ret = getAllNotes();
         HashMap<String, ArrayList<INote>> hm_data = new HashMap<>();
         for (INote i : ret) {
-            String h_k = i.getTs().toString().substring(0, 7);
+            String h_k = i.getTsToStr().substring(0, 7);
             ArrayList<INote> h_v = hm_data.get(h_k);
             if (null == h_v) {
                 ArrayList<INote> v = new ArrayList<>();
@@ -170,7 +169,7 @@ public class PayIncomeDBUtility {
         List<INote> ret = getAllNotes();
         HashMap<String, ArrayList<INote>> hm_data = new HashMap<>();
         for (INote i : ret) {
-            String h_k = i.getTs().toString().substring(0, 4);
+            String h_k = i.getTsToStr().substring(0, 4);
             ArrayList<INote> h_v = hm_data.get(h_k);
             if (null == h_v) {
                 ArrayList<INote> v = new ArrayList<>();
@@ -289,6 +288,7 @@ public class PayIncomeDBUtility {
             PayNoteItem pi = super.getData(id);
             if(null != pi)  {
                 pi.setVal(pi.getVal());
+                pi.setTs(pi.getTs());
             }
 
             return pi;
@@ -303,6 +303,7 @@ public class PayIncomeDBUtility {
             List<PayNoteItem> rets = getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
             for(PayNoteItem it : rets)  {
                 it.setVal(it.getVal());
+                it.setTs(it.getTs());
             }
             return rets;
         }
@@ -345,6 +346,7 @@ public class PayIncomeDBUtility {
             IncomeNoteItem pi = super.getData(id);
             if(null != pi)  {
                 pi.setVal(pi.getVal());
+                pi.setTs(pi.getTs());
             }
 
             return pi;
@@ -359,6 +361,7 @@ public class PayIncomeDBUtility {
             List<IncomeNoteItem> rets = getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
             for(IncomeNoteItem it : rets)   {
                 it.setVal(it.getVal());
+                it.setTs(it.getTs());
             }
             return rets;
         }

@@ -270,7 +270,9 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
         AddTestDataForDefualtUsr();
     }
 
-
+    /**
+     * 产生测试数据
+     */
     private void AddTestDataForDefualtUsr() {
         class createUtility {
             private final String[] mSZPayInfos =

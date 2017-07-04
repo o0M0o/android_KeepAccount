@@ -43,7 +43,8 @@ public class PayNoteItem
     private BigDecimal val;
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
     private Timestamp ts;
-    private String valStr = null;
+    private String valStr;
+    private String tsStr;
 
     public PayNoteItem() {
         setTs(new Timestamp(0));
@@ -128,6 +129,12 @@ public class PayNoteItem
     @Override
     public void setTs(Timestamp tsval) {
         this.ts = tsval;
+        tsStr = ts.toString();
+    }
+
+    @Override
+    public String getTsToStr()    {
+        return tsStr;
     }
 
     @Override

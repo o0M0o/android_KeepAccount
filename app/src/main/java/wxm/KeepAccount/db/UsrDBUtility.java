@@ -32,7 +32,6 @@ public class UsrDBUtility extends DBUtilityBase<UsrItem, Integer> {
 
     /**
      * 检查是否用户'usr'已经存在
-     *
      * @param usr 待检查用户
      * @return 如果存在返回true, 否则返回false
      */
@@ -47,7 +46,6 @@ public class UsrDBUtility extends DBUtilityBase<UsrItem, Integer> {
 
     /**
      * 添加用户
-     *
      * @param usr 待添加用户名
      * @param pwd 待添加用户密码
      * @return 添加成功返回添加后的数据, 否则返回null
@@ -88,7 +86,6 @@ public class UsrDBUtility extends DBUtilityBase<UsrItem, Integer> {
 
     /**
      * 检查用户
-     *
      * @param usr 待检查用户名
      * @param pwd 待检查用户密码
      * @return 如果符合返回true, 否则返回false
@@ -111,7 +108,6 @@ public class UsrDBUtility extends DBUtilityBase<UsrItem, Integer> {
 
     /**
      * 检查登录信息，如果有符合的记录就返回对应用户信息
-     *
      * @param usr 待检查用户名
      * @param pwd 待检查用户密码
      * @return 如果符合返回注册用户数据, 否则返回null
@@ -136,7 +132,6 @@ public class UsrDBUtility extends DBUtilityBase<UsrItem, Integer> {
     /**
      * 使用用户信息登录APP
      * （并刷新数据)
-     *
      * @param usr 待检查用户名
      * @param pwd 待检查用户密码
      * @return 如果登录成功返回true, 否则返回false

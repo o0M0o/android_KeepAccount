@@ -34,6 +34,8 @@ public interface INote {
 
     String getValToStr();
 
+    String getTsToStr();
+
     Timestamp getTs();
 
     void setTs(Timestamp tsval);
