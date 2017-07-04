@@ -6,9 +6,9 @@
 
     <RelativeLayout
         android:id="@+id/rl_remind"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/ghostwhite"
         android:clickable="true">
 
         <TextView
@@ -42,11 +42,11 @@
 
     <RelativeLayout
         android:id="@+id/rl_reformat_data"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/rl_remind"
         android:layout_marginTop="2dp"
-        android:background="@color/ghostwhite"
         android:clickable="true">
 
         <TextView
@@ -80,11 +80,11 @@
 
     <RelativeLayout
         android:id="@+id/rl_chart_color"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/rl_reformat_data"
         android:layout_marginTop="2dp"
-        android:background="@color/ghostwhite"
         android:clickable="true">
 
         <TextView
@@ -118,11 +118,11 @@
 
     <RelativeLayout
         android:id="@+id/rl_check_version"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/rl_chart_color"
         android:layout_marginTop="16dp"
-        android:background="@color/ghostwhite"
         android:clickable="true">
 
         <TextView
@@ -155,11 +155,11 @@
 
     <RelativeLayout
         android:id="@+id/rl_share_app"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/rl_check_version"
         android:layout_marginTop="2dp"
-        android:background="@color/ghostwhite"
         android:clickable="true">
 
         <TextView
