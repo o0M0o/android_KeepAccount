@@ -140,7 +140,7 @@ public class AdapterNoteDetail extends SimpleAdapter {
             vh.getView(R.id.iv_pay_budget).setVisibility(View.GONE);
         }
 
-        vh.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %.02f", pn.getVal()));
+        vh.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %s", pn.getValToStr()));
         vh.setText(R.id.tv_pay_time, pn.getTs().toString().substring(11, 16));
 
         // for look detail
@@ -180,7 +180,7 @@ public class AdapterNoteDetail extends SimpleAdapter {
 
         vh.setText(R.id.tv_income_title, i_n.getInfo());
 
-        vh.setText(R.id.tv_income_amount, String.format(Locale.CHINA, "%.02f", i_n.getVal()));
+        vh.setText(R.id.tv_income_amount, i_n.getValToStr());
         vh.setText(R.id.tv_income_time, i_n.getTs().toString().substring(11, 16));
 
         // for look detail

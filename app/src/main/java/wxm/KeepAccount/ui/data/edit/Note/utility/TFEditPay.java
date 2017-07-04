@@ -118,7 +118,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             mTVNote.setText(UtilFun.StringIsNullOrEmpty(o_n) ? mSZDefNote : o_n);
             mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
-            mETAmount.setText(format(Locale.CHINA, "%.02f", mOldPayNote.getVal()));
+            mETAmount.setText(mOldPayNote.getValToStr());
         } else {
             mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 

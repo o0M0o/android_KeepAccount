@@ -1,8 +1,6 @@
 package wxm.KeepAccount.ui.data.show.calendar;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.simplecalendarlvb.BaseCalendarItemAdapter;
 import wxm.simplecalendarlvb.BaseCalendarItemModel;
-
+import wxm.androidutil.util.UiUtil;
 
 /**
  * 日历节点
@@ -25,18 +23,9 @@ public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarSho
 
     static {
         Context ct = ContextUtil.getInstance();
-        Resources res = ct.getResources();
-        Resources.Theme te = ct.getTheme();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mCLToday = res.getColor(R.color.red_ff725f, te);
-            mCLHoliday = res.getColor(R.color.red_ff725f, te);
-            mCLDisable = res.getColor(android.R.color.darker_gray, te);
-        } else {
-            mCLToday = res.getColor(R.color.red_ff725f);
-            mCLHoliday = res.getColor(R.color.red_ff725f);
-            mCLDisable = res.getColor(android.R.color.darker_gray);
-        }
+        mCLToday = UiUtil.getColor(ct, R.color.red_ff725f);
+        mCLHoliday = UiUtil.getColor(ct, R.color.red_ff725f);
+        mCLDisable = UiUtil.getColor(ct, android.R.color.darker_gray);
     }
 
 

@@ -284,6 +284,15 @@ public class PayIncomeDBUtility {
             return ContextUtil.getDBHelper().getPayDataREDao();
         }
 
+        @Override
+        public PayNoteItem getData(Integer id) {
+            PayNoteItem pi = super.getData(id);
+            if(null != pi)  {
+                pi.setVal(pi.getVal());
+            }
+
+            return pi;
+        }
 
         @Override
         public List<PayNoteItem> getAllData() {
@@ -291,7 +300,11 @@ public class PayIncomeDBUtility {
             if (null == ui)
                 return new ArrayList<>();
 
-            return getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
+            List<PayNoteItem> rets = getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
+            for(PayNoteItem it : rets)  {
+                it.setVal(it.getVal());
+            }
+            return rets;
         }
 
         @Override
@@ -328,12 +341,26 @@ public class PayIncomeDBUtility {
         }
 
         @Override
+        public IncomeNoteItem getData(Integer id) {
+            IncomeNoteItem pi = super.getData(id);
+            if(null != pi)  {
+                pi.setVal(pi.getVal());
+            }
+
+            return pi;
+        }
+
+        @Override
         public List<IncomeNoteItem> getAllData() {
             UsrItem ui = ContextUtil.getCurUsr();
             if (null == ui)
                 return new ArrayList<>();
 
-            return getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
+            List<IncomeNoteItem> rets = getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
+            for(IncomeNoteItem it : rets)   {
+                it.setVal(it.getVal());
+            }
+            return rets;
         }
 
         @Override

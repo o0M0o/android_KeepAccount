@@ -1,18 +1,10 @@
 package wxm.KeepAccount.utility;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-
-import wxm.KeepAccount.R;
 
 /**
  * 工具类
@@ -93,48 +85,5 @@ public class ToolUtil {
     public static String getDayInWeek(int dw) {
         dw--;
         return DAY_IN_WEEK[dw];
-    }
-
-    /**
-     * 打印调用堆栈
-     * @param max_lv 打印最大调用层数
-     * @return 调用堆栈
-     */
-    public static String[] getCallStack(int max_lv) {
-        StackTraceElement st[] = Thread.currentThread().getStackTrace();
-        int val_lv = st.length - 3;
-        if (0 < val_lv) {
-            int real_lv = max_lv > val_lv ? val_lv : max_lv;
-            String[] ret_ar = new String[real_lv];
-
-            int lv_end = real_lv + 3;
-            for (int i = 3; i < lv_end; i++) {
-                ret_ar[i - 3] = st[i].toString();
-            }
-
-            return ret_ar;
-        }
-
-        return new String[0];
-    }
-
-    /**
-     * 获取颜色的工具函数
-     * @param id    颜色id
-     * @return      颜色值
-     */
-    @ColorInt
-    public static int getColor(@ColorRes int id)    {
-        Context ct = ContextUtil.getInstance();
-        Resources res = ct.getResources();
-
-        int ret;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ret = res.getColor(id, ct.getTheme());
-        } else {
-            ret = res.getColor(id);
-        }
-
-        return  ret;
     }
 }

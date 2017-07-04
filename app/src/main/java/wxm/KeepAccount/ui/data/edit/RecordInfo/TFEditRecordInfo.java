@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
+import wxm.androidutil.util.UiUtil;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
@@ -72,8 +73,8 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mCLSelected = ToolUtil.getColor(R.color.peachpuff);
-        mCLNotSelected = ToolUtil.getColor(R.color.white);
+        mCLSelected = UiUtil.getColor(ContextUtil.getInstance(), R.color.peachpuff);
+        mCLNotSelected = UiUtil.getColor(ContextUtil.getInstance(), R.color.white);
         return inflater.inflate(R.layout.vw_edit_record_info, container, false);
     }
 
@@ -380,8 +381,8 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                       String[] from, int[] to) {
             super(context, data, R.layout.gi_record_type, from, to);
 
-            mCLSelected = ToolUtil.getColor(R.color.peachpuff);
-            mCLNotSelected = ToolUtil.getColor(R.color.white);
+            mCLSelected = UiUtil.getColor(context, R.color.peachpuff);
+            mCLNotSelected = UiUtil.getColor(context, R.color.white);
         }
 
         @Override

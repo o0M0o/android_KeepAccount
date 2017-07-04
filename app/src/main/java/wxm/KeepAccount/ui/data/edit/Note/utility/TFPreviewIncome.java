@@ -74,7 +74,7 @@ public class TFPreviewIncome extends TFPreviewBase {
      */
     private void init_view() {
         if (null != mINData) {
-            mTVAmount.setText(String.format(Locale.CHINA, "%.02f", mINData.getVal()));
+            mTVAmount.setText(mINData.getValToStr());
             mTVInfo.setText(mINData.getInfo());
             mTVNote.setText(mINData.getNote());
             mTVDate.setText(ToolUtil.FormatDateString(mINData.getTs().toString().substring(0, 10)));

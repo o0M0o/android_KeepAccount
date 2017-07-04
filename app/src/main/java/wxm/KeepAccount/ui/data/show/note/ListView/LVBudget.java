@@ -286,7 +286,7 @@ public class LVBudget extends LVBase {
 
                 map.put(K_TIME, all_date.substring(11, 16));
                 map.put(K_TITLE, i.getInfo());
-                map.put(K_AMOUNT, String.format(Locale.CHINA, "%.02f", i.getVal()));
+                map.put(K_AMOUNT, i.getValToStr());
                 map.put(K_TAG, main_tag);
                 map.put(K_SUB_TAG, i.getTs().toString().substring(0, 10));
                 map.put(K_ID, String.valueOf(i.getId()));

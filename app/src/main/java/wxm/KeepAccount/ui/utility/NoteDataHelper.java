@@ -232,14 +232,11 @@ public class NoteDataHelper {
     }
 
     /// PRIVATE BEGIN
-
     /**
      * 更新日统计数据
      * 数据取自sqlite原始数据
      */
     private void refresh_day() {
-        //ArrayList<String> set_k = new ArrayList<>(mHMDayNotes.keySet());
-        //Collections.sort(set_k);
         for (String k : mALOrderedDays) {
             ArrayList<INote> v = mHMDayNotes.get(k);
             NoteShowInfo ni = new NoteShowInfo();

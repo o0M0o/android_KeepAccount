@@ -76,7 +76,7 @@ public class TFPreviewPay extends TFPreviewBase {
      */
     private void init_view() {
         if (null != mPIData) {
-            mTVAmount.setText(String.format(Locale.CHINA, "%.02f", mPIData.getVal()));
+            mTVAmount.setText(mPIData.getValToStr());
             mTVInfo.setText(mPIData.getInfo());
             mTVNote.setText(mPIData.getNote());
             mTVBudget.setText(null == mPIData.getBudget() ? "" : mPIData.getBudget().getName());

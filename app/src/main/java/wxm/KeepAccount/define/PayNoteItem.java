@@ -23,20 +23,11 @@ import wxm.KeepAccount.utility.ContextUtil;
  */
 @DatabaseTable(tableName = "tbPayNote")
 public class PayNoteItem
-        implements Parcelable, INote, IDBRow<Integer> {
+        implements INote, IDBRow<Integer> {
     public final static String FIELD_TS = "ts";
     public final static String FIELD_USR = "usr_id";
     public final static String FIELD_BUDGET = "budget_id";
-    public static final Parcelable.Creator<PayNoteItem> CREATOR
-            = new Parcelable.Creator<PayNoteItem>() {
-        public PayNoteItem createFromParcel(Parcel in) {
-            return new PayNoteItem(in);
-        }
 
-        public PayNoteItem[] newArray(int size) {
-            return new PayNoteItem[size];
-        }
-    };
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     private int _id;
     @DatabaseField(columnName = "usr_id", foreign = true, foreignColumnName = UsrItem.FIELD_ID,
@@ -52,7 +43,7 @@ public class PayNoteItem
     private BigDecimal val;
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
     private Timestamp ts;
-    private String valStr = "0.0";
+    private String valStr = null;
 
     public PayNoteItem() {
         setTs(new Timestamp(0));
@@ -61,34 +52,6 @@ public class PayNoteItem
         setNote("");
 
         setId(GlobalDef.INVALID_ID);
-    }
-
-    private PayNoteItem(Parcel in) {
-        setId(in.readInt());
-
-        int uid = in.readInt();
-        if (GlobalDef.INVALID_ID != uid) {
-            setUsr(ContextUtil.getUsrUtility().getData(uid));
-        }
-
-        int bid = in.readInt();
-        if (GlobalDef.INVALID_ID != bid) {
-            setBudget(ContextUtil.getBudgetUtility().getData(bid));
-        }
-
-        setInfo(in.readString());
-        setNote(in.readString());
-        setVal(new BigDecimal(in.readString()));
-
-        try {
-            setTs(new Timestamp(0));
-
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-            Date date = format.parse(in.readString());
-            getTs().setTime(date.getTime());
-        } catch (ParseException ex) {
-            setTs(new Timestamp(0));
-        }
     }
 
     @Override
@@ -149,9 +112,10 @@ public class PayNoteItem
     @Override
     public void setVal(BigDecimal val) {
         this.val = val;
-        valStr = String.format(Locale.CHINA, "%.02f", val.floatValue());
+        valStr = String.format(Locale.CHINA, "%.02f", val);
     }
 
+    @Override
     public String getValToStr() {
         return valStr;
     }
@@ -181,22 +145,6 @@ public class PayNoteItem
         return String.format(Locale.CHINA
                 , "info : %s, val : %f, timestamp : %s\nnote : %s"
                 , getInfo(), getVal(), getTs().toString(), getNote());
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(getId());
-
-        out.writeInt(null == getUsr() ? GlobalDef.INVALID_ID : getUsr().getId());
-        out.writeInt(null == getBudget() ? GlobalDef.INVALID_ID : getBudget().get_id());
-
-        out.writeString(getInfo());
-        out.writeString(getNote());
-        out.writeString(getVal().toString());
-        out.writeString(getTs().toString());
     }
 
     @Override

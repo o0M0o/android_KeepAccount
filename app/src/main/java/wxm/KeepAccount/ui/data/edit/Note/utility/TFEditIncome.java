@@ -120,7 +120,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
             mTVNote.setText(UtilFun.StringIsNullOrEmpty(o_n) ? mSZDefNote : o_n);
             mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
-            mETAmount.setText(String.format(Locale.CHINA, "%.02f", mOldIncomeNote.getVal()));
+            mETAmount.setText(mOldIncomeNote.getValToStr());
         } else {
             mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 

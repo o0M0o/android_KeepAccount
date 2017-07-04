@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
+import wxm.KeepAccount.utility.ContextUtil;
+import wxm.androidutil.util.UiUtil;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
@@ -77,7 +79,7 @@ public class TFPreviewBudget extends TFPreviewBase {
             String ra = String.format(Locale.CHINA, "%.02f", mBIData.getRemainderAmount());
             mTVLeaveAmount.setText(ra);
             if (ra.startsWith("-")) {
-                mTVLeaveAmount.setTextColor(ToolUtil.getColor(R.color.darkred));
+                mTVLeaveAmount.setTextColor(UiUtil.getColor(ContextUtil.getInstance(), R.color.darkred));
             }
         } else {
             mTVName.setText("");

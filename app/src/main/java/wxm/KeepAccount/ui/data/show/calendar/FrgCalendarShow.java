@@ -94,7 +94,6 @@ public class FrgCalendarShow extends FrgUtilityBase {
         mCSIAdapter = new CalendarShowItemAdapter(getActivity());
         mHGVDays.setCalendarListViewAdapter(mCSIAdapter);
 
-
         mHGVDays.setOnMonthChangedListener(yearMonth -> {
             Log.d(LOG_TAG, "OnMonthChangedListener, yearMonth = " + yearMonth);
             loadCalendarData(yearMonth);
@@ -110,12 +109,10 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
     @Override
     protected void loadUI() {
-        Log.d(LOG_TAG, "loadUI");
     }
 
     @Override
     protected void enterActivity() {
-        Log.d(LOG_TAG, "in enterActivity");
         super.enterActivity();
 
         EventBus.getDefault().register(this);
@@ -123,7 +120,6 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
     @Override
     protected void leaveActivity() {
-        Log.d(LOG_TAG, "in leaveActivity");
         super.enterActivity();
 
         EventBus.getDefault().unregister(this);
