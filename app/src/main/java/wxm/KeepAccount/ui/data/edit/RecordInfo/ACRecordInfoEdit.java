@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
+import wxm.androidutil.ExActivity.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 

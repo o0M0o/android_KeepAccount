@@ -22,7 +22,7 @@ import android.widget.ProgressBar;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
+import wxm.androidutil.FrgUtility.FrgUtilityBase;;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.usr.ACAddUsr;

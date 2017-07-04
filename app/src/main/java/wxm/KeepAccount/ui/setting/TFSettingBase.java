@@ -4,7 +4,7 @@ package wxm.KeepAccount.ui.setting;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.util.UtilFun;
 
 /**
  * 设置页面基础类

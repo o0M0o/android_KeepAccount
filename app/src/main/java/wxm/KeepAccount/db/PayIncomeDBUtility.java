@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import cn.wxm.andriodutillib.DBHelper.DBUtilityBase;
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.DBHelper.DBUtilityBase;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;

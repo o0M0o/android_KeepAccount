@@ -14,7 +14,7 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.RemindItem;

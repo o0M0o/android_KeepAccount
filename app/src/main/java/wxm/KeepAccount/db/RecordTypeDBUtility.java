@@ -6,7 +6,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-import cn.wxm.andriodutillib.DBHelper.DBUtilityBase;
+import wxm.androidutil.DBHelper.DBUtilityBase;
 import wxm.KeepAccount.define.RecordTypeItem;
 import wxm.KeepAccount.utility.ContextUtil;
 

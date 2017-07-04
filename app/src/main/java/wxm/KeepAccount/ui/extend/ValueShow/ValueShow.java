@@ -19,7 +19,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 
 

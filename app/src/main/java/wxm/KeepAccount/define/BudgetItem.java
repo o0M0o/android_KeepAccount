@@ -14,8 +14,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import cn.wxm.andriodutillib.DBHelper.IDBRow;
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.DBHelper.IDBRow;
+import wxm.androidutil.util.UtilFun;
 
 /**
  * 预算类

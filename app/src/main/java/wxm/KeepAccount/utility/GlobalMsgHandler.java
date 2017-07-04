@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.UsrItem;
 

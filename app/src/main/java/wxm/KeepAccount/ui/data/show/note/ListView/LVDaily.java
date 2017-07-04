@@ -28,9 +28,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import butterknife.OnClick;
-import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
-import cn.wxm.andriodutillib.util.FastViewHolder;
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.Dialog.DlgOKOrNOBase;
+import wxm.androidutil.util.FastViewHolder;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.INote;

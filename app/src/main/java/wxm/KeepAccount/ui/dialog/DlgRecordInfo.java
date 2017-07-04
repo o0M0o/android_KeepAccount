@@ -5,8 +5,8 @@ import android.view.View;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.Dialog.DlgOKOrNOBase;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.RecordTypeItem;

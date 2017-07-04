@@ -12,7 +12,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
+import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.KeepAccount.R;
 
 /**

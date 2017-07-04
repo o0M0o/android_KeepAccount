@@ -3,7 +3,7 @@ package wxm.KeepAccount.ui.utility;
 import java.math.BigDecimal;
 import java.util.Locale;
 
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.util.UtilFun;
 
 /**
  * 数据显示内容定义类

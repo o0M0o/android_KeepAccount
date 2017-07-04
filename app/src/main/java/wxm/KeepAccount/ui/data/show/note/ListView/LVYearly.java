@@ -27,8 +27,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import butterknife.OnClick;
-import cn.wxm.andriodutillib.util.FastViewHolder;
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.util.FastViewHolder;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.base.ResourceHelper;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;

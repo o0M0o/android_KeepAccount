@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
+import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.KeepAccount.BuildConfig;
 import wxm.KeepAccount.R;
 

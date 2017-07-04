@@ -12,7 +12,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.wxm.andriodutillib.util.PackageUtil;
+import wxm.androidutil.util.PackageUtil;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 

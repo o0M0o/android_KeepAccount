@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;

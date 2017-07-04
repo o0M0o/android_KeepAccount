@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cn.wxm.andriodutillib.FrgUtility.FrgUtilitySupportBase;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 

@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.Dialog.DlgOKOrNOBase;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.dialog.utility.DlgResource;
 import wxm.KeepAccount.utility.ActionHelper;

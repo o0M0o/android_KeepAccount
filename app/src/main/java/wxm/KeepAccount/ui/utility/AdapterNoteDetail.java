@@ -2,7 +2,6 @@ package wxm.KeepAccount.ui.utility;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -14,8 +13,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cn.wxm.andriodutillib.util.FastViewHolder;
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.util.FastViewHolder;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.GlobalDef;
@@ -24,7 +23,6 @@ import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.base.ResourceHelper;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
-import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * adapter for note detail

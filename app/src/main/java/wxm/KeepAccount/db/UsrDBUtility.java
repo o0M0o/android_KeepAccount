@@ -6,9 +6,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-import cn.wxm.andriodutillib.DBHelper.DBUtilityBase;
-import cn.wxm.andriodutillib.util.MD5Util;
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.DBHelper.DBUtilityBase;
+import wxm.androidutil.util.MD5Util;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.UsrItem;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;

@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import cn.wxm.andriodutillib.DBHelper.IDBRow;
+import wxm.androidutil.DBHelper.IDBRow;
 
 
 /**

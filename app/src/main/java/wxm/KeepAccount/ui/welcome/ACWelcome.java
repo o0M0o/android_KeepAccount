@@ -22,8 +22,8 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Locale;
 
-import cn.wxm.andriodutillib.Dialog.DlgOKOrNOBase;
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.Dialog.DlgOKOrNOBase;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;

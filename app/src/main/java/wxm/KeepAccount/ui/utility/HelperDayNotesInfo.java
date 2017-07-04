@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import cn.wxm.andriodutillib.util.FastViewHolder;
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.util.FastViewHolder;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
 

@@ -7,7 +7,7 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import cn.wxm.andriodutillib.DBHelper.IDBRow;
+import wxm.androidutil.DBHelper.IDBRow;
 
 /**
  * 记录类型数据

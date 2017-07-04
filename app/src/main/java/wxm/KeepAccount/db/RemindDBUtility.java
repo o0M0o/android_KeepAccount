@@ -7,7 +7,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.sql.SQLException;
 import java.util.List;
 
-import cn.wxm.andriodutillib.DBHelper.DBUtilityBase;
+import wxm.androidutil.DBHelper.DBUtilityBase;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.RemindItem;
 import wxm.KeepAccount.define.UsrItem;

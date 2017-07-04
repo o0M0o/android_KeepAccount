@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.wxm.andriodutillib.FrgUtility.FrgUtilityBase;
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.FrgUtility.FrgUtilityBase;;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 
 /**

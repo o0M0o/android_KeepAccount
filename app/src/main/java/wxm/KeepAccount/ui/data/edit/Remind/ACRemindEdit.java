@@ -14,7 +14,7 @@ import android.view.MenuItem;
 
 import java.util.HashMap;
 
-import cn.wxm.andriodutillib.util.UtilFun;
+import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.RemindItem;

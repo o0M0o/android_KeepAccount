@@ -91,32 +91,30 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
-    compile files('libs/extend_lib/junit/junit-4.12.jar')
-    compile files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
-    compile files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
     compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.trello:rxlifecycle:0.5.0'
-    //compile 'org.jdeferred:jdeferred-android-aar:1.2.6@aar'
-    // If you want pre-written Activities and Fragments you can subclass as providers
     compile 'com.trello:rxlifecycle-components:0.5.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.1'
     compile 'com.squareup.retrofit2:converter-gson:2.0.1'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'org.apache.httpcomponents:httpcore:4.4.4'
-    compile project(':hellocharts-library-release')
-    compile project(':AndriodUtillib')
-    compile project(':lm_banner_library')
-    compile project(':simplecalendar')
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'org.apache.httpcomponents:httpcore:4.4.4'
+    compile project(':AndroidUtil')
+    compile project(':hellocharts-library-release')
+    compile project(':lm_banner_library')
     compile project(':UiLib')
+    compile project(':simplecalendar')
+    compile files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
     compile files('libs/extend_lib/fashjson/fastjson-1.2.33.jar')
+    compile files('libs/extend_lib/junit/junit-4.12.jar')
+    compile files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
 }
 
 configurations.all {

@@ -2,7 +2,7 @@ package wxm.KeepAccount.ui.usr;
 
 import android.content.res.Configuration;
 
-import cn.wxm.andriodutillib.ExActivity.BaseAppCompatActivity;
+import wxm.androidutil.ExActivity.BaseAppCompatActivity;
 
 /**
  * 添加用户
