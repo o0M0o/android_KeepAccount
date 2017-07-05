@@ -65,7 +65,16 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/tv_year_month"
                 android:layout_below="@id/tv_year_month"
-                android:text="19日"
+                android:text="19"
+                android:textColor="@color/text_fit"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/tv_day"
+                android:layout_below="@id/tv_year_month"
+                android:text="日"
                 android:textColor="@color/text_fit"
                 android:textSize="14sp" />
 
@@ -74,8 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_year_month"
-                android:layout_marginStart="12dp"
-                android:layout_toEndOf="@id/tv_day"
+                android:layout_alignEnd="@id/tv_year_month"
                 android:text="星期四"
                 android:textColor="@color/text_fit"
                 android:textSize="14sp" />

@@ -54,19 +54,6 @@ public class PayIncomeDBUtility {
         return mDUIncome;
     }
 
-
-    /**
-     * 得到数据最后被更改时间
-     *
-     * @return 数据最后更新时间
-     */
-    public Timestamp getDataLastChangeTime() {
-        Timestamp ts_p = mDUPay.getDataLastChangeTime();
-        Timestamp ts_i = mDUIncome.getDataLastChangeTime();
-
-        return ts_p.after(ts_i) ? ts_p : ts_i;
-    }
-
     /**
      * 根据预算查找支出数据
      * 并根据支出数据更新预算
@@ -287,8 +274,7 @@ public class PayIncomeDBUtility {
         public PayNoteItem getData(Integer id) {
             PayNoteItem pi = super.getData(id);
             if(null != pi)  {
-                pi.setVal(pi.getVal());
-                pi.setTs(pi.getTs());
+                updateNote(pi);
             }
 
             return pi;
@@ -302,8 +288,7 @@ public class PayIncomeDBUtility {
 
             List<PayNoteItem> rets = getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
             for(PayNoteItem it : rets)  {
-                it.setVal(it.getVal());
-                it.setTs(it.getTs());
+                updateNote(it);
             }
             return rets;
         }
@@ -324,6 +309,15 @@ public class PayIncomeDBUtility {
         protected void onDataRemove(List<Integer> dd) {
             NoteDataHelper.getInstance().refreshData();
             EventBus.getDefault().post(new DBDataChangeEvent());
+        }
+
+        /**
+         * 更新paynote
+         * @param pi   data
+         */
+        private void updateNote(PayNoteItem pi) {
+            pi.setVal(pi.getVal());
+            pi.setTs(pi.getTs());
         }
     }
 
@@ -345,8 +339,7 @@ public class PayIncomeDBUtility {
         public IncomeNoteItem getData(Integer id) {
             IncomeNoteItem pi = super.getData(id);
             if(null != pi)  {
-                pi.setVal(pi.getVal());
-                pi.setTs(pi.getTs());
+                updateNote(pi);
             }
 
             return pi;
@@ -360,8 +353,7 @@ public class PayIncomeDBUtility {
 
             List<IncomeNoteItem> rets = getDBHelper().queryForEq(PayNoteItem.FIELD_USR, ui.getId());
             for(IncomeNoteItem it : rets)   {
-                it.setVal(it.getVal());
-                it.setTs(it.getTs());
+                updateNote(it);
             }
             return rets;
         }
@@ -382,6 +374,15 @@ public class PayIncomeDBUtility {
         protected void onDataRemove(List<Integer> dd) {
             NoteDataHelper.getInstance().refreshData();
             EventBus.getDefault().post(new DBDataChangeEvent());
+        }
+
+        /**
+         * 更新paynote
+         * @param ii   data
+         */
+        private void updateNote(IncomeNoteItem ii) {
+            ii.setVal(ii.getVal());
+            ii.setTs(ii.getTs());
         }
     }
 }
