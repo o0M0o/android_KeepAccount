@@ -21,7 +21,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -181,18 +183,20 @@ public class FrgCalendarShow extends FrgUtilityBase {
                 = NoteDataHelper.getInstance().getNotesForMonth();
         if (null != hm_note) {
             ArrayList<INote> al_notes = hm_note.get(month);
-            for (INote ci : al_notes) {
-                Calendar cd = Calendar.getInstance();
-                cd.setTimeInMillis(ci.getTs().getTime());
-                String day = ALL_SIMPLE_FORMAT.format(cd.getTime());
+            if(null != al_notes) {
+                for (INote ci : al_notes) {
+                    Calendar cd = Calendar.getInstance();
+                    cd.setTimeInMillis(ci.getTs().getTime());
+                    String day = ALL_SIMPLE_FORMAT.format(cd.getTime());
 
-                List<INote> ls_note = mTMList.get(day);
-                if (null == ls_note) {
-                    ls_note = new ArrayList<>();
-                    mTMList.put(day, ls_note);
+                    List<INote> ls_note = mTMList.get(day);
+                    if (null == ls_note) {
+                        ls_note = new ArrayList<>();
+                        mTMList.put(day, ls_note);
+                    }
+
+                    ls_note.add(ci);
                 }
-
-                ls_note.add(ci);
             }
         }
     }
@@ -261,12 +265,12 @@ public class FrgCalendarShow extends FrgUtilityBase {
      * // generate test data for CalendarView,imitate to be a Network Requests. update "mCSIAdapter.getDayModelList()"
      * // and notifyDataSetChanged will update CalendarView.
      *
-     * @param date 加载的月份，比如"2016-07"
+     * @param newMonth 加载的月份，比如"2016-07"
      */
-    private void loadCalendarData(final String date) {
-        Log.d(LOG_TAG, "loadCalendarData, date = " + date
+    private void loadCalendarData(final String newMonth) {
+        Log.d(LOG_TAG, "loadCalendarData, date = " + newMonth
                 + ", select_date = " + mHGVDays.getCurrentSelectedDate());
-        loadNotes(date);
+        loadNotes(newMonth);
 
         if (!mTMList.isEmpty()) {
             for (String ik : mTMList.keySet()) {
@@ -280,7 +284,20 @@ public class FrgCalendarShow extends FrgUtilityBase {
         mCSIAdapter.notifyDataSetChanged();
 
         String cur_day = mHGVDays.getCurrentSelectedDate();
-        mFGContent.setDay(cur_day,
-                !UtilFun.StringIsNullOrEmpty(cur_day) ? mTMList.get(cur_day) : null);
+        if(!UtilFun.StringIsNullOrEmpty(cur_day)) {
+            if(cur_day.contains(newMonth)) {
+                mFGContent.setDay(cur_day, mTMList.get(cur_day));
+            } else {
+                int keySize = mTMList.keySet().size();
+                if(keySize > 0) {
+                    String[] days = new String[keySize];
+                    mTMList.keySet().toArray(days);
+                    Arrays.sort(days);
+
+                    String new_day = days[0];
+                    mFGContent.setDay(new_day, mTMList.get(new_day));
+                }
+            }
+        }
     }
 }

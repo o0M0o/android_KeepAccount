@@ -54,7 +54,7 @@ public class FrgCalendarContent extends FrgUtilityBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "FrgFLNotePadContent";
+        LOG_TAG = "FrgCalendarContent";
         View rootView = layoutInflater.inflate(R.layout.frg_calendar_content, viewGroup, false);
         ButterKnife.bind(this, rootView);
         return rootView;
