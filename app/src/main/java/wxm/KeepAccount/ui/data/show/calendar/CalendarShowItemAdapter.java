@@ -14,7 +14,7 @@ import wxm.androidutil.util.UiUtil;
 
 /**
  * 日历节点
- * Created by xiaoming wang on 2017/07/03.
+ * Created by ookoo on 2017/07/03.
  */
 public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarShowItemModel> {
     private final static int mCLToday;

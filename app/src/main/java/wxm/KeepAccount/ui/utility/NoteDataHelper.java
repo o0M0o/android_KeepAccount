@@ -22,7 +22,7 @@ public class NoteDataHelper {
     public static final String TAB_TITLE_MONTHLY = "月流水";
     public static final String TAB_TITLE_YEARLY = "年流水";
     public static final String TAB_TITLE_BUDGET = "预算";
-    private static final String TAG = "NoteDataHelper ";
+
     // use singleton
     private static NoteDataHelper instance = new NoteDataHelper();
     /**
@@ -172,6 +172,15 @@ public class NoteDataHelper {
         }
 
         return ls_note;
+    }
+
+    /**
+     * 获取指定日期的INote数据
+     * @param day   日期(example : '2017-07-06')
+     * @return      INote数据
+     */
+    public List<INote> getNotesByDay(String day)    {
+        return mHMDayNotes.get(day);
     }
 
 

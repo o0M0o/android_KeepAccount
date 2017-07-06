@@ -1,19 +1,14 @@
 package wxm.KeepAccount.ui.data.show.calendar;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -21,15 +16,14 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.TreeMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -66,9 +60,6 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
     // for data
     private CalendarShowItemAdapter mCSIAdapter;
-    //key:date "yyyy-mm-dd" format.
-    private TreeMap<String, List<INote>> mTMList = new TreeMap<>();
-
     private FrgCalendarContent mFGContent = new FrgCalendarContent();
 
     @Override
@@ -95,12 +86,12 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
         mHGVDays.setOnMonthChangedListener(yearMonth -> {
             Log.d(LOG_TAG, "OnMonthChangedListener, yearMonth = " + yearMonth);
-            loadCalendarData(yearMonth);
+            updateCalendar(yearMonth);
         });
 
         mHGVDays.setOnCalendarViewItemClickListener((View, selectedDate) -> {
             Log.d(LOG_TAG, "OnCalendarViewItemClick, selectedDate = " + selectedDate);
-            mFGContent.setDay(selectedDate, mTMList.get(selectedDate));
+            mFGContent.updateContent(selectedDate);
         });
 
         reLoadFrg();
@@ -134,37 +125,6 @@ public class FrgCalendarShow extends FrgUtilityBase {
         reLoadFrg();
     }
 
-
-    /**
-     * 加载月度数据
-     *
-     * @param month 加载的月份，比如"2016-07"
-     */
-    private void loadNotes(String month) {
-        Log.d(LOG_TAG, "loadNotes");
-
-        mTMList.clear();
-        HashMap<String, ArrayList<INote>> hm_note
-                = NoteDataHelper.getInstance().getNotesForMonth();
-        if (null != hm_note) {
-            ArrayList<INote> al_notes = hm_note.get(month);
-            if(null != al_notes) {
-                for (INote ci : al_notes) {
-                    Calendar cd = Calendar.getInstance();
-                    cd.setTimeInMillis(ci.getTs().getTime());
-                    String day = ALL_SIMPLE_FORMAT.format(cd.getTime());
-
-                    List<INote> ls_note = mTMList.get(day);
-                    if (null == ls_note) {
-                        ls_note = new ArrayList<>();
-                        mTMList.put(day, ls_note);
-                    }
-
-                    ls_note.add(ci);
-                }
-            }
-        }
-    }
 
     /**
      * 重新加载数据
@@ -215,7 +175,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
                     if (!cur_month.equals(mSZFristMonth) && !mSZFristMonth.equals(cur_sel_month))
                         mHGVDays.changeMonth(mSZFristMonth);
                     else
-                        loadCalendarData(mSZFristMonth);
+                        updateCalendar(mSZFristMonth);
                 }
             }
         }.execute();
@@ -223,31 +183,30 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
 
     /**
-     * // date (yyyy-MM),load data for Calendar View by date,load one month data one times.
-     * // generate test data for CalendarView,imitate to be a Network Requests. update "mCSIAdapter.getDayModelList()"
-     * // and notifyDataSetChanged will update CalendarView.
-     *
-     * @param newMonth 加载的月份，比如"2016-07"
+     *  更新日历
+     *  @param newMonth 日历月份(example : "2016-07")
      */
-    private void loadCalendarData(final String newMonth) {
-        Log.d(LOG_TAG, "loadCalendarData, date = " + newMonth
+    private void updateCalendar(final String newMonth) {
+        Log.d(LOG_TAG, "updateCalendar, date = " + newMonth
                 + ", select_date = " + mHGVDays.getSelectedDate());
-        loadNotes(newMonth);
 
-        if (!mTMList.isEmpty()) {
-            for (String ik : mTMList.keySet()) {
-                List<INote> ls_n = mTMList.get(ik);
-                CalendarShowItemModel calendarItemModel = mCSIAdapter.getDayModelList().get(ik);
-                if (calendarItemModel != null) {
-                    calendarItemModel.setRecordCount(ls_n.size());
+        TreeMap<String, CalendarShowItemModel> tmDays = mCSIAdapter.getDayModelList();
+        for(String day : tmDays.keySet()) {
+            CalendarShowItemModel itModel = tmDays.get(day);
+            if (itModel != null) {
+                NoteShowInfo ni = NoteDataHelper.getInfoByDay(day);
+                if(ni != null && !day.startsWith(newMonth))    {
+                    ni = null;
                 }
+
+                itModel.setRecordCount(ni != null ? ni.getIncomeCount() + ni.getPayCount() : 0);
             }
         }
         mCSIAdapter.notifyDataSetChanged();
 
         String cur_day = mHGVDays.getSelectedDate();
         if(!UtilFun.StringIsNullOrEmpty(cur_day)) {
-            mFGContent.setDay(cur_day, mTMList.get(cur_day));
+            mFGContent.updateContent(cur_day);
         }
     }
 }

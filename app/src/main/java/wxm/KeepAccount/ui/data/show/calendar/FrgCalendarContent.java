@@ -61,14 +61,12 @@ public class FrgCalendarContent extends FrgUtilityBase {
     }
 
     /**
-     * 设置展示类容
-     *
-     * @param day     for day
-     * @param content for content
+     * 更新类容
+     * @param day   展示日期(example : 2017-07-06)
      */
-    public void setDay(String day, List<INote> content) {
+    public void updateContent(String day) {
         mSZHotDay = day;
-        mLSDayContents = content;
+        mLSDayContents = NoteDataHelper.getInstance().getNotesByDay(day);
 
         loadContent();
     }
