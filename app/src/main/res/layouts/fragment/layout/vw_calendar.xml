@@ -4,15 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/load_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
-
     <wxm.uilib.SimpleCalendar.CalendarListView
         android:id="@+id/calendar_listview"
         android:layout_width="match_parent"

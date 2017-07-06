@@ -61,9 +61,6 @@ public class FrgCalendarShow extends FrgUtilityBase {
     @BindView(R.id.calendar_listview)
     CalendarListView mHGVDays;
 
-    @BindView(R.id.load_progress)
-    ProgressBar mPBLoad;
-
     @BindView(R.id.fl_holder)
     FrameLayout mFLHolder;
 
@@ -137,38 +134,6 @@ public class FrgCalendarShow extends FrgUtilityBase {
         reLoadFrg();
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     *
-     * @param show 如果为true则显示加载数据图
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        int shortAnimTime = getResources()
-                .getInteger(android.R.integer.config_shortAnimTime);
-
-        mHGVDays.setVisibility(show ? View.GONE : View.VISIBLE);
-        mHGVDays.animate().setDuration(shortAnimTime).alpha(
-                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mHGVDays.setVisibility(show ? View.GONE : View.VISIBLE);
-            }
-        });
-
-        mPBLoad.setVisibility(show ? View.VISIBLE : View.GONE);
-        mPBLoad.animate().setDuration(shortAnimTime)
-                .alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mPBLoad.setVisibility(show ? View.VISIBLE : View.GONE);
-            }
-        });
-    }
-
 
     /**
      * 加载月度数据
@@ -213,7 +178,6 @@ public class FrgCalendarShow extends FrgUtilityBase {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                showProgress(true);
             }
 
 
@@ -232,8 +196,6 @@ public class FrgCalendarShow extends FrgUtilityBase {
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
 
-                showProgress(false);
-
                 if (UtilFun.StringIsNullOrEmpty(mSZFristMonth)) {
                     Activity ac = getActivity();
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ac);
@@ -245,7 +207,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
                 } else {
                     Calendar c_cur = Calendar.getInstance();
                     String cur_month = YEAR_MONTH_SIMPLE_FORMAT.format(c_cur.getTime());
-                    String cur_sel_month = mHGVDays.getCurrentSelectedDate();
+                    String cur_sel_month = mHGVDays.getSelectedDate();
                     if (!UtilFun.StringIsNullOrEmpty(cur_sel_month))
                         cur_sel_month = cur_sel_month.substring(0, 7);
 
@@ -269,7 +231,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
      */
     private void loadCalendarData(final String newMonth) {
         Log.d(LOG_TAG, "loadCalendarData, date = " + newMonth
-                + ", select_date = " + mHGVDays.getCurrentSelectedDate());
+                + ", select_date = " + mHGVDays.getSelectedDate());
         loadNotes(newMonth);
 
         if (!mTMList.isEmpty()) {
@@ -283,21 +245,9 @@ public class FrgCalendarShow extends FrgUtilityBase {
         }
         mCSIAdapter.notifyDataSetChanged();
 
-        String cur_day = mHGVDays.getCurrentSelectedDate();
+        String cur_day = mHGVDays.getSelectedDate();
         if(!UtilFun.StringIsNullOrEmpty(cur_day)) {
-            if(cur_day.contains(newMonth)) {
-                mFGContent.setDay(cur_day, mTMList.get(cur_day));
-            } else {
-                int keySize = mTMList.keySet().size();
-                if(keySize > 0) {
-                    String[] days = new String[keySize];
-                    mTMList.keySet().toArray(days);
-                    Arrays.sort(days);
-
-                    String new_day = days[0];
-                    mFGContent.setDay(new_day, mTMList.get(new_day));
-                }
-            }
+            mFGContent.setDay(cur_day, mTMList.get(cur_day));
         }
     }
 }
