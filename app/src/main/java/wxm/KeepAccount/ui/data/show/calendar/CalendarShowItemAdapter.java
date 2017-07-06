@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.simplecalendarlvb.BaseCalendarItemAdapter;
-import wxm.simplecalendarlvb.BaseCalendarItemModel;
+import wxm.uilib.SimpleCalendar.BaseCalendarItemAdapter;
+import wxm.uilib.SimpleCalendar.BaseCalendarItemModel;
 import wxm.androidutil.util.UiUtil;
 
 /**

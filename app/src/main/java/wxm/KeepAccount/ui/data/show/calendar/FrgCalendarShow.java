@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -37,7 +36,8 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
-import wxm.simplecalendarlvb.CalendarListView;
+
+import wxm.uilib.SimpleCalendar.CalendarListView;
 
 
 /**

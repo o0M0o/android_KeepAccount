@@ -1,1 +1,1 @@
-include ':app', ':hellocharts-library-release', ':lm_banner_library', ':simplecalendar', ':UiLib', ':AndroidUtil'
+include ':app', ':hellocharts-library-release', ':lm_banner_library', ':UiLib', ':AndroidUtil'

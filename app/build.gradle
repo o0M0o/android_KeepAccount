@@ -109,7 +109,6 @@ dependencies {
     compile project(':hellocharts-library-release')
     compile project(':lm_banner_library')
     compile project(':UiLib')
-    compile project(':simplecalendar')
     compile files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
     compile files('libs/extend_lib/fashjson/fastjson-1.2.33.jar')
     compile files('libs/extend_lib/junit/junit-4.12.jar')
