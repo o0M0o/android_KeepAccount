@@ -11,24 +11,24 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginBottom="2dp"
-        android:layout_marginStart="2dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="2dp">
 
         <TextView
             android:id="@+id/tv_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="false"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:text="2016-07"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_day_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@id/tv_month"
+            android:layout_alignParentStart="true"
             android:layout_below="@id/tv_month"
             android:text="15"
             android:textColor="@color/black"
@@ -50,8 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/tv_day"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/tv_day"
+            android:layout_alignEnd="@id/tv_month"
             android:text="星期三"
             android:textSize="10sp" />
     </RelativeLayout>
@@ -62,78 +61,75 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="2dp"
         android:layout_marginStart="24dp"
+        android:layout_marginEnd="72dp"
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@id/rl_date">
 
-        <TextView
-            android:id="@+id/tv_pay_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="交通费"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-
         <RelativeLayout
-            android:id="@+id/rl_clock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_pay_title"
-            android:layout_marginTop="1dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/iv_clock"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_clock" />
+            android:layout_centerVertical="true">
 
             <TextView
-                android:id="@+id/tv_pay_time"
+                android:id="@+id/tv_pay_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_toEndOf="@id/iv_clock"
-                android:text="12:04"
-                android:textSize="13sp" />
-        </RelativeLayout>
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="交通费"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
-        <RelativeLayout
-            android:id="@+id/rl_pay_note"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/rl_clock"
-            android:layout_marginTop="1dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/iv_note"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_note" />
-
-            <TextView
-                android:id="@+id/tv_pay_note"
+            <RelativeLayout
+                android:id="@+id/rl_clock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="4dp"
-                android:layout_toEndOf="@id/iv_note"
-                android:text="生活开支类预算"
-                android:textSize="12sp" />
-        </RelativeLayout>
+                android:layout_below="@id/tv_pay_title"
+                android:layout_marginTop="1dp"
+                android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/iv_look"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="32dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/right_arrow" />
+                <ImageView
+                    android:id="@+id/iv_clock"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_clock" />
+
+                <TextView
+                    android:id="@+id/tv_pay_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_toEndOf="@id/iv_clock"
+                    android:text="12:04"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_pay_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/rl_clock"
+                android:layout_marginTop="1dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_note"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_note" />
+
+                <TextView
+                    android:id="@+id/tv_pay_note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="4dp"
+                    android:layout_toEndOf="@id/iv_note"
+                    android:text="生活开支类预算"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_pay_amount"
@@ -141,9 +137,19 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="68dp"
             android:text="- 145.75"
             android:textColor="@color/darkred"
             android:textSize="16sp" />
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_look"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:padding="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/right_arrow" />
 </RelativeLayout>

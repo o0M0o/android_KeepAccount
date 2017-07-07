@@ -70,6 +70,9 @@ public class PayIncomeDBUtility {
             BigDecimal all_pay = BigDecimal.ZERO;
             for (PayNoteItem i : ls_pay) {
                 all_pay = all_pay.add(i.getVal());
+
+                i.setVal(i.getVal());
+                i.setTs(i.getTs());
             }
 
             bi.useBudget(all_pay);

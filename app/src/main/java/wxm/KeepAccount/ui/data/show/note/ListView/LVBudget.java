@@ -442,23 +442,6 @@ public class LVBudget extends LVBase {
      * 次级adapter
      */
     private class SelfSubAdapter extends SimpleAdapter {
-        private final static String TAG = "SelfSubAdapter";
-
-        private View.OnClickListener mCLAdapter = v -> {
-            int pos = mLVShow.getPositionForView(v);
-
-            HashMap<String, String> hm = UtilFun.cast(getItem(pos));
-
-            ACNoteShow ac = getRootActivity();
-            Intent intent;
-            intent = new Intent(ac, ACPreveiwAndEdit.class);
-            intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(hm.get(K_ID)));
-            intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
-                    GlobalDef.STR_RECORD_PAY);
-
-            ac.startActivityForResult(intent, 1);
-        };
-
         SelfSubAdapter(Context context,
                        List<? extends Map<String, ?>> sdata,
                        String[] from, int[] to) {
@@ -498,7 +481,16 @@ public class LVBudget extends LVBase {
             vh.setText(R.id.tv_pay_time, hm.get(K_TIME));
 
             // for look action
-            vh.getView(R.id.iv_look).setOnClickListener(mCLAdapter);
+            vh.getView(R.id.iv_look).setOnClickListener(v -> {
+                ACNoteShow ac = getRootActivity();
+                Intent intent;
+                intent = new Intent(ac, ACPreveiwAndEdit.class);
+                intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(hm.get(K_ID)));
+                intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
+                        GlobalDef.STR_RECORD_PAY);
+
+                ac.startActivityForResult(intent, 1);
+            });
             return vh.getConvertView();
         }
     }
