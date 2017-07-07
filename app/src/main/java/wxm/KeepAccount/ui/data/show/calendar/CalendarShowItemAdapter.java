@@ -36,13 +36,11 @@ public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarSho
     @Override
     public View getView(String date, CalendarShowItemModel model, View convertView, ViewGroup parent) {
         ViewGroup view = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.gi_calendar_item, null);
-
-        TextView dayNum = (TextView) view.findViewById(R.id.tv_day_num);
-        dayNum.setText(model.getDayNumber());
-
         view.setBackgroundResource(model.getRecordCount() > 0 ?
                 R.drawable.day_shape : R.drawable.day_empty_shape);
 
+        TextView dayNum = (TextView) view.findViewById(R.id.tv_day_num);
+        dayNum.setText(model.getDayNumber());
         if (model.isToday()) {
             dayNum.setTextColor(mCLToday);
             dayNum.setText(mContext.getResources().getString(R.string.today));
@@ -60,8 +58,6 @@ public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarSho
         if (!model.isCurrentMonth()) {
             dayNum.setVisibility(View.GONE);
             dayNewsCount.setVisibility(View.GONE);
-            //dayNum.setTextColor(mCLNotCurrentMonth);
-            view.setClickable(true);
         } else {
             if (model.getRecordCount() > 0) {
                 dayNewsCount.setText(String.format(mContext.getResources().getString(R.string.calendar_item_new_count), model.getRecordCount()));
