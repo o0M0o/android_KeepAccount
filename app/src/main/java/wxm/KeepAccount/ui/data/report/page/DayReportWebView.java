@@ -21,10 +21,10 @@ import java.util.HashMap;
 
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.ui.base.FrgWebView;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.report.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
+import wxm.androidutil.FrgWebView.FrgWebView;
 
 /**
  * 日数据汇报 - webview展示页
@@ -76,6 +76,8 @@ public class DayReportWebView extends FrgWebView {
 
     @Override
     protected void initUiComponent(View view) {
+        super.initUiComponent(view);
+
         Bundle bd = getArguments();
         mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
     }

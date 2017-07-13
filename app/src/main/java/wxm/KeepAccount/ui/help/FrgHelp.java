@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
-import wxm.KeepAccount.ui.base.FrgWebView;
+import wxm.androidutil.FrgWebView.FrgWebView;
 
 /**
  * for help
@@ -19,10 +19,6 @@ public class FrgHelp extends FrgWebView {
         View rootView = super.inflaterView(inflater, container, bundle);
         LOG_TAG = "FrgHelp";
         return rootView;
-    }
-
-    @Override
-    protected void initUiComponent(View view) {
     }
 
     @Override

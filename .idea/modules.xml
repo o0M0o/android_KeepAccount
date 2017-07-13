@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/AndroidUtil/AndroidUtil.iml" filepath="$PROJECT_DIR$/AndroidUtil/AndroidUtil.iml" />
       <module fileurl="file://$PROJECT_DIR$/KeepAccount.iml" filepath="$PROJECT_DIR$/KeepAccount.iml" />
       <module fileurl="file://$PROJECT_DIR$/UiLib/UiLib.iml" filepath="$PROJECT_DIR$/UiLib/UiLib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/andriod_keepaccount.iml" filepath="$PROJECT_DIR$/andriod_keepaccount.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/hellocharts-library-release/hellocharts-library-release.iml" filepath="$PROJECT_DIR$/hellocharts-library-release/hellocharts-library-release.iml" />
       <module fileurl="file://$PROJECT_DIR$/lm_banner_library/lm_banner_library.iml" filepath="$PROJECT_DIR$/lm_banner_library/lm_banner_library.iml" />
