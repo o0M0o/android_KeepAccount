@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 
 import wxm.androidutil.FrgWebView.FrgWebView;
 
@@ -20,11 +19,6 @@ public class FrgHelp extends FrgWebView {
         LOG_TAG = "FrgHelp";
         return rootView;
     }
-
-    @Override
-    protected void onWVPageFinished(WebView wvPage, Object pagePara) {
-    }
-
 
     @Override
     protected void loadUI() {
