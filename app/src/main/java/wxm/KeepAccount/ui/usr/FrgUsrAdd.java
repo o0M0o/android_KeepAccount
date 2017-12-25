@@ -73,7 +73,6 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
 
     @Override
     protected void loadUI() {
-
     }
 
     @OnClick({R.id.bt_confirm, R.id.bt_giveup})

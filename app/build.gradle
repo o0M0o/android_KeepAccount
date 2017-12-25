@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
+//apply plugin: 'me.tatarka.retrolambda'
 
 android {
     signingConfigs {
@@ -73,12 +73,10 @@ android {
         }
     }
 
-    /*
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
-    */
 
     flavorDimensions "default"
     productFlavors {
