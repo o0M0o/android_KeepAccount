@@ -38,11 +38,4 @@ public class GlobalDef {
 
     public final static String DEF_USR_NAME = "default";
     public final static String DEF_USR_PWD = "123456";
-
-    // for msg
-    public static final int MSG_USR_ADDUSR = 1001;
-    public static final int MSG_USR_LOGIN = 1002;
-    public static final int MSG_USR_LOGOUT = 1003;
-
-    public static final int MSG_REPLY = 9999;
 }

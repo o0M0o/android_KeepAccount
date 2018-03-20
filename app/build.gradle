@@ -17,13 +17,13 @@ android {
         }
     }
 
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationId "com.wxm.keepaccount"
         minSdkVersion 19
-        targetSdkVersion 23
+        targetSdkVersion 26
         versionCode 20
         versionName "1.20"
         signingConfig signingConfigs.defkey

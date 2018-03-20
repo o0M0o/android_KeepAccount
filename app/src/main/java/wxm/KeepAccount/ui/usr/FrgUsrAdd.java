@@ -17,6 +17,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import wxm.KeepAccount.define.EMsgType;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;;
 import wxm.androidutil.util.UtilFun;
 import wxm.androidutil.util.WRMsgHandler;
@@ -85,7 +86,7 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
                     data.putExtra(UsrItem.FIELD_PWD, mETPwd.getText().toString());
 
                     Message m = Message.obtain(ContextUtil.getMsgHandler(),
-                            GlobalDef.MSG_USR_ADDUSR);
+                            EMsgType.USR_ADD.getId());
                     m.obj = new Object[]{data, mMHHandler};
                     m.sendToTarget();
                 }
@@ -182,24 +183,19 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
 
         @Override
         protected void processMsg(Message m, FrgUsrAdd home) {
-            switch (m.what) {
-                case GlobalDef.MSG_REPLY: {
-                    switch (m.arg1) {
-                        case GlobalDef.MSG_USR_ADDUSR: {
-                            afterAddUsr(m, home);
-                        }
-                        break;
+            EMsgType et = EMsgType.getEMsgType(m.what);
+            if(null == et)
+                return;
 
-                        default:
-                            Log.e(TAG, String.format("msg(%s) can not process", m.toString()));
-                            break;
+            if(EMsgType.REPLAY == et)   {
+                EMsgType et_inner = EMsgType.getEMsgType(m.arg1);
+                if(null != et_inner)    {
+                    if(EMsgType.USR_ADD == et_inner)    {
+                        afterAddUsr(m, home);
                     }
                 }
-                break;
-
-                default:
-                    Log.e(TAG, String.format("msg(%s) can not process", m.toString()));
-                    break;
+            } else  {
+                Log.e(TAG, String.format("msg(%s) can not process", m.toString()));
             }
         }
 

@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import wxm.KeepAccount.define.EMsgType;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.UsrItem;
@@ -25,7 +26,7 @@ public class GlobalMsgHandler extends Handler {
      * @param msg_obj  回复消息的参数{@code obj}
      */
     private static void ReplyMsg(Handler mh, int msg_type, Object msg_obj) {
-        Message m = Message.obtain(mh, GlobalDef.MSG_REPLY);
+        Message m = Message.obtain(mh, EMsgType.REPLAY.getId());
         m.arg1 = msg_type;
         m.obj = msg_obj;
         m.sendToTarget();
@@ -34,8 +35,12 @@ public class GlobalMsgHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
         Log.i(TAG, "receive msg : " + msg.toString());
-        switch (msg.what) {
-            case GlobalDef.MSG_USR_ADDUSR: {
+        EMsgType et = EMsgType.getEMsgType(msg.what);
+        if(null == et)
+            return;
+
+        switch (et) {
+            case USR_ADD: {
                 Object[] arr = UtilFun.cast(msg.obj);
 
                 Intent data = UtilFun.cast(arr[0]);
@@ -44,17 +49,17 @@ public class GlobalMsgHandler extends Handler {
                 String pwd = data.getStringExtra(UsrItem.FIELD_PWD);
 
                 if (ContextUtil.getUsrUtility().hasUsr(usr)) {
-                    ReplyMsg(h, GlobalDef.MSG_USR_ADDUSR,
+                    ReplyMsg(h, EMsgType.USR_ADD.getId(),
                             new Object[]{false, data, "用户已经存在！"});
                 } else {
                     boolean ret = (null != ContextUtil.getUsrUtility().addUsr(usr, pwd));
-                    ReplyMsg(h, GlobalDef.MSG_USR_ADDUSR,
+                    ReplyMsg(h, EMsgType.USR_ADD.getId(),
                             new Object[]{ret, data});
                 }
             }
             break;
 
-            case GlobalDef.MSG_USR_LOGIN: {
+            case USR_LOGIN: {
                 Object[] arr = UtilFun.cast(msg.obj);
 
                 Intent data = UtilFun.cast(arr[0]);
@@ -66,11 +71,11 @@ public class GlobalMsgHandler extends Handler {
                 ContextUtil.setCurUsr(ContextUtil.getUsrUtility().CheckAndGetUsr(usr, pwd));
                 boolean ret = (null != ContextUtil.getCurUsr());
 
-                ReplyMsg(h, GlobalDef.MSG_USR_LOGIN, ret);
+                ReplyMsg(h, EMsgType.USR_LOGIN.getId(), ret);
             }
             break;
 
-            case GlobalDef.MSG_USR_LOGOUT: {
+            case USR_LOGOUT: {
                 ContextUtil.setCurUsr(null);
             }
             break;

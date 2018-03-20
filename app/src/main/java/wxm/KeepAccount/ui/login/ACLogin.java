@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.EMsgType;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.help.ACHelp;
 import wxm.KeepAccount.utility.ContextUtil;
@@ -113,7 +114,7 @@ public class ACLogin extends AppCompatActivity {
             b_resetview = true;
 
             Message m = Message.obtain(ContextUtil.getMsgHandler(),
-                    GlobalDef.MSG_USR_LOGOUT);
+                    EMsgType.USR_LOGOUT.getId());
             m.sendToTarget();
         } else {
             Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
