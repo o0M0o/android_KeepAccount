@@ -33,7 +33,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 import wxm.uilib.IconButton.IconButton;
 
 /**
- * 选择“记录类型”对话框
+ * select 'record type'
  * Created by 123 on 2016/11/1.
  */
 public class DlgSelectRecordType extends DlgOKOrNOBase {
@@ -72,12 +72,11 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
     }
 
     /**
-     * 设置以前的“记录类型”
-     *
-     * @param rt 记录类型归属的大类，可以为 :
-     *           -- GlobalDef.STR_RECORD_PAY
-     *           -- GlobalDef.STR_RECORD_INCOME
-     * @param ot 以前的记录类型
+     * set old 'record type'
+     * @param rt    can be :
+     *              -- GlobalDef.STR_RECORD_PAY
+     *              -- GlobalDef.STR_RECORD_INCOME
+     * @param ot    current record type
      */
     public void setOldType(String rt, String ot) {
         mRootType = rt;
@@ -85,9 +84,8 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
     }
 
     /**
-     * 得到当前“记录类型"
-     *
-     * @return 当前“记录类型"
+     * get current 'record type'
+     * @return      current record type
      */
     public String getCurType() {
         return mCurType;
@@ -137,9 +135,8 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
     }
 
     /**
-     * 附加动作
-     *
-     * @param v 动作view
+     * addition action
+     * @param v     action view
      */
     @OnClick({R.id.ib_sort, R.id.ib_manage})
     public void onActionClick(View v) {
@@ -203,7 +200,7 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
 
 
     /**
-     * 加载gridview的适配器类
+     * adapter for gridview
      */
     public class GVTypeAdapter extends SimpleAdapter {
         GVTypeAdapter(Context context, List<? extends Map<String, ?>> data,

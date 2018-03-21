@@ -16,7 +16,7 @@ import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.KeepAccount.R;
 
 /**
- * 选择输出报告的日期范围
+ * select day range for report
  * Created by User on 2017/2/15.
  */
 public class DlgSelectReportDays extends DlgOKOrNOBase {
@@ -30,18 +30,16 @@ public class DlgSelectReportDays extends DlgOKOrNOBase {
     private String mSZEndDay;
 
     /**
-     * 得到需报告的起始日期
-     *
-     * @return 起始日期
+     * get start day
+     * @return      start day
      */
     public String getStartDay() {
         return mSZStartDay;
     }
 
     /**
-     * 得到需报告的结束日期
-     *
-     * @return 结束日期
+     * get end day
+     * @return      end day
      */
     public String getEndDay() {
         return mSZEndDay;
@@ -73,9 +71,8 @@ public class DlgSelectReportDays extends DlgOKOrNOBase {
     }
 
     /**
-     * 用户点击textview后处理器
-     *
-     * @param v 被点击的textview
+     * handler for click event
+     * @param v     clicked view
      */
     @OnClick({R.id.tv_start_day, R.id.tv_end_day})
     public void tvClicks(View v) {
@@ -118,9 +115,8 @@ public class DlgSelectReportDays extends DlgOKOrNOBase {
     }
 
     /**
-     * 必须设置起止日期
-     *
-     * @return 检查结果
+     * check whether data is ok
+     * @return      true if ok
      */
     @Override
     protected boolean checkBeforeOK() {
@@ -153,8 +149,7 @@ public class DlgSelectReportDays extends DlgOKOrNOBase {
     }
 
     /**
-     * 转换日期到字符串
-     *
+     * parse day to string
      * @param year  年
      * @param month 月(1-12)
      * @param day   日(1-31)

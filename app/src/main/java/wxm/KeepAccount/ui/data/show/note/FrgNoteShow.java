@@ -77,8 +77,8 @@ public class FrgNoteShow extends FrgUtilityBase {
     private pageHelper mPHHot;
 
     /**
-     * 数据库内数据变化处理器
-     * @param event 事件参数
+     * DB data change handler
+     * @param event     event param
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBDataChangeEvent(DBDataChangeEvent event) {
@@ -240,7 +240,7 @@ public class FrgNoteShow extends FrgUtilityBase {
     /// PRIVATE BEGIN
 
     /**
-     * 得到selector name
+     * get selector name
      * @param rl    for selector
      * @return      name for selector
      */
@@ -250,8 +250,8 @@ public class FrgNoteShow extends FrgUtilityBase {
     }
 
     /**
-     * 修改rl状态
-     * @param rl        待修改rl
+     * enable rl status
+     * @param rl    param
      */
     private void enableRLStatus(RelativeLayout rl)  {
         for(pageHelper ph : mPHHelper)  {
@@ -270,18 +270,18 @@ public class FrgNoteShow extends FrgUtilityBase {
     }
 
     /**
-     * 判断rl是否enable
-     * @param rl    待检查rl
-     * @return      是否enable
+     * check whether rl is enabled
+     * @param rl    rl need check
+     * @return      True if enabled
      */
     private Boolean isEnableRL(RelativeLayout rl)  {
         return rl == mPHHot.mRLSelector;
     }
 
     /**
-     * 设置rl的状态
-     * @param rl            待设置relativelayout
-     * @param bIsSelected   新状态
+     * set rl status
+     * @param rl            rl need set
+     * @param bIsSelected   true is selected
      */
     private void setRLStatus(RelativeLayout rl, boolean bIsSelected)    {
         int res;
@@ -299,8 +299,8 @@ public class FrgNoteShow extends FrgUtilityBase {
     }
 
     /**
-     * 得到当前选中的tab item
-     * @return 当前选中的tab item
+     * get hot tab item
+     * @return      hot tab item
      */
     public TFShowBase getHotTabItem() {
         return mPHHot.mSBPage;

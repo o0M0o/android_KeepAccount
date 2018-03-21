@@ -21,37 +21,26 @@ import wxm.KeepAccount.utility.ActionHelper;
 import wxm.KeepAccount.utility.DGVButtonAdapter;
 
 /**
- * 选择关注channel的对话框
+ * select follow channel
  * Created by 123 on 2016/9/20.
  */
 public class DlgSelectChannel extends DlgOKOrNOBase {
     // for hot channel
     private ArrayList<String> mLSHotChannel = new ArrayList<>();
 
-    /*
-     * 根据当前hot channel来初始化
-     * @param org_hot   当前hot channel
-    public DlgSelectChannel(ArrayList<String> org_hot)  {
-        super();
-        mLSHotChannel.addAll(org_hot);
-    }
-    */
-
     /**
-     * 获取放置在首页上的项（项名）
-     * 结束对话框后使用此方法得到更新的值
-     *
-     * @return 用户在对话框中的选择
+     * get followed channel(channel name)
+     * after finish dlg, use this get new followed list
+     * @return      new followed channel
      */
     public List<String> getHotChannel() {
         return mLSHotChannel;
     }
 
     /**
-     * 设置放置在首页上的项（项名）
-     * 显示对话框前使用此方法设置初始值
-     *
-     * @param org_hot 放置在首页上的项名
+     * set followed channel(channel name)
+     * before use dlg, use this set init val
+     * @param org_hot   followed list
      */
     public void setHotChannel(List<String> org_hot) {
         mLSHotChannel.addAll(org_hot);
@@ -95,7 +84,7 @@ public class DlgSelectChannel extends DlgOKOrNOBase {
 
 
     /**
-     * 加载gridview的适配器类
+     * adapter for gridview
      */
     public class GVChannelAdapter extends SimpleAdapter {
         GVChannelAdapter(Context context, List<? extends Map<String, ?>> data,

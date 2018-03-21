@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.data.report.page;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,16 +19,17 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.Executors;
 
-import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.report.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.androidutil.FrgWebView.FrgWebView;
+import wxm.androidutil.util.UtilFun;
 
 /**
- * 日数据汇报 - webview展示页
+ * day data report(webview)
  * Created by ookoo on 2017/3/4.
  */
 public class DayReportWebView extends FrgWebView {
@@ -50,9 +52,8 @@ public class DayReportWebView extends FrgWebView {
     }
 
     /**
-     * 更新日期范围
-     *
-     * @param event 事件
+     * handler for change data range
+     * @param event     param
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSelectDaysEvent(EventSelectDays event) {
@@ -84,43 +85,35 @@ public class DayReportWebView extends FrgWebView {
 
     @Override
     protected void loadUI() {
-        new AsyncTask<Void, Void, Void>() {
-            private String mSzPara;
+        showProgress(true);
 
-            @Override
-            protected void onPreExecute() {
-                showProgress(true);
+        Activity h = this.getActivity();
+        Executors.newCachedThreadPool().submit(() -> {
+            String mSzPara = null;
+            if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
+                if (2 != mASParaLoad.size())
+                    return;
+
+                String d_s = mASParaLoad.get(0);
+                String d_e = mASParaLoad.get(1);
+                HashMap<String, ArrayList<INote>> hmData = NoteDataHelper
+                        .getInstance().getNotesBetweenDays(d_s, d_e);
+
+                SimplePropertyPreFilter filter = new SimplePropertyPreFilter(INote.class,
+                        "info", "ts", "val", "payNote");
+                mSzPara = JSON.toJSONString(hmData, filter);
             }
 
-            @Override
-            protected Void doInBackground(Void... params) {
-                if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
-                    if (2 != mASParaLoad.size())
-                        return null;
+            final String para = mSzPara;
+            if(!(h.isDestroyed() || h.isFinishing()))   {
+                h.runOnUiThread(() ->   {
+                    showProgress(false);
 
-                    String d_s = mASParaLoad.get(0);
-                    String d_e = mASParaLoad.get(1);
-                    HashMap<String, ArrayList<INote>> hmData = NoteDataHelper
-                            .getInstance().getNotesBetweenDays(d_s, d_e);
-
-                    SimplePropertyPreFilter filter = new SimplePropertyPreFilter(INote.class,
-                            "info", "ts", "val", "payNote");
-                    mSzPara = JSON.toJSONString(hmData, filter);
-                }
-
-                return null;
+                    if (!UtilFun.StringIsNullOrEmpty(para)) {
+                        loadPage("file:///android_asset/report/report_day.html", para);
+                    }
+                });
             }
-
-            @SuppressLint("SetJavaScriptEnabled")
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                showProgress(false);
-
-                if (!UtilFun.StringIsNullOrEmpty(mSzPara)) {
-                    loadPage("file:///android_asset/report/report_day.html", mSzPara);
-                }
-            }
-        }.execute();
+        });
     }
 }

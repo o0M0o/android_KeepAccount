@@ -12,7 +12,7 @@ import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.RecordTypeItem;
 
 /**
- * 日期选择对话框
+ * record info dlg
  * Created by 123 on 2016/11/1.
  */
 public class DlgRecordInfo extends DlgOKOrNOBase {

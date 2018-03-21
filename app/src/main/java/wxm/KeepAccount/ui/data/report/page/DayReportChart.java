@@ -3,6 +3,7 @@ package wxm.KeepAccount.ui.data.report.page;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -151,30 +153,22 @@ public class DayReportChart extends FrgUtilityBase {
         }
 
         // update show
-        new AsyncTask<Void, Void, Void>() {
-            private PieChartData mCVData;
+        showProgress(true);
 
-            @Override
-            protected void onPreExecute() {
-                showProgress(true);
+        Activity h = this.getActivity();
+        Executors.newCachedThreadPool().submit(() -> {
+            PieChartData mCVData = new PieChartData();
+            generateData(mCVData);
+
+            if(!(h.isDestroyed() || h.isFinishing()))   {
+                h.runOnUiThread(() ->   {
+                    showProgress(false);
+
+                    mCVchart.setCircleFillRatio(0.6f);
+                    mCVchart.setPieChartData(mCVData);
+                });
             }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                mCVData = new PieChartData();
-                generateData(mCVData);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                showProgress(false);
-
-                mCVchart.setCircleFillRatio(0.6f);
-                mCVchart.setPieChartData(mCVData);
-            }
-        }.execute();
+        });
     }
 
     /**

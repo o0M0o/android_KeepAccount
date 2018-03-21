@@ -20,7 +20,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 
 /**
- * 颜色选择对话框
+ * select color
  * Created by 123 on 2016/10/10.
  */
 public class DlgSelectColor extends DlgOKOrNOBase
@@ -67,8 +67,7 @@ public class DlgSelectColor extends DlgOKOrNOBase
     }
 
     /**
-     * Gridview的itemclick处理方法
-     *
+     * click handler for gridview item
      * @param parent   param
      * @param view     param
      * @param position param
@@ -113,7 +112,7 @@ public class DlgSelectColor extends DlgOKOrNOBase
 
 
     /**
-     * 加载gridview的适配器类
+     * adapter for gridview
      */
     public class GVChannelAdapter extends SimpleAdapter {
         GVChannelAdapter(Context context, List<? extends Map<String, ?>> data,

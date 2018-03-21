@@ -25,7 +25,6 @@ import wxm.KeepAccount.R;
 
 /**
  * use this help show data
- *
  * @author wxm
  * @version create：2017/03/28
  */

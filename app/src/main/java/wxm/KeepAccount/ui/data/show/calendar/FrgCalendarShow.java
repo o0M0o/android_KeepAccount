@@ -2,7 +2,6 @@ package wxm.KeepAccount.ui.data.show.calendar;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -118,19 +117,14 @@ public class FrgCalendarShow extends FrgUtilityBase {
     }
 
     /**
-     * 数据库内数据变化处理器
-     *
+     * handler for DB event
      * @param event 事件参数
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDBDataChangeEvent(DBDataChangeEvent event) {
+    public void onDBChangeEvent(DBDataChangeEvent event) {
         reLoadFrg();
     }
 
-
-    /**
-     * 重新加载数据
-     */
     private void reLoadFrg() {
         Log.d(LOG_TAG, "reLoadFrg");
 
@@ -173,8 +167,8 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
 
     /**
-     *  更新日历
-     *  @param newMonth 日历月份(example : "2016-07")
+     *  update calendar
+     *  @param newMonth     calendar month(example : "2016-07")
      */
     private void updateCalendar(final String newMonth) {
         Log.d(LOG_TAG, "updateCalendar, date = " + newMonth

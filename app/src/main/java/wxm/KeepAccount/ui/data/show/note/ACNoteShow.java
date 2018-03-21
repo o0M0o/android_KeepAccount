@@ -69,18 +69,16 @@ public class ACNoteShow extends BaseAppCompatActivity {
     }
 
     /**
-     * 关闭/打开触摸功能
-     *
-     * @param bflag 若为true则打开触摸功能，否则关闭触摸功能
+     * open/close page touch
+     * @param bflag     true open page touch
      */
     public void disableViewPageTouch(boolean bflag) {
         ((FrgNoteShow) mFGHolder).disableViewPageTouch(bflag);
     }
 
     /**
-     * 跳至对应名称的标签页
-     *
-     * @param tabname 需跳转标签页的名字
+     * jump to page with name
+     * @param tabname   tab name
      */
     public void jumpByTabName(String tabname) {
         ((FrgNoteShow) mFGHolder).jumpByTabName(tabname);

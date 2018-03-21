@@ -10,7 +10,7 @@ import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 
 /**
- * 日期选择对话框
+ * longtext dlg
  * Created by ookoo on 2016/11/1.
  */
 public class DlgLongTxt extends DlgOKOrNOBase {
@@ -20,18 +20,16 @@ public class DlgLongTxt extends DlgOKOrNOBase {
     private String mSZInitLongTxt;
 
     /**
-     * 获取长文本
-     *
-     * @return 长文本
+     * get usr input longtext
+     * @return      usr input
      */
     public String getLongTxt() {
         return mETLongTxt.getText().toString();
     }
 
     /**
-     * 设置长文本
-     *
-     * @param lt 初始长文本
+     * set longtext
+     * @param lt    origin longtext
      */
     public void setLongTxt(String lt) {
         mSZInitLongTxt = lt;

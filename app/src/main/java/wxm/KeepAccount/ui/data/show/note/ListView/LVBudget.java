@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -24,8 +27,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executors;
 
 import butterknife.OnClick;
+import wxm.KeepAccount.define.INote;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -41,7 +47,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 
 /**
- * 预算数据视图辅助类
+ * budget listview
  * Created by 123 on 2016/9/15.
  */
 public class LVBudget extends LVBase {
@@ -58,17 +64,13 @@ public class LVBudget extends LVBase {
     }
 
     /**
-     * 过滤视图事件
-     *
+     * filter event
      * @param event 事件
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
     }
 
-    /**
-     * 初始化可隐藏动作条
-     */
     @Override
     protected void initActs() {
         mIBReport.setVisibility(View.GONE);
@@ -78,9 +80,8 @@ public class LVBudget extends LVBase {
     }
 
     /**
-     * 附加动作
-     *
-     * @param v 动作view
+     * addition action
+     * @param v     action view
      */
     @OnClick({R.id.ib_sort, R.id.ib_refresh, R.id.ib_delete, R.id.ib_add})
     public void onActionClick(View v) {
@@ -155,26 +156,16 @@ public class LVBudget extends LVBase {
     protected void refreshData() {
         super.refreshData();
 
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected void onPreExecute() {
-            }
+        Activity h = this.getActivity();
+        Executors.newCachedThreadPool().submit(() -> {
+            parseNotes();
 
-            @Override
-            protected Void doInBackground(Void... params) {
-                parseNotes();
-                return null;
+            if(!(h.isDestroyed() || h.isFinishing()))   {
+                h.runOnUiThread(() ->   {
+                    loadUIUtility(true);
+                });
             }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                // After completing execution of given task, control will return here.
-                // Hence if you want to populate UI elements with fetched data, do it here.
-                loadUIUtility(true);
-                //showLoadingProgress(false);
-            }
-        }.execute();
+        });
     }
 
     /// BEGIN PRIVATE
@@ -185,19 +176,10 @@ public class LVBudget extends LVBase {
     }
 
     /**
-     * 加载UI的工作
-     *
-     * @param b_fully 若为true则加载数据
+     * load UI
+     * @param b_fully   if true then reload data
      */
     protected void loadUIUtility(boolean b_fully) {
-        /*
-        Log.d(LOG_TAG, "in loadUIUtility, b_fully = " + Boolean.toString(b_fully));
-        String[] calls = ToolUtil.getCallStack(8);
-        for (int i = 0; i < calls.length; ++i) {
-            Log.d(LOG_TAG, "in loadUIUtility, [" + i + "] = " + calls[i]);
-        }
-        */
-
         refreshAttachLayout();
 
         if (b_fully) {
@@ -214,14 +196,14 @@ public class LVBudget extends LVBase {
 
 
     /**
-     * 调整数据排序
+     * reorder data
      */
     private void reorderData() {
         Collections.reverse(mMainPara);
     }
 
     /**
-     * 解析数据
+     * parse data
      */
     private void parseNotes() {
         mMainPara.clear();
@@ -297,10 +279,9 @@ public class LVBudget extends LVBase {
     }
 
     /**
-     * 加载详细视图
-     *
-     * @param lv  视图
-     * @param tag 数据tag
+     * load detail view
+     * @param lv        UI
+     * @param tag       data tag
      */
     private void load_detail_view(ListView lv, String tag) {
         LinkedList<HashMap<String, String>> llhm = mHMSubPara.get(tag);
@@ -315,7 +296,7 @@ public class LVBudget extends LVBase {
     /// END PRIVATE
 
     /**
-     * 首级adapter
+     * main adapter
      */
     protected class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
@@ -439,7 +420,7 @@ public class LVBudget extends LVBase {
 
 
     /**
-     * 次级adapter
+     * sub adapter
      */
     private class SelfSubAdapter extends SimpleAdapter {
         SelfSubAdapter(Context context,

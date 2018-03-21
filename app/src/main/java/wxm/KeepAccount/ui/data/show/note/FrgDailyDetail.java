@@ -148,9 +148,8 @@ public class FrgDailyDetail extends FrgUtilityBase {
     }
 
     /**
-     * 数据库内数据变化处理器
-     *
-     * @param event 事件参数
+     * handler for DB data change
+     * @param event     for event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBDataChangeEvent(DBDataChangeEvent event) {
@@ -164,9 +163,8 @@ public class FrgDailyDetail extends FrgUtilityBase {
 
 
     /**
-     * 处理日期前后向导工作
-     *
-     * @param view 触发的按键
+     * process day prior/next browse
+     * @param view      for button
      */
     @OnClick({R.id.rl_prv, R.id.rl_next})
     public void dayButtonClick(View view) {

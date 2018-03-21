@@ -9,7 +9,7 @@ import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 
 /**
- * 展示日详情的activity
+ * day detail UI
  */
 public class ACDailyDetail extends BaseAppCompatActivity {
     public final static String K_HOTDAY = "hotday";
