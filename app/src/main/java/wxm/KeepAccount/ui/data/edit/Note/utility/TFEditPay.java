@@ -51,7 +51,7 @@ import wxm.KeepAccount.utility.ToolUtil;
 import static java.lang.String.format;
 
 /**
- * 编辑支出
+ * edit pay
  * Created by wxm on 2016/9/28.
  */
 public class TFEditPay extends TFEditBase implements View.OnTouchListener {
@@ -94,7 +94,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
     }
 
     /**
-     * 填充数据
+     * fill data
      */
     private void fill_data() {
         if (mAction.equals(GlobalDef.STR_MODIFY)) {
@@ -132,9 +132,6 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         }
     }
 
-    /**
-     * 初始化元素
-     */
     private void init_component() {
         // 填充预算数据
         ArrayList<String> data_ls = new ArrayList<>();
@@ -250,9 +247,8 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
 
     /**
-     * 检查数据合法性
-     *
-     * @return 若数据合法返回true, 否则返回false
+     * check data validity
+     * @return      true if data validity
      */
     private boolean checkResult() {
         Activity ac = getActivity();
@@ -290,9 +286,8 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
     }
 
     /**
-     * 写入数据
-     *
-     * @return 操作成功返回true, 否则返回false
+     * write data
+     * @return      true if success
      */
     private boolean fillResult() {
         String str_val = mETAmount.getText().toString();

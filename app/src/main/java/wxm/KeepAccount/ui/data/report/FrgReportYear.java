@@ -10,7 +10,7 @@ import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.KeepAccount.R;
 
 /**
- * 年数据汇报
+ * date year report
  * Created by ookoo on 2017/2/15.
  */
 public class FrgReportYear extends FrgUtilityBase {

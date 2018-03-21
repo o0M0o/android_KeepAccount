@@ -21,7 +21,7 @@ import wxm.KeepAccount.ui.dialog.DlgSelectColor;
 import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
- * 图表颜色设置页面
+ * setting for chart color
  * Created by 123 on 2016/10/10.
  */
 public class TFSettingChartColor extends TFSettingBase {

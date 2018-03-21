@@ -45,7 +45,7 @@ import wxm.KeepAccount.utility.ToolUtil;
 import static java.lang.String.format;
 
 /**
- * 编辑收入
+ * edit income
  * Created by wxm on 2016/9/28.
  */
 public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
@@ -186,9 +186,8 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
 
 
     /**
-     * 检查数据合法性
-     *
-     * @return 若数据合法返回true, 否则返回false
+     * check record validity
+     * @return      true if record validity
      */
     private boolean checkResult() {
         Activity ac = getActivity();
@@ -226,9 +225,8 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     }
 
     /**
-     * 写入数据
-     *
-     * @return 操作成功返回true, 否则返回false
+     * write record
+     * @return      true if success
      */
     private boolean fillResult() {
         String str_val = mETAmount.getText().toString();

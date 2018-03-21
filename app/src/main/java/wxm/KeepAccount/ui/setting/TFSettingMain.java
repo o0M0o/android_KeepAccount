@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.setting;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import java.lang.ref.WeakReference;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -18,20 +21,63 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
 
 /**
- * 设置主页面
+ * main page for setting
  * Created by 123 on 2016/10/10.
  */
 public class TFSettingMain extends TFSettingBase {
-
     @BindView(R.id.rl_remind)
     RelativeLayout mRLRemind;
 
     @BindView(R.id.rl_share_app)
     RelativeLayout mRLShareApp;
 
+    static class safeTask extends AsyncTask<Void, Void, Void> {
+        private final WeakReference<Activity> weakActivity;
+        private AlertDialog mADDlg;
+
+        safeTask(Activity myActivity) {
+            this.weakActivity = new WeakReference<>(myActivity);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            if(isActivityAlive()) {
+                Activity activity = weakActivity.get();
+                mADDlg = new AlertDialog.Builder(activity)
+                        .setTitle("提示")
+                        .setMessage("请等待数据清理完毕...").create();
+            }
+        }
+
+
+        @Override
+        public Void doInBackground(Void... params) {
+            ContextUtil.ClearDB();
+            return null;
+        }
+
+        @Override
+        public void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            if(isActivityAlive())
+                return;
+
+            mADDlg.dismiss();
+        }
+
+        private boolean isActivityAlive()   {
+            Activity activity = weakActivity.get();
+            return !(activity == null || activity.isFinishing() || activity.isDestroyed());
+        }
+    }
+
+    private safeTask mTask;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        mTask = new safeTask(this.getActivity());
+
         View v = inflater.inflate(R.layout.page_setting_main, container, false);
         ButterKnife.bind(this, v);
         return v;
@@ -63,31 +109,8 @@ public class TFSettingMain extends TFSettingBase {
                 Dialog alertDialog = new AlertDialog.Builder(getContext()).
                         setTitle("清除所有数据!").
                         setMessage("此操作不能恢复，是否继续操作!").
-                        setPositiveButton("是", (dialog, which) ->
-                                new AsyncTask<Void, Void, Void>() {
-                                    private AlertDialog mADDlg;
-
-                                    @Override
-                                    protected void onPreExecute() {
-                                        mADDlg = new AlertDialog.Builder(getContext())
-                                                .setTitle("提示")
-                                                .setMessage("请等待数据清理完毕...").create();
-                                    }
-
-                                    @Override
-                                    protected Void doInBackground(Void... params) {
-                                        ContextUtil.ClearDB();
-                                        return null;
-                                    }
-
-                                    @Override
-                                    protected void onPostExecute(Void aVoid) {
-                                        super.onPostExecute(aVoid);
-                                        mADDlg.dismiss();
-                                    }
-                                }.execute()).
-                        setNegativeButton("否", (dialog, which) -> {
-                        }).
+                        setPositiveButton("是", (dialog, which) -> mTask.execute()).
+                        setNegativeButton("否", (dialog, which) -> {}).
                         create();
                 alertDialog.show();
             }

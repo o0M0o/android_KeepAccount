@@ -34,7 +34,7 @@ public class AdapterNoteDetail extends SimpleAdapter {
     private Context mCTSelf;
 
     /**
-     * 如果设置为true则数据可以删除
+     * if set to true can delete data
      */
     private boolean mBLCanDelete = false;
     private ArrayList<INote> mALDelNotes;
@@ -58,9 +58,8 @@ public class AdapterNoteDetail extends SimpleAdapter {
     }
 
     /**
-     * 设置是否可以删除数据
-     *
-     * @param bdel 若为true则可以删除数据
+     * set whether can delete data
+     * @param bdel      if true then can delete data
      */
     public void setCanDelete(boolean bdel) {
         mBLCanDelete = bdel;
@@ -68,9 +67,8 @@ public class AdapterNoteDetail extends SimpleAdapter {
 
 
     /**
-     * 获得待删除的节点
-     *
-     * @return 待删除节点链表
+     * get nodes wait deleted
+     * @return  nodes wait deleted
      */
     public List<INote> getWantDeleteNotes() {
         return mALDelNotes;
@@ -97,11 +95,10 @@ public class AdapterNoteDetail extends SimpleAdapter {
 
 
     /**
-     * 初始化删除动作
-     *
-     * @param vh    view holder
-     * @param data  数据
-     * @param bflag 若为ture则数据可删除
+     * init delete action
+     * @param vh        view holder
+     * @param data      data
+     * @param bflag     if true then data can delete
      */
     private void initDelAction(FastViewHolder vh, INote data, boolean bflag) {
         if (!bflag)
@@ -121,10 +118,9 @@ public class AdapterNoteDetail extends SimpleAdapter {
     }
 
     /**
-     * 当前节点是pay时初始化
-     *
-     * @param vh   view holder
-     * @param data 数据
+     * init pay node
+     * @param vh    view holder
+     * @param data  pay data
      */
     private void initPay(FastViewHolder vh, INote data) {
         PayNoteItem pn = data.toPayNote();
@@ -170,10 +166,9 @@ public class AdapterNoteDetail extends SimpleAdapter {
     }
 
     /**
-     * 当前节点是income时初始化
-     *
-     * @param vh   view holder
-     * @param data 数据
+     * init income node
+     * @param vh    view holder
+     * @param data  income data
      */
     private void initIncome(FastViewHolder vh, INote data) {
         IncomeNoteItem i_n = data.toIncomeNote();

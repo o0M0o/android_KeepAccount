@@ -7,22 +7,18 @@ import java.util.Calendar;
 import java.util.Locale;
 
 /**
- * 工具类
+ * tool helper
  * Created by 123 on 2016/6/2.
  */
 public class ToolUtil {
-    private static final String LOG_TAG = "ToolUtil";
-
     private final static String[] DAY_IN_WEEK = {
             "星期日", "星期一", "星期二", "星期三",
             "星期四", "星期五", "星期六"};
 
-
     /**
-     * 把"2016-01-14"转换为"2016年01月14日"
-     *
-     * @param org 待转换日期字符串
-     * @return 转换后的字符串
+     * format date string '2016-01-14' to '2016年01月14日'
+     * @param org       origin date string
+     * @return          format string
      */
     public static String FormatDateString(String org) {
         int orglen = org.length();
@@ -44,15 +40,15 @@ public class ToolUtil {
 
 
     /**
-     * 时间字符串转换到时间戳
-     * 待转换字符串必须是如下格式 ：
+     * date string to Timestamp
+     * string must be :
      * "2016-08-06",
      * "2016年08月06日"
      * "2016-08-06 12:00:00",
      * "2016年08月06日 12:00:00"
      *
-     * @param str 待转换时间字符串
-     * @return 转换的结果
+     * @param str   date string
+     * @return      timestamp
      * @throws ParseException parse failure
      */
     public static Timestamp StringToTimestamp(String str) throws ParseException {
@@ -66,9 +62,9 @@ public class ToolUtil {
     }
 
     /**
-     * 获取时间戳所在的星期信息
-     * @param ts 时间戳
-     * @return 返回"星期*"
+     * get day in week for timestamp
+     * @param ts    time
+     * @return      "星期*"
      */
     public static String getDayInWeek(Timestamp ts) {
         Calendar day = Calendar.getInstance();
@@ -78,9 +74,9 @@ public class ToolUtil {
     }
 
     /**
-     * 返回“星期*"
-     * @param dw 0-6格式的星期数
-     * @return 星期*
+     * get "星期*"
+     * @param dw    day order in week(0-6)
+     * @return      "星期*"
      */
     public static String getDayInWeek(int dw) {
         dw--;

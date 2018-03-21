@@ -10,7 +10,7 @@ import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.KeepAccount.R;
 
 /**
- * 月数据汇报
+ * data month report
  * Created by ookoo on 2017/2/15.
  */
 public class FrgReportMonth extends FrgUtilityBase {

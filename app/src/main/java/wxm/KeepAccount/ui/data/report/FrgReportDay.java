@@ -1,10 +1,12 @@
 package wxm.KeepAccount.ui.data.report;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,14 +18,20 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import wxm.KeepAccount.ui.setting.TFSettingMain;
+import wxm.KeepAccount.utility.ContextUtil;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.util.UtilFun;
@@ -35,7 +43,7 @@ import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
 /**
- * 日数据汇报
+ * day data report
  * Created by ookoo on 2017/2/15.
  */
 public class FrgReportDay extends FrgUtilityBase {
@@ -49,7 +57,6 @@ public class FrgReportDay extends FrgUtilityBase {
     private FrgUtilityBase mPGHot = null;
     private DayReportWebView mPGWebView = new DayReportWebView();
     private DayReportChart mPGChart = new DayReportChart();
-
 
     @Override
     protected void enterActivity() {
@@ -68,9 +75,8 @@ public class FrgReportDay extends FrgUtilityBase {
     }
 
     /**
-     * 更新日期范围
-     *
-     * @param event 事件
+     * update date range
+     * @param event     event with start & end day
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSelectDaysEvent(EventSelectDays event) {
@@ -105,57 +111,45 @@ public class FrgReportDay extends FrgUtilityBase {
 
     @Override
     protected void loadUI() {
-        new AsyncTask<Void, Void, Void>() {
-            private String mSZCaption;
+        Activity h = this.getActivity();
+        FrgReportDay frg = this;
+        ExecutorService tp = Executors.newCachedThreadPool();
+        tp.submit(() -> {
+            if (!UtilFun.ListIsNullOrEmpty(frg.mASParaLoad)) {
+                if (2 != frg.mASParaLoad.size())
+                    return;
 
-            private BigDecimal mBDTotalPay = BigDecimal.ZERO;
-            private BigDecimal mBDTotalIncome = BigDecimal.ZERO;
+                String d_s = frg.mASParaLoad.get(0);
+                String d_e = frg.mASParaLoad.get(1);
+                final String mSZCaption = String.format(Locale.CHINA,
+                        "%s - %s", d_s, d_e);
+                HashMap<String, ArrayList<INote>> ls_note = NoteDataHelper.getInstance()
+                        .getNotesBetweenDays(d_s, d_e);
 
-            @Override
-            protected void onPreExecute() {
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
-                    if (2 != mASParaLoad.size())
-                        return null;
-
-                    String d_s = mASParaLoad.get(0);
-                    String d_e = mASParaLoad.get(1);
-                    mSZCaption = String.format(Locale.CHINA,
-                            "%s - %s", d_s, d_e);
-                    HashMap<String, ArrayList<INote>> ls_note = NoteDataHelper.getInstance()
-                            .getNotesBetweenDays(d_s, d_e);
-
-                    for (ArrayList<INote> ls_n : ls_note.values()) {
-                        for (INote id : ls_n) {
-                            if (id.isPayNote())
-                                mBDTotalPay = mBDTotalPay.add(id.getVal());
-                            else
-                                mBDTotalIncome = mBDTotalIncome.add(id.getVal());
-                        }
+                BigDecimal mBDTotalPay = BigDecimal.ZERO;
+                BigDecimal mBDTotalIncome = BigDecimal.ZERO;
+                for (ArrayList<INote> ls_n : ls_note.values()) {
+                    for (INote id : ls_n) {
+                        if (id.isPayNote())
+                            mBDTotalPay = mBDTotalPay.add(id.getVal());
+                        else
+                            mBDTotalIncome = mBDTotalIncome.add(id.getVal());
                     }
                 }
 
-                return null;
+                final BigDecimal t_p = mBDTotalPay;
+                final BigDecimal t_i = mBDTotalIncome;
+                if(!(h.isFinishing() || h.isDestroyed())) {
+                    h.runOnUiThread(() -> {
+                        frg.mTVDay.setText(mSZCaption);
+                        frg.mTVPay.setText(String.format(Locale.CHINA,
+                                "%.02f", t_p.floatValue()));
+                        frg.mTVIncome.setText(String.format(Locale.CHINA,
+                                "%.02f", t_i.floatValue()));
+                    });
+                }
             }
-
-            @SuppressLint("SetJavaScriptEnabled")
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                // After completing execution of given task, control will return here.
-                // Hence if you want to populate UI elements with fetched data, do it here.
-
-                // for header show
-                mTVDay.setText(mSZCaption);
-                mTVPay.setText(String.format(Locale.CHINA,
-                        "%.02f", mBDTotalPay.floatValue()));
-                mTVIncome.setText(String.format(Locale.CHINA,
-                        "%.02f", mBDTotalIncome.floatValue()));
-            }
-        }.execute();
+        });
     }
 
     /**

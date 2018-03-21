@@ -1,7 +1,7 @@
 package wxm.KeepAccount.define;
 
 /**
- * App全局定义
+ * global define
  * Created by 123 on 2016/5/6.
  */
 public class GlobalDef {

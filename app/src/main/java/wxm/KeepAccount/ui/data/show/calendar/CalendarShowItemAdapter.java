@@ -13,7 +13,7 @@ import wxm.uilib.SimpleCalendar.BaseCalendarItemModel;
 import wxm.androidutil.util.UiUtil;
 
 /**
- * 日历节点
+ * adapter for calendar
  * Created by ookoo on 2017/07/03.
  */
 public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarShowItemModel> {

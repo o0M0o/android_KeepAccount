@@ -18,7 +18,7 @@ import wxm.androidutil.DBHelper.IDBRow;
 import wxm.KeepAccount.utility.ContextUtil;
 
 /**
- * 支出记录数据
+ * pay record
  * Created by 123 on 2016/5/3.
  */
 @DatabaseTable(tableName = "tbPayNote")

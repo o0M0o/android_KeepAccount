@@ -18,7 +18,7 @@ import wxm.androidutil.DBHelper.IDBRow;
 import wxm.androidutil.util.UtilFun;
 
 /**
- * 预算类
+ * budget
  * Created by 123 on 2016/9/1.
  */
 @DatabaseTable(tableName = "tbBudget")
@@ -152,9 +152,8 @@ public class BudgetItem
     }
 
     /**
-     * 使用预算
-     *
-     * @param use_val 使用预算金额,为总使用预算金额
+     * use budget
+     * @param use_val   total used budget amount
      */
     public void useBudget(BigDecimal use_val) {
         remainder_amount = amount.subtract(use_val);

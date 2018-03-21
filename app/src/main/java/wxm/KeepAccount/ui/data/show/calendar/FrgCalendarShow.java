@@ -20,6 +20,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -132,31 +134,19 @@ public class FrgCalendarShow extends FrgUtilityBase {
     private void reLoadFrg() {
         Log.d(LOG_TAG, "reLoadFrg");
 
-        new AsyncTask<Void, Void, Void>() {
-            private String mSZFristMonth;
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                HashMap<String, ArrayList<INote>> hm
+        Activity h = this.getActivity();
+        ExecutorService tp = Executors.newCachedThreadPool();
+        tp.submit(() -> {
+            String mSZFristMonth = null;
+            HashMap<String, ArrayList<INote>> hm
                         = NoteDataHelper.getInstance().getNotesForMonth();
-                if (null != hm) {
-                    mSZFristMonth = UtilFun.cast_t(hm.keySet().toArray()[0]);
-                }
-
-                return null;
+            if (null != hm) {
+                mSZFristMonth = UtilFun.cast_t(hm.keySet().toArray()[0]);
             }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-
-                if (UtilFun.StringIsNullOrEmpty(mSZFristMonth)) {
+            final String fist_month = mSZFristMonth;
+            h.runOnUiThread(() -> {
+                if (UtilFun.StringIsNullOrEmpty(fist_month)) {
                     Activity ac = getActivity();
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ac);
                     builder.setMessage("当前用户没有数据，请先添加数据!").setTitle("警告");
@@ -172,13 +162,13 @@ public class FrgCalendarShow extends FrgUtilityBase {
                         cur_sel_month = cur_sel_month.substring(0, 7);
 
 
-                    if (!cur_month.equals(mSZFristMonth) && !mSZFristMonth.equals(cur_sel_month))
-                        mHGVDays.changeMonth(mSZFristMonth);
+                    if (!cur_month.equals(fist_month) && !fist_month.equals(cur_sel_month))
+                        mHGVDays.changeMonth(fist_month);
                     else
-                        updateCalendar(mSZFristMonth);
+                        updateCalendar(fist_month);
                 }
-            }
-        }.execute();
+            });
+        });
     }
 
 

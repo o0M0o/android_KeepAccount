@@ -33,7 +33,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 
 /**
- * 编辑记录类型
+ * UI for record info
  * Created by wxm on 2016/9/28.
  */
 public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener {
@@ -116,7 +116,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     }
 
     /**
-     * 更新界面动作状态
+     * update actions
      * @param type  for type
      */
     private void update_acts(int type) {
@@ -167,7 +167,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     }
 
     /**
-     * 加载数据到gird view
+     * load data to gird view
      */
     private void load_info() {
         mLHMData.clear();
@@ -196,9 +196,8 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     }
 
     /**
-     * GridView item选中后调用的函数
-     *
-     * @param position 当前点击位置
+     * after gridview item selected
+     * @param position      current click position
      */
     private void onGVItemClick(int position) {
         if (mRLActMinus.isSelected()) {
@@ -246,7 +245,6 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
 
     @Override
     public void setCurData(String action, Object obj) {
-        String mAction = action;
         mEditType = UtilFun.cast_t(obj);
     }
 
@@ -371,7 +369,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
 
 
     /**
-     * 加载gridview的适配器类
+     * adapter for gridview
      */
     public class GVTypeAdapter extends SimpleAdapter {
         private int mCLSelected;

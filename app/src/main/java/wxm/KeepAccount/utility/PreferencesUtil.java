@@ -14,7 +14,7 @@ import wxm.KeepAccount.R;
 import wxm.androidutil.util.UiUtil;
 
 /**
- * 配置管理类
+ * preference helper
  * Created by 123 on 2016/6/18.
  */
 public class PreferencesUtil {
@@ -29,9 +29,8 @@ public class PreferencesUtil {
     /// BEGIN
 
     /**
-     * 加载首页上动作配置
-     *
-     * @return 动作配置
+     * load first page action setting
+     * @return      action in first page
      */
     public static List<String> loadHotAction() {
         SharedPreferences param = ContextUtil.getInstance()
@@ -49,9 +48,8 @@ public class PreferencesUtil {
 
 
     /**
-     * 保存首页上动作
-     *
-     * @param acts 动作
+     * save fist page action
+     * @param acts  action in fist page
      */
     public static void saveHotAction(List<String> acts) {
         SharedPreferences param = ContextUtil.getInstance()
@@ -66,9 +64,8 @@ public class PreferencesUtil {
     /// BEGIN
 
     /**
-     * 加载chart颜色配置
-     *
-     * @return 颜色配置
+     * load chart color setting
+     * @return  color setting
      */
     public static HashMap<String, Integer> loadChartColor() {
         SharedPreferences param = ContextUtil.getInstance()
@@ -86,9 +83,8 @@ public class PreferencesUtil {
 
 
     /**
-     * 保存chart颜色配置
-     *
-     * @param ccs 配色配置
+     * save chart color setting
+     * @param ccs   color setting
      */
     public static void saveChartColor(HashMap<String, Integer> ccs) {
         SharedPreferences param = ContextUtil.getInstance()
@@ -103,10 +99,9 @@ public class PreferencesUtil {
     /// BEGIN PRIVATE
 
     /**
-     * 把配置字符串解析成结果
-     *
-     * @param pr 配置字符串
-     * @return 结果
+     * parse setting string
+     * @param pr    setting string
+     * @return      settings
      */
     private static List<String> parsePreferences(String pr) {
         ArrayList<String> ret = new ArrayList<>();
@@ -117,10 +112,9 @@ public class PreferencesUtil {
     }
 
     /**
-     * 把动作解析成配置字符串
-     *
-     * @param acts 待解析动作
-     * @return 配置字符串
+     * parse settings to string
+     * @param acts      settings
+     * @return          setting string
      */
     private static String parseToPreferences(List<String> acts) {
         boolean ff = true;
@@ -139,10 +133,9 @@ public class PreferencesUtil {
     }
 
     /**
-     * 从配置字符串解析配置
-     *
-     * @param cc 配置字符串
-     * @return 解析配置
+     * parse setting string for chart color
+     * @param cc    setting string
+     * @return      chart color setting
      */
     private static HashMap<String, Integer> parseChartColors(String cc) {
         HashMap<String, Integer> ret = new HashMap<>();
@@ -158,10 +151,9 @@ public class PreferencesUtil {
 
 
     /**
-     * 图表颜色串行化为字符串
-     *
-     * @param hmcc 配置信息
-     * @return 字符串
+     * parse chart color to setting string
+     * @param hmcc      chart color setting
+     * @return          setting string
      */
     private static String parseChartColorsToString(HashMap<String, Integer> hmcc) {
         StringBuilder ret = new StringBuilder();

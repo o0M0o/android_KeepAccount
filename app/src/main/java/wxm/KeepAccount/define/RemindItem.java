@@ -18,7 +18,7 @@ import wxm.androidutil.DBHelper.IDBRow;
 import wxm.KeepAccount.utility.ContextUtil;
 
 /**
- * 提醒数据
+ * remind
  * Created by 123 on 2016/10/9.
  */
 @DatabaseTable(tableName = "tbRemind")

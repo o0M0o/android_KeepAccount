@@ -17,7 +17,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 
 /**
- * 检查版本设置页面
+ * check version
  * Created by 123 on 2016/10/10.
  */
 public class TFSettingCheckVersion extends TFSettingBase {

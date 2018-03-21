@@ -7,7 +7,7 @@ import android.graphics.BitmapFactory;
 import wxm.KeepAccount.R;
 
 /**
- * 动作辅助类
+ * action helper
  * Created by 123 on 2016/9/21.
  */
 public class ActionHelper {
@@ -33,10 +33,9 @@ public class ActionHelper {
 
 
     /**
-     * 根据动作的名字得到其对应的bitmap
-     *
-     * @param act_name 动作名
-     * @return 对应的bitmap
+     * get bitmap accroding to name
+     * @param act_name      name for action
+     * @return              bitmap
      */
     public static Bitmap getBitMapFromName(String act_name) {
         Resources res = ContextUtil.getInstance().getResources();

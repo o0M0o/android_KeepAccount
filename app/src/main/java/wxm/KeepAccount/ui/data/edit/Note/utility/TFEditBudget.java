@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.data.edit.Note.utility;
 
+import android.annotation.SuppressLint;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,7 +30,7 @@ import wxm.KeepAccount.ui.dialog.DlgLongTxt;
 import wxm.KeepAccount.utility.ContextUtil;
 
 /**
- * 编辑支出
+ * edit budget
  * Created by wxm on 2016/9/28.
  */
 public class TFEditBudget extends TFEditBase {
@@ -158,7 +159,7 @@ public class TFEditBudget extends TFEditBase {
 
 
     /**
-     * 初始化视图
+     * init UI
      */
     private void init_view() {
         if (UtilFun.StringIsNullOrEmpty(mAction)
@@ -176,8 +177,9 @@ public class TFEditBudget extends TFEditBase {
     }
 
     /**
-     * 初始化组件
+     * init UI component
      */
+    @SuppressLint("ClickableViewAccessibility")
     private void init_component() {
         mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 

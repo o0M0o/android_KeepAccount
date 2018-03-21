@@ -12,18 +12,17 @@ import wxm.KeepAccount.define.UsrItem;
 
 
 /**
- * APP全局消息处理器
+ * global msg handler
  * Created by 123 on 2016/6/30.
  */
 public class GlobalMsgHandler extends Handler {
     private static final String TAG = "GlobalMsgHandler";
 
     /**
-     * 回复消息
-     *
-     * @param mh       接收回复消息的句柄
-     * @param msg_type 原消息类型（{@code arg1}）
-     * @param msg_obj  回复消息的参数{@code obj}
+     * reply msg
+     * @param mh        receive handler接收回复消息的句柄
+     * @param msg_type  origin msg type{@code arg1}）
+     * @param msg_obj   object for reply{@code obj}
      */
     private static void ReplyMsg(Handler mh, int msg_type, Object msg_obj) {
         Message m = Message.obtain(mh, EMsgType.REPLAY.getId());

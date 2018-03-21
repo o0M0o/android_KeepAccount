@@ -24,7 +24,7 @@ import wxm.KeepAccount.R;
 
 
 /**
- * 显示数据图示的扩展视图
+ * use this help show data
  *
  * @author wxm
  * @version create：2017/03/28
@@ -63,7 +63,7 @@ public class ValueShow extends ConstraintLayout {
     ImageView mIVIncomeLine;
 
     /**
-     * 可设置属性
+     * can set attributes
      */
     private String mAttrPayCount;
     private String mAttrPayAmount;
@@ -87,9 +87,8 @@ public class ValueShow extends ConstraintLayout {
 
 
     /**
-     * 调节属性
-     *
-     * @param attrs 新属性值
+     * adjust attributes
+     * @param attrs     new attributes
      */
     public void adjustAttribute(Map<String, Object> attrs) {
         for (String k : attrs.keySet()) {
@@ -116,10 +115,9 @@ public class ValueShow extends ConstraintLayout {
     }
 
     /**
-     * 初始化自身
-     *
-     * @param context 上下文
-     * @param attrs   配置
+     * use date init UI
+     * @param context   context for UI
+     * @param attrs     data for UI
      */
     private void initCompent(Context context, AttributeSet attrs) {
         // for parameter
@@ -153,9 +151,6 @@ public class ValueShow extends ConstraintLayout {
         }
     }
 
-    /**
-     * 更新显示
-     */
     private void updateShow() {
         mTVPayCount.setText(mAttrPayCount);
         mTVPayAmount.setText(mAttrPayAmount);
@@ -196,10 +191,9 @@ public class ValueShow extends ConstraintLayout {
     }
 
     /**
-     * 调整显示线长度
-     *
-     * @param iv      待调正线
-     * @param percent 新长度百分比
+     * adjust line length
+     * @param iv        line need adjust
+     * @param percent   new length(percentage)
      */
     private void adjustLineLen(ImageView iv, float percent) {
         ViewGroup.LayoutParams lp = iv.getLayoutParams();

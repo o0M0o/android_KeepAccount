@@ -38,7 +38,7 @@ import wxm.KeepAccount.utility.ActionHelper;
 import wxm.KeepAccount.R;
 
 /**
- * 用户登陆后首页面
+ * first page after login
  */
 public class ACWelcome extends AppCompatActivity
         implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {

@@ -26,7 +26,7 @@ public class NoteDataHelper {
     // use singleton
     private static NoteDataHelper instance = new NoteDataHelper();
     /**
-     * 分别对应 :
+     *  example :
      * '2016-10-24' ---- data   (日数据）
      * '2016-10'    ---- data   (月数据)
      * '2016'       ---- data   (年数据)
@@ -50,17 +50,17 @@ public class NoteDataHelper {
     }
 
     /**
-     * 根据月份查找统计数据
-     * @param mt 月份（比如'2017-01')
-     * @return 统计数据
+     * get data for month
+     * @param mt    month（example : '2017-01')
+     * @return      data
      */
     public static NoteShowInfo getInfoByMonth(String mt) {
         return getInstance().mHMMonthInfo.get(mt);
     }
 
     /**
-     * 返回有数据的月份
-     * @return 有数据的月份
+     * get month that have records
+     * @return  month
      */
     public static List<String> getNotesMonths() {
         LinkedList<String> ls_sz = new LinkedList<>();
@@ -69,17 +69,17 @@ public class NoteDataHelper {
     }
 
     /**
-     * 根据年份查找统计数据
-     * @param yr 年度（比如'2017')
-     * @return 统计数据
+     * get data for year
+     * @param yr    year(example : '2017')
+     * @return      data
      */
     public static NoteShowInfo getInfoByYear(String yr) {
         return getInstance().mHMYearInfo.get(yr);
     }
 
     /**
-     * 返回有数据的年度
-     * @return 有数据的年度
+     * get year that have records
+     * @return      year
      */
     public static List<String> getNotesYears() {
         LinkedList<String> ls_sz = new LinkedList<>();
@@ -88,17 +88,17 @@ public class NoteDataHelper {
     }
 
     /**
-     * 根据日期查找统计数据
-     * @param day 日期（比如'2017-01-12')
-     * @return 统计数据
+     * get data for year
+     * @param day   day（example : '2017-01-12')
+     * @return      data
      */
     public static NoteShowInfo getInfoByDay(String day) {
         return getInstance().mHMDayInfo.get(day);
     }
 
     /**
-     * 返回有数据的日期
-     * @return 有数据的日期
+     * get day that have records
+     * @return      days
      */
     public static List<String> getNotesDays() {
         LinkedList<String> ls_sz = new LinkedList<>();
@@ -107,7 +107,7 @@ public class NoteDataHelper {
     }
 
     /**
-     * 更新统计数据
+     * update data for day/month/year
      */
     public void refreshData() {
         mHMDayInfo.clear();
@@ -127,38 +127,34 @@ public class NoteDataHelper {
     }
 
     /**
-     * 获得按日归类的数据
-     *
-     * @return 按日归类的数据
+     * get data group by day
+     * @return  data
      */
     public HashMap<String, ArrayList<INote>> getNotesForDay() {
         return mHMDayNotes;
     }
 
     /**
-     * 获得按日归类的数据
-     *
-     * @return 按日归类的数据
+     * get data group by month
+     * @return  data
      */
     public HashMap<String, ArrayList<INote>> getNotesForMonth() {
         return mHMMonthNotes;
     }
 
     /**
-     * 获得按日归类的数据
-     *
-     * @return 按日归类的数据
+     * get data group by year
+     * @return  data
      */
     public HashMap<String, ArrayList<INote>> getNotesForYear() {
         return mHMYearNotes;
     }
 
     /**
-     * 以日期为单位,抽取指定时间段范围内的数据
-     *
-     * @param start 开始日期
-     * @param end   结束日期
-     * @return 数据
+     * get data between start to end
+     * @param start     start day
+     * @param end       end day
+     * @return          data
      */
     public HashMap<String, ArrayList<INote>> getNotesBetweenDays(String start, String end) {
         HashMap<String, ArrayList<INote>> ls_note = new HashMap<>();
@@ -175,9 +171,9 @@ public class NoteDataHelper {
     }
 
     /**
-     * 获取指定日期的INote数据
-     * @param day   日期(example : '2017-07-06')
-     * @return      INote数据
+     * get records for day
+     * @param day   day(example : '2017-07-06')
+     * @return      records
      */
     public List<INote> getNotesByDay(String day)    {
         return mHMDayNotes.get(day);
@@ -185,10 +181,9 @@ public class NoteDataHelper {
 
 
     /**
-     * 根据当前日期, 获得下一天的日期
-     *
-     * @param org_day 当前日期,比如"2017-02-24"
-     * @return 下一天的日期，或者""
+     * get next day have record
+     * @param org_day   origin day(example : "2017-02-24")
+     * @return          next day or ""
      */
     public String getNextDay(String org_day) {
         if (mALOrderedDays.isEmpty())
@@ -214,10 +209,9 @@ public class NoteDataHelper {
 
 
     /**
-     * 根据当前日期, 获得上一天的日期
-     *
-     * @param org_day 当前日期
-     * @return 上一天的日期，或者""
+     * get prior day have record
+     * @param org_day   origin day(example : "2017-02-24")
+     * @return          prior day or ""
      */
     public String getPrvDay(String org_day) {
         if (mALOrderedDays.isEmpty())
@@ -242,8 +236,8 @@ public class NoteDataHelper {
 
     /// PRIVATE BEGIN
     /**
-     * 更新日统计数据
-     * 数据取自sqlite原始数据
+     * update day stats
+     * data from sqlite
      */
     private void refresh_day() {
         for (String k : mALOrderedDays) {
@@ -264,8 +258,8 @@ public class NoteDataHelper {
     }
 
     /**
-     * 更新月统计数据
-     * !!数据取自日统计数据!!
+     * update month stats
+     * data from day stats
      */
     private void refresh_month() {
         ArrayList<String> set_k = new ArrayList<>(mHMDayInfo.keySet());
@@ -290,8 +284,8 @@ public class NoteDataHelper {
     }
 
     /**
-     * 更新年统计数据
-     * !!数据取自月统计数据!!
+     * update year stats
+     * data from month stats
      */
     private void refresh_year() {
         ArrayList<String> set_k = new ArrayList<>(mHMMonthInfo.keySet());

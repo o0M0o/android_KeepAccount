@@ -67,9 +67,6 @@ public class TFPreviewBudget extends TFPreviewBase {
             init_view();
     }
 
-    /**
-     * 初始化视图
-     */
     private void init_view() {
         if (null != mBIData) {
             mTVName.setText(mBIData.getName());

@@ -27,7 +27,7 @@ import wxm.KeepAccount.define.UsrItem;
 import wxm.KeepAccount.utility.ContextUtil;
 
 /**
- * 添加用户
+ * add user
  * Created by ookoo on 2016/11/29.
  */
 public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorActionListener {
@@ -131,7 +131,7 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
     /// PRIVATE BEGIN
 
     /**
-     * 清空已经存在的数据
+     * clean UI
      */
     private void repeatInput() {
         mETUsrName.setText("");
@@ -141,11 +141,9 @@ public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorAction
         mETUsrName.requestFocus();
     }
 
-
     /**
-     * 检查输入数据合法性，并设置提示信息
-     *
-     * @return 如果数据合法返回true, 否则返回false
+     * check input data then give prompting message
+     * @return  true if data legal else false
      */
     private boolean checkInput() {
         String usr_name = mETUsrName.getText().toString();

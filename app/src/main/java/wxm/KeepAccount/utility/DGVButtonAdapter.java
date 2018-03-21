@@ -72,9 +72,8 @@ public class DGVButtonAdapter extends SimpleAdapter {
     }
 
     /**
-     * 获取当前动作
-     *
-     * @return 当前动作
+     * get current action
+     * @return      action
      */
     public List<String> getCurAction() {
         ArrayList<String> ret_ls = new ArrayList<>();

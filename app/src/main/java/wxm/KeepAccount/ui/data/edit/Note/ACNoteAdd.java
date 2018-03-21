@@ -8,7 +8,7 @@ import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 
 /**
- * 支出/收入数据编辑UI
+ * income/pay record UI
  */
 public class ACNoteAdd extends BaseAppCompatActivity {
     @Override

@@ -54,18 +54,16 @@ public class FrgSetting extends FrgUtilityBase {
 
 
     /**
-     * 切换到新页面
-     *
-     * @param new_page 新页面postion
+     * change to new page
+     * @param new_page  position for new page
      */
     public void change_page(int new_page) {
         mVPPage.setCurrentItem(new_page);
     }
 
     /**
-     * 得到当前页
-     *
-     * @return 当前页实例
+     * get current page
+     * @return      current page
      */
     public TFSettingBase getCurrentPage() {
         PagerAdapter pa = UtilFun.cast_t(mVPPage.getAdapter());

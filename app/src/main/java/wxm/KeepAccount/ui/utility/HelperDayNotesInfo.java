@@ -15,7 +15,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
 
 /**
- * 日数据头辅助类
+ * day data helper
  * Created by ookoo on 2017/1/22.
  */
 public class HelperDayNotesInfo {
@@ -41,85 +41,13 @@ public class HelperDayNotesInfo {
     }
 
     /**
-     * 填充note信息区
-     *
-     * @param rl            信息区句柄
-     * @param pay_count     支出次数
-     * @param pay_amount    支出金额
-     * @param income_count  收入次数
-     * @param income_amount 收入金额
-     * @param amount        结余金额
-     */
-    public static void fillNoteInfo(RelativeLayout rl, String pay_count, String pay_amount,
-                                    String income_count, String income_amount, String amount) {
-        boolean b_pay = !"0".equals(pay_count);
-        boolean b_income = !"0".equals(income_count);
-
-        RelativeLayout rl_p = UtilFun.cast_t(rl.findViewById(R.id.rl_pay));
-        RelativeLayout rl_i = UtilFun.cast_t(rl.findViewById(R.id.rl_income));
-
-        rl_i.setVisibility(View.VISIBLE);
-        rl_p.setVisibility(View.VISIBLE);
-
-        ImageView i_iv = UtilFun.cast_t(rl.findViewById(R.id.iv_income_line));
-        ImageView p_iv = UtilFun.cast_t(rl.findViewById(R.id.iv_pay_line));
-        if (b_pay) {
-            ViewGroup.LayoutParams i_para = i_iv.getLayoutParams();
-            i_para.width = DIM_FULL_WIDTH;
-            i_iv.setLayoutParams(i_para);
-
-            TextView tv = UtilFun.cast_t(rl.findViewById(R.id.tv_pay_count));
-            tv.setText(pay_count);
-
-            tv = UtilFun.cast_t(rl.findViewById(R.id.tv_pay_amount));
-            tv.setText(pay_amount);
-        } else {
-            rl_p.setVisibility(View.GONE);
-        }
-
-        if (b_income) {
-            ViewGroup.LayoutParams p_para = p_iv.getLayoutParams();
-            p_para.width = DIM_FULL_WIDTH;
-            p_iv.setLayoutParams(p_para);
-
-            TextView tv = UtilFun.cast_t(rl.findViewById(R.id.tv_income_count));
-            tv.setText(income_count);
-
-            tv = UtilFun.cast_t(rl.findViewById(R.id.tv_income_amount));
-            tv.setText(income_amount);
-        } else {
-            rl_i.setVisibility(View.GONE);
-        }
-
-        if (b_income && b_pay) {
-            float pay = Float.valueOf(pay_amount);
-            float income = Float.valueOf(income_amount);
-            ImageView iv = UtilFun.cast_t(rl.findViewById(pay < income ?
-                    R.id.iv_pay_line : R.id.iv_income_line));
-            ViewGroup.LayoutParams para = iv.getLayoutParams();
-            float ratio = (pay > income ? income : pay)
-                    / (pay < income ? income : pay);
-            //Log.v(LOG_TAG, "ratio : " + ratio + ", width : " + org_para.width);
-
-            para.width = (int) (DIM_FULL_WIDTH * ratio);
-            iv.setLayoutParams(para);
-        }
-
-        TextView tv = UtilFun.cast_t(rl.findViewById(R.id.tv_amount));
-        tv.setText(amount);
-        tv.setTextColor(amount.startsWith("+") ? CR_INCOME : CR_PAY);
-    }
-
-
-    /**
-     * 填充note信息区
-     *
-     * @param vh            视图holder
-     * @param pay_count     支出次数
-     * @param pay_amount    支出金额
-     * @param income_count  收入次数
-     * @param income_amount 收入金额
-     * @param amount        结余金额
+     * fill note UI
+     * @param vh                holder for view
+     * @param pay_count         pay count in one day
+     * @param pay_amount        pay amount in one day
+     * @param income_count      income count in one day
+     * @param income_amount     income amount in one day
+     * @param amount            balance amount in one day
      */
     public static void fillNoteInfo(FastViewHolder vh, String pay_count, String pay_amount,
                                     String income_count, String income_amount, String amount) {

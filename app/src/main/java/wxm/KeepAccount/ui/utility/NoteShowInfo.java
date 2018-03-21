@@ -6,7 +6,7 @@ import java.util.Locale;
 import wxm.androidutil.util.UtilFun;
 
 /**
- * 数据显示内容定义类
+ * for show data
  * Created by 123 on 2016/10/24.
  */
 public class NoteShowInfo {

@@ -16,7 +16,7 @@ import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
 import wxm.KeepAccount.utility.ToolUtil;
 
 /**
- * preview fragment for budget
+ * preview fragment for income
  * Created by 123 on 2016/10/29.
  */
 public class TFPreviewIncome extends TFPreviewBase {
@@ -69,9 +69,6 @@ public class TFPreviewIncome extends TFPreviewBase {
             init_view();
     }
 
-    /**
-     * 初始化视图
-     */
     private void init_view() {
         if (null != mINData) {
             mTVAmount.setText(mINData.getValToStr());

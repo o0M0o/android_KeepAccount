@@ -27,7 +27,7 @@ import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
 
 /**
- * 查看/编辑收入数据
+ * preview/edit record
  * Created by 123 on 2016/10/30.
  */
 public class FrgPreviewAndEdit extends Fragment
@@ -59,9 +59,8 @@ public class FrgPreviewAndEdit extends Fragment
     }
 
     /**
-     * 当前页是否是编辑页
-     *
-     * @return 若是编辑页，返回true
+     * check current page is edit
+     * @return      true if current page for edit
      */
     @Override
     public boolean isEditPage() {
@@ -69,25 +68,18 @@ public class FrgPreviewAndEdit extends Fragment
     }
 
     /**
-     * 当前页是否是预览页
-     *
-     * @return 若是预览页，返回true
+     * check current page is preview
+     * @return      true if current page for preview
      */
     @Override
     public boolean isPreviewPage() {
         return null != mVPPages && mVPPages.getCurrentItem() == PAGE_IDX_PREVIEW;
     }
 
-
-    /**
-     * 切换至编辑页
-     *
-     * @return 切换成功返回true
-     */
     @Override
-    public boolean toEditPage() {
+    public void toEditPage() {
         if (null == mVPPages)
-            return false;
+            return;
 
         if (isPreviewPage()) {
             mVPPages.setCurrentItem(PAGE_IDX_EDIT);
@@ -100,14 +92,8 @@ public class FrgPreviewAndEdit extends Fragment
                 te.reLoadView();
             }
         }
-        return true;
     }
 
-    /**
-     * 切换至预览页
-     *
-     * @return 切换成功返回true
-     */
     @Override
     public void toPreviewPage() {
         if (null == mVPPages)

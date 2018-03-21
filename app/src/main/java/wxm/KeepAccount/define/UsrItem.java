@@ -7,7 +7,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import wxm.androidutil.DBHelper.IDBRow;
 
 /**
- * 用户数据
+ * usr class
  * Created by 123 on 2016/8/5.
  */
 @DatabaseTable(tableName = "tbUsr")

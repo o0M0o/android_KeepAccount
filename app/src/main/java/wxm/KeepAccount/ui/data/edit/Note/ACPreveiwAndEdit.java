@@ -16,7 +16,7 @@ import wxm.KeepAccount.ui.data.edit.base.IPreviewAndEditBase;
 import wxm.KeepAccount.utility.ContextUtil;
 
 /**
- * 预览/编辑UI for note
+ * preview/edit UI for note
  */
 public class ACPreveiwAndEdit extends BaseAppCompatActivity {
     private final static String CHANGETO_PREVIEW = "预览";

@@ -71,9 +71,6 @@ public class TFPreviewPay extends TFPreviewBase {
             init_view();
     }
 
-    /**
-     * 初始化视图
-     */
     private void init_view() {
         if (null != mPIData) {
             mTVAmount.setText(mPIData.getValToStr());

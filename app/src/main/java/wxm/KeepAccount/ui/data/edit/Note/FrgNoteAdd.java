@@ -29,7 +29,7 @@ import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditPay;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 
 /**
- * for login
+ * note add UI
  * Created by ookoo on 2016/11/29.
  */
 public class FrgNoteAdd extends FrgUtilityBase {

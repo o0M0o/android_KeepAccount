@@ -10,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import wxm.androidutil.DBHelper.IDBRow;
 
 /**
- * 记录类型数据
+ * record type
  * Created by 123 on 2016/8/8.
  */
 @DatabaseTable(tableName = "tbRecordType")

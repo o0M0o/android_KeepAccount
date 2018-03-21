@@ -11,9 +11,8 @@ import android.widget.ListView;
  */
 public class ListViewHelper {
     /**
-     * 次级列表视图计算列表高度有错误，使用此函数校正
-     *
-     * @param listView 列表
+     * sub listview height have problem, use this to correct
+     * @param listView      for view
      */
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         int totalHeight = 0;

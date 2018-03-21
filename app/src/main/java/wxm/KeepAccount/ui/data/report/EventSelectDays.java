@@ -1,7 +1,7 @@
 package wxm.KeepAccount.ui.data.report;
 
 /**
- * 选择起止时间的类
+ * event when select start & end day
  * Created by ookoo on 2017/3/7.
  */
 public class EventSelectDays {

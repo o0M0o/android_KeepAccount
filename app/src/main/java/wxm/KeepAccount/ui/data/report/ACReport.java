@@ -11,7 +11,7 @@ import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 
 /**
- * 显示汇报信息
+ * UI for report
  * Created by ookoo on 2017/2/15.
  */
 public class ACReport extends BaseAppCompatActivity {

@@ -8,6 +8,9 @@ import wxm.androidutil.ExActivity.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 
+/**
+ * for record info
+ */
 public class ACRecordInfoEdit extends BaseAppCompatActivity {
     public final static String IT_PARA_RECORDTYPE = "record_type";
     private final TFEditRecordInfo mTFRecordInfo = new TFEditRecordInfo();
