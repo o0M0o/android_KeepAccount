@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.data.show.note.HelloChart;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.util.UtilFun;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.listener.ViewportChangeListener;
@@ -254,93 +254,83 @@ public class BudgetChart extends ShowViewBase {
         List<PayNoteItem> pays = ContextUtil.getPayIncomeUtility().getPayNoteByBudget(bi);
         HashMap<String, ArrayList<PayNoteItem>> hm_ret = new HashMap<>();
 
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                for (PayNoteItem i : pays) {
-                    String k = i.getTs().toString().substring(0, 10);
-                    ArrayList<PayNoteItem> lsp = hm_ret.get(k);
-                    if (UtilFun.ListIsNullOrEmpty(lsp)) {
-                        lsp = new ArrayList<>();
-                        lsp.add(i);
+        ToolUtil.runInBackground(this.getActivity(),
+                () -> {
+                    for (PayNoteItem i : pays) {
+                        String k = i.getTs().toString().substring(0, 10);
+                        ArrayList<PayNoteItem> lsp = hm_ret.get(k);
+                        if (UtilFun.ListIsNullOrEmpty(lsp)) {
+                            lsp = new ArrayList<>();
+                            lsp.add(i);
 
-                        hm_ret.put(k, lsp);
-                    } else {
-                        lsp.add(i);
-                    }
-                }
-
-                if (0 == hm_ret.size()) {
-                    String org_k = bi.getTs().toString().substring(0, 10);
-                    hm_ret.put(org_k, new ArrayList<>());
-                }
-
-                int id_col = 0;
-                List<AxisValue> axisValues = new ArrayList<>();
-                List<Column> columns = new ArrayList<>();
-                ArrayList<String> set_k = new ArrayList<>(hm_ret.keySet());
-                Collections.sort(set_k);
-                BigDecimal all_pay = BigDecimal.ZERO;
-                for (String k : set_k) {
-                    BigDecimal pay = BigDecimal.ZERO;
-                    ArrayList<PayNoteItem> lsp = hm_ret.get(k);
-                    for (PayNoteItem i : lsp) {
-                        pay = pay.add(i.getVal());
+                            hm_ret.put(k, lsp);
+                        } else {
+                            lsp.add(i);
+                        }
                     }
 
-                    all_pay = all_pay.add(pay);
-                    BigDecimal left_budget = bi.getAmount().subtract(all_pay);
-                    List<SubcolumnValue> values = new ArrayList<>();
-                    values.add(new SubcolumnValue(left_budget.floatValue(),
-                            mHMColor.get(PreferencesUtil.SET_BUDGET_BALANCE_COLOR)));
-                    values.add(new SubcolumnValue(all_pay.floatValue(),
-                            mHMColor.get(PreferencesUtil.SET_BUDGET_UESED_COLOR)));
-
-                    Column cd = new Column(values);
-                    cd.setHasLabels(true);
-                    columns.add(cd);
-
-                    axisValues.add(new AxisValue(id_col).setLabel(k));
-                    id_col++;
-                }
-
-                mChartData = new ColumnChartData(columns);
-                mChartData.setAxisXBottom(new Axis(axisValues));
-                mChartData.setAxisYLeft(new Axis().setHasLines(true));
-
-                // prepare preview data, is better to use separate deep copy for preview chart.
-                // set color to grey to make preview area more visible.
-                mPreviewData = new ColumnChartData(mChartData);
-                for (Column column : mPreviewData.getColumns()) {
-                    for (SubcolumnValue value : column.getValues()) {
-                        value.setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
+                    if (0 == hm_ret.size()) {
+                        String org_k = bi.getTs().toString().substring(0, 10);
+                        hm_ret.put(org_k, new ArrayList<>());
                     }
 
-                    column.setHasLabels(false);
-                }
+                    int id_col = 0;
+                    List<AxisValue> axisValues = new ArrayList<>();
+                    List<Column> columns = new ArrayList<>();
+                    ArrayList<String> set_k = new ArrayList<>(hm_ret.keySet());
+                    Collections.sort(set_k);
+                    BigDecimal all_pay = BigDecimal.ZERO;
+                    for (String k : set_k) {
+                        BigDecimal pay = BigDecimal.ZERO;
+                        ArrayList<PayNoteItem> lsp = hm_ret.get(k);
+                        for (PayNoteItem i : lsp) {
+                            pay = pay.add(i.getVal());
+                        }
 
-                int cc = 0;
-                for (AxisValue i : mPreviewData.getAxisXBottom().getValues()) {
-                    if (0 == cc % 5) {
-                        String v = new String(i.getLabelAsChars()).substring(0, 7);
-                        i.setLabel(v);
-                    } else {
-                        i.setLabel("");
+                        all_pay = all_pay.add(pay);
+                        BigDecimal left_budget = bi.getAmount().subtract(all_pay);
+                        List<SubcolumnValue> values = new ArrayList<>();
+                        values.add(new SubcolumnValue(left_budget.floatValue(),
+                                mHMColor.get(PreferencesUtil.SET_BUDGET_BALANCE_COLOR)));
+                        values.add(new SubcolumnValue(all_pay.floatValue(),
+                                mHMColor.get(PreferencesUtil.SET_BUDGET_UESED_COLOR)));
+
+                        Column cd = new Column(values);
+                        cd.setHasLabels(true);
+                        columns.add(cd);
+
+                        axisValues.add(new AxisValue(id_col).setLabel(k));
+                        id_col++;
                     }
 
-                    cc += 1;
-                }
-                return null;
-            }
+                    mChartData = new ColumnChartData(columns);
+                    mChartData.setAxisXBottom(new Axis(axisValues));
+                    mChartData.setAxisYLeft(new Axis().setHasLines(true));
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                // After completing execution of given task, control will return here.
-                // Hence if you want to populate UI elements with fetched data, do it here.
-                loadUIUtility(true);
-            }
-        }.execute();
+                    // prepare preview data, is better to use separate deep copy for preview chart.
+                    // set color to grey to make preview area more visible.
+                    mPreviewData = new ColumnChartData(mChartData);
+                    for (Column column : mPreviewData.getColumns()) {
+                        for (SubcolumnValue value : column.getValues()) {
+                            value.setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
+                        }
+
+                        column.setHasLabels(false);
+                    }
+
+                    int cc = 0;
+                    for (AxisValue i : mPreviewData.getAxisXBottom().getValues()) {
+                        if (0 == cc % 5) {
+                            String v = new String(i.getLabelAsChars()).substring(0, 7);
+                            i.setLabel(v);
+                        } else {
+                            i.setLabel("");
+                        }
+
+                        cc += 1;
+                    }
+                },
+                () -> loadUIUtility(true));
     }
 
     /**

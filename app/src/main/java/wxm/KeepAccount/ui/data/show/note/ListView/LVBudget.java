@@ -3,15 +3,11 @@ package wxm.KeepAccount.ui.data.show.note.ListView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -30,8 +26,6 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 
 import butterknife.OnClick;
-import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;

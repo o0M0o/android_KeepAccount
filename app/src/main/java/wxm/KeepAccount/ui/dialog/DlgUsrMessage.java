@@ -3,7 +3,6 @@ package wxm.KeepAccount.ui.dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Message;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +18,7 @@ import java.io.IOException;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.PackageUtil;
 import wxm.androidutil.util.SIMCardUtil;
@@ -116,8 +116,60 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
      * @return 发送成功返回true
      */
     private boolean sendMsgByHttpPost(String usr, String msg) {
-        HttpPostTask ht = new HttpPostTask(usr, msg);
-        ht.execute();
+        mProgressStatus = 0;
+
+        mPDDlg.setMax(100);
+        // 设置对话框的标题
+        mPDDlg.setTitle("发送消息");
+        // 设置对话框 显示的内容
+        mPDDlg.setMessage("发送进度");
+        // 设置对话框不能用“取消”按钮关闭
+        mPDDlg.setCancelable(true);
+        mPDDlg.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", (dialogInterface, i) -> {
+        });
+
+        // 设置对话框的进度条风格
+        mPDDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mPDDlg.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        // 设置对话框的进度条是否显示进度
+        mPDDlg.setIndeterminate(false);
+
+        mPDDlg.incrementProgressBy(-mPDDlg.getProgress());
+        mPDDlg.show();
+
+        ToolUtil.runInBackground(this.getActivity(),
+                () -> {
+                    OkHttpClient client = new OkHttpClient();
+                    try {
+                        // set param
+                        JSONObject param = new JSONObject();
+                        param.put(mSZColUsr, usr);
+                        param.put(mSZColMsg, msg);
+                        param.put(mSZColAppName,
+                                mSZColValAppName + "-"
+                                        + PackageUtil.getVerName(getContext(), GlobalDef.PACKAGE_NAME));
+
+                        RequestBody body = RequestBody.create(JSON, param.toString());
+
+                        mProgressStatus = 50;
+                        Message m = new Message();
+                        m.what = MSG_PROGRESS_UPDATE;
+                        mHDProgress.sendMessage(m);
+
+                        Request request = new Request.Builder()
+                                .url(mSZUrlPost).post(body).build();
+                        client.newCall(request).execute();
+
+                        mProgressStatus = 100;
+                        Message m1 = new Message();
+                        m1.what = MSG_PROGRESS_UPDATE;
+                        mHDProgress.sendMessage(m1);
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                },
+                () -> mPDDlg.dismiss());
+
         return true;
     }
 
@@ -142,91 +194,6 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
                     Log.e(TAG, String.format("msg(%s) can not process", m.toString()));
                     break;
             }
-        }
-    }
-
-    /**
-     * for send http post
-     */
-    public class HttpPostTask extends AsyncTask<Void, Void, Boolean> {
-        private final String mSZUsr;
-        private final String mSZMsg;
-
-        HttpPostTask(String usr, String msg) {
-            mSZUsr = usr;
-            mSZMsg = msg;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            mProgressStatus = 0;
-
-            mPDDlg.setMax(100);
-            // 设置对话框的标题
-            mPDDlg.setTitle("发送消息");
-            // 设置对话框 显示的内容
-            mPDDlg.setMessage("发送进度");
-            // 设置对话框不能用“取消”按钮关闭
-            mPDDlg.setCancelable(true);
-            mPDDlg.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", (dialogInterface, i) -> {
-            });
-
-            // 设置对话框的进度条风格
-            mPDDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mPDDlg.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            // 设置对话框的进度条是否显示进度
-            mPDDlg.setIndeterminate(false);
-
-            mPDDlg.incrementProgressBy(-mPDDlg.getProgress());
-            mPDDlg.show();
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            OkHttpClient client = new OkHttpClient();
-            try {
-                // set param
-                JSONObject param = new JSONObject();
-                param.put(mSZColUsr, mSZUsr);
-                param.put(mSZColMsg, mSZMsg);
-                param.put(mSZColAppName,
-                        mSZColValAppName + "-"
-                                + PackageUtil.getVerName(getContext(), GlobalDef.PACKAGE_NAME));
-
-                RequestBody body = RequestBody.create(JSON, param.toString());
-
-                mProgressStatus = 50;
-                Message m = new Message();
-                m.what = MSG_PROGRESS_UPDATE;
-                mHDProgress.sendMessage(m);
-
-                Request request = new Request.Builder()
-                        .url(mSZUrlPost).post(body).build();
-                client.newCall(request).execute();
-
-                mProgressStatus = 100;
-                Message m1 = new Message();
-                m1.what = MSG_PROGRESS_UPDATE;
-                mHDProgress.sendMessage(m1);
-            } catch (JSONException | IOException e) {
-                e.printStackTrace();
-            }
-
-            return true;
-        }
-
-
-        @Override
-        protected void onPostExecute(Boolean bret) {
-            super.onPostExecute(bret);
-            mPDDlg.dismiss();
         }
     }
 }

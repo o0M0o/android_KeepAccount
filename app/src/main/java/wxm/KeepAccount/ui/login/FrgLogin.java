@@ -5,7 +5,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,12 +21,15 @@ import android.widget.ProgressBar;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.usr.ACAddUsr;
 import wxm.KeepAccount.ui.welcome.ACWelcome;
 import wxm.KeepAccount.utility.ContextUtil;
+import wxm.KeepAccount.utility.ToolUtil;
+import wxm.androidutil.FrgUtility.FrgUtilityBase;
+
+;
 
 /**
  * for login
@@ -60,9 +62,6 @@ public class FrgLogin extends FrgUtilityBase {
     @BindString(R.string.error_incorrect_password)
     String mHSErrorPassword;
 
-    // Keep track of the login task to ensure we can cancel it if requested.
-    private UserLoginTask mAuthTask = null;
-
     @Override
     protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         LOG_TAG = "FrgLogin";
@@ -93,8 +92,7 @@ public class FrgLogin extends FrgUtilityBase {
         });
 
         mBTDefUsrLogin.setOnClickListener(v -> {
-            mAuthTask = new UserLoginTask(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD);
-            mAuthTask.execute((Void) null);
+            doLogin(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD);
         });
     }
 
@@ -110,10 +108,6 @@ public class FrgLogin extends FrgUtilityBase {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mETEmail.setError(null);
         mETPassword.setError(null);
@@ -146,8 +140,7 @@ public class FrgLogin extends FrgUtilityBase {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            doLogin(email, password);
         }
     }
 
@@ -186,55 +179,23 @@ public class FrgLogin extends FrgUtilityBase {
             }
         });
     }
-    /// PRIVATE END
 
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showProgress(true);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            return ContextUtil.getUsrUtility().loginByUsr(mEmail, mPassword);
-        }
-
-
-        @Override
-        protected void onPostExecute(Boolean bret) {
-            super.onPostExecute(bret);
-
-            mAuthTask = null;
-            new Handler().postDelayed(() -> showProgress(false), 300);
-
-            if (bret) {
-                Intent intent = new Intent(getActivity(), ACWelcome.class);
-                startActivityForResult(intent, 1);
-            } else {
-                mETPassword.setError(mHSErrorPassword);
-                mETPassword.requestFocus();
-            }
-        }
-
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
+    void doLogin(String usr, String pwd)  {
+        final boolean[] bret = {false};
+        ToolUtil.runInBackground(this.getActivity(),
+                () -> {
+                    bret[0] = ContextUtil.getUsrUtility().loginByUsr(usr, pwd);
+                },
+                () -> {
+                    new Handler().postDelayed(() -> showProgress(false), 300);
+                    if (bret[0]) {
+                        Intent intent = new Intent(getActivity(), ACWelcome.class);
+                        startActivityForResult(intent, 1);
+                    } else {
+                        mETPassword.setError(mHSErrorPassword);
+                        mETPassword.requestFocus();
+                    }
+                });
     }
+    /// PRIVATE END
 }

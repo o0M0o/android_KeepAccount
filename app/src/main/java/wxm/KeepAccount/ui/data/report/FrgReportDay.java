@@ -1,12 +1,9 @@
 package wxm.KeepAccount.ui.data.report;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,10 +15,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -30,8 +25,6 @@ import java.util.concurrent.Executors;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import wxm.KeepAccount.ui.setting.TFSettingMain;
-import wxm.KeepAccount.utility.ContextUtil;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.util.UtilFun;

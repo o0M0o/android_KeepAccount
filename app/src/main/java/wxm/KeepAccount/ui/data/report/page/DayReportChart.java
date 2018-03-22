@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +29,7 @@ import java.util.concurrent.Executors;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.util.UtilFun;
 import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener;
@@ -44,7 +44,7 @@ import wxm.KeepAccount.ui.data.report.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
 /**
- * 日数据汇报 - webview展示页
+ * daily report(webview)
  * Created by ookoo on 2017/3/4.
  */
 public class DayReportChart extends FrgUtilityBase {
@@ -76,9 +76,8 @@ public class DayReportChart extends FrgUtilityBase {
     }
 
     /**
-     * 更新日期范围
-     *
-     * @param event 事件
+     * update day range
+     * @param event     for day range
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSelectDaysEvent(EventSelectDays event) {
@@ -123,9 +122,8 @@ public class DayReportChart extends FrgUtilityBase {
 
 
     /**
-     * 切换显示内容
-     *
-     * @param v 激活的ToggleButton
+     * switch UI according to click
+     * @param v     clicked view
      */
     @OnClick({R.id.tb_income, R.id.tb_pay})
     public void onTBClick(View v) {
@@ -192,60 +190,41 @@ public class DayReportChart extends FrgUtilityBase {
         });
     }
 
-    /**
-     * 重新加载数据
-     */
     private void loadData() {
         mLLOrgData = new LinkedList<>();
-        new AsyncTask<Void, Void, Void>() {
-            private PieChartData mCVData;
 
-            @Override
-            protected void onPreExecute() {
-                showProgress(true);
-            }
+        final PieChartData CVData = new PieChartData();
+        showProgress(true);
+        ToolUtil.runInBackground(this.getActivity(),
+                () -> {
+                    if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
+                        if (2 != mASParaLoad.size())
+                            return ;
 
-            @Override
-            protected Void doInBackground(Void... params) {
-                if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
-                    if (2 != mASParaLoad.size())
-                        return null;
+                        String d_s = mASParaLoad.get(0);
+                        String d_e = mASParaLoad.get(1);
+                        HashMap<String, ArrayList<INote>> hm_note = NoteDataHelper.getInstance()
+                                .getNotesBetweenDays(d_s, d_e);
 
-                    String d_s = mASParaLoad.get(0);
-                    String d_e = mASParaLoad.get(1);
-                    HashMap<String, ArrayList<INote>> hm_note = NoteDataHelper.getInstance()
-                            .getNotesBetweenDays(d_s, d_e);
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        hm_note.values().forEach(mLLOrgData::addAll);
-                    } else {
-                        for (ArrayList<INote> ls_n : hm_note.values()) {
-                            mLLOrgData.addAll(ls_n);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            hm_note.values().forEach(mLLOrgData::addAll);
+                        } else {
+                            for (ArrayList<INote> ls_n : hm_note.values()) {
+                                mLLOrgData.addAll(ls_n);
+                            }
                         }
+
+                        generateData(CVData);
                     }
+                },
+                () -> {
+                    showProgress(false);
 
-                    mCVData = new PieChartData();
-                    generateData(mCVData);
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                showProgress(false);
-
-                mCVchart.setCircleFillRatio(0.6f);
-                mCVchart.setPieChartData(mCVData);
-            }
-        }.execute();
+                    mCVchart.setCircleFillRatio(0.6f);
+                    mCVchart.setPieChartData(CVData);
+                });
     }
 
-
-    /**
-     * 生成数据
-     */
     private void generateData(PieChartData pd) {
         class chartItem {
             private final static int PAY_ITEM = 1;

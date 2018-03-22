@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.data.show.note.HelloChart;
 
-import android.os.AsyncTask;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -11,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.util.UtilFun;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
@@ -26,7 +26,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
- * 加载日chart视图
+ * daily chart
  * Created by wxm on 2016/9/29.
  */
 public class DailyChart extends ChartBase {
@@ -41,94 +41,83 @@ public class DailyChart extends ChartBase {
     protected void refreshData() {
         super.refreshData();
 
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForDay();
+        ToolUtil.runInBackground(this.getActivity(),
+                () -> {
+                    HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForDay();
 
-                int id_col = 0;
-                List<AxisValue> axisValues = new ArrayList<>();
-                List<Column> columns = new ArrayList<>();
-                ArrayList<String> set_k = new ArrayList<>(ret.keySet());
-                Collections.sort(set_k);
-                for (String k : set_k) {
-                    boolean ba = true;
-                    if (mBFilter && !mFilterPara.isEmpty()) {
-                        //String ck = ToolUtil.FormatDateString(k);
-                        if (!mFilterPara.contains(k))
-                            ba = false;
-                    }
-
-                    if (ba) {
-                        BigDecimal pay = BigDecimal.ZERO;
-                        BigDecimal income = BigDecimal.ZERO;
-                        for (Object i : ret.get(k)) {
-                            if (i instanceof PayNoteItem) {
-                                PayNoteItem pi = UtilFun.cast(i);
-                                pay = pay.add(pi.getVal());
-                            } else {
-                                IncomeNoteItem ii = UtilFun.cast(i);
-                                income = income.add(ii.getVal());
-                            }
+                    int id_col = 0;
+                    List<AxisValue> axisValues = new ArrayList<>();
+                    List<Column> columns = new ArrayList<>();
+                    ArrayList<String> set_k = new ArrayList<>(ret.keySet());
+                    Collections.sort(set_k);
+                    for (String k : set_k) {
+                        boolean ba = true;
+                        if (mBFilter && !mFilterPara.isEmpty()) {
+                            //String ck = ToolUtil.FormatDateString(k);
+                            if (!mFilterPara.contains(k))
+                                ba = false;
                         }
 
-                        List<SubcolumnValue> values = new ArrayList<>();
-                        values.add(new SubcolumnValue(pay.floatValue(),
-                                mHMColor.get(PreferencesUtil.SET_PAY_COLOR)));
-                        values.add(new SubcolumnValue(income.floatValue(),
-                                mHMColor.get(PreferencesUtil.SET_INCOME_COLOR)));
+                        if (ba) {
+                            BigDecimal pay = BigDecimal.ZERO;
+                            BigDecimal income = BigDecimal.ZERO;
+                            for (Object i : ret.get(k)) {
+                                if (i instanceof PayNoteItem) {
+                                    PayNoteItem pi = UtilFun.cast(i);
+                                    pay = pay.add(pi.getVal());
+                                } else {
+                                    IncomeNoteItem ii = UtilFun.cast(i);
+                                    income = income.add(ii.getVal());
+                                }
+                            }
 
-                        Column cd = new Column(values);
-                        cd.setHasLabels(true);
-                        columns.add(cd);
+                            List<SubcolumnValue> values = new ArrayList<>();
+                            values.add(new SubcolumnValue(pay.floatValue(),
+                                    mHMColor.get(PreferencesUtil.SET_PAY_COLOR)));
+                            values.add(new SubcolumnValue(income.floatValue(),
+                                    mHMColor.get(PreferencesUtil.SET_INCOME_COLOR)));
 
-                        axisValues.add(new AxisValue(id_col).setLabel(k));
-                        id_col++;
-                    }
-                }
+                            Column cd = new Column(values);
+                            cd.setHasLabels(true);
+                            columns.add(cd);
 
-                mChartData = new ColumnChartData(columns);
-                mChartData.setAxisXBottom(new Axis(axisValues));
-                mChartData.setAxisYLeft(new Axis().setHasLines(true));
-
-                // prepare preview data, is better to use separate deep copy for preview chart.
-                // set color to grey to make preview area more visible.
-                mPreviewData = new ColumnChartData(mChartData);
-                for (Column column : mPreviewData.getColumns()) {
-                    for (SubcolumnValue value : column.getValues()) {
-                        value.setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
-                    }
-
-                    column.setHasLabels(false);
-                }
-
-                int cc = 0;
-                for (AxisValue i : mPreviewData.getAxisXBottom().getValues()) {
-                    if (0 == cc % 5) {
-                        String v = new String(i.getLabelAsChars()).substring(0, 7);
-                        i.setLabel(v);
-                    } else {
-                        i.setLabel("");
+                            axisValues.add(new AxisValue(id_col).setLabel(k));
+                            id_col++;
+                        }
                     }
 
-                    cc += 1;
-                }
-                return null;
-            }
+                    mChartData = new ColumnChartData(columns);
+                    mChartData.setAxisXBottom(new Axis(axisValues));
+                    mChartData.setAxisYLeft(new Axis().setHasLines(true));
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                // After completing execution of given task, control will return here.
-                // Hence if you want to populate UI elements with fetched data, do it here.
-                loadUIUtility(true);
-            }
-        }.execute();
+                    // prepare preview data, is better to use separate deep copy for preview chart.
+                    // set color to grey to make preview area more visible.
+                    mPreviewData = new ColumnChartData(mChartData);
+                    for (Column column : mPreviewData.getColumns()) {
+                        for (SubcolumnValue value : column.getValues()) {
+                            value.setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
+                        }
+
+                        column.setHasLabels(false);
+                    }
+
+                    int cc = 0;
+                    for (AxisValue i : mPreviewData.getAxisXBottom().getValues()) {
+                        if (0 == cc % 5) {
+                            String v = new String(i.getLabelAsChars()).substring(0, 7);
+                            i.setLabel(v);
+                        } else {
+                            i.setLabel("");
+                        }
+
+                        cc += 1;
+                    }
+                },
+                () -> loadUIUtility(true));
     }
 
     /**
-     * 过滤视图事件
-     *
+     * filter UI
      * @param event 事件
      */
     @Subscribe(threadMode = ThreadMode.MAIN)

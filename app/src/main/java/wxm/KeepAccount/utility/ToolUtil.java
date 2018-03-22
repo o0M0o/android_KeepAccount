@@ -1,10 +1,14 @@
 package wxm.KeepAccount.utility;
 
+import android.app.Activity;
+
+import java.lang.ref.WeakReference;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.Executors;
 
 /**
  * tool helper
@@ -81,5 +85,23 @@ public class ToolUtil {
     public static String getDayInWeek(int dw) {
         dw--;
         return DAY_IN_WEEK[dw];
+    }
+
+    /**
+     * do in background then show in UI
+     * @param h         current activity
+     * @param back      run in background
+     * @param ui        run in UI
+     */
+    public static void runInBackground(Activity h, Runnable back, Runnable ui)    {
+        final WeakReference<Activity> weakActivity = new WeakReference<>(h);
+        Executors.newCachedThreadPool().submit(() -> {
+           back.run();
+
+           Activity cur = weakActivity.get();
+           if(!(null == cur || cur.isDestroyed() || cur.isFinishing())) {
+               cur.runOnUiThread(ui);
+           }
+        });
     }
 }

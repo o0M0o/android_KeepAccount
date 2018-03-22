@@ -1,9 +1,7 @@
 package wxm.KeepAccount.ui.setting;
 
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -12,13 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import java.lang.ref.WeakReference;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
+import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * main page for setting
@@ -31,53 +28,9 @@ public class TFSettingMain extends TFSettingBase {
     @BindView(R.id.rl_share_app)
     RelativeLayout mRLShareApp;
 
-    static class safeTask extends AsyncTask<Void, Void, Void> {
-        private final WeakReference<Activity> weakActivity;
-        private AlertDialog mADDlg;
-
-        safeTask(Activity myActivity) {
-            this.weakActivity = new WeakReference<>(myActivity);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            if(isActivityAlive()) {
-                Activity activity = weakActivity.get();
-                mADDlg = new AlertDialog.Builder(activity)
-                        .setTitle("提示")
-                        .setMessage("请等待数据清理完毕...").create();
-            }
-        }
-
-
-        @Override
-        public Void doInBackground(Void... params) {
-            ContextUtil.ClearDB();
-            return null;
-        }
-
-        @Override
-        public void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            if(isActivityAlive())
-                return;
-
-            mADDlg.dismiss();
-        }
-
-        private boolean isActivityAlive()   {
-            Activity activity = weakActivity.get();
-            return !(activity == null || activity.isFinishing() || activity.isDestroyed());
-        }
-    }
-
-    private safeTask mTask;
-
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mTask = new safeTask(this.getActivity());
-
         View v = inflater.inflate(R.layout.page_setting_main, container, false);
         ButterKnife.bind(this, v);
         return v;
@@ -109,7 +62,7 @@ public class TFSettingMain extends TFSettingBase {
                 Dialog alertDialog = new AlertDialog.Builder(getContext()).
                         setTitle("清除所有数据!").
                         setMessage("此操作不能恢复，是否继续操作!").
-                        setPositiveButton("是", (dialog, which) -> mTask.execute()).
+                        setPositiveButton("是", (dialog, which) -> doCleanDB()).
                         setNegativeButton("否", (dialog, which) -> {}).
                         create();
                 alertDialog.show();
@@ -123,5 +76,17 @@ public class TFSettingMain extends TFSettingBase {
         if (mBSettingDirty) {
             mBSettingDirty = false;
         }
+    }
+
+    /**
+     * clean db
+     */
+    private void doCleanDB()    {
+        AlertDialog mADDlg = new AlertDialog.Builder(this.getActivity())
+                .setTitle("提示")
+                .setMessage("请等待数据清理完毕...").create();;
+        ToolUtil.runInBackground(this.getActivity(),
+                ContextUtil::ClearDB,
+                mADDlg::dismiss);
     }
 }

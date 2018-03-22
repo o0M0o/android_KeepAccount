@@ -1,7 +1,6 @@
 package wxm.KeepAccount.ui.data.show.note.ListView;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import butterknife.OnClick;
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -167,47 +167,46 @@ public class LVYearly extends LVBase {
         mMainPara.clear();
         mHMSubPara.clear();
 
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
-                Future<LinkedList<HashMap<String, String>>> ll_main_rets;
-                Future<LinkedList<Map.Entry<String, HashMap<String, String>>>> ll_sub_rets;
+        ToolUtil.runInBackground(this.getActivity(),
+                () -> {
+                    ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
+                    Future<LinkedList<HashMap<String, String>>> ll_main_rets;
+                    Future<LinkedList<Map.Entry<String, HashMap<String, String>>>> ll_sub_rets;
 
-                // for year
-                List<String> set_k = NoteDataHelper.getNotesYears();
-                Collections.sort(set_k, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-                ll_main_rets = fixedThreadPool
-                        .submit(() -> {
-                            LinkedList<HashMap<String, String>> ll_rets = new LinkedList<>();
-                            for (String k : set_k) {
-                                NoteShowInfo ni = NoteDataHelper.getInfoByYear(k);
+                    // for year
+                    List<String> set_k = NoteDataHelper.getNotesYears();
+                    Collections.sort(set_k, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
+                    ll_main_rets = fixedThreadPool
+                            .submit(() -> {
+                                LinkedList<HashMap<String, String>> ll_rets = new LinkedList<>();
+                                for (String k : set_k) {
+                                    NoteShowInfo ni = NoteDataHelper.getInfoByYear(k);
 
-                                HashMap<String, String> map = new HashMap<>();
-                                map.put(K_YEAR, k);
-                                map.put(K_YEAR_PAY_COUNT, String.valueOf(ni.getPayCount()));
-                                map.put(K_YEAR_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
-                                map.put(K_YEAR_PAY_AMOUNT, String.format(Locale.CHINA,
-                                        "%.02f", ni.getPayAmount()));
-                                map.put(K_YEAR_INCOME_AMOUNT, String.format(Locale.CHINA,
-                                        "%.02f", ni.getIncomeAmount()));
+                                    HashMap<String, String> map = new HashMap<>();
+                                    map.put(K_YEAR, k);
+                                    map.put(K_YEAR_PAY_COUNT, String.valueOf(ni.getPayCount()));
+                                    map.put(K_YEAR_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
+                                    map.put(K_YEAR_PAY_AMOUNT, String.format(Locale.CHINA,
+                                            "%.02f", ni.getPayAmount()));
+                                    map.put(K_YEAR_INCOME_AMOUNT, String.format(Locale.CHINA,
+                                            "%.02f", ni.getIncomeAmount()));
 
-                                BigDecimal bd_l = ni.getBalance();
-                                String v_l = String.format(Locale.CHINA,
-                                        0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-                                map.put(K_AMOUNT, v_l);
+                                    BigDecimal bd_l = ni.getBalance();
+                                    String v_l = String.format(Locale.CHINA,
+                                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
+                                    map.put(K_AMOUNT, v_l);
 
-                                map.put(K_TAG, k);
-                                map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
-                                ll_rets.add(map);
-                            }
+                                    map.put(K_TAG, k);
+                                    map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                                    ll_rets.add(map);
+                                }
 
-                            return ll_rets;
-                        });
+                                return ll_rets;
+                            });
 
-                // for month
-                List<String> set_k_m = NoteDataHelper.getNotesMonths();
-                Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
+                    // for month
+                    List<String> set_k_m = NoteDataHelper.getNotesMonths();
+                    Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
                     ll_sub_rets = fixedThreadPool
                             .submit(() -> {
                                 LinkedList<Map.Entry<String, HashMap<String, String>>>
@@ -238,13 +237,13 @@ public class LVYearly extends LVBase {
                                     ll_rets.add(new Map.Entry<String, HashMap<String, String>>() {
                                         @Override
                                         public String getKey() {
-                                                                     return ky;
-                                                                               }
+                                            return ky;
+                                        }
 
                                         @Override
                                         public HashMap<String, String> getValue() {
-                                                                                        return map;
-                                                                                                   }
+                                            return map;
+                                        }
 
                                         @Override
                                         public HashMap<String, String> setValue(HashMap<String, String> value) {
@@ -256,32 +255,23 @@ public class LVYearly extends LVBase {
                                 return ll_rets;
                             });
 
-                try {
-                    mMainPara.addAll(ll_main_rets.get());
+                    try {
+                        mMainPara.addAll(ll_main_rets.get());
 
-                    for(Map.Entry<String, HashMap<String, String>> ret : ll_sub_rets.get()) {
-                        LinkedList<HashMap<String, String>> lh = mHMSubPara.get(ret.getKey());
-                        if(null == lh)  {
-                            lh = new LinkedList<>();
-                            mHMSubPara.put(ret.getKey(), lh);
+                        for(Map.Entry<String, HashMap<String, String>> ret : ll_sub_rets.get()) {
+                            LinkedList<HashMap<String, String>> lh = mHMSubPara.get(ret.getKey());
+                            if(null == lh)  {
+                                lh = new LinkedList<>();
+                                mHMSubPara.put(ret.getKey(), lh);
+                            }
+
+                            lh.add(ret.getValue());
                         }
-
-                        lh.add(ret.getValue());
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
                     }
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                // After completing execution of given task, control will return here.
-                // Hence if you want to populate UI elements with fetched data, do it here.
-                loadUIUtility(true);
-            }
-        }.execute();
+                },
+                () -> loadUIUtility(true));
     }
 
     @Override
