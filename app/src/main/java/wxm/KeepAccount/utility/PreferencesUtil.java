@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Locale;
 
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.define.EAction;
 import wxm.androidutil.util.UiUtil;
 
 /**
@@ -38,9 +39,9 @@ public class PreferencesUtil {
 
         String def = String.format(Locale.CHINA,
                 "%s:%s:%s:%s:%s:%s",
-                ActionHelper.ACT_ADD_DATA, ActionHelper.ACT_LOOK_DATA,
-                ActionHelper.ACT_CALENDAR_VIEW, ActionHelper.ACT_LOOK_BUDGET,
-                ActionHelper.ACT_ADD_BUDGET, ActionHelper.ACT_LOGOUT);
+                EAction.ADD_DATA.getName(), EAction.LOOK_DATA.getName(),
+                EAction.CALENDAR_VIEW.getName(), EAction.LOOK_BUDGET.getName(),
+                EAction.ADD_BUDGET.getName(), EAction.LOGOUT.getName());
 
         String load = param.getString(SET_HOT_ACTION, def);
         return parsePreferences(load);

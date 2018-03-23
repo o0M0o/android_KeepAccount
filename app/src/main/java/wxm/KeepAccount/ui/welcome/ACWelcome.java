@@ -22,6 +22,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Locale;
 
+import wxm.KeepAccount.define.EAction;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
@@ -34,7 +35,6 @@ import wxm.KeepAccount.ui.dialog.DlgUsrMessage;
 import wxm.KeepAccount.ui.help.ACHelp;
 import wxm.KeepAccount.ui.setting.ACSetting;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
-import wxm.KeepAccount.utility.ActionHelper;
 import wxm.KeepAccount.R;
 
 /**
@@ -129,8 +129,9 @@ public class ACWelcome extends AppCompatActivity
      * @param act onclick的动作
      */
     private void do_click(String act) {
-        switch (act) {
-            case ActionHelper.ACT_LOOK_BUDGET: {
+        EAction ea = EAction.getEAction(act);
+        switch (ea) {
+            case LOOK_BUDGET: {
                 Intent intent = new Intent(this, ACNoteShow.class);
                 intent.putExtra(NoteDataHelper.INTENT_PARA_FIRST_TAB,
                         NoteDataHelper.TAB_TITLE_BUDGET);
@@ -138,26 +139,26 @@ public class ACWelcome extends AppCompatActivity
             }
             break;
 
-            case ActionHelper.ACT_LOOK_DATA: {
+            case LOOK_DATA: {
                 Intent intent = new Intent(this, ACNoteShow.class);
                 startActivityForResult(intent, 1);
             }
             break;
 
-            case ActionHelper.ACT_CALENDAR_VIEW: {
+            case CALENDAR_VIEW: {
                 Intent intent = new Intent(this, ACCalendarShow.class);
                 startActivityForResult(intent, 1);
             }
             break;
 
-            case ActionHelper.ACT_ADD_BUDGET: {
+            case ADD_BUDGET: {
                 Intent intent = new Intent(this, ACPreveiwAndEdit.class);
                 intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
                 startActivityForResult(intent, 1);
             }
             break;
 
-            case ActionHelper.ACT_ADD_DATA: {
+            case ADD_DATA: {
                 Intent intent = new Intent(this, ACNoteAdd.class);
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
@@ -173,7 +174,7 @@ public class ACWelcome extends AppCompatActivity
             }
             break;
 
-            case ActionHelper.ACT_LOGOUT: {
+            case LOGOUT: {
                 int ret_data = GlobalDef.INTRET_USR_LOGOUT;
 
                 Intent data = new Intent();
@@ -182,11 +183,13 @@ public class ACWelcome extends AppCompatActivity
             }
             break;
 
+            /*
             case ActionHelper.ACT_ADD_REMIND: {
                 Intent intent = new Intent(this, ACRemindEdit.class);
                 startActivityForResult(intent, 1);
             }
             break;
+            */
         }
     }
 

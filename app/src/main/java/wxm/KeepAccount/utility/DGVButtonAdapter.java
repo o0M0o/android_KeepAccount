@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import wxm.KeepAccount.define.EAction;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 
@@ -61,7 +62,7 @@ public class DGVButtonAdapter extends SimpleAdapter {
             // for image
             ImageView iv = UtilFun.cast(v.findViewById(R.id.iv_image));
             assert null != iv;
-            Bitmap bm = ActionHelper.getBitMapFromName(hv);
+            Bitmap bm = EAction.getIcon(hv);
             if (null != bm) {
                 iv.setImageBitmap(bm);
                 iv.setScaleType(ImageView.ScaleType.CENTER_CROP);

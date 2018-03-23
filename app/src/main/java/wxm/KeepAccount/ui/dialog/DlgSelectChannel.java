@@ -13,11 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import wxm.KeepAccount.define.EAction;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.dialog.utility.DlgResource;
-import wxm.KeepAccount.utility.ActionHelper;
 import wxm.KeepAccount.utility.DGVButtonAdapter;
 
 /**
@@ -67,9 +67,9 @@ public class DlgSelectChannel extends DlgOKOrNOBase {
         });
 
         ArrayList<HashMap<String, Object>> ls_data = new ArrayList<>();
-        for (String i : ActionHelper.ACTION_NAMES) {
+        for(EAction ea : EAction.values())  {
             HashMap<String, Object> hm = new HashMap<>();
-            hm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
+            hm.put(DGVButtonAdapter.HKEY_ACT_NAME, ea.getName());
 
             ls_data.add(hm);
         }
@@ -114,9 +114,9 @@ public class DlgSelectChannel extends DlgOKOrNOBase {
                         DlgResource.mDAChannelSel : DlgResource.mDAChannelNoSel);
 
                 // for image
-                ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_act));
-                Bitmap bm = ActionHelper.getBitMapFromName(hv);
+                Bitmap bm = EAction.getIcon(hv);
                 if (null != bm) {
+                    ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_act));
                     iv.setImageBitmap(bm);
                 }
             }
