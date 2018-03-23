@@ -180,7 +180,14 @@ public class FrgLogin extends FrgUtilityBase {
         });
     }
 
+    /**
+     * do login in background
+     * @param usr       usr name
+     * @param pwd       usr password
+     */
     void doLogin(String usr, String pwd)  {
+        showProgress(true);
+
         final boolean[] bret = {false};
         ToolUtil.runInBackground(this.getActivity(),
                 () -> {

@@ -41,12 +41,10 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
 
     private Context mContext;
     private ViewGroup mVGGroup;
-    private SparseArray<View> mSAView;
 
     public FrgAdapter(Context context, ViewGroup vg) {
         mContext = context;
         mVGGroup = vg;
-        mSAView = new SparseArray<>();
 
         initView();
     }
@@ -71,25 +69,19 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
         return v;
     }
 
-
     private void initView() {
         Log.d(LOG_TAG, "initView");
 
-        mSAView.clear();
-
         View v = LayoutInflater.from(mContext).inflate(R.layout.banner_month, mVGGroup);
         fillMonth(v);
-        mSAView.put(R.layout.banner_month, v);
 
         v = LayoutInflater.from(mContext).inflate(R.layout.banner_year, mVGGroup);
         fillYear(v);
-        mSAView.put(R.layout.banner_year, v);
     }
 
     /**
-     * 填充月数据
-     *
-     * @param v 视图
+     * fill month data
+     * @param v     UI
      */
     private void fillMonth(View v) {
         TextView tv_pay = UtilFun.cast_t(v.findViewById(R.id.tv_pay_amount));
@@ -117,9 +109,8 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
     }
 
     /**
-     * 填充年数据
-     *
-     * @param v 视图
+     * fill year data
+     * @param v     UI
      */
     private void fillYear(View v) {
         TextView tv_pay = UtilFun.cast_t(v.findViewById(R.id.tv_pay_amount));
@@ -144,8 +135,13 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
         fillChart(v, ni);
     }
 
+    /**
+     * draw chart in banner
+     * @param v         chart holder
+     * @param ni        info to draw
+     */
     private void fillChart(View v, NoteShowInfo ni) {
-        // 展示条
+        // draw bar
         HashMap<String, Integer> mHMColor = PreferencesUtil.loadChartColor();
         int cl_pay = mHMColor.get(PreferencesUtil.SET_PAY_COLOR);
         int cl_income = mHMColor.get(PreferencesUtil.SET_INCOME_COLOR);
@@ -156,7 +152,7 @@ public class FrgAdapter implements LBaseAdapter<FrgPara> {
         iv = UtilFun.cast_t(v.findViewById(R.id.iv_pay));
         iv.setBackgroundColor(cl_pay);
 
-        // for chart
+        // draw chart
         List<AxisValue> axisValues = new ArrayList<>();
         List<Column> columns = new ArrayList<>();
         List<SubcolumnValue> values = new ArrayList<>();

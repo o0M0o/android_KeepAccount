@@ -148,17 +148,6 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSPBudget.setAdapter(spAdapter);
 
-        /*
-        不显示,UI会比较难看
-        RelativeLayout rl = UtilFun.cast(mSelfView.findViewById(R.id.rl_budget));
-        if (0 < spAdapter.getCount()) {
-            rl.setVisibility(View.VISIBLE);
-            mSPBudget.setSelection(0);
-        } else {
-            rl.setVisibility(View.INVISIBLE);
-        }
-        */
-
         // 填充其他数据
         mETDate.setOnTouchListener(this);
         mETInfo.setOnTouchListener(this);

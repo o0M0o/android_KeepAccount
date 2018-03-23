@@ -175,10 +175,9 @@ public class PayIncomeDBUtility {
 
 
     /**
-     * 添加支出记录
-     *
-     * @param lsi 待添加的记录集合
-     * @return 返回添加成功的数据量
+     * add 'pay' record
+     * @param lsi   need add record
+     * @return      added record count
      */
     public int addPayNotes(List<PayNoteItem> lsi) {
         UsrItem cur_usr = ContextUtil.getCurUsr();

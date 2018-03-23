@@ -4,12 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.allure.lbanners.LMBanners;
+import com.allure.lbanners.adapter.LBaseAdapter;
 import com.allure.lbanners.transformer.TransitionEffect;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +25,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import wxm.KeepAccount.db.DBDataChangeEvent;
+import wxm.KeepAccount.define.INote;
+import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.DragGrid.DragGridView;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;;
@@ -46,6 +55,28 @@ public class FrgWelcome extends FrgUtilityBase {
     // for data
     private List<HashMap<String, Object>> mLSData = new ArrayList<>();
     private ArrayList<FrgPara> mALFrgs = new ArrayList<>();
+
+    @Override
+    protected void enterActivity() {
+        super.enterActivity();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void leaveActivity() {
+        EventBus.getDefault().unregister(this);
+        super.leaveActivity();
+    }
+
+    /**
+     * handler for DB data change
+     * @param event     for event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDBEvent(DBDataChangeEvent event) {
+        //noinspection unchecked
+        mLBanners.setAdapter(new FrgAdapter(getActivity(), null), mALFrgs);
+    }
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
@@ -155,8 +186,11 @@ public class FrgWelcome extends FrgUtilityBase {
         }
     }
 
+    /**
+     * banner is show in head of welcome page
+     */
     private void initBanner() {
-        //本地用法
+        //noinspection unchecked
         mLBanners.setAdapter(new FrgAdapter(getActivity(), null), mALFrgs);
 
         //参数设置

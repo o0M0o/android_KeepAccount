@@ -120,7 +120,6 @@ public class ValueShow extends ConstraintLayout {
      */
     private void initCompent(Context context, AttributeSet attrs) {
         // for parameter
-        boolean b_ok = true;
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ValueShow);
         try {
             mAttrPayCount = array.getString(R.styleable.ValueShow_szPayCount);
@@ -138,15 +137,12 @@ public class ValueShow extends ConstraintLayout {
             float dst = getContext().getResources().getDisplayMetrics().density;
             mAttrDMLineLen = array.getLayoutDimension(R.styleable.ValueShow_pxLineLen,
                     (int) (200 * dst));
+
+            updateShow();
         } catch (Exception ex) {
-            b_ok = false;
             Log.e(LOG_TAG, "catch ex : " + ex.toString());
         } finally {
             array.recycle();
-        }
-
-        if (b_ok) {
-            updateShow();
         }
     }
 
