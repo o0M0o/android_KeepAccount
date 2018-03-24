@@ -27,6 +27,8 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
 
     @Override
     protected void initUi(Bundle savedInstanceState) {
+        LOG_TAG = "ACPreveiwAndEdit";
+
         Intent it = getIntent();
         String type = it.getStringExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE);
         if (UtilFun.StringIsNullOrEmpty(type)
@@ -56,18 +58,27 @@ public class ACPreveiwAndEdit extends BaseAppCompatActivity {
             return;
 
         // for ui
-        LOG_TAG = "ACPreveiwAndEdit";
-
-        Object ob;
+        Object ob = null;
         PayIncomeDBUtility puit = ContextUtil.getPayIncomeUtility();
         BudgetDBUtility buit = ContextUtil.getBudgetUtility();
         int id = it.getIntExtra(GlobalDef.INTENT_LOAD_RECORD_ID, -1);
-        if (GlobalDef.STR_RECORD_PAY.equals(type)) {
-            ob = -1 != id ? puit.getPayDBUtility().getData(id) : null;
-        } else if (GlobalDef.STR_RECORD_BUDGET.equals(type)) {
-            ob = -1 != id ? buit.getData(id) : null;
-        } else {
-            ob = -1 != id ? puit.getIncomeDBUtility().getData(id) : null;
+        if(-1 != id)    {
+            switch (type)   {
+                case GlobalDef.STR_RECORD_PAY : {
+                    ob = puit.getPayDBUtility().getData(id);
+                }
+                break;
+
+                case GlobalDef.STR_RECORD_INCOME : {
+                    ob = puit.getIncomeDBUtility().getData(id);
+                }
+                break;
+
+                case GlobalDef.STR_RECORD_BUDGET : {
+                    ob = buit.getData(id);
+                }
+                break;
+            }
         }
 
         FrgPreviewAndEdit tpe = new FrgPreviewAndEdit();
