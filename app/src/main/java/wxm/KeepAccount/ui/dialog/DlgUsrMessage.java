@@ -111,9 +111,9 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
 
     /**
      * use http send msg
-     * @param usr 用户
-     * @param msg 消息
-     * @return 发送成功返回true
+     * @param usr       msg owner
+     * @param msg       msg
+     * @return          true if success
      */
     private boolean sendMsgByHttpPost(String usr, String msg) {
         mProgressStatus = 0;

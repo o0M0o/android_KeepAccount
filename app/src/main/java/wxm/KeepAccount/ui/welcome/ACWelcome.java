@@ -28,7 +28,6 @@ import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
-import wxm.KeepAccount.ui.data.edit.Remind.ACRemindEdit;
 import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.dialog.DlgUsrMessage;

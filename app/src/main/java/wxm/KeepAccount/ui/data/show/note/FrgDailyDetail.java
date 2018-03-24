@@ -209,9 +209,8 @@ public class FrgDailyDetail extends FrgUtilityBase {
 
 
     /**
-     * 处理动作点击
-     *
-     * @param view 触发的按键
+     * click on action
+     * @param view      for action
      */
     @OnClick({R.id.ib_delete, R.id.ib_add, R.id.bt_giveup})
     public void dayActionClick(View view) {

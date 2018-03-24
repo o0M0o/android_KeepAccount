@@ -118,7 +118,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
     /**
      * handler for DB event
-     * @param event 事件参数
+     * @param event     param
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBChangeEvent(DBDataChangeEvent event) {

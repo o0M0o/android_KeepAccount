@@ -30,7 +30,8 @@ import wxm.KeepAccount.utility.ContextUtil;
  * add user
  * Created by ookoo on 2016/11/29.
  */
-public class FrgUsrAdd extends FrgUtilityBase implements TextView.OnEditorActionListener {
+public class FrgUsrAdd extends FrgUtilityBase
+        implements TextView.OnEditorActionListener {
     // for ui
     @BindView(R.id.et_usr_name)
     EditText mETUsrName;

@@ -39,7 +39,7 @@ public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarSho
         view.setBackgroundResource(model.getRecordCount() > 0 ?
                 R.drawable.day_shape : R.drawable.day_empty_shape);
 
-        TextView dayNum = (TextView) view.findViewById(R.id.tv_day_num);
+        TextView dayNum = view.findViewById(R.id.tv_day_num);
         dayNum.setText(model.getDayNumber());
         if (model.isToday()) {
             dayNum.setTextColor(mCLToday);
@@ -54,7 +54,7 @@ public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarSho
             dayNum.setTextColor(mCLDisable);
         }
 
-        TextView dayNewsCount = (TextView) view.findViewById(R.id.tv_day_new_count);
+        TextView dayNewsCount = view.findViewById(R.id.tv_day_new_count);
         if (!model.isCurrentMonth()) {
             dayNum.setVisibility(View.GONE);
             dayNewsCount.setVisibility(View.GONE);

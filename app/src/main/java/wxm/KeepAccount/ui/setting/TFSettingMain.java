@@ -62,7 +62,14 @@ public class TFSettingMain extends TFSettingBase {
                 Dialog alertDialog = new AlertDialog.Builder(getContext()).
                         setTitle("清除所有数据!").
                         setMessage("此操作不能恢复，是否继续操作!").
-                        setPositiveButton("是", (dialog, which) -> doCleanDB()).
+                        setPositiveButton("是", (dialog, which) -> {
+                            AlertDialog mADDlg = new AlertDialog.Builder(this.getActivity())
+                                    .setTitle("提示")
+                                    .setMessage("请等待数据清理完毕...").create();;
+                            ToolUtil.runInBackground(this.getActivity(),
+                                    ContextUtil::ClearDB,
+                                    mADDlg::dismiss);
+                        }).
                         setNegativeButton("否", (dialog, which) -> {}).
                         create();
                 alertDialog.show();
@@ -76,17 +83,5 @@ public class TFSettingMain extends TFSettingBase {
         if (mBSettingDirty) {
             mBSettingDirty = false;
         }
-    }
-
-    /**
-     * clean db
-     */
-    private void doCleanDB()    {
-        AlertDialog mADDlg = new AlertDialog.Builder(this.getActivity())
-                .setTitle("提示")
-                .setMessage("请等待数据清理完毕...").create();;
-        ToolUtil.runInBackground(this.getActivity(),
-                ContextUtil::ClearDB,
-                mADDlg::dismiss);
     }
 }

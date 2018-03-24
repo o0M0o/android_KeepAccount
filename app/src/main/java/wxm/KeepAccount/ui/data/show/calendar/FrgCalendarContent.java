@@ -61,8 +61,8 @@ public class FrgCalendarContent extends FrgUtilityBase {
     }
 
     /**
-     * 更新类容
-     * @param day   展示日期(example : 2017-07-06)
+     * update hot day
+     * @param day   show day(example : 2017-07-06)
      */
     public void updateContent(String day) {
         mSZHotDay = day;

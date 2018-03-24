@@ -19,8 +19,6 @@ import wxm.KeepAccount.utility.ContextUtil;
  * Created by ookoo on 2017/1/22.
  */
 public class HelperDayNotesInfo {
-    private final static String LOG_TAG = "HelperDayNotesInfo";
-
     private static int CR_PAY;
     private static int CR_INCOME;
     private static int DIM_FULL_WIDTH;

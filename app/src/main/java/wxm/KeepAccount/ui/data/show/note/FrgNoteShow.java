@@ -63,8 +63,6 @@ public class FrgNoteShow extends FrgUtilityBase {
     @BindView(R.id.rl_budget)
     RelativeLayout mRLBudget;
 
-
-
     // for helper data
     private class pageHelper    {
         boolean mBADataChange;
@@ -81,7 +79,7 @@ public class FrgNoteShow extends FrgUtilityBase {
      * @param event     event param
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDBDataChangeEvent(DBDataChangeEvent event) {
+    public void onDBChangeEvent(DBDataChangeEvent event) {
         getHotTabItem().loadView(true);
 
         int cur_pos = mVPPages.getCurrentItem();

@@ -79,23 +79,22 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (null != view) {
-            View mSelfView = view;
+    public void onViewCreated(View vw, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(vw, savedInstanceState);
+        if (null != vw) {
             if (!mEditType.equals(GlobalDef.STR_RECORD_PAY) &&
                     !mEditType.equals(GlobalDef.STR_RECORD_INCOME))
                 return;
 
             // init view
-            GridView mGVHolder = UtilFun.cast_t(mSelfView.findViewById(R.id.gv_record_info));
-            mTVNote = UtilFun.cast_t(mSelfView.findViewById(R.id.tv_note));
+            GridView mGVHolder = UtilFun.cast_t(vw.findViewById(R.id.gv_record_info));
+            mTVNote = UtilFun.cast_t(vw.findViewById(R.id.tv_note));
             mTVNote.setText("");
-            mRLActAdd = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_add));
-            mRLActMinus = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_minus));
-            mRLActAccept = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_accept));
-            mRLActReject = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_reject));
-            mRLActPencil = UtilFun.cast_t(mSelfView.findViewById(R.id.rl_pencil));
+            mRLActAdd = UtilFun.cast_t(vw.findViewById(R.id.rl_add));
+            mRLActMinus = UtilFun.cast_t(vw.findViewById(R.id.rl_minus));
+            mRLActAccept = UtilFun.cast_t(vw.findViewById(R.id.rl_accept));
+            mRLActReject = UtilFun.cast_t(vw.findViewById(R.id.rl_reject));
+            mRLActPencil = UtilFun.cast_t(vw.findViewById(R.id.rl_pencil));
 
             // init gv
             mLHMData = new ArrayList<>();
