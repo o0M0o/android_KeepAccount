@@ -19,13 +19,13 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 
 /**
- * viewhelper基础类
+ * base for show record
  * Created by xiaoming wang on 2016/9/14.
  */
 public abstract class ShowViewBase
         extends FrgUtilitySupportBase {
 
-    // 视图过滤数据
+    // filter for view
     protected boolean mBFilter;
     protected final LinkedList<String> mFilterPara;
     protected final Timestamp mTSLastLoadViewTime = new Timestamp(0);
@@ -64,18 +64,14 @@ public abstract class ShowViewBase
         refreshData();
     }
 
-    /**
-     * 更新数据
-     */
     @CallSuper
     protected void refreshData() {
         mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
     }
 
     /**
-     * 获取视图所在的activity
-     *
-     * @return 若成功返回activity，失败返回null;
+     * get root activity
+     * @return      activity if success else null
      */
     protected ACNoteShow getRootActivity() {
         Context ct = getContext();

@@ -62,7 +62,7 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
     public void switchPage() {
         View v = getView();
         if (null != v) {
-            mHotChild = mHotChild >= mViewHelper.length - 1 ? 0 : mHotChild + 1;
+            mHotChild = (mHotChild + 1) % mViewHelper.length;
             loadHotFrg();
         }
     }
