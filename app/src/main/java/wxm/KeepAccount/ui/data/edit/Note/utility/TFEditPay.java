@@ -35,6 +35,8 @@ import java.util.Locale;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import wxm.KeepAccount.ui.base.TouchEditText;
+import wxm.KeepAccount.ui.base.TouchTextView;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -56,20 +58,28 @@ import static java.lang.String.format;
  */
 public class TFEditPay extends TFEditBase implements View.OnTouchListener {
     private final static String TAG = "TFEditPay";
+
     @BindView(R.id.ar_et_info)
-    EditText mETInfo;
+    TouchEditText mETInfo;
+
     @BindView(R.id.ar_et_date)
-    EditText mETDate;
+    TouchEditText mETDate;
+
     @BindView(R.id.ar_et_amount)
-    EditText mETAmount;
+    TouchEditText mETAmount;
+
     @BindView(R.id.ar_sp_budget)
     Spinner mSPBudget;
+
     @BindView(R.id.ar_tv_budget)
     TextView mTVBudget;
+
     @BindView(R.id.tv_note)
-    TextView mTVNote;
+    TouchTextView mTVNote;
+
     @BindString(R.string.notice_input_note)
     String mSZDefNote;
+
     private PayNoteItem mOldPayNote;
 
     @Override

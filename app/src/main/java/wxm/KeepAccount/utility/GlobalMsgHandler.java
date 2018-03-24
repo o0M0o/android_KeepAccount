@@ -20,7 +20,7 @@ public class GlobalMsgHandler extends Handler {
 
     /**
      * reply msg
-     * @param mh        receive handler接收回复消息的句柄
+     * @param mh        receive handler
      * @param msg_type  origin msg type{@code arg1}）
      * @param msg_obj   object for reply{@code obj}
      */

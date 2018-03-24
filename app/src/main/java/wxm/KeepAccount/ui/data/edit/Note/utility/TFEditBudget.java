@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import wxm.KeepAccount.ui.base.TouchTextView;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -36,14 +37,19 @@ import wxm.KeepAccount.utility.ContextUtil;
 public class TFEditBudget extends TFEditBase {
     private final static String TAG = "TFEditBudget";
     private final static int MAX_NOTELEN = 200;
+
     @BindView(R.id.et_budget_name)
     TextInputEditText mETName;
+
     @BindView(R.id.et_budget_amount)
     TextInputEditText mETAmount;
+
     @BindView(R.id.tv_note)
-    TextView mTVNote;
+    TouchTextView mTVNote;
+
     @BindString(R.string.notice_input_note)
     String mSZDefNote;
+
     private BudgetItem mBIData;
 
     @Override
