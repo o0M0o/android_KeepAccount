@@ -29,15 +29,12 @@ import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditPay;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 
 /**
- * note add UI
+ * UI for add note
  * Created by ookoo on 2016/11/29.
  */
 public class FrgNoteAdd extends FrgUtilityBase {
     protected final static int POS_PAY = 0;
     protected final static int POS_INCOME = 1;
-
-    @BindView(R.id.bt_accept)
-    Button mBTAccept;
 
     @BindView(R.id.cl_header)
     ConstraintLayout mCLHeader;
@@ -109,15 +106,6 @@ public class FrgNoteAdd extends FrgUtilityBase {
         mPHHelper[POS_INCOME].mRLSelector = mRLIncome;
         mPHHelper[POS_INCOME].mPageIdx = POS_INCOME;
 
-        mBTAccept.setOnClickListener(v -> {
-            int pos = isEnableRL(mRLPay) ? POS_PAY : POS_INCOME;
-            PagerAdapter pa = UtilFun.cast(mVPPager.getAdapter());
-            TFEditBase tb = UtilFun.cast(pa.getItem(pos));
-            if (tb.onAccept()) {
-                ac.finish();
-            }
-        });
-
         enableRLStatus(mRLPay);
     }
 
@@ -125,10 +113,17 @@ public class FrgNoteAdd extends FrgUtilityBase {
     protected void loadUI() {
     }
 
+    public boolean onAccept() {
+        int pos = isEnableRL(mRLPay) ? POS_PAY : POS_INCOME;
+        PagerAdapter pa = UtilFun.cast(mVPPager.getAdapter());
+        TFEditBase tb = UtilFun.cast(pa.getItem(pos));
+        return tb.onAccept();
+    }
+
     /// PRIVATE BEGIN
     /**
-     * 修改rl状态
-     * @param rl        待修改rl
+     * enable selection
+     * @param rl        enabled rl
      */
     private void enableRLStatus(RelativeLayout rl)  {
         for(pageHelper ph : mPHHelper)  {
@@ -158,8 +153,9 @@ public class FrgNoteAdd extends FrgUtilityBase {
 
     /**
      * 判断rl是否enable
-     * @param rl    待检查rl
-     * @return      是否enable
+     * check rl is enabled
+     * @param rl    rl need check
+     * @return      true if enable
      */
     private Boolean isEnableRL(RelativeLayout rl)  {
         return rl == mPHHot.mRLSelector;

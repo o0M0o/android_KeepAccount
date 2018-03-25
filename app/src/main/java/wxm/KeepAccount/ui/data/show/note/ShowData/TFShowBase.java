@@ -57,7 +57,7 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
     }
 
     /**
-     * 在两个视图之间切换
+     * switch in pages
      */
     public void switchPage() {
         View v = getView();
@@ -69,8 +69,8 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
 
 
     /**
-     * 数据变化后调用
-     * @param bForce 若为true则刷新数据
+     * update view
+     * @param bForce    if true it will reload data
      */
     public void loadView(boolean bForce) {
         View cur_v = getView();
@@ -82,7 +82,7 @@ public abstract class TFShowBase extends FrgUtilitySupportBase {
 
     //// PRIVATE START
     /**
-     * 加载热fragment
+     * load hot fragment
      */
     private void loadHotFrg() {
         android.support.v4.app.FragmentTransaction t = getChildFragmentManager().beginTransaction();
