@@ -23,6 +23,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import wxm.KeepAccount.ui.base.PageSwitcher;
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -72,7 +74,7 @@ public class FrgNoteShow extends FrgUtilityBase {
         int  mPageIdx;
     }
     private pageHelper[] mPHHelper;
-    private pageHelper mPHHot;
+    private PageSwitcher    mPSSwitcher;
 
     /**
      * DB data change handler
@@ -120,45 +122,13 @@ public class FrgNoteShow extends FrgUtilityBase {
         AppCompatActivity a_ac = UtilFun.cast_t(getActivity());
         final PagerAdapter adapter = new PagerAdapter(a_ac.getSupportFragmentManager());
         mVPPages.setAdapter(adapter);
-        mVPPages.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
 
-            @Override
-            public void onPageSelected(int position) {
-                enableRLStatus(mPHHelper[position].mRLSelector);
-            }
+        mRLDayFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_DAY_FLOW]));
+        mRLMonthFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_MONTH_FLOW]));
+        mRLYearFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_YEAR_FLOW]));
+        mRLBudget.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_BUDGET]));
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-
-        mRLDayFlow.setOnClickListener(v -> {
-            if(!isEnableRL(mRLDayFlow)) {
-                enableRLStatus(mRLDayFlow);
-            }
-        });
-
-        mRLMonthFlow.setOnClickListener(v -> {
-            if(!isEnableRL(mRLMonthFlow)) {
-                enableRLStatus(mRLMonthFlow);
-            }
-        });
-
-        mRLYearFlow.setOnClickListener(v -> {
-            if(!isEnableRL(mRLYearFlow)) {
-                enableRLStatus(mRLYearFlow);
-            }
-        });
-
-        mRLBudget.setOnClickListener(v -> {
-            if(!isEnableRL(mRLBudget)) {
-                enableRLStatus(mRLBudget);
-            }
-        });
-
+        mPSSwitcher = new PageSwitcher();
         mPHHelper = new pageHelper[POS_BUDGET + 1];
 
         mPHHelper[POS_DAY_FLOW] = new pageHelper();
@@ -166,50 +136,64 @@ public class FrgNoteShow extends FrgUtilityBase {
         mPHHelper[POS_DAY_FLOW].mBADataChange = false;
         mPHHelper[POS_DAY_FLOW].mRLSelector = mRLDayFlow;
         mPHHelper[POS_DAY_FLOW].mSBPage = UtilFun.cast(adapter.getItem(POS_DAY_FLOW));
+        mPHHelper[POS_DAY_FLOW].mSZName = ((TextView)mRLDayFlow.findViewById(R.id.tv_tag))
+                                                .getText().toString();
+        mPSSwitcher.addSelector(mPHHelper[POS_DAY_FLOW],
+                () -> setPage(mPHHelper[POS_DAY_FLOW], true),
+                () -> setPage(mPHHelper[POS_DAY_FLOW], false));
 
         mPHHelper[POS_MONTH_FLOW] = new pageHelper();
         mPHHelper[POS_MONTH_FLOW].mPageIdx = POS_MONTH_FLOW;
         mPHHelper[POS_MONTH_FLOW].mBADataChange = false;
         mPHHelper[POS_MONTH_FLOW].mRLSelector = mRLMonthFlow;
         mPHHelper[POS_MONTH_FLOW].mSBPage = UtilFun.cast(adapter.getItem(POS_MONTH_FLOW));
+        mPHHelper[POS_MONTH_FLOW].mSZName = ((TextView)mRLMonthFlow.findViewById(R.id.tv_tag))
+                                                .getText().toString();
+        mPSSwitcher.addSelector(mPHHelper[POS_MONTH_FLOW],
+                () -> setPage(mPHHelper[POS_MONTH_FLOW], true),
+                () -> setPage(mPHHelper[POS_MONTH_FLOW], false));
 
         mPHHelper[POS_YEAR_FLOW] = new pageHelper();
         mPHHelper[POS_YEAR_FLOW].mPageIdx = POS_YEAR_FLOW;
         mPHHelper[POS_YEAR_FLOW].mBADataChange = false;
         mPHHelper[POS_YEAR_FLOW].mRLSelector = mRLYearFlow;
         mPHHelper[POS_YEAR_FLOW].mSBPage = UtilFun.cast(adapter.getItem(POS_YEAR_FLOW));
+        mPHHelper[POS_YEAR_FLOW].mSZName = ((TextView)mRLYearFlow.findViewById(R.id.tv_tag))
+                                                .getText().toString();
+        mPSSwitcher.addSelector(mPHHelper[POS_YEAR_FLOW],
+                () -> setPage(mPHHelper[POS_YEAR_FLOW], true),
+                () -> setPage(mPHHelper[POS_YEAR_FLOW], false));
 
         mPHHelper[POS_BUDGET] = new pageHelper();
         mPHHelper[POS_BUDGET].mPageIdx = POS_BUDGET;
         mPHHelper[POS_BUDGET].mBADataChange = false;
         mPHHelper[POS_BUDGET].mRLSelector = mRLBudget;
         mPHHelper[POS_BUDGET].mSBPage = UtilFun.cast(adapter.getItem(POS_BUDGET));
-
-        for(pageHelper ph : mPHHelper)  {
-            ph.mSZName = getSelectorName(ph.mRLSelector);
-        }
+        mPHHelper[POS_BUDGET].mSZName = ((TextView)mRLBudget.findViewById(R.id.tv_tag))
+                                                .getText().toString();
+        mPSSwitcher.addSelector(mPHHelper[POS_BUDGET],
+                () -> setPage(mPHHelper[POS_BUDGET], true),
+                () -> setPage(mPHHelper[POS_BUDGET], false));
 
         // 默认选择第一页为首页
         // 根据调用参数跳转到指定首页
+        boolean b_hot = false;
         Intent it = getActivity().getIntent();
         if (null != it) {
-            boolean b_hot = false;
             String ft = it.getStringExtra(NoteDataHelper.INTENT_PARA_FIRST_TAB);
             if (!UtilFun.StringIsNullOrEmpty(ft)) {
                 for(pageHelper ph : mPHHelper)  {
                     if (ph.mSZName.equals(ft)) {
-                        enableRLStatus(ph.mRLSelector);
+                        mPSSwitcher.doSelect(ph);
                         b_hot = true;
                         break;
                     }
                 }
             }
+        }
 
-            if (!b_hot) {
-                enableRLStatus(mRLDayFlow);
-            }
-        } else {
-            enableRLStatus(mRLDayFlow);
+        if (!b_hot) {
+            mPSSwitcher.doSelect(mPHHelper[POS_DAY_FLOW]);
         }
     }
 
@@ -226,7 +210,7 @@ public class FrgNoteShow extends FrgUtilityBase {
         for(pageHelper ph : mPHHelper)  {
             if(tabname.equals(ph.mSZName))  {
                 if(!isEnableRL(ph.mRLSelector)) {
-                    enableRLStatus(ph.mRLSelector);
+                    mPSSwitcher.doSelect(ph);
                 }
 
                 break;
@@ -237,33 +221,13 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     /// PRIVATE BEGIN
 
-    /**
-     * get selector name
-     * @param rl    for selector
-     * @return      name for selector
-     */
-    @NonNull
-    private String getSelectorName(RelativeLayout rl)   {
-        return ((TextView)rl.findViewById(R.id.tv_tag)).getText().toString();
-    }
+    private void setPage(pageHelper ph, boolean enable) {
+        setRLStatus(ph.mRLSelector, enable);
+        if(enable)  {
+            mVPPages.setCurrentItem(ph.mPageIdx);
 
-    /**
-     * enable rl status
-     * @param rl    param
-     */
-    private void enableRLStatus(RelativeLayout rl)  {
-        for(pageHelper ph : mPHHelper)  {
-            if(ph.mRLSelector != rl)    {
-                setRLStatus(ph.mRLSelector, false);
-            } else {
-                mPHHot = ph;
-
-                setRLStatus(ph.mRLSelector, true);
-                mVPPages.setCurrentItem(ph.mPageIdx);
-
-                getHotTabItem().loadView(ph.mBADataChange);
-                ph.mBADataChange = false;
-            }
+            ph.mSBPage.loadView(ph.mBADataChange);
+            ph.mBADataChange = false;
         }
     }
 
@@ -272,14 +236,15 @@ public class FrgNoteShow extends FrgUtilityBase {
      * @param rl    rl need check
      * @return      True if enabled
      */
-    private Boolean isEnableRL(RelativeLayout rl)  {
-        return rl == mPHHot.mRLSelector;
+    private Boolean isEnableRL(RelativeLayout rl) {
+        pageHelper ph = (pageHelper) mPSSwitcher.getSelected();
+        return null != ph && ph.mRLSelector == rl;
     }
 
     /**
      * set rl status
      * @param rl            rl need set
-     * @param bIsSelected   true is selected
+     * @param bIsSelected   true is doSelect
      */
     private void setRLStatus(RelativeLayout rl, boolean bIsSelected)    {
         int res;
@@ -301,7 +266,8 @@ public class FrgNoteShow extends FrgUtilityBase {
      * @return      hot tab item
      */
     public TFShowBase getHotTabItem() {
-        return mPHHot.mSBPage;
+        pageHelper ph = (pageHelper) mPSSwitcher.getSelected();
+        return null == ph ? null : ph.mSBPage;
     }
     ///PRIVATE END
 
