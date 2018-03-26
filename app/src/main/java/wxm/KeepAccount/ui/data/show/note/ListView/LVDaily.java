@@ -48,7 +48,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 
 /**
- * 日数据视图辅助类
+ * listview for daily data
  * Created by 123 on 2016/9/10.
  */
 public class LVDaily extends LVBase {
@@ -69,9 +69,8 @@ public class LVDaily extends LVBase {
     }
 
     /**
-     * 过滤视图事件
-     *
-     * @param event 事件
+     * filter event
+     * @param event     param
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
@@ -88,7 +87,7 @@ public class LVDaily extends LVBase {
     }
 
     /**
-     * 初始化可隐藏动作条
+     * init action bar
      */
     @Override
     protected void initActs() {
@@ -97,9 +96,8 @@ public class LVDaily extends LVBase {
     }
 
     /**
-     * 附加动作
-     *
-     * @param v 动作view
+     * actions
+     * @param v     clicked view
      */
     @OnClick({R.id.ib_sort, R.id.ib_refresh, R.id.ib_delete,
             R.id.ib_add, R.id.ib_report})
@@ -318,7 +316,7 @@ public class LVDaily extends LVBase {
 
     /// BEGIN PRIVATE
     /**
-     * 用现有数据重绘UI
+     * redraw UI
      */
     private void redrawUI() {
         // adjust attach layout
@@ -333,18 +331,10 @@ public class LVDaily extends LVBase {
 
 
     /**
-     * 加载UI
-     * @param b_fully 若为true则加载数据
+     * load UI
+     * @param b_fully   load data if true
      */
     private void loadUIUtility(boolean b_fully) {
-        /*
-        Log.d(LOG_TAG, "in loadUIUtility, b_fully = " + Boolean.toString(b_fully));
-        String[] calls = ToolUtil.getCallStack(8);
-        for (int i = 0; i < calls.length; ++i) {
-            Log.v(LOG_TAG, "in loadUIUtility, [" + i + "] = " + calls[i]);
-        }
-        */
-
         // adjust attach layout
         setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
                 View.VISIBLE : View.GONE);
@@ -380,7 +370,7 @@ public class LVDaily extends LVBase {
     }
 
     /**
-     * 调整数据排序
+     * reorder data
      */
     private void reorderData() {
         Collections.reverse(mMainPara);
@@ -389,7 +379,7 @@ public class LVDaily extends LVBase {
 
 
     /**
-     * 首级列表adapter
+     * main adapter
      */
     private class SelfAdapter extends SimpleAdapter {
         private final static String TAG = "SelfAdapter";
@@ -477,9 +467,8 @@ public class LVDaily extends LVBase {
         }
 
         /**
-         * 返回等待删除的日数据
-         *
-         * @return 待删除日数据
+         * get daily data need delete
+         * @return      daily data
          */
         List<String> getWaitDeleteDays() {
             return mALWaitDeleteDays;

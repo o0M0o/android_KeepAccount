@@ -7,7 +7,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cl_header"
-        android:background="#EEB4B4"
+        android:background="#dbdbdb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

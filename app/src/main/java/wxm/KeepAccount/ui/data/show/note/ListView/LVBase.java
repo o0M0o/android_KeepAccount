@@ -28,7 +28,7 @@ import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 import wxm.uilib.IconButton.IconButton;
 
 /**
- * sub class for listview
+ * listview base for show record
  * Created by wxm on 2016/9/29.
  */
 public abstract class LVBase extends ShowViewBase {
@@ -66,13 +66,13 @@ public abstract class LVBase extends ShowViewBase {
     protected final static String V_SHOW_UNFOLD = "vs_unfold";
     protected final static String V_SHOW_FOLD = "vs_fold";
 
-    // 视图数据
+    // view data
     protected final LinkedList<HashMap<String, String>> mMainPara;
     protected final HashMap<String, LinkedList<HashMap<String, String>>> mHMSubPara;
     protected final LinkedList<String> mLLSubFilter = new LinkedList<>();
     protected final LinkedList<View> mLLSubFilterVW = new LinkedList<>();
 
-    // 存放展开节点的数据
+    // unfold data
     private final LinkedList<String> mUnfoldItems;
 
     // for filter
@@ -147,14 +147,13 @@ public abstract class LVBase extends ShowViewBase {
     }
 
     /**
-     * 初始化底部动作条
+     * init bottom action bar
      */
     protected abstract void initActs();
 
     /**
-     * 切换底部”动作条“显示/隐藏
-     *
-     * @param v 点击view
+     * switch bottom action bar show/hide
+     * @param v         param
      */
     @OnClick(R.id.rl_hide_show)
     public void switchActionHideShow(View v) {
@@ -177,10 +176,9 @@ public abstract class LVBase extends ShowViewBase {
     }
 
     /**
-     * 添加一个展开节点
-     * 只记录20个展开节点, 超过数量后将移除最早记录的节点
-     *
-     * @param tag 展开节点tag
+     * add unfold node
+     * only record 20 node, then will remove first node
+     * @param tag       tag for unfold node
      */
     protected void addUnfoldItem(String tag) {
         if (!mUnfoldItems.contains(tag)) {
@@ -193,9 +191,8 @@ public abstract class LVBase extends ShowViewBase {
     }
 
     /**
-     * 移除一个展开节点
-     *
-     * @param tag 移除节点tag
+     * remove unfold item
+     * @param tag       tag for need removed
      */
     protected void removeUnfoldItem(String tag) {
         mUnfoldItems.remove(tag);
@@ -203,10 +200,9 @@ public abstract class LVBase extends ShowViewBase {
 
 
     /**
-     * 检查一个节点是否是展开节点
-     *
-     * @param tag 待检查节点tag
-     * @return 如果此节点是展开节点，返回true, 否则返回false
+     * check one item if is unfold
+     * @param tag       tag for wait checked item
+     * @return          true if unfold else false
      */
     protected boolean checkUnfoldItem(String tag) {
         return mUnfoldItems.contains(tag);
@@ -214,10 +210,9 @@ public abstract class LVBase extends ShowViewBase {
 
 
     /**
-     * 刷新数据以及视图
-     *
-     * @param v           for context
-     * @param bShowDialog 若为true则显示提醒对话框
+     * reload data & view
+     * @param v             context
+     * @param bShowDialog   show dialog if true
      */
     protected void reloadView(final Context v, final boolean bShowDialog) {
         //refreshUI();

@@ -82,7 +82,9 @@ public class FrgNoteShow extends FrgUtilityBase {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBChangeEvent(DBDataChangeEvent event) {
-        getHotTabItem().loadView(true);
+        TFShowBase tb = getHotTabItem();
+        if(null != tb)
+            tb.loadView(true);
 
         int cur_pos = mVPPages.getCurrentItem();
         for (int i = 0; i < mPHHelper.length; i++) {
@@ -128,6 +130,7 @@ public class FrgNoteShow extends FrgUtilityBase {
         mRLYearFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_YEAR_FLOW]));
         mRLBudget.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_BUDGET]));
 
+        // init page switch
         mPSSwitcher = new PageSwitcher();
         mPHHelper = new pageHelper[POS_BUDGET + 1];
 
@@ -201,11 +204,14 @@ public class FrgNoteShow extends FrgUtilityBase {
     protected void loadUI() {
     }
 
-
     public void disableViewPageTouch(boolean bflag) {
         mVPPages.requestDisallowInterceptTouchEvent(bflag);
     }
 
+    /**
+     * jump to tab page use name
+     * @param tabname       name for target page
+     */
     public void jumpByTabName(String tabname) {
         for(pageHelper ph : mPHHelper)  {
             if(tabname.equals(ph.mSZName))  {
@@ -221,6 +227,11 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     /// PRIVATE BEGIN
 
+    /**
+     * switch to other page
+     * @param ph            page helper data
+     * @param enable        if true, switch to this page
+     */
     private void setPage(pageHelper ph, boolean enable) {
         setRLStatus(ph.mRLSelector, enable);
         if(enable)  {

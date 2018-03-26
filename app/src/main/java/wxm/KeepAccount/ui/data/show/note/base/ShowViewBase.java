@@ -28,7 +28,6 @@ public abstract class ShowViewBase
     // filter for view
     protected boolean mBFilter;
     protected final LinkedList<String> mFilterPara;
-    protected final Timestamp mTSLastLoadViewTime = new Timestamp(0);
 
     @BindView(R.id.rl_attach_button)
     RelativeLayout mRLAttachButton;
@@ -66,7 +65,6 @@ public abstract class ShowViewBase
 
     @CallSuper
     protected void refreshData() {
-        mTSLastLoadViewTime.setTime(Calendar.getInstance().getTimeInMillis());
     }
 
     /**
@@ -83,11 +81,10 @@ public abstract class ShowViewBase
     }
 
     /**
-     * 设置附加layout可见性
-     *
-     * @param visible 若为 :
-     *                1. {@code View.GONE}, 不可见
-     *                2. {@code View.VISIBLE}, 可见
+     * set layout visibility
+     * @param visible can be :
+     *                1. {@code View.GONE}
+     *                2. {@code View.VISIBLE}
      */
     protected void setAttachLayoutVisible(int visible) {
         mRLAttachButton.setVisibility(visible);
@@ -95,11 +92,10 @@ public abstract class ShowViewBase
 
 
     /**
-     * 设置过滤layout可见性
-     *
-     * @param visible 若为 :
-     *                1. {@code View.GONE}, 不可见
-     *                2. {@code View.VISIBLE}, 可见
+     * set filter layout visibility
+     * @param visible can be :
+     *                1. {@code View.GONE}
+     *                2. {@code View.VISIBLE}
      */
     protected void setFilterLayoutVisible(int visible) {
         if (View.VISIBLE == visible)
@@ -110,11 +106,10 @@ public abstract class ShowViewBase
 
 
     /**
-     * 设置接受-放弃layout可见性
-     *
-     * @param visible 若为 :
-     *                1. {@code View.GONE}, 不可见
-     *                2. {@code View.VISIBLE}, 可见
+     * set accept/give-up layout visibility
+     * @param visible can be :
+     *                1. {@code View.GONE}
+     *                2. {@code View.VISIBLE}
      */
     protected void setAccpetGiveupLayoutVisible(int visible) {
         if (View.VISIBLE == visible)
