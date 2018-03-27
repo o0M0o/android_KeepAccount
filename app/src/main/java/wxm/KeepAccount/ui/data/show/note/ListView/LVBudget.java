@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
@@ -39,6 +40,7 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
+import wxm.uilib.IconButton.IconButton;
 
 /**
  * budget listview
@@ -52,9 +54,72 @@ public class LVBudget extends LVBase {
     protected boolean mBODownOrder = true;
     private int mActionType = ACTION_EDIT;
 
+    class BudgetActionHelper extends ActionHelper    {
+        @BindView(R.id.ib_sort)
+        IconButton mIBSort;
+
+        @BindView(R.id.ib_report)
+        IconButton mIBReport;
+
+        BudgetActionHelper() {
+            super();
+        }
+
+        @Override
+        protected void initActs() {
+            mIBReport.setVisibility(View.GONE);
+
+            mIBSort.setActIcon(mBODownOrder ?
+                    R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+            mIBSort.setActName(mBODownOrder ?
+                    R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
+        }
+
+        @OnClick({R.id.ib_sort, R.id.ib_refresh})
+        public void onActionClick(View v) {
+            switch (v.getId()) {
+                case R.id.ib_sort: {
+                    mBODownOrder = !mBODownOrder;
+
+                    mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+                    mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
+
+                    reorderData();
+                    loadUIUtility(true);
+                }
+                break;
+
+                case R.id.ib_refresh: {
+                    mActionType = ACTION_EDIT;
+                    reloadView(getContext(), false);
+                }
+                break;
+
+                case R.id.ib_delete: {
+                    if (ACTION_DELETE != mActionType) {
+                        mActionType = ACTION_DELETE;
+                        reloadView(v.getContext(), false);
+                    }
+                }
+                break;
+
+                case R.id.ib_add: {
+                    ACNoteShow ac = getRootActivity();
+                    Intent intent = new Intent(ac, ACPreveiwAndEdit.class);
+                    intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
+                    ac.startActivityForResult(intent, 1);
+                }
+                break;
+            }
+        }
+    }
+
+
     public LVBudget() {
         super();
         LOG_TAG = "LVBudget";
+
+        mAHActs = new BudgetActionHelper();
     }
 
     /**
@@ -65,54 +130,13 @@ public class LVBudget extends LVBase {
     public void onFilterShowEvent(FilterShowEvent event) {
     }
 
-    @Override
-    protected void initActs() {
-        mIBReport.setVisibility(View.GONE);
-
-        mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
-        mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
-    }
-
     /**
      * addition action
      * @param v     action view
      */
     @OnClick({R.id.ib_sort, R.id.ib_refresh, R.id.ib_delete, R.id.ib_add})
     public void onActionClick(View v) {
-        switch (v.getId()) {
-            case R.id.ib_sort: {
-                mBODownOrder = !mBODownOrder;
 
-                mIBSort.setActIcon(mBODownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
-                mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
-
-                reorderData();
-                loadUIUtility(true);
-            }
-            break;
-
-            case R.id.ib_refresh: {
-                mActionType = ACTION_EDIT;
-                reloadView(getContext(), false);
-            }
-            break;
-
-            case R.id.ib_delete: {
-                if (ACTION_DELETE != mActionType) {
-                    mActionType = ACTION_DELETE;
-                    reloadView(v.getContext(), false);
-                }
-            }
-            break;
-
-            case R.id.ib_add: {
-                ACNoteShow ac = getRootActivity();
-                Intent intent = new Intent(ac, ACPreveiwAndEdit.class);
-                intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
-                ac.startActivityForResult(intent, 1);
-            }
-            break;
-        }
     }
 
 

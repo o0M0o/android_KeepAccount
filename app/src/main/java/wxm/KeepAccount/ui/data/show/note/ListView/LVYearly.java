@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.util.FastViewHolder;
@@ -39,6 +40,7 @@ import wxm.KeepAccount.ui.utility.ListViewHelper;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.utility.ContextUtil;
+import wxm.uilib.IconButton.IconButton;
 
 /**
  * 年数据视图辅助类
@@ -48,14 +50,69 @@ public class LVYearly extends LVBase {
     private final static String TAG = "LVYearly";
     private final LinkedList<String> mLLSubFilter = new LinkedList<>();
     private final LinkedList<View> mLLSubFilterVW = new LinkedList<>();
+
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
     private boolean mBSelectSubFilter = false;
+
+    class YearlyActionHelper extends ActionHelper    {
+        @BindView(R.id.ib_sort)
+        IconButton mIBSort;
+
+        @BindView(R.id.ib_report)
+        IconButton mIBReport;
+
+        @BindView(R.id.ib_delete)
+        IconButton mIBDelete;
+
+        @BindView(R.id.ib_add)
+        IconButton mIBAdd;
+
+        YearlyActionHelper() {
+            super();
+        }
+
+        @Override
+        protected void initActs() {
+            mIBReport.setVisibility(View.GONE);
+            mIBAdd.setVisibility(View.GONE);
+            mIBDelete.setVisibility(View.GONE);
+
+            mIBSort.setActIcon(mBTimeDownOrder ?
+                    R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+            mIBSort.setActName(mBTimeDownOrder ?
+                    R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+        }
+
+        @OnClick({R.id.ib_sort, R.id.ib_refresh})
+        public void onActionClick(View v) {
+            switch (v.getId()) {
+                case R.id.ib_sort: {
+                    mBTimeDownOrder = !mBTimeDownOrder;
+
+                    mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+                    mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+
+                    reorderData();
+                    loadUIUtility(true);
+                }
+                break;
+
+                case R.id.ib_refresh: {
+                    reloadView(v.getContext(), false);
+                }
+                break;
+            }
+        }
+    }
+
 
     public LVYearly() {
         super();
         LOG_TAG = "LVYearly";
         mBActionExpand = false;
+
+        mAHActs = new YearlyActionHelper();
     }
 
     /**
@@ -67,32 +124,6 @@ public class LVYearly extends LVBase {
     public void onFilterShowEvent(FilterShowEvent event) {
     }
 
-
-    /**
-     * 附加动作
-     *
-     * @param v 动作view
-     */
-    @OnClick({R.id.ib_sort, R.id.ib_refresh})
-    public void onActionClick(View v) {
-        switch (v.getId()) {
-            case R.id.ib_sort: {
-                mBTimeDownOrder = !mBTimeDownOrder;
-
-                mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
-                mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
-
-                reorderData();
-                loadUIUtility(true);
-            }
-            break;
-
-            case R.id.ib_refresh: {
-                reloadView(v.getContext(), false);
-            }
-            break;
-        }
-    }
 
 
     /**
@@ -142,20 +173,6 @@ public class LVYearly extends LVBase {
                 break;
         }
     }
-
-    /**
-     * 初始化可隐藏动作条
-     */
-    @Override
-    protected void initActs() {
-        mIBReport.setVisibility(View.GONE);
-        mIBAdd.setVisibility(View.GONE);
-        mIBDelete.setVisibility(View.GONE);
-
-        mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
-        mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
-    }
-
 
     /**
      * 重新加载数据

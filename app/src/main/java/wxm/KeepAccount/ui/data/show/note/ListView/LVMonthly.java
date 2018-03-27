@@ -1,7 +1,10 @@
 package wxm.KeepAccount.ui.data.show.note.ListView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,7 +29,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import butterknife.BindView;
 import butterknife.OnClick;
+import wxm.KeepAccount.define.GlobalDef;
+import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd;
+import wxm.KeepAccount.ui.data.report.ACReport;
+import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
+import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -39,6 +48,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
+import wxm.uilib.IconButton.IconButton;
 
 /**
  * 月数据辅助类
@@ -52,11 +62,63 @@ public class LVMonthly
     private boolean mBTimeDownOrder = true;
 
 
+    class MonthlyActionHelper extends ActionHelper    {
+        @BindView(R.id.ib_sort)
+        IconButton mIBSort;
+
+        @BindView(R.id.ib_report)
+        IconButton mIBReport;
+
+        @BindView(R.id.ib_add)
+        IconButton mIBAdd;
+
+        @BindView(R.id.ib_delete)
+        IconButton mIBDelete;
+
+        MonthlyActionHelper() {
+            super();
+        }
+
+        @Override
+        protected void initActs() {
+            mIBReport.setVisibility(View.GONE);
+            mIBAdd.setVisibility(View.GONE);
+            mIBDelete.setVisibility(View.GONE);
+
+            mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+            mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+        }
+
+        @OnClick({R.id.ib_sort, R.id.ib_refresh})
+        public void onActionClick(View v) {
+            switch (v.getId()) {
+                case R.id.ib_sort: {
+                    mBTimeDownOrder = !mBTimeDownOrder;
+
+                    mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+                    mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+
+                    reorderData();
+                    loadUIUtility(true);
+                }
+                break;
+
+                case R.id.ib_refresh: {
+                    reloadView(v.getContext(), false);
+                }
+                break;
+            }
+        }
+    }
+
+
     public LVMonthly() {
         super();
 
         LOG_TAG = "LVMonthly";
         mBActionExpand = false;
+
+        mAHActs = new MonthlyActionHelper();
     }
 
 
@@ -79,32 +141,6 @@ public class LVMonthly
         }
     }
 
-
-    /**
-     * 附加动作
-     *
-     * @param v 动作view
-     */
-    @OnClick({R.id.ib_sort, R.id.ib_refresh})
-    public void onActionClick(View v) {
-        switch (v.getId()) {
-            case R.id.ib_sort: {
-                mBTimeDownOrder = !mBTimeDownOrder;
-
-                mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
-                mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
-
-                reorderData();
-                loadUIUtility(true);
-            }
-            break;
-
-            case R.id.ib_refresh: {
-                reloadView(v.getContext(), false);
-            }
-            break;
-        }
-    }
 
 
     /**
@@ -162,21 +198,6 @@ public class LVMonthly
             break;
         }
     }
-
-
-    /**
-     * 初始化可隐藏动作条
-     */
-    @Override
-    protected void initActs() {
-        mIBReport.setVisibility(View.GONE);
-        mIBAdd.setVisibility(View.GONE);
-        mIBDelete.setVisibility(View.GONE);
-
-        mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
-        mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
-    }
-
 
     /**
      * 重新加载数据

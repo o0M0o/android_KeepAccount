@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'me.tatarka.retrolambda'
 
 android {
     signingConfigs {
@@ -18,7 +17,7 @@ android {
     }
 
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationId "com.wxm.keepaccount"
@@ -90,39 +89,41 @@ static def releaseTime() {
 
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support.test:runner:1.0.1'
-    androidTestCompile 'com.android.support.test:rules:1.0.1'
-    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test:rules:1.0.1'
+    androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.android.support:design:25.4.0'
-    compile 'com.jakewharton:butterknife:8.5.1'
-    compile 'com.trello:rxlifecycle:0.5.0'
-    compile 'com.trello:rxlifecycle-components:0.5.0'
-    compile 'com.squareup.retrofit2:retrofit:2.0.1'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.1'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.squareup.okhttp3:okhttp:3.7.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'org.apache.httpcomponents:httpcore:4.4.4'
-    compile project(':AndroidUtil')
-    compile project(':hellocharts-library-release')
-    compile project(':lm_banner_library')
-    compile project(':UiLib')
-    compile files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
-    compile files('libs/extend_lib/fashjson/fastjson-1.2.33.jar')
-    compile files('libs/extend_lib/junit/junit-4.12.jar')
-    compile files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.jakewharton:butterknife:8.5.1'
+    implementation 'com.trello:rxlifecycle:0.5.0'
+    implementation 'com.trello:rxlifecycle-components:0.5.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.0.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.0.1'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.0.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.okhttp3:okhttp:3.7.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'io.reactivex:rxandroid:1.1.0'
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'org.apache.httpcomponents:httpcore:4.4.4'
+    implementation project(':AndroidUtil')
+    implementation project(':hellocharts-library-release')
+    implementation project(':lm_banner_library')
+    implementation project(':UiLib')
+    implementation files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
+    implementation files('libs/extend_lib/fashjson/fastjson-1.2.33.jar')
+    implementation files('libs/extend_lib/junit/junit-4.12.jar')
+    implementation files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
 }
 
+/*
 configurations.all {
     resolutionStrategy {
         force 'com.android.support:support-annotations:24.2.1'
     }
 }
+*/
 

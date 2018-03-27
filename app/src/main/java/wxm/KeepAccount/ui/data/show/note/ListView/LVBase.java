@@ -80,43 +80,6 @@ public abstract class LVBase extends ShowViewBase {
     protected boolean mBActionExpand;
 
     // for ui
-    @BindView(R.id.iv_show_tag)
-    protected ImageView mIVHideShow;
-
-    @BindView(R.id.rl_hide_show)
-    protected RelativeLayout mRLHideShow;
-
-    @BindView(R.id.rl_lv_note)
-    protected RelativeLayout mRLLVNote;
-
-    @BindView(R.id.rl_acts)
-    protected RelativeLayout mRLActions;
-
-    @BindDrawable(R.drawable.ic_to_left)
-    protected Drawable mDAExpand;
-
-    @BindDrawable(R.drawable.ic_to_right)
-    protected Drawable mDAHide;
-
-    // for addtion action
-    @BindView(R.id.ib_report)
-    IconButton mIBReport;
-
-    @BindView(R.id.ib_add)
-    IconButton mIBAdd;
-
-    @BindView(R.id.ib_delete)
-    IconButton mIBDelete;
-
-    @BindView(R.id.ib_refresh)
-    IconButton mIBRefresh;
-
-    @BindView(R.id.ib_sort)
-    IconButton mIBSort;
-
-    @BindView(R.id.rl_action)
-    RelativeLayout mRLAction;
-
     @BindView(R.id.lv_show)
     ListView mLVShow;
 
@@ -125,6 +88,8 @@ public abstract class LVBase extends ShowViewBase {
 
     @BindView(R.id.pb_loading)
     ProgressBar mPBLoading;
+
+    protected ActionHelper     mAHActs;
 
     public LVBase() {
         super();
@@ -137,42 +102,14 @@ public abstract class LVBase extends ShowViewBase {
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View rootView = layoutInflater.inflate(R.layout.lv_note_show_pager, viewGroup, false);
         ButterKnife.bind(this, rootView);
+        mAHActs.bind(rootView);
         return rootView;
     }
 
     @Override
     protected void initUiComponent(View view) {
-        initActs();
+        mAHActs.initActs();
         refreshData();
-    }
-
-    /**
-     * init bottom action bar
-     */
-    protected abstract void initActs();
-
-    /**
-     * switch bottom action bar show/hide
-     * @param v         param
-     */
-    @OnClick(R.id.rl_hide_show)
-    public void switchActionHideShow(View v) {
-        ViewGroup.LayoutParams rp = mRLActions.getLayoutParams();
-        boolean b_hide = rp.width == 0;
-
-        mIVHideShow.setImageDrawable(b_hide ? mDAHide : mDAExpand);
-        mRLHideShow.getBackground().setAlpha(b_hide ? 255 : 40);
-        mRLAction.getBackground().setAlpha(b_hide ? 255 : 0);
-
-        rp.width = b_hide ? ViewGroup.LayoutParams.MATCH_PARENT : 0;
-        mRLActions.setLayoutParams(rp);
-
-        RelativeLayout.LayoutParams rp_lv = UtilFun.cast_t(mRLLVNote.getLayoutParams());
-        if (b_hide)
-            rp_lv.addRule(RelativeLayout.ABOVE, R.id.rl_action);
-        else
-            rp_lv.removeRule(RelativeLayout.ABOVE);
-        mRLLVNote.setLayoutParams(rp_lv);
     }
 
     /**

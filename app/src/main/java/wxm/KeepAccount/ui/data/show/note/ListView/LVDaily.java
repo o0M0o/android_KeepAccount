@@ -27,6 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.FastViewHolder;
@@ -46,6 +47,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
+import wxm.uilib.IconButton.IconButton;
 
 /**
  * listview for daily data
@@ -61,11 +63,114 @@ public class LVDaily extends LVBase {
     private boolean mBTimeDownOrder = true;
     private int mActionType = ACTION_EDIT;
 
+    class DailyActionHelper extends ActionHelper    {
+        @BindView(R.id.ib_sort)
+        IconButton mIBSort;
+
+        DailyActionHelper() {
+            super();
+        }
+
+        @Override
+        protected void initActs() {
+            mIBSort.setActIcon(mBTimeDownOrder ?
+                    R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+            mIBSort.setActName(mBTimeDownOrder ?
+                    R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+        }
+
+        /**
+         * actions
+         * @param v     clicked view
+         */
+        @OnClick({R.id.ib_sort, R.id.ib_refresh, R.id.ib_delete,
+                R.id.ib_add, R.id.ib_report})
+        public void onActionClick(View v) {
+            switch (v.getId()) {
+                case R.id.ib_sort: {
+                    mBTimeDownOrder = !mBTimeDownOrder;
+
+                    mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
+                    mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
+
+                    reorderData();
+                    loadUIUtility(true);
+                }
+                break;
+
+                case R.id.ib_refresh: {
+                    mActionType = ACTION_EDIT;
+                    reloadView(getContext(), false);
+                }
+                break;
+
+                case R.id.ib_delete: {
+                    if (ACTION_DELETE != mActionType) {
+                        mActionType = ACTION_DELETE;
+                        redrawUI();
+                    }
+                }
+                break;
+
+                case R.id.ib_add: {
+                    ACNoteShow ac = getRootActivity();
+                    Intent intent = new Intent(ac, ACNoteAdd.class);
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(System.currentTimeMillis());
+                    intent.putExtra(GlobalDef.STR_RECORD_DATE,
+                            String.format(Locale.CHINA, "%d-%02d-%02d %02d:%02d"
+                                    , cal.get(Calendar.YEAR)
+                                    , cal.get(Calendar.MONTH) + 1
+                                    , cal.get(Calendar.DAY_OF_MONTH)
+                                    , cal.get(Calendar.HOUR_OF_DAY)
+                                    , cal.get(Calendar.MINUTE)));
+
+                    ac.startActivityForResult(intent, 1);
+                }
+                break;
+
+                case R.id.ib_report: {
+                    final String[] d_s = {"", ""};
+
+                    DlgSelectReportDays dlg_days = new DlgSelectReportDays();
+                    dlg_days.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                        @Override
+                        public void onDialogPositiveResult(DialogFragment dialogFragment) {
+                            d_s[0] = dlg_days.getStartDay();
+                            d_s[1] = dlg_days.getEndDay();
+                            Log.d(LOG_TAG, "start : " + d_s[0] + ", end : " + d_s[1]);
+
+                            ArrayList<String> ls_sz = new ArrayList<>();
+                            ls_sz.add(d_s[0]);
+                            ls_sz.add(d_s[1]);
+
+                            Intent it = new Intent(getRootActivity(), ACReport.class);
+                            it.putExtra(ACReport.PARA_TYPE, ACReport.PT_DAY);
+                            it.putStringArrayListExtra(ACReport.PARA_LOAD, ls_sz);
+                            getRootActivity().startActivity(it);
+                        }
+
+                        @Override
+                        public void onDialogNegativeResult(DialogFragment dialogFragment) {
+                            Log.d(LOG_TAG, "start : " + d_s[0] + ", end : " + d_s[1]);
+                        }
+                    });
+
+                    dlg_days.show(getRootActivity().getSupportFragmentManager(), "select days");
+                }
+                break;
+            }
+        }
+    }
+
+
     public LVDaily() {
         super();
 
         LOG_TAG = "LVDaily";
         mBActionExpand = false;
+
+        mAHActs = new DailyActionHelper();
     }
 
     /**
@@ -85,99 +190,6 @@ public class LVDaily extends LVBase {
             loadUIUtility(true);
         }
     }
-
-    /**
-     * init action bar
-     */
-    @Override
-    protected void initActs() {
-        mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
-        mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
-    }
-
-    /**
-     * actions
-     * @param v     clicked view
-     */
-    @OnClick({R.id.ib_sort, R.id.ib_refresh, R.id.ib_delete,
-            R.id.ib_add, R.id.ib_report})
-    public void onActionClick(View v) {
-        switch (v.getId()) {
-            case R.id.ib_sort: {
-                mBTimeDownOrder = !mBTimeDownOrder;
-
-                mIBSort.setActIcon(mBTimeDownOrder ? R.drawable.ic_sort_up_1 : R.drawable.ic_sort_down_1);
-                mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
-
-                reorderData();
-                loadUIUtility(true);
-            }
-            break;
-
-            case R.id.ib_refresh: {
-                mActionType = ACTION_EDIT;
-                reloadView(getContext(), false);
-            }
-            break;
-
-            case R.id.ib_delete: {
-                if (ACTION_DELETE != mActionType) {
-                    mActionType = ACTION_DELETE;
-                    redrawUI();
-                }
-            }
-            break;
-
-            case R.id.ib_add: {
-                ACNoteShow ac = getRootActivity();
-                Intent intent = new Intent(ac, ACNoteAdd.class);
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(System.currentTimeMillis());
-                intent.putExtra(GlobalDef.STR_RECORD_DATE,
-                        String.format(Locale.CHINA, "%d-%02d-%02d %02d:%02d"
-                                , cal.get(Calendar.YEAR)
-                                , cal.get(Calendar.MONTH) + 1
-                                , cal.get(Calendar.DAY_OF_MONTH)
-                                , cal.get(Calendar.HOUR_OF_DAY)
-                                , cal.get(Calendar.MINUTE)));
-
-                ac.startActivityForResult(intent, 1);
-            }
-            break;
-
-            case R.id.ib_report: {
-                final String[] d_s = {"", ""};
-
-                DlgSelectReportDays dlg_days = new DlgSelectReportDays();
-                dlg_days.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
-                    @Override
-                    public void onDialogPositiveResult(DialogFragment dialogFragment) {
-                        d_s[0] = dlg_days.getStartDay();
-                        d_s[1] = dlg_days.getEndDay();
-                        Log.d(LOG_TAG, "start : " + d_s[0] + ", end : " + d_s[1]);
-
-                        ArrayList<String> ls_sz = new ArrayList<>();
-                        ls_sz.add(d_s[0]);
-                        ls_sz.add(d_s[1]);
-
-                        Intent it = new Intent(getRootActivity(), ACReport.class);
-                        it.putExtra(ACReport.PARA_TYPE, ACReport.PT_DAY);
-                        it.putStringArrayListExtra(ACReport.PARA_LOAD, ls_sz);
-                        getRootActivity().startActivity(it);
-                    }
-
-                    @Override
-                    public void onDialogNegativeResult(DialogFragment dialogFragment) {
-                        Log.d(LOG_TAG, "start : " + d_s[0] + ", end : " + d_s[1]);
-                    }
-                });
-
-                dlg_days.show(getRootActivity().getSupportFragmentManager(), "select days");
-            }
-            break;
-        }
-    }
-
 
     /**
      * handler for 'accept' or 'cancel'
@@ -475,3 +487,5 @@ public class LVDaily extends LVBase {
         }
     }
 }
+
+
