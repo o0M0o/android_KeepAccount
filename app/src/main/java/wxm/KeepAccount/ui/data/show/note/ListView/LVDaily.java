@@ -74,6 +74,7 @@ public class LVDaily extends LVBase {
 
         MainAdapterItem()    {
             show = EShowFold.FOLD.getName();
+            day = new dataDetail();
         }
     }
     protected final LinkedList<MainAdapterItem> mMainPara;
