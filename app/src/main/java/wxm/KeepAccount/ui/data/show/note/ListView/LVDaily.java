@@ -69,10 +69,7 @@ public class LVDaily extends LVBase {
         public String  month;
         public String  dayNumber;
         public String  dayInWeek;
-        public String  dayPayCount;
-        public String  dayPayAmount;
-        public String  dayIncomeCount;
-        public String  dayIncomeAmount;
+        public dataDetail   day;
         public String  amount;
 
         MainAdapterItem()    {
@@ -308,10 +305,10 @@ public class LVDaily extends LVBase {
                                         cl_day.set(year, month, day);
                                         map.dayInWeek = ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK));
 
-                                        map.dayPayCount = String.valueOf(ni.getPayCount());
-                                        map.dayIncomeCount = String.valueOf(ni.getIncomeCount());
-                                        map.dayPayAmount = ni.getSZPayAmount();
-                                        map.dayIncomeAmount = ni.getSZIncomeAmount();
+                                        map.day.mPayCount = String.valueOf(ni.getPayCount());
+                                        map.day.mIncomeCount = String.valueOf(ni.getIncomeCount());
+                                        map.day.mPayAmount = ni.getSZPayAmount();
+                                        map.day.mIncomeAmount = ni.getSZIncomeAmount();
 
                                         BigDecimal bd_l = ni.getBalance();
                                         map.amount = String.format(Locale.CHINA,
@@ -416,9 +413,8 @@ public class LVDaily extends LVBase {
             int vid = v.getId();
             int pos = mLVShow.getPositionForView(v);
 
-            HashMap<String, String> hm = UtilFun.cast(getItem(pos));
-            String k_tag = hm.get(K_TAG);
-
+            MainAdapterItem hm = UtilFun.cast(getItem(pos));
+            String k_tag = hm.tag;
             switch (vid) {
                 case R.id.rl_delete: {
                     if (mALWaitDeleteDays.contains(k_tag)) {
@@ -470,10 +466,10 @@ public class LVDaily extends LVBase {
 
             ValueShow vs = viewHolder.getView(R.id.vs_daily_info);
             HashMap<String, Object> hm_attr = new HashMap<>();
-            hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.dayPayCount);
-            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.dayPayAmount);
-            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.dayIncomeCount);
-            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.dayIncomeAmount);
+            hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.day.mPayCount);
+            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.day.mPayAmount);
+            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.day.mIncomeCount);
+            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.day.mIncomeAmount);
             vs.adjustAttribute(hm_attr);
 
             return root_view;

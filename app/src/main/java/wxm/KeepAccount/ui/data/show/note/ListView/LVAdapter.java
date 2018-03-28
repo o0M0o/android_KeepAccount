@@ -2,7 +2,6 @@ package wxm.KeepAccount.ui.data.show.note.ListView;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.RequiresApi;
@@ -11,16 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Checkable;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ThemedSpinnerAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ookoo on 2018/3/28.

@@ -32,37 +32,14 @@ import wxm.uilib.IconButton.IconButton;
  * Created by wxm on 2016/9/29.
  */
 public abstract class LVBase extends ShowViewBase {
-    // data define for listview
-    protected final static String K_TITLE = "k_title";
-    protected final static String K_ABSTRACT = "k_abstract";
-    protected final static String K_TIME = "k_time";
-    protected final static String K_BUDGET = "k_budget";
-    protected final static String K_AMOUNT = "k_amount";
-    protected final static String K_NOTE = "k_note";
-    protected final static String K_TAG = "k_tag";
-    protected final static String K_ID = "k_id";
-    protected final static String K_TYPE = "k_type";
-    protected final static String K_DETAIL = "k_detail";
-    protected final static String K_SUB_TAG = "k_sub_tag";
 
-    protected final static String K_YEAR = "k_year";
-    protected final static String K_MONTH = "k_month";
-    protected final static String K_DAY_NUMEBER = "k_d_number";
-    protected final static String K_DAY_IN_WEEK = "k_d_in_week";
-    protected final static String K_YEAR_PAY_COUNT = "k_ypc";
-    protected final static String K_YEAR_PAY_AMOUNT = "k_ypa";
-    protected final static String K_YEAR_INCOME_COUNT = "k_yic";
-    protected final static String K_YEAR_INCOME_AMOUNT = "k_yia";
-    protected final static String K_DAY_PAY_COUNT = "k_dpc";
-    protected final static String K_DAY_PAY_AMOUNT = "k_dpa";
-    protected final static String K_DAY_INCOME_COUNT = "k_dic";
-    protected final static String K_DAY_INCOME_AMOUNT = "k_dia";
-    protected final static String K_MONTH_PAY_COUNT = "k_mpc";
-    protected final static String K_MONTH_PAY_AMOUNT = "k_mpa";
-    protected final static String K_MONTH_INCOME_COUNT = "k_mic";
-    protected final static String K_MONTH_INCOME_AMOUNT = "k_mia";
+    class dataDetail    {
+        public String   mPayCount;
+        public String   mPayAmount;
 
-    protected final static String K_SHOW = "k_show";
+        public String   mIncomeCount;
+        public String   mIncomeAmount;
+    }
 
     enum EShowFold {
         UNFOLD("vs_unfold"),

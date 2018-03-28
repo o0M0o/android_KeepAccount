@@ -356,11 +356,11 @@ public class LVBudget extends LVBase {
             int vid = v.getId();
             int pos = mLVShow.getPositionForView(v);
 
-            HashMap<String, String> hm = UtilFun.cast(getItem(pos));
+            MainAdapterItem hm = UtilFun.cast(getItem(pos));
 
             switch (vid) {
                 case R.id.rl_delete: {
-                    String k_tag = hm.get(K_ID);
+                    String k_tag = hm.id;
                     Integer id = Integer.parseInt(k_tag);
                     if (mALWaitDeleteItems.contains(id)) {
                         mALWaitDeleteItems.remove((Object) id);
@@ -373,7 +373,7 @@ public class LVBudget extends LVBase {
                 break;
 
                 case R.id.iv_edit: {
-                    int tag_id = Integer.parseInt(hm.get(K_ID));
+                    int tag_id = Integer.parseInt(hm.id);
                     Activity ac = getRootActivity();
                     Intent it = new Intent(ac, ACPreveiwAndEdit.class);
                     it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, tag_id);
