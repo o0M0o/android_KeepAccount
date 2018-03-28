@@ -9,3 +9,5 @@
 app/src/yyb_keepaccount/
 exportToHTML/
 *.hprof
+/.idea/caches/build_file_checksums.ser
+.idea/caches/

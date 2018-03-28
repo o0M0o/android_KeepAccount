@@ -299,7 +299,7 @@ public class LVDaily extends LVBase {
                                         map.put(K_AMOUNT, v_l);
 
                                         map.put(K_TAG, k);
-                                        map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                                        map.put(K_SHOW, EShowFold.getByFold(!checkUnfoldItem(k)).getName());
                                         maps.add(map);
                                     }
                                     return maps;
@@ -394,7 +394,7 @@ public class LVDaily extends LVBase {
      * main adapter
      */
     private class SelfAdapter extends SimpleAdapter {
-        private final static String TAG = "SelfAdapter";
+        private final static String TAG = "MainAdapter";
 
         private ArrayList<String> mALWaitDeleteDays = new ArrayList<>();
 

@@ -50,9 +50,9 @@ public class LVBudget extends LVBase {
     //for action
     private final static int ACTION_DELETE = 1;
     private final static int ACTION_EDIT = 2;
-    // 排列次序
-    protected boolean mBODownOrder = true;
     private int mActionType = ACTION_EDIT;
+
+    private boolean mBODownOrder = true;
 
     class BudgetActionHelper extends ActionHelper    {
         @BindView(R.id.ib_sort)
@@ -148,7 +148,7 @@ public class LVBudget extends LVBase {
                 if (ACTION_DELETE == mActionType) {
                     mActionType = ACTION_EDIT;
 
-                    SelfAdapter sad = UtilFun.cast_t(mLVShow.getAdapter());
+                    MainAdapter sad = UtilFun.cast_t(mLVShow.getAdapter());
                     List<Integer> ls_dels = sad.getWaitDeleteItems();
                     if (!UtilFun.ListIsNullOrEmpty(ls_dels)) {
                         ContextUtil.getBudgetUtility().removeDatas(ls_dels);
@@ -205,7 +205,7 @@ public class LVBudget extends LVBase {
             n_mainpara.addAll(mMainPara);
 
             // 设置listview adapter
-            SelfAdapter mSNAdapter = new SelfAdapter(ContextUtil.getInstance(), n_mainpara,
+            MainAdapter mSNAdapter = new MainAdapter(ContextUtil.getInstance(), n_mainpara,
                     new String[]{}, new int[]{});
             mLVShow.setAdapter(mSNAdapter);
             mSNAdapter.notifyDataSetChanged();
@@ -249,7 +249,7 @@ public class LVBudget extends LVBase {
             map.put(K_AMOUNT, show_str);
             map.put(K_TAG, tag);
             map.put(K_ID, tag);
-            map.put(K_SHOW, checkUnfoldItem(tag) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+            map.put(K_SHOW, EShowFold.getByFold(!checkUnfoldItem(tag)).getName());
             mMainPara.add(map);
 
             parseSub(tag, ls_pay);
@@ -304,7 +304,7 @@ public class LVBudget extends LVBase {
     private void load_detail_view(ListView lv, String tag) {
         LinkedList<HashMap<String, String>> llhm = mHMSubPara.get(tag);
         if (!UtilFun.ListIsNullOrEmpty(llhm)) {
-            SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm,
+            SubAdapter mAdapter = new SubAdapter(getContext(), llhm,
                     new String[]{}, new int[]{});
             lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
@@ -316,8 +316,8 @@ public class LVBudget extends LVBase {
     /**
      * main adapter
      */
-    protected class SelfAdapter extends SimpleAdapter {
-        private final static String TAG = "SelfAdapter";
+    protected class MainAdapter extends SimpleAdapter {
+        private final static String TAG = "MainAdapter";
 
         private ArrayList<Integer> mALWaitDeleteItems = new ArrayList<>();
 
@@ -354,7 +354,7 @@ public class LVBudget extends LVBase {
         };
 
 
-        SelfAdapter(Context context,
+        MainAdapter(Context context,
                     List<? extends Map<String, ?>> mdata,
                     String[] from, int[] to) {
             super(context, mdata, R.layout.li_budget_show, from, to);
@@ -378,14 +378,13 @@ public class LVBudget extends LVBase {
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            //View v = super.getView(position, view, arg2);
             FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
                     view, R.layout.li_budget_show);
 
             final HashMap<String, String> hm = UtilFun.cast(getItem(position));
             final ListView lv = viewHolder.getView(R.id.lv_show_detail);
             final String tag = hm.get(K_TAG);
-            if (V_SHOW_FOLD.equals(hm.get(K_SHOW))) {
+            if (EShowFold.FOLD == EShowFold.getByName(hm.get(K_SHOW))) {
                 lv.setVisibility(View.GONE);
             } else {
                 lv.setVisibility(View.VISIBLE);
@@ -393,8 +392,8 @@ public class LVBudget extends LVBase {
             }
 
             View.OnClickListener local_cl = v -> {
-                boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-                hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                boolean bf = EShowFold.FOLD == EShowFold.getByName(hm.get(K_SHOW));
+                hm.put(K_SHOW, EShowFold.getByFold(!bf).getName());
 
                 if (bf) {
                     lv.setVisibility(View.VISIBLE);
@@ -440,10 +439,10 @@ public class LVBudget extends LVBase {
     /**
      * sub adapter
      */
-    private class SelfSubAdapter extends SimpleAdapter {
-        SelfSubAdapter(Context context,
-                       List<? extends Map<String, ?>> sdata,
-                       String[] from, int[] to) {
+    private class SubAdapter extends SimpleAdapter {
+        SubAdapter(Context context,
+                   List<? extends Map<String, ?>> sdata,
+                   String[] from, int[] to) {
             super(context, sdata, R.layout.li_budget_show_detail, from, to);
         }
 

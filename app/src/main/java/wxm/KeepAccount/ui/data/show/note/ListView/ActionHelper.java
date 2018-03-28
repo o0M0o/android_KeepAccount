@@ -39,8 +39,12 @@ public abstract class ActionHelper {
     @BindView(R.id.rl_lv_note)
     RelativeLayout mRLLVNote;
 
+    private boolean  mIsShow;
+    private boolean  mDoOnce;
 
     ActionHelper()    {
+        mIsShow = true;
+        mDoOnce = false;
     }
 
     public void bind(View holder)   {
@@ -53,23 +57,36 @@ public abstract class ActionHelper {
      */
     @OnClick(R.id.rl_hide_show)
     public void switchActionHideShow(View v) {
+        setActsVisilibity(!mIsShow);
+        mIsShow = !mIsShow;
+    }
+
+    protected abstract void initActs();
+
+    protected void init()   {
+        setActsVisilibity(mIsShow);
+
+        if(!mDoOnce && mIsShow) {
+            initActs();
+            mDoOnce = true;
+        }
+    }
+
+    private void setActsVisilibity(boolean bshow)   {
         ViewGroup.LayoutParams rp = mRLActions.getLayoutParams();
-        boolean b_hide = rp.width == 0;
 
-        mIVHideShow.setImageDrawable(b_hide ? mDAHide : mDAExpand);
-        mRLHideShow.getBackground().setAlpha(b_hide ? 255 : 40);
-        mRLAction.getBackground().setAlpha(b_hide ? 255 : 0);
+        mIVHideShow.setImageDrawable(bshow ? mDAHide : mDAExpand);
+        mRLHideShow.getBackground().setAlpha(bshow ? 255 : 40);
+        mRLAction.getBackground().setAlpha(bshow ? 255 : 0);
 
-        rp.width = b_hide ? ViewGroup.LayoutParams.MATCH_PARENT : 0;
+        rp.width = bshow ? ViewGroup.LayoutParams.MATCH_PARENT : 0;
         mRLActions.setLayoutParams(rp);
 
         RelativeLayout.LayoutParams rp_lv = UtilFun.cast_t(mRLLVNote.getLayoutParams());
-        if (b_hide)
+        if (bshow)
             rp_lv.addRule(RelativeLayout.ABOVE, R.id.rl_action);
         else
             rp_lv.removeRule(RelativeLayout.ABOVE);
         mRLLVNote.setLayoutParams(rp_lv);
     }
-
-    protected abstract void initActs();
 }

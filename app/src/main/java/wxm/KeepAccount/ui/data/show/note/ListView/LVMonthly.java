@@ -238,7 +238,7 @@ public class LVMonthly
                                     map.put(K_AMOUNT, v_l);
 
                                     map.put(K_TAG, k);
-                                    map.put(K_SHOW, checkUnfoldItem(k) ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                                    map.put(K_SHOW, EShowFold.getByFold(!checkUnfoldItem(k)).getName());
 
                                     ll_rets.add(map);
                                 }
@@ -428,7 +428,7 @@ public class LVMonthly
             final HashMap<String, String> hm = UtilFun.cast(getItem(position));
             final ListView lv = viewHolder.getView(R.id.lv_show_detail);
             final String tag = hm.get(K_TAG);
-            if (V_SHOW_FOLD.equals(hm.get(K_SHOW))) {
+            if (EShowFold.getByName(hm.get(K_SHOW)) == EShowFold.FOLD) {
                 lv.setVisibility(View.GONE);
             } else {
                 lv.setVisibility(View.VISIBLE);
@@ -437,8 +437,8 @@ public class LVMonthly
             }
 
             View.OnClickListener local_cl = v -> {
-                boolean bf = V_SHOW_FOLD.equals(hm.get(K_SHOW));
-                hm.put(K_SHOW, bf ? V_SHOW_UNFOLD : V_SHOW_FOLD);
+                boolean bf = EShowFold.getByName(hm.get(K_SHOW)) == EShowFold.FOLD;
+                hm.put(K_SHOW, EShowFold.getByFold(!bf).getName());
 
                 if (bf) {
                     lv.setVisibility(View.VISIBLE);
@@ -478,7 +478,7 @@ public class LVMonthly
      * 次级adapter
      */
     private class SelfSubAdapter extends SimpleAdapter {
-        private final static String TAG = "SelfSubAdapter";
+        private final static String TAG = "SubAdapter";
 
         SelfSubAdapter(Context context,
                        List<? extends Map<String, ?>> sdata,

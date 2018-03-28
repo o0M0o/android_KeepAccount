@@ -63,8 +63,29 @@ public abstract class LVBase extends ShowViewBase {
     protected final static String K_MONTH_INCOME_AMOUNT = "k_mia";
 
     protected final static String K_SHOW = "k_show";
-    protected final static String V_SHOW_UNFOLD = "vs_unfold";
-    protected final static String V_SHOW_FOLD = "vs_fold";
+
+    enum EShowFold {
+        UNFOLD("vs_unfold"),
+        FOLD("vs_fold");
+
+        private String mSZName;
+
+        EShowFold(String nm)   {
+            mSZName = nm;
+        }
+
+        public String getName() {
+            return mSZName;
+        }
+
+        public static EShowFold getByFold(boolean fold)    {
+            return fold ? FOLD : UNFOLD;
+        }
+
+        public static EShowFold getByName(String nm)  {
+            return nm.equals(FOLD.mSZName) ? FOLD : UNFOLD;
+        }
+    }
 
     // view data
     protected final LinkedList<HashMap<String, String>> mMainPara;
@@ -108,7 +129,7 @@ public abstract class LVBase extends ShowViewBase {
 
     @Override
     protected void initUiComponent(View view) {
-        mAHActs.initActs();
+        mAHActs.init();
         refreshData();
     }
 
