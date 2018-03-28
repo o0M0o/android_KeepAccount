@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.data.show.note.ListView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
@@ -62,6 +61,26 @@ public class LVDaily extends LVBase {
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
     private int mActionType = ACTION_EDIT;
+
+    class MainAdapterItem   {
+        public String  tag;
+        public String  show;
+
+        public String  month;
+        public String  dayNumber;
+        public String  dayInWeek;
+        public String  dayPayCount;
+        public String  dayPayAmount;
+        public String  dayIncomeCount;
+        public String  dayIncomeAmount;
+        public String  amount;
+
+        MainAdapterItem()    {
+            show = EShowFold.FOLD.getName();
+        }
+    }
+    protected final LinkedList<MainAdapterItem> mMainPara;
+
 
     class DailyActionHelper extends ActionHelper    {
         @BindView(R.id.ib_sort)
@@ -170,6 +189,7 @@ public class LVDaily extends LVBase {
         LOG_TAG = "LVDaily";
         mBActionExpand = false;
 
+        mMainPara = new LinkedList<>();
         mAHActs = new DailyActionHelper();
     }
 
@@ -204,7 +224,7 @@ public class LVDaily extends LVBase {
                     ArrayList<Integer> al_i = new ArrayList<>();
                     ArrayList<Integer> al_p = new ArrayList<>();
 
-                    SelfAdapter cur_ap = (SelfAdapter) mLVShow.getAdapter();
+                    MainAdapter cur_ap = (MainAdapter) mLVShow.getAdapter();
                     List<String> ls_days = cur_ap.getWaitDeleteDays();
                     HashMap<String, ArrayList<INote>> hm =
                             NoteDataHelper.getInstance().getNotesForDay();
@@ -261,7 +281,7 @@ public class LVDaily extends LVBase {
 
                     Calendar cl_day = Calendar.getInstance();
                     ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
-                    LinkedList<Future<LinkedList<HashMap<String, String>>>> ll_rets = new LinkedList<>();
+                    LinkedList<Future<LinkedList<MainAdapterItem>>> ll_rets = new LinkedList<>();
 
                     int once_process = 10;
                     int idx = 0;
@@ -270,36 +290,35 @@ public class LVDaily extends LVBase {
                         List<String> jobs = set_k_d.subList(idx, idx + once_process < len ? idx + once_process : len - 1);
                         idx += once_process;
 
-                        Future<LinkedList<HashMap<String, String>>> ret = fixedThreadPool
+                        Future<LinkedList<MainAdapterItem>> ret = fixedThreadPool
                                 .submit(() -> {
-                                    LinkedList<HashMap<String, String>> maps = new LinkedList<>();
+                                    LinkedList<MainAdapterItem> maps = new LinkedList<>();
                                     for(String k : jobs) {
                                         NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
-                                        HashMap<String, String> map = new HashMap<>();
-                                        map.put(K_MONTH, k.substring(0, 7));
+                                        MainAdapterItem map = new MainAdapterItem();
+                                        map.month = k.substring(0, 7);
 
                                         String km = k.substring(8, 10);
                                         km = km.startsWith("0") ? km.replaceFirst("0", "") : km;
-                                        map.put(K_DAY_NUMEBER, km);
+                                        map.dayNumber = km;
 
                                         int year = Integer.valueOf(k.substring(0, 4));
                                         int month = Integer.valueOf(k.substring(5, 7));
                                         int day = Integer.valueOf(km);
                                         cl_day.set(year, month, day);
-                                        map.put(K_DAY_IN_WEEK, ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK)));
+                                        map.dayInWeek = ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK));
 
-                                        map.put(K_DAY_PAY_COUNT, String.valueOf(ni.getPayCount()));
-                                        map.put(K_DAY_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
-                                        map.put(K_DAY_PAY_AMOUNT, ni.getSZPayAmount());
-                                        map.put(K_DAY_INCOME_AMOUNT, ni.getSZIncomeAmount());
+                                        map.dayPayCount = String.valueOf(ni.getPayCount());
+                                        map.dayIncomeCount = String.valueOf(ni.getIncomeCount());
+                                        map.dayPayAmount = ni.getSZPayAmount();
+                                        map.dayIncomeAmount = ni.getSZIncomeAmount();
 
                                         BigDecimal bd_l = ni.getBalance();
-                                        String v_l = String.format(Locale.CHINA,
-                                                0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-                                        map.put(K_AMOUNT, v_l);
+                                        map.amount = String.format(Locale.CHINA,
+                                                (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
 
-                                        map.put(K_TAG, k);
-                                        map.put(K_SHOW, EShowFold.getByFold(!checkUnfoldItem(k)).getName());
+                                        map.tag = k;
+                                        map.show = EShowFold.getByFold(!checkUnfoldItem(k)).getName();
                                         maps.add(map);
                                     }
                                     return maps;
@@ -309,7 +328,7 @@ public class LVDaily extends LVBase {
                     }
 
                     try {
-                        for(Future<LinkedList<HashMap<String, String>>> ret : ll_rets) {
+                        for(Future<LinkedList<MainAdapterItem>> ret : ll_rets) {
                             mMainPara.addAll(ret.get());
                         }
                     } catch (InterruptedException | ExecutionException e) {
@@ -337,7 +356,7 @@ public class LVDaily extends LVBase {
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
         setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType && !mBFilter ? View.VISIBLE : View.GONE);
 
-        SelfAdapter cur_ap = (SelfAdapter) mLVShow.getAdapter();
+        MainAdapter cur_ap = (MainAdapter) mLVShow.getAdapter();
         cur_ap.notifyDataSetChanged();
     }
 
@@ -355,13 +374,12 @@ public class LVDaily extends LVBase {
 
         if (b_fully) {
             // load show data
-            LinkedList<HashMap<String, String>> n_mainpara;
+            LinkedList<MainAdapterItem> n_mainpara;
             if (mBFilter) {
                 n_mainpara = new LinkedList<>();
-                for (HashMap<String, String> i : mMainPara) {
-                    String cur_tag = i.get(K_TAG);
+                for (MainAdapterItem i : mMainPara) {
                     for (String ii : mFilterPara) {
-                        if (cur_tag.equals(ii)) {
+                        if (i.tag.equals(ii)) {
                             n_mainpara.add(i);
                             break;
                         }
@@ -372,9 +390,7 @@ public class LVDaily extends LVBase {
             }
 
             // 设置listview adapter
-            SelfAdapter mSNAdapter = new SelfAdapter(ContextUtil.getInstance(), n_mainpara,
-                    new String[]{K_MONTH, K_DAY_NUMEBER, K_DAY_IN_WEEK},
-                    new int[]{R.id.tv_month, R.id.tv_day_number, R.id.tv_day_in_week});
+            MainAdapter mSNAdapter = new MainAdapter(ContextUtil.getInstance(), n_mainpara);
 
             mLVShow.setAdapter(mSNAdapter);
             mSNAdapter.notifyDataSetChanged();
@@ -393,9 +409,7 @@ public class LVDaily extends LVBase {
     /**
      * main adapter
      */
-    private class SelfAdapter extends SimpleAdapter {
-        private final static String TAG = "MainAdapter";
-
+    private class MainAdapter extends LVAdapter {
         private ArrayList<String> mALWaitDeleteDays = new ArrayList<>();
 
         private View.OnClickListener mCLAdapter = v -> {
@@ -427,21 +441,8 @@ public class LVDaily extends LVBase {
             }
         };
 
-
-        SelfAdapter(Context context, List<? extends Map<String, ?>> mdata,
-                    String[] from, int[] to) {
-            super(context, mdata, R.layout.li_daily_show, from, to);
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            int org_ct = getCount();
-            return org_ct < 1 ? 1 : org_ct;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return position;
+        MainAdapter(Context context, List<?> mdata)  {
+            super(context, mdata, R.layout.li_daily_show);
         }
 
         @Override
@@ -462,17 +463,17 @@ public class LVDaily extends LVBase {
             viewHolder.getView(R.id.vs_daily_info).setOnClickListener(mCLAdapter);
 
             // for show
-            HashMap<String, String> hm = UtilFun.cast(getItem(position));
-            viewHolder.setText(R.id.tv_month, hm.get(K_MONTH));
-            viewHolder.setText(R.id.tv_day_number, hm.get(K_DAY_NUMEBER));
-            viewHolder.setText(R.id.tv_day_in_week, hm.get(K_DAY_IN_WEEK));
+            MainAdapterItem item = UtilFun.cast(getItem(position));
+            viewHolder.setText(R.id.tv_month, item.month);
+            viewHolder.setText(R.id.tv_day_number, item.dayNumber);
+            viewHolder.setText(R.id.tv_day_in_week, item.dayInWeek);
 
             ValueShow vs = viewHolder.getView(R.id.vs_daily_info);
             HashMap<String, Object> hm_attr = new HashMap<>();
-            hm_attr.put(ValueShow.ATTR_PAY_COUNT, hm.get(K_DAY_PAY_COUNT));
-            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, hm.get(K_DAY_PAY_AMOUNT));
-            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, hm.get(K_DAY_INCOME_COUNT));
-            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, hm.get(K_DAY_INCOME_AMOUNT));
+            hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.dayPayCount);
+            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.dayPayAmount);
+            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.dayIncomeCount);
+            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.dayIncomeAmount);
             vs.adjustAttribute(hm_attr);
 
             return root_view;

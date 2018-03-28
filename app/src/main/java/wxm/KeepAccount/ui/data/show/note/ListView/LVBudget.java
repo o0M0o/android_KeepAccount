@@ -54,6 +54,39 @@ public class LVBudget extends LVBase {
 
     private boolean mBODownOrder = true;
 
+    class MainAdapterItem   {
+        public String  tag;
+        public String  show;
+        public String  id;
+
+        public String  title;
+        public String  note;
+        public String  amount;
+
+        MainAdapterItem()    {
+            show = EShowFold.FOLD.getName();
+        }
+    }
+    protected final LinkedList<MainAdapterItem> mMainPara;
+
+    class SubAdapterItem   {
+        public String  tag;
+        public String  subTag;
+        public String  id;
+
+        public String  month;
+        public String  time;
+        public String  dayNumber;
+        public String  dayInWeek;
+        public String  note;
+        public String  title;
+        public String  amount;
+
+        SubAdapterItem()    {
+        }
+    }
+    protected final HashMap<String, LinkedList<SubAdapterItem>> mHMSubPara;
+
     class BudgetActionHelper extends ActionHelper    {
         @BindView(R.id.ib_sort)
         IconButton mIBSort;
@@ -119,6 +152,8 @@ public class LVBudget extends LVBase {
         super();
         LOG_TAG = "LVBudget";
 
+        mMainPara = new LinkedList<>();
+        mHMSubPara = new HashMap<>();
         mAHActs = new BudgetActionHelper();
     }
 
@@ -201,12 +236,11 @@ public class LVBudget extends LVBase {
         refreshAttachLayout();
 
         if (b_fully) {
-            LinkedList<HashMap<String, String>> n_mainpara = new LinkedList<>();
+            LinkedList<MainAdapterItem> n_mainpara = new LinkedList<>();
             n_mainpara.addAll(mMainPara);
 
             // 设置listview adapter
-            MainAdapter mSNAdapter = new MainAdapter(ContextUtil.getInstance(), n_mainpara,
-                    new String[]{}, new int[]{});
+            MainAdapter mSNAdapter = new MainAdapter(ContextUtil.getInstance(), n_mainpara);
             mLVShow.setAdapter(mSNAdapter);
             mSNAdapter.notifyDataSetChanged();
         }
@@ -240,16 +274,16 @@ public class LVBudget extends LVBase {
                     "(总额)%.02f/(剩余)%.02f",
                     i.getAmount(), i.getRemainderAmount());
 
-            HashMap<String, String> map = new HashMap<>();
-            map.put(K_TITLE, i.getName());
+            MainAdapterItem map = new MainAdapterItem();
+            map.title = i.getName();
             String nt = i.getNote();
             if (!UtilFun.StringIsNullOrEmpty(nt)) {
-                map.put(K_NOTE, nt);
+                map.note = nt;
             }
-            map.put(K_AMOUNT, show_str);
-            map.put(K_TAG, tag);
-            map.put(K_ID, tag);
-            map.put(K_SHOW, EShowFold.getByFold(!checkUnfoldItem(tag)).getName());
+            map.amount = show_str;
+            map.tag = tag;
+            map.id = tag;
+            map.show = EShowFold.getByFold(!checkUnfoldItem(tag)).getName();
             mMainPara.add(map);
 
             parseSub(tag, ls_pay);
@@ -258,38 +292,38 @@ public class LVBudget extends LVBase {
 
 
     private void parseSub(String main_tag, List<PayNoteItem> ls_pay) {
-        LinkedList<HashMap<String, String>> cur_llhm = new LinkedList<>();
+        LinkedList<SubAdapterItem> cur_llhm = new LinkedList<>();
         if (!UtilFun.ListIsNullOrEmpty(ls_pay)) {
             Collections.sort(ls_pay, (o1, o2) -> o1.getTs().compareTo(o2.getTs()));
 
             for (PayNoteItem i : ls_pay) {
                 String all_date = i.getTs().toString();
-                HashMap<String, String> map = new HashMap<>();
-                map.put(K_MONTH, all_date.substring(0, 7));
+                SubAdapterItem map = new SubAdapterItem();
+                map.month = all_date.substring(0, 7);
 
                 String km = all_date.substring(8, 10);
                 km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
-                map.put(K_DAY_NUMEBER, km);
+                map.dayNumber = km;
                 try {
                     Timestamp ts = ToolUtil.StringToTimestamp(all_date);
                     Calendar day = Calendar.getInstance();
                     day.setTimeInMillis(ts.getTime());
-                    map.put(K_DAY_IN_WEEK, ToolUtil.getDayInWeek(day.get(Calendar.DAY_OF_WEEK)));
+                    map.dayInWeek = ToolUtil.getDayInWeek(day.get(Calendar.DAY_OF_WEEK));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
                 String nt = i.getNote();
                 if (!UtilFun.StringIsNullOrEmpty(nt)) {
-                    map.put(K_NOTE, nt.length() > 10 ? nt.substring(0, 10) + "..." : nt);
+                    map.note = nt.length() > 10 ? nt.substring(0, 10) + "..." : nt;
                 }
 
-                map.put(K_TIME, all_date.substring(11, 16));
-                map.put(K_TITLE, i.getInfo());
-                map.put(K_AMOUNT, i.getValToStr());
-                map.put(K_TAG, main_tag);
-                map.put(K_SUB_TAG, i.getTs().toString().substring(0, 10));
-                map.put(K_ID, String.valueOf(i.getId()));
+                map.time = all_date.substring(11, 16);
+                map.title = i.getInfo();
+                map.amount = i.getValToStr();
+                map.tag = main_tag;
+                map.subTag = i.getTs().toString().substring(0, 10);
+                map.id = String.valueOf(i.getId());
                 cur_llhm.add(map);
             }
         }
@@ -302,10 +336,9 @@ public class LVBudget extends LVBase {
      * @param tag       data tag
      */
     private void load_detail_view(ListView lv, String tag) {
-        LinkedList<HashMap<String, String>> llhm = mHMSubPara.get(tag);
+        LinkedList<SubAdapterItem> llhm = mHMSubPara.get(tag);
         if (!UtilFun.ListIsNullOrEmpty(llhm)) {
-            SubAdapter mAdapter = new SubAdapter(getContext(), llhm,
-                    new String[]{}, new int[]{});
+            SubAdapter mAdapter = new SubAdapter(getContext(), llhm);
             lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
             ListViewHelper.setListViewHeightBasedOnChildren(lv);
@@ -316,9 +349,7 @@ public class LVBudget extends LVBase {
     /**
      * main adapter
      */
-    protected class MainAdapter extends SimpleAdapter {
-        private final static String TAG = "MainAdapter";
-
+    protected class MainAdapter extends LVAdapter {
         private ArrayList<Integer> mALWaitDeleteItems = new ArrayList<>();
 
         private View.OnClickListener mCLAdapter = v -> {
@@ -354,21 +385,8 @@ public class LVBudget extends LVBase {
         };
 
 
-        MainAdapter(Context context,
-                    List<? extends Map<String, ?>> mdata,
-                    String[] from, int[] to) {
-            super(context, mdata, R.layout.li_budget_show, from, to);
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            int org_ct = getCount();
-            return org_ct < 1 ? 1 : org_ct;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return position;
+        MainAdapter(Context context, List<?> mdata)   {
+            super(context, mdata, R.layout.li_budget_show);
         }
 
         public List<Integer> getWaitDeleteItems() {
@@ -381,10 +399,10 @@ public class LVBudget extends LVBase {
             FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
                     view, R.layout.li_budget_show);
 
-            final HashMap<String, String> hm = UtilFun.cast(getItem(position));
+            final MainAdapterItem hm = UtilFun.cast(getItem(position));
             final ListView lv = viewHolder.getView(R.id.lv_show_detail);
-            final String tag = hm.get(K_TAG);
-            if (EShowFold.FOLD == EShowFold.getByName(hm.get(K_SHOW))) {
+            final String tag = hm.tag;
+            if (EShowFold.FOLD == EShowFold.getByName(hm.show)) {
                 lv.setVisibility(View.GONE);
             } else {
                 lv.setVisibility(View.VISIBLE);
@@ -392,8 +410,8 @@ public class LVBudget extends LVBase {
             }
 
             View.OnClickListener local_cl = v -> {
-                boolean bf = EShowFold.FOLD == EShowFold.getByName(hm.get(K_SHOW));
-                hm.put(K_SHOW, EShowFold.getByFold(!bf).getName());
+                boolean bf = EShowFold.FOLD == EShowFold.getByName(hm.show);
+                hm.show = EShowFold.getByFold(!bf).getName();
 
                 if (bf) {
                     lv.setVisibility(View.VISIBLE);
@@ -419,15 +437,15 @@ public class LVBudget extends LVBase {
             rl_del.setOnClickListener(mCLAdapter);
 
             // for note
-            String nt = hm.get(K_NOTE);
+            String nt = hm.note;
             boolean b_nt = UtilFun.StringIsNullOrEmpty(nt);
             viewHolder.getView(R.id.iv_note).setVisibility(b_nt ? View.GONE : View.VISIBLE);
             viewHolder.getView(R.id.tv_budget_note).setVisibility(b_nt ? View.GONE : View.VISIBLE);
             if (!b_nt)
                 viewHolder.setText(R.id.tv_budget_note, nt);
 
-            viewHolder.setText(R.id.tv_budget_name, hm.get(K_TITLE));
-            viewHolder.setText(R.id.tv_budget_amount, hm.get(K_AMOUNT));
+            viewHolder.setText(R.id.tv_budget_name, hm.title);
+            viewHolder.setText(R.id.tv_budget_amount, hm.amount);
 
             // for action
             viewHolder.getView(R.id.iv_edit).setOnClickListener(mCLAdapter);
@@ -439,22 +457,9 @@ public class LVBudget extends LVBase {
     /**
      * sub adapter
      */
-    private class SubAdapter extends SimpleAdapter {
-        SubAdapter(Context context,
-                   List<? extends Map<String, ?>> sdata,
-                   String[] from, int[] to) {
-            super(context, sdata, R.layout.li_budget_show_detail, from, to);
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            int org_ct = getCount();
-            return org_ct < 1 ? 1 : org_ct;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return position;
+    private class SubAdapter extends LVAdapter {
+        SubAdapter(Context context, List<?> sdata)    {
+            super(context, sdata, R.layout.li_budget_show_detail);
         }
 
         @Override
@@ -462,28 +467,28 @@ public class LVBudget extends LVBase {
             FastViewHolder vh = FastViewHolder.get(getRootActivity(),
                     view, R.layout.li_budget_show_detail);
 
-            HashMap<String, String> hm = UtilFun.cast(getItem(position));
+            SubAdapterItem hm = UtilFun.cast(getItem(position));
             // for note
-            String nt = hm.get(K_NOTE);
+            String nt = hm.note;
             if (UtilFun.StringIsNullOrEmpty(nt)) {
                 vh.getView(R.id.rl_pay_note).setVisibility(View.GONE);
             }
 
             // for show
-            vh.setText(R.id.tv_month, hm.get(K_MONTH));
-            vh.setText(R.id.tv_day_number, hm.get(K_DAY_NUMEBER));
-            vh.setText(R.id.tv_day_in_week, hm.get(K_DAY_IN_WEEK));
-            vh.setText(R.id.tv_pay_title, hm.get(K_TITLE));
-            vh.setText(R.id.tv_pay_amount, hm.get(K_AMOUNT));
-            vh.setText(R.id.tv_pay_note, hm.get(K_NOTE));
-            vh.setText(R.id.tv_pay_time, hm.get(K_TIME));
+            vh.setText(R.id.tv_month, hm.month);
+            vh.setText(R.id.tv_day_number, hm.dayNumber);
+            vh.setText(R.id.tv_day_in_week, hm.dayInWeek);
+            vh.setText(R.id.tv_pay_title, hm.title);
+            vh.setText(R.id.tv_pay_amount, hm.amount);
+            vh.setText(R.id.tv_pay_note, hm.note);
+            vh.setText(R.id.tv_pay_time, hm.time);
 
             // for look action
             vh.getView(R.id.iv_look).setOnClickListener(v -> {
                 ACNoteShow ac = getRootActivity();
                 Intent intent;
                 intent = new Intent(ac, ACPreveiwAndEdit.class);
-                intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(hm.get(K_ID)));
+                intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(hm.id));
                 intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
                         GlobalDef.STR_RECORD_PAY);
 

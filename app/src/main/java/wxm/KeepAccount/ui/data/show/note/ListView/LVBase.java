@@ -88,8 +88,6 @@ public abstract class LVBase extends ShowViewBase {
     }
 
     // view data
-    protected final LinkedList<HashMap<String, String>> mMainPara;
-    protected final HashMap<String, LinkedList<HashMap<String, String>>> mHMSubPara;
     protected final LinkedList<String> mLLSubFilter = new LinkedList<>();
     protected final LinkedList<View> mLLSubFilterVW = new LinkedList<>();
 
@@ -114,8 +112,7 @@ public abstract class LVBase extends ShowViewBase {
 
     public LVBase() {
         super();
-        mMainPara = new LinkedList<>();
-        mHMSubPara = new HashMap<>();
+
         mUnfoldItems = new LinkedList<>();
     }
 

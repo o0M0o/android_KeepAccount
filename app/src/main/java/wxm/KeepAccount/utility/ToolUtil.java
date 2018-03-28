@@ -84,7 +84,7 @@ public class ToolUtil {
      */
     public static String getDayInWeek(int dw) {
         dw--;
-        return DAY_IN_WEEK[dw];
+        return dw >= 0 && dw <= 6 ? DAY_IN_WEEK[dw] : "星期*";
     }
 
     /**

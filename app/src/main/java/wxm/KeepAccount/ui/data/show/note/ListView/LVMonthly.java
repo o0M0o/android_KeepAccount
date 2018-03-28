@@ -61,6 +61,40 @@ public class LVMonthly
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
 
+    class MainAdapterItem   {
+        public String  tag;
+        public String  show;
+
+        public String  month;
+        public String  monthPayCount;
+        public String  monthPayAmount;
+        public String  monthIncomeCount;
+        public String  monthIncomeAmount;
+        public String  amount;
+
+        MainAdapterItem()    {
+            show = EShowFold.FOLD.getName();
+        }
+    }
+    protected final LinkedList<MainAdapterItem> mMainPara;
+
+    class SubAdapterItem   {
+        public String  tag;
+        public String  subTag;
+
+        public String  dayNumber;
+        public String  dayInWeek;
+        public String  dayPayCount;
+        public String  dayPayAmount;
+        public String  dayIncomeCount;
+        public String  dayIncomeAmount;
+        public String  amount;
+
+        SubAdapterItem()    {
+        }
+    }
+    protected final HashMap<String, LinkedList<SubAdapterItem>> mHMSubPara;
+
 
     class MonthlyActionHelper extends ActionHelper    {
         @BindView(R.id.ib_sort)
@@ -118,6 +152,8 @@ public class LVMonthly
         LOG_TAG = "LVMonthly";
         mBActionExpand = false;
 
+        mMainPara = new LinkedList<>();
+        mHMSubPara = new HashMap<>();
         mAHActs = new MonthlyActionHelper();
     }
 
@@ -212,33 +248,32 @@ public class LVMonthly
         ToolUtil.runInBackground(this.getActivity(),
                 () -> {
                     ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
-                    Future<LinkedList<HashMap<String, String>>> ll_main_rets;
-                    Future<LinkedList<Map.Entry<String, HashMap<String, String>>>>  ll_sub_rets;
+                    Future<LinkedList<MainAdapterItem>> ll_main_rets;
+                    Future<LinkedList<Map.Entry<String, SubAdapterItem>>>  ll_sub_rets;
 
                     // for month
                     List<String> set_k_m = NoteDataHelper.getNotesMonths();
                     Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
                     ll_main_rets = fixedThreadPool
                             .submit(() -> {
-                                LinkedList<HashMap<String, String>> ll_rets = new LinkedList<>();
+                                LinkedList<MainAdapterItem> ll_rets = new LinkedList<>();
                                 for (String k : set_k_m) {
                                     NoteShowInfo ni = NoteDataHelper.getInfoByMonth(k);
-                                    HashMap<String, String> map = new HashMap<>();
-                                    map.put(K_MONTH, k);
-                                    map.put(K_MONTH_PAY_COUNT, String.valueOf(ni.getPayCount()));
-                                    map.put(K_MONTH_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
-                                    map.put(K_MONTH_PAY_AMOUNT, String.format(Locale.CHINA,
-                                            "%.02f", ni.getPayAmount()));
-                                    map.put(K_MONTH_INCOME_AMOUNT, String.format(Locale.CHINA,
-                                            "%.02f", ni.getIncomeAmount()));
+                                    MainAdapterItem map = new MainAdapterItem();
+                                    map.month = k;
+                                    map.monthPayCount = String.valueOf(ni.getPayCount());
+                                    map.monthIncomeCount = String.valueOf(ni.getIncomeCount());
+                                    map.monthPayAmount = String.format(Locale.CHINA,
+                                                            "%.02f", ni.getPayAmount());
+                                    map.monthIncomeAmount = String.format(Locale.CHINA,
+                                                         "%.02f", ni.getIncomeAmount());
 
                                     BigDecimal bd_l = ni.getBalance();
-                                    String v_l = String.format(Locale.CHINA,
-                                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-                                    map.put(K_AMOUNT, v_l);
+                                    map.amount = String.format(Locale.CHINA,
+                                                    (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
 
-                                    map.put(K_TAG, k);
-                                    map.put(K_SHOW, EShowFold.getByFold(!checkUnfoldItem(k)).getName());
+                                    map.tag = k;
+                                    map.show = EShowFold.getByFold(!checkUnfoldItem(k)).getName();
 
                                     ll_rets.add(map);
                                 }
@@ -252,50 +287,49 @@ public class LVMonthly
                     Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
                     ll_sub_rets = fixedThreadPool
                             .submit(() -> {
-                                LinkedList<Map.Entry<String, HashMap<String, String>>> ll_rets = new LinkedList<>();
+                                LinkedList<Map.Entry<String, SubAdapterItem>> ll_rets = new LinkedList<>();
                                 for (String k : set_k_d) {
                                     String mk = k.substring(0, 7);
                                     NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
-                                    HashMap<String, String> map = new HashMap<>();
+                                    SubAdapterItem map = new SubAdapterItem();
 
                                     String km = k.substring(8, 10);
                                     km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
-                                    map.put(K_DAY_NUMEBER, km);
+                                    map.dayNumber = km;
 
                                     int year = Integer.valueOf(k.substring(0, 4));
                                     int month = Integer.valueOf(k.substring(5, 7));
                                     int day = Integer.valueOf(k.substring(8, 10));
                                     cl_day.set(year, month, day);
-                                    map.put(K_DAY_IN_WEEK, ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK)));
+                                    map.dayInWeek = ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK));
 
-                                    map.put(K_DAY_PAY_COUNT, String.valueOf(ni.getPayCount()));
-                                    map.put(K_DAY_INCOME_COUNT, String.valueOf(ni.getIncomeCount()));
-                                    map.put(K_DAY_PAY_AMOUNT, String.format(Locale.CHINA,
-                                            "%.02f", ni.getPayAmount()));
-                                    map.put(K_DAY_INCOME_AMOUNT, String.format(Locale.CHINA,
-                                            "%.02f", ni.getIncomeAmount()));
+                                    map.dayPayCount = String.valueOf(ni.getPayCount());
+                                    map.dayIncomeCount = String.valueOf(ni.getIncomeCount());
+                                    map.dayPayAmount = String.format(Locale.CHINA,
+                                                    "%.02f", ni.getPayAmount());
+                                    map.dayIncomeAmount = String.format(Locale.CHINA,
+                                                    "%.02f", ni.getIncomeAmount());
 
                                     BigDecimal bd_l = ni.getBalance();
-                                    String v_l = String.format(Locale.CHINA,
-                                            0 < bd_l.floatValue() ? "+ %.02f" : "%.02f", bd_l);
-                                    map.put(K_AMOUNT, v_l);
+                                    map.amount = String.format(Locale.CHINA,
+                                                    (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
 
-                                    map.put(K_TAG, mk);
-                                    map.put(K_SUB_TAG, k);
+                                    map.tag = mk;
+                                    map.subTag = k;
 
-                                    ll_rets.add(new Map.Entry<String, HashMap<String, String>>() {
+                                    ll_rets.add(new Map.Entry<String, SubAdapterItem>() {
                                         @Override
                                         public String getKey() {
                                             return mk;
                                         }
 
                                         @Override
-                                        public HashMap<String, String> getValue() {
+                                        public SubAdapterItem getValue() {
                                             return map;
                                         }
 
                                         @Override
-                                        public HashMap<String, String> setValue(HashMap<String, String> value) {
+                                        public SubAdapterItem setValue(SubAdapterItem value) {
                                             return null;
                                         }
                                     });
@@ -307,8 +341,8 @@ public class LVMonthly
                     try {
                         mMainPara.addAll(ll_main_rets.get());
 
-                        for(Map.Entry<String, HashMap<String, String>> ret : ll_sub_rets.get()) {
-                            LinkedList<HashMap<String, String>> lh = mHMSubPara.get(ret.getKey());
+                        for(Map.Entry<String, SubAdapterItem> ret : ll_sub_rets.get()) {
+                            LinkedList<SubAdapterItem> lh = mHMSubPara.get(ret.getKey());
                             if(null == lh)  {
                                 lh = new LinkedList<>();
                                 mHMSubPara.put(ret.getKey(), lh);
@@ -341,13 +375,12 @@ public class LVMonthly
 
         if (b_fully) {
             // load show data
-            LinkedList<HashMap<String, String>> n_mainpara;
+            LinkedList<MainAdapterItem> n_mainpara;
             if (mBFilter) {
                 n_mainpara = new LinkedList<>();
-                for (HashMap<String, String> i : mMainPara) {
-                    String cur_tag = i.get(K_TAG);
+                for (MainAdapterItem i : mMainPara) {
                     for (String ii : mFilterPara) {
-                        if (cur_tag.equals(ii)) {
+                        if (i.tag.equals(ii)) {
                             n_mainpara.add(i);
                             break;
                         }
@@ -358,8 +391,7 @@ public class LVMonthly
             }
 
             // 设置listview adapter
-            SelfAdapter mSNAdapter = new SelfAdapter(ContextUtil.getInstance(), n_mainpara,
-                    new String[]{}, new int[]{});
+            SelfAdapter mSNAdapter = new SelfAdapter(ContextUtil.getInstance(), n_mainpara);
             mLVShow.setAdapter(mSNAdapter);
             mSNAdapter.notifyDataSetChanged();
         }
@@ -388,10 +420,9 @@ public class LVMonthly
      * @param tag 数据tag
      */
     private void load_detail_view(ListView lv, String tag) {
-        LinkedList<HashMap<String, String>> llhm = mHMSubPara.get(tag);
+        LinkedList<SubAdapterItem> llhm = mHMSubPara.get(tag);
         if (!UtilFun.ListIsNullOrEmpty(llhm)) {
-            SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm,
-                    new String[]{}, new int[]{});
+            SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm);
             lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
             ListViewHelper.setListViewHeightBasedOnChildren(lv);
@@ -402,22 +433,9 @@ public class LVMonthly
     /**
      * 首级adapter
      */
-    private class SelfAdapter extends SimpleAdapter {
-        SelfAdapter(Context context,
-                    List<? extends Map<String, ?>> mdata,
-                    String[] from, int[] to) {
-            super(context, mdata, R.layout.li_monthly_show, from, to);
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            int org_ct = getCount();
-            return org_ct < 1 ? 1 : org_ct;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return position;
+    private class SelfAdapter extends LVAdapter {
+        SelfAdapter(Context context, List<?> mdata)  {
+            super(context, mdata, R.layout.li_monthly_show);
         }
 
         @Override
@@ -425,10 +443,10 @@ public class LVMonthly
             FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
                     view, R.layout.li_monthly_show);
 
-            final HashMap<String, String> hm = UtilFun.cast(getItem(position));
+            final MainAdapterItem item = UtilFun.cast(getItem(position));
             final ListView lv = viewHolder.getView(R.id.lv_show_detail);
-            final String tag = hm.get(K_TAG);
-            if (EShowFold.getByName(hm.get(K_SHOW)) == EShowFold.FOLD) {
+            final String tag = item.tag;
+            if (EShowFold.getByName(item.show) == EShowFold.FOLD) {
                 lv.setVisibility(View.GONE);
             } else {
                 lv.setVisibility(View.VISIBLE);
@@ -437,8 +455,8 @@ public class LVMonthly
             }
 
             View.OnClickListener local_cl = v -> {
-                boolean bf = EShowFold.getByName(hm.get(K_SHOW)) == EShowFold.FOLD;
-                hm.put(K_SHOW, EShowFold.getByFold(!bf).getName());
+                boolean bf = EShowFold.getByName(item.show) == EShowFold.FOLD;
+                item.show = EShowFold.getByFold(!bf).getName();
 
                 if (bf) {
                     lv.setVisibility(View.VISIBLE);
@@ -459,15 +477,15 @@ public class LVMonthly
             rl.setOnClickListener(local_cl);
 
             // for month
-            viewHolder.setText(R.id.tv_month, hm.get(K_MONTH));
+            viewHolder.setText(R.id.tv_month, item.month);
 
             // for graph value
             ValueShow vs = viewHolder.getView(R.id.vs_monthly_info);
             HashMap<String, Object> hm_attr = new HashMap<>();
-            hm_attr.put(ValueShow.ATTR_PAY_COUNT, hm.get(K_MONTH_PAY_COUNT));
-            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, hm.get(K_MONTH_PAY_AMOUNT));
-            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, hm.get(K_MONTH_INCOME_COUNT));
-            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, hm.get(K_MONTH_INCOME_AMOUNT));
+            hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.monthPayCount);
+            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.monthPayAmount);
+            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.monthIncomeCount);
+            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.monthIncomeAmount);
             vs.adjustAttribute(hm_attr);
             return viewHolder.getConvertView();
         }
@@ -477,24 +495,9 @@ public class LVMonthly
     /**
      * 次级adapter
      */
-    private class SelfSubAdapter extends SimpleAdapter {
-        private final static String TAG = "SubAdapter";
-
-        SelfSubAdapter(Context context,
-                       List<? extends Map<String, ?>> sdata,
-                       String[] from, int[] to) {
-            super(context, sdata, R.layout.li_monthly_show_detail, from, to);
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            int org_ct = getCount();
-            return org_ct < 1 ? 1 : org_ct;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return position;
+    private class SelfSubAdapter extends LVAdapter {
+        SelfSubAdapter(Context context, List<?> sdata)  {
+            super(context, sdata, R.layout.li_monthly_show_detail);
         }
 
         @Override
@@ -503,14 +506,14 @@ public class LVMonthly
                     view, R.layout.li_monthly_show_detail);
 
             View root_view = viewHolder.getConvertView();
-            HashMap<String, String> hm = UtilFun.cast(getItem(position));
-            String sub_tag = hm.get(K_SUB_TAG);
+            SubAdapterItem item = UtilFun.cast(getItem(position));
+            String sub_tag = item.subTag;
 
             ImageView ib = viewHolder.getView(R.id.iv_action);
             ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ?
                     ResourceHelper.mCRLVItemSel : ResourceHelper.mCRLVItemTransFull);
             ib.setOnClickListener(v -> {
-                String sub_tag1 = hm.get(K_SUB_TAG);
+                String sub_tag1 = item.subTag;
 
                 if (!mLLSubFilter.contains(sub_tag1)) {
                     v.setBackgroundColor(ResourceHelper.mCRLVItemSel);
@@ -537,16 +540,16 @@ public class LVMonthly
             });
 
             // for show
-            viewHolder.setText(R.id.tv_day_number, hm.get(K_DAY_NUMEBER));
-            viewHolder.setText(R.id.tv_day_in_week, hm.get(K_DAY_IN_WEEK));
+            viewHolder.setText(R.id.tv_day_number, item.dayNumber);
+            viewHolder.setText(R.id.tv_day_in_week, item.dayInWeek);
 
             // for graph value
             ValueShow vs = viewHolder.getView(R.id.vs_daily_info);
             HashMap<String, Object> hm_attr = new HashMap<>();
-            hm_attr.put(ValueShow.ATTR_PAY_COUNT, hm.get(K_DAY_PAY_COUNT));
-            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, hm.get(K_DAY_PAY_AMOUNT));
-            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, hm.get(K_DAY_INCOME_COUNT));
-            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, hm.get(K_DAY_INCOME_AMOUNT));
+            hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.dayPayCount);
+            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.dayPayAmount);
+            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.dayIncomeCount);
+            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.dayIncomeAmount);
             vs.adjustAttribute(hm_attr);
             return root_view;
         }
