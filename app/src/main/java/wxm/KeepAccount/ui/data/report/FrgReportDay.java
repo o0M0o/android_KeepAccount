@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.data.report;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -25,8 +24,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
+import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
+import wxm.KeepAccount.ui.data.report.base.EventSelectDays;
 import wxm.KeepAccount.ui.data.report.page.DayReportChart;
 import wxm.KeepAccount.ui.data.report.page.DayReportWebView;
+import wxm.KeepAccount.ui.data.show.note.HelloChart.DailyChart;
+import wxm.KeepAccount.ui.data.show.note.ListView.LVDaily;
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
@@ -38,7 +41,7 @@ import wxm.androidutil.util.UtilFun;
  * day data report
  * Created by ookoo on 2017/2/15.
  */
-public class FrgReportDay extends FrgUtilityBase {
+public class FrgReportDay extends FrgSwitcher {
     @BindView(R.id.tv_day)
     TextView mTVDay;
     @BindView(R.id.tv_pay)
@@ -46,23 +49,27 @@ public class FrgReportDay extends FrgUtilityBase {
     @BindView(R.id.tv_income)
     TextView mTVIncome;
     private ArrayList<String> mASParaLoad;
-    private FrgUtilityBase mPGHot = null;
+
     private DayReportWebView mPGWebView = new DayReportWebView();
     private DayReportChart mPGChart = new DayReportChart();
 
+    public FrgReportDay()   {
+        super();
+        LOG_TAG = "FrgReportDay";
+
+        setFrgID(R.layout.vw_report, R.id.fl_page_holder);
+        setChildFrg(mPGWebView, mPGChart);
+    }
+
     @Override
     protected void enterActivity() {
-        Log.d(LOG_TAG, "in enterActivity");
         super.enterActivity();
-
         EventBus.getDefault().register(this);
     }
 
     @Override
     protected void leaveActivity() {
-        Log.d(LOG_TAG, "in leaveActivity");
         EventBus.getDefault().unregister(this);
-
         super.leaveActivity();
     }
 
@@ -80,22 +87,19 @@ public class FrgReportDay extends FrgUtilityBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "FrgReportDay";
-        View rootView = layoutInflater.inflate(R.layout.vw_report, viewGroup, false);
+        View rootView = super.inflaterView(layoutInflater, viewGroup, bundle);
         ButterKnife.bind(this, rootView);
-
         return rootView;
     }
 
     @Override
     protected void initUiComponent(View view) {
         Bundle bd = getArguments();
-        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
 
         mPGWebView.setArguments(bd);
         mPGChart.setArguments(bd);
 
-        loadHotPage(mPGWebView);
+        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
     }
 
     @Override
@@ -137,6 +141,8 @@ public class FrgReportDay extends FrgUtilityBase {
                                 "%.02f", ((BigDecimal)param[2]).floatValue()));
                     });
         }
+
+        loadHotFrg();
     }
 
     /**
@@ -145,7 +151,7 @@ public class FrgReportDay extends FrgUtilityBase {
      */
     @OnClick({R.id.iv_switch})
     public void onSwitchShow(View v) {
-        loadHotPage(mPGHot instanceof DayReportWebView ? mPGChart : mPGWebView);
+        switchPage();
     }
 
     /**
@@ -172,16 +178,5 @@ public class FrgReportDay extends FrgUtilityBase {
     }
 
     /// PRIVATE BEGIN
-    /**
-     * load hot page to UI
-     * @param hotFrg        frg will load to ui
-     */
-    private void loadHotPage(FrgUtilityBase hotFrg)  {
-        FragmentTransaction t = getChildFragmentManager().beginTransaction();
-        t.replace(R.id.fl_page_holder, hotFrg);
-        t.commit();
-
-        mPGHot = hotFrg;
-    }
     /// PRIVATE END
 }

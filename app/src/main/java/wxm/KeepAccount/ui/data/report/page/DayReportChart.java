@@ -3,7 +3,6 @@ package wxm.KeepAccount.ui.data.report.page;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +23,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,17 +35,18 @@ import lecho.lib.hellocharts.view.PieChartView;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.data.report.ACReport;
-import wxm.KeepAccount.ui.data.report.EventSelectDays;
+import wxm.KeepAccount.ui.data.report.base.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 
 /**
  * daily report(webview)
  * Created by ookoo on 2017/3/4.
  */
-public class DayReportChart extends FrgUtilityBase {
+public class DayReportChart extends FrgUtilitySupportBase {
     @BindView(R.id.chart)
     PieChartView mCVchart;
     @BindView(R.id.pb_load_data)

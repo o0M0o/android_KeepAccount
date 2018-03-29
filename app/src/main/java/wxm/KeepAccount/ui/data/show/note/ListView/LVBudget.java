@@ -107,7 +107,7 @@ public class LVBudget extends LVBase {
                     R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
         }
 
-        @OnClick({R.id.ib_sort, R.id.ib_refresh})
+        @OnClick({R.id.ib_sort, R.id.ib_delete, R.id.ib_add, R.id.ib_refresh})
         public void onActionClick(View v) {
             switch (v.getId()) {
                 case R.id.ib_sort: {

@@ -107,13 +107,14 @@ public abstract class FrgSwitcher extends FrgUtilitySupportBase {
     protected void setChildFrg(FrgUtilitySupportBase... childs)  {
         mViewHelper = new FrgUtilitySupportBase[childs.length];
         System.arraycopy(childs, 0, mViewHelper, 0, childs.length);
+        mHotChild = 0;
     }
 
     //// PRIVATE START
     /**
      * load hot fragment
      */
-    private void loadHotFrg() {
+    protected void loadHotFrg() {
         android.support.v4.app.FragmentTransaction t = getChildFragmentManager().beginTransaction();
         t.replace(mChildFrg, mViewHelper[mHotChild]);
         t.commit();

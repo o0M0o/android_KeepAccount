@@ -8,12 +8,13 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.KeepAccount.R;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 /**
  * date year report
  * Created by ookoo on 2017/2/15.
  */
-public class FrgReportYear extends FrgUtilityBase {
+public class FrgReportYear extends FrgUtilitySupportBase {
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         LOG_TAG = "FrgReportYear";

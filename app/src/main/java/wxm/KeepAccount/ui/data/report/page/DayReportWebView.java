@@ -1,7 +1,5 @@
 package wxm.KeepAccount.ui.data.report.page;
 
-import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,21 +16,20 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.Executors;
 
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.data.report.ACReport;
-import wxm.KeepAccount.ui.data.report.EventSelectDays;
+import wxm.KeepAccount.ui.data.report.base.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
-import wxm.androidutil.FrgWebView.FrgWebView;
+import wxm.androidutil.FrgWebView.FrgSupportWebView;
 import wxm.androidutil.util.UtilFun;
 
 /**
  * day data report(webview)
  * Created by ookoo on 2017/3/4.
  */
-public class DayReportWebView extends FrgWebView {
+public class DayReportWebView extends FrgSupportWebView {
     private ArrayList<String> mASParaLoad;
 
     @Override

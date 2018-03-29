@@ -53,25 +53,25 @@ public class ACReport extends BaseAppCompatActivity {
         // for holder
         switch (sz_type) {
             case PT_DAY: {
-                mFGHolder = new FrgReportDay();
+                mFGSupportHolder = new FrgReportDay();
             }
             break;
 
             case PT_MONTH: {
-                mFGHolder = new FrgReportMonth();
+                mFGSupportHolder = new FrgReportMonth();
             }
             break;
 
             case PT_YEAR: {
-                mFGHolder = new FrgReportYear();
+                mFGSupportHolder = new FrgReportYear();
             }
             break;
         }
 
-        if (null != mFGHolder) {
+        if (null != mFGSupportHolder) {
             Bundle bd = new Bundle();
             bd.putStringArrayList(PARA_LOAD, al_load);
-            mFGHolder.setArguments(bd);
+            mFGSupportHolder.setArguments(bd);
         }
     }
 }
