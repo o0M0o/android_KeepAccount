@@ -18,7 +18,7 @@ import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
  */
 public abstract class FrgSwitcher extends FrgUtilitySupportBase {
     private final static String CHILD_HOT = "child_hot";
-    protected ShowViewBase[] mViewHelper;
+    protected FrgUtilitySupportBase[] mViewHelper;
     private int mHotChild = 0;
 
     @LayoutRes
@@ -43,7 +43,6 @@ public abstract class FrgSwitcher extends FrgUtilitySupportBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        //return layoutInflater.inflate(R.layout.tf_show_base, viewGroup, false);
         return layoutInflater.inflate(mFatherFrg, viewGroup, false);
     }
 
@@ -56,19 +55,9 @@ public abstract class FrgSwitcher extends FrgUtilitySupportBase {
         loadHotFrg();
     }
 
-    /*
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        View cur_v = getView();
-        Log.i(LOG_TAG, "setUserVisibleHint, visible = "  + (isVisibleToUser ? "true" : "false")
-                + ", view = " + (cur_v == null ? "false" : "true"));
-    }
-    */
-
     /**
      * switch in pages
+     * will loop switch between all child
      */
     public void switchPage() {
         View v = getView();
@@ -79,24 +68,44 @@ public abstract class FrgSwitcher extends FrgUtilitySupportBase {
     }
 
     /**
-     * update view
-     * @param bForce    if true it will reload data
+     * switch to child page
+     * @param sb    child page want switch to
      */
-    public void loadView(boolean bForce) {
-        View cur_v = getView();
-        if (null != cur_v) {
-            if (bForce)
-                mViewHelper[mHotChild].loadView();
+    public void switchToPage(FrgUtilitySupportBase sb)  {
+        for(int pos = 0; pos < mViewHelper.length; pos++)   {
+            if(sb == mViewHelper[pos])  {
+                if(mHotChild != pos)    {
+                    mHotChild = pos;
+                    loadHotFrg();
+                }
+            }
         }
     }
 
+    /**
+     * get current hot page
+     * @return      current page
+     */
+    public FrgUtilitySupportBase getHotPage()    {
+        return mViewHelper[mHotChild];
+    }
+
+    /**
+     * set main resource id
+     * @param father        mainly frg
+     * @param child         container frg for child
+     */
     protected void setFrgID(@LayoutRes int father, @IdRes int child) {
         mFatherFrg = father;
         mChildFrg = child;
     }
 
-    protected void setChildFrg(ShowViewBase... childs)  {
-        mViewHelper = new ShowViewBase[childs.length];
+    /**
+     * set child frg
+     * @param childs    all child frg
+     */
+    protected void setChildFrg(FrgUtilitySupportBase... childs)  {
+        mViewHelper = new FrgUtilitySupportBase[childs.length];
         System.arraycopy(childs, 0, mViewHelper, 0, childs.length);
     }
 
@@ -106,7 +115,6 @@ public abstract class FrgSwitcher extends FrgUtilitySupportBase {
      */
     private void loadHotFrg() {
         android.support.v4.app.FragmentTransaction t = getChildFragmentManager().beginTransaction();
-        //t.replace(R.id.fl_holder, mViewHelper[mHotChild]);
         t.replace(mChildFrg, mViewHelper[mHotChild]);
         t.commit();
     }

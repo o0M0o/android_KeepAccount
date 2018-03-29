@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import wxm.KeepAccount.ui.base.Switcher.PageSwitcher;
+import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -81,8 +82,9 @@ public class FrgNoteShow extends FrgUtilityBase {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBChangeEvent(DBDataChangeEvent event) {
         FrgSwitcher tb = getHotTabItem();
-        if(null != tb)
-            tb.loadView(true);
+        if(null != tb) {
+            ((ShowViewBase)tb.getHotPage()).loadView();
+        }
 
         int cur_pos = mVPPages.getCurrentItem();
         for (int i = 0; i < mPHHelper.length; i++) {
@@ -222,9 +224,7 @@ public class FrgNoteShow extends FrgUtilityBase {
         }
     }
 
-
     /// PRIVATE BEGIN
-
     /**
      * switch to other page
      * @param ph            page helper data
@@ -235,7 +235,8 @@ public class FrgNoteShow extends FrgUtilityBase {
         if(enable)  {
             mVPPages.setCurrentItem(ph.mPageIdx);
 
-            ph.mSBPage.loadView(ph.mBADataChange);
+            if(ph.mBADataChange)
+                ph.mSBPage.refreshUI();
             ph.mBADataChange = false;
         }
     }

@@ -400,9 +400,7 @@ public class LVDaily extends LVBase {
                 n_mainpara = mMainPara;
             }
 
-            // 设置listview adapter
             MainAdapter mSNAdapter = new MainAdapter(ContextUtil.getInstance(), n_mainpara);
-
             mLVShow.setAdapter(mSNAdapter);
             mSNAdapter.notifyDataSetChanged();
         }
