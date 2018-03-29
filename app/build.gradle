@@ -109,7 +109,6 @@ dependencies {
     implementation 'io.reactivex:rxandroid:1.1.0'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'org.apache.httpcomponents:httpcore:4.4.4'
-    implementation project(':AndroidUtil')
     implementation project(':hellocharts-library-release')
     implementation project(':lm_banner_library')
     implementation project(':UiLib')
@@ -117,6 +116,7 @@ dependencies {
     implementation files('libs/extend_lib/fashjson/fastjson-1.2.33.jar')
     implementation files('libs/extend_lib/junit/junit-4.12.jar')
     implementation files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
+    implementation project(':AndroidUtil')
 }
 
 /*

@@ -1,10 +1,8 @@
 package wxm.KeepAccount.ui.data.report;
 
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +26,10 @@ import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays;
 import wxm.KeepAccount.ui.data.report.page.DayReportChart;
 import wxm.KeepAccount.ui.data.report.page.DayReportWebView;
-import wxm.KeepAccount.ui.data.show.note.HelloChart.DailyChart;
-import wxm.KeepAccount.ui.data.show.note.ListView.LVDaily;
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.util.UtilFun;
 
 /**
@@ -173,7 +168,7 @@ public class FrgReportDay extends FrgSwitcher {
             }
         });
 
-        dlg_days.show(((AppCompatActivity) getActivity()).getSupportFragmentManager()
+        dlg_days.show(getActivity().getSupportFragmentManager()
                 , "select days");
     }
 
