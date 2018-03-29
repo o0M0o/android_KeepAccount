@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.base;
+package wxm.KeepAccount.ui.base.Switcher;
 
 import java.util.ArrayList;
 

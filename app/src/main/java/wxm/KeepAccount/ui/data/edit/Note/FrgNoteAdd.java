@@ -18,12 +18,12 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import wxm.KeepAccount.ui.base.PageSwitcher;
+import wxm.KeepAccount.ui.base.Switcher.PageSwitcher;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.ui.base.ResourceHelper;
+import wxm.KeepAccount.ui.base.Helper.ResourceHelper;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditIncome;
 import wxm.KeepAccount.ui.data.edit.Note.utility.TFEditPay;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;

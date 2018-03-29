@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -35,8 +34,8 @@ import java.util.Locale;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import wxm.KeepAccount.ui.base.TouchEditText;
-import wxm.KeepAccount.ui.base.TouchTextView;
+import wxm.KeepAccount.ui.base.TouchUI.TouchEditText;
+import wxm.KeepAccount.ui.base.TouchUI.TouchTextView;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;

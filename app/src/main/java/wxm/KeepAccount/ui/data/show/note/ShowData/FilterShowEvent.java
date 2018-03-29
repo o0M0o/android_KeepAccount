@@ -3,17 +3,17 @@ package wxm.KeepAccount.ui.data.show.note.ShowData;
 import java.util.List;
 
 /**
- * 过滤视图事件类
+ * filter show data
  * Created by User on 2017/2/14.
  */
 public class FilterShowEvent {
     /**
-     * 事件发送者
+     * event sender
      */
     private String mSZSender;
 
     /**
-     * 过滤视图参数
+     * event parameter
      */
     private List<String> mLSFilterTag;
 
@@ -23,18 +23,16 @@ public class FilterShowEvent {
     }
 
     /**
-     * 得到过滤参数
-     *
-     * @return 过滤参数
+     * get filter parameter
+     * @return      parameter for filter
      */
     public List<String> getFilterTag() {
         return mLSFilterTag;
     }
 
     /**
-     * 获得事件发送者
-     *
-     * @return 事件发送者
+     * get event sender
+     * @return      sender
      */
     public String getSender() {
         return mSZSender;

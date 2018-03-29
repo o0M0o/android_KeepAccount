@@ -1,21 +1,22 @@
 package wxm.KeepAccount.ui.data.show.note.ShowData;
 
+import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
 import wxm.KeepAccount.ui.data.show.note.HelloChart.MonthlyChart;
 import wxm.KeepAccount.ui.data.show.note.ListView.LVMonthly;
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 
 /**
- * fragment for monthly show
+ * for monthly data
  * Created by wxm on 2016/9/25.
  */
-public class TFShowMonthly extends TFShowBase {
+public class TFShowMonthly extends FrgSwitcher {
 
     public TFShowMonthly() {
         super();
         LOG_TAG = "TFShowMonthly";
 
-        mViewHelper = new ShowViewBase[2];
-        mViewHelper[0] = new LVMonthly();
-        mViewHelper[1] = new MonthlyChart();
+        setFrgID(R.layout.tf_show_base, R.id.fl_holder);
+        setChildFrg(new LVMonthly(), new MonthlyChart());
     }
 }

@@ -21,7 +21,7 @@ import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
-import wxm.KeepAccount.ui.base.ResourceHelper;
+import wxm.KeepAccount.ui.base.Helper.ResourceHelper;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
 
 /**

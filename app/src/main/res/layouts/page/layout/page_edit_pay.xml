@@ -13,7 +13,7 @@
         android:background="@color/white"
         android:padding="2dp">
 
-        <wxm.KeepAccount.ui.base.TouchEditText
+        <wxm.KeepAccount.ui.base.TouchUI.TouchEditText
             android:id="@+id/ar_et_info"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             android:background="@color/white"
             android:padding="2dp">
 
-            <wxm.KeepAccount.ui.base.TouchEditText
+            <wxm.KeepAccount.ui.base.TouchUI.TouchEditText
                 android:id="@+id/ar_et_date"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
             android:background="@color/white"
             android:padding="2dp">
 
-            <wxm.KeepAccount.ui.base.TouchEditText
+            <wxm.KeepAccount.ui.base.TouchUI.TouchEditText
                 android:id="@+id/ar_et_amount"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
         android:background="@color/white"
         android:padding="8dp">
 
-        <wxm.KeepAccount.ui.base.TouchTextView
+        <wxm.KeepAccount.ui.base.TouchUI.TouchTextView
             android:id="@+id/tv_note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

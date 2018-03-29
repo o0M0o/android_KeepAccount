@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.show.note.ListView;
+package wxm.KeepAccount.ui.base.Adapter;
 
 import android.content.Context;
 import android.content.res.Resources;

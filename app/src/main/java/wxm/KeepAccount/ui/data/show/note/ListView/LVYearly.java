@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,11 +26,12 @@ import java.util.concurrent.Future;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import wxm.KeepAccount.ui.base.Adapter.LVAdapter;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.base.ResourceHelper;
+import wxm.KeepAccount.ui.base.Helper.ResourceHelper;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
@@ -47,7 +47,6 @@ import wxm.uilib.IconButton.IconButton;
  * Created by 123 on 2016/9/10.
  */
 public class LVYearly extends LVBase {
-    private final static String TAG = "LVYearly";
     private final LinkedList<String> mLLSubFilter = new LinkedList<>();
     private final LinkedList<View> mLLSubFilterVW = new LinkedList<>();
 
@@ -60,14 +59,12 @@ public class LVYearly extends LVBase {
         public String  show;
 
         public String  year;
-        public String  yearPayCount;
-        public String  yearPayAmount;
-        public String  yearIncomeCount;
-        public String  yearIncomeAmount;
+        public recordDetail yearDetail;
         public String  amount;
 
         MainAdapterItem()    {
             show = EShowFold.FOLD.getName();
+            yearDetail = new recordDetail();
         }
     }
     protected final LinkedList<MainAdapterItem> mMainPara;
@@ -77,13 +74,11 @@ public class LVYearly extends LVBase {
         public String  subTag;
 
         public String  month;
-        public String  monthPayCount;
-        public String  monthPayAmount;
-        public String  monthIncomeCount;
-        public String  monthIncomeAmount;
+        public recordDetail monthDetail;
         public String  amount;
 
         SubAdapterItem()    {
+            monthDetail = new recordDetail();
         }
     }
     protected final HashMap<String, LinkedList<SubAdapterItem>> mHMSubPara;
@@ -236,11 +231,11 @@ public class LVYearly extends LVBase {
 
                                     MainAdapterItem map = new MainAdapterItem();
                                     map.year = k;
-                                    map.yearPayCount = String.valueOf(ni.getPayCount());
-                                    map.yearIncomeCount = String.valueOf(ni.getIncomeCount());
-                                    map.yearPayAmount = String.format(Locale.CHINA,
+                                    map.yearDetail.mPayCount = String.valueOf(ni.getPayCount());
+                                    map.yearDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
+                                    map.yearDetail.mPayAmount = String.format(Locale.CHINA,
                                                              "%.02f", ni.getPayAmount());
-                                    map.yearIncomeAmount = String.format(Locale.CHINA,
+                                    map.yearDetail.mIncomeAmount = String.format(Locale.CHINA,
                                                             "%.02f", ni.getIncomeAmount());
 
                                     BigDecimal bd_l = ni.getBalance();
@@ -270,11 +265,11 @@ public class LVYearly extends LVBase {
                                     String km = k.substring(5, 7);
                                     km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
                                     map.month = km;
-                                    map.monthPayCount = String.valueOf(ni.getPayCount());
-                                    map.monthIncomeCount = String.valueOf(ni.getIncomeCount());
-                                    map.monthPayAmount = String.format(Locale.CHINA,
+                                    map.monthDetail.mPayCount = String.valueOf(ni.getPayCount());
+                                    map.monthDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
+                                    map.monthDetail.mPayAmount = String.format(Locale.CHINA,
                                                             "%.02f", ni.getPayAmount());
-                                    map.monthIncomeAmount = String.format(Locale.CHINA,
+                                    map.monthDetail.mIncomeAmount = String.format(Locale.CHINA,
                                                             "%.02f", ni.getIncomeAmount());
 
                                     BigDecimal bd_l = ni.getBalance();
@@ -358,7 +353,7 @@ public class LVYearly extends LVBase {
             }
 
             // 设置listview adapter
-            SelfAdapter mSNAdapter = new SelfAdapter(ContextUtil.getInstance(), n_mainpara);
+            YearAdapter mSNAdapter = new YearAdapter(ContextUtil.getInstance(), n_mainpara);
             mLVShow.setAdapter(mSNAdapter);
             mSNAdapter.notifyDataSetChanged();
         }
@@ -390,7 +385,7 @@ public class LVYearly extends LVBase {
     private void load_detail_view(ListView lv, String tag) {
         LinkedList<SubAdapterItem> llhm = mHMSubPara.get(tag);
         if (!UtilFun.ListIsNullOrEmpty(llhm)) {
-            SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm);
+            MonthAdapter mAdapter = new MonthAdapter(getContext(), llhm);
             lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
             ListViewHelper.setListViewHeightBasedOnChildren(lv);
@@ -402,8 +397,8 @@ public class LVYearly extends LVBase {
     /**
      * 首级adapter
      */
-    private class SelfAdapter extends LVAdapter {
-        SelfAdapter(Context context, List<?> mdata)    {
+    private class YearAdapter extends LVAdapter {
+        YearAdapter(Context context, List<?> mdata)    {
             super(context, mdata, R.layout.li_yearly_show);
         }
 
@@ -452,10 +447,10 @@ public class LVYearly extends LVBase {
             // for graph value
             ValueShow vs = viewHolder.getView(R.id.vs_yearly_info);
             HashMap<String, Object> hm_attr = new HashMap<>();
-            hm_attr.put(ValueShow.ATTR_PAY_COUNT, hm.yearPayCount);
-            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, hm.yearPayAmount);
-            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, hm.yearIncomeCount);
-            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, hm.yearIncomeAmount);
+            hm_attr.put(ValueShow.ATTR_PAY_COUNT, hm.yearDetail.mPayCount);
+            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, hm.yearDetail.mPayAmount);
+            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, hm.yearDetail.mIncomeCount);
+            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, hm.yearDetail.mIncomeAmount);
             vs.adjustAttribute(hm_attr);
             return viewHolder.getConvertView();
         }
@@ -465,8 +460,8 @@ public class LVYearly extends LVBase {
     /**
      * 次级adapter
      */
-    private class SelfSubAdapter extends LVAdapter {
-        SelfSubAdapter(Context context, List<?> sdata)    {
+    private class MonthAdapter extends LVAdapter {
+        MonthAdapter(Context context, List<?> sdata)    {
             super(context, sdata, R.layout.li_yearly_show_detail);
         }
 
@@ -513,8 +508,8 @@ public class LVYearly extends LVBase {
             viewHolder.setText(R.id.tv_month, hm.month);
 
             HelperDayNotesInfo.fillNoteInfo(viewHolder,
-                    hm.monthPayCount, hm.monthPayAmount,
-                    hm.monthIncomeCount, hm.monthIncomeAmount,
+                    hm.monthDetail.mPayCount, hm.monthDetail.mPayAmount,
+                    hm.monthDetail.mIncomeCount, hm.monthDetail.mIncomeAmount,
                     hm.amount);
             return root_view;
         }

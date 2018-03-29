@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.base;
+package wxm.KeepAccount.ui.base.TouchUI;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

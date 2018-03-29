@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -20,7 +19,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,13 +26,14 @@ import java.util.concurrent.Future;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import wxm.KeepAccount.ui.base.Adapter.LVAdapter;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.ui.base.ResourceHelper;
+import wxm.KeepAccount.ui.base.Helper.ResourceHelper;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.show.note.ACDailyDetail;
@@ -54,13 +53,27 @@ import wxm.uilib.IconButton.IconButton;
  */
 public class LVDaily extends LVBase {
     // for action
-    //private final static int ACTION_NONE    = 0;
-    private final static int ACTION_DELETE = 1;
-    private final static int ACTION_EDIT = 2;
+    enum EAction    {
+        DELETE(1),
+        EDIT(2);
+
+        int mID;
+        EAction(int v)  {
+            mID = v;
+        }
+
+        public boolean isEdit() {
+            return mID == EDIT.mID;
+        }
+
+        public boolean isDelete() {
+            return mID == DELETE.mID;
+        }
+    }
+    private EAction mAction = EAction.EDIT;
 
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
-    private int mActionType = ACTION_EDIT;
 
     class MainAdapterItem   {
         public String  tag;
@@ -69,12 +82,12 @@ public class LVDaily extends LVBase {
         public String  month;
         public String  dayNumber;
         public String  dayInWeek;
-        public dataDetail   day;
+        public recordDetail day;
         public String  amount;
 
         MainAdapterItem()    {
             show = EShowFold.FOLD.getName();
-            day = new dataDetail();
+            day = new recordDetail();
         }
     }
     protected final LinkedList<MainAdapterItem> mMainPara;
@@ -116,14 +129,14 @@ public class LVDaily extends LVBase {
                 break;
 
                 case R.id.ib_refresh: {
-                    mActionType = ACTION_EDIT;
+                    mAction = EAction.EDIT;
                     reloadView(getContext(), false);
                 }
                 break;
 
                 case R.id.ib_delete: {
-                    if (ACTION_DELETE != mActionType) {
-                        mActionType = ACTION_DELETE;
+                    if (mAction.isEdit()) {
+                        mAction = EAction.DELETE;
                         redrawUI();
                     }
                 }
@@ -201,7 +214,7 @@ public class LVDaily extends LVBase {
         if ((NoteDataHelper.TAB_TITLE_MONTHLY.equals(event.getSender()))
                 && (null != e_p)) {
             mBFilter = true;
-            mActionType = ACTION_EDIT;
+            mAction = EAction.EDIT;
 
             mFilterPara.clear();
             mFilterPara.addAll(e_p);
@@ -218,7 +231,7 @@ public class LVDaily extends LVBase {
         int vid = v.getId();
         switch (vid) {
             case R.id.bt_accpet:
-                if (ACTION_DELETE == mActionType) {
+                if (mAction.isDelete()) {
                     ArrayList<Integer> al_i = new ArrayList<>();
                     ArrayList<Integer> al_p = new ArrayList<>();
 
@@ -247,14 +260,14 @@ public class LVDaily extends LVBase {
                         bf = true;
                     }
 
-                    mActionType = ACTION_EDIT;
+                    mAction = EAction.EDIT;
                     if (bf)
                         reloadView(v.getContext(), false);
                 }
                 break;
 
             case R.id.bt_giveup:
-                mActionType = ACTION_EDIT;
+                mAction = EAction.EDIT;
                 redrawUI();
                 break;
 
@@ -349,10 +362,10 @@ public class LVDaily extends LVBase {
      */
     private void redrawUI() {
         // adjust attach layout
-        setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
+        setAttachLayoutVisible(mAction.isDelete() || mBFilter ?
                 View.VISIBLE : View.GONE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
-        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType && !mBFilter ? View.VISIBLE : View.GONE);
+        setAccpetGiveupLayoutVisible(mAction.isDelete() && !mBFilter ? View.VISIBLE : View.GONE);
 
         MainAdapter cur_ap = (MainAdapter) mLVShow.getAdapter();
         cur_ap.notifyDataSetChanged();
@@ -365,10 +378,10 @@ public class LVDaily extends LVBase {
      */
     private void loadUIUtility(boolean b_fully) {
         // adjust attach layout
-        setAttachLayoutVisible(ACTION_EDIT != mActionType || mBFilter ?
-                View.VISIBLE : View.GONE);
+        setAttachLayoutVisible(mAction.isDelete() || mBFilter ?
+                                    View.VISIBLE : View.GONE);
         setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
-        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType && !mBFilter ? View.VISIBLE : View.GONE);
+        setAccpetGiveupLayoutVisible(mAction.isDelete() && !mBFilter ? View.VISIBLE : View.GONE);
 
         if (b_fully) {
             // load show data
@@ -453,7 +466,7 @@ public class LVDaily extends LVBase {
 
             // for line data
             RelativeLayout rl_del = viewHolder.getView(R.id.rl_delete);
-            rl_del.setVisibility(mActionType == ACTION_EDIT ? View.GONE : View.VISIBLE);
+            rl_del.setVisibility(mAction.isEdit() ? View.GONE : View.VISIBLE);
             rl_del.setOnClickListener(mCLAdapter);
 
             viewHolder.getView(R.id.rl_date).setOnClickListener(mCLAdapter);

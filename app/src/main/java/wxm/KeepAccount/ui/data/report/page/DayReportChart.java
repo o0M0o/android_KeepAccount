@@ -29,9 +29,6 @@ import java.util.concurrent.Executors;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import wxm.KeepAccount.utility.ToolUtil;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
-import wxm.androidutil.util.UtilFun;
 import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
@@ -42,6 +39,9 @@ import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.report.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
+import wxm.KeepAccount.utility.ToolUtil;
+import wxm.androidutil.FrgUtility.FrgUtilityBase;
+import wxm.androidutil.util.UtilFun;
 
 /**
  * daily report(webview)
@@ -77,7 +77,8 @@ public class DayReportChart extends FrgUtilityBase {
 
     /**
      * update day range
-     * @param event     for day range
+     *
+     * @param event for day range
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSelectDaysEvent(EventSelectDays event) {
@@ -123,7 +124,8 @@ public class DayReportChart extends FrgUtilityBase {
 
     /**
      * switch UI according to click
-     * @param v     clicked view
+     *
+     * @param v clicked view
      */
     @OnClick({R.id.tb_income, R.id.tb_pay})
     public void onTBClick(View v) {
@@ -151,22 +153,16 @@ public class DayReportChart extends FrgUtilityBase {
         }
 
         // update show
+        final PieChartData CVData = new PieChartData();
         showProgress(true);
-
-        Activity h = this.getActivity();
-        Executors.newCachedThreadPool().submit(() -> {
-            PieChartData mCVData = new PieChartData();
-            generateData(mCVData);
-
-            if(!(h.isDestroyed() || h.isFinishing()))   {
-                h.runOnUiThread(() ->   {
+        ToolUtil.runInBackground(this.getActivity(),
+                () -> generateData(CVData),
+                () -> {
                     showProgress(false);
 
                     mCVchart.setCircleFillRatio(0.6f);
-                    mCVchart.setPieChartData(mCVData);
+                    mCVchart.setPieChartData(CVData);
                 });
-            }
-        });
     }
 
     /**
@@ -192,15 +188,14 @@ public class DayReportChart extends FrgUtilityBase {
 
     private void loadData() {
         mLLOrgData = new LinkedList<>();
+        if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
+            if (2 != mASParaLoad.size())
+                return;
 
-        final PieChartData CVData = new PieChartData();
-        showProgress(true);
-        ToolUtil.runInBackground(this.getActivity(),
-                () -> {
-                    if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
-                        if (2 != mASParaLoad.size())
-                            return ;
-
+            final PieChartData CVData = new PieChartData();
+            showProgress(true);
+            ToolUtil.runInBackground(this.getActivity(),
+                    () -> {
                         String d_s = mASParaLoad.get(0);
                         String d_e = mASParaLoad.get(1);
                         HashMap<String, ArrayList<INote>> hm_note = NoteDataHelper.getInstance()
@@ -215,14 +210,14 @@ public class DayReportChart extends FrgUtilityBase {
                         }
 
                         generateData(CVData);
-                    }
-                },
-                () -> {
-                    showProgress(false);
+                    },
+                    () -> {
+                        showProgress(false);
 
-                    mCVchart.setCircleFillRatio(0.6f);
-                    mCVchart.setPieChartData(CVData);
-                });
+                        mCVchart.setCircleFillRatio(0.6f);
+                        mCVchart.setPieChartData(CVData);
+                    });
+        }
     }
 
     private void generateData(PieChartData pd) {

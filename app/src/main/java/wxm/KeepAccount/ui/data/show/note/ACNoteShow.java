@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import wxm.androidutil.ExActivity.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBase;
+import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
 
 /**
  * for Note show
@@ -46,7 +46,7 @@ public class ACNoteShow extends BaseAppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_switch: {
-                TFShowBase hot = ((FrgNoteShow) mFGHolder).getHotTabItem();
+                FrgSwitcher hot = ((FrgNoteShow) mFGHolder).getHotTabItem();
                 if (null != hot) {
                     hot.switchPage();
                 }

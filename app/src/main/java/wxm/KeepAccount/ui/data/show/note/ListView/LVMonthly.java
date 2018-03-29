@@ -1,15 +1,11 @@
 package wxm.KeepAccount.ui.data.show.note.ListView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,15 +27,11 @@ import java.util.concurrent.Future;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd;
-import wxm.KeepAccount.ui.data.report.ACReport;
-import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
-import wxm.androidutil.Dialog.DlgOKOrNOBase;
+import wxm.KeepAccount.ui.base.Adapter.LVAdapter;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.base.ResourceHelper;
+import wxm.KeepAccount.ui.base.Helper.ResourceHelper;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
@@ -51,7 +43,7 @@ import wxm.KeepAccount.utility.ToolUtil;
 import wxm.uilib.IconButton.IconButton;
 
 /**
- * 月数据辅助类
+ * ListView for monthly data
  * Created by 123 on 2016/9/10.
  */
 public class LVMonthly
@@ -66,14 +58,12 @@ public class LVMonthly
         public String  show;
 
         public String  month;
-        public String  monthPayCount;
-        public String  monthPayAmount;
-        public String  monthIncomeCount;
-        public String  monthIncomeAmount;
+        public recordDetail monthDetail;
         public String  amount;
 
         MainAdapterItem()    {
             show = EShowFold.FOLD.getName();
+            monthDetail = new recordDetail();
         }
     }
     protected final LinkedList<MainAdapterItem> mMainPara;
@@ -84,13 +74,11 @@ public class LVMonthly
 
         public String  dayNumber;
         public String  dayInWeek;
-        public String  dayPayCount;
-        public String  dayPayAmount;
-        public String  dayIncomeCount;
-        public String  dayIncomeAmount;
+        public recordDetail dayDetail;
         public String  amount;
 
         SubAdapterItem()    {
+            dayDetail = new recordDetail();
         }
     }
     protected final HashMap<String, LinkedList<SubAdapterItem>> mHMSubPara;
@@ -159,9 +147,8 @@ public class LVMonthly
 
 
     /**
-     * 过滤视图事件
-     *
-     * @param event 事件
+     * filter view
+     * @param event     param
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {
@@ -177,12 +164,9 @@ public class LVMonthly
         }
     }
 
-
-
     /**
-     * "接受"或者"取消"后动作
-     *
-     * @param v 动作view
+     * 'accpet' or 'giveup' click
+     * @param v         action view
      */
     @OnClick({R.id.bt_accpet, R.id.bt_giveup, R.id.bt_giveup_filter})
     public void onAccpetOrGiveupClick(View v) {
@@ -194,8 +178,7 @@ public class LVMonthly
                         ACNoteShow ac = getRootActivity();
                         ac.jumpByTabName(NoteDataHelper.TAB_TITLE_DAILY);
 
-                        ArrayList<String> al_s = new ArrayList<>();
-                        al_s.addAll(mLLSubFilter);
+                        ArrayList<String> al_s = new ArrayList<>(mLLSubFilter);
                         EventBus.getDefault().post(new FilterShowEvent(NoteDataHelper.TAB_TITLE_MONTHLY, al_s));
 
                         mLLSubFilter.clear();
@@ -235,9 +218,6 @@ public class LVMonthly
         }
     }
 
-    /**
-     * 重新加载数据
-     */
     @Override
     protected void refreshData() {
         super.refreshData();
@@ -261,11 +241,11 @@ public class LVMonthly
                                     NoteShowInfo ni = NoteDataHelper.getInfoByMonth(k);
                                     MainAdapterItem map = new MainAdapterItem();
                                     map.month = k;
-                                    map.monthPayCount = String.valueOf(ni.getPayCount());
-                                    map.monthIncomeCount = String.valueOf(ni.getIncomeCount());
-                                    map.monthPayAmount = String.format(Locale.CHINA,
+                                    map.monthDetail.mPayCount = String.valueOf(ni.getPayCount());
+                                    map.monthDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
+                                    map.monthDetail.mPayAmount = String.format(Locale.CHINA,
                                                             "%.02f", ni.getPayAmount());
-                                    map.monthIncomeAmount = String.format(Locale.CHINA,
+                                    map.monthDetail.mIncomeAmount = String.format(Locale.CHINA,
                                                          "%.02f", ni.getIncomeAmount());
 
                                     BigDecimal bd_l = ni.getBalance();
@@ -303,11 +283,11 @@ public class LVMonthly
                                     cl_day.set(year, month, day);
                                     map.dayInWeek = ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK));
 
-                                    map.dayPayCount = String.valueOf(ni.getPayCount());
-                                    map.dayIncomeCount = String.valueOf(ni.getIncomeCount());
-                                    map.dayPayAmount = String.format(Locale.CHINA,
+                                    map.dayDetail.mPayCount = String.valueOf(ni.getPayCount());
+                                    map.dayDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
+                                    map.dayDetail.mPayAmount = String.format(Locale.CHINA,
                                                     "%.02f", ni.getPayAmount());
-                                    map.dayIncomeAmount = String.format(Locale.CHINA,
+                                    map.dayDetail.mIncomeAmount = String.format(Locale.CHINA,
                                                     "%.02f", ni.getIncomeAmount());
 
                                     BigDecimal bd_l = ni.getBalance();
@@ -365,9 +345,8 @@ public class LVMonthly
     /// BEGIN PRIVATE
 
     /**
-     * 加载UI的工作
-     *
-     * @param b_fully 若为true则加载数据
+     * load UI
+     * @param b_fully   reload data if true
      */
     private void loadUIUtility(boolean b_fully) {
         // adjust attach layout
@@ -391,21 +370,21 @@ public class LVMonthly
             }
 
             // 设置listview adapter
-            SelfAdapter mSNAdapter = new SelfAdapter(ContextUtil.getInstance(), n_mainpara);
+            MonthAdapter mSNAdapter = new MonthAdapter(ContextUtil.getInstance(), n_mainpara);
             mLVShow.setAdapter(mSNAdapter);
             mSNAdapter.notifyDataSetChanged();
         }
     }
 
     /**
-     * 调整数据排序
+     * adjust data order
      */
     private void reorderData() {
         Collections.reverse(mMainPara);
     }
 
     /**
-     * 更新附加layout
+     * update attach layout
      */
     private void refreshAttachLayout() {
         setAttachLayoutVisible(mBFilter || mBSelectSubFilter ? View.VISIBLE : View.GONE);
@@ -414,15 +393,14 @@ public class LVMonthly
     }
 
     /**
-     * 加载详细视图
-     *
-     * @param lv  视图
-     * @param tag 数据tag
+     * load detail view
+     * @param lv        view need show detail view
+     * @param tag       tag for data
      */
     private void load_detail_view(ListView lv, String tag) {
         LinkedList<SubAdapterItem> llhm = mHMSubPara.get(tag);
         if (!UtilFun.ListIsNullOrEmpty(llhm)) {
-            SelfSubAdapter mAdapter = new SelfSubAdapter(getContext(), llhm);
+            DayAdapter mAdapter = new DayAdapter(getContext(), llhm);
             lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
             ListViewHelper.setListViewHeightBasedOnChildren(lv);
@@ -431,10 +409,10 @@ public class LVMonthly
     /// END PRIVATE
 
     /**
-     * 首级adapter
+     * month data adapter
      */
-    private class SelfAdapter extends LVAdapter {
-        SelfAdapter(Context context, List<?> mdata)  {
+    private class MonthAdapter extends LVAdapter {
+        MonthAdapter(Context context, List<?> mdata)  {
             super(context, mdata, R.layout.li_monthly_show);
         }
 
@@ -482,10 +460,10 @@ public class LVMonthly
             // for graph value
             ValueShow vs = viewHolder.getView(R.id.vs_monthly_info);
             HashMap<String, Object> hm_attr = new HashMap<>();
-            hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.monthPayCount);
-            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.monthPayAmount);
-            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.monthIncomeCount);
-            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.monthIncomeAmount);
+            hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.monthDetail.mPayCount);
+            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.monthDetail.mPayAmount);
+            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.monthDetail.mIncomeCount);
+            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.monthDetail.mIncomeAmount);
             vs.adjustAttribute(hm_attr);
             return viewHolder.getConvertView();
         }
@@ -493,10 +471,10 @@ public class LVMonthly
 
 
     /**
-     * 次级adapter
+     * day data adapter
      */
-    private class SelfSubAdapter extends LVAdapter {
-        SelfSubAdapter(Context context, List<?> sdata)  {
+    private class DayAdapter extends LVAdapter {
+        DayAdapter(Context context, List<?> sdata)  {
             super(context, sdata, R.layout.li_monthly_show_detail);
         }
 
@@ -546,10 +524,10 @@ public class LVMonthly
             // for graph value
             ValueShow vs = viewHolder.getView(R.id.vs_daily_info);
             HashMap<String, Object> hm_attr = new HashMap<>();
-            hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.dayPayCount);
-            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.dayPayAmount);
-            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.dayIncomeCount);
-            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.dayIncomeAmount);
+            hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.dayDetail.mPayCount);
+            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.dayDetail.mPayAmount);
+            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.dayDetail.mIncomeCount);
+            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.dayDetail.mIncomeAmount);
             vs.adjustAttribute(hm_attr);
             return root_view;
         }

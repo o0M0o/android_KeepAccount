@@ -2,7 +2,6 @@ package wxm.KeepAccount.ui.data.show.note;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -23,18 +22,17 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import wxm.KeepAccount.ui.base.PageSwitcher;
-import wxm.KeepAccount.utility.ToolUtil;
+import wxm.KeepAccount.ui.base.Switcher.PageSwitcher;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;
-import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBase;
+import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBudget;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowMonthly;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowYearly;
-import wxm.KeepAccount.ui.base.ResourceHelper;
+import wxm.KeepAccount.ui.base.Helper.ResourceHelper;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
 
@@ -52,7 +50,7 @@ public class FrgNoteShow extends FrgUtilityBase {
     @BindView(R.id.vp_pages)
     ViewPager mVPPages;
 
-    // for selecter ui
+    // for selector ui
     @BindView(R.id.rl_day_flow)
     RelativeLayout mRLDayFlow;
 
@@ -70,7 +68,7 @@ public class FrgNoteShow extends FrgUtilityBase {
         boolean mBADataChange;
         RelativeLayout mRLSelector;
         String   mSZName;
-        TFShowBase   mSBPage;
+        FrgSwitcher mSBPage;
         int  mPageIdx;
     }
     private pageHelper[] mPHHelper;
@@ -82,7 +80,7 @@ public class FrgNoteShow extends FrgUtilityBase {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBChangeEvent(DBDataChangeEvent event) {
-        TFShowBase tb = getHotTabItem();
+        FrgSwitcher tb = getHotTabItem();
         if(null != tb)
             tb.loadView(true);
 
@@ -276,7 +274,7 @@ public class FrgNoteShow extends FrgUtilityBase {
      * get hot tab item
      * @return      hot tab item
      */
-    public TFShowBase getHotTabItem() {
+    public FrgSwitcher getHotTabItem() {
         pageHelper ph = (pageHelper) mPSSwitcher.getSelected();
         return null == ph ? null : ph.mSBPage;
     }

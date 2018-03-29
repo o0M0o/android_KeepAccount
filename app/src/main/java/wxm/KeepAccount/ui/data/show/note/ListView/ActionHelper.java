@@ -47,6 +47,10 @@ public abstract class ActionHelper {
         mDoOnce = false;
     }
 
+    /**
+     * bind layout for ButterKnife
+     * @param holder        father view
+     */
     public void bind(View holder)   {
         ButterKnife.bind(this, holder);
     }
@@ -57,14 +61,20 @@ public abstract class ActionHelper {
      */
     @OnClick(R.id.rl_hide_show)
     public void switchActionHideShow(View v) {
-        setActsVisilibity(!mIsShow);
+        setActsVisibility(!mIsShow);
         mIsShow = !mIsShow;
     }
 
+    /**
+     * use this to init self actions
+     */
     protected abstract void initActs();
 
+    /**
+     * invoke this before use
+     */
     protected void init()   {
-        setActsVisilibity(mIsShow);
+        setActsVisibility(mIsShow);
 
         if(!mDoOnce && mIsShow) {
             initActs();
@@ -72,7 +82,11 @@ public abstract class ActionHelper {
         }
     }
 
-    private void setActsVisilibity(boolean bshow)   {
+    /**
+     * set visibility for self
+     * @param bshow     show UI if true
+     */
+    private void setActsVisibility(boolean bshow)   {
         ViewGroup.LayoutParams rp = mRLActions.getLayoutParams();
 
         mIVHideShow.setImageDrawable(bshow ? mDAHide : mDAExpand);

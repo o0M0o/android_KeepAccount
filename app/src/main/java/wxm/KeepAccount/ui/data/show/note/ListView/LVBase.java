@@ -32,8 +32,10 @@ import wxm.uilib.IconButton.IconButton;
  * Created by wxm on 2016/9/29.
  */
 public abstract class LVBase extends ShowViewBase {
-
-    class dataDetail    {
+    /**
+     * helper for record detail
+     */
+    class recordDetail {
         public String   mPayCount;
         public String   mPayAmount;
 
@@ -41,6 +43,9 @@ public abstract class LVBase extends ShowViewBase {
         public String   mIncomeAmount;
     }
 
+    /**
+     * helper for node fold/unfold
+     */
     enum EShowFold {
         UNFOLD("vs_unfold"),
         FOLD("vs_fold");
@@ -51,14 +56,28 @@ public abstract class LVBase extends ShowViewBase {
             mSZName = nm;
         }
 
+        /**
+         * get self name
+         * @return      name
+         */
         public String getName() {
             return mSZName;
         }
 
+        /**
+         * use fold status get EShowFold
+         * @param fold      if true, node fold
+         * @return          EShowFold object
+         */
         public static EShowFold getByFold(boolean fold)    {
             return fold ? FOLD : UNFOLD;
         }
 
+        /**
+         * use name get EShowFold
+         * @param nm        name for node status
+         * @return          EShowFold object
+         */
         public static EShowFold getByName(String nm)  {
             return nm.equals(FOLD.mSZName) ? FOLD : UNFOLD;
         }

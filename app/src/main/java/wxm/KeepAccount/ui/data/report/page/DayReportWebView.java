@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.data.report.page;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.report.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.FrgWebView.FrgWebView;
 import wxm.androidutil.util.UtilFun;
 
@@ -83,35 +85,29 @@ public class DayReportWebView extends FrgWebView {
 
     @Override
     protected void loadUI() {
-        showProgress(true);
+        if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
+            if (2 != mASParaLoad.size())
+                return;
 
-        Activity h = this.getActivity();
-        Executors.newCachedThreadPool().submit(() -> {
-            String mSzPara = null;
-            if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
-                if (2 != mASParaLoad.size())
-                    return;
+            final String[] param = new String[1];
+            showProgress(true);
+            ToolUtil.runInBackground(this.getActivity(),
+                    () -> {
+                        String d_s = mASParaLoad.get(0);
+                        String d_e = mASParaLoad.get(1);
+                        HashMap<String, ArrayList<INote>> hmData = NoteDataHelper
+                                .getInstance().getNotesBetweenDays(d_s, d_e);
 
-                String d_s = mASParaLoad.get(0);
-                String d_e = mASParaLoad.get(1);
-                HashMap<String, ArrayList<INote>> hmData = NoteDataHelper
-                        .getInstance().getNotesBetweenDays(d_s, d_e);
-
-                SimplePropertyPreFilter filter = new SimplePropertyPreFilter(INote.class,
-                        "info", "ts", "val", "payNote");
-                mSzPara = JSON.toJSONString(hmData, filter);
-            }
-
-            final String para = mSzPara;
-            if(!(h.isDestroyed() || h.isFinishing()))   {
-                h.runOnUiThread(() ->   {
-                    showProgress(false);
-
-                    if (!UtilFun.StringIsNullOrEmpty(para)) {
-                        loadPage("file:///android_asset/report/report_day.html", para);
-                    }
-                });
-            }
-        });
+                        SimplePropertyPreFilter filter = new SimplePropertyPreFilter(INote.class,
+                                "info", "ts", "val", "payNote");
+                        param[0] = JSON.toJSONString(hmData, filter);
+                    },
+                    () -> {
+                        showProgress(false);
+                        if (!UtilFun.StringIsNullOrEmpty(param[0])) {
+                            loadPage("file:///android_asset/report/report_day.html", param[0]);
+                        }
+                    });
+        }
     }
 }

@@ -19,21 +19,20 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import wxm.androidutil.Dialog.DlgOKOrNOBase;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
-import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.data.report.page.DayReportChart;
 import wxm.KeepAccount.ui.data.report.page.DayReportWebView;
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
+import wxm.KeepAccount.utility.ToolUtil;
+import wxm.androidutil.Dialog.DlgOKOrNOBase;
+import wxm.androidutil.FrgUtility.FrgUtilityBase;
+import wxm.androidutil.util.UtilFun;
 
 /**
  * day data report
@@ -85,7 +84,6 @@ public class FrgReportDay extends FrgUtilityBase {
         View rootView = layoutInflater.inflate(R.layout.vw_report, viewGroup, false);
         ButterKnife.bind(this, rootView);
 
-        mPGHot = mPGWebView;
         return rootView;
     }
 
@@ -97,68 +95,62 @@ public class FrgReportDay extends FrgUtilityBase {
         mPGWebView.setArguments(bd);
         mPGChart.setArguments(bd);
 
-        FragmentTransaction t = getChildFragmentManager().beginTransaction();
-        t.replace(R.id.fl_page_holder, mPGHot);
-        t.commit();
+        loadHotPage(mPGWebView);
     }
 
     @Override
     protected void loadUI() {
-        Activity h = this.getActivity();
         FrgReportDay frg = this;
-        ExecutorService tp = Executors.newCachedThreadPool();
-        tp.submit(() -> {
-            if (!UtilFun.ListIsNullOrEmpty(frg.mASParaLoad)) {
-                if (2 != frg.mASParaLoad.size())
-                    return;
+        if (!UtilFun.ListIsNullOrEmpty(frg.mASParaLoad)) {
+            if (2 != frg.mASParaLoad.size())
+                return;
 
-                String d_s = frg.mASParaLoad.get(0);
-                String d_e = frg.mASParaLoad.get(1);
-                final String mSZCaption = String.format(Locale.CHINA,
-                        "%s - %s", d_s, d_e);
-                HashMap<String, ArrayList<INote>> ls_note = NoteDataHelper.getInstance()
-                        .getNotesBetweenDays(d_s, d_e);
+            final Object[] param = new Object[3];
+            ToolUtil.runInBackground(this.getActivity(),
+                    () -> {
+                        String d_s = frg.mASParaLoad.get(0);
+                        String d_e = frg.mASParaLoad.get(1);
+                        param[0] = String.format(Locale.CHINA,
+                                "%s - %s", d_s, d_e);
+                        HashMap<String, ArrayList<INote>> ls_note = NoteDataHelper.getInstance()
+                                .getNotesBetweenDays(d_s, d_e);
 
-                BigDecimal mBDTotalPay = BigDecimal.ZERO;
-                BigDecimal mBDTotalIncome = BigDecimal.ZERO;
-                for (ArrayList<INote> ls_n : ls_note.values()) {
-                    for (INote id : ls_n) {
-                        if (id.isPayNote())
-                            mBDTotalPay = mBDTotalPay.add(id.getVal());
-                        else
-                            mBDTotalIncome = mBDTotalIncome.add(id.getVal());
-                    }
-                }
+                        BigDecimal mBDTotalPay = BigDecimal.ZERO;
+                        BigDecimal mBDTotalIncome = BigDecimal.ZERO;
+                        for (ArrayList<INote> ls_n : ls_note.values()) {
+                            for (INote id : ls_n) {
+                                if (id.isPayNote())
+                                    mBDTotalPay = mBDTotalPay.add(id.getVal());
+                                else
+                                    mBDTotalIncome = mBDTotalIncome.add(id.getVal());
+                            }
+                        }
 
-                final BigDecimal t_p = mBDTotalPay;
-                final BigDecimal t_i = mBDTotalIncome;
-                if(!(h.isFinishing() || h.isDestroyed())) {
-                    h.runOnUiThread(() -> {
-                        frg.mTVDay.setText(mSZCaption);
+                        param[1] = mBDTotalPay;
+                        param[2] = mBDTotalIncome;
+                    },
+                    () -> {
+                        frg.mTVDay.setText((String)param[0]);
                         frg.mTVPay.setText(String.format(Locale.CHINA,
-                                "%.02f", t_p.floatValue()));
+                                "%.02f", ((BigDecimal)param[1]).floatValue()));
                         frg.mTVIncome.setText(String.format(Locale.CHINA,
-                                "%.02f", t_i.floatValue()));
+                                "%.02f", ((BigDecimal)param[2]).floatValue()));
                     });
-                }
-            }
-        });
+        }
     }
 
     /**
-     * 切换显示类型
-     *
-     * @param v 动作view
+     * switch page
+     * @param v     clicked view
      */
     @OnClick({R.id.iv_switch})
     public void onSwitchShow(View v) {
-        switchPage();
+        loadHotPage(mPGHot instanceof DayReportWebView ? mPGChart : mPGWebView);
     }
 
     /**
-     * 重新选择起止时间
-     *
-     * @param v 动作view
+     * reselect start & end time
+     * @param v     action view
      */
     @OnClick({R.id.tv_select_days})
     public void onSelectDays(View v) {
@@ -179,15 +171,17 @@ public class FrgReportDay extends FrgUtilityBase {
                 , "select days");
     }
 
-
+    /// PRIVATE BEGIN
     /**
-     * 切换展示类型
+     * load hot page to UI
+     * @param hotFrg        frg will load to ui
      */
-    private void switchPage() {
-        mPGHot = mPGHot instanceof DayReportWebView ? mPGChart : mPGWebView;
-
+    private void loadHotPage(FrgUtilityBase hotFrg)  {
         FragmentTransaction t = getChildFragmentManager().beginTransaction();
-        t.replace(R.id.fl_page_holder, mPGHot);
+        t.replace(R.id.fl_page_holder, hotFrg);
         t.commit();
+
+        mPGHot = hotFrg;
     }
+    /// PRIVATE END
 }

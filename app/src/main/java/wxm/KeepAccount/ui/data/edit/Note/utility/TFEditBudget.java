@@ -13,14 +13,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.math.BigDecimal;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import wxm.KeepAccount.ui.base.TouchTextView;
+import wxm.KeepAccount.ui.base.TouchUI.TouchTextView;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;

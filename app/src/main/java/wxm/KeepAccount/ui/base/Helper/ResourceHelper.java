@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.base;
+package wxm.KeepAccount.ui.base.Helper;
 
 import android.content.Context;
 import android.content.res.Resources;
