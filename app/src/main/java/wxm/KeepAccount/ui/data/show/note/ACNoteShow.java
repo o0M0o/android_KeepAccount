@@ -29,7 +29,7 @@ public class ACNoteShow extends BaseAppCompatActivity {
     @Override
     protected void initFrgHolder() {
         LOG_TAG = "ACNoteShow";
-        mFGHolder = new FrgNoteShow();
+        mFGSupportHolder = new FrgNoteShow();
     }
 
 
@@ -46,7 +46,7 @@ public class ACNoteShow extends BaseAppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_switch: {
-                FrgSwitcher hot = ((FrgNoteShow) mFGHolder).getHotTabItem();
+                FrgSwitcher hot = ((FrgNoteShow) mFGSupportHolder).getHotTabItem();
                 if (null != hot) {
                     hot.switchPage();
                 }
@@ -65,7 +65,7 @@ public class ACNoteShow extends BaseAppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         // TODO Auto-generated method stub
         super.onConfigurationChanged(newConfig);
-        ((FrgNoteShow) mFGHolder).refreshUI();
+        ((FrgNoteShow) mFGSupportHolder).refreshUI();
     }
 
     /**
@@ -73,7 +73,7 @@ public class ACNoteShow extends BaseAppCompatActivity {
      * @param bflag     true open page touch
      */
     public void disableViewPageTouch(boolean bflag) {
-        ((FrgNoteShow) mFGHolder).disableViewPageTouch(bflag);
+        ((FrgNoteShow) mFGSupportHolder).disableViewPageTouch(bflag);
     }
 
     /**
@@ -81,6 +81,6 @@ public class ACNoteShow extends BaseAppCompatActivity {
      * @param tabname   tab name
      */
     public void jumpByTabName(String tabname) {
-        ((FrgNoteShow) mFGHolder).jumpByTabName(tabname);
+        ((FrgNoteShow) mFGSupportHolder).jumpByTabName(tabname);
     }
 }

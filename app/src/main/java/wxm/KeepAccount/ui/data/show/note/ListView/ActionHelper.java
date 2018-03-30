@@ -40,11 +40,9 @@ public abstract class ActionHelper {
     RelativeLayout mRLLVNote;
 
     private boolean  mIsShow;
-    private boolean  mDoOnce;
 
     ActionHelper()    {
         mIsShow = true;
-        mDoOnce = false;
     }
 
     /**
@@ -76,9 +74,8 @@ public abstract class ActionHelper {
     protected void init()   {
         setActsVisibility(mIsShow);
 
-        if(!mDoOnce && mIsShow) {
+        if(mIsShow) {
             initActs();
-            mDoOnce = true;
         }
     }
 

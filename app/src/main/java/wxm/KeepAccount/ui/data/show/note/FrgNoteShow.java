@@ -2,11 +2,6 @@ package wxm.KeepAccount.ui.data.show.note;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +13,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import wxm.KeepAccount.ui.base.Switcher.PageSwitcher;
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;
@@ -41,15 +34,11 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
  * for note show
  * Created by ookoo on 2016/11/30.
  */
-public class FrgNoteShow extends FrgUtilityBase {
+public class FrgNoteShow extends FrgSwitcher {
     protected final static int POS_DAY_FLOW = 0;
     protected final static int POS_MONTH_FLOW = 1;
     protected final static int POS_YEAR_FLOW = 2;
     protected final static int POS_BUDGET = 3;
-
-    // for ui
-    @BindView(R.id.vp_pages)
-    ViewPager mVPPages;
 
     // for selector ui
     @BindView(R.id.rl_day_flow)
@@ -75,21 +64,32 @@ public class FrgNoteShow extends FrgUtilityBase {
     private pageHelper[] mPHHelper;
     private PageSwitcher    mPSSwitcher;
 
+    private TFShowDaily     mTFDaily    = new TFShowDaily();
+    private TFShowMonthly   mTFMonthly  = new TFShowMonthly();
+    private TFShowYearly    mTFYearly   = new TFShowYearly();
+    private TFShowBudget    mTFBudget   = new TFShowBudget();
+
+    public FrgNoteShow()   {
+        super();
+        LOG_TAG = "FrgReportDay";
+
+        setFrgID(R.layout.vw_note_show, R.id.fl_page_holder);
+        setChildFrg(mTFDaily, mTFMonthly, mTFYearly, mTFBudget);
+    }
+
     /**
      * DB data change handler
      * @param event     event param
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBChangeEvent(DBDataChangeEvent event) {
+        for (pageHelper aMPHHelper : mPHHelper) {
+            aMPHHelper.mBADataChange = true;
+        }
+
         FrgSwitcher tb = getHotTabItem();
         if(null != tb) {
             ((ShowViewBase)tb.getHotPage()).loadView();
-        }
-
-        int cur_pos = mVPPages.getCurrentItem();
-        for (int i = 0; i < mPHHelper.length; i++) {
-            if (cur_pos != i)
-                mPHHelper[i].mBADataChange = true;
         }
     }
 
@@ -121,10 +121,6 @@ public class FrgNoteShow extends FrgUtilityBase {
     protected void initUiComponent(View view) {
         // init view
         // init adapter
-        AppCompatActivity a_ac = UtilFun.cast_t(getActivity());
-        final PagerAdapter adapter = new PagerAdapter(a_ac.getSupportFragmentManager());
-        mVPPages.setAdapter(adapter);
-
         mRLDayFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_DAY_FLOW]));
         mRLMonthFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_MONTH_FLOW]));
         mRLYearFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_YEAR_FLOW]));
@@ -138,7 +134,7 @@ public class FrgNoteShow extends FrgUtilityBase {
         mPHHelper[POS_DAY_FLOW].mPageIdx = POS_DAY_FLOW;
         mPHHelper[POS_DAY_FLOW].mBADataChange = false;
         mPHHelper[POS_DAY_FLOW].mRLSelector = mRLDayFlow;
-        mPHHelper[POS_DAY_FLOW].mSBPage = UtilFun.cast(adapter.getItem(POS_DAY_FLOW));
+        mPHHelper[POS_DAY_FLOW].mSBPage = mTFDaily;
         mPHHelper[POS_DAY_FLOW].mSZName = ((TextView)mRLDayFlow.findViewById(R.id.tv_tag))
                                                 .getText().toString();
         mPSSwitcher.addSelector(mPHHelper[POS_DAY_FLOW],
@@ -149,7 +145,7 @@ public class FrgNoteShow extends FrgUtilityBase {
         mPHHelper[POS_MONTH_FLOW].mPageIdx = POS_MONTH_FLOW;
         mPHHelper[POS_MONTH_FLOW].mBADataChange = false;
         mPHHelper[POS_MONTH_FLOW].mRLSelector = mRLMonthFlow;
-        mPHHelper[POS_MONTH_FLOW].mSBPage = UtilFun.cast(adapter.getItem(POS_MONTH_FLOW));
+        mPHHelper[POS_MONTH_FLOW].mSBPage = mTFMonthly;
         mPHHelper[POS_MONTH_FLOW].mSZName = ((TextView)mRLMonthFlow.findViewById(R.id.tv_tag))
                                                 .getText().toString();
         mPSSwitcher.addSelector(mPHHelper[POS_MONTH_FLOW],
@@ -160,7 +156,7 @@ public class FrgNoteShow extends FrgUtilityBase {
         mPHHelper[POS_YEAR_FLOW].mPageIdx = POS_YEAR_FLOW;
         mPHHelper[POS_YEAR_FLOW].mBADataChange = false;
         mPHHelper[POS_YEAR_FLOW].mRLSelector = mRLYearFlow;
-        mPHHelper[POS_YEAR_FLOW].mSBPage = UtilFun.cast(adapter.getItem(POS_YEAR_FLOW));
+        mPHHelper[POS_YEAR_FLOW].mSBPage = mTFYearly;
         mPHHelper[POS_YEAR_FLOW].mSZName = ((TextView)mRLYearFlow.findViewById(R.id.tv_tag))
                                                 .getText().toString();
         mPSSwitcher.addSelector(mPHHelper[POS_YEAR_FLOW],
@@ -171,7 +167,7 @@ public class FrgNoteShow extends FrgUtilityBase {
         mPHHelper[POS_BUDGET].mPageIdx = POS_BUDGET;
         mPHHelper[POS_BUDGET].mBADataChange = false;
         mPHHelper[POS_BUDGET].mRLSelector = mRLBudget;
-        mPHHelper[POS_BUDGET].mSBPage = UtilFun.cast(adapter.getItem(POS_BUDGET));
+        mPHHelper[POS_BUDGET].mSBPage = mTFBudget;
         mPHHelper[POS_BUDGET].mSZName = ((TextView)mRLBudget.findViewById(R.id.tv_tag))
                                                 .getText().toString();
         mPSSwitcher.addSelector(mPHHelper[POS_BUDGET],
@@ -202,10 +198,11 @@ public class FrgNoteShow extends FrgUtilityBase {
 
     @Override
     protected void loadUI() {
+        loadHotFrg();
     }
 
     public void disableViewPageTouch(boolean bflag) {
-        mVPPages.requestDisallowInterceptTouchEvent(bflag);
+        //getHotTabItem().requestDisallowInterceptTouchEvent(bflag);
     }
 
     /**
@@ -233,7 +230,7 @@ public class FrgNoteShow extends FrgUtilityBase {
     private void setPage(pageHelper ph, boolean enable) {
         setRLStatus(ph.mRLSelector, enable);
         if(enable)  {
-            mVPPages.setCurrentItem(ph.mPageIdx);
+            switchToPage(ph.mSBPage);
 
             if(ph.mBADataChange)
                 ph.mSBPage.refreshUI();
@@ -280,31 +277,4 @@ public class FrgNoteShow extends FrgUtilityBase {
         return null == ph ? null : ph.mSBPage;
     }
     ///PRIVATE END
-
-    /**
-     * fragment adapter
-     */
-    private class PagerAdapter extends FragmentStatePagerAdapter {
-        ArrayList<Fragment> mALFrg;
-
-        PagerAdapter(FragmentManager fm) {
-            super(fm);
-
-            mALFrg = new ArrayList<>();
-            mALFrg.add(new TFShowDaily());
-            mALFrg.add(new TFShowMonthly());
-            mALFrg.add(new TFShowYearly());
-            mALFrg.add(new TFShowBudget());
-        }
-
-        @Override
-        public android.support.v4.app.Fragment getItem(int position) {
-            return mALFrg.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mALFrg.size();
-        }
-    }
 }
