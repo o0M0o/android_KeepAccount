@@ -16,12 +16,13 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
 import wxm.KeepAccount.ui.base.Switcher.PageSwitcher;
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;
-import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBudget;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowDaily;
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowMonthly;
@@ -34,7 +35,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
  * for note show
  * Created by ookoo on 2016/11/30.
  */
-public class FrgNoteShow extends FrgSwitcher {
+public class FrgNoteShow extends FrgSwitcher<FrgUtilitySupportBase> {
     protected final static int POS_DAY_FLOW = 0;
     protected final static int POS_MONTH_FLOW = 1;
     protected final static int POS_YEAR_FLOW = 2;
@@ -74,7 +75,10 @@ public class FrgNoteShow extends FrgSwitcher {
         LOG_TAG = "FrgReportDay";
 
         setFrgID(R.layout.vw_note_show, R.id.fl_page_holder);
-        setChildFrg(mTFDaily, mTFMonthly, mTFYearly, mTFBudget);
+        addChildFrg(mTFDaily);
+        addChildFrg(mTFMonthly);
+        addChildFrg(mTFYearly);
+        addChildFrg(mTFBudget);
     }
 
     /**

@@ -29,13 +29,16 @@ import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
+import wxm.androidutil.FrgUtility.FrgUtilityBase;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
+import wxm.androidutil.FrgWebView.FrgSupportWebView;
 import wxm.androidutil.util.UtilFun;
 
 /**
  * day data report
  * Created by ookoo on 2017/2/15.
  */
-public class FrgReportDay extends FrgSwitcher {
+public class FrgReportDay extends FrgSwitcher<FrgUtilitySupportBase> {
     @BindView(R.id.tv_day)
     TextView mTVDay;
     @BindView(R.id.tv_pay)
@@ -52,7 +55,8 @@ public class FrgReportDay extends FrgSwitcher {
         LOG_TAG = "FrgReportDay";
 
         setFrgID(R.layout.vw_report, R.id.fl_page_holder);
-        setChildFrg(mPGWebView, mPGChart);
+        addChildFrg(mPGWebView);
+        addChildFrg(mPGChart);
     }
 
     @Override

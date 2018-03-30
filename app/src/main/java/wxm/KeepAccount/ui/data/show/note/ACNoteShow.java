@@ -6,10 +6,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
 import wxm.androidutil.ExActivity.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 /**
  * for Note show

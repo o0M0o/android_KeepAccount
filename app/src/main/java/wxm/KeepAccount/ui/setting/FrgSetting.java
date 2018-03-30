@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
 import wxm.KeepAccount.ui.setting.page.TFSettingBase;
 import wxm.KeepAccount.ui.setting.page.TFSettingChartColor;
 import wxm.KeepAccount.ui.setting.page.TFSettingCheckVersion;

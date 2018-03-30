@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import wxm.androidutil.ExActivity.BaseAppCompatActivity;
+import wxm.KeepAccount.ui.base.ExtendActivity.ACSwitcherActivity;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 
@@ -14,26 +14,20 @@ import wxm.KeepAccount.define.GlobalDef;
  * UI for report
  * Created by ookoo on 2017/2/15.
  */
-public class ACReport extends BaseAppCompatActivity {
+public class ACReport extends ACSwitcherActivity<android.support.v4.app.Fragment> {
     public final static String PARA_TYPE = "para_type";
     public final static String PT_DAY = "pt_day";
     public final static String PT_MONTH = "pt_month";
     public final static String PT_YEAR = "pt_year";
 
-
     public final static String PARA_LOAD = "para_load";
 
+    private android.support.v4.app.Fragment    mSelfFrg;
 
     @Override
-    protected void leaveActivity() {
-        int ret_data = GlobalDef.INTRET_GIVEUP;
-        Intent data = new Intent();
-        setResult(ret_data, data);
-        finish();
-    }
+    protected void initUi(Bundle savedInstanceState)    {
+        super.initUi(savedInstanceState);
 
-    @Override
-    protected void initFrgHolder() {
         LOG_TAG = "ACNoteAdd";
 
         // check invoke intent
@@ -53,25 +47,36 @@ public class ACReport extends BaseAppCompatActivity {
         // for holder
         switch (sz_type) {
             case PT_DAY: {
-                mFGSupportHolder = new FrgReportDay();
+                mSelfFrg = new FrgReportDay();
             }
             break;
 
             case PT_MONTH: {
-                mFGSupportHolder = new FrgReportMonth();
+                mSelfFrg = new FrgReportMonth();
             }
             break;
 
             case PT_YEAR: {
-                mFGSupportHolder = new FrgReportYear();
+                mSelfFrg = new FrgReportYear();
             }
             break;
         }
 
-        if (null != mFGSupportHolder) {
+        if (null != mSelfFrg) {
             Bundle bd = new Bundle();
             bd.putStringArrayList(PARA_LOAD, al_load);
-            mFGSupportHolder.setArguments(bd);
+            mSelfFrg.setArguments(bd);
         }
+
+        addChildFrg(mSelfFrg);
+        loadHotFrg();
+    }
+
+    @Override
+    protected void leaveActivity() {
+        int ret_data = GlobalDef.INTRET_GIVEUP;
+        Intent data = new Intent();
+        setResult(ret_data, data);
+        finish();
     }
 }

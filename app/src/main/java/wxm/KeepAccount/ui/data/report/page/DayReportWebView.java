@@ -22,6 +22,8 @@ import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
+import wxm.androidutil.FrgUtility.FrgUtilityBase;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.FrgWebView.FrgSupportWebView;
 import wxm.androidutil.util.UtilFun;
 

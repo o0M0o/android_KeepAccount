@@ -1,25 +1,28 @@
 package wxm.KeepAccount.ui.base.Switcher;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
+import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
-import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
+import wxm.androidutil.FrgWebView.FrgSupportWebView;
 
 /**
  * base UI for show data
  * Created by wxm on 2016/9/27.
  */
-public abstract class FrgSwitcher extends FrgUtilitySupportBase {
+public abstract class FrgSwitcher<T> extends FrgUtilitySupportBase {
     private final static String CHILD_HOT = "child_hot";
-    protected FrgUtilitySupportBase[] mViewHelper;
-    private int mHotChild = 0;
+    protected ArrayList<T>  mFrgArr = new ArrayList<>();
+    protected int           mHotFrgIdx  = 0;
 
     @LayoutRes
     private int mFatherFrg;
@@ -31,14 +34,14 @@ public abstract class FrgSwitcher extends FrgUtilitySupportBase {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            mHotChild = savedInstanceState.getInt(CHILD_HOT, 0);
+            mHotFrgIdx = savedInstanceState.getInt(CHILD_HOT, 0);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(CHILD_HOT, mHotChild);
+        outState.putInt(CHILD_HOT, mHotFrgIdx);
     }
 
     @Override
@@ -60,9 +63,8 @@ public abstract class FrgSwitcher extends FrgUtilitySupportBase {
      * will loop switch between all child
      */
     public void switchPage() {
-        View v = getView();
-        if (null != v) {
-            mHotChild = (mHotChild + 1) % mViewHelper.length;
+        if(null != getView()) {
+            mHotFrgIdx = (mHotFrgIdx + 1) % mFrgArr.size();
             loadHotFrg();
         }
     }
@@ -71,12 +73,15 @@ public abstract class FrgSwitcher extends FrgUtilitySupportBase {
      * switch to child page
      * @param sb    child page want switch to
      */
-    public void switchToPage(FrgUtilitySupportBase sb)  {
-        for(int pos = 0; pos < mViewHelper.length; pos++)   {
-            if(sb == mViewHelper[pos])  {
-                if(mHotChild != pos)    {
-                    mHotChild = pos;
-                    loadHotFrg();
+    public void switchToPage(T sb)  {
+        if(null != getView()) {
+            for (T frg : mFrgArr) {
+                if (frg == sb) {
+                    if (frg != mFrgArr.get(mHotFrgIdx)) {
+                        mHotFrgIdx = mFrgArr.indexOf(frg);
+                        loadHotFrg();
+                    }
+                    break;
                 }
             }
         }
@@ -86,8 +91,16 @@ public abstract class FrgSwitcher extends FrgUtilitySupportBase {
      * get current hot page
      * @return      current page
      */
-    public FrgUtilitySupportBase getHotPage()    {
-        return mViewHelper[mHotChild];
+    public T getHotPage()    {
+        return mFrgArr.size() > 0 ? mFrgArr.get(mHotFrgIdx) : null;
+    }
+
+    /**
+     * set child frg
+     * @param child    all child frg
+     */
+    protected void addChildFrg(T child)  {
+        mFrgArr.add(child);
     }
 
     /**
@@ -100,24 +113,21 @@ public abstract class FrgSwitcher extends FrgUtilitySupportBase {
         mChildFrg = child;
     }
 
-    /**
-     * set child frg
-     * @param childs    all child frg
-     */
-    protected void setChildFrg(FrgUtilitySupportBase... childs)  {
-        mViewHelper = new FrgUtilitySupportBase[childs.length];
-        System.arraycopy(childs, 0, mViewHelper, 0, childs.length);
-        mHotChild = 0;
-    }
 
     //// PRIVATE START
     /**
      * load hot fragment
      */
     protected void loadHotFrg() {
-        android.support.v4.app.FragmentTransaction t = getChildFragmentManager().beginTransaction();
-        t.replace(mChildFrg, mViewHelper[mHotChild]);
-        t.commit();
+        if(null != getView() && mHotFrgIdx >= 0  && mHotFrgIdx < mFrgArr.size()) {
+            T cur = mFrgArr.get(mHotFrgIdx);
+            if(cur instanceof android.support.v4.app.Fragment) {
+                android.support.v4.app.FragmentTransaction t =
+                        getChildFragmentManager().beginTransaction();
+                t.replace(mChildFrg, (android.support.v4.app.Fragment)cur);
+                t.commit();
+            }
+        }
     }
     //// PRIVATE END
 }
