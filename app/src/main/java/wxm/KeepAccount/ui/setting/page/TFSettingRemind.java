@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.setting;
+package wxm.KeepAccount.ui.setting.page;
 
 
 /**

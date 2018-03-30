@@ -43,12 +43,6 @@ public class FrgUsrAdd extends FrgUtilityBase
     @BindString(R.string.error_no_usrname)
     String mRSErrorNoUsrName;
 
-    /*
-    @BindView(R.id.bt_confirm)
-    Button mBTConfirm;
-    @BindView(R.id.bt_giveup)
-    Button mBTGiveup;
-    */
     @BindString(R.string.error_invalid_password)
     String mRSErrorInvalidPWD;
     @BindString(R.string.error_repeatpwd_notmatch)
@@ -130,7 +124,6 @@ public class FrgUsrAdd extends FrgUtilityBase
 
 
     /// PRIVATE BEGIN
-
     /**
      * clean UI
      */

@@ -1,9 +1,12 @@
-package wxm.KeepAccount.ui.setting;
+package wxm.KeepAccount.ui.setting.page;
 
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import wxm.KeepAccount.ui.setting.ACSetting;
+import wxm.KeepAccount.ui.setting.FrgSetting;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 
 /**
@@ -12,18 +15,10 @@ import wxm.androidutil.util.UtilFun;
  */
 public abstract class TFSettingBase extends Fragment {
     protected boolean mBSettingDirty = false;
+    protected FrgSetting    mFrgHolder = null;
 
-    /**
-     *  get ACSetting
-     * @return      ACSetting else null
-     */
-    public ACSetting getRootActivity() {
-        Context ct = getContext();
-        if (ct instanceof ACSetting) {
-            return UtilFun.cast(ct);
-        }
-
-        return null;
+    public void setFrgHolder(FrgSetting frgHolder)  {
+        mFrgHolder = frgHolder;
     }
 
     /**
@@ -31,10 +26,8 @@ public abstract class TFSettingBase extends Fragment {
      * @param idx   for new page
      */
     public void toPageByIdx(int idx) {
-        ACSetting acs = getRootActivity();
-        if (null != acs) {
-            acs.change_page(idx);
-        }
+        if(null != mFrgHolder)
+            mFrgHolder.change_page(idx);
     }
 
     /**

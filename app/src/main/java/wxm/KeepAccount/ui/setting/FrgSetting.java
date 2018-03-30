@@ -12,6 +12,12 @@ import android.view.ViewGroup;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
+import wxm.KeepAccount.ui.setting.page.TFSettingBase;
+import wxm.KeepAccount.ui.setting.page.TFSettingChartColor;
+import wxm.KeepAccount.ui.setting.page.TFSettingCheckVersion;
+import wxm.KeepAccount.ui.setting.page.TFSettingMain;
+import wxm.KeepAccount.ui.setting.page.TFSettingRemind;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -26,6 +32,7 @@ public class FrgSetting extends FrgUtilityBase {
     public final static int PAGE_IDX_CHART_COLOR = 2;
     public final static int PAGE_IDX_REMIND = 3;
     private final static int PAGE_COUNT = 4;
+
     @BindView(R.id.vp_pages)
     ViewPager mVPPage;
 
@@ -42,8 +49,7 @@ public class FrgSetting extends FrgUtilityBase {
         AppCompatActivity a_ac = UtilFun.cast_t(getActivity());
 
         // for pages
-        final PagerAdapter adapter = new PagerAdapter
-                (a_ac.getSupportFragmentManager());
+        final PagerAdapter adapter = new PagerAdapter(a_ac.getSupportFragmentManager(), this);
         mVPPage.setAdapter(adapter);
     }
 
@@ -74,27 +80,29 @@ public class FrgSetting extends FrgUtilityBase {
         return mVPPage.getCurrentItem();
     }
 
-    public void setCurrentItem(int idx) {
-        mVPPage.setCurrentItem(idx);
-    }
-
-
     /**
      * fragment adapter
      */
-    public class PagerAdapter extends FragmentStatePagerAdapter {
+    class PagerAdapter extends FragmentStatePagerAdapter {
         int mNumOfFrags;
         private Fragment[] mFRFrags;
 
-        PagerAdapter(FragmentManager fm) {
+        PagerAdapter(FragmentManager fm, FrgSetting holder) {
             super(fm);
             mNumOfFrags = PAGE_COUNT;
 
             mFRFrags = new Fragment[mNumOfFrags];
             mFRFrags[PAGE_IDX_MAIN] = new TFSettingMain();
+            ((TFSettingBase)mFRFrags[PAGE_IDX_MAIN]).setFrgHolder(holder);
+
             mFRFrags[PAGE_IDX_CHECK_VERSION] = new TFSettingCheckVersion();
+            ((TFSettingBase)mFRFrags[PAGE_IDX_CHECK_VERSION]).setFrgHolder(holder);
+
             mFRFrags[PAGE_IDX_CHART_COLOR] = new TFSettingChartColor();
+            ((TFSettingBase)mFRFrags[PAGE_IDX_CHART_COLOR]).setFrgHolder(holder);
+
             mFRFrags[PAGE_IDX_REMIND] = new TFSettingRemind();
+            ((TFSettingBase)mFRFrags[PAGE_IDX_REMIND]).setFrgHolder(holder);
         }
 
         @Override

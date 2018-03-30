@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.setting;
+package wxm.KeepAccount.ui.setting.page;
 
 
 import android.app.Dialog;
@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.setting.FrgSetting;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 

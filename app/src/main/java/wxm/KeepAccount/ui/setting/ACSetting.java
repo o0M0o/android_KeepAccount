@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import wxm.KeepAccount.ui.setting.page.TFSettingBase;
 import wxm.androidutil.ExActivity.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
@@ -90,14 +91,5 @@ public class ACSetting extends BaseAppCompatActivity {
         }
 
         return true;
-    }
-
-    /**
-     * 切换到新页面
-     *
-     * @param new_page 新页面postion
-     */
-    public void change_page(int new_page) {
-        mFGSetting.setCurrentItem(new_page);
     }
 }

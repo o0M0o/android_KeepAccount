@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.setting;
+package wxm.KeepAccount.ui.setting.page;
 
 
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import wxm.KeepAccount.ui.setting.FrgSetting;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;

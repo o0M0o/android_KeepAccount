@@ -41,7 +41,6 @@ import wxm.KeepAccount.R;
  */
 public class ACWelcome extends AppCompatActivity
         implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG = "ACWelcome";
     private FrgWelcome mFGWelcome;
 
     @Override
@@ -62,7 +61,7 @@ public class ACWelcome extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.ac_welcome);
+        DrawerLayout drawer = findViewById(R.id.ac_welcome);
         assert drawer != null;
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -123,9 +122,8 @@ public class ACWelcome extends AppCompatActivity
     }
 
     /**
-     * 执行onclick
-     *
-     * @param act onclick的动作
+     * click handler
+     * @param act   name for action
      */
     private void do_click(String act) {
         EAction ea = EAction.getEAction(act);
@@ -193,9 +191,8 @@ public class ACWelcome extends AppCompatActivity
     }
 
     /**
-     * 初始化activity
-     *
-     * @param savedInstanceState onclick的动作
+     * init UI component
+     * @param savedInstanceState    saved component state
      */
     private void init_component(Bundle savedInstanceState) {
         // set nav view
@@ -225,7 +222,7 @@ public class ACWelcome extends AppCompatActivity
     }
 
     /**
-     * 激活手机邮件客户端，往设定的地址发送邮件
+     * invoke email app to send email
      */
     private void contactWriter() {
         DlgUsrMessage dlg = new DlgUsrMessage();

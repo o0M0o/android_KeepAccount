@@ -5,7 +5,7 @@ import android.content.res.Configuration;
 import wxm.androidutil.ExActivity.BaseAppCompatActivity;
 
 /**
- * 添加用户
+ * add usr
  */
 public class ACAddUsr extends BaseAppCompatActivity {
     private final FrgUsrAdd mFGUsrAdd = new FrgUsrAdd();
