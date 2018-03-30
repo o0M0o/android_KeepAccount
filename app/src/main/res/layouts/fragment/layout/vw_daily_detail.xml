@@ -145,7 +145,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="180dp" />
 
-        <wxm.KeepAccount.ui.extend.ValueShow.ValueShow
+        <wxm.KeepAccount.ui.data.show.note.base.ValueShow
             android:id="@+id/vs_daily_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

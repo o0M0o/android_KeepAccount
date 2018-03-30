@@ -40,7 +40,7 @@ import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd;
-import wxm.KeepAccount.ui.extend.ValueShow.ValueShow;
+import wxm.KeepAccount.ui.data.show.note.base.ValueShow;
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;

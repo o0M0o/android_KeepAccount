@@ -11,9 +11,6 @@ public class ACHelp extends BaseAppCompatActivity {
 
     public static final String STR_HELP_MAIN = "help_main";
     public static final String STR_HELP_START = "help_start";
-    //public static final String STR_HELP_DAILYDETAIL = "help_dailydetail";
-    //public static final String STR_HELP_RECORD = "help_record";
-    //public static final String STR_HELP_BUDGET = "budget";
 
     @Override
     protected void leaveActivity() {

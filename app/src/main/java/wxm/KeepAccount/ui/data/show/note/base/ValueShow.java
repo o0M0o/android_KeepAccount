@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.extend.ValueShow;
+package wxm.KeepAccount.ui.data.show.note.base;
 
 
 import android.content.Context;
@@ -25,8 +25,8 @@ import wxm.KeepAccount.R;
 
 /**
  * use this help show data
- * @author wxm
- * @version create：2017/03/28
+ * @author      wxm
+ * @version     create：2017/03/28
  */
 public class ValueShow extends ConstraintLayout {
     public final static String ATTR_PAY_COUNT = "pay_count";
@@ -146,6 +146,9 @@ public class ValueShow extends ConstraintLayout {
         }
     }
 
+    /**
+     * update UI
+     */
     private void updateShow() {
         mTVPayCount.setText(mAttrPayCount);
         mTVPayAmount.setText(mAttrPayAmount);
