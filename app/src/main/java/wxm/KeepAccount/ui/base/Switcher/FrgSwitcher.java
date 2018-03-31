@@ -11,15 +11,14 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
-import wxm.androidutil.FrgWebView.FrgSupportWebView;
 
 /**
  * base UI for show data
  * Created by wxm on 2016/9/27.
  */
-public abstract class FrgSwitcher<T> extends FrgUtilitySupportBase {
+public abstract class FrgSwitcher<T>
+        extends FrgUtilitySupportBase   {
     private final static String CHILD_HOT = "child_hot";
     protected ArrayList<T>  mFrgArr = new ArrayList<>();
     protected int           mHotFrgIdx  = 0;

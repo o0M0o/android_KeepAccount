@@ -1,13 +1,20 @@
 package wxm.KeepAccount.ui.setting;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import wxm.KeepAccount.ui.base.ExtendActivity.ACSwitcherActivity;
 import wxm.KeepAccount.ui.setting.page.TFSettingBase;
+import wxm.KeepAccount.ui.setting.page.TFSettingChartColor;
+import wxm.KeepAccount.ui.setting.page.TFSettingCheckVersion;
+import wxm.KeepAccount.ui.setting.page.TFSettingMain;
+import wxm.KeepAccount.ui.setting.page.TFSettingRemind;
 import wxm.androidutil.ExActivity.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
@@ -15,25 +22,22 @@ import wxm.KeepAccount.define.GlobalDef;
 /**
  * for app setting
  */
-public class ACSetting extends BaseAppCompatActivity {
-    private final FrgSetting mFGSetting = new FrgSetting();
+public class ACSetting extends ACSwitcherActivity<TFSettingBase> {
+    private TFSettingMain           mTFMain         = new TFSettingMain();
+    private TFSettingChartColor     mTFChartColor   = new TFSettingChartColor();
+    private TFSettingCheckVersion   mTFCheckVer     = new TFSettingCheckVersion();
+    private TFSettingRemind         mTFRemind       = new TFSettingRemind();
 
     @Override
     protected void leaveActivity() {
-        if (FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
-            mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
+        if (mTFMain !=  getHotFragment()) {
+            switchToFragment(mTFMain);
         } else {
             int ret_data = GlobalDef.INTRET_GIVEUP;
             Intent data = new Intent();
             setResult(ret_data, data);
             finish();
         }
-    }
-
-    @Override
-    protected void initFrgHolder() {
-        LOG_TAG = "ACSetting";
-        mFGHolder = mFGSetting;
     }
 
     @Override
@@ -45,24 +49,35 @@ public class ACSetting extends BaseAppCompatActivity {
     }
 
     @Override
+    protected void initUi(Bundle savedInstanceState)    {
+        super.initUi(savedInstanceState);
+        LOG_TAG = "ACSetting";
+        addFragment(mTFMain);
+        addFragment(mTFChartColor);
+        addFragment(mTFCheckVer);
+        addFragment(mTFRemind);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_save: {
-                if (FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
-                    final TFSettingBase tb = mFGSetting.getCurrentPage();
+                if (mTFMain != getHotFragment()) {
+                    final TFSettingBase tb = getHotFragment();
+                    final ACSwitcherActivity<TFSettingBase> h = this;
                     if (tb.isSettingDirty()) {
-                        Dialog alertDialog = new AlertDialog.Builder(this).
-                                setTitle("配置已经更改").
-                                setMessage("是否保存更改的配置?").
-                                setPositiveButton("是", (dialog, which) -> {
-                                    tb.updateSetting();
-                                    mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
-                                }).
-                                setNegativeButton("否", (dialog, which) -> mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN)).
-                                create();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle("配置已经更改");
+                        builder.setMessage("是否保存更改的配置?");
+                        builder.setPositiveButton("是", (DialogInterface dialog, int which) -> {
+                            tb.updateSetting();
+                            h.switchToFragment(mTFMain);
+                        });
+                        builder.setNegativeButton("否", (dialog, which) -> h.switchToFragment(mTFMain));
+                        Dialog alertDialog = builder.create();
                         alertDialog.show();
                     } else {
-                        mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
+                        switchToFragment(mTFMain);
                     }
                 } else {
                     int ret_data = GlobalDef.INTRET_SURE;
@@ -74,8 +89,8 @@ public class ACSetting extends BaseAppCompatActivity {
             break;
 
             case R.id.mi_giveup: {
-                if (FrgSetting.PAGE_IDX_MAIN != mFGSetting.getCurrentItem()) {
-                    mFGSetting.change_page(FrgSetting.PAGE_IDX_MAIN);
+                if (mTFMain != getHotFragment()) {
+                    switchToFragment(mTFMain);
                 } else {
                     int ret_data = GlobalDef.INTRET_GIVEUP;
                     Intent data = new Intent();
@@ -87,9 +102,16 @@ public class ACSetting extends BaseAppCompatActivity {
 
             default:
                 return super.onOptionsItemSelected(item);
-
         }
 
         return true;
+    }
+
+    public void switchToPageByType(String pageType)    {
+        if(pageType.equals(TFSettingChartColor.class.getName()))    {
+            switchToFragment(mTFChartColor);
+        } else if(pageType.equals(TFSettingCheckVersion.class.getName()))   {
+            switchToFragment(mTFCheckVer);
+        }
     }
 }

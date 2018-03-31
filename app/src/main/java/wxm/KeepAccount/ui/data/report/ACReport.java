@@ -22,13 +22,10 @@ public class ACReport extends ACSwitcherActivity<android.support.v4.app.Fragment
 
     public final static String PARA_LOAD = "para_load";
 
-    private android.support.v4.app.Fragment    mSelfFrg;
-
     @Override
     protected void initUi(Bundle savedInstanceState)    {
         super.initUi(savedInstanceState);
-
-        LOG_TAG = "ACNoteAdd";
+        LOG_TAG = "ACReport";
 
         // check invoke intent
         Intent it = getIntent();
@@ -45,6 +42,7 @@ public class ACReport extends ACSwitcherActivity<android.support.v4.app.Fragment
         }
 
         // for holder
+        android.support.v4.app.Fragment mSelfFrg = null;
         switch (sz_type) {
             case PT_DAY: {
                 mSelfFrg = new FrgReportDay();
@@ -68,8 +66,7 @@ public class ACReport extends ACSwitcherActivity<android.support.v4.app.Fragment
             mSelfFrg.setArguments(bd);
         }
 
-        addChildFrg(mSelfFrg);
-        loadHotFrg();
+        addFragment(mSelfFrg);
     }
 
     @Override

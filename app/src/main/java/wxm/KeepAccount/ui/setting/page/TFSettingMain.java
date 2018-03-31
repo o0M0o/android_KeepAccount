@@ -14,7 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.setting.FrgSetting;
+import wxm.KeepAccount.ui.setting.ACSetting;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 
@@ -50,12 +50,14 @@ public class TFSettingMain extends TFSettingBase {
     public void onIVClick(View v) {
         switch (v.getId()) {
             case R.id.rl_check_version: {
-                toPageByIdx(FrgSetting.PAGE_IDX_CHECK_VERSION);
+                ((ACSetting)getActivity())
+                        .switchToPageByType(TFSettingCheckVersion.class.getName());
             }
             break;
 
             case R.id.rl_chart_color: {
-                toPageByIdx(FrgSetting.PAGE_IDX_CHART_COLOR);
+                ((ACSetting)getActivity())
+                        .switchToPageByType(TFSettingChartColor.class.getName());
             }
             break;
 

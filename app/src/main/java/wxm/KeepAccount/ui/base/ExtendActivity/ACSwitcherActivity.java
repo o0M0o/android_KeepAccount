@@ -5,16 +5,15 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import butterknife.ButterKnife;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 /**
  * activity extend
+ * T can be --
+ *      android.app.Fragment  or android.support.v4.app.Fragment
  * Created by wxm on 2018/03/30.
  */
 public abstract class ACSwitcherActivity<T>
@@ -24,7 +23,7 @@ public abstract class ACSwitcherActivity<T>
 
     private int       mDIDBack = wxm.androidutil.R.drawable.ic_back;
 
-    protected ArrayList<T>  mFrgArr;
+    protected ArrayList<T>  mALFrg;
     protected int           mHotFrgIdx  = 0;
 
     @Override
@@ -32,43 +31,18 @@ public abstract class ACSwitcherActivity<T>
         super.onCreate(savedInstanceState);
         setContentView(wxm.androidutil.R.layout.ac_base);
 
-        mFrgArr = new ArrayList<>();
-        if (savedInstanceState != null) {
-            mHotFrgIdx = savedInstanceState.getInt(CHILD_HOT, 0);
-        }
-
         ButterKnife.bind(this);
         initUi(savedInstanceState);
+
+        if(null == savedInstanceState)  {
+            loadHotFragment();
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(CHILD_HOT, mHotFrgIdx);
-    }
-
-    /**
-     * 需要在调用此函数前赋值view holder和LOG_TAG
-     * 优先使用当前view holder，然后再使用兼容view holder
-     * @param savedInstanceState 视图参数
-     */
-    protected void initUi(Bundle savedInstanceState) {
-        // for left menu(go back)
-        Toolbar toolbar = ButterKnife.findById(this, wxm.androidutil.R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(getBackIconRID());
-        toolbar.setNavigationOnClickListener(v -> leaveActivity());
-
-        if(null == savedInstanceState)  {
-            loadHotFrg();
-        }
-    }
-
-    /**
-     * leave activity
-     */
-    protected void leaveActivity()   {
-        finish();
     }
 
     /**
@@ -87,22 +61,14 @@ public abstract class ACSwitcherActivity<T>
         this.mDIDBack = mDIDBack;
     }
 
-    /**
-     * set child frg
-     * @param child    all child frg
-     */
-    protected void addChildFrg(T child)  {
-        mFrgArr.add(child);
-    }
 
     /**
      * switch in pages
      * will loop switch between all child
      */
-    public void switchFrg() {
+    public void switchFragment() {
         if(!(isFinishing() || isDestroyed())) {
-            mHotFrgIdx = (mHotFrgIdx + 1) % mFrgArr.size();
-            loadHotFrg();
+            swapToFragmentByIdx((mHotFrgIdx + 1) % mALFrg.size());
         }
     }
 
@@ -110,14 +76,11 @@ public abstract class ACSwitcherActivity<T>
      * switch to child fragment
      * @param sb    child fragment want switch to
      */
-    public void switchToFrg(T sb)  {
+    public void switchToFragment(T sb)  {
         if(!(isFinishing() || isDestroyed())) {
-            for (T frg : mFrgArr) {
-                if (frg == sb) {
-                    if (frg != mFrgArr.get(mHotFrgIdx)) {
-                        mHotFrgIdx = mFrgArr.indexOf(frg);
-                        loadHotFrg();
-                    }
+            for (T frg : mALFrg) {
+                if (frg == sb && frg != mALFrg.get(mHotFrgIdx)) {
+                    swapToFragmentByIdx(mALFrg.indexOf(frg));
                     break;
                 }
             }
@@ -128,28 +91,77 @@ public abstract class ACSwitcherActivity<T>
      * get current hot fragment
      * @return      current page
      */
-    public T getHotFrg()    {
-        return mFrgArr.size() > 0 ? mFrgArr.get(mHotFrgIdx) : null;
+    public T getHotFragment()    {
+        return mALFrg.size() > 0 ? mALFrg.get(mHotFrgIdx) : null;
+    }
+
+
+    protected void removeAllFragment()  {
+        mALFrg.clear();
+        mHotFrgIdx = 0;
+    }
+
+    /**
+     * add child frg
+     * @param child    all child frg
+     */
+    protected void addFragment(T child)  {
+        mALFrg.add(child);
+    }
+
+
+    /**
+     * invoke this to setup ui
+     * @param savedInstanceState    param for ui
+     */
+    protected void initUi(Bundle savedInstanceState) {
+        // for left menu(go back)
+        Toolbar toolbar = ButterKnife.findById(this, wxm.androidutil.R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(getBackIconRID());
+        toolbar.setNavigationOnClickListener(v -> leaveActivity());
+
+        // for Fragment
+        if (null != mALFrg && savedInstanceState != null) {
+            mHotFrgIdx = savedInstanceState.getInt(CHILD_HOT, 0);
+        } else  {
+            mALFrg = new ArrayList<>();
+            mHotFrgIdx = 0;
+        }
+    }
+
+    /**
+     * leave activity
+     */
+    protected void leaveActivity()   {
+        finish();
     }
 
     /**
      * load hot fragment
      */
-    protected void loadHotFrg() {
-        if(mHotFrgIdx >= 0  && mHotFrgIdx < mFrgArr.size()) {
-            T cur = mFrgArr.get(mHotFrgIdx);
+    private void loadHotFragment() {
+        if(mHotFrgIdx >= 0  && mHotFrgIdx < mALFrg.size()) {
+            T cur = mALFrg.get(mHotFrgIdx);
             if(cur instanceof Fragment) {
                 FragmentTransaction t = getFragmentManager().beginTransaction();
                 t.replace(wxm.androidutil.R.id.fl_holder, (Fragment)cur);
                 t.commit();
             } else  {
-                if(cur instanceof  android.support.v4.app.Fragment) {
+                if(cur instanceof android.support.v4.app.Fragment) {
                     android.support.v4.app.FragmentTransaction t =
                             getSupportFragmentManager().beginTransaction();
                     t.replace(wxm.androidutil.R.id.fl_holder, (android.support.v4.app.Fragment)cur);
                     t.commit();
                 }
             }
+        }
+    }
+
+    private void swapToFragmentByIdx(int idx)    {
+        if(idx >= 0  && idx < mALFrg.size()) {
+            mHotFrgIdx = idx;
+            loadHotFragment();
         }
     }
 }

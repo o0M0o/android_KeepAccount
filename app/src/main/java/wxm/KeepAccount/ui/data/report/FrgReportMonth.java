@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
+import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.KeepAccount.R;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
@@ -14,7 +15,7 @@ import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
  * data month report
  * Created by ookoo on 2017/2/15.
  */
-public class FrgReportMonth extends FrgUtilitySupportBase {
+public class FrgReportMonth extends FrgSwitcher<FrgUtilitySupportBase> {
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         LOG_TAG = "FrgReportMonth";
