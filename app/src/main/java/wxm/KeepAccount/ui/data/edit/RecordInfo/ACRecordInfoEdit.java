@@ -1,19 +1,19 @@
 package wxm.KeepAccount.ui.data.edit.RecordInfo;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import wxm.androidutil.ExActivity.BaseAppCompatActivity;
+import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * for record info
  */
-public class ACRecordInfoEdit extends BaseAppCompatActivity {
+public class ACRecordInfoEdit extends ACSwitcherActivity<TFEditRecordInfo> {
     public final static String IT_PARA_RECORDTYPE = "record_type";
-    private final TFEditRecordInfo mTFRecordInfo = new TFEditRecordInfo();
 
     @Override
     protected void leaveActivity() {
@@ -24,12 +24,14 @@ public class ACRecordInfoEdit extends BaseAppCompatActivity {
     }
 
     @Override
-    protected void initFrgHolder() {
-        Intent it = getIntent();
-        mTFRecordInfo.setCurData("", it.getStringExtra(IT_PARA_RECORDTYPE));
+    protected void initUi(Bundle savedInstanceState)    {
+        super.initUi(savedInstanceState);
 
-        LOG_TAG = "ACRecordInfoEdit";
-        mFGSupportHolder = mTFRecordInfo;
+        Intent it = getIntent();
+        TFEditRecordInfo tf = new TFEditRecordInfo();
+        tf.setCurData("", it.getStringExtra(IT_PARA_RECORDTYPE));
+
+        addFragment(tf);
     }
 
     @Override
@@ -45,7 +47,7 @@ public class ACRecordInfoEdit extends BaseAppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_save: {
-                if (mTFRecordInfo.onAccept()) {
+                if (getHotFragment().onAccept()) {
                     int ret_data = GlobalDef.INTRET_SURE;
                     Intent data = new Intent();
                     setResult(ret_data, data);

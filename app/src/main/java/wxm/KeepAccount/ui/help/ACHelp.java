@@ -1,25 +1,22 @@
 package wxm.KeepAccount.ui.help;
 
-import wxm.androidutil.ExActivity.BaseAppCompatActivity;
+import android.os.Bundle;
+
+import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
 
 /**
- * 本activity用于展示应用帮助信息
- * 根据intent参数加载不同帮助信息
+ * UI for help
  */
-public class ACHelp extends BaseAppCompatActivity {
+public class ACHelp extends ACSwitcherActivity<FrgHelp> {
     public static final String STR_HELP_TYPE = "HELP_TYPE";
 
     public static final String STR_HELP_MAIN = "help_main";
     public static final String STR_HELP_START = "help_start";
 
     @Override
-    protected void leaveActivity() {
-        finish();
-    }
-
-    @Override
-    protected void initFrgHolder() {
+    protected void initUi(Bundle savedInstanceState)    {
+        super.initUi(savedInstanceState);
         LOG_TAG = "ACHelp";
-        mFGHolder = new FrgHelp();
+        addFragment(new FrgHelp());
     }
 }

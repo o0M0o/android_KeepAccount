@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import wxm.KeepAccount.ui.base.ExtendActivity.ACSwitcherActivity;
+import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 

@@ -68,7 +68,7 @@ public class FrgCalendarContent extends FrgUtilityBase {
         mSZHotDay = day;
         mLSDayContents = NoteDataHelper.getInstance().getNotesByDay(day);
 
-        loadContent();
+        loadUI();
     }
 
     @Override
@@ -79,11 +79,6 @@ public class FrgCalendarContent extends FrgUtilityBase {
 
     @Override
     protected void loadUI() {
-        loadContent();
-    }
-
-    /// PRIVATE BEGIN
-    private void loadContent() {
         if (isDetached())
             return;
 
@@ -127,6 +122,7 @@ public class FrgCalendarContent extends FrgUtilityBase {
         ap.notifyDataSetChanged();
     }
 
+    /// PRIVATE BEGIN
     private void setVisibility(int vis) {
         mTVMonthDay.setVisibility(vis);
         mTVYearMonth.setVisibility(vis);

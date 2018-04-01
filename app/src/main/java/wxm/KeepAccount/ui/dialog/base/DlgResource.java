@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.dialog.utility;
+package wxm.KeepAccount.ui.dialog.base;
 
 import android.content.Context;
 import android.content.res.Resources;

@@ -28,7 +28,7 @@ import wxm.KeepAccount.db.RecordTypeDBUtility;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.RecordTypeItem;
 import wxm.KeepAccount.ui.data.edit.RecordInfo.ACRecordInfoEdit;
-import wxm.KeepAccount.ui.dialog.utility.DlgResource;
+import wxm.KeepAccount.ui.dialog.base.DlgResource;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.uilib.IconButton.IconButton;
 

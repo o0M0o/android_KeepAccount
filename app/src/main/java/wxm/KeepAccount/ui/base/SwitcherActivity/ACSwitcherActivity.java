@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.base.ExtendActivity;
+package wxm.KeepAccount.ui.base.SwitcherActivity;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -30,6 +30,8 @@ public abstract class ACSwitcherActivity<T>
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(wxm.androidutil.R.layout.ac_base);
+
+        LOG_TAG = this.getClass().getSimpleName();
 
         ButterKnife.bind(this);
         initUi(savedInstanceState);
@@ -158,6 +160,10 @@ public abstract class ACSwitcherActivity<T>
         }
     }
 
+    /**
+     * swap to fragment by idx
+     * @param idx       swap in fragment idx
+     */
     private void swapToFragmentByIdx(int idx)    {
         if(idx >= 0  && idx < mALFrg.size()) {
             mHotFrgIdx = idx;

@@ -4,14 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import wxm.androidutil.ExActivity.BaseAppCompatActivity;
+import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * day detail UI
  */
-public class ACDailyDetail extends BaseAppCompatActivity {
+public class ACDailyDetail extends ACSwitcherActivity<FrgDailyDetail> {
     public final static String K_HOTDAY = "hotday";
 
     @Override
@@ -24,8 +24,8 @@ public class ACDailyDetail extends BaseAppCompatActivity {
     }
 
     @Override
-    protected void initFrgHolder() {
-        LOG_TAG = "ACDailyDetail";
+    protected void initUi(Bundle savedInstanceState)    {
+        super.initUi(savedInstanceState);
 
         Intent it = getIntent();
         assert null != it;
@@ -41,6 +41,6 @@ public class ACDailyDetail extends BaseAppCompatActivity {
         bd.putString(K_HOTDAY, hot_day);
         fg.setArguments(bd);
 
-        mFGHolder = fg;
+        addFragment(fg);
     }
 }

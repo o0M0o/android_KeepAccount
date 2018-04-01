@@ -1,7 +1,5 @@
 package wxm.KeepAccount.ui.base.Switcher;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;

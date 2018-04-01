@@ -1,22 +1,18 @@
 package wxm.KeepAccount.ui.data.show.calendar;
 
-import wxm.androidutil.ExActivity.BaseRxAppCompatActivity;
+import android.os.Bundle;
+
+import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
 
 /**
  * for calendar
  * Created by ookoo on 2016/12/4.
  */
-public class ACCalendarShow extends BaseRxAppCompatActivity {
-    private final FrgCalendarShow mFGTCalendar = new FrgCalendarShow();
-
+public class ACCalendarShow extends ACSwitcherActivity<FrgCalendarShow> {
     @Override
-    protected void leaveActivity() {
-        finish();
-    }
-
-    @Override
-    protected void initFrgHolder() {
+    protected void initUi(Bundle savedInstanceState)    {
+        super.initUi(savedInstanceState);
         LOG_TAG = "ACCalendarShow";
-        mFGHolder = mFGTCalendar;
+        addFragment(new FrgCalendarShow());
     }
 }

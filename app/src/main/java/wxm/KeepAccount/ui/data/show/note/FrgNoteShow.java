@@ -93,7 +93,7 @@ public class FrgNoteShow extends FrgSwitcher<FrgUtilitySupportBase> {
 
         FrgSwitcher tb = getHotTabItem();
         if(null != tb) {
-            ((ShowViewBase)tb.getHotPage()).loadView();
+            ((ShowViewBase)tb.getHotPage()).reloadView();
         }
     }
 
@@ -198,11 +198,6 @@ public class FrgNoteShow extends FrgSwitcher<FrgUtilitySupportBase> {
         if (!b_hot) {
             mPSSwitcher.doSelect(mPHHelper[POS_DAY_FLOW]);
         }
-    }
-
-    @Override
-    protected void loadUI() {
-        loadHotFrg();
     }
 
     public void disableViewPageTouch(boolean bflag) {

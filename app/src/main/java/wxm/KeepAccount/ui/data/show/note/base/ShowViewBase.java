@@ -59,7 +59,7 @@ public abstract class ShowViewBase
         super.leaveActivity();
     }
 
-    public void loadView()  {
+    public void reloadView()  {
         refreshData();
     }
 

@@ -2,21 +2,21 @@ package wxm.KeepAccount.ui.data.show.note;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
-import wxm.androidutil.ExActivity.BaseAppCompatActivity;
+import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 /**
  * for Note show
  * Created by wxm on 2016/12/1.
  */
-public class ACNoteShow extends BaseAppCompatActivity {
+public class ACNoteShow extends ACSwitcherActivity<FrgNoteShow> {
 
     @Override
     protected void leaveActivity() {
@@ -28,9 +28,9 @@ public class ACNoteShow extends BaseAppCompatActivity {
     }
 
     @Override
-    protected void initFrgHolder() {
-        LOG_TAG = "ACNoteShow";
-        mFGSupportHolder = new FrgNoteShow();
+    protected void initUi(Bundle savedInstanceState)    {
+        super.initUi(savedInstanceState);
+        addFragment(new FrgNoteShow());
     }
 
 
@@ -47,7 +47,7 @@ public class ACNoteShow extends BaseAppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_switch: {
-                FrgSwitcher hot = ((FrgNoteShow) mFGSupportHolder).getHotTabItem();
+                FrgSwitcher hot = getHotFragment().getHotTabItem();
                 if (null != hot) {
                     hot.switchPage();
                 }
@@ -66,7 +66,7 @@ public class ACNoteShow extends BaseAppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         // TODO Auto-generated method stub
         super.onConfigurationChanged(newConfig);
-        ((FrgNoteShow) mFGSupportHolder).refreshUI();
+        getHotFragment().refreshUI();
     }
 
     /**
@@ -74,7 +74,7 @@ public class ACNoteShow extends BaseAppCompatActivity {
      * @param bflag     true open page touch
      */
     public void disableViewPageTouch(boolean bflag) {
-        ((FrgNoteShow) mFGSupportHolder).disableViewPageTouch(bflag);
+        getHotFragment().disableViewPageTouch(bflag);
     }
 
     /**
@@ -82,6 +82,6 @@ public class ACNoteShow extends BaseAppCompatActivity {
      * @param tabname   tab name
      */
     public void jumpByTabName(String tabname) {
-        ((FrgNoteShow) mFGSupportHolder).jumpByTabName(tabname);
+        getHotFragment().jumpByTabName(tabname);
     }
 }

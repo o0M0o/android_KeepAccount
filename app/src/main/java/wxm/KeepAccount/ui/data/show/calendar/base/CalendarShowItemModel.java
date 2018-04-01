@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.show.calendar;
+package wxm.KeepAccount.ui.data.show.calendar.base;
 
 
 import wxm.uilib.SimpleCalendar.BaseCalendarItemModel;
@@ -7,14 +7,14 @@ import wxm.uilib.SimpleCalendar.BaseCalendarItemModel;
  * for extended
  * Created by ookoo on 2017/07/06
  */
-class CalendarShowItemModel extends BaseCalendarItemModel {
+public class CalendarShowItemModel extends BaseCalendarItemModel {
     private int mRecordCount;
 
-    int getRecordCount() {
+    public int getRecordCount() {
         return mRecordCount;
     }
 
-    void setRecordCount(int mRecordCount) {
+    public void setRecordCount(int mRecordCount) {
         this.mRecordCount = mRecordCount;
     }
 }

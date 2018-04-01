@@ -17,7 +17,7 @@ import wxm.KeepAccount.define.EAction;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.dialog.utility.DlgResource;
+import wxm.KeepAccount.ui.dialog.base.DlgResource;
 import wxm.KeepAccount.utility.DGVButtonAdapter;
 
 /**

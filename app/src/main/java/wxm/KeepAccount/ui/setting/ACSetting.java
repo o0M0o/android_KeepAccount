@@ -9,13 +9,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import wxm.KeepAccount.ui.base.ExtendActivity.ACSwitcherActivity;
+import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
 import wxm.KeepAccount.ui.setting.page.TFSettingBase;
 import wxm.KeepAccount.ui.setting.page.TFSettingChartColor;
 import wxm.KeepAccount.ui.setting.page.TFSettingCheckVersion;
 import wxm.KeepAccount.ui.setting.page.TFSettingMain;
 import wxm.KeepAccount.ui.setting.page.TFSettingRemind;
-import wxm.androidutil.ExActivity.BaseAppCompatActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 
@@ -51,7 +50,7 @@ public class ACSetting extends ACSwitcherActivity<TFSettingBase> {
     @Override
     protected void initUi(Bundle savedInstanceState)    {
         super.initUi(savedInstanceState);
-        LOG_TAG = "ACSetting";
+
         addFragment(mTFMain);
         addFragment(mTFChartColor);
         addFragment(mTFCheckVer);

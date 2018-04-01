@@ -19,12 +19,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.TreeMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import wxm.KeepAccount.ui.data.show.calendar.base.CalendarShowItemAdapter;
+import wxm.KeepAccount.ui.data.show.calendar.base.CalendarShowItemModel;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
+import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -95,11 +96,41 @@ public class FrgCalendarShow extends FrgUtilityBase {
             mFGContent.updateContent(selectedDate);
         });
 
-        reLoadFrg();
     }
 
     @Override
     protected void loadUI() {
+        final String[] param = new String[1];
+        ToolUtil.runInBackground(this.getActivity(),
+                () -> {
+                    HashMap<String, ArrayList<INote>> hm
+                            = NoteDataHelper.getInstance().getNotesForMonth();
+                    if (null != hm) {
+                        param[0] = UtilFun.cast_t(hm.keySet().toArray()[0]);
+                    }
+                },
+                () -> {
+                    String fist_month = param[0];
+                    if (UtilFun.StringIsNullOrEmpty(fist_month)) {
+                        Activity ac = getActivity();
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ac);
+                        builder.setMessage("当前用户没有数据，请先添加数据!").setTitle("警告");
+                        builder.setNegativeButton("确认", (d, w) -> ac.finish());
+
+                        android.app.AlertDialog dlg = builder.create();
+                        dlg.show();
+                        return;
+                    }
+
+                    String cur_sel_month = mHGVDays.getSelectedDate();
+                    if (!UtilFun.StringIsNullOrEmpty(cur_sel_month)) {
+                        updateCalendar(cur_sel_month.substring(0, 7));
+                        return;
+                    }
+
+                    String cur_month = YEAR_MONTH_SIMPLE_FORMAT.format(Calendar.getInstance().getTime());
+                    updateCalendar(cur_month);
+                });
     }
 
     @Override
@@ -122,49 +153,8 @@ public class FrgCalendarShow extends FrgUtilityBase {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBChangeEvent(DBDataChangeEvent event) {
-        reLoadFrg();
+        loadUI();
     }
-
-    private void reLoadFrg() {
-        Log.d(LOG_TAG, "reLoadFrg");
-
-        Activity h = this.getActivity();
-        ExecutorService tp = Executors.newCachedThreadPool();
-        tp.submit(() -> {
-            String mSZFristMonth = null;
-            HashMap<String, ArrayList<INote>> hm
-                        = NoteDataHelper.getInstance().getNotesForMonth();
-            if (null != hm) {
-                mSZFristMonth = UtilFun.cast_t(hm.keySet().toArray()[0]);
-            }
-
-            final String fist_month = mSZFristMonth;
-            h.runOnUiThread(() -> {
-                if (UtilFun.StringIsNullOrEmpty(fist_month)) {
-                    Activity ac = getActivity();
-                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ac);
-                    builder.setMessage("当前用户没有数据，请先添加数据!").setTitle("警告");
-                    builder.setNegativeButton("确认", (d, w) -> ac.finish());
-
-                    android.app.AlertDialog dlg = builder.create();
-                    dlg.show();
-                } else {
-                    Calendar c_cur = Calendar.getInstance();
-                    String cur_month = YEAR_MONTH_SIMPLE_FORMAT.format(c_cur.getTime());
-                    String cur_sel_month = mHGVDays.getSelectedDate();
-                    if (!UtilFun.StringIsNullOrEmpty(cur_sel_month))
-                        cur_sel_month = cur_sel_month.substring(0, 7);
-
-
-                    if (!cur_month.equals(fist_month) && !fist_month.equals(cur_sel_month))
-                        mHGVDays.changeMonth(fist_month);
-                    else
-                        updateCalendar(fist_month);
-                }
-            });
-        });
-    }
-
 
     /**
      *  update calendar
