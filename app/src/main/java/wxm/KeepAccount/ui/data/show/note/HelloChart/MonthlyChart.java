@@ -26,7 +26,7 @@ import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
  * month chart
- * Created by wxm on 2016/9/29.
+ * Created by WangXM on2016/9/29.
  */
 public class MonthlyChart extends ChartBase {
     public MonthlyChart() {

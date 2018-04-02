@@ -7,7 +7,7 @@ import android.widget.ListView;
 
 /**
  * Helper class for ListView
- * Created by ookoo on 2017/2/21.
+ * Created by WangXM on 2017/2/21.
  */
 public class ListViewHelper {
     /**

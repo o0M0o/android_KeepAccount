@@ -12,7 +12,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * Data helper for NoteShow
- * Created by wxm on 2016/5/30.
+ * Created by WangXM on2016/5/30.
  */
 public class NoteDataHelper {
     // 定义调用参数

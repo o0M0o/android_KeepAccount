@@ -15,7 +15,7 @@ import wxm.KeepAccount.define.RemindItem;
 
 /**
  * 收入提醒
- * Created by 123 on 2016/10/8.
+ * Created by WangXM on 2016/10/8.
  */
 public class TFEditRemindIncome extends TFEditRemindBase {
     private final static String[] PERIOD_TYPE = {

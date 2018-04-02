@@ -8,7 +8,7 @@ import wxm.androidutil.DBHelper.IDBRow;
 
 /**
  * usr class
- * Created by 123 on 2016/8/5.
+ * Created by WangXM on 2016/8/5.
  */
 @DatabaseTable(tableName = "tbUsr")
 public class UsrItem

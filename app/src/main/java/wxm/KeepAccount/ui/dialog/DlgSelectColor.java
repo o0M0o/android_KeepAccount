@@ -21,7 +21,7 @@ import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * select color
- * Created by 123 on 2016/10/10.
+ * Created by WangXM on 2016/10/10.
  */
 public class DlgSelectColor extends DlgOKOrNOBase
         implements AdapterView.OnItemClickListener {

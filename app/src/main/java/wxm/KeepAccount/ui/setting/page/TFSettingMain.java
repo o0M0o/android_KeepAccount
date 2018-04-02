@@ -20,7 +20,7 @@ import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * main page for setting
- * Created by 123 on 2016/10/10.
+ * Created by WangXM on 2016/10/10.
  */
 public class TFSettingMain extends TFSettingBase {
     @BindView(R.id.rl_remind)

@@ -42,7 +42,7 @@ import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
  * for welcome
- * Created by ookoo on 2016/12/7.
+ * Created by WangXM on 2016/12/7.
  */
 public class FrgWelcome extends FrgUtilityBase {
     // for ui

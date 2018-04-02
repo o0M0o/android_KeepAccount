@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 
 /**
  * tool helper
- * Created by 123 on 2016/6/2.
+ * Created by WangXM on 2016/6/2.
  */
 public class ToolUtil {
     private final static String[] DAY_IN_WEEK = {

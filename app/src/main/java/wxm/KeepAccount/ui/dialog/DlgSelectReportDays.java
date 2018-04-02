@@ -17,7 +17,7 @@ import wxm.KeepAccount.R;
 
 /**
  * select day range for report
- * Created by User on 2017/2/15.
+ * Created by WangXM on 2017/2/15.
  */
 public class DlgSelectReportDays extends DlgOKOrNOBase {
     @BindString(R.string.hint_input_day)

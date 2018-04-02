@@ -46,7 +46,7 @@ import static java.lang.String.format;
 
 /**
  * edit income
- * Created by wxm on 2016/9/28.
+ * Created by WangXM on2016/9/28.
  */
 public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     private final static String TAG = "TFEditIncome";

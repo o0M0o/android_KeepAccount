@@ -2,7 +2,7 @@ package wxm.KeepAccount.ui.data.edit.base;
 
 /**
  * interface for preview & edit record
- * Created by 123 on 2016/10/30.
+ * Created by WangXM on 2016/10/30.
  */
 public interface IPreviewAndEditBase {
     /**

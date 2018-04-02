@@ -19,7 +19,7 @@ import wxm.KeepAccount.R;
 
 /**
  * drag grid view adapter for buttons in welcome activity
- * Created by 123 on 2016/9/19.
+ * Created by WangXM on 2016/9/19.
  */
 public class DGVButtonAdapter extends SimpleAdapter {
     public final static String HKEY_ACT_NAME = "HKEY_ACT_NAME";

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
- * Created by 123 on 2016/10/21.
+ * Created by WangXM on 2016/10/21.
  * interface for note
  */
 public interface INote {

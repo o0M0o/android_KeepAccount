@@ -7,7 +7,7 @@ import wxm.androidutil.util.UtilFun;
 
 /**
  * for show data
- * Created by 123 on 2016/10/24.
+ * Created by WangXM on 2016/10/24.
  */
 public class NoteShowInfo {
     private int mPayCount;

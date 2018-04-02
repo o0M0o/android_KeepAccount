@@ -33,7 +33,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
 /**
  * for note show
- * Created by ookoo on 2016/11/30.
+ * Created by WangXM on 2016/11/30.
  */
 public class FrgNoteShow extends FrgSwitcher<FrgUtilitySupportBase> {
     protected final static int POS_DAY_FLOW = 0;

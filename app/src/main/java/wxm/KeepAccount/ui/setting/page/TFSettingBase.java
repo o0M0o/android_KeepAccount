@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 
 /**
  * for base setting
- * Created by 123 on 2016/10/10.
+ * Created by WangXM on 2016/10/10.
  */
 public abstract class TFSettingBase extends Fragment {
     protected boolean mBSettingDirty = false;

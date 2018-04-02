@@ -28,7 +28,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * add user
- * Created by ookoo on 2016/11/29.
+ * Created by WangXM on 2016/11/29.
  */
 public class FrgUsrAdd extends FrgUtilityBase
         implements TextView.OnEditorActionListener {

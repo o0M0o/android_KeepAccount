@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 
 /**
  * base for data edit
- * Created by wxm on 2016/9/27.
+ * Created by WangXM on2016/9/27.
  */
 public abstract class TFEditBase extends Fragment {
     protected String mAction;

@@ -25,7 +25,7 @@ import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
  * chart view base helper
- * Created by wxm on 2016/9/29.
+ * Created by WangXM on2016/9/29.
  */
 abstract class ChartBase extends ShowViewBase {
     ColumnChartData mChartData;

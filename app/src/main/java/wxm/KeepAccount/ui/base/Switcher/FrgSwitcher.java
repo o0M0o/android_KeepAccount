@@ -13,7 +13,7 @@ import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 /**
  * base UI for show data
- * Created by wxm on 2016/9/27.
+ * Created by WangXM on2016/9/27.
  */
 public abstract class FrgSwitcher<T>
         extends FrgUtilitySupportBase   {

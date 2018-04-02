@@ -36,7 +36,7 @@ import wxm.androidutil.util.UtilFun;
 
 /**
  * day data report
- * Created by ookoo on 2017/2/15.
+ * Created by WangXM on 2017/2/15.
  */
 public class FrgReportDay extends FrgSwitcher<FrgUtilitySupportBase> {
     @BindView(R.id.tv_day)

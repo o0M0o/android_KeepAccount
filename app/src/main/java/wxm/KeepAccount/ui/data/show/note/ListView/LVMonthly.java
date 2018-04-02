@@ -44,7 +44,7 @@ import wxm.uilib.IconButton.IconButton;
 
 /**
  * ListView for monthly data
- * Created by 123 on 2016/9/10.
+ * Created by WangXM on 2016/9/10.
  */
 public class LVMonthly
         extends LVBase {

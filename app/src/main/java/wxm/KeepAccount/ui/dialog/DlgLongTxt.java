@@ -11,7 +11,7 @@ import wxm.KeepAccount.R;
 
 /**
  * longtext dlg
- * Created by ookoo on 2016/11/1.
+ * Created by WangXM on 2016/11/1.
  */
 public class DlgLongTxt extends DlgOKOrNOBase {
     @BindView(R.id.et_long_txt)

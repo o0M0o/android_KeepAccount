@@ -51,7 +51,7 @@ import wxm.uilib.IconButton.IconButton;
 
 /**
  * for daily detail info
- * Created by ookoo on 2017/01/20.
+ * Created by WangXM on 2017/01/20.
  */
 public class FrgDailyDetail extends FrgUtilityBase {
     // 展示时间信息的UI

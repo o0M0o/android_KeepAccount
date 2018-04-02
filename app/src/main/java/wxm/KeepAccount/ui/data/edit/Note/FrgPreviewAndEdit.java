@@ -28,7 +28,7 @@ import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
 
 /**
  * preview/edit record
- * Created by 123 on 2016/10/30.
+ * Created by WangXM on 2016/10/30.
  */
 public class FrgPreviewAndEdit extends Fragment
         implements IPreviewAndEditBase {

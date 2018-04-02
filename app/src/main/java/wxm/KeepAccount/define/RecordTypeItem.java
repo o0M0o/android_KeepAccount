@@ -11,7 +11,7 @@ import wxm.androidutil.DBHelper.IDBRow;
 
 /**
  * record type
- * Created by 123 on 2016/8/8.
+ * Created by WangXM on 2016/8/8.
  */
 @DatabaseTable(tableName = "tbRecordType")
 public class RecordTypeItem

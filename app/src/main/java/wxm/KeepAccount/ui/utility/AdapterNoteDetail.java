@@ -26,7 +26,7 @@ import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
 
 /**
  * adapter for note detail
- * Created by ookoo on 2017/1/23.
+ * Created by WangXM on 2017/1/23.
  */
 public class AdapterNoteDetail extends SimpleAdapter {
     public final static String K_NODE = "node";

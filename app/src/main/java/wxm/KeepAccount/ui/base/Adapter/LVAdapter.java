@@ -15,7 +15,7 @@ import android.widget.ThemedSpinnerAdapter;
 import java.util.List;
 
 /**
- * Created by ookoo on 2018/3/28.
+ * Created by WangXM on 2018/3/28.
  */
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class LVAdapter extends BaseAdapter implements  ThemedSpinnerAdapter {

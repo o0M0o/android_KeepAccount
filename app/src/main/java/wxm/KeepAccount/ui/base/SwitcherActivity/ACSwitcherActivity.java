@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
  * activity extend
  * T can be --
  *      android.app.Fragment  or android.support.v4.app.Fragment
- * Created by wxm on 2018/03/30.
+ * Created by WangXM on2018/03/30.
  */
 public abstract class ACSwitcherActivity<T>
         extends AppCompatActivity {

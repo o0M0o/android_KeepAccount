@@ -49,7 +49,7 @@ import wxm.uilib.IconButton.IconButton;
 
 /**
  * listview for daily data
- * Created by 123 on 2016/9/10.
+ * Created by WangXM on 2016/9/10.
  */
 public class LVDaily extends LVBase {
     // for action

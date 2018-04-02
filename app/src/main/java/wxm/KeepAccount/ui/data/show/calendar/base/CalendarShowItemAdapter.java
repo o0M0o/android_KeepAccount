@@ -14,7 +14,7 @@ import wxm.androidutil.util.UiUtil;
 
 /**
  * adapter for calendar
- * Created by ookoo on 2017/07/03.
+ * Created by WangXM on 2017/07/03.
  */
 public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarShowItemModel> {
     private final static int mCLToday;

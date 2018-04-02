@@ -29,7 +29,7 @@ import wxm.androidutil.util.UtilFun;
 
 /**
  * day data report(webview)
- * Created by ookoo on 2017/3/4.
+ * Created by WangXM on 2017/3/4.
  */
 public class DayReportWebView extends FrgSupportWebView {
     private ArrayList<String> mASParaLoad;

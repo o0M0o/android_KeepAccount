@@ -10,7 +10,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * dialog会用到的资源
- * Created by ookoo on 2017/3/8.
+ * Created by WangXM on 2017/3/8.
  */
 public class DlgResource {
     // for channel item shape

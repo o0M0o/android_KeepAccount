@@ -16,7 +16,7 @@ import wxm.androidutil.util.UiUtil;
 
 /**
  * preference helper
- * Created by 123 on 2016/6/18.
+ * Created by WangXM on 2016/6/18.
  */
 public class PreferencesUtil {
     public final static String SET_PAY_COLOR = "pay";

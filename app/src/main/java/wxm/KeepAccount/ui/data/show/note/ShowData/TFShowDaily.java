@@ -9,7 +9,7 @@ import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 /**
  * for daily data
- * Created by wxm on 2016/9/25.
+ * Created by WangXM on2016/9/25.
  */
 public class TFShowDaily extends FrgSwitcher<FrgUtilitySupportBase> {
 

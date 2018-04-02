@@ -8,7 +8,7 @@ import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 /**
  * for yearly data
- * Created by wxm on 2016/9/25.
+ * Created by WangXM on2016/9/25.
  */
 public class TFShowYearly extends FrgSwitcher<FrgUtilitySupportBase> {
 

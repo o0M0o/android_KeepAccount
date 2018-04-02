@@ -26,7 +26,7 @@ import wxm.KeepAccount.ui.utility.NoteShowInfo;
 
 /**
  * for note pad content detail
- * Created by ookoo on 2016/12/12.
+ * Created by WangXM on 2016/12/12.
  */
 public class FrgCalendarContent extends FrgUtilityBase {
     // for ui

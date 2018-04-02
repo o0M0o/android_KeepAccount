@@ -17,7 +17,7 @@ import wxm.KeepAccount.define.UsrItem;
 
 /**
  * UT for DBOrmLiteHelper
- * Created by 123 on 2016/8/5.
+ * Created by WangXM on 2016/8/5.
  */
 public class DBOrmliteHelperUT extends AndroidTestCase {
     private DBOrmLiteHelper mHelper;

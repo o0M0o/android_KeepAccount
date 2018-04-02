@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * for page switch
- * Created by ookoo on 2018/3/25.
+ * Created by WangXM on 2018/3/25.
  */
 public class PageSwitcher {
     private final static int INVALID_POS = -1;

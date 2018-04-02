@@ -29,7 +29,7 @@ import wxm.uilib.IconButton.IconButton;
 
 /**
  * listview base for show record
- * Created by wxm on 2016/9/29.
+ * Created by WangXM on2016/9/29.
  */
 public abstract class LVBase extends ShowViewBase {
     /**

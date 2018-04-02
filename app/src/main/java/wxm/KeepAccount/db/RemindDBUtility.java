@@ -15,7 +15,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * 提醒数据辅助类
- * Created by 123 on 2016/10/9.
+ * Created by WangXM on 2016/10/9.
  */
 public class RemindDBUtility extends DBUtilityBase<RemindItem, Integer> {
     public RemindDBUtility() {

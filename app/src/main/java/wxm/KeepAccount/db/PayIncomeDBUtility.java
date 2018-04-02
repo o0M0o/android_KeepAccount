@@ -24,7 +24,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * 备忘本数据库工具类
- * Created by ookoo on 2016/11/16.
+ * Created by WangXM on 2016/11/16.
  */
 public class PayIncomeDBUtility {
     private PayDBUtility mDUPay;

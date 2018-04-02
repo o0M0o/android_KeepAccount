@@ -2,7 +2,7 @@ package wxm.KeepAccount.ui.data.report.base;
 
 /**
  * event when select start & end day
- * Created by ookoo on 2017/3/7.
+ * Created by WangXM on 2017/3/7.
  */
 public class EventSelectDays {
     public String mSZStartDay;

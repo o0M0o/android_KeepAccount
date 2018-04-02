@@ -16,7 +16,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * day data helper
- * Created by ookoo on 2017/1/22.
+ * Created by WangXM on 2017/1/22.
  */
 public class HelperDayNotesInfo {
     private static int CR_PAY;

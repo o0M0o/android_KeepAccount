@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 
 /**
  * base for data preview
- * Created by wxm on 2016/9/27.
+ * Created by WangXM on2016/9/27.
  */
 public abstract class TFPreviewBase extends Fragment {
     /**

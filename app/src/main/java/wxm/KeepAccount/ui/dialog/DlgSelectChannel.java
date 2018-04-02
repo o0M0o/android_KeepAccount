@@ -22,7 +22,7 @@ import wxm.KeepAccount.utility.DGVButtonAdapter;
 
 /**
  * select follow channel
- * Created by 123 on 2016/9/20.
+ * Created by WangXM on 2016/9/20.
  */
 public class DlgSelectChannel extends DlgOKOrNOBase {
     // for hot channel

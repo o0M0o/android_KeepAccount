@@ -30,7 +30,7 @@ import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 
 /**
  * UI for add note
- * Created by ookoo on 2016/11/29.
+ * Created by WangXM on 2016/11/29.
  */
 public class FrgNoteAdd extends FrgUtilityBase {
     protected final static int POS_PAY = 0;

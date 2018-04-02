@@ -5,7 +5,7 @@ import wxm.uilib.SimpleCalendar.BaseCalendarItemModel;
 
 /**
  * for extended
- * Created by ookoo on 2017/07/06
+ * Created by WangXM on 2017/07/06
  */
 public class CalendarShowItemModel extends BaseCalendarItemModel {
     private int mRecordCount;

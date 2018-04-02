@@ -44,7 +44,7 @@ import wxm.androidutil.util.UtilFun;
 
 /**
  * daily report(webview)
- * Created by ookoo on 2017/3/4.
+ * Created by WangXM on 2017/3/4.
  */
 public class DayReportChart extends FrgUtilitySupportBase {
     @BindView(R.id.chart)

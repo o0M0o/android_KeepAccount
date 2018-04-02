@@ -34,7 +34,7 @@ import wxm.uilib.IconButton.IconButton;
 
 /**
  * select 'record type'
- * Created by 123 on 2016/11/1.
+ * Created by WangXM on 2016/11/1.
  */
 public class DlgSelectRecordType extends DlgOKOrNOBase {
     private final static String KEY_NAME = "key_name";

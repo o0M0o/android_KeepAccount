@@ -38,7 +38,7 @@ import wxm.uilib.SimpleCalendar.CalendarListView;
 
 /**
  * for calendar show
- * Created by ookoo on 2016/12/4.
+ * Created by WangXM on 2016/12/4.
  */
 public class FrgCalendarShow extends FrgUtilityBase {
     public static final SimpleDateFormat DAY_FORMAT =

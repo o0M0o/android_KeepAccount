@@ -44,7 +44,7 @@ import wxm.uilib.IconButton.IconButton;
 
 /**
  * 年数据视图辅助类
- * Created by 123 on 2016/9/10.
+ * Created by WangXM on 2016/9/10.
  */
 public class LVYearly extends LVBase {
     private final LinkedList<String> mLLSubFilter = new LinkedList<>();

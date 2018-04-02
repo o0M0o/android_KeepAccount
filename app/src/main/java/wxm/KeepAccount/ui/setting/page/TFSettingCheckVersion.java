@@ -18,7 +18,7 @@ import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * check version
- * Created by 123 on 2016/10/10.
+ * Created by WangXM on 2016/10/10.
  */
 public class TFSettingCheckVersion extends TFSettingBase {
     @BindView(R.id.tv_ver_number)

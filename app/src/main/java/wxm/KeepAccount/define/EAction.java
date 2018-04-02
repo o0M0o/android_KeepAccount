@@ -8,7 +8,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * Action in welcome page
- * Created by ookoo on 2018/2/19.
+ * Created by WangXM on 2018/2/19.
  */
 public enum EAction {
     CALENDAR_VIEW("数据日历", R.drawable.ic_calendar_view),

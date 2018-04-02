@@ -32,7 +32,7 @@ import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * 编辑提醒基类
- * Created by 123 on 2016/10/9.
+ * Created by WangXM on 2016/10/9.
  */
 public abstract class TFEditRemindBase extends Fragment implements View.OnTouchListener {
     private final static String TAG = "TFEditRemindBase";

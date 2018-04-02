@@ -2,7 +2,7 @@ package wxm.KeepAccount.define;
 
 /**
  * msg type
- * Created by ookoo on 2018/2/19.
+ * Created by WangXM on 2018/2/19.
  */
 public enum EMsgType {
     USR_ADD("add usr", 1001),

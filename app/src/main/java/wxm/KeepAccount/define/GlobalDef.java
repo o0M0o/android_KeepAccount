@@ -2,7 +2,7 @@ package wxm.KeepAccount.define;
 
 /**
  * global define
- * Created by 123 on 2016/5/6.
+ * Created by WangXM on 2016/5/6.
  */
 public class GlobalDef {
     public static final String PACKAGE_NAME = "com.wxm.keepaccount";

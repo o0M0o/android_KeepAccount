@@ -31,7 +31,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * edit budget
- * Created by wxm on 2016/9/28.
+ * Created by WangXM on2016/9/28.
  */
 public class TFEditBudget extends TFEditBase {
     private final static String TAG = "TFEditBudget";

@@ -16,7 +16,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * usr数据处理类
- * Created by 123 on 2016/8/9.
+ * Created by WangXM on 2016/8/9.
  */
 public class UsrDBUtility extends DBUtilityBase<UsrItem, Integer> {
     private final String TAG = "UsrDBUtility";

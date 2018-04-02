@@ -15,7 +15,7 @@ import wxm.KeepAccount.define.RemindItem;
 
 /**
  * 支出提醒
- * Created by 123 on 2016/10/8.
+ * Created by WangXM on 2016/10/8.
  */
 public class TFEditRemindPay extends TFEditRemindBase {
     private final static String[] PERIOD_TYPE = {

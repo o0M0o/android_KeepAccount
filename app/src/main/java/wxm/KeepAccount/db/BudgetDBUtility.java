@@ -20,7 +20,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * 预算数据工具类
- * Created by 123 on 2016/9/1.
+ * Created by WangXM on 2016/9/1.
  */
 public class BudgetDBUtility extends DBUtilityBase<BudgetItem, Integer> {
     private final static String TAG = "BudgetDBUtility";

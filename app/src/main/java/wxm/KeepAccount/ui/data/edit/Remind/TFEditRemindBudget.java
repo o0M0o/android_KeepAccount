@@ -22,7 +22,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * 预算提醒
- * Created by 123 on 2016/10/8.
+ * Created by WangXM on 2016/10/8.
  */
 public class TFEditRemindBudget extends TFEditRemindBase {
     private Spinner mSPBudget;

@@ -30,7 +30,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * db ormlite helper
- * Created by 123 on 2016/8/5.
+ * Created by WangXM on 2016/8/5.
  */
 public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
     private static final String TAG = "DBOrmLiteHelper";

@@ -29,7 +29,7 @@ import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
  * 加载年度chart视图
- * Created by wxm on 2016/9/29.
+ * Created by WangXM on2016/9/29.
  */
 public class YearlyChart extends ChartBase {
     public YearlyChart() {

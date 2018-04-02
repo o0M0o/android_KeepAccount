@@ -19,7 +19,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * remind
- * Created by 123 on 2016/10/9.
+ * Created by WangXM on 2016/10/9.
  */
 @DatabaseTable(tableName = "tbRemind")
 public class RemindItem

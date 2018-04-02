@@ -33,7 +33,7 @@ import wxm.androidutil.FrgUtility.FrgUtilityBase;
 
 /**
  * for login
- * Created by ookoo on 2016/11/29.
+ * Created by WangXM on 2016/11/29.
  */
 public class FrgLogin extends FrgUtilityBase {
     // for ui

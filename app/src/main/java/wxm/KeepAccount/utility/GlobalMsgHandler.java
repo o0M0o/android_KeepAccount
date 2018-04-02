@@ -13,7 +13,7 @@ import wxm.KeepAccount.define.UsrItem;
 
 /**
  * global msg handler
- * Created by 123 on 2016/6/30.
+ * Created by WangXM on 2016/6/30.
  */
 public class GlobalMsgHandler extends Handler {
     private static final String TAG = "GlobalMsgHandler";

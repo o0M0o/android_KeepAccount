@@ -15,7 +15,7 @@ import wxm.androidutil.util.UtilFun;
 
 /**
  * helper for action layout
- * Created by ookoo on 2018/3/26.
+ * Created by WangXM on 2018/3/26.
  */
 public abstract class ActionHelper {
     @BindView(R.id.iv_show_tag)

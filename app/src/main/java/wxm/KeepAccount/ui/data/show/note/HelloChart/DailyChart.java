@@ -27,7 +27,7 @@ import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
  * daily chart
- * Created by wxm on 2016/9/29.
+ * Created by WangXM on2016/9/29.
  */
 public class DailyChart extends ChartBase {
     public DailyChart() {

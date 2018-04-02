@@ -19,7 +19,7 @@ import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * preview fragment for budget
- * Created by 123 on 2016/10/29.
+ * Created by WangXM on 2016/10/29.
  */
 public class TFPreviewBudget extends TFPreviewBase {
     private TextView mTVAllAmount;

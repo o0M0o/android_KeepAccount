@@ -22,7 +22,7 @@ import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
  * setting for chart color
- * Created by 123 on 2016/10/10.
+ * Created by WangXM on 2016/10/10.
  */
 public class TFSettingChartColor extends TFSettingBase {
     @BindView(R.id.iv_pay)

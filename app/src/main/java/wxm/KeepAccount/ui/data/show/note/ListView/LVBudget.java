@@ -43,7 +43,7 @@ import wxm.uilib.IconButton.IconButton;
 
 /**
  * budget listview
- * Created by 123 on 2016/9/15.
+ * Created by WangXM on 2016/9/15.
  */
 public class LVBudget extends LVBase {
     //for action

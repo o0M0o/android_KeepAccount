@@ -19,7 +19,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * pay record
- * Created by 123 on 2016/5/3.
+ * Created by WangXM on 2016/5/3.
  */
 @DatabaseTable(tableName = "tbPayNote")
 public class PayNoteItem

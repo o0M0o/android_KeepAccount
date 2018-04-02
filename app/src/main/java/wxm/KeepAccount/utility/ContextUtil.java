@@ -20,7 +20,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
 /**
  * get global context & helper
- * Created by 123 on 2016/5/7.
+ * Created by WangXM on 2016/5/7.
  */
 public class ContextUtil extends Application {
     private static final String TAG = "ContextUtil";

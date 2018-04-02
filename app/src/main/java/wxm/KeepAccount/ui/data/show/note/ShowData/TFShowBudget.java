@@ -8,7 +8,7 @@ import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 /**
  * for budget
- * Created by 123 on 2016/10/5.
+ * Created by WangXM on 2016/10/5.
  */
 
 public class TFShowBudget extends FrgSwitcher<FrgUtilitySupportBase> {

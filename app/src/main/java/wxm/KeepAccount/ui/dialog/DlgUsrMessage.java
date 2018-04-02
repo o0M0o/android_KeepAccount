@@ -37,7 +37,7 @@ import static android.Manifest.permission.READ_SMS;
 
 /**
  * submit usr msg
- * Created by ookoo on 2017/1/9.
+ * Created by WangXM on 2017/1/9.
  */
 public class DlgUsrMessage extends DlgOKOrNOBase {
     // for progress dialog when send http post

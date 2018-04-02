@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 
 /**
  * use this to suppress warning caused by setOnTouchListener
- * Created by ookoo on 2018/3/24.
+ * Created by WangXM on 2018/3/24.
  */
 public class TouchTextView extends android.support.v7.widget.AppCompatTextView {
 

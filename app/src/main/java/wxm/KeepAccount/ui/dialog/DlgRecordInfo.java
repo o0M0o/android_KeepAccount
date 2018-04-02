@@ -13,7 +13,7 @@ import wxm.KeepAccount.define.RecordTypeItem;
 
 /**
  * record info dlg
- * Created by 123 on 2016/11/1.
+ * Created by WangXM on 2016/11/1.
  */
 public class DlgRecordInfo extends DlgOKOrNOBase {
     @BindView(R.id.ti_name)

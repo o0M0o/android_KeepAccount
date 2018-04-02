@@ -46,7 +46,7 @@ import wxm.KeepAccount.utility.PreferencesUtil;
 
 /**
  * 预算chart辅助类
- * Created by 123 on 2016/10/7.
+ * Created by WangXM on 2016/10/7.
  */
 public class BudgetChart extends ShowViewBase {
     ColumnChartData mChartData;

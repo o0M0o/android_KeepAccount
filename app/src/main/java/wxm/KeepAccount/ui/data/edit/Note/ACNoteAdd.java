@@ -8,8 +8,8 @@ import android.view.MenuItem;
 
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
-import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.androidutil.util.UtilFun;
 
 /**
  * income/pay record UI

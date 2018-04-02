@@ -12,7 +12,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * for record type data
- * Created by ookoo on 2016/12/2.
+ * Created by WangXM on 2016/12/2.
  */
 public class RecordTypeDBUtility extends DBUtilityBase<RecordTypeItem, Integer> {
 

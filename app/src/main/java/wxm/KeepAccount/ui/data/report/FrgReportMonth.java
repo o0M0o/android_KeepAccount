@@ -13,7 +13,7 @@ import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 /**
  * data month report
- * Created by ookoo on 2017/2/15.
+ * Created by WangXM on 2017/2/15.
  */
 public class FrgReportMonth extends FrgSwitcher<FrgUtilitySupportBase> {
     @Override

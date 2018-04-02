@@ -9,7 +9,7 @@ import wxm.KeepAccount.utility.ContextUtil;
 
 /**
  * Resource helper
- * Created by ookoo on 2017/3/3.
+ * Created by WangXM on 2017/3/3.
  */
 public class ResourceHelper {
     public static int mCRLVLineOne;

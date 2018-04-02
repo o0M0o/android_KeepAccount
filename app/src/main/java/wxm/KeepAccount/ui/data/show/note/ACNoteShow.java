@@ -14,7 +14,7 @@ import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * for Note show
- * Created by wxm on 2016/12/1.
+ * Created by WangXM on2016/12/1.
  */
 public class ACNoteShow extends ACSwitcherActivity<FrgNoteShow> {
 

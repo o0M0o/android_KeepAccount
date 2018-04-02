@@ -19,7 +19,7 @@ import wxm.androidutil.util.UtilFun;
 
 /**
  * budget
- * Created by 123 on 2016/9/1.
+ * Created by WangXM on 2016/9/1.
  */
 @DatabaseTable(tableName = "tbBudget")
 public class BudgetItem

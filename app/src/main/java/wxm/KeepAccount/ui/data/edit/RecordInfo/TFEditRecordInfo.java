@@ -34,7 +34,7 @@ import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * UI for record info
- * Created by wxm on 2016/9/28.
+ * Created by WangXM on2016/9/28.
  */
 public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener {
     private final static String TAG = "TFEditRecordInfo";

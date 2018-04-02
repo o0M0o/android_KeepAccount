@@ -17,7 +17,7 @@ import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * preview fragment for income
- * Created by 123 on 2016/10/29.
+ * Created by WangXM on 2016/10/29.
  */
 public class TFPreviewIncome extends TFPreviewBase {
     private TextView mTVAmount;

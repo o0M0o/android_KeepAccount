@@ -12,7 +12,7 @@ import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * UI for report
- * Created by ookoo on 2017/2/15.
+ * Created by WangXM on 2017/2/15.
  */
 public class ACReport extends ACSwitcherActivity<android.support.v4.app.Fragment> {
     public final static String PARA_TYPE = "para_type";
