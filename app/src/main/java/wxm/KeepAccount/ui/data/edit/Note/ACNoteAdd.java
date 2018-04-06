@@ -7,8 +7,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import wxm.KeepAccount.R;
-import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.androidutil.Switcher.ACSwitcherActivity;
 import wxm.androidutil.util.UtilFun;
 
 /**
@@ -25,9 +25,7 @@ public class ACNoteAdd extends ACSwitcherActivity<FrgNoteAdd> {
     }
 
     @Override
-    protected void initUi(Bundle savedInstanceState)    {
-        super.initUi(savedInstanceState);
-        // for holder
+    protected void setupFragment(Bundle bundle) {
         FrgNoteAdd hf = new FrgNoteAdd();
         Intent it = getIntent();
         assert null != it;

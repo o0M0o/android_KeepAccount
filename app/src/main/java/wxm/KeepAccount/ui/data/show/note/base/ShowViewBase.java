@@ -44,19 +44,15 @@ public abstract class ShowViewBase
     }
 
     @Override
-    protected void enterActivity() {
-        Log.d(LOG_TAG, "in enterActivity");
-        super.enterActivity();
-
+    public void onStart() {
+        super.onStart();
         EventBus.getDefault().register(this);
     }
 
     @Override
-    protected void leaveActivity() {
-        Log.d(LOG_TAG, "in leaveActivity");
+    public void onDestroy() {
         EventBus.getDefault().unregister(this);
-
-        super.leaveActivity();
+        super.onDestroy();
     }
 
     public void reloadView()  {

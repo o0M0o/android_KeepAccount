@@ -20,14 +20,13 @@ import android.widget.ProgressBar;
 
 import butterknife.BindString;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.ui.usr.ACAddUsr;
 import wxm.KeepAccount.ui.welcome.ACWelcome;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 ;
 
@@ -35,7 +34,7 @@ import wxm.androidutil.FrgUtility.FrgUtilityBase;
  * for login
  * Created by WangXM on 2016/11/29.
  */
-public class FrgLogin extends FrgUtilityBase {
+public class FrgLogin extends FrgUtilitySupportBase {
     // for ui
     @BindView(R.id.login_progress)
     ProgressBar mPBLoginProgress;
@@ -64,26 +63,11 @@ public class FrgLogin extends FrgUtilityBase {
 
     @Override
     protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        LOG_TAG = "FrgLogin";
-        View rootView = inflater.inflate(R.layout.vw_login, container, false);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+        return inflater.inflate(R.layout.vw_login, container, false);
     }
 
     @Override
-    protected void initUiComponent(View view) {
-        /*
-        // Set up the login form.
-        //populateAutoComplete();
-        mETPassword.setOnEditorActionListener((textView, id, keyEvent) -> {
-            if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                attemptLogin();
-                return true;
-            }
-            return false;
-        });
-        */
-
+    protected void initUI(Bundle bundle)    {
         mBTEmailSignIn.setOnClickListener(view1 -> attemptLogin());
 
         mBTEmailRegister.setOnClickListener(v -> {
@@ -97,7 +81,7 @@ public class FrgLogin extends FrgUtilityBase {
     }
 
     @Override
-    protected void loadUI() {
+    protected void loadUI(Bundle bundle) {
     }
 
     /// PRIVATE BEGIN

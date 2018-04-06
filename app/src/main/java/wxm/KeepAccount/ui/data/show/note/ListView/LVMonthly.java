@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.data.show.note.ListView;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.ViewGroup;
@@ -137,7 +138,6 @@ public class LVMonthly
     public LVMonthly() {
         super();
 
-        LOG_TAG = "LVMonthly";
         mBActionExpand = false;
 
         mMainPara = new LinkedList<>();
@@ -338,7 +338,7 @@ public class LVMonthly
     }
 
     @Override
-    protected void loadUI() {
+    protected void loadUI(Bundle bundle) {
         loadUIUtility(false);
     }
 

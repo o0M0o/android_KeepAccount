@@ -15,8 +15,7 @@ import java.util.Locale;
 
 import butterknife.BindColor;
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
@@ -28,7 +27,7 @@ import wxm.KeepAccount.ui.utility.NoteShowInfo;
  * for note pad content detail
  * Created by WangXM on 2016/12/12.
  */
-public class FrgCalendarContent extends FrgUtilityBase {
+public class FrgCalendarContent extends FrgUtilitySupportBase {
     // for ui
     @BindView(R.id.tv_month_day)
     TextView mTVMonthDay;
@@ -54,31 +53,13 @@ public class FrgCalendarContent extends FrgUtilityBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "FrgCalendarContent";
-        View rootView = layoutInflater.inflate(R.layout.frg_calendar_content, viewGroup, false);
-        ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    /**
-     * update hot day
-     * @param day   show day(example : 2017-07-06)
-     */
-    public void updateContent(String day) {
-        mSZHotDay = day;
-        mLSDayContents = NoteDataHelper.getInstance().getNotesByDay(day);
-
-        loadUI();
-    }
-
-    @Override
-    protected void initUiComponent(View view) {
         mSZHotDay = null;
         mLSDayContents = null;
+        return layoutInflater.inflate(R.layout.frg_calendar_content, viewGroup, false);
     }
 
     @Override
-    protected void loadUI() {
+    protected void loadUI(Bundle bundle) {
         if (isDetached())
             return;
 
@@ -120,6 +101,17 @@ public class FrgCalendarContent extends FrgUtilityBase {
                 new String[]{}, new int[]{});
         mLVBody.setAdapter(ap);
         ap.notifyDataSetChanged();
+    }
+
+    /**
+     * update hot day
+     * @param day   show day(example : 2017-07-06)
+     */
+    public void updateContent(String day) {
+        mSZHotDay = day;
+        mLSDayContents = NoteDataHelper.getInstance().getNotesByDay(day);
+
+        loadUI(null);
     }
 
     /// PRIVATE BEGIN

@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.androidutil.Switcher.ACSwitcherActivity;
 
 /**
  * for record info
@@ -24,9 +24,7 @@ public class ACRecordInfoEdit extends ACSwitcherActivity<TFEditRecordInfo> {
     }
 
     @Override
-    protected void initUi(Bundle savedInstanceState)    {
-        super.initUi(savedInstanceState);
-
+    protected void setupFragment(Bundle bundle) {
         Intent it = getIntent();
         TFEditRecordInfo tf = new TFEditRecordInfo();
         tf.setCurData("", it.getStringExtra(IT_PARA_RECORDTYPE));

@@ -28,25 +28,19 @@ public class TFSettingCheckVersion extends TFSettingBase {
     TextView mTVVerName;
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.page_setting_version, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        return layoutInflater.inflate(R.layout.page_setting_version, viewGroup, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (null != view) {
-            String s = String.format(Locale.CHINA, "当前版本号 : %d",
-                    PackageUtil.getVerCode(getContext(), GlobalDef.PACKAGE_NAME));
-            mTVVerNumber.setText(s);
+    protected void initUI(Bundle bundle)    {
+        String s = String.format(Locale.CHINA, "当前版本号 : %d",
+                PackageUtil.getVerCode(getContext(), GlobalDef.PACKAGE_NAME));
+        mTVVerNumber.setText(s);
 
-            s = String.format(Locale.CHINA, "当前版本名 : %s",
-                    PackageUtil.getVerName(getContext(), GlobalDef.PACKAGE_NAME));
-            mTVVerName.setText(s);
-        }
+        s = String.format(Locale.CHINA, "当前版本名 : %s",
+                PackageUtil.getVerName(getContext(), GlobalDef.PACKAGE_NAME));
+        mTVVerName.setText(s);
     }
 
     @Override

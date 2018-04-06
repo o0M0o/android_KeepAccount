@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.PieChartData;
@@ -38,7 +37,6 @@ import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 
@@ -59,24 +57,19 @@ public class DayReportChart extends FrgUtilitySupportBase {
     private LinkedList<INote> mLLOrgData;
 
     @Override
-    protected void enterActivity() {
-        Log.d(LOG_TAG, "in enterActivity");
-        super.enterActivity();
-
+    public void onStart() {
+        super.onStart();
         EventBus.getDefault().register(this);
     }
 
     @Override
-    protected void leaveActivity() {
-        Log.d(LOG_TAG, "in leaveActivity");
+    public void onDestroy() {
         EventBus.getDefault().unregister(this);
-
-        super.leaveActivity();
+        super.onDestroy();
     }
 
     /**
      * update day range
-     *
      * @param event for day range
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -88,14 +81,13 @@ public class DayReportChart extends FrgUtilitySupportBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "DayReportChart";
-        View rootView = layoutInflater.inflate(R.layout.page_report_chart, viewGroup, false);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+        Bundle bd = getArguments();
+        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
+        return layoutInflater.inflate(R.layout.page_report_chart, viewGroup, false);
     }
 
     @Override
-    protected void initUiComponent(View view) {
+    protected void loadUI(Bundle bundle) {
         mCVchart.setOnValueTouchListener(new PieChartOnValueSelectListener() {
             @Override
             public void onValueSelected(int i, SliceValue sliceValue) {
@@ -111,19 +103,11 @@ public class DayReportChart extends FrgUtilitySupportBase {
             }
         });
 
-        Bundle bd = getArguments();
-        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
         loadData();
     }
 
-    @Override
-    protected void loadUI() {
-    }
-
-
     /**
      * switch UI according to click
-     *
      * @param v clicked view
      */
     @OnClick({R.id.tb_income, R.id.tb_pay})

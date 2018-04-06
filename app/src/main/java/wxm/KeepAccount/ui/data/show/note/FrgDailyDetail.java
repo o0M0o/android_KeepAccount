@@ -33,7 +33,7 @@ import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;
@@ -53,7 +53,7 @@ import wxm.uilib.IconButton.IconButton;
  * for daily detail info
  * Created by WangXM on 2017/01/20.
  */
-public class FrgDailyDetail extends FrgUtilityBase {
+public class FrgDailyDetail extends FrgUtilitySupportBase {
     // 展示时间信息的UI
     @BindView(R.id.tv_day)
     TextView mTVMonthDay;
@@ -106,45 +106,53 @@ public class FrgDailyDetail extends FrgUtilityBase {
     private List<INote> mLSDayContents;
 
     @Override
+    public void  onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void  onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "FrgDailyDetail";
-        View rootView = layoutInflater.inflate(R.layout.vw_daily_detail, viewGroup, false);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+        return layoutInflater.inflate(R.layout.vw_daily_detail, viewGroup, false);
     }
 
     @Override
-    protected void initUiComponent(View view) {
-        mSZHotDay = null;
-        mLSDayContents = null;
-    }
-
-    @Override
-    protected void loadUI() {
+    protected void initUI(Bundle bundle) {
         Bundle bd = getArguments();
         mSZHotDay = bd.getString(ACDailyDetail.K_HOTDAY);
         if (!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
             HashMap<String, ArrayList<INote>> hl = NoteDataHelper.getInstance().getNotesForDay();
             mLSDayContents = hl.get(mSZHotDay);
         }
-
-        loadContent();
     }
 
     @Override
-    protected void enterActivity() {
-        Log.d(LOG_TAG, "in enterActivity");
-        super.enterActivity();
+    protected void loadUI(Bundle bundle) {
+        if (isDetached())
+            return;
 
-        EventBus.getDefault().register(this);
-    }
+        if (UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
+            setVisibility(View.INVISIBLE);
+            return;
+        }
 
-    @Override
-    protected void leaveActivity() {
-        Log.d(LOG_TAG, "in leaveActivity");
-        EventBus.getDefault().unregister(this);
+        String[] arr = mSZHotDay.split("-");
+        if (3 != arr.length) {
+            setVisibility(View.INVISIBLE);
+            return;
+        }
 
-        super.leaveActivity();
+        setVisibility(View.VISIBLE);
+        loadDayHeader();
+        loadDayInfo();
+        loadDayNotes(false);
+        loadActBars(false);
     }
 
     /**
@@ -157,7 +165,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
             HashMap<String, ArrayList<INote>> hl = NoteDataHelper.getInstance().getNotesForDay();
             mLSDayContents = hl.get(mSZHotDay);
 
-            loadContent();
+            initUI(null);
         }
     }
 
@@ -203,7 +211,7 @@ public class FrgDailyDetail extends FrgUtilityBase {
             HashMap<String, ArrayList<INote>> hl = NoteDataHelper.getInstance().getNotesForDay();
             mLSDayContents = hl.get(mSZHotDay);
 
-            loadContent();
+            loadUI(null);
         }
     }
 
@@ -293,32 +301,6 @@ public class FrgDailyDetail extends FrgUtilityBase {
                 mPBLoginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
-    }
-
-
-    /**
-     * 加载内容
-     */
-    private void loadContent() {
-        if (isDetached())
-            return;
-
-        if (UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
-            setVisibility(View.INVISIBLE);
-            return;
-        }
-
-        String[] arr = mSZHotDay.split("-");
-        if (3 != arr.length) {
-            setVisibility(View.INVISIBLE);
-            return;
-        }
-
-        setVisibility(View.VISIBLE);
-        loadDayHeader();
-        loadDayInfo();
-        loadDayNotes(false);
-        loadActBars(false);
     }
 
     /**

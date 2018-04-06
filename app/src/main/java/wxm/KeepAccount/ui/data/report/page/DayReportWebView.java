@@ -1,10 +1,6 @@
 package wxm.KeepAccount.ui.data.report.page;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import com.alibaba.fastjson.JSON;
@@ -22,8 +18,6 @@ import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.FrgWebView.FrgSupportWebView;
 import wxm.androidutil.util.UtilFun;
 
@@ -35,19 +29,18 @@ public class DayReportWebView extends FrgSupportWebView {
     private ArrayList<String> mASParaLoad;
 
     @Override
-    protected void enterActivity() {
-        Log.d(LOG_TAG, "in enterActivity");
-        super.enterActivity();
+    public void onStart() {
+        super.onStart();
 
+        Bundle bd = getArguments();
+        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
         EventBus.getDefault().register(this);
     }
 
     @Override
-    protected void leaveActivity() {
-        Log.d(LOG_TAG, "in leaveActivity");
+    public void onDestroy() {
         EventBus.getDefault().unregister(this);
-
-        super.leaveActivity();
+        super.onDestroy();
     }
 
     /**
@@ -58,15 +51,9 @@ public class DayReportWebView extends FrgSupportWebView {
     public void onSelectDaysEvent(EventSelectDays event) {
         mASParaLoad.set(0, event.mSZStartDay);
         mASParaLoad.set(1, event.mSZEndDay);
-        loadUI();
+        loadUI(null);
     }
 
-    @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        View vw = super.inflaterView(layoutInflater, viewGroup, bundle);
-        LOG_TAG = "DayReportWebView";
-        return vw;
-    }
 
     @Override
     protected void onWVPageFinished(WebView wvPage, Object para) {
@@ -75,15 +62,7 @@ public class DayReportWebView extends FrgSupportWebView {
     }
 
     @Override
-    protected void initUiComponent(View view) {
-        super.initUiComponent(view);
-
-        Bundle bd = getArguments();
-        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
-    }
-
-    @Override
-    protected void loadUI() {
+    protected void loadUI(Bundle savedInstanceState) {
         if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
             if (2 != mASParaLoad.size())
                 return;

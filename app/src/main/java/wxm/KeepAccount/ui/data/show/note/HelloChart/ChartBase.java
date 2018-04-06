@@ -55,13 +55,11 @@ abstract class ChartBase extends ShowViewBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        View rootView = layoutInflater.inflate(R.layout.chart_pager, viewGroup, false);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+        return layoutInflater.inflate(R.layout.chart_pager, viewGroup, false);
     }
 
     @Override
-    protected void initUiComponent(View view) {
+    protected void initUI(Bundle bundle) {
         mBFilter = false;
         mHMColor = PreferencesUtil.loadChartColor();
 
@@ -135,7 +133,7 @@ abstract class ChartBase extends ShowViewBase {
     }
 
     @Override
-    protected void loadUI() {
+    protected void loadUI(Bundle bundle) {
         loadUIUtility(false);
     }
 

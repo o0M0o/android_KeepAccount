@@ -18,7 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import wxm.KeepAccount.define.EMsgType;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.androidutil.util.WRMsgHandler;
 import wxm.KeepAccount.R;
@@ -30,7 +30,7 @@ import wxm.KeepAccount.utility.ContextUtil;
  * add user
  * Created by WangXM on 2016/11/29.
  */
-public class FrgUsrAdd extends FrgUtilityBase
+public class FrgUsrAdd extends FrgUtilitySupportBase
         implements TextView.OnEditorActionListener {
     // for ui
     @BindView(R.id.et_usr_name)
@@ -52,14 +52,11 @@ public class FrgUsrAdd extends FrgUtilityBase
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "FrgUsrAdd";
-        View rootView = layoutInflater.inflate(R.layout.vw_usr_add, viewGroup, false);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+        return layoutInflater.inflate(R.layout.vw_usr_add, viewGroup, false);
     }
 
     @Override
-    protected void initUiComponent(View view) {
+    protected void initUI(Bundle bundle) {
         mMHHandler = new LocalMsgHandler(this);
 
         mETUsrName.setOnEditorActionListener(this);
@@ -67,9 +64,6 @@ public class FrgUsrAdd extends FrgUtilityBase
         mETRepeatPwd.setOnEditorActionListener(this);
     }
 
-    @Override
-    protected void loadUI() {
-    }
 
     @OnClick({R.id.bt_confirm, R.id.bt_giveup})
     void onSelfClick(View v) {

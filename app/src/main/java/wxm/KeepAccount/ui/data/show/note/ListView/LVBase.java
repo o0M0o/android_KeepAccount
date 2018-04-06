@@ -115,13 +115,12 @@ public abstract class LVBase extends ShowViewBase {
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View rootView = layoutInflater.inflate(R.layout.lv_note_show_pager, viewGroup, false);
-        ButterKnife.bind(this, rootView);
         mAHActs.bind(rootView);
         return rootView;
     }
 
     @Override
-    protected void initUiComponent(View view) {
+    protected void initUI(Bundle bundle) {
         mAHActs.init();
         refreshData();
     }

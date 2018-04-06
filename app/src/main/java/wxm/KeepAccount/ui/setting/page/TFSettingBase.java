@@ -1,12 +1,12 @@
 package wxm.KeepAccount.ui.setting.page;
 
-import android.support.v4.app.Fragment;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 /**
  * for base setting
  * Created by WangXM on 2016/10/10.
  */
-public abstract class TFSettingBase extends Fragment {
+public abstract class TFSettingBase extends FrgUtilitySupportBase {
     protected boolean mBSettingDirty = false;
 
     /**

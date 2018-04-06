@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.data.show.note.ListView;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,7 +139,6 @@ public class LVYearly extends LVBase {
 
     public LVYearly() {
         super();
-        LOG_TAG = "LVYearly";
         mBActionExpand = false;
 
         mMainPara = new LinkedList<>();
@@ -321,7 +321,7 @@ public class LVYearly extends LVBase {
     }
 
     @Override
-    protected void loadUI() {
+    protected void loadUI(Bundle bundle) {
         loadUIUtility(false);
     }
 

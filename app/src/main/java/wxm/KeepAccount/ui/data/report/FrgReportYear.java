@@ -6,29 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
-import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
 import wxm.KeepAccount.R;
+import wxm.androidutil.FrgUtility.FrgSupportSwitcher;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 /**
  * date year report
  * Created by WangXM on 2017/2/15.
  */
-public class FrgReportYear extends FrgSwitcher<FrgUtilitySupportBase> {
-    @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "FrgReportYear";
-        View rootView = layoutInflater.inflate(R.layout.vw_report, viewGroup, false);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+public class FrgReportYear extends FrgSupportSwitcher<FrgUtilitySupportBase> {
+    public FrgReportYear()   {
+        super();
+        setupFrgID(R.layout.vw_report, R.id.fl_page_holder);
     }
 
     @Override
-    protected void initUiComponent(View view) {
-    }
-
-    @Override
-    protected void loadUI() {
+    protected void setupFragment(Bundle bundle) {
     }
 }

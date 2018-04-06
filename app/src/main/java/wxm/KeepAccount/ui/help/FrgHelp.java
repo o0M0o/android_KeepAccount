@@ -15,13 +15,11 @@ import wxm.androidutil.FrgWebView.FrgWebView;
 public class FrgHelp extends FrgWebView {
     @Override
     protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        View rootView = super.inflaterView(inflater, container, bundle);
-        LOG_TAG = "FrgHelp";
-        return rootView;
+        return super.inflaterView(inflater, container, bundle);
     }
 
     @Override
-    protected void loadUI() {
+    protected void loadUI(Bundle bundle) {
         loadPage("file:///android_asset/help/help_main.html", null);
     }
 }

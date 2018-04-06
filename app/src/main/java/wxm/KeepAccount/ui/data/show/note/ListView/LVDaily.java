@@ -2,6 +2,7 @@ package wxm.KeepAccount.ui.data.show.note.ListView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
@@ -196,8 +197,6 @@ public class LVDaily extends LVBase {
 
     public LVDaily() {
         super();
-
-        LOG_TAG = "LVDaily";
         mBActionExpand = false;
 
         mMainPara = new LinkedList<>();
@@ -351,7 +350,7 @@ public class LVDaily extends LVBase {
 
 
     @Override
-    protected void loadUI() {
+    protected void loadUI(Bundle bundle) {
         loadUIUtility(false);
     }
 

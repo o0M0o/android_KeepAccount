@@ -7,17 +7,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
-import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.androidutil.FrgUtility.FrgSupportSwitcher;
+import wxm.androidutil.Switcher.ACSwitcherActivity;
 
 /**
  * for Note show
  * Created by WangXM on2016/12/1.
  */
 public class ACNoteShow extends ACSwitcherActivity<FrgNoteShow> {
-
     @Override
     protected void leaveActivity() {
         int ret_data = GlobalDef.INTRET_USR_LOGOUT;
@@ -28,11 +27,9 @@ public class ACNoteShow extends ACSwitcherActivity<FrgNoteShow> {
     }
 
     @Override
-    protected void initUi(Bundle savedInstanceState)    {
-        super.initUi(savedInstanceState);
+    protected void setupFragment(Bundle bundle) {
         addFragment(new FrgNoteShow());
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,7 +44,7 @@ public class ACNoteShow extends ACSwitcherActivity<FrgNoteShow> {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_switch: {
-                FrgSwitcher hot = getHotFragment().getHotTabItem();
+                FrgSupportSwitcher hot = getHotFragment().getHotTabItem();
                 if (null != hot) {
                     hot.switchPage();
                 }

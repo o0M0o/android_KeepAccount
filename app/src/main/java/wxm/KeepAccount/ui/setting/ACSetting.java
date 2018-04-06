@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
 import wxm.KeepAccount.ui.setting.page.TFSettingBase;
 import wxm.KeepAccount.ui.setting.page.TFSettingChartColor;
 import wxm.KeepAccount.ui.setting.page.TFSettingCheckVersion;
@@ -17,6 +16,7 @@ import wxm.KeepAccount.ui.setting.page.TFSettingMain;
 import wxm.KeepAccount.ui.setting.page.TFSettingRemind;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
+import wxm.androidutil.Switcher.ACSwitcherActivity;
 
 /**
  * for app setting
@@ -40,21 +40,19 @@ public class ACSetting extends ACSwitcherActivity<TFSettingBase> {
     }
 
     @Override
+    protected void setupFragment(Bundle bundle) {
+        addFragment(mTFMain);
+        addFragment(mTFChartColor);
+        addFragment(mTFCheckVer);
+        addFragment(mTFRemind);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mu_save_giveup, menu);
         return true;
-    }
-
-    @Override
-    protected void initUi(Bundle savedInstanceState)    {
-        super.initUi(savedInstanceState);
-
-        addFragment(mTFMain);
-        addFragment(mTFChartColor);
-        addFragment(mTFCheckVer);
-        addFragment(mTFRemind);
     }
 
     @Override

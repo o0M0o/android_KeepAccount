@@ -2,9 +2,7 @@ package wxm.KeepAccount.ui.data.report;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -17,11 +15,9 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays;
 import wxm.KeepAccount.ui.data.report.page.DayReportChart;
 import wxm.KeepAccount.ui.data.report.page.DayReportWebView;
@@ -29,16 +25,15 @@ import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
+import wxm.androidutil.FrgUtility.FrgSupportSwitcher;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
-import wxm.androidutil.FrgWebView.FrgSupportWebView;
 import wxm.androidutil.util.UtilFun;
 
 /**
  * day data report
  * Created by WangXM on 2017/2/15.
  */
-public class FrgReportDay extends FrgSwitcher<FrgUtilitySupportBase> {
+public class FrgReportDay extends FrgSupportSwitcher<FrgUtilitySupportBase> {
     @BindView(R.id.tv_day)
     TextView mTVDay;
     @BindView(R.id.tv_pay)
@@ -52,23 +47,14 @@ public class FrgReportDay extends FrgSwitcher<FrgUtilitySupportBase> {
 
     public FrgReportDay()   {
         super();
-        LOG_TAG = "FrgReportDay";
-
-        setFrgID(R.layout.vw_report, R.id.fl_page_holder);
-        addChildFrg(mPGWebView);
-        addChildFrg(mPGChart);
-    }
-
-    @Override
-    protected void enterActivity() {
-        super.enterActivity();
         EventBus.getDefault().register(this);
+        setupFrgID(R.layout.vw_report, R.id.fl_page_holder);
     }
 
     @Override
-    protected void leaveActivity() {
+    public void  onDestroy() {
         EventBus.getDefault().unregister(this);
-        super.leaveActivity();
+        super.onDestroy();
     }
 
     /**
@@ -80,28 +66,23 @@ public class FrgReportDay extends FrgSwitcher<FrgUtilitySupportBase> {
         mASParaLoad.set(0, event.mSZStartDay);
         mASParaLoad.set(1, event.mSZEndDay);
 
-        loadUI();
+        loadUI(null);
     }
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        View rootView = super.inflaterView(layoutInflater, viewGroup, bundle);
-        ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    protected void initUiComponent(View view) {
+    protected void setupFragment(Bundle bundle) {
         Bundle bd = getArguments();
 
         mPGWebView.setArguments(bd);
         mPGChart.setArguments(bd);
 
         mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
+        addChildFrg(mPGWebView);
+        addChildFrg(mPGChart);
     }
 
     @Override
-    protected void loadUI() {
+    protected void loadUI(Bundle savedInstanceState) {
         FrgReportDay frg = this;
         if (!UtilFun.ListIsNullOrEmpty(frg.mASParaLoad)) {
             if (2 != frg.mASParaLoad.size())
@@ -137,10 +118,10 @@ public class FrgReportDay extends FrgSwitcher<FrgUtilitySupportBase> {
                                 "%.02f", ((BigDecimal)param[1]).floatValue()));
                         frg.mTVIncome.setText(String.format(Locale.CHINA,
                                 "%.02f", ((BigDecimal)param[2]).floatValue()));
+
+                        super.loadUI(savedInstanceState);
                     });
         }
-
-        loadHotFrg();
     }
 
     /**

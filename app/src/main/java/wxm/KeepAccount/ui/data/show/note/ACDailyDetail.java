@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
+import wxm.androidutil.Switcher.ACSwitcherActivity;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 
@@ -24,9 +24,7 @@ public class ACDailyDetail extends ACSwitcherActivity<FrgDailyDetail> {
     }
 
     @Override
-    protected void initUi(Bundle savedInstanceState)    {
-        super.initUi(savedInstanceState);
-
+    protected void setupFragment(Bundle bundle) {
         Intent it = getIntent();
         assert null != it;
         String hot_day = it.getStringExtra(K_HOTDAY);

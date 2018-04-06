@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.allure.lbanners.LMBanners;
-import com.allure.lbanners.adapter.LBaseAdapter;
 import com.allure.lbanners.transformer.TransitionEffect;
 
 import org.greenrobot.eventbus.EventBus;
@@ -23,14 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import wxm.KeepAccount.db.DBDataChangeEvent;
-import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.DragGrid.DragGridView;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
@@ -44,7 +39,7 @@ import wxm.KeepAccount.utility.PreferencesUtil;
  * for welcome
  * Created by WangXM on 2016/12/7.
  */
-public class FrgWelcome extends FrgUtilityBase {
+public class FrgWelcome extends FrgUtilitySupportBase {
     // for ui
     @BindView(R.id.dgv_buttons)
     DragGridView mDGVActions;
@@ -57,15 +52,15 @@ public class FrgWelcome extends FrgUtilityBase {
     private ArrayList<FrgPara> mALFrgs = new ArrayList<>();
 
     @Override
-    protected void enterActivity() {
-        super.enterActivity();
+    public void onStart() {
+        super.onStart();
         EventBus.getDefault().register(this);
     }
 
     @Override
-    protected void leaveActivity() {
+    public void onDestroy() {
         EventBus.getDefault().unregister(this);
-        super.leaveActivity();
+        super.onDestroy();
     }
 
     /**
@@ -80,16 +75,12 @@ public class FrgWelcome extends FrgUtilityBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "FrgWelcome";
         initFrgs();
-
-        View rootView = layoutInflater.inflate(R.layout.vw_welcome, viewGroup, false);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+        return layoutInflater.inflate(R.layout.vw_welcome, viewGroup, false);
     }
 
     @Override
-    protected void initUiComponent(View view) {
+    protected void initUI(Bundle savedInstanceState) {
         initBanner();
 
         mLSData.clear();
@@ -127,11 +118,6 @@ public class FrgWelcome extends FrgUtilityBase {
             apt.notifyDataSetChanged();
         });
         apt.notifyDataSetChanged();
-    }
-
-
-    @Override
-    protected void loadUI() {
     }
 
     private void initFrgs() {

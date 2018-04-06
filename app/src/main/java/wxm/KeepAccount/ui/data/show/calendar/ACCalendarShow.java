@@ -2,7 +2,8 @@ package wxm.KeepAccount.ui.data.show.calendar;
 
 import android.os.Bundle;
 
-import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
+import wxm.androidutil.Switcher.ACSwitcherActivity;
+
 
 /**
  * for calendar
@@ -10,9 +11,7 @@ import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
  */
 public class ACCalendarShow extends ACSwitcherActivity<FrgCalendarShow> {
     @Override
-    protected void initUi(Bundle savedInstanceState)    {
-        super.initUi(savedInstanceState);
-        LOG_TAG = "ACCalendarShow";
+    protected void setupFragment(Bundle bundle) {
         addFragment(new FrgCalendarShow());
     }
 }

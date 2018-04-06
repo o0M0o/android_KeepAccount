@@ -1,10 +1,10 @@
 package wxm.KeepAccount.ui.login;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Process;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -12,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import butterknife.ButterKnife;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.EMsgType;
 import wxm.KeepAccount.define.GlobalDef;
@@ -31,7 +30,6 @@ public class ACLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_login);
 
-        ButterKnife.bind(this);
         init_ui(savedInstanceState);
     }
 
@@ -85,7 +83,7 @@ public class ACLogin extends AppCompatActivity {
     private void init_ui(Bundle savedInstanceState) {
         // for frg
         if (null == savedInstanceState) {
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fl_login, mFGLogin);
             transaction.commit();
         }

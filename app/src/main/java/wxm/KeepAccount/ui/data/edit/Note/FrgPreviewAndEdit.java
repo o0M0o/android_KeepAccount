@@ -2,7 +2,6 @@ package wxm.KeepAccount.ui.data.edit.Note;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -12,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
@@ -30,7 +29,7 @@ import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
  * preview/edit record
  * Created by WangXM on 2016/10/30.
  */
-public class FrgPreviewAndEdit extends Fragment
+public class FrgPreviewAndEdit extends FrgUtilitySupportBase
         implements IPreviewAndEditBase {
     private final static int PAGE_COUNT = 2;
     private final static int PAGE_IDX_PREVIEW = 0;
@@ -42,20 +41,24 @@ public class FrgPreviewAndEdit extends Fragment
     private Object mData;
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.vw_viewpage, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        return layoutInflater.inflate(R.layout.vw_viewpage, viewGroup, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (null != view) {
-            mVPPages = UtilFun.cast_t(view.findViewById(R.id.vp_pages));
-            init_view();
-        }
+    protected void initUI(Bundle bundle)    {
+        PagerAdapter adapter = new PagerAdapter(getFragmentManager());
+        mVPPages.setAdapter(adapter);
+
+        if (UtilFun.StringIsNullOrEmpty(mStrAction)
+                || UtilFun.StringIsNullOrEmpty(mStrType)
+                || (GlobalDef.STR_MODIFY.equals(mStrAction) && null == mData)
+                || (GlobalDef.STR_CREATE.equals(mStrAction) && null != mData))
+            return;
+
+        ((TFPreviewBase) adapter.getItem(PAGE_IDX_PREVIEW)).setPreviewPara(mData);
+        ((TFEditBase) adapter.getItem(PAGE_IDX_EDIT)).setCurData(mStrAction, mData);
+        mVPPages.setCurrentItem(GlobalDef.STR_MODIFY.equals(mStrAction) ?
+                PAGE_IDX_PREVIEW : PAGE_IDX_EDIT);
     }
 
     /**
@@ -108,22 +111,6 @@ public class FrgPreviewAndEdit extends Fragment
             tp.setPreviewPara(old_te.getCurData());
             tp.reLoadView();
         }
-    }
-
-    private void init_view() {
-        PagerAdapter adapter = new PagerAdapter(getFragmentManager());
-        mVPPages.setAdapter(adapter);
-
-        if (UtilFun.StringIsNullOrEmpty(mStrAction)
-                || UtilFun.StringIsNullOrEmpty(mStrType)
-                || (GlobalDef.STR_MODIFY.equals(mStrAction) && null == mData)
-                || (GlobalDef.STR_CREATE.equals(mStrAction) && null != mData))
-            return;
-
-        ((TFPreviewBase) adapter.getItem(PAGE_IDX_PREVIEW)).setPreviewPara(mData);
-        ((TFEditBase) adapter.getItem(PAGE_IDX_EDIT)).setCurData(mStrAction, mData);
-        mVPPages.setCurrentItem(GlobalDef.STR_MODIFY.equals(mStrAction) ?
-                PAGE_IDX_PREVIEW : PAGE_IDX_EDIT);
     }
 
     @Override

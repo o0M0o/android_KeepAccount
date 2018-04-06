@@ -66,22 +66,17 @@ public class BudgetChart extends ShowViewBase {
     private List<BudgetItem> mSPBudgetData;
     private int mSPBudgetHot = Spinner.INVALID_POSITION;
 
-
     public BudgetChart() {
         super();
-        LOG_TAG = "BudgetChart";
     }
-
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        View rootView = layoutInflater.inflate(R.layout.chart_budget_pager, viewGroup, false);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+        return layoutInflater.inflate(R.layout.chart_budget_pager, viewGroup, false);
     }
 
     @Override
-    protected void initUiComponent(View view) {
+    protected void initUI(Bundle bundle) {
         mBFilter = false;
         mHMColor = PreferencesUtil.loadChartColor();
 
@@ -103,14 +98,14 @@ public class BudgetChart extends ShowViewBase {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     mSPBudgetHot = position;
                     refreshData();
-                    loadUI();
+                    loadUI(null);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                     mSPBudgetHot = Spinner.INVALID_POSITION;
                     refreshData();
-                    loadUI();
+                    loadUI(null);
                 }
             });
         }
@@ -121,7 +116,6 @@ public class BudgetChart extends ShowViewBase {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                //Log.i(LOG_TAG, "in chart event = " + event.getAction());
                 int act = event.getAction();
                 switch (act) {
                     case MotionEvent.ACTION_DOWN:
@@ -162,7 +156,6 @@ public class BudgetChart extends ShowViewBase {
 
         // 预览chart需要锁定触摸滚屏
         mPreviewChart.setOnTouchListener((v, event) -> {
-            //Log.i(LOG_TAG, "in preview chart event = " + event.getAction());
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     getRootActivity().disableViewPageTouch(true);
@@ -183,7 +176,7 @@ public class BudgetChart extends ShowViewBase {
     }
 
     @Override
-    protected void loadUI() {
+    protected void loadUI(Bundle bundle) {
         loadUIUtility(false);
     }
 

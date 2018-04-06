@@ -30,7 +30,6 @@ import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
  */
 public class AdapterNoteDetail extends SimpleAdapter {
     public final static String K_NODE = "node";
-    private final static String LOG_TAG = "AdapterNoteDetail";
     private Context mCTSelf;
 
     /**

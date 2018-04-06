@@ -21,12 +21,11 @@ import java.util.Locale;
 import java.util.TreeMap;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import wxm.KeepAccount.ui.data.show.calendar.base.CalendarShowItemAdapter;
 import wxm.KeepAccount.ui.data.show.calendar.base.CalendarShowItemModel;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.utility.ToolUtil;
-import wxm.androidutil.FrgUtility.FrgUtilityBase;
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;
@@ -40,7 +39,7 @@ import wxm.uilib.SimpleCalendar.CalendarListView;
  * for calendar show
  * Created by WangXM on 2016/12/4.
  */
-public class FrgCalendarShow extends FrgUtilityBase {
+public class FrgCalendarShow extends FrgUtilitySupportBase {
     public static final SimpleDateFormat DAY_FORMAT =
             new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
 
@@ -66,40 +65,11 @@ public class FrgCalendarShow extends FrgUtilityBase {
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "FrgCalendarShow";
-        View rootView = layoutInflater.inflate(R.layout.vw_calendar, viewGroup, false);
-        ButterKnife.bind(this, rootView);
-
-        if (null == bundle) {
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.add(R.id.fl_holder, mFGContent);
-            ft.commit();
-        }
-
-        return rootView;
+        return layoutInflater.inflate(R.layout.vw_calendar, viewGroup, false);
     }
 
     @Override
-    protected void initUiComponent(View view) {
-        Log.d(LOG_TAG, "initUiComponent");
-
-        mCSIAdapter = new CalendarShowItemAdapter(getActivity());
-        mHGVDays.setCalendarListViewAdapter(mCSIAdapter);
-
-        mHGVDays.setOnMonthChangedListener(yearMonth -> {
-            Log.d(LOG_TAG, "OnMonthChangedListener, yearMonth = " + yearMonth);
-            updateCalendar(yearMonth);
-        });
-
-        mHGVDays.setOnCalendarViewItemClickListener((View, selectedDate) -> {
-            Log.d(LOG_TAG, "OnCalendarViewItemClick, selectedDate = " + selectedDate);
-            mFGContent.updateContent(selectedDate);
-        });
-
-    }
-
-    @Override
-    protected void loadUI() {
+    protected void loadUI(Bundle bundle) {
         final String[] param = new String[1];
         ToolUtil.runInBackground(this.getActivity(),
                 () -> {
@@ -134,16 +104,37 @@ public class FrgCalendarShow extends FrgUtilityBase {
     }
 
     @Override
-    protected void enterActivity() {
-        super.enterActivity();
+    protected void initUI(Bundle bundle) {
+        if (null == bundle) {
+            android.support.v4.app.FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            ft.add(R.id.fl_holder, mFGContent);
+            ft.commit();
+        }
 
+        mCSIAdapter = new CalendarShowItemAdapter(getActivity());
+        mHGVDays.setCalendarListViewAdapter(mCSIAdapter);
+
+        mHGVDays.setOnMonthChangedListener(yearMonth -> {
+            Log.d(LOG_TAG, "OnMonthChangedListener, yearMonth = " + yearMonth);
+            updateCalendar(yearMonth);
+        });
+
+        mHGVDays.setOnCalendarViewItemClickListener((View, selectedDate) -> {
+            Log.d(LOG_TAG, "OnCalendarViewItemClick, selectedDate = " + selectedDate);
+            mFGContent.updateContent(selectedDate);
+        });
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         EventBus.getDefault().register(this);
     }
 
     @Override
-    protected void leaveActivity() {
-        super.enterActivity();
-
+    public void onDestroy() {
+        super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
@@ -153,7 +144,7 @@ public class FrgCalendarShow extends FrgUtilityBase {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBChangeEvent(DBDataChangeEvent event) {
-        loadUI();
+        loadUI(null);
     }
 
     /**

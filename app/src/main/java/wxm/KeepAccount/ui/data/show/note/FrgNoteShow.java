@@ -16,9 +16,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import wxm.KeepAccount.ui.base.Switcher.FrgSwitcher;
 import wxm.KeepAccount.ui.base.Switcher.PageSwitcher;
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
+import wxm.androidutil.FrgUtility.FrgSupportSwitcher;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -35,7 +35,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
  * for note show
  * Created by WangXM on 2016/11/30.
  */
-public class FrgNoteShow extends FrgSwitcher<FrgUtilitySupportBase> {
+public class FrgNoteShow extends FrgSupportSwitcher<FrgUtilitySupportBase> {
     protected final static int POS_DAY_FLOW = 0;
     protected final static int POS_MONTH_FLOW = 1;
     protected final static int POS_YEAR_FLOW = 2;
@@ -59,7 +59,7 @@ public class FrgNoteShow extends FrgSwitcher<FrgUtilitySupportBase> {
         boolean mBADataChange;
         RelativeLayout mRLSelector;
         String   mSZName;
-        FrgSwitcher mSBPage;
+        FrgSupportSwitcher mSBPage;
         int  mPageIdx;
     }
     private pageHelper[] mPHHelper;
@@ -72,13 +72,7 @@ public class FrgNoteShow extends FrgSwitcher<FrgUtilitySupportBase> {
 
     public FrgNoteShow()   {
         super();
-        LOG_TAG = "FrgReportDay";
-
-        setFrgID(R.layout.vw_note_show, R.id.fl_page_holder);
-        addChildFrg(mTFDaily);
-        addChildFrg(mTFMonthly);
-        addChildFrg(mTFYearly);
-        addChildFrg(mTFBudget);
+        setupFrgID(R.layout.vw_note_show, R.id.fl_page_holder);
     }
 
     /**
@@ -91,38 +85,39 @@ public class FrgNoteShow extends FrgSwitcher<FrgUtilitySupportBase> {
             aMPHHelper.mBADataChange = true;
         }
 
-        FrgSwitcher tb = getHotTabItem();
+        FrgSupportSwitcher tb = getHotTabItem();
         if(null != tb) {
             ((ShowViewBase)tb.getHotPage()).reloadView();
         }
     }
 
     @Override
-    protected void enterActivity() {
-        Log.d(LOG_TAG, "in enterActivity");
-        super.enterActivity();
-
+    public void onStart() {
+        super.onStart();
         EventBus.getDefault().register(this);
     }
 
     @Override
-    protected void leaveActivity() {
-        Log.d(LOG_TAG, "in leaveActivity");
+    public void onDestroy() {
         EventBus.getDefault().unregister(this);
-
-        super.leaveActivity();
+        super.onDestroy();
     }
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        LOG_TAG = "FrgNoteShow";
-        View rootView = layoutInflater.inflate(R.layout.vw_note_show, viewGroup, false);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+        return layoutInflater.inflate(R.layout.vw_note_show, viewGroup, false);
     }
 
     @Override
-    protected void initUiComponent(View view) {
+    protected void setupFragment(Bundle bundle) {
+        addChildFrg(mTFDaily);
+        addChildFrg(mTFMonthly);
+        addChildFrg(mTFYearly);
+        addChildFrg(mTFBudget);
+    }
+
+    @Override
+    protected void initUI(Bundle bundle) {
         // init view
         // init adapter
         mRLDayFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_DAY_FLOW]));
@@ -271,7 +266,7 @@ public class FrgNoteShow extends FrgSwitcher<FrgUtilitySupportBase> {
      * get hot tab item
      * @return      hot tab item
      */
-    public FrgSwitcher getHotTabItem() {
+    public FrgSupportSwitcher getHotTabItem() {
         pageHelper ph = (pageHelper) mPSSwitcher.getSelected();
         return null == ph ? null : ph.mSBPage;
     }

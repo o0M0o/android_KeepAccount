@@ -2,11 +2,12 @@ package wxm.KeepAccount.ui.data.report;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import java.util.ArrayList;
 
-import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
+import wxm.androidutil.Switcher.ACSwitcherActivity;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.define.GlobalDef;
 
@@ -14,7 +15,7 @@ import wxm.KeepAccount.define.GlobalDef;
  * UI for report
  * Created by WangXM on 2017/2/15.
  */
-public class ACReport extends ACSwitcherActivity<android.support.v4.app.Fragment> {
+public class ACReport extends ACSwitcherActivity<Fragment> {
     public final static String PARA_TYPE = "para_type";
     public final static String PT_DAY = "pt_day";
     public final static String PT_MONTH = "pt_month";
@@ -23,10 +24,15 @@ public class ACReport extends ACSwitcherActivity<android.support.v4.app.Fragment
     public final static String PARA_LOAD = "para_load";
 
     @Override
-    protected void initUi(Bundle savedInstanceState)    {
-        super.initUi(savedInstanceState);
-        LOG_TAG = "ACReport";
+    protected void leaveActivity() {
+        int ret_data = GlobalDef.INTRET_GIVEUP;
+        Intent data = new Intent();
+        setResult(ret_data, data);
+        finish();
+    }
 
+    @Override
+    protected void setupFragment(Bundle bundle) {
         // check invoke intent
         Intent it = getIntent();
         String sz_type = it.getStringExtra(PARA_TYPE);
@@ -67,13 +73,5 @@ public class ACReport extends ACSwitcherActivity<android.support.v4.app.Fragment
         }
 
         addFragment(mSelfFrg);
-    }
-
-    @Override
-    protected void leaveActivity() {
-        int ret_data = GlobalDef.INTRET_GIVEUP;
-        Intent data = new Intent();
-        setResult(ret_data, data);
-        finish();
     }
 }

@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import wxm.KeepAccount.ui.base.SwitcherActivity.ACSwitcherActivity;
+import wxm.androidutil.Switcher.ACSwitcherActivity;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.BudgetDBUtility;
@@ -24,9 +24,16 @@ public class ACPreveiwAndEdit extends ACSwitcherActivity<FrgPreviewAndEdit> {
     private MenuItem mMISave;
 
     @Override
-    protected void initUi(Bundle savedInstanceState) {
-        super.initUi(savedInstanceState);
+    protected void leaveActivity() {
+        int ret_data = GlobalDef.INTRET_GIVEUP;
 
+        Intent data = new Intent();
+        setResult(ret_data, data);
+        finish();
+    }
+
+    @Override
+    protected void setupFragment(Bundle bundle) {
         Intent it = getIntent();
         String type = it.getStringExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE);
         if (UtilFun.StringIsNullOrEmpty(type)
@@ -60,15 +67,6 @@ public class ACPreveiwAndEdit extends ACSwitcherActivity<FrgPreviewAndEdit> {
         FrgPreviewAndEdit tpe = new FrgPreviewAndEdit();
         tpe.setCurData(type, ob == null ? GlobalDef.STR_CREATE : GlobalDef.STR_MODIFY, ob);
         addFragment(tpe);
-    }
-
-    @Override
-    protected void leaveActivity() {
-        int ret_data = GlobalDef.INTRET_GIVEUP;
-
-        Intent data = new Intent();
-        setResult(ret_data, data);
-        finish();
     }
 
     @Override

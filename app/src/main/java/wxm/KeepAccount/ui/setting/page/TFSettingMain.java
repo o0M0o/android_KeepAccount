@@ -30,17 +30,13 @@ public class TFSettingMain extends TFSettingBase {
     RelativeLayout mRLShareApp;
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.page_setting_main, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        return layoutInflater.inflate(R.layout.page_setting_main, viewGroup, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (null != view) {
+    protected void initUI(Bundle bundle)    {
+        if(null == bundle) {
             mRLRemind.setVisibility(View.GONE);
             mRLShareApp.setVisibility(View.GONE);
         }

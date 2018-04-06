@@ -33,8 +33,6 @@ public class DailyChart extends ChartBase {
     public DailyChart() {
         super();
         mPrvWidth = 4.5f;
-
-        LOG_TAG = "DailyChart";
     }
 
     @Override

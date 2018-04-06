@@ -35,8 +35,6 @@ public class YearlyChart extends ChartBase {
     public YearlyChart() {
         super();
         mPrvWidth = 6;
-
-        LOG_TAG = "YearlyChart";
     }
 
     @Override
