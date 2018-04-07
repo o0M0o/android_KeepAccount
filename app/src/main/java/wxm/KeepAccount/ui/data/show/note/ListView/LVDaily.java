@@ -278,8 +278,8 @@ public class LVDaily extends LVBase {
     }
 
     @Override
-    protected void refreshData() {
-        super.refreshData();
+    protected void initUI(Bundle bundle) {
+        super.initUI(bundle);
 
         //showLoadingProgress(true);
         mMainPara.clear();

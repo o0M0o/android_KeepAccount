@@ -82,19 +82,16 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBChangeEvent(DBDataChangeEvent event) {
-        for (pageHelper aMPHHelper : mPHHelper) {
-            aMPHHelper.mBADataChange = true;
-        }
-
         FrgSupportSwitcher tb = getHotTabItem();
-        if(null != tb) {
-            ((ShowViewBase)tb.getHotPage()).reloadView();
+        for (pageHelper aMPHHelper : mPHHelper) {
+            if(tb != aMPHHelper.mSBPage) {
+                aMPHHelper.mBADataChange = true;
+            }
         }
-    }
 
-    @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return layoutInflater.inflate(R.layout.vw_note_show, viewGroup, false);
+        if(null != tb) {
+            ((FrgUtilitySupportBase)tb.getHotPage()).refreshUI();
+        }
     }
 
     @Override
@@ -215,9 +212,10 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
         if(enable)  {
             switchToPage(ph.mSBPage);
 
-            if(ph.mBADataChange)
+            if(ph.mBADataChange) {
                 ph.mSBPage.refreshUI();
-            ph.mBADataChange = false;
+                ph.mBADataChange = false;
+            }
         }
     }
 

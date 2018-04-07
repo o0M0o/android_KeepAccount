@@ -208,8 +208,8 @@ public class LVYearly extends LVBase {
      * 重新加载数据
      */
     @Override
-    protected void refreshData() {
-        super.refreshData();
+    protected void initUI(Bundle bundle) {
+        super.initUI(bundle);
 
         mMainPara.clear();
         mHMSubPara.clear();

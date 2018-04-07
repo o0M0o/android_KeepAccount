@@ -1,5 +1,7 @@
 package wxm.KeepAccount.ui.data.show.note.HelloChart;
 
+import android.os.Bundle;
+
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -32,14 +34,10 @@ public class MonthlyChart extends ChartBase {
     public MonthlyChart() {
         super();
         mPrvWidth = 5.5f;
-
-        LOG_TAG = "MonthlyChart";
     }
 
     @Override
     protected void refreshData() {
-        super.refreshData();
-
         ToolUtil.runInBackground(this.getActivity(),
                 () -> {
                     HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForMonth();

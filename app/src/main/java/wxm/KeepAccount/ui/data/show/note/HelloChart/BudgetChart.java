@@ -235,11 +235,7 @@ public class BudgetChart extends ShowViewBase {
         }
     }
 
-
-    @Override
     protected void refreshData() {
-        super.refreshData();
-
         if (Spinner.INVALID_POSITION == mSPBudgetHot)
             return;
 

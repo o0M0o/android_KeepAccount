@@ -205,19 +205,12 @@ public class LVBudget extends LVBase {
     }
 
     @Override
-    protected void refreshData() {
-        super.refreshData();
+    protected void initUI(Bundle bundle) {
+        super.initUI(bundle);
 
-        Activity h = this.getActivity();
-        Executors.newCachedThreadPool().submit(() -> {
-            parseNotes();
-
-            if(!(h.isDestroyed() || h.isFinishing()))   {
-                h.runOnUiThread(() ->   {
-                    loadUIUtility(true);
-                });
-            }
-        });
+        ToolUtil.runInBackground(this.getActivity(),
+                this::parseNotes,
+                () -> loadUIUtility(true));
     }
 
     /// BEGIN PRIVATE

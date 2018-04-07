@@ -122,7 +122,6 @@ public abstract class LVBase extends ShowViewBase {
     @Override
     protected void initUI(Bundle bundle) {
         mAHActs.init();
-        refreshData();
     }
 
     /**
@@ -165,8 +164,7 @@ public abstract class LVBase extends ShowViewBase {
      * @param bShowDialog   show dialog if true
      */
     protected void reloadView(final Context v, final boolean bShowDialog) {
-        //refreshUI();
-        refreshData();
+        refreshUI();
         if (bShowDialog) {
             android.app.AlertDialog.Builder builder =
                     new android.app.AlertDialog.Builder(v);

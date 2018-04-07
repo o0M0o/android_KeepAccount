@@ -1,6 +1,8 @@
 package wxm.KeepAccount.ui.data.show.note.HelloChart;
 
 
+import android.os.Bundle;
+
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -35,10 +37,25 @@ public class DailyChart extends ChartBase {
         mPrvWidth = 4.5f;
     }
 
-    @Override
-    protected void refreshData() {
-        super.refreshData();
+    /**
+     * filter UI
+     * @param event 事件
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFilterShowEvent(FilterShowEvent event) {
+        List<String> e_p = event.getFilterTag();
+        if ((NoteDataHelper.TAB_TITLE_MONTHLY.equals(event.getSender()))
+                && (null != e_p)) {
+            mBFilter = true;
+            mFilterPara.clear();
+            mFilterPara.addAll(e_p);
 
+            refreshData();
+        }
+    }
+
+    @Override
+    protected void refreshData()  {
         ToolUtil.runInBackground(this.getActivity(),
                 () -> {
                     HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForDay();
@@ -112,22 +129,5 @@ public class DailyChart extends ChartBase {
                     }
                 },
                 () -> loadUIUtility(true));
-    }
-
-    /**
-     * filter UI
-     * @param event 事件
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onFilterShowEvent(FilterShowEvent event) {
-        List<String> e_p = event.getFilterTag();
-        if ((NoteDataHelper.TAB_TITLE_MONTHLY.equals(event.getSender()))
-                && (null != e_p)) {
-            mBFilter = true;
-            mFilterPara.clear();
-            mFilterPara.addAll(e_p);
-
-            refreshData();
-        }
     }
 }

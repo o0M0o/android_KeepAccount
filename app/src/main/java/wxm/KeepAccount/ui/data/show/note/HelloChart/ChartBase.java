@@ -198,6 +198,8 @@ abstract class ChartBase extends ShowViewBase {
         }
     }
 
+    protected abstract void refreshData();
+
 
     private void refreshAttachLayout() {
         setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);

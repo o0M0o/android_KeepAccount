@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 
 import butterknife.BindView;
+import wxm.KeepAccount.ui.base.FrgUitlity.FrgWithEventBus;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -23,7 +24,7 @@ import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
  * Created by xiaoming wang on 2016/9/14.
  */
 public abstract class ShowViewBase
-        extends FrgUtilitySupportBase {
+        extends FrgWithEventBus {
 
     // filter for view
     protected boolean mBFilter;
@@ -41,26 +42,6 @@ public abstract class ShowViewBase
     protected ShowViewBase() {
         mBFilter = false;
         mFilterPara = new LinkedList<>();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
-
-    public void reloadView()  {
-        refreshData();
-    }
-
-    @CallSuper
-    protected void refreshData() {
     }
 
     /**
