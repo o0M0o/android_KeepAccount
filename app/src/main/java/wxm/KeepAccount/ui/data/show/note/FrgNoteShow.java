@@ -16,6 +16,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import wxm.KeepAccount.ui.base.FrgUitlity.FrgSwitcherWithEventBus;
 import wxm.KeepAccount.ui.base.Switcher.PageSwitcher;
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 import wxm.androidutil.FrgUtility.FrgSupportSwitcher;
@@ -35,7 +36,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
  * for note show
  * Created by WangXM on 2016/11/30.
  */
-public class FrgNoteShow extends FrgSupportSwitcher<FrgUtilitySupportBase> {
+public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> {
     protected final static int POS_DAY_FLOW = 0;
     protected final static int POS_MONTH_FLOW = 1;
     protected final static int POS_YEAR_FLOW = 2;
@@ -89,18 +90,6 @@ public class FrgNoteShow extends FrgSupportSwitcher<FrgUtilitySupportBase> {
         if(null != tb) {
             ((ShowViewBase)tb.getHotPage()).reloadView();
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
     }
 
     @Override

@@ -18,6 +18,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
+import wxm.KeepAccount.ui.base.FrgUitlity.FrgSwitcherWithEventBus;
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays;
 import wxm.KeepAccount.ui.data.report.page.DayReportChart;
 import wxm.KeepAccount.ui.data.report.page.DayReportWebView;
@@ -25,7 +26,6 @@ import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
-import wxm.androidutil.FrgUtility.FrgSupportSwitcher;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 
@@ -33,7 +33,7 @@ import wxm.androidutil.util.UtilFun;
  * day data report
  * Created by WangXM on 2017/2/15.
  */
-public class FrgReportDay extends FrgSupportSwitcher<FrgUtilitySupportBase> {
+public class FrgReportDay extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> {
     @BindView(R.id.tv_day)
     TextView mTVDay;
     @BindView(R.id.tv_pay)
@@ -47,14 +47,7 @@ public class FrgReportDay extends FrgSupportSwitcher<FrgUtilitySupportBase> {
 
     public FrgReportDay()   {
         super();
-        EventBus.getDefault().register(this);
         setupFrgID(R.layout.vw_report, R.id.fl_page_holder);
-    }
-
-    @Override
-    public void  onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
     }
 
     /**

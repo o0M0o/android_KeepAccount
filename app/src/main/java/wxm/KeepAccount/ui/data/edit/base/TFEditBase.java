@@ -1,12 +1,13 @@
 package wxm.KeepAccount.ui.data.edit.base;
 
-import android.support.v4.app.Fragment;
+
+import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 
 /**
  * base for data edit
  * Created by WangXM on2016/9/27.
  */
-public abstract class TFEditBase extends Fragment {
+public abstract class TFEditBase extends FrgUtilitySupportBase {
     protected String mAction;
 
     /**
@@ -30,9 +31,4 @@ public abstract class TFEditBase extends Fragment {
      * @return      current data or null
      */
     public abstract Object getCurData();
-
-    /**
-     * reload UI
-     */
-    public abstract void reLoadView();
 }

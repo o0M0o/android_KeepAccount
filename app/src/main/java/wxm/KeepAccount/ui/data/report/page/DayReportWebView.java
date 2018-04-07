@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.data.report.page;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.webkit.WebView;
 
@@ -29,18 +30,15 @@ public class DayReportWebView extends FrgSupportWebView {
     private ArrayList<String> mASParaLoad;
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        Bundle bd = getArguments();
-        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onDestroy() {
+    public void onDetach() {
         EventBus.getDefault().unregister(this);
-        super.onDestroy();
+        super.onDetach();
     }
 
     /**
@@ -59,6 +57,11 @@ public class DayReportWebView extends FrgSupportWebView {
     protected void onWVPageFinished(WebView wvPage, Object para) {
         wvPage.evaluateJavascript("onLoadData(" + para + ")", value -> {
         });
+    }
+
+    protected void initUI(Bundle bundle)    {
+        Bundle bd = getArguments();
+        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
     }
 
     @Override

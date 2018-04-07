@@ -69,27 +69,12 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     private IncomeNoteItem mOldIncomeNote;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.page_edit_income, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+    protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+        return inflater.inflate(R.layout.page_edit_income, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (null != view) {
-            if (UtilFun.StringIsNullOrEmpty(mAction)
-                    || (mAction.equals(GlobalDef.STR_MODIFY) && null == mOldIncomeNote))
-                return;
-
-            init_compent(view);
-            init_view();
-        }
-    }
-
-    private void init_compent(View v) {
+    protected void initUI(Bundle bundle) {
         mETDate.setOnTouchListener(this);
         mETInfo.setOnTouchListener(this);
         mTVNote.setOnTouchListener(this);
@@ -117,7 +102,12 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         });
     }
 
-    private void init_view() {
+    @Override
+    protected void loadUI(Bundle bundle) {
+        if (UtilFun.StringIsNullOrEmpty(mAction)
+                || (mAction.equals(GlobalDef.STR_MODIFY) && null == mOldIncomeNote))
+            return;
+
         if (mAction.equals(GlobalDef.STR_MODIFY)) {
             mETDate.setText(mOldIncomeNote.getTs().toString().substring(0, 16));
             mETInfo.setText(mOldIncomeNote.getInfo());
@@ -182,12 +172,6 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         }
 
         return null;
-    }
-
-    @Override
-    public void reLoadView() {
-        if (null != getView())
-            init_view();
     }
 
 

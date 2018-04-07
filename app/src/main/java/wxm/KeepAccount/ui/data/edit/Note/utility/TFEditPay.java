@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.sql.BatchUpdateException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -82,30 +83,16 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
     private PayNoteItem mOldPayNote;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.page_edit_pay, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+    protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+        return inflater.inflate(R.layout.page_edit_pay, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (null != view) {
-            if (UtilFun.StringIsNullOrEmpty(mAction)
-                    || (GlobalDef.STR_MODIFY.equals(mAction) && null == mOldPayNote))
-                return;
+    protected void loadUI(Bundle bundle) {
+        if (UtilFun.StringIsNullOrEmpty(mAction)
+                || (GlobalDef.STR_MODIFY.equals(mAction) && null == mOldPayNote))
+            return;
 
-            init_component();
-            fill_data();
-        }
-    }
-
-    /**
-     * fill data
-     */
-    private void fill_data() {
         if (mAction.equals(GlobalDef.STR_MODIFY)) {
             BudgetItem bi = mOldPayNote.getBudget();
             if (null != bi) {
@@ -141,7 +128,8 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         }
     }
 
-    private void init_component() {
+    @Override
+    protected void initUI(Bundle bundle) {
         // 填充预算数据
         ArrayList<String> data_ls = new ArrayList<>();
         data_ls.add("无预算(不使用预算)");
@@ -238,11 +226,6 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
         return null;
     }
-
-    @Override
-    public void reLoadView() {
-    }
-
 
     /**
      * check data validity

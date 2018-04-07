@@ -33,18 +33,18 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
+import wxm.KeepAccount.ui.base.FrgUitlity.FrgWithEventBus;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 
 /**
  * daily report(webview)
  * Created by WangXM on 2017/3/4.
  */
-public class DayReportChart extends FrgUtilitySupportBase {
+public class DayReportChart extends FrgWithEventBus {
     @BindView(R.id.chart)
     PieChartView mCVchart;
     @BindView(R.id.pb_load_data)
@@ -55,18 +55,6 @@ public class DayReportChart extends FrgUtilitySupportBase {
     ToggleButton mTBPay;
     private ArrayList<String> mASParaLoad;
     private LinkedList<INote> mLLOrgData;
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
 
     /**
      * update day range

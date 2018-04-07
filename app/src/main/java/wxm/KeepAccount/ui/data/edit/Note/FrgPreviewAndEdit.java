@@ -92,7 +92,7 @@ public class FrgPreviewAndEdit extends FrgUtilitySupportBase
                 TFPreviewBase old_tp = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_PREVIEW));
 
                 te.setCurData(mStrAction, old_tp.getCurData());
-                te.reLoadView();
+                te.refreshUI();
             }
         }
     }

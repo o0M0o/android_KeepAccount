@@ -33,6 +33,7 @@ import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import wxm.KeepAccount.ui.base.FrgUitlity.FrgWithEventBus;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -53,7 +54,7 @@ import wxm.uilib.IconButton.IconButton;
  * for daily detail info
  * Created by WangXM on 2017/01/20.
  */
-public class FrgDailyDetail extends FrgUtilitySupportBase {
+public class FrgDailyDetail extends FrgWithEventBus {
     // 展示时间信息的UI
     @BindView(R.id.tv_day)
     TextView mTVMonthDay;
@@ -104,18 +105,6 @@ public class FrgDailyDetail extends FrgUtilitySupportBase {
     // for data
     private String mSZHotDay;
     private List<INote> mLSDayContents;
-
-    @Override
-    public void  onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void  onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
 
     @Override
     protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {

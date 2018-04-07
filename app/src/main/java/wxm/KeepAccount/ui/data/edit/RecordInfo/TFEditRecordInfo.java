@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import butterknife.BindView;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.UiUtil;
 import wxm.androidutil.util.UtilFun;
@@ -60,58 +61,64 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     private GVTypeAdapter mGVAdapter;
 
     // ui component for view
-    private TextView mTVNote;
-    private RelativeLayout mRLActAdd;
-    private RelativeLayout mRLActMinus;
-    private RelativeLayout mRLActPencil;
-    private RelativeLayout mRLActAccept;
-    private RelativeLayout mRLActReject;
+    @BindView(R.id.tv_note)
+    TextView mTVNote;
 
-    private int mCLSelected;
-    private int mCLNotSelected;
+    @BindView(R.id.rl_add)
+    RelativeLayout mRLActAdd;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    @BindView(R.id.rl_minus)
+    RelativeLayout mRLActMinus;
+
+    @BindView(R.id.rl_pencil)
+    RelativeLayout mRLActPencil;
+
+    @BindView(R.id.rl_accept)
+    RelativeLayout mRLActAccept;
+
+    @BindView(R.id.rl_reject)
+    RelativeLayout mRLActReject;
+
+    @BindView(R.id.gv_record_info)
+    GridView mGVHolder;
+
+    private static int mCLSelected;
+    private static int mCLNotSelected;
+    static {
         mCLSelected = UiUtil.getColor(ContextUtil.getInstance(), R.color.peachpuff);
         mCLNotSelected = UiUtil.getColor(ContextUtil.getInstance(), R.color.white);
-        return inflater.inflate(R.layout.vw_edit_record_info, container, false);
     }
 
     @Override
-    public void onViewCreated(View vw, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(vw, savedInstanceState);
-        if (null != vw) {
-            if (!mEditType.equals(GlobalDef.STR_RECORD_PAY) &&
-                    !mEditType.equals(GlobalDef.STR_RECORD_INCOME))
-                return;
+    protected void initUI(Bundle bundle)    {
+        // init action
+        mRLActAdd.setOnClickListener(this);
+        mRLActMinus.setOnClickListener(this);
+        mRLActAccept.setOnClickListener(this);
+        mRLActReject.setOnClickListener(this);
+        mRLActPencil.setOnClickListener(this);
+        update_acts(SELECTED_NONE);
+    }
 
-            // init view
-            GridView mGVHolder = UtilFun.cast_t(vw.findViewById(R.id.gv_record_info));
-            mTVNote = UtilFun.cast_t(vw.findViewById(R.id.tv_note));
-            mTVNote.setText("");
-            mRLActAdd = UtilFun.cast_t(vw.findViewById(R.id.rl_add));
-            mRLActMinus = UtilFun.cast_t(vw.findViewById(R.id.rl_minus));
-            mRLActAccept = UtilFun.cast_t(vw.findViewById(R.id.rl_accept));
-            mRLActReject = UtilFun.cast_t(vw.findViewById(R.id.rl_reject));
-            mRLActPencil = UtilFun.cast_t(vw.findViewById(R.id.rl_pencil));
+    @Override
+    protected void loadUI(Bundle bundle)    {
+        if (!mEditType.equals(GlobalDef.STR_RECORD_PAY) &&
+                !mEditType.equals(GlobalDef.STR_RECORD_INCOME))
+            return;
 
-            // init gv
-            mLHMData = new ArrayList<>();
-            mGVAdapter = new GVTypeAdapter(getActivity(), mLHMData,
-                    new String[]{KEY_NAME}, new int[]{R.id.tv_type_name});
-            mGVHolder.setAdapter(mGVAdapter);
-            mGVHolder.setOnItemClickListener((parent, view1, position, id) -> onGVItemClick(position));
-            load_info();
 
-            // init action
-            mRLActAdd.setOnClickListener(this);
-            mRLActMinus.setOnClickListener(this);
-            mRLActAccept.setOnClickListener(this);
-            mRLActReject.setOnClickListener(this);
-            mRLActPencil.setOnClickListener(this);
-            update_acts(SELECTED_NONE);
-        }
+        // init gv
+        mLHMData = new ArrayList<>();
+        mGVAdapter = new GVTypeAdapter(getActivity(), mLHMData,
+                new String[]{KEY_NAME}, new int[]{R.id.tv_type_name});
+        mGVHolder.setAdapter(mGVAdapter);
+        mGVHolder.setOnItemClickListener((parent, view1, position, id) -> onGVItemClick(position));
+        load_info();
+    }
+
+    @Override
+    protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+        return inflater.inflate(R.layout.vw_edit_record_info, container, false);
     }
 
     /**
@@ -267,9 +274,6 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
         return ri;
     }
 
-    @Override
-    public void reLoadView() {
-    }
 
     @Override
     public void onClick(View v) {

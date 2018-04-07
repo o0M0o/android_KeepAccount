@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.welcome;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -23,6 +24,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.KeepAccount.db.DBDataChangeEvent;
+import wxm.KeepAccount.ui.base.FrgUitlity.FrgWithEventBus;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.DragGrid.DragGridView;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
@@ -39,7 +41,7 @@ import wxm.KeepAccount.utility.PreferencesUtil;
  * for welcome
  * Created by WangXM on 2016/12/7.
  */
-public class FrgWelcome extends FrgUtilitySupportBase {
+public class FrgWelcome extends FrgWithEventBus {
     // for ui
     @BindView(R.id.dgv_buttons)
     DragGridView mDGVActions;
@@ -50,18 +52,6 @@ public class FrgWelcome extends FrgUtilitySupportBase {
     // for data
     private List<HashMap<String, Object>> mLSData = new ArrayList<>();
     private ArrayList<FrgPara> mALFrgs = new ArrayList<>();
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
 
     /**
      * handler for DB data change

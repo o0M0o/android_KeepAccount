@@ -52,20 +52,66 @@ public class TFEditBudget extends TFEditBase {
     private BudgetItem mBIData;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.vw_budget_edit, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+    protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+        return inflater.inflate(R.layout.vw_budget_edit, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (null != view) {
-            init_component();
-            init_view();
-        }
+    @SuppressLint("ClickableViewAccessibility")
+    protected void initUI(Bundle bundle)    {
+        mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+
+        mTVNote.setOnTouchListener((view, motionEvent) -> {
+            View v_self = getView();
+            if (null != v_self && motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                String tv_sz = mTVNote.getText().toString();
+                String lt = mSZDefNote.equals(tv_sz) ? "" : tv_sz;
+
+                DlgLongTxt dlg = new DlgLongTxt();
+                dlg.setLongTxt(lt);
+                dlg.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                    @Override
+                    public void onDialogPositiveResult(DialogFragment dialogFragment) {
+                        String lt = ((DlgLongTxt) dialogFragment).getLongTxt();
+                        if (UtilFun.StringIsNullOrEmpty(lt))
+                            lt = mSZDefNote;
+
+                        mTVNote.setText(lt);
+                        mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+                    }
+
+                    @Override
+                    public void onDialogNegativeResult(DialogFragment dialogFragment) {
+                    }
+                });
+
+                dlg.show(getActivity().getSupportFragmentManager(), "edit note");
+                return true;
+            }
+
+            return false;
+        });
+
+        mETAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int pos = s.toString().indexOf(".");
+                if (pos >= 0) {
+                    int after_len = s.length() - (pos + 1);
+                    if (after_len > 2) {
+                        mETAmount.setError("小数点后超过两位数!");
+                        mETAmount.setText(s.subSequence(0, pos + 3));
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -156,17 +202,11 @@ public class TFEditBudget extends TFEditBase {
         return null;
     }
 
-    @Override
-    public void reLoadView() {
-        if (null != getView())
-            init_view();
-    }
-
-
     /**
      * init UI
      */
-    private void init_view() {
+    @Override
+    protected void loadUI(Bundle bundle) {
         if (UtilFun.StringIsNullOrEmpty(mAction)
                 || (GlobalDef.STR_MODIFY.equals(mAction) && null == mBIData))
             return;
@@ -179,66 +219,5 @@ public class TFEditBudget extends TFEditBase {
             mTVNote.setText(UtilFun.StringIsNullOrEmpty(o_n) ? mSZDefNote : o_n);
             mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         }
-    }
-
-    /**
-     * init UI component
-     */
-    @SuppressLint("ClickableViewAccessibility")
-    private void init_component() {
-        mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-
-        mTVNote.setOnTouchListener((view, motionEvent) -> {
-            View v_self = getView();
-            if (null != v_self && motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                String tv_sz = mTVNote.getText().toString();
-                String lt = mSZDefNote.equals(tv_sz) ? "" : tv_sz;
-
-                DlgLongTxt dlg = new DlgLongTxt();
-                dlg.setLongTxt(lt);
-                dlg.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
-                    @Override
-                    public void onDialogPositiveResult(DialogFragment dialogFragment) {
-                        String lt = ((DlgLongTxt) dialogFragment).getLongTxt();
-                        if (UtilFun.StringIsNullOrEmpty(lt))
-                            lt = mSZDefNote;
-
-                        mTVNote.setText(lt);
-                        mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-                    }
-
-                    @Override
-                    public void onDialogNegativeResult(DialogFragment dialogFragment) {
-                    }
-                });
-
-                dlg.show(getActivity().getSupportFragmentManager(), "edit note");
-                return true;
-            }
-
-            return false;
-        });
-
-        mETAmount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                int pos = s.toString().indexOf(".");
-                if (pos >= 0) {
-                    int after_len = s.length() - (pos + 1);
-                    if (after_len > 2) {
-                        mETAmount.setError("小数点后超过两位数!");
-                        mETAmount.setText(s.subSequence(0, pos + 3));
-                    }
-                }
-            }
-        });
     }
 }
