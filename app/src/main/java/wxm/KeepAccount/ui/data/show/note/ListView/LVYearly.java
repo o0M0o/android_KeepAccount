@@ -124,7 +124,7 @@ public class LVYearly extends LVBase {
                     mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
                     reorderData();
-                    loadUIUtility(true);
+                    loadUI(null);
                 }
                 break;
 
@@ -208,157 +208,139 @@ public class LVYearly extends LVBase {
      * 重新加载数据
      */
     @Override
-    protected void initUI(Bundle bundle) {
-        super.initUI(bundle);
-
+    protected void asyncInitUI(Bundle bundle) {
         mMainPara.clear();
         mHMSubPara.clear();
 
-        ToolUtil.runInBackground(this.getActivity(),
-                () -> {
-                    ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
-                    Future<LinkedList<MainAdapterItem>> ll_main_rets;
-                    Future<LinkedList<Map.Entry<String, SubAdapterItem>>> ll_sub_rets;
+        ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
+        Future<LinkedList<MainAdapterItem>> ll_main_rets;
+        Future<LinkedList<Map.Entry<String, SubAdapterItem>>> ll_sub_rets;
 
-                    // for year
-                    List<String> set_k = NoteDataHelper.getNotesYears();
-                    Collections.sort(set_k, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-                    ll_main_rets = fixedThreadPool
-                            .submit(() -> {
-                                LinkedList<MainAdapterItem> ll_rets = new LinkedList<>();
-                                for (String k : set_k) {
-                                    NoteShowInfo ni = NoteDataHelper.getInfoByYear(k);
+        // for year
+        List<String> set_k = NoteDataHelper.getNotesYears();
+        Collections.sort(set_k, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
+        ll_main_rets = fixedThreadPool
+                .submit(() -> {
+                    LinkedList<MainAdapterItem> ll_rets = new LinkedList<>();
+                    for (String k : set_k) {
+                        NoteShowInfo ni = NoteDataHelper.getInfoByYear(k);
 
-                                    MainAdapterItem map = new MainAdapterItem();
-                                    map.year = k;
-                                    map.yearDetail.mPayCount = String.valueOf(ni.getPayCount());
-                                    map.yearDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
-                                    map.yearDetail.mPayAmount = String.format(Locale.CHINA,
-                                                             "%.02f", ni.getPayAmount());
-                                    map.yearDetail.mIncomeAmount = String.format(Locale.CHINA,
-                                                            "%.02f", ni.getIncomeAmount());
+                        MainAdapterItem map = new MainAdapterItem();
+                        map.year = k;
+                        map.yearDetail.mPayCount = String.valueOf(ni.getPayCount());
+                        map.yearDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
+                        map.yearDetail.mPayAmount = String.format(Locale.CHINA,
+                                "%.02f", ni.getPayAmount());
+                        map.yearDetail.mIncomeAmount = String.format(Locale.CHINA,
+                                "%.02f", ni.getIncomeAmount());
 
-                                    BigDecimal bd_l = ni.getBalance();
-                                    map.amount = String.format(Locale.CHINA,
-                                            (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
+                        BigDecimal bd_l = ni.getBalance();
+                        map.amount = String.format(Locale.CHINA,
+                                (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
 
-                                    map.tag = k;
-                                    map.show = EShowFold.getByFold(!checkUnfoldItem(k)).getName();
-                                    ll_rets.add(map);
-                                }
+                        map.tag = k;
+                        map.show = EShowFold.getByFold(!checkUnfoldItem(k)).getName();
+                        ll_rets.add(map);
+                    }
 
-                                return ll_rets;
-                            });
+                    return ll_rets;
+                });
 
-                    // for month
-                    List<String> set_k_m = NoteDataHelper.getNotesMonths();
-                    Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-                    ll_sub_rets = fixedThreadPool
-                            .submit(() -> {
-                                LinkedList<Map.Entry<String, SubAdapterItem>>
-                                        ll_rets = new LinkedList<>();
-                                for (String k : set_k_m) {
-                                    String ky = k.substring(0, 4);
-                                    NoteShowInfo ni = NoteDataHelper.getInfoByMonth(k);
-                                    SubAdapterItem map = new SubAdapterItem();
+        // for month
+        List<String> set_k_m = NoteDataHelper.getNotesMonths();
+        Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
+        ll_sub_rets = fixedThreadPool
+                .submit(() -> {
+                    LinkedList<Map.Entry<String, SubAdapterItem>>
+                            ll_rets = new LinkedList<>();
+                    for (String k : set_k_m) {
+                        String ky = k.substring(0, 4);
+                        NoteShowInfo ni = NoteDataHelper.getInfoByMonth(k);
+                        SubAdapterItem map = new SubAdapterItem();
 
-                                    String km = k.substring(5, 7);
-                                    km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
-                                    map.month = km;
-                                    map.monthDetail.mPayCount = String.valueOf(ni.getPayCount());
-                                    map.monthDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
-                                    map.monthDetail.mPayAmount = String.format(Locale.CHINA,
-                                                            "%.02f", ni.getPayAmount());
-                                    map.monthDetail.mIncomeAmount = String.format(Locale.CHINA,
-                                                            "%.02f", ni.getIncomeAmount());
+                        String km = k.substring(5, 7);
+                        km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
+                        map.month = km;
+                        map.monthDetail.mPayCount = String.valueOf(ni.getPayCount());
+                        map.monthDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
+                        map.monthDetail.mPayAmount = String.format(Locale.CHINA,
+                                "%.02f", ni.getPayAmount());
+                        map.monthDetail.mIncomeAmount = String.format(Locale.CHINA,
+                                "%.02f", ni.getIncomeAmount());
 
-                                    BigDecimal bd_l = ni.getBalance();
-                                    map.amount = String.format(Locale.CHINA,
-                                            (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
+                        BigDecimal bd_l = ni.getBalance();
+                        map.amount = String.format(Locale.CHINA,
+                                (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
 
-                                    map.tag = ky;
-                                    map.subTag = k;
+                        map.tag = ky;
+                        map.subTag = k;
 
-                                    ll_rets.add(new Map.Entry<String, SubAdapterItem>() {
-                                        @Override
-                                        public String getKey() {
-                                            return ky;
-                                        }
-
-                                        @Override
-                                        public SubAdapterItem getValue() {
-                                            return map;
-                                        }
-
-                                        @Override
-                                        public SubAdapterItem setValue(SubAdapterItem value) {
-                                            return null;
-                                        }
-
-                                    });
-                                }
-
-                                return ll_rets;
-                            });
-
-                    try {
-                        mMainPara.addAll(ll_main_rets.get());
-
-                        for(Map.Entry<String, SubAdapterItem> ret : ll_sub_rets.get()) {
-                            LinkedList<SubAdapterItem> lh = mHMSubPara.get(ret.getKey());
-                            if(null == lh)  {
-                                lh = new LinkedList<>();
-                                mHMSubPara.put(ret.getKey(), lh);
+                        ll_rets.add(new Map.Entry<String, SubAdapterItem>() {
+                            @Override
+                            public String getKey() {
+                                return ky;
                             }
 
-                            lh.add(ret.getValue());
-                        }
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
+                            @Override
+                            public SubAdapterItem getValue() {
+                                return map;
+                            }
+
+                            @Override
+                            public SubAdapterItem setValue(SubAdapterItem value) {
+                                return null;
+                            }
+
+                        });
                     }
-                },
-                () -> loadUIUtility(true));
+
+                    return ll_rets;
+                });
+
+        try {
+            mMainPara.addAll(ll_main_rets.get());
+
+            for(Map.Entry<String, SubAdapterItem> ret : ll_sub_rets.get()) {
+                LinkedList<SubAdapterItem> lh = mHMSubPara.get(ret.getKey());
+                if(null == lh)  {
+                    lh = new LinkedList<>();
+                    mHMSubPara.put(ret.getKey(), lh);
+                }
+
+                lh.add(ret.getValue());
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void loadUI(Bundle bundle) {
-        loadUIUtility(false);
+        refreshAttachLayout();
+
+        // update data
+        LinkedList<MainAdapterItem> n_mainpara;
+        if (mBFilter) {
+            n_mainpara = new LinkedList<>();
+            for (MainAdapterItem i : mMainPara) {
+                for (String ii : mFilterPara) {
+                    if (i.tag.equals(ii)) {
+                        n_mainpara.add(i);
+                        break;
+                    }
+                }
+            }
+        } else {
+            n_mainpara = mMainPara;
+        }
+
+        // 设置listview adapter
+        YearAdapter mSNAdapter = new YearAdapter(ContextUtil.getInstance(), n_mainpara);
+        mLVShow.setAdapter(mSNAdapter);
+        mSNAdapter.notifyDataSetChanged();
     }
 
     /// BEGIN PRIVATE
-
-    /**
-     * 加载UI的工作
-     *
-     * @param b_fully 若为true则加载数据
-     */
-    private void loadUIUtility(boolean b_fully) {
-        refreshAttachLayout();
-
-        if (b_fully) {
-            // update data
-            LinkedList<MainAdapterItem> n_mainpara;
-            if (mBFilter) {
-                n_mainpara = new LinkedList<>();
-                for (MainAdapterItem i : mMainPara) {
-                    for (String ii : mFilterPara) {
-                        if (i.tag.equals(ii)) {
-                            n_mainpara.add(i);
-                            break;
-                        }
-                    }
-                }
-            } else {
-                n_mainpara = mMainPara;
-            }
-
-            // 设置listview adapter
-            YearAdapter mSNAdapter = new YearAdapter(ContextUtil.getInstance(), n_mainpara);
-            mLVShow.setAdapter(mSNAdapter);
-            mSNAdapter.notifyDataSetChanged();
-        }
-    }
-
 
     /**
      * 调整数据排序

@@ -118,7 +118,7 @@ public class LVBudget extends LVBase {
                     mIBSort.setActName(mBODownOrder ? R.string.cn_sort_up_by_name : R.string.cn_sort_down_by_name);
 
                     reorderData();
-                    loadUIUtility(true);
+                    loadUI(null);
                 }
                 break;
 
@@ -189,28 +189,32 @@ public class LVBudget extends LVBase {
                     }
                 }
 
-                loadUIUtility(true);
+                loadUI(null);
                 break;
 
             case R.id.bt_giveup:
                 mActionType = ACTION_EDIT;
-                loadUIUtility(true);
+                loadUI(null);
                 break;
         }
     }
 
     @Override
     protected void loadUI(Bundle bundle) {
-        loadUIUtility(false);
+        refreshAttachLayout();
+
+        LinkedList<MainAdapterItem> n_mainpara = new LinkedList<>();
+        n_mainpara.addAll(mMainPara);
+
+        // 设置listview adapter
+        MainAdapter mSNAdapter = new MainAdapter(ContextUtil.getInstance(), n_mainpara);
+        mLVShow.setAdapter(mSNAdapter);
+        mSNAdapter.notifyDataSetChanged();
     }
 
     @Override
-    protected void initUI(Bundle bundle) {
-        super.initUI(bundle);
-
-        ToolUtil.runInBackground(this.getActivity(),
-                this::parseNotes,
-                () -> loadUIUtility(true));
+    protected void asyncInitUI(Bundle bundle) {
+        parseNotes();
     }
 
     /// BEGIN PRIVATE
@@ -218,24 +222,6 @@ public class LVBudget extends LVBase {
         setAttachLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
         setFilterLayoutVisible(View.GONE);
         setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
-    }
-
-    /**
-     * load UI
-     * @param b_fully   if true then reload data
-     */
-    protected void loadUIUtility(boolean b_fully) {
-        refreshAttachLayout();
-
-        if (b_fully) {
-            LinkedList<MainAdapterItem> n_mainpara = new LinkedList<>();
-            n_mainpara.addAll(mMainPara);
-
-            // 设置listview adapter
-            MainAdapter mSNAdapter = new MainAdapter(ContextUtil.getInstance(), n_mainpara);
-            mLVShow.setAdapter(mSNAdapter);
-            mSNAdapter.notifyDataSetChanged();
-        }
     }
 
 

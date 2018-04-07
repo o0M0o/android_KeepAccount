@@ -16,6 +16,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import wxm.KeepAccount.ui.base.FrgUitlity.FrgAsyncLoad;
 import wxm.KeepAccount.ui.base.FrgUitlity.FrgSwitcherWithEventBus;
 import wxm.KeepAccount.ui.base.Switcher.PageSwitcher;
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
@@ -90,7 +91,7 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
         }
 
         if(null != tb) {
-            ((FrgUtilitySupportBase)tb.getHotPage()).refreshUI();
+            ((FrgAsyncLoad)tb.getHotPage()).refreshUI();
         }
     }
 
@@ -213,7 +214,7 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
             switchToPage(ph.mSBPage);
 
             if(ph.mBADataChange) {
-                ph.mSBPage.refreshUI();
+                ((FrgAsyncLoad)ph.mSBPage.getHotPage()).refreshUI();
                 ph.mBADataChange = false;
             }
         }
