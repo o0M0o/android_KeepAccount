@@ -213,8 +213,10 @@ public class LVBudget extends LVBase {
     }
 
     @Override
-    protected void asyncInitUI(Bundle bundle) {
-        parseNotes();
+    protected void initUI(Bundle bundle) {
+        ToolUtil.runInBackground(getActivity(),
+                this::parseNotes,
+                () -> loadUI(bundle));
     }
 
     /// BEGIN PRIVATE

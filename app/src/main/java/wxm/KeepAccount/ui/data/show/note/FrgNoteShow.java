@@ -91,7 +91,7 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
         }
 
         if(null != tb) {
-            ((FrgAsyncLoad)tb.getHotPage()).refreshUI();
+            ((FrgAsyncLoad)tb.getHotPage()).reInitUI();
         }
     }
 
@@ -214,7 +214,7 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
             switchToPage(ph.mSBPage);
 
             if(ph.mBADataChange) {
-                ((FrgAsyncLoad)ph.mSBPage.getHotPage()).refreshUI();
+                ((FrgAsyncLoad)ph.mSBPage.getHotPage()).reInitUI();
                 ph.mBADataChange = false;
             }
         }

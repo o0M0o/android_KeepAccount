@@ -15,10 +15,6 @@ import java.util.concurrent.Executors;
  * Created by WangXM on 2016/6/2.
  */
 public class ToolUtil {
-    private final static String[] DAY_IN_WEEK = {
-            "星期日", "星期一", "星期二", "星期三",
-            "星期四", "星期五", "星期六"};
-
     /**
      * format date string '2016-01-14' to '2016年01月14日'
      * @param org       origin date string
@@ -73,18 +69,50 @@ public class ToolUtil {
     public static String getDayInWeek(Timestamp ts) {
         Calendar day = Calendar.getInstance();
         day.setTimeInMillis(ts.getTime());
-        int dw = day.get(Calendar.DAY_OF_WEEK) - 1;
-        return (0 <= dw && dw < DAY_IN_WEEK.length) ? DAY_IN_WEEK[dw] : "";
+        return getDayInWeek(day.get(Calendar.DAY_OF_WEEK));
     }
 
     /**
      * get "星期*"
-     * @param dw    day order in week(0-6)
+     * @param dw    day order in week(1-7)
      * @return      "星期*"
      */
     public static String getDayInWeek(int dw) {
-        dw--;
-        return dw >= 0 && dw <= 6 ? DAY_IN_WEEK[dw] : "星期*";
+        String ret;
+        switch (dw) {
+            case Calendar.SUNDAY :
+                ret = "星期日";
+                break;
+
+            case Calendar.MONDAY :
+                ret = "星期一";
+                break;
+
+            case Calendar.TUESDAY :
+                ret = "星期二";
+                break;
+
+            case Calendar.WEDNESDAY :
+                ret = "星期三";
+                break;
+
+            case Calendar.THURSDAY :
+                ret = "星期四";
+                break;
+
+            case Calendar.FRIDAY :
+                ret = "星期五";
+                break;
+
+            case Calendar.SATURDAY :
+                ret = "星期六";
+                break;
+
+            default:
+                ret = "";
+        }
+
+        return ret;
     }
 
     /**

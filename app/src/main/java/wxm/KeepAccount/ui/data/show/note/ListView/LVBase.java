@@ -160,7 +160,7 @@ public abstract class LVBase extends ShowViewBase {
      * @param bShowDialog   show dialog if true
      */
     protected void reloadView(final Context v, final boolean bShowDialog) {
-        refreshUI();
+        reInitUI();
         if (bShowDialog) {
             android.app.AlertDialog.Builder builder =
                     new android.app.AlertDialog.Builder(v);

@@ -125,7 +125,7 @@ public class LVDaily extends LVBase {
                     mIBSort.setActName(mBTimeDownOrder ? R.string.cn_sort_up_by_time : R.string.cn_sort_down_by_time);
 
                     reorderData();
-                    loadUIUtility(true);
+                    reloadUI();
                 }
                 break;
 
@@ -217,7 +217,7 @@ public class LVDaily extends LVBase {
 
             mFilterPara.clear();
             mFilterPara.addAll(e_p);
-            loadUIUtility(true);
+            reloadUI();
         }
     }
 
@@ -272,73 +272,81 @@ public class LVDaily extends LVBase {
 
             case R.id.bt_giveup_filter:
                 mBFilter = false;
-                loadUIUtility(true);
+                reloadUI();
                 break;
         }
     }
 
     @Override
-    protected void asyncInitUI(Bundle bundle) {
-        mMainPara.clear();
-        // for day
-        List<String> set_k_d = NoteDataHelper.getNotesDays();
-        Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
+    protected void initUI(Bundle bundle) {
+        ToolUtil.runInBackground(getActivity(),
+                () -> {
+                    mMainPara.clear();
+                    // for day
+                    List<String> set_k_d = NoteDataHelper.getNotesDays();
+                    Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
 
-        Calendar cl_day = Calendar.getInstance();
-        ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
-        LinkedList<Future<LinkedList<MainAdapterItem>>> ll_rets = new LinkedList<>();
+                    Calendar cl_day = Calendar.getInstance();
+                    ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
+                    LinkedList<Future<LinkedList<MainAdapterItem>>> ll_rets = new LinkedList<>();
 
-        int once_process = 10;
-        int idx = 0;
-        int len = set_k_d.size();
-        while (idx < len)   {
-            List<String> jobs = set_k_d.subList(idx, idx + once_process < len ? idx + once_process : len - 1);
-            idx += once_process;
+                    int once_process = 10;
+                    int idx = 0;
+                    int len = set_k_d.size();
+                    while (idx < len)   {
+                        List<String> jobs = set_k_d.subList(idx, idx + once_process < len ? idx + once_process : len - 1);
+                        idx += once_process;
 
-            Future<LinkedList<MainAdapterItem>> ret = fixedThreadPool
-                    .submit(() -> {
-                        LinkedList<MainAdapterItem> maps = new LinkedList<>();
-                        for(String k : jobs) {
-                            NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
-                            MainAdapterItem map = new MainAdapterItem();
-                            map.month = k.substring(0, 7);
+                        Future<LinkedList<MainAdapterItem>> ret = fixedThreadPool
+                                .submit(() -> {
+                                    LinkedList<MainAdapterItem> maps = new LinkedList<>();
+                                    for(String k : jobs) {
+                                        try {
+                                            NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
+                                            MainAdapterItem map = new MainAdapterItem();
+                                            map.month = k.substring(0, 7);
 
-                            String km = k.substring(8, 10);
-                            km = km.startsWith("0") ? km.replaceFirst("0", "") : km;
-                            map.dayNumber = km;
+                                            String km = k.substring(8, 10);
+                                            km = km.startsWith("0") ? km.replaceFirst("0", "") : km;
+                                            map.dayNumber = km;
 
-                            int year = Integer.valueOf(k.substring(0, 4));
-                            int month = Integer.valueOf(k.substring(5, 7));
-                            int day = Integer.valueOf(km);
-                            cl_day.set(year, month, day);
-                            map.dayInWeek = ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK));
+                                            int year = Integer.valueOf(k.substring(0, 4));
+                                            int month = Integer.valueOf(k.substring(5, 7));
+                                            int day = Integer.valueOf(km);
+                                            cl_day.set(year, month - 1, day);
+                                            map.dayInWeek = ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK));
 
-                            map.day.mPayCount = String.valueOf(ni.getPayCount());
-                            map.day.mIncomeCount = String.valueOf(ni.getIncomeCount());
-                            map.day.mPayAmount = ni.getSZPayAmount();
-                            map.day.mIncomeAmount = ni.getSZIncomeAmount();
+                                            map.day.mPayCount = String.valueOf(ni.getPayCount());
+                                            map.day.mIncomeCount = String.valueOf(ni.getIncomeCount());
+                                            map.day.mPayAmount = ni.getSZPayAmount();
+                                            map.day.mIncomeAmount = ni.getSZIncomeAmount();
 
-                            BigDecimal bd_l = ni.getBalance();
-                            map.amount = String.format(Locale.CHINA,
-                                    (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
+                                            BigDecimal bd_l = ni.getBalance();
+                                            map.amount = String.format(Locale.CHINA,
+                                                    (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
 
-                            map.tag = k;
-                            map.show = EShowFold.getByFold(!checkUnfoldItem(k)).getName();
-                            maps.add(map);
+                                            map.tag = k;
+                                            map.show = EShowFold.getByFold(!checkUnfoldItem(k)).getName();
+                                            maps.add(map);
+                                        } catch (Exception ex)  {
+                                            ex.printStackTrace();
+                                        }
+                                    }
+                                    return maps;
+                                });
+
+                        ll_rets.add(ret);
+                    }
+
+                    try {
+                        for(Future<LinkedList<MainAdapterItem>> ret : ll_rets) {
+                            mMainPara.addAll(ret.get());
                         }
-                        return maps;
-                    });
-
-            ll_rets.add(ret);
-        }
-
-        try {
-            for(Future<LinkedList<MainAdapterItem>> ret : ll_rets) {
-                mMainPara.addAll(ret.get());
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                },
+                () -> loadUI(bundle));
     }
 
 
@@ -388,13 +396,6 @@ public class LVDaily extends LVBase {
     }
 
 
-    /**
-     * load UI
-     * @param b_fully   load data if true
-     */
-    private void loadUIUtility(boolean b_fully) {
-
-    }
 
     /**
      * reorder data

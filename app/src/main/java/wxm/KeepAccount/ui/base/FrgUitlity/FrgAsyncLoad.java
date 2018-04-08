@@ -32,31 +32,27 @@ public abstract class FrgAsyncLoad extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflaterView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, v);
 
         initUI(savedInstanceState);
-        ToolUtil.runInBackground(getActivity(),
-                () -> asyncInitUI(savedInstanceState),
-                () -> loadUI(savedInstanceState));
         return v;
     }
 
     /**
      * refresh UI
+     * used by outer totally reinitialize UI
      */
-    public final void refreshUI()    {
+    public final void reInitUI()    {
         if(isVisible()) {
             initUI(null);
-            ToolUtil.runInBackground(getActivity(),
-                    () -> asyncInitUI(null),
-                    () -> loadUI(null));
         }
     }
 
     /**
      * reload UI
+     * used by outer only reload UI
      */
     public final void reloadUI()    {
         if(isVisible()) {
@@ -81,14 +77,6 @@ public abstract class FrgAsyncLoad extends Fragment {
      *                                  from a previous saved state as given here.
      */
     protected void loadUI(Bundle savedInstanceState)    {
-    }
-
-    /**
-     * init ui
-     * @param savedInstanceState        If non-null, this fragment is being re-constructed
-     *                                  from a previous saved state as given here.
-     */
-    protected void asyncInitUI(Bundle savedInstanceState)    {
     }
 
     /**
