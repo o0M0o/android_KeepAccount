@@ -115,8 +115,8 @@ dependencies {
     implementation files('libs/extend_lib/fashjson/fastjson-1.2.33.jar')
     implementation files('libs/extend_lib/junit/junit-4.12.jar')
     implementation files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
-    implementation project(':UiLib')
     implementation project(':AndroidUtil')
+    implementation project(':UiLib')
 }
 
 /*

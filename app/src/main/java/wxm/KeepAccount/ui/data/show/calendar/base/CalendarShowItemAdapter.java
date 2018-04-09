@@ -55,7 +55,7 @@ public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarSho
         }
 
         TextView dayNewsCount = view.findViewById(R.id.tv_day_new_count);
-        if (!model.isCurrentMonth()) {
+        if (model.isNotCurrentMonth()) {
             dayNum.setVisibility(View.GONE);
             dayNewsCount.setVisibility(View.GONE);
         } else {
