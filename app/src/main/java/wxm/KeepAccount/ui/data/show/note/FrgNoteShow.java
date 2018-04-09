@@ -2,24 +2,17 @@ package wxm.KeepAccount.ui.data.show.note;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgAsyncLoad;
+import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
 import wxm.KeepAccount.ui.base.FrgUitlity.FrgSwitcherWithEventBus;
 import wxm.KeepAccount.ui.base.Switcher.PageSwitcher;
-import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 import wxm.androidutil.FrgUtility.FrgSupportSwitcher;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
@@ -91,7 +84,7 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
         }
 
         if(null != tb) {
-            ((FrgAsyncLoad)tb.getHotPage()).reInitUI();
+            ((FrgAdvBase)tb.getHotPage()).reInitUI();
         }
     }
 
@@ -214,7 +207,7 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
             switchToPage(ph.mSBPage);
 
             if(ph.mBADataChange) {
-                ((FrgAsyncLoad)ph.mSBPage.getHotPage()).reInitUI();
+                ((FrgAdvBase)ph.mSBPage.getHotPage()).reInitUI();
                 ph.mBADataChange = false;
             }
         }

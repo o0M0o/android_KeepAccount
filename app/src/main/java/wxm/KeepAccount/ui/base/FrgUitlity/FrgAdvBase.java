@@ -2,6 +2,7 @@ package wxm.KeepAccount.ui.base.FrgUitlity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +11,14 @@ import android.view.ViewGroup;
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.ButterKnife;
-import wxm.KeepAccount.utility.ToolUtil;
 
 /**
+ * base for fragment
+ * simple to use fragment
  * @author WangXM
  * @version create：2018/4/7
  */
-public abstract class FrgAsyncLoad extends Fragment {
+public abstract class FrgAdvBase extends Fragment {
     protected final String LOG_TAG = getClass().getSimpleName();
 
     @Override
@@ -33,11 +35,16 @@ public abstract class FrgAsyncLoad extends Fragment {
 
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflaterView(inflater, container, savedInstanceState);
+        View v = inflater.inflate(getLayoutID(), container, false);
         ButterKnife.bind(this, v);
-
-        initUI(savedInstanceState);
         return v;
+    }
+
+    @Override
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
+        if (null != view) {
+            initUI(savedInstanceState);
+        }
     }
 
     /**
@@ -61,18 +68,15 @@ public abstract class FrgAsyncLoad extends Fragment {
     }
 
     /**
-     * realize this in derived class
-     * @param inflater                  inflater for view
-     * @param container                 view holder
-     * @param savedInstanceState        If non-null, this fragment is being re-constructed
-     *                                  from a previous saved state as given here.
-     * @return                          inflated view
+     * realize this to setup layout ID
+     * @return      layout ID for UI
      */
-    protected abstract View inflaterView(LayoutInflater inflater, ViewGroup container,
-                                         Bundle savedInstanceState);
+    @LayoutRes
+    protected abstract int getLayoutID();
 
     /**
-     * load ui
+     * derive it do ui load work
+     * suggest invoke it in initUI
      * @param savedInstanceState        If non-null, this fragment is being re-constructed
      *                                  from a previous saved state as given here.
      */
@@ -80,7 +84,7 @@ public abstract class FrgAsyncLoad extends Fragment {
     }
 
     /**
-     * init ui
+     * derive it do ui init work
      * @param savedInstanceState        If non-null, this fragment is being re-constructed
      *                                  from a previous saved state as given here.
      */

@@ -279,6 +279,8 @@ public class LVDaily extends LVBase {
 
     @Override
     protected void initUI(Bundle bundle) {
+        super.initUI(bundle);
+
         ToolUtil.runInBackground(getActivity(),
                 () -> {
                     mMainPara.clear();

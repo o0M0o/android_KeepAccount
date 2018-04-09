@@ -49,13 +49,9 @@ abstract class ChartBase extends ShowViewBase {
     @BindView(R.id.bt_less_viewport)
     Button mBTLessViewPort;
 
-    ChartBase() {
-        super();
-    }
-
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return layoutInflater.inflate(R.layout.chart_pager, viewGroup, false);
+    protected int getLayoutID() {
+        return R.layout.chart_pager;
     }
 
     @Override

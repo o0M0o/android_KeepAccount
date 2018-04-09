@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.data.show.note.HelloChart;
 
-import android.os.Bundle;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -11,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.util.UtilFun;
 import lecho.lib.hellocharts.model.Axis;

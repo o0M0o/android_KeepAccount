@@ -214,6 +214,8 @@ public class LVBudget extends LVBase {
 
     @Override
     protected void initUI(Bundle bundle) {
+        super.initUI(bundle);
+
         ToolUtil.runInBackground(getActivity(),
                 this::parseNotes,
                 () -> loadUI(bundle));

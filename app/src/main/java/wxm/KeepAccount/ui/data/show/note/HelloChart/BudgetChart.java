@@ -66,13 +66,9 @@ public class BudgetChart extends ShowViewBase {
     private List<BudgetItem> mSPBudgetData;
     private int mSPBudgetHot = Spinner.INVALID_POSITION;
 
-    public BudgetChart() {
-        super();
-    }
-
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return layoutInflater.inflate(R.layout.chart_budget_pager, viewGroup, false);
+    protected int getLayoutID() {
+        return R.layout.chart_budget_pager;
     }
 
     @Override
@@ -174,6 +170,8 @@ public class BudgetChart extends ShowViewBase {
             return false;
         });
     }
+
+
 
     @Override
     protected void loadUI(Bundle bundle) {

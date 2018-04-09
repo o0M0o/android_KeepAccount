@@ -1,21 +1,13 @@
 package wxm.KeepAccount.ui.data.show.note.base;
 
 import android.content.Context;
-import android.support.annotation.CallSuper;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.LinkedList;
 
 import butterknife.BindView;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgAsyncLoad;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgWithEventBus;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
+import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
@@ -25,7 +17,7 @@ import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
  * Created by xiaoming wang on 2016/9/14.
  */
 public abstract class ShowViewBase
-        extends FrgAsyncLoad {
+        extends FrgAdvBase {
 
     // filter for view
     protected boolean mBFilter;

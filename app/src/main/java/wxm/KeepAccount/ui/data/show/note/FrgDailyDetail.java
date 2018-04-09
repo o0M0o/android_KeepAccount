@@ -293,9 +293,8 @@ public class FrgDailyDetail extends FrgWithEventBus {
     }
 
     /**
-     * 加载动作条
-     *
-     * @param bDelStatus 若为true则处于删除数据状态
+     * load act bars
+     * @param bDelStatus    when true, in 'delete data' mode
      */
     private void loadActBars(boolean bDelStatus) {
         mRLAcceptGiveup.setVisibility(bDelStatus ? View.VISIBLE : View.GONE);
@@ -303,7 +302,7 @@ public class FrgDailyDetail extends FrgWithEventBus {
     }
 
     /**
-     * 加载日期头
+     * load day info header
      */
     private void loadDayHeader() {
         String[] arr = mSZHotDay.split("-");
@@ -320,7 +319,7 @@ public class FrgDailyDetail extends FrgWithEventBus {
     }
 
     /**
-     * 加载日期信息
+     * load day info
      */
     private void loadDayInfo() {
         NoteShowInfo ni = NoteDataHelper.getInfoByDay(mSZHotDay);
@@ -350,9 +349,8 @@ public class FrgDailyDetail extends FrgWithEventBus {
     }
 
     /**
-     * 加载日内数据
-     *
-     * @param bDelStatus 若为true则处于删除数据状态
+     * load day data
+     * @param bDelStatus    when true, in 'delete data' mode
      */
     private void loadDayNotes(boolean bDelStatus) {
         LinkedList<HashMap<String, INote>> c_para = new LinkedList<>();
@@ -374,9 +372,8 @@ public class FrgDailyDetail extends FrgWithEventBus {
     }
 
     /**
-     * 切换UI显示状态
-     *
-     * @param vis 显示参数
+     * set UI visibility
+     * @param vis       visibility param
      */
     private void setVisibility(int vis) {
         mTVMonthDay.setVisibility(vis);

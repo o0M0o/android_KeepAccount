@@ -113,11 +113,14 @@ public abstract class LVBase extends ShowViewBase {
     }
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        View rootView = layoutInflater.inflate(R.layout.lv_note_show_pager, viewGroup, false);
-        mAHActs.bind(rootView);
+    protected void initUI(Bundle bundle)    {
+        mAHActs.bind(getView());
         mAHActs.init();
-        return rootView;
+    }
+
+    @Override
+    protected int getLayoutID() {
+        return R.layout.lv_note_show_pager;
     }
 
     /**
