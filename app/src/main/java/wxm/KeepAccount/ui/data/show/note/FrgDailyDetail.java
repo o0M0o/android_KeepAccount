@@ -33,6 +33,7 @@ import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
 import wxm.KeepAccount.ui.base.FrgUitlity.FrgWithEventBus;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
@@ -54,7 +55,7 @@ import wxm.uilib.IconButton.IconButton;
  * for daily detail info
  * Created by WangXM on 2017/01/20.
  */
-public class FrgDailyDetail extends FrgWithEventBus {
+public class FrgDailyDetail extends FrgAdvBase {
     // 展示时间信息的UI
     @BindView(R.id.tv_day)
     TextView mTVMonthDay;
@@ -107,11 +108,6 @@ public class FrgDailyDetail extends FrgWithEventBus {
     private List<INote> mLSDayContents;
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return layoutInflater.inflate(R.layout.vw_daily_detail, viewGroup, false);
-    }
-
-    @Override
     protected void initUI(Bundle bundle) {
         Bundle bd = getArguments();
         mSZHotDay = bd.getString(ACDailyDetail.K_HOTDAY);
@@ -119,13 +115,17 @@ public class FrgDailyDetail extends FrgWithEventBus {
             HashMap<String, ArrayList<INote>> hl = NoteDataHelper.getInstance().getNotesForDay();
             mLSDayContents = hl.get(mSZHotDay);
         }
+
+        loadUI(bundle);
+    }
+
+    @Override
+    protected int getLayoutID() {
+        return R.layout.vw_daily_detail;
     }
 
     @Override
     protected void loadUI(Bundle bundle) {
-        if (isDetached())
-            return;
-
         if (UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
             setVisibility(View.INVISIBLE);
             return;

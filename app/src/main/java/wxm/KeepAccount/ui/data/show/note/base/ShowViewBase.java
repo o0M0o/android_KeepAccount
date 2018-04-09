@@ -16,9 +16,7 @@ import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
  * base for show record
  * Created by xiaoming wang on 2016/9/14.
  */
-public abstract class ShowViewBase
-        extends FrgAdvBase {
-
+public abstract class ShowViewBase extends FrgAdvBase {
     // filter for view
     protected boolean mBFilter;
     protected final LinkedList<String> mFilterPara;
@@ -33,6 +31,7 @@ public abstract class ShowViewBase
     RelativeLayout mRLFilter;
 
     protected ShowViewBase() {
+        super();
         mBFilter = false;
         mFilterPara = new LinkedList<>();
     }

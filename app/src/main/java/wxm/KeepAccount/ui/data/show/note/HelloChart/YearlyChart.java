@@ -99,9 +99,8 @@ public class YearlyChart extends ChartBase {
     }
 
     /**
-     * 过滤视图事件
-     *
-     * @param event 事件
+     * filter UI
+     * @param event     for filter
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {

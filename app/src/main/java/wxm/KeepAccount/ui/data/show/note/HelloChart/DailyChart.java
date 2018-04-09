@@ -1,8 +1,6 @@
 package wxm.KeepAccount.ui.data.show.note.HelloChart;
 
 
-import android.os.Bundle;
-
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -39,7 +37,7 @@ public class DailyChart extends ChartBase {
 
     /**
      * filter UI
-     * @param event 事件
+     * @param event     for event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFilterShowEvent(FilterShowEvent event) {

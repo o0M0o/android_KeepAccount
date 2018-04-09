@@ -1,25 +1,23 @@
 package wxm.KeepAccount.ui.data.show.note.HelloChart;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.HashMap;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.listener.ViewportChangeListener;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Viewport;
-import lecho.lib.hellocharts.view.ColumnChartView;
-import lecho.lib.hellocharts.view.PreviewColumnChartView;
 import wxm.KeepAccount.R;
+import wxm.KeepAccount.ui.base.TouchUI.TouchColumnChartView;
+import wxm.KeepAccount.ui.base.TouchUI.TouchPreviewColumnChartView;
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
 import wxm.KeepAccount.utility.PreferencesUtil;
 
@@ -35,10 +33,10 @@ abstract class ChartBase extends ShowViewBase {
     HashMap<String, Integer> mHMColor;
 
     @BindView(R.id.chart)
-    ColumnChartView mChart;
+    TouchColumnChartView mChart;
 
     @BindView(R.id.chart_preview)
-    PreviewColumnChartView mPreviewChart;
+    TouchPreviewColumnChartView mPreviewChart;
 
     @BindView(R.id.iv_income)
     ImageView mIVIncome;
@@ -54,12 +52,13 @@ abstract class ChartBase extends ShowViewBase {
         return R.layout.chart_pager;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initUI(Bundle bundle) {
         mBFilter = false;
         mHMColor = PreferencesUtil.loadChartColor();
 
-        // 主chart需要响应触摸滚动事件
+        // main chart need respond touch event
         mChart.setOnTouchListener(new View.OnTouchListener() {
             private float prv_x = -1;
 
@@ -159,9 +158,8 @@ abstract class ChartBase extends ShowViewBase {
 
 
     /**
-     * 设置扩大/缩小viewport
-     *
-     * @param v 激活view
+     * adjust viewport
+     * @param v     clicked view
      */
     @OnClick({R.id.bt_less_viewport, R.id.bt_more_viewport, R.id.bt_giveup_filter})
     public void onLessOrMoreView(View v) {
