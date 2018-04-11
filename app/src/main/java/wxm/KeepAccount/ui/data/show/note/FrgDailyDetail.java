@@ -6,16 +6,12 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -31,11 +27,8 @@ import java.util.Locale;
 
 import butterknife.BindColor;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgWithEventBus;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;
@@ -46,7 +39,6 @@ import wxm.KeepAccount.ui.data.show.note.base.ValueShow;
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
-import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.uilib.IconButton.IconButton;
 
@@ -109,8 +101,10 @@ public class FrgDailyDetail extends FrgAdvBase {
 
     @Override
     protected void initUI(Bundle bundle) {
-        Bundle bd = getArguments();
-        mSZHotDay = bd.getString(ACDailyDetail.K_HOTDAY);
+        if(UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
+            mSZHotDay = getArguments().getString(ACDailyDetail.K_HOTDAY);
+        }
+
         if (!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
             HashMap<String, ArrayList<INote>> hl = NoteDataHelper.getInstance().getNotesForDay();
             mLSDayContents = hl.get(mSZHotDay);
@@ -140,7 +134,7 @@ public class FrgDailyDetail extends FrgAdvBase {
         setVisibility(View.VISIBLE);
         loadDayHeader();
         loadDayInfo();
-        loadDayNotes(false);
+        loadDayNotes();
         loadActBars(false);
     }
 
@@ -150,12 +144,7 @@ public class FrgDailyDetail extends FrgAdvBase {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDBDataChangeEvent(DBDataChangeEvent event) {
-        if (!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
-            HashMap<String, ArrayList<INote>> hl = NoteDataHelper.getInstance().getNotesForDay();
-            mLSDayContents = hl.get(mSZHotDay);
-
-            initUI(null);
-        }
+        initUI(null);
     }
 
 
@@ -209,7 +198,7 @@ public class FrgDailyDetail extends FrgAdvBase {
      * click on action
      * @param view      for action
      */
-    @OnClick({R.id.ib_delete, R.id.ib_add, R.id.bt_giveup})
+    @OnClick({R.id.ib_add})
     public void dayActionClick(View view) {
         int vid = view.getId();
         switch (vid) {
@@ -225,45 +214,6 @@ public class FrgDailyDetail extends FrgAdvBase {
                                 , cal.get(Calendar.MINUTE)));
 
                 startActivityForResult(intent, 1);
-            }
-            break;
-
-            // 删除数据
-            case R.id.ib_delete: {
-                boolean bdel = !(mIBAdd.getVisibility() == View.VISIBLE);
-                if (bdel) {
-                    AdapterNoteDetail ap = (AdapterNoteDetail) mLVBody.getAdapter();
-                    List<INote> w_d = ap.getWantDeleteNotes();
-                    if (!w_d.isEmpty()) {
-                        ArrayList<Integer> al_i = new ArrayList<>();
-                        ArrayList<Integer> al_p = new ArrayList<>();
-                        for (INote it : w_d) {
-                            if (it.isPayNote())
-                                al_p.add(it.getId());
-                            else
-                                al_i.add(it.getId());
-                        }
-
-                        if (!al_i.isEmpty())
-                            ContextUtil.getPayIncomeUtility().deleteIncomeNotes(al_i);
-
-                        if (!al_p.isEmpty())
-                            ContextUtil.getPayIncomeUtility().deletePayNotes(al_p);
-                    } else {
-                        loadActBars(false);
-                        loadDayNotes(false);
-                    }
-                } else {
-                    loadActBars(true);
-                    loadDayNotes(true);
-                }
-            }
-            break;
-
-            // 取消删除数据
-            case R.id.bt_giveup: {
-                loadActBars(false);
-                loadDayNotes(false);
             }
             break;
         }
@@ -350,9 +300,8 @@ public class FrgDailyDetail extends FrgAdvBase {
 
     /**
      * load day data
-     * @param bDelStatus    when true, in 'delete data' mode
      */
-    private void loadDayNotes(boolean bDelStatus) {
+    private void loadDayNotes() {
         LinkedList<HashMap<String, INote>> c_para = new LinkedList<>();
         if (!UtilFun.ListIsNullOrEmpty(mLSDayContents)) {
             Collections.sort(mLSDayContents, (t1, t2) -> t1.getTs().compareTo(t2.getTs()));
@@ -364,9 +313,8 @@ public class FrgDailyDetail extends FrgAdvBase {
             }
         }
 
-        AdapterNoteDetail ap = new AdapterNoteDetail(getActivity(), c_para,
+        AdapterNoteDetail ap = new AdapterNoteDetail(this, getActivity(), c_para,
                 new String[]{}, new int[]{});
-        ap.setCanDelete(bDelStatus);
         mLVBody.setAdapter(ap);
         ap.notifyDataSetChanged();
     }

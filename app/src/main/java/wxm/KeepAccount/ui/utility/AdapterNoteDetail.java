@@ -10,12 +10,16 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
+import wxm.KeepAccount.ui.base.Helper.ViewHelper;
 import wxm.KeepAccount.ui.base.SwipeLayout.SwipeLayout;
+import wxm.KeepAccount.utility.ContextUtil;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -37,22 +41,17 @@ public class AdapterNoteDetail extends SimpleAdapter {
         public View mRight;
     }
 
-
     public final static String K_NODE = "node";
     private Context mCTSelf;
+    private FrgAdvBase  mFrgHolder;
 
 
-    /**
-     * if set to true can delete data
-     */
-    private boolean mBLCanDelete = false;
-    private ArrayList<INote> mALDelNotes;
 
-    public AdapterNoteDetail(Context context, List<? extends Map<String, ?>> data,
+    public AdapterNoteDetail(FrgAdvBase frgHolder, Context context, List<? extends Map<String, ?>> data,
                              String[] from, int[] to) {
         super(context, data, R.layout.li_data_detail, from, to);
         mCTSelf = context;
-        mALDelNotes = new ArrayList<>();
+        mFrgHolder = frgHolder;
     }
 
     @Override
@@ -66,27 +65,10 @@ public class AdapterNoteDetail extends SimpleAdapter {
         return position;
     }
 
-    /**
-     * set whether can delete data
-     * @param bdel      if true then can delete data
-     */
-    public void setCanDelete(boolean bdel) {
-        mBLCanDelete = bdel;
-    }
-
-
-    /**
-     * get nodes wait deleted
-     * @return  nodes wait deleted
-     */
-    public List<INote> getWantDeleteNotes() {
-        return mALDelNotes;
-    }
-
-
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        FastViewHolder vh = FastViewHolder.get(mCTSelf, convertView,
-                R.layout.li_data_detail_holder);
+        FastViewHolder vh = FastViewHolder.get(mCTSelf, convertView, R.layout.li_data_detail_holder);
+        HashMap<String, INote> hmData = UtilFun.cast_t(getItem(position));
 
         SwipeLayout sl = vh.getView(R.id.swipe);
         vwTag vt = (vwTag)sl.getTag();
@@ -94,6 +76,17 @@ public class AdapterNoteDetail extends SimpleAdapter {
             vt = new vwTag();
             vt.mContent = LayoutInflater.from(mCTSelf).inflate(R.layout.li_data_detail, null);
             vt.mRight = LayoutInflater.from(mCTSelf).inflate(R.layout.vw_delte, null);
+            vt.mRight.setTag(hmData.get(K_NODE));
+            vt.mRight.setOnClickListener(v -> {
+                INote data = (INote)v.getTag();
+                List<Integer> al = Collections.singletonList(data.getId());
+
+                if(data.isPayNote())    {
+                    ContextUtil.getPayIncomeUtility().deletePayNotes(al);
+                } else  {
+                    ContextUtil.getPayIncomeUtility().deleteIncomeNotes(al);
+                }
+            });
 
             sl.setContentView(vt.mContent);
             sl.setRightView(vt.mRight);
@@ -101,7 +94,7 @@ public class AdapterNoteDetail extends SimpleAdapter {
             sl.setTag(vt);
         }
 
-        initInfo(vt.mContent, UtilFun.cast_t(getItem(position)));
+        initInfo(vt.mContent, hmData);
         return vh.getConvertView();
     }
 
@@ -110,62 +103,40 @@ public class AdapterNoteDetail extends SimpleAdapter {
         INote data = hmData.get(K_NODE);
         if (data.isPayNote()) {
             vwInfo.findViewById(R.id.rl_income).setVisibility(View.GONE);
-            //initPay(vwInfo, data);
+            initPay(vwInfo, data);
         } else {
             vwInfo.findViewById(R.id.rl_pay).setVisibility(View.GONE);
-            //initIncome(vwInfo, data);
+            initIncome(vwInfo, data);
         }
-
-        //initDelAction(vwInfo, hmData.get(K_NODE), mBLCanDelete);
-    }
-
-    /**
-     * init delete action
-     * @param vh        view holder
-     * @param data      data
-     * @param bflag     if true then data can delete
-    private void initDelAction(FastViewHolder vh, INote data, boolean bflag) {
-        if (!bflag)
-            mALDelNotes.clear();
-
-        RelativeLayout rl_del = vh.getView(R.id.rl_delete);
-        rl_del.setVisibility(bflag ? View.VISIBLE : View.GONE);
-        rl_del.setOnClickListener(view -> {
-            if (mALDelNotes.contains(data)) {
-                mALDelNotes.remove(data);
-                rl_del.setBackgroundColor(ResourceHelper.mCRLVItemNoSel);
-            } else {
-                mALDelNotes.add(data);
-                rl_del.setBackgroundColor(ResourceHelper.mCRLVItemSel);
-            }
-        });
     }
 
     /**
      * init pay node
      * @param vh    view holder
      * @param data  pay data
+     */
     private void initPay(View vh, INote data) {
         PayNoteItem pn = data.toPayNote();
+        ViewHelper vHelper = new ViewHelper(vh);
 
-        vh.setText(R.id.tv_pay_title, pn.getInfo());
+        vHelper.setText(R.id.tv_pay_title, pn.getInfo());
 
         BudgetItem bi = pn.getBudget();
         String b_name = bi == null ? "" : bi.getName();
         if (!UtilFun.StringIsNullOrEmpty(b_name)) {
-            vh.setText(R.id.tv_pay_budget, b_name);
+            vHelper.setText(R.id.tv_pay_budget, b_name);
         } else {
-            vh.getView(R.id.tv_pay_budget).setVisibility(View.GONE);
-            vh.getView(R.id.iv_pay_budget).setVisibility(View.GONE);
+            vHelper.setVisibility(R.id.tv_pay_budget, View.GONE);
+            vHelper.setVisibility(R.id.iv_pay_budget, View.GONE);
         }
 
-        vh.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %s", pn.getValToStr()));
-        vh.setText(R.id.tv_pay_time, pn.getTs().toString().substring(11, 16));
+        vHelper.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %s", pn.getValToStr()));
+        vHelper.setText(R.id.tv_pay_time, pn.getTs().toString().substring(11, 16));
 
         // for look detail
-        vh.getView(R.id.iv_pay_action).setVisibility(View.GONE);
+        vHelper.setVisibility(R.id.iv_pay_action, View.GONE);
 
-        vh.getView(R.id.rl_pay).setOnClickListener(v -> {
+        vHelper.getChildView(R.id.rl_pay).setOnClickListener(v -> {
             Intent intent;
             intent = new Intent(mCTSelf, ACPreveiwAndEdit.class);
             intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, data.getId());
@@ -176,15 +147,15 @@ public class AdapterNoteDetail extends SimpleAdapter {
 
         // for budget
         if (UtilFun.StringIsNullOrEmpty(b_name)) {
-            vh.getView(R.id.rl_budget).setVisibility(View.GONE);
+            vHelper.setVisibility(R.id.rl_budget, View.GONE);
         }
 
         // for note
         String nt = pn.getNote();
         if (UtilFun.StringIsNullOrEmpty(nt)) {
-            vh.getView(R.id.rl_pay_note).setVisibility(View.GONE);
+            vHelper.setVisibility(R.id.rl_pay_note, View.GONE);
         } else {
-            vh.setText(R.id.tv_pay_note, nt);
+            vHelper.setText(R.id.tv_pay_note, nt);
         }
     }
 
@@ -192,18 +163,20 @@ public class AdapterNoteDetail extends SimpleAdapter {
      * init income node
      * @param vh    view holder
      * @param data  income data
-    private void initIncome(FastViewHolder vh, INote data) {
+     */
+    private void initIncome(View vh, INote data) {
         IncomeNoteItem i_n = data.toIncomeNote();
+        ViewHelper vHelper = new ViewHelper(vh);
 
-        vh.setText(R.id.tv_income_title, i_n.getInfo());
+        vHelper.setText(R.id.tv_income_title, i_n.getInfo());
 
-        vh.setText(R.id.tv_income_amount, i_n.getValToStr());
-        vh.setText(R.id.tv_income_time, i_n.getTs().toString().substring(11, 16));
+        vHelper.setText(R.id.tv_income_amount, i_n.getValToStr());
+        vHelper.setText(R.id.tv_income_time, i_n.getTs().toString().substring(11, 16));
 
         // for look detail
-        vh.getView(R.id.iv_income_action).setVisibility(View.GONE);
+        vHelper.setVisibility(R.id.iv_income_action, View.GONE);
 
-        vh.getView(R.id.rl_income).setOnClickListener(v -> {
+        vHelper.getChildView(R.id.rl_income).setOnClickListener(v -> {
             Intent intent;
             intent = new Intent(mCTSelf, ACPreveiwAndEdit.class);
             intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, data.getId());
@@ -215,10 +188,9 @@ public class AdapterNoteDetail extends SimpleAdapter {
         // for note
         String nt = i_n.getNote();
         if (UtilFun.StringIsNullOrEmpty(nt)) {
-            vh.getView(R.id.rl_income_note).setVisibility(View.GONE);
+            vHelper.setVisibility(R.id.rl_income_note, View.GONE);
         } else {
-            vh.setText(R.id.tv_income_note, nt);
+            vHelper.setText(R.id.tv_income_note, nt);
         }
     }
-     */
 }

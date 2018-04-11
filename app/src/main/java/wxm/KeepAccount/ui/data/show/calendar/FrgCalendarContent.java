@@ -15,6 +15,7 @@ import java.util.Locale;
 
 import butterknife.BindColor;
 import butterknife.BindView;
+import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -27,7 +28,7 @@ import wxm.KeepAccount.ui.utility.NoteShowInfo;
  * for note pad content detail
  * Created by WangXM on 2016/12/12.
  */
-public class FrgCalendarContent extends FrgUtilitySupportBase {
+public class FrgCalendarContent extends FrgAdvBase {
     // for ui
     @BindView(R.id.tv_month_day)
     TextView mTVMonthDay;
@@ -52,10 +53,14 @@ public class FrgCalendarContent extends FrgUtilitySupportBase {
     private List<INote> mLSDayContents;
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+    protected int getLayoutID() {
+        return R.layout.frg_calendar_content;
+    }
+
+    @Override
+    protected void initUI(Bundle bundle)    {
         mSZHotDay = null;
         mLSDayContents = null;
-        return layoutInflater.inflate(R.layout.frg_calendar_content, viewGroup, false);
     }
 
     @Override
@@ -97,7 +102,7 @@ public class FrgCalendarContent extends FrgUtilitySupportBase {
             }
         }
 
-        AdapterNoteDetail ap = new AdapterNoteDetail(getActivity(), c_para,
+        AdapterNoteDetail ap = new AdapterNoteDetail(this, getActivity(), c_para,
                 new String[]{}, new int[]{});
         mLVBody.setAdapter(ap);
         ap.notifyDataSetChanged();
