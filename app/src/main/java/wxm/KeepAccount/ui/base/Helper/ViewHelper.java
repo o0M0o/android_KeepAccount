@@ -27,6 +27,11 @@ public class ViewHelper {
         return (T)mVWHolder.findViewById(viewId);
     }
 
+    public View getParentView() {
+        return mVWHolder;
+    }
+
+
     /**
      * set visibility for child view
      * @param vId           id for child view
@@ -55,5 +60,14 @@ public class ViewHelper {
         textView.setTextColor(res.getColor(color, mVWHolder.getContext().getTheme()));
 
         return this;
+    }
+
+    public ViewHelper setTag(@IdRes int vId, Object obj) {
+        getChildView(vId).setTag(obj);
+        return this;
+    }
+
+    public Object getTag(@IdRes int vId) {
+        return getChildView(vId).getTag();
     }
 }
