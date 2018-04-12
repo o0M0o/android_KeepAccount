@@ -18,8 +18,6 @@ import wxm.KeepAccount.R;
 public class SwipeLayout extends LinearLayout {
     private static final String TAG = "SwipeLayout";
 
-    private Context mContext;
-
     private LinearLayout mContentView;
 
     private RelativeLayout mRightView;
@@ -52,15 +50,16 @@ public class SwipeLayout extends LinearLayout {
     }
 
     private void initView() {
-        mContext = getContext();
+        Context mContext = getContext();
         mScroller = new Scroller(mContext);
         setOrientation(LinearLayout.HORIZONTAL);
         View.inflate(mContext, R.layout.container_swipelayout, this);
-        mContentView = (LinearLayout) findViewById(R.id.view_content);
-        mRightView = (RelativeLayout) findViewById(R.id.view_right);
-        mHolderWidth = Math.round(TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, mHolderWidth, getResources()
-                        .getDisplayMetrics()));
+        mContentView = findViewById(R.id.view_content);
+        mRightView = findViewById(R.id.view_right);
+        mHolderWidth = Math.round(
+                        TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP, mHolderWidth,
+                            getResources().getDisplayMetrics()));
     }
 
     //将View加入到mContentView中
@@ -200,5 +199,4 @@ public class SwipeLayout extends LinearLayout {
             postInvalidate();
         }
     }
-
 }
