@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,6 +18,7 @@ import java.util.Locale;
 
 import butterknife.BindColor;
 import butterknife.BindView;
+import wxm.KeepAccount.db.DBDataChangeEvent;
 import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
 import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
@@ -52,6 +56,14 @@ public class FrgCalendarContent extends FrgAdvBase {
     private String mSZHotDay;
     private List<INote> mLSDayContents;
 
+    /**
+     * handler for DB data change
+     * @param event     for event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDBDataChangeEvent(DBDataChangeEvent event) {
+    }
+
     @Override
     protected int getLayoutID() {
         return R.layout.frg_calendar_content;
@@ -61,13 +73,12 @@ public class FrgCalendarContent extends FrgAdvBase {
     protected void initUI(Bundle bundle)    {
         mSZHotDay = null;
         mLSDayContents = null;
+
+        loadUI(bundle);
     }
 
     @Override
     protected void loadUI(Bundle bundle) {
-        if (isDetached())
-            return;
-
         if (UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
             setVisibility(View.INVISIBLE);
             return;
