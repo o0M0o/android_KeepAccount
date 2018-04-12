@@ -76,17 +76,9 @@ public class FrgDailyDetail extends FrgAdvBase {
     @BindView(R.id.login_progress)
     ProgressBar mPBLoginProgress;
 
-    // 确认或者放弃选择
-    @BindView(R.id.rl_accpet_giveup)
-    RelativeLayout mRLAcceptGiveup;
-
     // create new data
     @BindView(R.id.ib_add)
     IconButton mIBAdd;
-
-    // delete data
-    @BindView(R.id.ib_delete)
-    IconButton mIBDelete;
 
     // for color
     @BindColor(R.color.darkred)
@@ -125,17 +117,10 @@ public class FrgDailyDetail extends FrgAdvBase {
             return;
         }
 
-        String[] arr = mSZHotDay.split("-");
-        if (3 != arr.length) {
-            setVisibility(View.INVISIBLE);
-            return;
-        }
-
         setVisibility(View.VISIBLE);
         loadDayHeader();
         loadDayInfo();
         loadDayNotes();
-        loadActBars(false);
     }
 
     /**
@@ -240,15 +225,6 @@ public class FrgDailyDetail extends FrgAdvBase {
                 mPBLoginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
-    }
-
-    /**
-     * load act bars
-     * @param bDelStatus    when true, in 'delete data' mode
-     */
-    private void loadActBars(boolean bDelStatus) {
-        mRLAcceptGiveup.setVisibility(bDelStatus ? View.VISIBLE : View.GONE);
-        mIBAdd.setVisibility(bDelStatus ? View.GONE : View.VISIBLE);
     }
 
     /**

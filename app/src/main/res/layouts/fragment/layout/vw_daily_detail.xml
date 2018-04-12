@@ -89,7 +89,6 @@
                 android:textSize="14sp" />
         </RelativeLayout>
 
-
         <RelativeLayout
             android:id="@+id/rl_next"
             android:layout_width="wrap_content"
@@ -118,20 +117,15 @@
                 android:layout_toEndOf="@id/tv_tag"
                 android:src="@drawable/ic_to_right" />
         </RelativeLayout>
-
     </RelativeLayout>
-
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_above="@id/rl_accpet_giveup"
-        android:layout_below="@id/cl_header"
-        app:layout_constraintBottom_toTopOf="@+id/rl_accpet_giveup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cl_header"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintBottom_toTopOf="@+id/rl_action">
 
         <ProgressBar
             android:id="@+id/login_progress"
@@ -142,8 +136,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="180dp" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <wxm.KeepAccount.ui.data.show.note.base.ValueShow
             android:id="@+id/vs_daily_info"
@@ -181,26 +174,6 @@
     </android.support.constraint.ConstraintLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_accpet_giveup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/rl_action"
-        android:layout_marginBottom="1dp"
-        android:background="@color/trans_black"
-        app:layout_constraintBottom_toTopOf="@+id/rl_action"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageButton
-            android:id="@+id/bt_giveup"
-            android:layout_width="96dp"
-            android:layout_height="32dp"
-            android:layout_centerInParent="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_reject" />
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/rl_action"
         android:layout_width="0dp"
         android:layout_height="48dp"
@@ -223,22 +196,5 @@
             app:ibIcon="@drawable/ic_add_new"
             app:ibIconHeight="20dp"
             app:ibIconWidth="20dp" />
-
-
-        <wxm.uilib.IconButton.IconButton
-            android:id="@+id/ib_delete"
-            android:layout_width="68dp"
-            android:layout_height="36dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/ib_add"
-            android:background="@drawable/rl_action_shape"
-            app:ibActName="@string/cn_delete"
-            app:ibActNameSize="14sp"
-            app:ibIcon="@drawable/ic_delete"
-            app:ibIconHeight="22dp"
-            app:ibIconWidth="22dp" />
-
     </RelativeLayout>
-
 </android.support.constraint.ConstraintLayout>
