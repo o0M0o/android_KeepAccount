@@ -19,7 +19,6 @@ import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
 import wxm.KeepAccount.ui.base.Helper.ViewHelper;
 import wxm.KeepAccount.ui.base.SwipeLayout.SwipeLayout;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -42,15 +41,10 @@ public class AdapterNoteDetail extends SimpleAdapter {
 
     public final static String K_NODE = "node";
     private Context mCTSelf;
-    private FrgAdvBase  mFrgHolder;
 
-
-
-    public AdapterNoteDetail(FrgAdvBase frgHolder, Context context, List<? extends Map<String, ?>> data,
-                             String[] from, int[] to) {
-        super(context, data, R.layout.li_data_detail, from, to);
+    public AdapterNoteDetail(Context context, List<? extends Map<String, ?>> data) {
+        super(context, data, R.layout.liit_data_swipe_holder, new String[]{}, new int[]{});
         mCTSelf = context;
-        mFrgHolder = frgHolder;
     }
 
     @Override
@@ -66,7 +60,7 @@ public class AdapterNoteDetail extends SimpleAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        FastViewHolder vh = FastViewHolder.get(mCTSelf, convertView, R.layout.li_data_detail_holder);
+        FastViewHolder vh = FastViewHolder.get(mCTSelf, convertView, R.layout.liit_data_swipe_holder);
         HashMap<String, INote> hmData = UtilFun.cast_t(getItem(position));
         INote itemData = hmData.get(K_NODE);
 

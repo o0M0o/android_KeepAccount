@@ -12,14 +12,28 @@ import android.widget.Scroller;
 import wxm.KeepAccount.R;
 
 /**
- * @author chenjiawei
- * @version create：2015/12/9
+ * @author      chenjiawei
+ * @version     create：2015/12/9
+ *              modify by WangXM at 2018/04/13
  */
 public class SwipeLayout extends LinearLayout {
-    private static final String TAG = "SwipeLayout";
+    /**
+     * listener for slide
+     */
+    public interface OnSlideListener {
+        int SLIDE_STATUS_OFF = 0;
+        int SLIDE_STATUS_START_SCROLL = 1;
+        int SLIDE_STATUS_ON = 2;
+
+        /**
+         * event handler
+         * @param view      slide view
+         * @param status    slide status
+         */
+        void onSlide(View view, int status);
+    }
 
     private LinearLayout mContentView;
-
     private RelativeLayout mRightView;
 
     private Scroller mScroller;
@@ -29,15 +43,7 @@ public class SwipeLayout extends LinearLayout {
     private int mLastY = 0;
     private static final int TAN = 2;
 
-    private int mSlideState = 0;
-
-    public interface OnSlideListener {
-        int SLIDE_STATUS_OFF = 0;
-        int SLIDE_STATUS_START_SCROLL = 1;
-        int SLIDE_STATUS_ON = 2;
-
-        void onSlide(View view, int status);
-    }
+    private int mSlideState = OnSlideListener.SLIDE_STATUS_OFF;
 
     public SwipeLayout(Context context) {
         super(context);
@@ -49,42 +55,35 @@ public class SwipeLayout extends LinearLayout {
         initView();
     }
 
-    private void initView() {
-        Context mContext = getContext();
-        mScroller = new Scroller(mContext);
-        setOrientation(LinearLayout.HORIZONTAL);
-        View.inflate(mContext, R.layout.container_swipelayout, this);
-        mContentView = findViewById(R.id.view_content);
-        mRightView = findViewById(R.id.view_right);
-        mHolderWidth = Math.round(
-                        TypedValue.applyDimension(
-                            TypedValue.COMPLEX_UNIT_DIP, mHolderWidth,
-                            getResources().getDisplayMetrics()));
-    }
-
-    //将View加入到mContentView中
+    /**
+     * set content view
+     * content view used for show content
+     * @param view   content
+     */
     public void setContentView(View view) {
         mContentView.addView(view);
     }
 
-    //将View加入到mRightView中
+    /**
+     * set right view
+     * right view used do operation
+     * @param v     operation view
+     */
     public void setRightView(View v) {
         mRightView.addView(v);
     }
 
-    public int getContentViewCount()    {
-        return mContentView.getChildCount();
-    }
-
-    public int getRightViewCount()    {
-        return mRightView.getChildCount();
-    }
-
+    /**
+     * set slide listener
+     * @param onSlideListener       listener for slide
+     */
     public void setOnSlideListener(OnSlideListener onSlideListener) {
         mOnSlideListener = onSlideListener;
     }
 
-    //将当前状态设置为关闭
+    /**
+     * close slide status
+     */
     public void shrink() {
         if (getScrollX() != 0) {
             this.smoothScrollTo(0, 0);
@@ -112,6 +111,7 @@ public class SwipeLayout extends LinearLayout {
                 mLastX = (int) ev.getX();
                 mLastY = (int) ev.getY();
                 return false;
+
             case MotionEvent.ACTION_MOVE:
                 //返回值为true表示本次触摸事件由自己执行，即执行SwipeLayout的onTouchEvent方法
                 int deltaX = x - mLastX;
@@ -122,6 +122,7 @@ public class SwipeLayout extends LinearLayout {
                 }
                 return true;
         }
+
         return super.onInterceptTouchEvent(ev);
     }
 
@@ -174,21 +175,28 @@ public class SwipeLayout extends LinearLayout {
             default:
                 break;
         }
+
         mLastX = x;
         mLastY = y;
         return true;
     }
 
-    //获取当前SwipeLayout的滑动状态
-    public int getSideState() {
+    /**
+     * get slide status
+     * @return      slide status
+     */
+    public int getSlideState() {
         return mSlideState;
     }
 
-    private void smoothScrollTo(int destX, int destY) {
-        // 缓慢滚动到指定位置
-        int scrollX = getScrollX();
-        int delta = destX - scrollX;
-        mScroller.startScroll(scrollX, 0, delta, 0, Math.abs(delta) * 3);
+    /**
+     * set slide width
+     * @param newWidth      new slide width
+     */
+    public void setSlideWidth(int newWidth) {
+        mHolderWidth = Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, newWidth,
+                getResources().getDisplayMetrics()));
         invalidate();
     }
 
@@ -199,4 +207,35 @@ public class SwipeLayout extends LinearLayout {
             postInvalidate();
         }
     }
+
+    /// PRIVATE START
+    /**
+     * scroll self
+     * @param destX     destination x
+     * @param destY     destination y
+     */
+    private void smoothScrollTo(int destX, int destY) {
+        // 缓慢滚动到指定位置
+        int scrollX = getScrollX();
+        int delta = destX - scrollX;
+        mScroller.startScroll(scrollX, 0, delta, 0, Math.abs(delta) * 3);
+        invalidate();
+    }
+
+    /**
+     * init self
+     */
+    private void initView() {
+        Context mContext = getContext();
+        mScroller = new Scroller(mContext);
+        setOrientation(LinearLayout.HORIZONTAL);
+        View.inflate(mContext, R.layout.container_swipelayout, this);
+        mContentView = findViewById(R.id.view_content);
+        mRightView = findViewById(R.id.view_right);
+        mHolderWidth = Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, mHolderWidth,
+                getResources().getDisplayMetrics()));
+    }
+
+    /// PRIVATE END
 }

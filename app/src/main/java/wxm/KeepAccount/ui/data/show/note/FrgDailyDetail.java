@@ -289,8 +289,7 @@ public class FrgDailyDetail extends FrgAdvBase {
             }
         }
 
-        AdapterNoteDetail ap = new AdapterNoteDetail(this, getActivity(), c_para,
-                new String[]{}, new int[]{});
+        AdapterNoteDetail ap = new AdapterNoteDetail(getActivity(), c_para);
         mLVBody.setAdapter(ap);
         ap.notifyDataSetChanged();
     }
