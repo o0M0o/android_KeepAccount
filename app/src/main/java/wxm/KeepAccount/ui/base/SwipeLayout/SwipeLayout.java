@@ -1,8 +1,12 @@
 package wxm.KeepAccount.ui.base.SwipeLayout;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -47,12 +51,12 @@ public class SwipeLayout extends LinearLayout {
 
     public SwipeLayout(Context context) {
         super(context);
-        initView();
+        initView(context, null);
     }
 
     public SwipeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView();
+        initView(context, attrs);
     }
 
     /**
@@ -117,13 +121,15 @@ public class SwipeLayout extends LinearLayout {
                 int deltaX = x - mLastX;
                 int deltaY = y - mLastY;
                 //这里作用是来比较X、Y轴的滑动距离，如果X轴的滑动距离小于两倍的Y轴滑动距离，则不执行SwipeLayout的滑动事件
-                if (Math.abs(deltaX) < Math.abs(deltaY) * TAN) {
-                    return false;
-                }
-                return true;
+                return Math.abs(deltaX) >= Math.abs(deltaY) * TAN;
         }
 
         return super.onInterceptTouchEvent(ev);
+    }
+
+    @Override
+    public boolean performClick()   {
+        return  true;
     }
 
     @Override
@@ -225,17 +231,45 @@ public class SwipeLayout extends LinearLayout {
     /**
      * init self
      */
-    private void initView() {
-        Context mContext = getContext();
-        mScroller = new Scroller(mContext);
+    private void initView(Context context, AttributeSet attrs) {
+        mScroller = new Scroller(context);
         setOrientation(LinearLayout.HORIZONTAL);
-        View.inflate(mContext, R.layout.container_swipelayout, this);
+        View.inflate(context, R.layout.container_swipelayout, this);
         mContentView = findViewById(R.id.view_content);
         mRightView = findViewById(R.id.view_right);
-        mHolderWidth = Math.round(TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, mHolderWidth,
-                getResources().getDisplayMetrics()));
-    }
 
+        int defPXWidth = Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 120,
+                getResources().getDisplayMetrics()));
+
+        @LayoutRes int idContent = R.layout.def_content;
+        @LayoutRes int idRight = R.layout.def_right;
+        if(null != attrs) {
+            TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.SwipeLayout);
+            try {
+                mHolderWidth = array.getDimensionPixelSize(R.styleable.SwipeLayout_dmRightWidth, defPXWidth);
+                idContent = array.getResourceId(R.styleable.SwipeLayout_idContentView, R.layout.def_content);
+                idRight = array.getResourceId(R.styleable.SwipeLayout_idRightView, R.layout.def_right);
+            } finally {
+                array.recycle();
+            }
+        }   else    {
+            mHolderWidth = defPXWidth;
+        }
+
+        if(isInEditMode())  {
+            setContentView(LayoutInflater.from(context).inflate(idContent, null));
+            setRightView(LayoutInflater.from(context).inflate(idRight, null));
+
+            int scrollX = getScrollX();
+            int delta = mHolderWidth - scrollX;
+            mScroller.startScroll(scrollX, 0, delta, 0, 0);
+        } else {
+            if(R.layout.def_content != idContent && R.layout.def_right != idRight)  {
+                setContentView(LayoutInflater.from(context).inflate(idContent, null));
+                setRightView(LayoutInflater.from(context).inflate(idRight, null));
+            }
+        }
+    }
     /// PRIVATE END
 }

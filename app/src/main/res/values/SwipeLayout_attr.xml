@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SwipeLayout">
+        <!-- for swipe width -->
+        <attr name="dmRightWidth" format="dimension" />
+
+        <!-- for content/right view -->
+        <attr name="idContentView" format="reference"/>
+        <attr name="idRightView" format="reference"/>
+    </declare-styleable>
+</resources>

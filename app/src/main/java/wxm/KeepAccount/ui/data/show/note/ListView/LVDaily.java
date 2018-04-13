@@ -397,8 +397,6 @@ public class LVDaily extends LVBase {
         cur_ap.notifyDataSetChanged();
     }
 
-
-
     /**
      * reorder data
      */
@@ -406,7 +404,6 @@ public class LVDaily extends LVBase {
         Collections.reverse(mMainPara);
     }
     /// END PRIVATE
-
 
     /**
      * main adapter
