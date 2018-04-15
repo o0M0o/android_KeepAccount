@@ -6,12 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import butterknife.BindView;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
@@ -29,7 +26,7 @@ import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
  * preview/edit record
  * Created by WangXM on 2016/10/30.
  */
-public class FrgPreviewAndEdit extends FrgUtilitySupportBase
+public class FrgPreviewAndEdit extends FrgSupportBaseAdv
         implements IPreviewAndEditBase {
     private final static int PAGE_COUNT = 2;
     private final static int PAGE_IDX_PREVIEW = 0;
@@ -41,8 +38,13 @@ public class FrgPreviewAndEdit extends FrgUtilitySupportBase
     private Object mData;
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return layoutInflater.inflate(R.layout.vw_viewpage, viewGroup, false);
+    protected int getLayoutID() {
+        return R.layout.vw_viewpage;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return false;
     }
 
     protected void initUI(Bundle bundle)    {
@@ -92,7 +94,7 @@ public class FrgPreviewAndEdit extends FrgUtilitySupportBase
                 TFPreviewBase old_tp = UtilFun.cast_t(old_pa.getItem(PAGE_IDX_PREVIEW));
 
                 te.setCurData(mStrAction, old_tp.getCurData());
-                te.refreshUI();
+                te.reInitUI();
             }
         }
     }

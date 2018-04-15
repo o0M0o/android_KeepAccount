@@ -18,7 +18,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgSwitcherWithEventBus;
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays;
 import wxm.KeepAccount.ui.data.report.page.DayReportChart;
 import wxm.KeepAccount.ui.data.report.page.DayReportWebView;
@@ -26,14 +25,15 @@ import wxm.KeepAccount.ui.dialog.DlgSelectReportDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
+import wxm.androidutil.FrgUtility.FrgSupportSwitcher;
 import wxm.androidutil.util.UtilFun;
 
 /**
  * day data report
  * Created by WangXM on 2017/2/15.
  */
-public class FrgReportDay extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> {
+public class FrgReportDay extends FrgSupportSwitcher<FrgSupportBaseAdv> {
     @BindView(R.id.tv_day)
     TextView mTVDay;
     @BindView(R.id.tv_pay)

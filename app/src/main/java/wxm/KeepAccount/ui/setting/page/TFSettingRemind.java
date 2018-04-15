@@ -19,7 +19,12 @@ public class TFSettingRemind extends TFSettingBase {
     }
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return null;
+    protected int getLayoutID() {
+        return 0;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return false;
     }
 }

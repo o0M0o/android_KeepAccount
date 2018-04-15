@@ -10,11 +10,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 
 import butterknife.BindView;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgSwitcherWithEventBus;
 import wxm.KeepAccount.ui.base.Switcher.PageSwitcher;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 import wxm.androidutil.FrgUtility.FrgSupportSwitcher;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;
@@ -30,7 +28,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper;
  * for note show
  * Created by WangXM on 2016/11/30.
  */
-public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> {
+public class FrgNoteShow extends FrgSupportSwitcher<FrgSupportBaseAdv> {
     protected final static int POS_DAY_FLOW = 0;
     protected final static int POS_MONTH_FLOW = 1;
     protected final static int POS_YEAR_FLOW = 2;
@@ -57,7 +55,7 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
         FrgSupportSwitcher mSBPage;
         int  mPageIdx;
     }
-    private pageHelper[] mPHHelper;
+    private pageHelper[]    mPHHelper;
     private PageSwitcher    mPSSwitcher;
 
     private TFShowDaily     mTFDaily    = new TFShowDaily();
@@ -68,6 +66,11 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
     public FrgNoteShow()   {
         super();
         setupFrgID(R.layout.vw_note_show, R.id.fl_page_holder);
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return true;
     }
 
     /**
@@ -84,7 +87,7 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
         }
 
         if(null != tb) {
-            ((FrgAdvBase)tb.getHotPage()).reInitUI();
+            ((FrgSupportBaseAdv)tb.getHotPage()).reInitUI();
         }
     }
 
@@ -94,17 +97,23 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
         addChildFrg(mTFMonthly);
         addChildFrg(mTFYearly);
         addChildFrg(mTFBudget);
+
+        initUIComponent();
+    }
+
+    /*
+    @Override
+    protected void initUI(Bundle bundle) {
+        super.initUI(bundle);
     }
 
     @Override
-    protected void initUI(Bundle bundle) {
-        // init view
-        // init adapter
-        mRLDayFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_DAY_FLOW]));
-        mRLMonthFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_MONTH_FLOW]));
-        mRLYearFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_YEAR_FLOW]));
-        mRLBudget.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_BUDGET]));
+    protected void loadUI(Bundle bundle) {
+        super.loadUI(bundle);
+    }
+    */
 
+    private void initUIComponent() {
         // init page switch
         mPSSwitcher = new PageSwitcher();
         mPHHelper = new pageHelper[POS_BUDGET + 1];
@@ -152,6 +161,11 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
         mPSSwitcher.addSelector(mPHHelper[POS_BUDGET],
                 () -> setPage(mPHHelper[POS_BUDGET], true),
                 () -> setPage(mPHHelper[POS_BUDGET], false));
+
+        mRLDayFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_DAY_FLOW]));
+        mRLMonthFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_MONTH_FLOW]));
+        mRLYearFlow.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_YEAR_FLOW]));
+        mRLBudget.setOnClickListener(v -> mPSSwitcher.doSelect(mPHHelper[POS_BUDGET]));
 
         // 默认选择第一页为首页
         // 根据调用参数跳转到指定首页
@@ -207,7 +221,7 @@ public class FrgNoteShow extends FrgSwitcherWithEventBus<FrgUtilitySupportBase> 
             switchToPage(ph.mSBPage);
 
             if(ph.mBADataChange) {
-                ((FrgAdvBase)ph.mSBPage.getHotPage()).reInitUI();
+                ((FrgSupportBaseAdv)ph.mSBPage.getHotPage()).reInitUI();
                 ph.mBADataChange = false;
             }
         }

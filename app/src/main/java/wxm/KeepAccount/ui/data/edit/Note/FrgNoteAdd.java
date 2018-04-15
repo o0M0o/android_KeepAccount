@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import wxm.KeepAccount.ui.base.Switcher.PageSwitcher;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
@@ -31,7 +31,7 @@ import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
  * UI for add note
  * Created by WangXM on 2016/11/29.
  */
-public class FrgNoteAdd extends FrgUtilitySupportBase {
+public class FrgNoteAdd extends FrgSupportBaseAdv {
     protected final static int POS_PAY = 0;
     protected final static int POS_INCOME = 1;
 
@@ -51,12 +51,17 @@ public class FrgNoteAdd extends FrgUtilitySupportBase {
     PageSwitcher mSWer;
 
     @Override
-    protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        return inflater.inflate(R.layout.vw_note_add, container, false);
+    protected int getLayoutID() {
+        return R.layout.vw_note_add;
     }
 
     @Override
-    protected void loadUI(Bundle savedInstanceState) {
+    protected boolean isUseEventBus() {
+        return false;
+    }
+
+    @Override
+    protected void initUI(Bundle savedInstanceState) {
         // for vp
         AppCompatActivity ac = (AppCompatActivity) getActivity();
         PagerAdapter adapter = new PagerAdapter(ac.getSupportFragmentManager());

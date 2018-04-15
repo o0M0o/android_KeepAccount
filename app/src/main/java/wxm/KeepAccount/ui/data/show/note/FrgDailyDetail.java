@@ -28,7 +28,7 @@ import java.util.Locale;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.OnClick;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;
@@ -47,7 +47,7 @@ import wxm.uilib.IconButton.IconButton;
  * for daily detail info
  * Created by WangXM on 2017/01/20.
  */
-public class FrgDailyDetail extends FrgAdvBase {
+public class FrgDailyDetail extends FrgSupportBaseAdv {
     // 展示时间信息的UI
     @BindView(R.id.tv_day)
     TextView mTVMonthDay;
@@ -108,6 +108,11 @@ public class FrgDailyDetail extends FrgAdvBase {
     @Override
     protected int getLayoutID() {
         return R.layout.vw_daily_detail;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return true;
     }
 
     @Override

@@ -35,6 +35,11 @@ public class DailyChart extends ChartBase {
         mPrvWidth = 4.5f;
     }
 
+    @Override
+    protected boolean isUseEventBus() {
+        return true;
+    }
+
     /**
      * filter UI
      * @param event     for event

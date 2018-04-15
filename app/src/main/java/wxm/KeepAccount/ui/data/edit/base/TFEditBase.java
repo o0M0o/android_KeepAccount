@@ -1,13 +1,13 @@
 package wxm.KeepAccount.ui.data.edit.base;
 
 
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 
 /**
  * base for data edit
  * Created by WangXM on2016/9/27.
  */
-public abstract class TFEditBase extends FrgUtilitySupportBase {
+public abstract class TFEditBase extends FrgSupportBaseAdv {
     protected String mAction;
 
     /**

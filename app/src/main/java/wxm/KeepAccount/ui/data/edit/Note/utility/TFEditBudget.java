@@ -51,11 +51,6 @@ public class TFEditBudget extends TFEditBase {
 
     private BudgetItem mBIData;
 
-    @Override
-    protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        return inflater.inflate(R.layout.vw_budget_edit, container, false);
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     protected void initUI(Bundle bundle)    {
         mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
@@ -112,6 +107,8 @@ public class TFEditBudget extends TFEditBase {
                 }
             }
         });
+
+        loadUI(bundle);
     }
 
     @Override
@@ -200,6 +197,16 @@ public class TFEditBudget extends TFEditBase {
         }
 
         return null;
+    }
+
+    @Override
+    protected int getLayoutID() {
+        return R.layout.vw_budget_edit;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return false;
     }
 
     /**

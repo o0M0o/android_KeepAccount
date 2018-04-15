@@ -146,6 +146,11 @@ public class LVYearly extends LVBase {
         mAHActs = new YearlyActionHelper();
     }
 
+    @Override
+    protected boolean isUseEventBus() {
+        return true;
+    }
+
     /**
      * 过滤视图事件
      *

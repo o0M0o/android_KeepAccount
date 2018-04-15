@@ -19,8 +19,7 @@ import java.util.Locale;
 import butterknife.BindColor;
 import butterknife.BindView;
 import wxm.KeepAccount.db.DBDataChangeEvent;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
@@ -32,7 +31,7 @@ import wxm.KeepAccount.ui.utility.NoteShowInfo;
  * for note pad content detail
  * Created by WangXM on 2016/12/12.
  */
-public class FrgCalendarContent extends FrgAdvBase {
+public class FrgCalendarContent extends FrgSupportBaseAdv {
     // for ui
     @BindView(R.id.tv_month_day)
     TextView mTVMonthDay;
@@ -67,6 +66,11 @@ public class FrgCalendarContent extends FrgAdvBase {
     @Override
     protected int getLayoutID() {
         return R.layout.frg_calendar_content;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return true;
     }
 
     @Override

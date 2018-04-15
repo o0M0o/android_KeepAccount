@@ -63,7 +63,7 @@ public class ACNoteShow extends ACSwitcherActivity<FrgNoteShow> {
     public void onConfigurationChanged(Configuration newConfig) {
         // TODO Auto-generated method stub
         super.onConfigurationChanged(newConfig);
-        getHotFragment().refreshUI();
+        getHotFragment().reInitUI();
     }
 
     /**

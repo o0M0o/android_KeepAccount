@@ -49,8 +49,6 @@ import static java.lang.String.format;
  * Created by WangXM on2016/9/28.
  */
 public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
-    private final static String TAG = "TFEditIncome";
-
     @BindView(R.id.ar_et_info)
     TouchEditText mETInfo;
 
@@ -67,11 +65,6 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
     String mSZDefNote;
 
     private IncomeNoteItem mOldIncomeNote;
-
-    @Override
-    protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        return inflater.inflate(R.layout.page_edit_income, container, false);
-    }
 
     @Override
     protected void initUI(Bundle bundle) {
@@ -100,6 +93,18 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
                 }
             }
         });
+
+        loadUI(bundle);
+    }
+
+    @Override
+    protected int getLayoutID() {
+        return R.layout.page_edit_income;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return false;
     }
 
     @Override
@@ -230,7 +235,7 @@ public class TFEditIncome extends TFEditBase implements View.OnTouchListener {
         try {
             tsDT = ToolUtil.StringToTimestamp(str_date + ":00");
         } catch (Exception ex) {
-            Log.e(TAG, String.format(Locale.CHINA, "解析'%s'到日期失败", str_date));
+            Log.e(LOG_TAG, String.format(Locale.CHINA, "解析'%s'到日期失败", str_date));
             return false;
         }
 

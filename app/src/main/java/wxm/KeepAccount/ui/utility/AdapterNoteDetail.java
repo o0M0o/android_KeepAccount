@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
 import wxm.KeepAccount.ui.base.Helper.ViewHelper;
 import wxm.KeepAccount.ui.base.SwipeLayout.SwipeLayout;
 import wxm.KeepAccount.utility.ContextUtil;

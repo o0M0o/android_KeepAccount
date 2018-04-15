@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.welcome;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import com.allure.lbanners.LMBanners;
 import com.allure.lbanners.transformer.TransitionEffect;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -24,10 +22,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.KeepAccount.db.DBDataChangeEvent;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgWithEventBus;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.DragGrid.DragGridView;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.dialog.DlgSelectChannel;
@@ -41,7 +38,7 @@ import wxm.KeepAccount.utility.PreferencesUtil;
  * for welcome
  * Created by WangXM on 2016/12/7.
  */
-public class FrgWelcome extends FrgWithEventBus {
+public class FrgWelcome extends FrgSupportBaseAdv {
     // for ui
     @BindView(R.id.dgv_buttons)
     DragGridView mDGVActions;
@@ -64,13 +61,18 @@ public class FrgWelcome extends FrgWithEventBus {
     }
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        initFrgs();
-        return layoutInflater.inflate(R.layout.vw_welcome, viewGroup, false);
+    protected int getLayoutID() {
+        return R.layout.vw_welcome;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return true;
     }
 
     @Override
     protected void initUI(Bundle savedInstanceState) {
+        initFrgs();
         initBanner();
 
         mLSData.clear();

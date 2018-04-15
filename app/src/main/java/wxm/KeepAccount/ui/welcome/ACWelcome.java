@@ -55,7 +55,7 @@ public class ACWelcome extends AppCompatActivity
     public void onConfigurationChanged(Configuration newConfig) {
         // TODO Auto-generated method stub
         super.onConfigurationChanged(newConfig);
-        mFGWelcome.refreshUI();
+        mFGWelcome.reInitUI();
     }
 
 

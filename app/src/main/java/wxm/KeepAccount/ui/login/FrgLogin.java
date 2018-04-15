@@ -26,7 +26,7 @@ import wxm.KeepAccount.ui.usr.ACAddUsr;
 import wxm.KeepAccount.ui.welcome.ACWelcome;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 
 ;
 
@@ -34,7 +34,7 @@ import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
  * for login
  * Created by WangXM on 2016/11/29.
  */
-public class FrgLogin extends FrgUtilitySupportBase {
+public class FrgLogin extends FrgSupportBaseAdv {
     // for ui
     @BindView(R.id.login_progress)
     ProgressBar mPBLoginProgress;
@@ -62,11 +62,6 @@ public class FrgLogin extends FrgUtilitySupportBase {
     String mHSErrorPassword;
 
     @Override
-    protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        return inflater.inflate(R.layout.vw_login, container, false);
-    }
-
-    @Override
     protected void initUI(Bundle bundle)    {
         mBTEmailSignIn.setOnClickListener(view1 -> attemptLogin());
 
@@ -78,6 +73,16 @@ public class FrgLogin extends FrgUtilitySupportBase {
         mBTDefUsrLogin.setOnClickListener(v -> {
             doLogin(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD);
         });
+    }
+
+    @Override
+    protected int getLayoutID() {
+        return R.layout.vw_login;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return false;
     }
 
     @Override

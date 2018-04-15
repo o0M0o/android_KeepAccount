@@ -30,8 +30,13 @@ public class TFSettingMain extends TFSettingBase {
     RelativeLayout mRLShareApp;
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return layoutInflater.inflate(R.layout.page_setting_main, viewGroup, false);
+    protected int getLayoutID() {
+        return R.layout.page_setting_main;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return false;
     }
 
     @Override

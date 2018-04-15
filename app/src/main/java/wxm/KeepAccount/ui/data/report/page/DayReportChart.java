@@ -33,18 +33,18 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.INote;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgWithEventBus;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 import wxm.KeepAccount.utility.ToolUtil;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 import wxm.androidutil.util.UtilFun;
 
 /**
  * daily report(webview)
  * Created by WangXM on 2017/3/4.
  */
-public class DayReportChart extends FrgWithEventBus {
+public class DayReportChart extends FrgSupportBaseAdv {
     @BindView(R.id.chart)
     PieChartView mCVchart;
     @BindView(R.id.pb_load_data)
@@ -68,10 +68,21 @@ public class DayReportChart extends FrgWithEventBus {
     }
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+    protected int getLayoutID() {
+        return R.layout.page_report_chart;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return true;
+    }
+
+    @Override
+    protected void initUI(Bundle bundle) {
         Bundle bd = getArguments();
         mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
-        return layoutInflater.inflate(R.layout.page_report_chart, viewGroup, false);
+
+        loadUI(bundle);
     }
 
     @Override

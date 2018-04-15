@@ -156,6 +156,11 @@ public class LVBudget extends LVBase {
         mAHActs = new BudgetActionHelper();
     }
 
+    @Override
+    protected boolean isUseEventBus() {
+        return true;
+    }
+
     /**
      * filter event
      * @param event 事件

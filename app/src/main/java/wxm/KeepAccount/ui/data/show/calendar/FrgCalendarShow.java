@@ -21,11 +21,11 @@ import java.util.Locale;
 import java.util.TreeMap;
 
 import butterknife.BindView;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgWithEventBus;
 import wxm.KeepAccount.ui.data.show.calendar.base.CalendarShowItemAdapter;
 import wxm.KeepAccount.ui.data.show.calendar.base.CalendarShowItemModel;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.utility.ToolUtil;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;
@@ -39,7 +39,7 @@ import wxm.uilib.SimpleCalendar.CalendarListView;
  * for calendar show
  * Created by WangXM on 2016/12/4.
  */
-public class FrgCalendarShow extends FrgWithEventBus {
+public class FrgCalendarShow extends FrgSupportBaseAdv {
     public static final SimpleDateFormat DAY_FORMAT =
             new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
 
@@ -64,8 +64,13 @@ public class FrgCalendarShow extends FrgWithEventBus {
     private FrgCalendarContent mFGContent = new FrgCalendarContent();
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return layoutInflater.inflate(R.layout.vw_calendar, viewGroup, false);
+    protected int getLayoutID() {
+        return R.layout.vw_calendar;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return true;
     }
 
     @Override
@@ -124,6 +129,7 @@ public class FrgCalendarShow extends FrgWithEventBus {
             mFGContent.updateContent(selectedDate);
         });
 
+        loadUI(bundle);
     }
 
     /**

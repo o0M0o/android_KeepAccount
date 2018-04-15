@@ -7,7 +7,7 @@ import android.widget.RelativeLayout;
 import java.util.LinkedList;
 
 import butterknife.BindView;
-import wxm.KeepAccount.ui.base.FrgUitlity.FrgAdvBase;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
@@ -16,7 +16,7 @@ import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
  * base for show record
  * Created by xiaoming wang on 2016/9/14.
  */
-public abstract class ShowViewBase extends FrgAdvBase {
+public abstract class ShowViewBase extends FrgSupportBaseAdv {
     // filter for view
     protected boolean mBFilter;
     protected final LinkedList<String> mFilterPara;

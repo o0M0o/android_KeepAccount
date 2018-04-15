@@ -37,6 +37,11 @@ public class MonthlyChart extends ChartBase {
     }
 
     @Override
+    protected boolean isUseEventBus() {
+        return true;
+    }
+
+    @Override
     protected void refreshData() {
         ToolUtil.runInBackground(this.getActivity(),
                 () -> {

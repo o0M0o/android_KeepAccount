@@ -98,6 +98,18 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
         mRLActReject.setOnClickListener(this);
         mRLActPencil.setOnClickListener(this);
         update_acts(SELECTED_NONE);
+
+        loadUI(bundle);
+    }
+
+    @Override
+    protected int getLayoutID() {
+        return R.layout.vw_edit_record_info;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return false;
     }
 
     @Override
@@ -114,11 +126,6 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
         mGVHolder.setAdapter(mGVAdapter);
         mGVHolder.setOnItemClickListener((parent, view1, position, id) -> onGVItemClick(position));
         load_info();
-    }
-
-    @Override
-    protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        return inflater.inflate(R.layout.vw_edit_record_info, container, false);
     }
 
     /**

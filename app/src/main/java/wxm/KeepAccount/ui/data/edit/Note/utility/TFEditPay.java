@@ -83,8 +83,13 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
     private PayNoteItem mOldPayNote;
 
     @Override
-    protected View inflaterView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        return inflater.inflate(R.layout.page_edit_pay, container, false);
+    protected int getLayoutID() {
+        return R.layout.page_edit_pay;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return false;
     }
 
     @Override
@@ -171,6 +176,8 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
                 }
             }
         });
+
+        loadUI(bundle);
     }
 
 

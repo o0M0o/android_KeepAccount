@@ -36,8 +36,13 @@ public class TFSettingChartColor extends TFSettingBase {
     private HashMap<String, Integer> mHMColors;
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return layoutInflater.inflate(R.layout.page_setting_chart_color, viewGroup, false);
+    protected int getLayoutID() {
+        return R.layout.page_setting_chart_color;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return false;
     }
 
     @Override

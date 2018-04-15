@@ -29,18 +29,6 @@ import wxm.androidutil.util.UtilFun;
 public class DayReportWebView extends FrgSupportWebView {
     private ArrayList<String> mASParaLoad;
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onDetach() {
-        EventBus.getDefault().unregister(this);
-        super.onDetach();
-    }
-
     /**
      * handler for change data range
      * @param event     param
@@ -52,6 +40,10 @@ public class DayReportWebView extends FrgSupportWebView {
         loadUI(null);
     }
 
+    @Override
+    protected boolean isUseEventBus() {
+        return true;
+    }
 
     @Override
     protected void onWVPageFinished(WebView wvPage, Object para) {
@@ -59,13 +51,12 @@ public class DayReportWebView extends FrgSupportWebView {
         });
     }
 
-    protected void initUI(Bundle bundle)    {
-        Bundle bd = getArguments();
-        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
-    }
 
     @Override
     protected void loadUI(Bundle savedInstanceState) {
+        Bundle bd = getArguments();
+        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD);
+
         if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
             if (2 != mASParaLoad.size())
                 return;

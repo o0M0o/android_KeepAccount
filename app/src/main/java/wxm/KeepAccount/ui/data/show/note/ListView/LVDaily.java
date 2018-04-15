@@ -203,6 +203,11 @@ public class LVDaily extends LVBase {
         mAHActs = new DailyActionHelper();
     }
 
+    @Override
+    protected boolean isUseEventBus() {
+        return true;
+    }
+
     /**
      * filter event
      * @param event     param

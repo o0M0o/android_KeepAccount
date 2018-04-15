@@ -72,6 +72,11 @@ public class BudgetChart extends ShowViewBase {
     }
 
     @Override
+    protected boolean isUseEventBus() {
+        return true;
+    }
+
+    @Override
     protected void initUI(Bundle bundle) {
         mBFilter = false;
         mHMColor = PreferencesUtil.loadChartColor();

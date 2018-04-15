@@ -119,7 +119,7 @@ public class ACLogin extends AppCompatActivity {
         }
 
         if (b_resetview) {
-            mFGLogin.refreshUI();
+            mFGLogin.reInitUI();
         }
     }
 }

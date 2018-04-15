@@ -145,6 +145,10 @@ public class LVMonthly
         mAHActs = new MonthlyActionHelper();
     }
 
+    @Override
+    protected boolean isUseEventBus() {
+        return true;
+    }
 
     /**
      * filter view

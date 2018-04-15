@@ -28,8 +28,13 @@ public class TFSettingCheckVersion extends TFSettingBase {
     TextView mTVVerName;
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return layoutInflater.inflate(R.layout.page_setting_version, viewGroup, false);
+    protected int getLayoutID() {
+        return R.layout.page_setting_version;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return false;
     }
 
     @Override

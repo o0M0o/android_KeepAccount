@@ -15,10 +15,9 @@ import android.widget.Toast;
 
 import butterknife.BindString;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import wxm.KeepAccount.define.EMsgType;
-import wxm.androidutil.FrgUtility.FrgUtilitySupportBase;
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 import wxm.androidutil.util.UtilFun;
 import wxm.androidutil.util.WRMsgHandler;
 import wxm.KeepAccount.R;
@@ -30,7 +29,7 @@ import wxm.KeepAccount.utility.ContextUtil;
  * add user
  * Created by WangXM on 2016/11/29.
  */
-public class FrgUsrAdd extends FrgUtilitySupportBase
+public class FrgUsrAdd extends FrgSupportBaseAdv
         implements TextView.OnEditorActionListener {
     // for ui
     @BindView(R.id.et_usr_name)
@@ -51,8 +50,13 @@ public class FrgUsrAdd extends FrgUtilitySupportBase
     private LocalMsgHandler mMHHandler;
 
     @Override
-    protected View inflaterView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return layoutInflater.inflate(R.layout.vw_usr_add, viewGroup, false);
+    protected int getLayoutID() {
+        return R.layout.vw_usr_add;
+    }
+
+    @Override
+    protected boolean isUseEventBus() {
+        return false;
     }
 
     @Override
