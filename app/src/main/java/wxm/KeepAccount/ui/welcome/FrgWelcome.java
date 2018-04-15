@@ -70,11 +70,17 @@ public class FrgWelcome extends FrgSupportBaseAdv {
         return true;
     }
 
+
     @Override
     protected void initUI(Bundle savedInstanceState) {
         initFrgs();
         initBanner();
 
+        loadUI(savedInstanceState);
+    }
+
+    @Override
+    protected void loadUI(Bundle savedInstanceState) {
         mLSData.clear();
         for (String i : PreferencesUtil.loadHotAction()) {
             HashMap<String, Object> ihm = new HashMap<>();

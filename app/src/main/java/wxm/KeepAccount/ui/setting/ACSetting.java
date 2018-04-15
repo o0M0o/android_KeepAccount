@@ -44,7 +44,7 @@ public class ACSetting extends ACSwitcherActivity<TFSettingBase> {
         addFragment(mTFMain);
         addFragment(mTFChartColor);
         addFragment(mTFCheckVer);
-        addFragment(mTFRemind);
+        //addFragment(mTFRemind);
     }
 
     @Override
