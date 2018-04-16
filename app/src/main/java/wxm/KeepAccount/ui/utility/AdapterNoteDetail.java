@@ -16,7 +16,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import wxm.KeepAccount.ui.base.Helper.ViewHelper;
-import wxm.KeepAccount.ui.base.SwipeLayout.SwipeLayout;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
@@ -27,6 +26,7 @@ import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.define.IncomeNoteItem;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
+import wxm.uilib.SwipeLayout.SwipeLayout;
 
 /**
  * adapter for note detail
@@ -66,16 +66,22 @@ public class AdapterNoteDetail extends SimpleAdapter {
         SwipeLayout sl = vh.getView(R.id.swipe);
         vwTag vt = (vwTag)sl.getTag();
         if(null == vt) {
+            ViewHelper vhSwipe = new ViewHelper(sl);
+
             vt = new vwTag();
             if(itemData.isPayNote()) {
-                vt.mContent = LayoutInflater.from(mCTSelf).inflate(R.layout.liit_data_pay, null);
+                vhSwipe.setVisibility(R.id.rl_income, View.GONE);
+
+                vt.mContent = vhSwipe.getChildView(R.id.rl_pay);
                 initPay(vt.mContent, itemData);
             } else  {
-                vt.mContent = LayoutInflater.from(mCTSelf).inflate(R.layout.liit_data_income, null);
+                vhSwipe.setVisibility(R.id.rl_pay, View.GONE);
+
+                vt.mContent = vhSwipe.getChildView(R.id.rl_income);
                 initIncome(vt.mContent, itemData);
             }
 
-            vt.mRight = LayoutInflater.from(mCTSelf).inflate(R.layout.liit_data_swipe, null);
+            vt.mRight = vhSwipe.getChildView(R.id.cl_swipe_right);
             ViewHelper vhRight = new ViewHelper(vt.mRight);
             vhRight.setTag(R.id.iv_delete, itemData);
             vhRight.setTag(R.id.iv_edit, itemData);
@@ -110,8 +116,6 @@ public class AdapterNoteDetail extends SimpleAdapter {
                 mCTSelf.startActivity(intent);
             });
 
-            sl.setContentView(vt.mContent);
-            sl.setRightView(vt.mRight);
             sl.setTag(vt);
         }
 

@@ -120,11 +120,3 @@ dependencies {
     implementation project(':UiLib')
 }
 
-/*
-configurations.all {
-    resolutionStrategy {
-        force 'com.android.support:support-annotations:24.2.1'
-    }
-}
-*/
-
