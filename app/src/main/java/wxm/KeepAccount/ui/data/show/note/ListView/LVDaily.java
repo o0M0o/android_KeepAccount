@@ -1,9 +1,11 @@
 package wxm.KeepAccount.ui.data.show.note.ListView;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +49,7 @@ import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.uilib.IconButton.IconButton;
+import wxm.uilib.SwipeLayout.SwipeLayout;
 
 /**
  * listview for daily data
@@ -315,6 +318,8 @@ public class LVDaily extends LVBase {
                                             MainAdapterItem map = new MainAdapterItem();
                                             map.year = k.substring(0, 4);
                                             map.month = k.substring(5, 7);
+                                            map.month = map.month.startsWith("0") ?
+                                                    map.month.replaceFirst("0", " ") : map.month;
 
                                             String km = k.substring(8, 10);
                                             km = km.startsWith("0") ? km.replaceFirst("0", "") : km;
@@ -445,29 +450,40 @@ public class LVDaily extends LVBase {
             View root_view = viewHolder.getConvertView();
             root_view.setBackgroundColor(0 == position % 2 ?
                     ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
+            root_view.setOnClickListener(mCLAdapter);
 
-            // for line data
-            viewHolder.getView(R.id.cl_date).setOnClickListener(mCLAdapter);
-            viewHolder.getView(R.id.vs_daily_info).setOnClickListener(mCLAdapter);
+            if(null == viewHolder.getView(R.id.cl_date).getTag())   {
+                initItemShow(viewHolder, position);
+                viewHolder.getView(R.id.cl_date).setTag(new Object());
+            }
 
-            // for show
-            MainAdapterItem item = UtilFun.cast(getItem(position));
-            viewHolder.setText(R.id.tv_year_number, item.year);
-            viewHolder.setText(R.id.tv_month_number,
+            return root_view;
+        }
+
+        private void initItemShow(FastViewHolder vh, int pos) {
+            MainAdapterItem item = UtilFun.cast(getItem(pos));
+            MainAdapterItem prvItem = pos > 0 ? UtilFun.cast(getItem(pos - 1)) : null;
+            if(null == prvItem || !prvItem.year.equals(item.year)) {
+                vh.setText(R.id.tv_year_number, item.year);
+            } else  {
+                //vh.setText(R.id.tv_year_number, item.year);
+                vh.getView(R.id.tv_year_number).setVisibility(View.INVISIBLE);
+            }
+
+            vh.setText(R.id.tv_month_number,
                     item.month.startsWith("0") ? item.month.substring(1) : item.month);
-            viewHolder.setText(R.id.tv_day_number, item.dayNumber);
-            viewHolder.setText(R.id.tv_day_in_week, item.dayInWeek);
+            vh.setText(R.id.tv_day_number, item.dayNumber);
+            vh.setText(R.id.tv_day_in_week, item.dayInWeek);
 
-            ValueShow vs = viewHolder.getView(R.id.vs_daily_info);
+            ValueShow vs = vh.getView(R.id.vs_daily_info);
             HashMap<String, Object> hm_attr = new HashMap<>();
             hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.day.mPayCount);
             hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.day.mPayAmount);
             hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.day.mIncomeCount);
             hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.day.mIncomeAmount);
             vs.adjustAttribute(hm_attr);
-
-            return root_view;
         }
+
 
         /**
          * get daily data need delete

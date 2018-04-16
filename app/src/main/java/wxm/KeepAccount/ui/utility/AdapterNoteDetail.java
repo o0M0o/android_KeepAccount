@@ -33,8 +33,8 @@ import wxm.uilib.SwipeLayout.SwipeLayout;
  */
 public class AdapterNoteDetail extends SimpleAdapter {
     class vwTag {
-        public View mContent;
-        public View mRight;
+        View mContent;
+        View mRight;
     }
 
     public final static String K_NODE = "node";

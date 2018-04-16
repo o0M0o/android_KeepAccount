@@ -1,90 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_daily_data"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp"
-    android:paddingStart="6dp"
-    android:paddingEnd="12dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingBottom="4dp"
+    android:paddingEnd="12dp"
+    android:paddingStart="6dp"
+    android:paddingTop="4dp">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cl_date"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true">
 
         <TextView
             android:id="@+id/tv_year_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tv_day_in_week"
-            app:layout_constraintTop_toTopOf="parent"
             android:text="2016"
             android:textColor="@color/darkslategrey"
-            android:textSize="20sp" />
-
-        <!--
-        <TextView
-            android:id="@+id/tv_year_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/tv_year"
-            app:layout_constraintTop_toTopOf="@id/tv_year"
-            app:layout_constraintBottom_toBottomOf="@id/tv_year"
-            android:text="年"
-            android:textSize="16sp" />
-            -->
-
-        <TextView
-            android:id="@+id/tv_month_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_year_number"
-            android:text=" 7"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_month_tag"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cl_month_day"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_year_number"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/tv_month_number"
-            app:layout_constraintBottom_toBottomOf="@id/tv_month_number"
-            android:text="月"
-            android:textSize="12sp" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_day_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/tv_month_tag"
-            app:layout_constraintBottom_toBottomOf="@id/tv_month_number"
-            android:text="15"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_month_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-        <TextView
-            android:id="@+id/tv_day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/tv_day_number"
-            app:layout_constraintBottom_toBottomOf="@id/tv_month_number"
-            android:text="日"
-            android:textSize="12sp" />
+            <TextView
+                android:id="@+id/tv_month_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="月"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_month_number"
+                app:layout_constraintStart_toEndOf="@id/tv_month_number" />
+
+            <TextView
+                android:id="@+id/tv_day_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_month_number"
+                app:layout_constraintStart_toEndOf="@id/tv_month_tag" />
+
+            <TextView
+                android:id="@+id/tv_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="日"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_month_number"
+                app:layout_constraintStart_toEndOf="@id/tv_day_number" />
+        </android.support.constraint.ConstraintLayout>
 
         <TextView
             android:id="@+id/tv_day_in_week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintStart_toEndOf="@id/tv_day"
-            app:layout_constraintBottom_toBottomOf="@id/tv_month_number"
             android:text="星期三"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/cl_month_day"
+            app:layout_constraintTop_toBottomOf="@id/cl_month_day"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 
     <wxm.KeepAccount.ui.data.show.note.base.ValueShow
