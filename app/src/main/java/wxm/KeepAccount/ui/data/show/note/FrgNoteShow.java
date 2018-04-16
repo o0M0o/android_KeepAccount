@@ -101,18 +101,6 @@ public class FrgNoteShow extends FrgSupportSwitcher<FrgSupportBaseAdv> {
         initUIComponent();
     }
 
-    /*
-    @Override
-    protected void initUI(Bundle bundle) {
-        super.initUI(bundle);
-    }
-
-    @Override
-    protected void loadUI(Bundle bundle) {
-        super.loadUI(bundle);
-    }
-    */
-
     private void initUIComponent() {
         // init page switch
         mPSSwitcher = new PageSwitcher();

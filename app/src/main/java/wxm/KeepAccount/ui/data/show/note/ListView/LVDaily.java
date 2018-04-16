@@ -286,6 +286,7 @@ public class LVDaily extends LVBase {
     protected void initUI(Bundle bundle) {
         super.initUI(bundle);
 
+        showLoadingProgress(true);
         ToolUtil.runInBackground(getActivity(),
                 () -> {
                     mMainPara.clear();
@@ -353,7 +354,10 @@ public class LVDaily extends LVBase {
                         e.printStackTrace();
                     }
                 },
-                () -> loadUI(bundle));
+                () -> {
+                    showLoadingProgress(false);
+                    loadUI(bundle);
+                });
     }
 
 
