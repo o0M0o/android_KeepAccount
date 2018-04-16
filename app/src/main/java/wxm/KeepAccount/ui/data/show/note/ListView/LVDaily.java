@@ -80,6 +80,7 @@ public class LVDaily extends LVBase {
         public String  tag;
         public String  show;
 
+        public String  year;
         public String  month;
         public String  dayNumber;
         public String  dayInWeek;
@@ -312,7 +313,8 @@ public class LVDaily extends LVBase {
                                         try {
                                             NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
                                             MainAdapterItem map = new MainAdapterItem();
-                                            map.month = k.substring(0, 7);
+                                            map.year = k.substring(0, 4);
+                                            map.month = k.substring(5, 7);
 
                                             String km = k.substring(8, 10);
                                             km = km.startsWith("0") ? km.replaceFirst("0", "") : km;
@@ -421,31 +423,14 @@ public class LVDaily extends LVBase {
         private ArrayList<String> mALWaitDeleteDays = new ArrayList<>();
 
         private View.OnClickListener mCLAdapter = v -> {
-            int vid = v.getId();
             int pos = mLVShow.getPositionForView(v);
 
             MainAdapterItem hm = UtilFun.cast(getItem(pos));
             String k_tag = hm.tag;
-            switch (vid) {
-                case R.id.rl_delete: {
-                    if (mALWaitDeleteDays.contains(k_tag)) {
-                        mALWaitDeleteDays.remove(k_tag);
-                        v.setBackgroundColor(ResourceHelper.mCRLVItemNoSel);
-                    } else {
-                        mALWaitDeleteDays.add(k_tag);
-                        v.setBackgroundColor(ResourceHelper.mCRLVItemSel);
-                    }
-                }
-                break;
-
-                default: {
-                    ACNoteShow ac = getRootActivity();
-                    Intent it = new Intent(ac, ACDailyDetail.class);
-                    it.putExtra(ACDailyDetail.K_HOTDAY, k_tag);
-                    ac.startActivity(it);
-                }
-                break;
-            }
+            ACNoteShow ac = getRootActivity();
+            Intent it = new Intent(ac, ACDailyDetail.class);
+            it.putExtra(ACDailyDetail.K_HOTDAY, k_tag);
+            ac.startActivity(it);
         };
 
         MainAdapter(Context context, List<?> mdata)  {
@@ -462,16 +447,14 @@ public class LVDaily extends LVBase {
                     ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
 
             // for line data
-            RelativeLayout rl_del = viewHolder.getView(R.id.rl_delete);
-            rl_del.setVisibility(mAction.isEdit() ? View.GONE : View.VISIBLE);
-            rl_del.setOnClickListener(mCLAdapter);
-
-            viewHolder.getView(R.id.rl_date).setOnClickListener(mCLAdapter);
+            viewHolder.getView(R.id.cl_date).setOnClickListener(mCLAdapter);
             viewHolder.getView(R.id.vs_daily_info).setOnClickListener(mCLAdapter);
 
             // for show
             MainAdapterItem item = UtilFun.cast(getItem(position));
-            viewHolder.setText(R.id.tv_month, item.month);
+            viewHolder.setText(R.id.tv_year_number, item.year);
+            viewHolder.setText(R.id.tv_month_number,
+                    item.month.startsWith("0") ? item.month.substring(1) : item.month);
             viewHolder.setText(R.id.tv_day_number, item.dayNumber);
             viewHolder.setText(R.id.tv_day_in_week, item.dayInWeek);
 
