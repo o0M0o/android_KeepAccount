@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -118,8 +119,7 @@ public class LVDaily extends LVBase {
          * actions
          * @param v     clicked view
          */
-        @OnClick({R.id.ib_sort, R.id.ib_refresh, R.id.ib_delete,
-                R.id.ib_add, R.id.ib_report})
+        @OnClick({R.id.ib_sort, R.id.ib_refresh, R.id.ib_delete, R.id.ib_add, R.id.ib_report})
         public void onActionClick(View v) {
             switch (v.getId()) {
                 case R.id.ib_sort: {
@@ -142,8 +142,12 @@ public class LVDaily extends LVBase {
                 case R.id.ib_delete: {
                     if (mAction.isEdit()) {
                         mAction = EAction.DELETE;
-                        redrawUI();
+                    } else  {
+                        doDelete();
+                        mAction = EAction.EDIT;
                     }
+
+                    redrawUI();
                 }
                 break;
 
@@ -240,37 +244,10 @@ public class LVDaily extends LVBase {
         switch (vid) {
             case R.id.bt_accpet:
                 if (mAction.isDelete()) {
-                    ArrayList<Integer> al_i = new ArrayList<>();
-                    ArrayList<Integer> al_p = new ArrayList<>();
-
-                    MainAdapter cur_ap = (MainAdapter) mLVShow.getAdapter();
-                    List<String> ls_days = cur_ap.getWaitDeleteDays();
-                    HashMap<String, ArrayList<INote>> hm =
-                            NoteDataHelper.getInstance().getNotesForDay();
-                    for (String day : ls_days) {
-                        List<INote> ls_n = hm.get(day);
-                        for (INote n : ls_n) {
-                            if (n.isPayNote())
-                                al_p.add(n.getId());
-                            else
-                                al_i.add(n.getId());
-                        }
-                    }
-
-                    boolean bf = false;
-                    if (!al_i.isEmpty()) {
-                        ContextUtil.getPayIncomeUtility().deleteIncomeNotes(al_i);
-                        bf = true;
-                    }
-
-                    if (!al_p.isEmpty()) {
-                        ContextUtil.getPayIncomeUtility().deletePayNotes(al_p);
-                        bf = true;
-                    }
+                    doDelete();
 
                     mAction = EAction.EDIT;
-                    if (bf)
-                        reloadView(v.getContext(), false);
+                    redrawUI();
                 }
                 break;
 
@@ -399,6 +376,33 @@ public class LVDaily extends LVBase {
 
 
     /// BEGIN PRIVATE
+    private void doDelete() {
+        ArrayList<Integer> al_i = new ArrayList<>();
+        ArrayList<Integer> al_p = new ArrayList<>();
+
+        MainAdapter cur_ap = (MainAdapter) mLVShow.getAdapter();
+        List<String> ls_days = cur_ap.getWaitDeleteDays();
+        HashMap<String, ArrayList<INote>> hm =
+                NoteDataHelper.getInstance().getNotesForDay();
+        for (String day : ls_days) {
+            List<INote> ls_n = hm.get(day);
+            for (INote n : ls_n) {
+                if (n.isPayNote())
+                    al_p.add(n.getId());
+                else
+                    al_i.add(n.getId());
+            }
+        }
+
+        if (!al_i.isEmpty()) {
+            ContextUtil.getPayIncomeUtility().deleteIncomeNotes(al_i);
+        }
+
+        if (!al_p.isEmpty()) {
+            ContextUtil.getPayIncomeUtility().deletePayNotes(al_p);
+        }
+    }
+
     /**
      * redraw UI
      */
@@ -425,8 +429,6 @@ public class LVDaily extends LVBase {
      * main adapter
      */
     private class MainAdapter extends LVAdapter {
-        private ArrayList<String> mALWaitDeleteDays = new ArrayList<>();
-
         private View.OnClickListener mCLAdapter = v -> {
             int pos = mLVShow.getPositionForView(v);
 
@@ -444,15 +446,24 @@ public class LVDaily extends LVBase {
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
-                    view, R.layout.li_daily_show);
+            FastViewHolder viewHolder = FastViewHolder.get(getContext(), view, R.layout.li_daily_show);
+            CheckBox cb = viewHolder.getView(R.id.cb_del);
+            if(!mAction.isDelete()) {
+                cb.setChecked(false);
+                cb.setVisibility(View.GONE);
+            } else  {
+                cb.setVisibility(View.VISIBLE);
+            }
 
             View root_view = viewHolder.getConvertView();
-            root_view.setBackgroundColor(0 == position % 2 ?
-                    ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
-            root_view.setOnClickListener(mCLAdapter);
-
             if(null == viewHolder.getView(R.id.cl_date).getTag())   {
+                MainAdapterItem item = UtilFun.cast(getItem(position));
+                cb.setTag(item.tag);
+
+                root_view.setBackgroundColor(0 == position % 2 ?
+                        ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
+                root_view.setOnClickListener(mCLAdapter);
+
                 initItemShow(viewHolder, position);
                 viewHolder.getView(R.id.cl_date).setTag(new Object());
             }
@@ -490,7 +501,20 @@ public class LVDaily extends LVBase {
          * @return      daily data
          */
         List<String> getWaitDeleteDays() {
-            return mALWaitDeleteDays;
+            if(!mAction.isDelete()) {
+                return Collections.emptyList();
+            }
+
+            List<String> ret = new LinkedList<>();
+            int count = mLVShow.getChildCount();
+            for(int pos = 0; pos < count; pos++)    {
+                View v = mLVShow.getChildAt(pos);
+                CheckBox cb = v.findViewById(R.id.cb_del);
+                if(cb.isChecked())  {
+                    ret.add((String) cb.getTag());
+                }
+            }
+            return ret;
         }
     }
 }
