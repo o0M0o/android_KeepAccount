@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <wxm.uilib.SimpleCalendar.CalendarListView
-        android:id="@+id/calendar_listview"
+    <wxm.uilib.FrgCalendar.FrgCalendar
+        android:id="@+id/frg_calender_lv"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
-</RelativeLayout>
+    <FrameLayout
+        android:id="@+id/fl_holder"
+        app:layout_constraintTop_toBottomOf="@id/frg_calender_lv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+</android.support.constraint.ConstraintLayout>

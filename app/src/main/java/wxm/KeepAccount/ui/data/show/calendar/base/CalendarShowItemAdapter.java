@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
+import wxm.uilib.FrgCalendar.FrgCalendarItemAdapter;
+import wxm.uilib.FrgCalendar.FrgCalendarItemModel;
 import wxm.uilib.SimpleCalendar.BaseCalendarItemAdapter;
 import wxm.uilib.SimpleCalendar.BaseCalendarItemModel;
 import wxm.androidutil.util.UiUtil;
@@ -16,7 +18,7 @@ import wxm.androidutil.util.UiUtil;
  * adapter for calendar
  * Created by WangXM on 2017/07/03.
  */
-public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarShowItemModel> {
+public class CalendarShowItemAdapter extends FrgCalendarItemAdapter<CalendarShowItemModel> {
     private final static int mCLToday;
     private final static int mCLHoliday;
     private final static int mCLDisable;
@@ -50,7 +52,7 @@ public class CalendarShowItemAdapter extends BaseCalendarItemAdapter<CalendarSho
             dayNum.setTextColor(mCLHoliday);
         }
 
-        if (model.getStatus() == BaseCalendarItemModel.Status.DISABLE) {
+        if (model.getStatus() == FrgCalendarItemModel.Status.DISABLE) {
             dayNum.setTextColor(mCLDisable);
         }
 
