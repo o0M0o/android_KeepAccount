@@ -19,6 +19,7 @@ import java.util.Locale;
 import butterknife.BindColor;
 import butterknife.BindView;
 import wxm.KeepAccount.db.DBDataChangeEvent;
+import wxm.KeepAccount.ui.data.show.calendar.base.SelectedDayEvent;
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -60,7 +61,16 @@ public class FrgCalendarContent extends FrgSupportBaseAdv {
      * @param event     for event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDBDataChangeEvent(DBDataChangeEvent event) {
+    public void onDBDataChange(DBDataChangeEvent event) {
+    }
+
+    /**
+     * handler for selected day change
+     * @param event     for event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectedDayChange(SelectedDayEvent event) {
+        updateContent(event.getDay());
     }
 
     @Override
@@ -122,18 +132,18 @@ public class FrgCalendarContent extends FrgSupportBaseAdv {
         ap.notifyDataSetChanged();
     }
 
+    /// PRIVATE BEGIN
     /**
      * update hot day
      * @param day   show day(example : 2017-07-06)
      */
-    public void updateContent(String day) {
+    private void updateContent(String day) {
         mSZHotDay = day;
         mLSDayContents = NoteDataHelper.getInstance().getNotesByDay(day);
 
         loadUI(null);
     }
 
-    /// PRIVATE BEGIN
     private void setVisibility(int vis) {
         mTVMonthDay.setVisibility(vis);
         mTVYearMonth.setVisibility(vis);

@@ -30,7 +30,6 @@ public class CalendarShowItemAdapter extends FrgCalendarItemAdapter<CalendarShow
         mCLDisable = UiUtil.getColor(ct, android.R.color.darker_gray);
     }
 
-
     public CalendarShowItemAdapter(Context context) {
         super(context);
     }

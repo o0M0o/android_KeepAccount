@@ -1,12 +1,9 @@
 package wxm.KeepAccount.ui.data.show.calendar;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -23,6 +20,7 @@ import java.util.TreeMap;
 import butterknife.BindView;
 import wxm.KeepAccount.ui.data.show.calendar.base.CalendarShowItemAdapter;
 import wxm.KeepAccount.ui.data.show.calendar.base.CalendarShowItemModel;
+import wxm.KeepAccount.ui.data.show.calendar.base.SelectedDayEvent;
 import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
@@ -33,15 +31,14 @@ import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.utility.NoteDataHelper;
 
 import wxm.uilib.FrgCalendar.FrgCalendar;
-import wxm.uilib.SimpleCalendar.CalendarListView;
 
 
 /**
- * for calendar show
+ * in upper part show calendar, if usr click day, in bottom part show day data
  * Created by WangXM on 2016/12/4.
  */
 public class FrgCalendarShow extends FrgSupportBaseAdv {
-    public static final SimpleDateFormat YEAR_MONTH_SIMPLE_FORMAT =
+    public static final SimpleDateFormat YEAR_MONTH_FORMAT =
             new SimpleDateFormat("yyyy-MM", Locale.CHINA);
 
     // for ui
@@ -97,7 +94,7 @@ public class FrgCalendarShow extends FrgSupportBaseAdv {
                         return;
                     }
 
-                    String cur_month = YEAR_MONTH_SIMPLE_FORMAT.format(Calendar.getInstance().getTime());
+                    String cur_month = YEAR_MONTH_FORMAT.format(Calendar.getInstance().getTime());
                     updateCalendar(cur_month);
                 });
     }
@@ -113,15 +110,17 @@ public class FrgCalendarShow extends FrgSupportBaseAdv {
         mCSIAdapter = new CalendarShowItemAdapter(getActivity());
         mHGVDays.setCalendarItemAdapter(mCSIAdapter);
 
-        mHGVDays.setOnMonthChangeListener(yearMonth -> {
-            Log.d(LOG_TAG, "OnMonthChangedListener, yearMonth = " + yearMonth);
-            updateCalendar(yearMonth);
-        });
+        mHGVDays.setDateChangeListener(new FrgCalendar.DateChangeListener() {
+            @Override
+            public void onDayChanged(View view, String s, int i) {
+                mSZCurrentDay = s;
+                EventBus.getDefault().post(new SelectedDayEvent(mSZCurrentDay));
+            }
 
-        mHGVDays.setOnSelectedListener((View, selectedDate, pos) -> {
-            Log.d(LOG_TAG, "OnCalendarViewItemClick, selectedDate = " + selectedDate);
-            mSZCurrentDay = selectedDate;
-            mFGContent.updateContent(selectedDate);
+            @Override
+            public void onMonthChanged(String s) {
+                updateCalendar(s);
+            }
         });
 
         loadUI(bundle);
@@ -156,9 +155,5 @@ public class FrgCalendarShow extends FrgSupportBaseAdv {
             }
         }
         mCSIAdapter.notifyDataSetChanged();
-
-        if(!UtilFun.StringIsNullOrEmpty(mSZCurrentDay)) {
-            mFGContent.updateContent(mSZCurrentDay);
-        }
     }
 }
