@@ -298,7 +298,7 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
                 .CheckAndGetUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD);
         if (null != def_ui) {
             long one_day_msecs = 1000 * 3600 * 24;
-            long before_msecs = one_day_msecs * 500;
+            long before_msecs = one_day_msecs * 600;
 
             Date cur_dt = new Date();
             Date start_dt = new Date(cur_dt.getTime() - before_msecs);
@@ -307,9 +307,9 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
             for (; start_dt.before(end_dt);
                  start_dt.setTime(start_dt.getTime() + one_day_msecs)) {
                 int r = new Random().nextInt(99);
-                if (0 == r % 5) {
+                if (0 == r % 3) {
                     Random rand1 = new Random();
-                    int pay = rand1.nextInt(3);
+                    int pay = rand1.nextInt(5);
                     if (0 < pay) {
                         double pay_max = 500;
                         double pay_min = 0.1;
@@ -327,7 +327,7 @@ public class DBOrmLiteHelper extends OrmLiteSqliteOpenHelper {
                     }
 
                     Random rand2 = new Random();
-                    int income = rand2.nextInt(3);
+                    int income = rand2.nextInt(5);
                     if (0 < income) {
                         double income_max = 500;
                         double income_min = 0.1;

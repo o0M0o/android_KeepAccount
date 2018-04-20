@@ -29,6 +29,7 @@ import java.util.concurrent.Future;
 import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.KeepAccount.ui.base.Adapter.LVAdapter;
+import wxm.KeepAccount.utility.ItemDataHolder;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
@@ -49,7 +50,7 @@ import wxm.uilib.IconButton.IconButton;
  */
 public class LVMonthly
         extends LVBase {
-    private final static String TAG = "LVMonthly";
+    private static Calendar CL_DAY = Calendar.getInstance();
 
     // 若为true则数据以时间降序排列
     private boolean mBTimeDownOrder = true;
@@ -67,7 +68,35 @@ public class LVMonthly
             monthDetail = new recordDetail();
         }
     }
-    protected final LinkedList<MainAdapterItem> mMainPara;
+
+    class MainItemHolder extends ItemDataHolder<String, MainAdapterItem>    {
+        public MainItemHolder(String tag)   {
+            super(tag);
+        }
+
+        @Override
+        protected MainAdapterItem getDataByTag(String tag) {
+            NoteShowInfo ni = NoteDataHelper.getInfoByMonth(tag);
+            MainAdapterItem map = new MainAdapterItem();
+            map.month = tag;
+            map.monthDetail.mPayCount = String.valueOf(ni.getPayCount());
+            map.monthDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
+            map.monthDetail.mPayAmount = String.format(Locale.CHINA,
+                    "%.02f", ni.getPayAmount());
+            map.monthDetail.mIncomeAmount = String.format(Locale.CHINA,
+                    "%.02f", ni.getIncomeAmount());
+
+            BigDecimal bd_l = ni.getBalance();
+            map.amount = String.format(Locale.CHINA,
+                    (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
+
+            map.tag = tag;
+            map.show = EShowFold.getByFold(!checkUnfoldItem(tag)).getName();
+
+            return map;
+        }
+    }
+    protected final LinkedList<MainItemHolder> mMainPara;
 
     class SubAdapterItem   {
         public String  tag;
@@ -82,7 +111,46 @@ public class LVMonthly
             dayDetail = new recordDetail();
         }
     }
-    protected final HashMap<String, LinkedList<SubAdapterItem>> mHMSubPara;
+
+    class SubItemHolder extends ItemDataHolder<String, SubAdapterItem>    {
+        public SubItemHolder(String tag)   {
+            super(tag);
+        }
+
+        @Override
+        protected SubAdapterItem getDataByTag(String tag) {
+            String mk = tag.substring(0, 7);
+            NoteShowInfo ni = NoteDataHelper.getInfoByDay(tag);
+            SubAdapterItem map = new SubAdapterItem();
+
+            String km = tag.substring(8, 10);
+            km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
+            map.dayNumber = km;
+
+            int year = Integer.valueOf(tag.substring(0, 4));
+            int month = Integer.valueOf(tag.substring(5, 7));
+            int day = Integer.valueOf(tag.substring(8, 10));
+            CL_DAY.set(year, month, day);
+            map.dayInWeek = ToolUtil.getDayInWeek(CL_DAY.get(Calendar.DAY_OF_WEEK));
+
+            map.dayDetail.mPayCount = String.valueOf(ni.getPayCount());
+            map.dayDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
+            map.dayDetail.mPayAmount = String.format(Locale.CHINA,
+                    "%.02f", ni.getPayAmount());
+            map.dayDetail.mIncomeAmount = String.format(Locale.CHINA,
+                    "%.02f", ni.getIncomeAmount());
+
+            BigDecimal bd_l = ni.getBalance();
+            map.amount = String.format(Locale.CHINA,
+                    (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
+
+            map.tag = mk;
+            map.subTag = tag;
+
+            return map;
+        }
+    }
+    protected final HashMap<String, LinkedList<SubItemHolder>> mHMSubPara;
 
 
     class MonthlyActionHelper extends ActionHelper    {
@@ -231,111 +299,23 @@ public class LVMonthly
                     mMainPara.clear();
                     mHMSubPara.clear();
 
-                    ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
-                    Future<LinkedList<MainAdapterItem>> ll_main_rets;
-                    Future<LinkedList<Map.Entry<String, SubAdapterItem>>>  ll_sub_rets;
-
                     // for month
                     List<String> set_k_m = NoteDataHelper.getNotesMonths();
                     Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-                    ll_main_rets = fixedThreadPool
-                            .submit(() -> {
-                                LinkedList<MainAdapterItem> ll_rets = new LinkedList<>();
-                                for (String k : set_k_m) {
-                                    NoteShowInfo ni = NoteDataHelper.getInfoByMonth(k);
-                                    MainAdapterItem map = new MainAdapterItem();
-                                    map.month = k;
-                                    map.monthDetail.mPayCount = String.valueOf(ni.getPayCount());
-                                    map.monthDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
-                                    map.monthDetail.mPayAmount = String.format(Locale.CHINA,
-                                            "%.02f", ni.getPayAmount());
-                                    map.monthDetail.mIncomeAmount = String.format(Locale.CHINA,
-                                            "%.02f", ni.getIncomeAmount());
+                    for(String k : set_k_m) {
+                        mMainPara.add(new MainItemHolder(k));
+                    }
 
-                                    BigDecimal bd_l = ni.getBalance();
-                                    map.amount = String.format(Locale.CHINA,
-                                            (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
-
-                                    map.tag = k;
-                                    map.show = EShowFold.getByFold(!checkUnfoldItem(k)).getName();
-
-                                    ll_rets.add(map);
-                                }
-
-                                return ll_rets;
-                            });
-
-                    // for day
-                    Calendar cl_day = Calendar.getInstance();
                     List<String> set_k_d = NoteDataHelper.getNotesDays();
                     Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-                    ll_sub_rets = fixedThreadPool
-                            .submit(() -> {
-                                LinkedList<Map.Entry<String, SubAdapterItem>> ll_rets = new LinkedList<>();
-                                for (String k : set_k_d) {
-                                    String mk = k.substring(0, 7);
-                                    NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
-                                    SubAdapterItem map = new SubAdapterItem();
-
-                                    String km = k.substring(8, 10);
-                                    km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
-                                    map.dayNumber = km;
-
-                                    int year = Integer.valueOf(k.substring(0, 4));
-                                    int month = Integer.valueOf(k.substring(5, 7));
-                                    int day = Integer.valueOf(k.substring(8, 10));
-                                    cl_day.set(year, month, day);
-                                    map.dayInWeek = ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK));
-
-                                    map.dayDetail.mPayCount = String.valueOf(ni.getPayCount());
-                                    map.dayDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
-                                    map.dayDetail.mPayAmount = String.format(Locale.CHINA,
-                                            "%.02f", ni.getPayAmount());
-                                    map.dayDetail.mIncomeAmount = String.format(Locale.CHINA,
-                                            "%.02f", ni.getIncomeAmount());
-
-                                    BigDecimal bd_l = ni.getBalance();
-                                    map.amount = String.format(Locale.CHINA,
-                                            (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
-
-                                    map.tag = mk;
-                                    map.subTag = k;
-
-                                    ll_rets.add(new Map.Entry<String, SubAdapterItem>() {
-                                        @Override
-                                        public String getKey() {
-                                            return mk;
-                                        }
-
-                                        @Override
-                                        public SubAdapterItem getValue() {
-                                            return map;
-                                        }
-
-                                        @Override
-                                        public SubAdapterItem setValue(SubAdapterItem value) {
-                                            return null;
-                                        }
-                                    });
-                                }
-
-                                return ll_rets;
-                            });
-
-                    try {
-                        mMainPara.addAll(ll_main_rets.get());
-
-                        for(Map.Entry<String, SubAdapterItem> ret : ll_sub_rets.get()) {
-                            LinkedList<SubAdapterItem> lh = mHMSubPara.get(ret.getKey());
-                            if(null == lh)  {
-                                lh = new LinkedList<>();
-                                mHMSubPara.put(ret.getKey(), lh);
-                            }
-
-                            lh.add(ret.getValue());
+                    for(String k : set_k_d) {
+                        String km = k.substring(0, 7);
+                        LinkedList<SubItemHolder> lsDay = mHMSubPara.get(km);
+                        if(null == lsDay)   {
+                            lsDay = new LinkedList<>();
+                            mHMSubPara.put(km, lsDay);
                         }
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
+                        lsDay.add(new SubItemHolder(k));
                     }
                 },
                 () -> loadUI(bundle));
@@ -347,12 +327,12 @@ public class LVMonthly
         refreshAttachLayout();
 
         // load show data
-        LinkedList<MainAdapterItem> n_mainpara;
+        LinkedList<MainItemHolder> n_mainpara;
         if (mBFilter) {
             n_mainpara = new LinkedList<>();
-            for (MainAdapterItem i : mMainPara) {
+            for (MainItemHolder i : mMainPara) {
                 for (String ii : mFilterPara) {
-                    if (i.tag.equals(ii)) {
+                    if (i.getTag().equals(ii)) {
                         n_mainpara.add(i);
                         break;
                     }
@@ -392,7 +372,7 @@ public class LVMonthly
      * @param tag       tag for data
      */
     private void load_detail_view(ListView lv, String tag) {
-        LinkedList<SubAdapterItem> llhm = mHMSubPara.get(tag);
+        LinkedList<SubItemHolder> llhm = mHMSubPara.get(tag);
         if (!UtilFun.ListIsNullOrEmpty(llhm)) {
             DayAdapter mAdapter = new DayAdapter(getContext(), llhm);
             lv.setAdapter(mAdapter);
@@ -414,51 +394,55 @@ public class LVMonthly
         public View getView(final int position, View view, ViewGroup arg2) {
             FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
                     view, R.layout.li_monthly_show);
-
-            final MainAdapterItem item = UtilFun.cast(getItem(position));
-            final ListView lv = viewHolder.getView(R.id.lv_show_detail);
-            final String tag = item.tag;
-            if (EShowFold.getByName(item.show) == EShowFold.FOLD) {
-                lv.setVisibility(View.GONE);
-            } else {
-                lv.setVisibility(View.VISIBLE);
-                if (0 == lv.getCount())
-                    load_detail_view(lv, tag);
-            }
-
-            View.OnClickListener local_cl = v -> {
-                boolean bf = EShowFold.getByName(item.show) == EShowFold.FOLD;
-                item.show = EShowFold.getByFold(!bf).getName();
-
-                if (bf) {
+            if(null == viewHolder.getView(R.id.cl_header).getTag()) {
+                final MainItemHolder holder = UtilFun.cast(getItem(position));
+                final MainAdapterItem item = holder.getData();
+                final ListView lv = viewHolder.getView(R.id.lv_show_detail);
+                final String tag = item.tag;
+                if (EShowFold.getByName(item.show) == EShowFold.FOLD) {
+                    lv.setVisibility(View.GONE);
+                } else {
                     lv.setVisibility(View.VISIBLE);
                     if (0 == lv.getCount())
                         load_detail_view(lv, tag);
-
-                    addUnfoldItem(tag);
-                } else {
-                    lv.setVisibility(View.GONE);
-
-                    removeUnfoldItem(tag);
                 }
-            };
 
-            ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
-            rl.setBackgroundColor(0 == position % 2 ?
-                    ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
-            rl.setOnClickListener(local_cl);
+                View.OnClickListener local_cl = v -> {
+                    boolean bf = EShowFold.getByName(item.show) == EShowFold.FOLD;
+                    item.show = EShowFold.getByFold(!bf).getName();
 
-            // for month
-            viewHolder.setText(R.id.tv_month, item.month);
+                    if (bf) {
+                        lv.setVisibility(View.VISIBLE);
+                        if (0 == lv.getCount())
+                            load_detail_view(lv, tag);
 
-            // for graph value
-            ValueShow vs = viewHolder.getView(R.id.vs_monthly_info);
-            HashMap<String, Object> hm_attr = new HashMap<>();
-            hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.monthDetail.mPayCount);
-            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.monthDetail.mPayAmount);
-            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.monthDetail.mIncomeCount);
-            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.monthDetail.mIncomeAmount);
-            vs.adjustAttribute(hm_attr);
+                        addUnfoldItem(tag);
+                    } else {
+                        lv.setVisibility(View.GONE);
+
+                        removeUnfoldItem(tag);
+                    }
+                };
+
+                ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
+                rl.setBackgroundColor(0 == position % 2 ?
+                        ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
+                rl.setOnClickListener(local_cl);
+
+                // for month
+                viewHolder.setText(R.id.tv_month, item.month);
+
+                // for graph value
+                ValueShow vs = viewHolder.getView(R.id.vs_monthly_info);
+                HashMap<String, Object> hm_attr = new HashMap<>();
+                hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.monthDetail.mPayCount);
+                hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.monthDetail.mPayAmount);
+                hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.monthDetail.mIncomeCount);
+                hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.monthDetail.mIncomeAmount);
+                vs.adjustAttribute(hm_attr);
+
+                viewHolder.getView(R.id.cl_header).setTag(new Object());
+            }
             return viewHolder.getConvertView();
         }
     }
@@ -476,54 +460,57 @@ public class LVMonthly
         public View getView(final int position, View view, ViewGroup arg2) {
             FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
                     view, R.layout.li_monthly_show_detail);
+            if(null == viewHolder.getView(R.id.cl_day).getTag()) {
+                SubItemHolder holder = UtilFun.cast(getItem(position));
+                SubAdapterItem item = holder.getData();
+                String sub_tag = item.subTag;
 
-            View root_view = viewHolder.getConvertView();
-            SubAdapterItem item = UtilFun.cast(getItem(position));
-            String sub_tag = item.subTag;
+                ImageView ib = viewHolder.getView(R.id.iv_action);
+                ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ?
+                        ResourceHelper.mCRLVItemSel : ResourceHelper.mCRLVItemTransFull);
+                ib.setOnClickListener(v -> {
+                    String sub_tag1 = item.subTag;
 
-            ImageView ib = viewHolder.getView(R.id.iv_action);
-            ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ?
-                    ResourceHelper.mCRLVItemSel : ResourceHelper.mCRLVItemTransFull);
-            ib.setOnClickListener(v -> {
-                String sub_tag1 = item.subTag;
+                    if (!mLLSubFilter.contains(sub_tag1)) {
+                        v.setBackgroundColor(ResourceHelper.mCRLVItemSel);
 
-                if (!mLLSubFilter.contains(sub_tag1)) {
-                    v.setBackgroundColor(ResourceHelper.mCRLVItemSel);
+                        mLLSubFilter.add(sub_tag1);
+                        mLLSubFilterVW.add(v);
 
-                    mLLSubFilter.add(sub_tag1);
-                    mLLSubFilterVW.add(v);
+                        if (!mBSelectSubFilter) {
+                            mBSelectSubFilter = true;
+                            refreshAttachLayout();
+                        }
+                    } else {
+                        v.setBackgroundColor(ResourceHelper.mCRLVItemTransFull);
 
-                    if (!mBSelectSubFilter) {
-                        mBSelectSubFilter = true;
-                        refreshAttachLayout();
+                        mLLSubFilter.remove(sub_tag1);
+                        mLLSubFilterVW.remove(v);
+
+                        if (mLLSubFilter.isEmpty()) {
+                            mLLSubFilterVW.clear();
+                            mBSelectSubFilter = false;
+                            refreshAttachLayout();
+                        }
                     }
-                } else {
-                    v.setBackgroundColor(ResourceHelper.mCRLVItemTransFull);
+                });
 
-                    mLLSubFilter.remove(sub_tag1);
-                    mLLSubFilterVW.remove(v);
+                // for show
+                viewHolder.setText(R.id.tv_day_number, item.dayNumber);
+                viewHolder.setText(R.id.tv_day_in_week, item.dayInWeek);
 
-                    if (mLLSubFilter.isEmpty()) {
-                        mLLSubFilterVW.clear();
-                        mBSelectSubFilter = false;
-                        refreshAttachLayout();
-                    }
-                }
-            });
+                // for graph value
+                ValueShow vs = viewHolder.getView(R.id.vs_daily_info);
+                HashMap<String, Object> hm_attr = new HashMap<>();
+                hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.dayDetail.mPayCount);
+                hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.dayDetail.mPayAmount);
+                hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.dayDetail.mIncomeCount);
+                hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.dayDetail.mIncomeAmount);
+                vs.adjustAttribute(hm_attr);
 
-            // for show
-            viewHolder.setText(R.id.tv_day_number, item.dayNumber);
-            viewHolder.setText(R.id.tv_day_in_week, item.dayInWeek);
-
-            // for graph value
-            ValueShow vs = viewHolder.getView(R.id.vs_daily_info);
-            HashMap<String, Object> hm_attr = new HashMap<>();
-            hm_attr.put(ValueShow.ATTR_PAY_COUNT, item.dayDetail.mPayCount);
-            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, item.dayDetail.mPayAmount);
-            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.dayDetail.mIncomeCount);
-            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.dayDetail.mIncomeAmount);
-            vs.adjustAttribute(hm_attr);
-            return root_view;
+                viewHolder.getView(R.id.cl_day).setTag(new Object());
+            }
+            return viewHolder.getConvertView();
         }
     }
 }

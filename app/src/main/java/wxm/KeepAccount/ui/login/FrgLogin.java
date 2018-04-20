@@ -183,7 +183,7 @@ public class FrgLogin extends FrgSupportBaseAdv {
                     bret[0] = ContextUtil.getUsrUtility().loginByUsr(usr, pwd);
                 },
                 () -> {
-                    new Handler().postDelayed(() -> showProgress(false), 300);
+                    new Handler().postDelayed(() -> showProgress(false), 100);
                     if (bret[0]) {
                         Intent intent = new Intent(getActivity(), ACWelcome.class);
                         startActivityForResult(intent, 1);

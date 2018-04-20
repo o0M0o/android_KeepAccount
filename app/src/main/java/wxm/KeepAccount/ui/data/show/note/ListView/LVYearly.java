@@ -400,51 +400,55 @@ public class LVYearly extends LVBase {
             FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
                     view, R.layout.li_yearly_show);
 
-            final MainAdapterItem hm = UtilFun.cast(getItem(position));
-            final ListView lv = viewHolder.getView(R.id.lv_show_detail);
-            final String tag = hm.tag;
-            if (EShowFold.getByName(hm.show) == EShowFold.FOLD) {
-                lv.setVisibility(View.GONE);
-            } else {
-                lv.setVisibility(View.VISIBLE);
-                if (0 == lv.getCount())
-                    load_detail_view(lv, tag);
-            }
-
-            View.OnClickListener local_cl = v -> {
-                boolean bf = EShowFold.getByName(hm.show) == EShowFold.FOLD;
-                hm.show = EShowFold.getByFold(!bf).getName();
-
-                if (bf) {
+            if(null == viewHolder.getView(R.id.cl_header).getTag()) {
+                final MainAdapterItem hm = UtilFun.cast(getItem(position));
+                final ListView lv = viewHolder.getView(R.id.lv_show_detail);
+                final String tag = hm.tag;
+                if (EShowFold.getByName(hm.show) == EShowFold.FOLD) {
+                    lv.setVisibility(View.GONE);
+                } else {
                     lv.setVisibility(View.VISIBLE);
                     if (0 == lv.getCount())
                         load_detail_view(lv, tag);
-
-                    addUnfoldItem(tag);
-                } else {
-                    lv.setVisibility(View.GONE);
-
-                    removeUnfoldItem(tag);
                 }
-            };
 
-            // adjust row color
-            ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
-            rl.setBackgroundColor(0 == position % 2 ?
-                    ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
-            rl.setOnClickListener(local_cl);
+                View.OnClickListener local_cl = v -> {
+                    boolean bf = EShowFold.getByName(hm.show) == EShowFold.FOLD;
+                    hm.show = EShowFold.getByFold(!bf).getName();
 
-            // for year
-            viewHolder.setText(R.id.tv_year, hm.year);
+                    if (bf) {
+                        lv.setVisibility(View.VISIBLE);
+                        if (0 == lv.getCount())
+                            load_detail_view(lv, tag);
 
-            // for graph value
-            ValueShow vs = viewHolder.getView(R.id.vs_yearly_info);
-            HashMap<String, Object> hm_attr = new HashMap<>();
-            hm_attr.put(ValueShow.ATTR_PAY_COUNT, hm.yearDetail.mPayCount);
-            hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, hm.yearDetail.mPayAmount);
-            hm_attr.put(ValueShow.ATTR_INCOME_COUNT, hm.yearDetail.mIncomeCount);
-            hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, hm.yearDetail.mIncomeAmount);
-            vs.adjustAttribute(hm_attr);
+                        addUnfoldItem(tag);
+                    } else {
+                        lv.setVisibility(View.GONE);
+
+                        removeUnfoldItem(tag);
+                    }
+                };
+
+                // adjust row color
+                ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
+                rl.setBackgroundColor(0 == position % 2 ?
+                        ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
+                rl.setOnClickListener(local_cl);
+
+                // for year
+                viewHolder.setText(R.id.tv_year, hm.year);
+
+                // for graph value
+                ValueShow vs = viewHolder.getView(R.id.vs_yearly_info);
+                HashMap<String, Object> hm_attr = new HashMap<>();
+                hm_attr.put(ValueShow.ATTR_PAY_COUNT, hm.yearDetail.mPayCount);
+                hm_attr.put(ValueShow.ATTR_PAY_AMOUNT, hm.yearDetail.mPayAmount);
+                hm_attr.put(ValueShow.ATTR_INCOME_COUNT, hm.yearDetail.mIncomeCount);
+                hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, hm.yearDetail.mIncomeAmount);
+                vs.adjustAttribute(hm_attr);
+
+                viewHolder.getView(R.id.cl_header).setTag(new Object());
+            }
             return viewHolder.getConvertView();
         }
     }
@@ -462,49 +466,51 @@ public class LVYearly extends LVBase {
         public View getView(final int position, View view, ViewGroup arg2) {
             FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
                     view, R.layout.li_yearly_show_detail);
+            if(null == viewHolder.getView(R.id.rl_header).getTag()) {
+                final SubAdapterItem hm = UtilFun.cast(getItem(position));
+                final String sub_tag = hm.subTag;
 
-            View root_view = viewHolder.getConvertView();
-            final SubAdapterItem hm = UtilFun.cast(getItem(position));
-            final String sub_tag = hm.subTag;
+                final ImageView ib = viewHolder.getView(R.id.iv_action);
+                ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ?
+                        ResourceHelper.mCRLVItemSel : ResourceHelper.mCRLVItemTransFull);
+                ib.setOnClickListener(v -> {
+                    String sub_tag1 = hm.subTag;
 
-            final ImageView ib = viewHolder.getView(R.id.iv_action);
-            ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ?
-                    ResourceHelper.mCRLVItemSel : ResourceHelper.mCRLVItemTransFull);
-            ib.setOnClickListener(v -> {
-                String sub_tag1 = hm.subTag;
+                    if (!mLLSubFilter.contains(sub_tag1)) {
+                        v.setBackgroundColor(ResourceHelper.mCRLVItemSel);
 
-                if (!mLLSubFilter.contains(sub_tag1)) {
-                    v.setBackgroundColor(ResourceHelper.mCRLVItemSel);
+                        mLLSubFilter.add(sub_tag1);
+                        mLLSubFilterVW.add(v);
 
-                    mLLSubFilter.add(sub_tag1);
-                    mLLSubFilterVW.add(v);
+                        if (!mBSelectSubFilter) {
+                            mBSelectSubFilter = true;
+                            refreshAttachLayout();
+                        }
+                    } else {
+                        v.setBackgroundColor(ResourceHelper.mCRLVItemTransFull);
 
-                    if (!mBSelectSubFilter) {
-                        mBSelectSubFilter = true;
-                        refreshAttachLayout();
+                        mLLSubFilter.remove(sub_tag1);
+                        mLLSubFilterVW.remove(v);
+
+                        if (mLLSubFilter.isEmpty()) {
+                            mLLSubFilterVW.clear();
+                            mBSelectSubFilter = false;
+                            refreshAttachLayout();
+                        }
                     }
-                } else {
-                    v.setBackgroundColor(ResourceHelper.mCRLVItemTransFull);
+                });
 
-                    mLLSubFilter.remove(sub_tag1);
-                    mLLSubFilterVW.remove(v);
+                // for show
+                viewHolder.setText(R.id.tv_month, hm.month);
 
-                    if (mLLSubFilter.isEmpty()) {
-                        mLLSubFilterVW.clear();
-                        mBSelectSubFilter = false;
-                        refreshAttachLayout();
-                    }
-                }
-            });
+                HelperDayNotesInfo.fillNoteInfo(viewHolder,
+                        hm.monthDetail.mPayCount, hm.monthDetail.mPayAmount,
+                        hm.monthDetail.mIncomeCount, hm.monthDetail.mIncomeAmount,
+                        hm.amount);
 
-            // for show
-            viewHolder.setText(R.id.tv_month, hm.month);
-
-            HelperDayNotesInfo.fillNoteInfo(viewHolder,
-                    hm.monthDetail.mPayCount, hm.monthDetail.mPayAmount,
-                    hm.monthDetail.mIncomeCount, hm.monthDetail.mIncomeAmount,
-                    hm.amount);
-            return root_view;
+                viewHolder.getView(R.id.rl_header).setTag(new Object());
+            }
+            return viewHolder.getConvertView();
         }
     }
 }

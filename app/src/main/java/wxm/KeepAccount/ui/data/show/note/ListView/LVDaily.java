@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,6 +32,7 @@ import java.util.concurrent.Future;
 import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.KeepAccount.ui.base.Adapter.LVAdapter;
+import wxm.KeepAccount.utility.ItemDataHolder;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
@@ -81,7 +83,6 @@ public class LVDaily extends LVBase {
     private boolean mBTimeDownOrder = true;
 
     class MainAdapterItem   {
-        public String  tag;
         public String  show;
 
         public String  year;
@@ -96,8 +97,48 @@ public class LVDaily extends LVBase {
             day = new recordDetail();
         }
     }
-    protected final LinkedList<MainAdapterItem> mMainPara;
 
+    class ItemHolder  extends ItemDataHolder<String, MainAdapterItem> {
+        public ItemHolder(String tag)   {
+            super(tag);
+        }
+
+        @Override
+        protected MainAdapterItem getDataByTag(String tag) {
+            Calendar cl_day = Calendar.getInstance();
+            NoteShowInfo ni = NoteDataHelper.getInfoByDay(tag);
+
+            MainAdapterItem item = new MainAdapterItem();
+            item.year = tag.substring(0, 4);
+            item.month = tag.substring(5, 7);
+            item.month = item.month.startsWith("0") ?
+                    item.month.replaceFirst("0", " ") : item.month;
+
+            String km = tag.substring(8, 10);
+            km = km.startsWith("0") ? km.replaceFirst("0", "") : km;
+            item.dayNumber = km;
+
+            int year = Integer.valueOf(tag.substring(0, 4));
+            int month = Integer.valueOf(tag.substring(5, 7));
+            int day = Integer.valueOf(km);
+            cl_day.set(year, month - 1, day);
+            item.dayInWeek = ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK));
+
+            item.day.mPayCount = String.valueOf(ni.getPayCount());
+            item.day.mIncomeCount = String.valueOf(ni.getIncomeCount());
+            item.day.mPayAmount = ni.getSZPayAmount();
+            item.day.mIncomeAmount = ni.getSZIncomeAmount();
+
+            BigDecimal bd_l = ni.getBalance();
+            item.amount = String.format(Locale.CHINA,
+                    (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
+
+            item.show = EShowFold.getByFold(!checkUnfoldItem(tag)).getName();
+
+            return item;
+        }
+    }
+    protected final LinkedList<ItemHolder> mMainPara;
 
     class DailyActionHelper extends ActionHelper    {
         @BindView(R.id.ib_sort)
@@ -275,67 +316,8 @@ public class LVDaily extends LVBase {
                     List<String> set_k_d = NoteDataHelper.getNotesDays();
                     Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
 
-                    Calendar cl_day = Calendar.getInstance();
-                    ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
-                    LinkedList<Future<LinkedList<MainAdapterItem>>> ll_rets = new LinkedList<>();
-
-                    int once_process = 10;
-                    int idx = 0;
-                    int len = set_k_d.size();
-                    while (idx < len)   {
-                        List<String> jobs = set_k_d.subList(idx, idx + once_process < len ? idx + once_process : len - 1);
-                        idx += once_process;
-
-                        Future<LinkedList<MainAdapterItem>> ret = fixedThreadPool
-                                .submit(() -> {
-                                    LinkedList<MainAdapterItem> maps = new LinkedList<>();
-                                    for(String k : jobs) {
-                                        try {
-                                            NoteShowInfo ni = NoteDataHelper.getInfoByDay(k);
-                                            MainAdapterItem map = new MainAdapterItem();
-                                            map.year = k.substring(0, 4);
-                                            map.month = k.substring(5, 7);
-                                            map.month = map.month.startsWith("0") ?
-                                                    map.month.replaceFirst("0", " ") : map.month;
-
-                                            String km = k.substring(8, 10);
-                                            km = km.startsWith("0") ? km.replaceFirst("0", "") : km;
-                                            map.dayNumber = km;
-
-                                            int year = Integer.valueOf(k.substring(0, 4));
-                                            int month = Integer.valueOf(k.substring(5, 7));
-                                            int day = Integer.valueOf(km);
-                                            cl_day.set(year, month - 1, day);
-                                            map.dayInWeek = ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK));
-
-                                            map.day.mPayCount = String.valueOf(ni.getPayCount());
-                                            map.day.mIncomeCount = String.valueOf(ni.getIncomeCount());
-                                            map.day.mPayAmount = ni.getSZPayAmount();
-                                            map.day.mIncomeAmount = ni.getSZIncomeAmount();
-
-                                            BigDecimal bd_l = ni.getBalance();
-                                            map.amount = String.format(Locale.CHINA,
-                                                    (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
-
-                                            map.tag = k;
-                                            map.show = EShowFold.getByFold(!checkUnfoldItem(k)).getName();
-                                            maps.add(map);
-                                        } catch (Exception ex)  {
-                                            ex.printStackTrace();
-                                        }
-                                    }
-                                    return maps;
-                                });
-
-                        ll_rets.add(ret);
-                    }
-
-                    try {
-                        for(Future<LinkedList<MainAdapterItem>> ret : ll_rets) {
-                            mMainPara.addAll(ret.get());
-                        }
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
+                    for(String k : set_k_d) {
+                        mMainPara.add(new ItemHolder(k));
                     }
                 },
                 () -> {
@@ -354,12 +336,12 @@ public class LVDaily extends LVBase {
         setAccpetGiveupLayoutVisible(mAction.isDelete() && !mBFilter ? View.VISIBLE : View.GONE);
 
         // load show data
-        LinkedList<MainAdapterItem> n_mainpara;
+        LinkedList<ItemHolder> n_mainpara;
         if (mBFilter) {
             n_mainpara = new LinkedList<>();
-            for (MainAdapterItem i : mMainPara) {
+            for (ItemHolder i : mMainPara) {
                 for (String ii : mFilterPara) {
-                    if (i.tag.equals(ii)) {
+                    if (i.getTag().equals(ii)) {
                         n_mainpara.add(i);
                         break;
                     }
@@ -432,11 +414,10 @@ public class LVDaily extends LVBase {
         private View.OnClickListener mCLAdapter = v -> {
             int pos = mLVShow.getPositionForView(v);
 
-            MainAdapterItem hm = UtilFun.cast(getItem(pos));
-            String k_tag = hm.tag;
+            ItemHolder hm = UtilFun.cast(getItem(pos));
             ACNoteShow ac = getRootActivity();
             Intent it = new Intent(ac, ACDailyDetail.class);
-            it.putExtra(ACDailyDetail.K_HOTDAY, k_tag);
+            it.putExtra(ACDailyDetail.K_HOTDAY, hm.getTag());
             ac.startActivity(it);
         };
 
@@ -457,23 +438,22 @@ public class LVDaily extends LVBase {
 
             View root_view = viewHolder.getConvertView();
             if(null == viewHolder.getView(R.id.cl_date).getTag())   {
-                MainAdapterItem item = UtilFun.cast(getItem(position));
-                cb.setTag(item.tag);
+                ItemHolder it = UtilFun.cast(getItem(position));
+                cb.setTag(it.getTag());
 
                 root_view.setBackgroundColor(0 == position % 2 ?
                         ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
                 root_view.setOnClickListener(mCLAdapter);
 
-                initItemShow(viewHolder, position);
+                ItemHolder itPrv = position > 0 ? UtilFun.cast(getItem(position - 1)) : null;
+                initItemShow(viewHolder, it.getData(), null != itPrv ? itPrv.getData() : null);
                 viewHolder.getView(R.id.cl_date).setTag(new Object());
             }
 
             return root_view;
         }
 
-        private void initItemShow(FastViewHolder vh, int pos) {
-            MainAdapterItem item = UtilFun.cast(getItem(pos));
-            MainAdapterItem prvItem = pos > 0 ? UtilFun.cast(getItem(pos - 1)) : null;
+        private void initItemShow(FastViewHolder vh, MainAdapterItem item, MainAdapterItem prvItem) {
             if(null == prvItem || !prvItem.year.equals(item.year)) {
                 vh.setText(R.id.tv_year_number, item.year);
             } else  {
@@ -494,7 +474,6 @@ public class LVDaily extends LVBase {
             hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.day.mIncomeAmount);
             vs.adjustAttribute(hm_attr);
         }
-
 
         /**
          * get daily data need delete

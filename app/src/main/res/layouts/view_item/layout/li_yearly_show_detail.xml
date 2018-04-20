@@ -7,6 +7,7 @@
     android:padding="2dp">
 
     <RelativeLayout
+        android:id="@+id/rl_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
