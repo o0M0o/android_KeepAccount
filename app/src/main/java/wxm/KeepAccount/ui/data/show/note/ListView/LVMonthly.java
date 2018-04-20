@@ -306,6 +306,7 @@ public class LVMonthly
                         mMainPara.add(new MainItemHolder(k));
                     }
 
+                    // for day
                     List<String> set_k_d = NoteDataHelper.getNotesDays();
                     Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
                     for(String k : set_k_d) {

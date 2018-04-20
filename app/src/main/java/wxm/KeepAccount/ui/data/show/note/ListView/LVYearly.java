@@ -28,6 +28,7 @@ import java.util.concurrent.Future;
 import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.KeepAccount.ui.base.Adapter.LVAdapter;
+import wxm.KeepAccount.utility.ItemDataHolder;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.util.FastViewHolder;
 import wxm.androidutil.util.UtilFun;
@@ -55,6 +56,7 @@ public class LVYearly extends LVBase {
     private boolean mBTimeDownOrder = true;
     private boolean mBSelectSubFilter = false;
 
+    // for main listview
     class MainAdapterItem   {
         public String  tag;
         public String  show;
@@ -68,8 +70,37 @@ public class LVYearly extends LVBase {
             yearDetail = new recordDetail();
         }
     }
-    protected final LinkedList<MainAdapterItem> mMainPara;
 
+    class MainItemHolder extends ItemDataHolder<String, MainAdapterItem> {
+        public MainItemHolder(String tag)   {
+            super(tag);
+        }
+
+        @Override
+        protected MainAdapterItem getDataByTag(String tag) {
+            NoteShowInfo ni = NoteDataHelper.getInfoByYear(tag);
+
+            MainAdapterItem map = new MainAdapterItem();
+            map.year = tag;
+            map.yearDetail.mPayCount = String.valueOf(ni.getPayCount());
+            map.yearDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
+            map.yearDetail.mPayAmount = String.format(Locale.CHINA,
+                    "%.02f", ni.getPayAmount());
+            map.yearDetail.mIncomeAmount = String.format(Locale.CHINA,
+                    "%.02f", ni.getIncomeAmount());
+
+            BigDecimal bd_l = ni.getBalance();
+            map.amount = String.format(Locale.CHINA,
+                    (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
+
+            map.tag = tag;
+            map.show = EShowFold.getByFold(!checkUnfoldItem(tag)).getName();
+            return map;
+        }
+    }
+    protected final LinkedList<MainItemHolder> mMainPara;
+
+    // for sub listview
     class SubAdapterItem   {
         public String  tag;
         public String  subTag;
@@ -82,7 +113,38 @@ public class LVYearly extends LVBase {
             monthDetail = new recordDetail();
         }
     }
-    protected final HashMap<String, LinkedList<SubAdapterItem>> mHMSubPara;
+
+    class SubItemHolder extends ItemDataHolder<String, SubAdapterItem>    {
+        public SubItemHolder(String tag)   {
+            super(tag);
+        }
+
+        @Override
+        protected SubAdapterItem getDataByTag(String tag) {
+            String ky = tag.substring(0, 4);
+            NoteShowInfo ni = NoteDataHelper.getInfoByMonth(tag);
+            SubAdapterItem map = new SubAdapterItem();
+
+            String km = tag.substring(5, 7);
+            km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
+            map.month = km;
+            map.monthDetail.mPayCount = String.valueOf(ni.getPayCount());
+            map.monthDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
+            map.monthDetail.mPayAmount = String.format(Locale.CHINA,
+                    "%.02f", ni.getPayAmount());
+            map.monthDetail.mIncomeAmount = String.format(Locale.CHINA,
+                    "%.02f", ni.getIncomeAmount());
+
+            BigDecimal bd_l = ni.getBalance();
+            map.amount = String.format(Locale.CHINA,
+                    (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
+
+            map.tag = ky;
+            map.subTag = tag;
+            return map;
+        }
+    }
+    protected final HashMap<String, LinkedList<SubItemHolder>> mHMSubPara;
 
 
     class YearlyActionHelper extends ActionHelper    {
@@ -221,105 +283,24 @@ public class LVYearly extends LVBase {
                     mMainPara.clear();
                     mHMSubPara.clear();
 
-                    ExecutorService fixedThreadPool = Executors.newCachedThreadPool();
-                    Future<LinkedList<MainAdapterItem>> ll_main_rets;
-                    Future<LinkedList<Map.Entry<String, SubAdapterItem>>> ll_sub_rets;
-
                     // for year
                     List<String> set_k = NoteDataHelper.getNotesYears();
                     Collections.sort(set_k, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-                    ll_main_rets = fixedThreadPool
-                            .submit(() -> {
-                                LinkedList<MainAdapterItem> ll_rets = new LinkedList<>();
-                                for (String k : set_k) {
-                                    NoteShowInfo ni = NoteDataHelper.getInfoByYear(k);
-
-                                    MainAdapterItem map = new MainAdapterItem();
-                                    map.year = k;
-                                    map.yearDetail.mPayCount = String.valueOf(ni.getPayCount());
-                                    map.yearDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
-                                    map.yearDetail.mPayAmount = String.format(Locale.CHINA,
-                                            "%.02f", ni.getPayAmount());
-                                    map.yearDetail.mIncomeAmount = String.format(Locale.CHINA,
-                                            "%.02f", ni.getIncomeAmount());
-
-                                    BigDecimal bd_l = ni.getBalance();
-                                    map.amount = String.format(Locale.CHINA,
-                                            (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
-
-                                    map.tag = k;
-                                    map.show = EShowFold.getByFold(!checkUnfoldItem(k)).getName();
-                                    ll_rets.add(map);
-                                }
-
-                                return ll_rets;
-                            });
+                    for(String k : set_k) {
+                        mMainPara.add(new MainItemHolder(k));
+                    }
 
                     // for month
                     List<String> set_k_m = NoteDataHelper.getNotesMonths();
                     Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
-                    ll_sub_rets = fixedThreadPool
-                            .submit(() -> {
-                                LinkedList<Map.Entry<String, SubAdapterItem>>
-                                        ll_rets = new LinkedList<>();
-                                for (String k : set_k_m) {
-                                    String ky = k.substring(0, 4);
-                                    NoteShowInfo ni = NoteDataHelper.getInfoByMonth(k);
-                                    SubAdapterItem map = new SubAdapterItem();
-
-                                    String km = k.substring(5, 7);
-                                    km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
-                                    map.month = km;
-                                    map.monthDetail.mPayCount = String.valueOf(ni.getPayCount());
-                                    map.monthDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
-                                    map.monthDetail.mPayAmount = String.format(Locale.CHINA,
-                                            "%.02f", ni.getPayAmount());
-                                    map.monthDetail.mIncomeAmount = String.format(Locale.CHINA,
-                                            "%.02f", ni.getIncomeAmount());
-
-                                    BigDecimal bd_l = ni.getBalance();
-                                    map.amount = String.format(Locale.CHINA,
-                                            (0 < bd_l.floatValue()) ? "+ %.02f" : "%.02f", bd_l);
-
-                                    map.tag = ky;
-                                    map.subTag = k;
-
-                                    ll_rets.add(new Map.Entry<String, SubAdapterItem>() {
-                                        @Override
-                                        public String getKey() {
-                                            return ky;
-                                        }
-
-                                        @Override
-                                        public SubAdapterItem getValue() {
-                                            return map;
-                                        }
-
-                                        @Override
-                                        public SubAdapterItem setValue(SubAdapterItem value) {
-                                            return null;
-                                        }
-
-                                    });
-                                }
-
-                                return ll_rets;
-                            });
-
-                    try {
-                        mMainPara.addAll(ll_main_rets.get());
-
-                        for(Map.Entry<String, SubAdapterItem> ret : ll_sub_rets.get()) {
-                            LinkedList<SubAdapterItem> lh = mHMSubPara.get(ret.getKey());
-                            if(null == lh)  {
-                                lh = new LinkedList<>();
-                                mHMSubPara.put(ret.getKey(), lh);
-                            }
-
-                            lh.add(ret.getValue());
+                    for(String k : set_k_m) {
+                        String ky = k.substring(0, 4);
+                        LinkedList<SubItemHolder> lsDay = mHMSubPara.get(ky);
+                        if(null == lsDay)   {
+                            lsDay = new LinkedList<>();
+                            mHMSubPara.put(ky, lsDay);
                         }
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
+                        lsDay.add(new SubItemHolder(k));
                     }
                 },
                 () -> loadUI(bundle));
@@ -330,12 +311,12 @@ public class LVYearly extends LVBase {
         refreshAttachLayout();
 
         // update data
-        LinkedList<MainAdapterItem> n_mainpara;
+        LinkedList<MainItemHolder> n_mainpara;
         if (mBFilter) {
             n_mainpara = new LinkedList<>();
-            for (MainAdapterItem i : mMainPara) {
+            for (MainItemHolder i : mMainPara) {
                 for (String ii : mFilterPara) {
-                    if (i.tag.equals(ii)) {
+                    if (i.getTag().equals(ii)) {
                         n_mainpara.add(i);
                         break;
                     }
@@ -371,12 +352,12 @@ public class LVYearly extends LVBase {
 
     /**
      * 加载详细视图
-     *
-     * @param lv  视图
-     * @param tag 数据tag
+     * load detail view(for month)
+     * @param lv    for view
+     * @param tag   tag for data
      */
     private void load_detail_view(ListView lv, String tag) {
-        LinkedList<SubAdapterItem> llhm = mHMSubPara.get(tag);
+        LinkedList<SubItemHolder> llhm = mHMSubPara.get(tag);
         if (!UtilFun.ListIsNullOrEmpty(llhm)) {
             MonthAdapter mAdapter = new MonthAdapter(getContext(), llhm);
             lv.setAdapter(mAdapter);
@@ -401,7 +382,8 @@ public class LVYearly extends LVBase {
                     view, R.layout.li_yearly_show);
 
             if(null == viewHolder.getView(R.id.cl_header).getTag()) {
-                final MainAdapterItem hm = UtilFun.cast(getItem(position));
+                final MainItemHolder holder = UtilFun.cast(getItem(position));
+                final MainAdapterItem hm = holder.getData();
                 final ListView lv = viewHolder.getView(R.id.lv_show_detail);
                 final String tag = hm.tag;
                 if (EShowFold.getByName(hm.show) == EShowFold.FOLD) {
@@ -467,7 +449,8 @@ public class LVYearly extends LVBase {
             FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
                     view, R.layout.li_yearly_show_detail);
             if(null == viewHolder.getView(R.id.rl_header).getTag()) {
-                final SubAdapterItem hm = UtilFun.cast(getItem(position));
+                final SubItemHolder holder = UtilFun.cast(getItem(position));
+                final SubAdapterItem hm = holder.getData();
                 final String sub_tag = hm.subTag;
 
                 final ImageView ib = viewHolder.getView(R.id.iv_action);
