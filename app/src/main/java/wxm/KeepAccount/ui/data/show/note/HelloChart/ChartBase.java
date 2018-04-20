@@ -60,43 +60,54 @@ abstract class ChartBase extends ShowViewBase {
 
         // main chart need respond touch event
         mChart.setOnTouchListener(new View.OnTouchListener() {
-            private float prv_x = -1;
+            private float mDownX = -1;
+
+            private Viewport mVPMax;
+            private Viewport mVPOrg;
+            private Viewport mVPOrgChart;
+
+            private int mChartWidth;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 //Log.i(LOG_TAG, "in chart event = " + event.getAction());
                 int act = event.getAction();
                 switch (act) {
-                    case MotionEvent.ACTION_DOWN:
-                        prv_x = event.getX();
-                        break;
+                    case MotionEvent.ACTION_DOWN: {
+                        mDownX = event.getX();
+                        mVPOrg = new Viewport(mPreviewChart.getCurrentViewport());
+                        mVPOrgChart = new Viewport(mChart.getCurrentViewport());
+                        mVPMax = mPreviewChart.getMaximumViewport();
 
-                    case MotionEvent.ACTION_UP:
-                        float cur_x = event.getX();
-                        float dif = cur_x - prv_x;
-                        if ((1 < dif) || (-1 > dif)) {
-                            Viewport mcp = mPreviewChart.getMaximumViewport();
-                            Viewport cp = mPreviewChart.getCurrentViewport();
+                        mChartWidth = mChart.getWidth();
+                    }
+                    break;
 
-                            int cw = mChart.getWidth();
-                            float w = (cp.right - cp.left);
-                            float m = -1 * (dif / cw) * w;
-                            cp.left += m;
-                            cp.right += m;
-                            if (cp.left < mcp.left) {
-                                cp.left = mcp.left;
-                                cp.right = mcp.left + w;
+                    case MotionEvent.ACTION_MOVE:
+                    case MotionEvent.ACTION_UP: {
+                        float dif = (event.getX() - mDownX) / mChartWidth;
+
+                        if(0.05 < Math.abs(dif) || act == MotionEvent.ACTION_UP) {
+                            Viewport cp = new Viewport(mVPOrg);
+                            if (cp.left > mVPMax.left || cp.right < mVPMax.right) {
+                                float w = cp.width();
+                                float m = -(dif * w);
+                                cp.offset(m, 0);
+                                if (cp.left < mVPMax.left) {
+                                    cp.left = mVPMax.left;
+                                    cp.right = mVPMax.left + w;
+                                }
+
+                                if (cp.right > mVPMax.right) {
+                                    cp.right = mVPMax.right;
+                                    cp.left = cp.right - w;
+                                }
+
+                                mPreviewChart.setCurrentViewport(cp);
                             }
-
-                            if (cp.right > mcp.right) {
-                                cp.right = mcp.right;
-                                cp.left = cp.right - w;
-                            }
-
-                            mPreviewChart.setCurrentViewportWithAnimation(cp);
-                            prv_x = cur_x;
                         }
-                        break;
+                    }
+                    break;
                 }
 
                 return false;
@@ -159,7 +170,8 @@ abstract class ChartBase extends ShowViewBase {
 
     /**
      * adjust viewport
-     * @param v     clicked view
+     *
+     * @param v clicked view
      */
     @OnClick({R.id.bt_less_viewport, R.id.bt_more_viewport, R.id.bt_giveup_filter})
     public void onLessOrMoreView(View v) {
