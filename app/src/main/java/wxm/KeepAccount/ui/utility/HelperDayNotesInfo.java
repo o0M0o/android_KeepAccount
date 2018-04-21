@@ -9,10 +9,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import wxm.androidutil.util.FastViewHolder;
-import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
+import wxm.androidutil.ViewHolder.ViewHolder;
 
 /**
  * day data helper
@@ -47,7 +46,7 @@ public class HelperDayNotesInfo {
      * @param income_amount     income amount in one day
      * @param amount            balance amount in one day
      */
-    public static void fillNoteInfo(FastViewHolder vh, String pay_count, String pay_amount,
+    public static void fillNoteInfo(ViewHolder vh, String pay_count, String pay_amount,
                                     String income_count, String income_amount, String amount) {
         boolean b_pay = !"0".equals(pay_count);
         boolean b_income = !"0".equals(income_count);

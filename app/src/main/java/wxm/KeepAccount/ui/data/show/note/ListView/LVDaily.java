@@ -23,18 +23,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.KeepAccount.ui.base.Adapter.LVAdapter;
-import wxm.KeepAccount.utility.ItemDataHolder;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
-import wxm.androidutil.util.FastViewHolder;
+import wxm.androidutil.ViewHolder.ViewDataHolder;
+import wxm.androidutil.ViewHolder.ViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
@@ -98,7 +94,7 @@ public class LVDaily extends LVBase {
         }
     }
 
-    class ItemHolder  extends ItemDataHolder<String, MainAdapterItem> {
+    class ItemHolder  extends ViewDataHolder<String, MainAdapterItem> {
         public ItemHolder(String tag)   {
             super(tag);
         }
@@ -411,6 +407,8 @@ public class LVDaily extends LVBase {
      * main adapter
      */
     private class MainAdapter extends LVAdapter {
+        private static final int SELF_TAG_ID = 0;
+
         private View.OnClickListener mCLAdapter = v -> {
             int pos = mLVShow.getPositionForView(v);
 
@@ -427,7 +425,7 @@ public class LVDaily extends LVBase {
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            FastViewHolder viewHolder = FastViewHolder.get(getContext(), view, R.layout.li_daily_show);
+            ViewHolder viewHolder = ViewHolder.get(getContext(), view, R.layout.li_daily_show);
             CheckBox cb = viewHolder.getView(R.id.cb_del);
             if(!mAction.isDelete()) {
                 cb.setChecked(false);
@@ -437,7 +435,9 @@ public class LVDaily extends LVBase {
             }
 
             View root_view = viewHolder.getConvertView();
-            if(null == viewHolder.getView(R.id.cl_date).getTag())   {
+            if(null == viewHolder.getSelfTag(SELF_TAG_ID))   {
+                viewHolder.setSelfTag(SELF_TAG_ID, new Object());
+
                 ItemHolder it = UtilFun.cast(getItem(position));
                 cb.setTag(it.getTag());
 
@@ -447,13 +447,12 @@ public class LVDaily extends LVBase {
 
                 ItemHolder itPrv = position > 0 ? UtilFun.cast(getItem(position - 1)) : null;
                 initItemShow(viewHolder, it.getData(), null != itPrv ? itPrv.getData() : null);
-                viewHolder.getView(R.id.cl_date).setTag(new Object());
             }
 
             return root_view;
         }
 
-        private void initItemShow(FastViewHolder vh, MainAdapterItem item, MainAdapterItem prvItem) {
+        private void initItemShow(ViewHolder vh, MainAdapterItem item, MainAdapterItem prvItem) {
             if(null == prvItem || !prvItem.year.equals(item.year)) {
                 vh.setText(R.id.tv_year_number, item.year);
             } else  {

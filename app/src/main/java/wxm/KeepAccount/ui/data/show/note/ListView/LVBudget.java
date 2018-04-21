@@ -22,12 +22,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.KeepAccount.ui.base.Adapter.LVAdapter;
-import wxm.androidutil.util.FastViewHolder;
+import wxm.androidutil.ViewHolder.ViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
@@ -383,7 +382,7 @@ public class LVBudget extends LVBase {
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
+            ViewHolder viewHolder = ViewHolder.get(getRootActivity(),
                     view, R.layout.li_budget_show);
 
             final MainAdapterItem hm = UtilFun.cast(getItem(position));
@@ -451,7 +450,7 @@ public class LVBudget extends LVBase {
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            FastViewHolder vh = FastViewHolder.get(getRootActivity(),
+            ViewHolder vh = ViewHolder.get(getRootActivity(),
                     view, R.layout.li_budget_show_detail);
 
             SubAdapterItem hm = UtilFun.cast(getItem(position));

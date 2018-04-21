@@ -19,18 +19,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.KeepAccount.ui.base.Adapter.LVAdapter;
-import wxm.KeepAccount.utility.ItemDataHolder;
 import wxm.KeepAccount.utility.ToolUtil;
-import wxm.androidutil.util.FastViewHolder;
+import wxm.androidutil.ViewHolder.ViewDataHolder;
+import wxm.androidutil.ViewHolder.ViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper;
@@ -71,7 +66,7 @@ public class LVYearly extends LVBase {
         }
     }
 
-    class MainItemHolder extends ItemDataHolder<String, MainAdapterItem> {
+    class MainItemHolder extends ViewDataHolder<String, MainAdapterItem> {
         public MainItemHolder(String tag)   {
             super(tag);
         }
@@ -114,7 +109,7 @@ public class LVYearly extends LVBase {
         }
     }
 
-    class SubItemHolder extends ItemDataHolder<String, SubAdapterItem>    {
+    class SubItemHolder extends ViewDataHolder<String, SubAdapterItem>    {
         public SubItemHolder(String tag)   {
             super(tag);
         }
@@ -369,19 +364,22 @@ public class LVYearly extends LVBase {
 
 
     /**
-     * 首级adapter
+     * year item view adapter
      */
     private class YearAdapter extends LVAdapter {
+        private static final int SELF_TAG_ID = 0;
+
         YearAdapter(Context context, List<?> mdata)    {
             super(context, mdata, R.layout.li_yearly_show);
         }
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
-                    view, R.layout.li_yearly_show);
+            ViewHolder viewHolder = ViewHolder.get(getRootActivity(), view,
+                                        R.layout.li_yearly_show);
+            if(null == viewHolder.getSelfTag(SELF_TAG_ID))   {
+                viewHolder.setSelfTag(SELF_TAG_ID, new Object());
 
-            if(null == viewHolder.getView(R.id.cl_header).getTag()) {
                 final MainItemHolder holder = UtilFun.cast(getItem(position));
                 final MainAdapterItem hm = holder.getData();
                 final ListView lv = viewHolder.getView(R.id.lv_show_detail);
@@ -428,8 +426,6 @@ public class LVYearly extends LVBase {
                 hm_attr.put(ValueShow.ATTR_INCOME_COUNT, hm.yearDetail.mIncomeCount);
                 hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, hm.yearDetail.mIncomeAmount);
                 vs.adjustAttribute(hm_attr);
-
-                viewHolder.getView(R.id.cl_header).setTag(new Object());
             }
             return viewHolder.getConvertView();
         }
@@ -437,18 +433,22 @@ public class LVYearly extends LVBase {
 
 
     /**
-     * 次级adapter
+     * month item view adapter
      */
     private class MonthAdapter extends LVAdapter {
+        private static final int SELF_TAG_ID = 0;
+
         MonthAdapter(Context context, List<?> sdata)    {
             super(context, sdata, R.layout.li_yearly_show_detail);
         }
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
+            ViewHolder viewHolder = ViewHolder.get(getRootActivity(),
                     view, R.layout.li_yearly_show_detail);
-            if(null == viewHolder.getView(R.id.rl_header).getTag()) {
+            if(null == viewHolder.getSelfTag(SELF_TAG_ID))   {
+                viewHolder.setSelfTag(SELF_TAG_ID, new Object());
+
                 final SubItemHolder holder = UtilFun.cast(getItem(position));
                 final SubAdapterItem hm = holder.getData();
                 final String sub_tag = hm.subTag;
@@ -490,8 +490,6 @@ public class LVYearly extends LVBase {
                         hm.monthDetail.mPayCount, hm.monthDetail.mPayAmount,
                         hm.monthDetail.mIncomeCount, hm.monthDetail.mIncomeAmount,
                         hm.amount);
-
-                viewHolder.getView(R.id.rl_header).setTag(new Object());
             }
             return viewHolder.getConvertView();
         }

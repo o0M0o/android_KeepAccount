@@ -29,8 +29,8 @@ import java.util.concurrent.Future;
 import butterknife.BindView;
 import butterknife.OnClick;
 import wxm.KeepAccount.ui.base.Adapter.LVAdapter;
-import wxm.KeepAccount.utility.ItemDataHolder;
-import wxm.androidutil.util.FastViewHolder;
+import wxm.androidutil.ViewHolder.ViewDataHolder;
+import wxm.androidutil.ViewHolder.ViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper;
@@ -69,7 +69,7 @@ public class LVMonthly
         }
     }
 
-    class MainItemHolder extends ItemDataHolder<String, MainAdapterItem>    {
+    class MainItemHolder extends ViewDataHolder<String, MainAdapterItem>    {
         public MainItemHolder(String tag)   {
             super(tag);
         }
@@ -112,7 +112,7 @@ public class LVMonthly
         }
     }
 
-    class SubItemHolder extends ItemDataHolder<String, SubAdapterItem>    {
+    class SubItemHolder extends ViewDataHolder<String, SubAdapterItem> {
         public SubItemHolder(String tag)   {
             super(tag);
         }
@@ -387,15 +387,19 @@ public class LVMonthly
      * month data adapter
      */
     private class MonthAdapter extends LVAdapter {
+        private static final int SELF_TAG_ID = 0;
+
         MonthAdapter(Context context, List<?> mdata)  {
             super(context, mdata, R.layout.li_monthly_show);
         }
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
+            ViewHolder viewHolder = ViewHolder.get(getRootActivity(),
                     view, R.layout.li_monthly_show);
-            if(null == viewHolder.getView(R.id.cl_header).getTag()) {
+            if(null == viewHolder.getSelfTag(SELF_TAG_ID))   {
+                viewHolder.setSelfTag(SELF_TAG_ID, new Object());
+
                 final MainItemHolder holder = UtilFun.cast(getItem(position));
                 final MainAdapterItem item = holder.getData();
                 final ListView lv = viewHolder.getView(R.id.lv_show_detail);
@@ -441,8 +445,6 @@ public class LVMonthly
                 hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.monthDetail.mIncomeCount);
                 hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.monthDetail.mIncomeAmount);
                 vs.adjustAttribute(hm_attr);
-
-                viewHolder.getView(R.id.cl_header).setTag(new Object());
             }
             return viewHolder.getConvertView();
         }
@@ -453,15 +455,19 @@ public class LVMonthly
      * day data adapter
      */
     private class DayAdapter extends LVAdapter {
+        private static final int SELF_TAG_ID = 0;
+
         DayAdapter(Context context, List<?> sdata)  {
             super(context, sdata, R.layout.li_monthly_show_detail);
         }
 
         @Override
         public View getView(final int position, View view, ViewGroup arg2) {
-            FastViewHolder viewHolder = FastViewHolder.get(getRootActivity(),
+            ViewHolder viewHolder = ViewHolder.get(getRootActivity(),
                     view, R.layout.li_monthly_show_detail);
-            if(null == viewHolder.getView(R.id.cl_day).getTag()) {
+            if(null == viewHolder.getSelfTag(SELF_TAG_ID))   {
+                viewHolder.setSelfTag(SELF_TAG_ID, new Object());
+
                 SubItemHolder holder = UtilFun.cast(getItem(position));
                 SubAdapterItem item = holder.getData();
                 String sub_tag = item.subTag;
@@ -508,8 +514,6 @@ public class LVMonthly
                 hm_attr.put(ValueShow.ATTR_INCOME_COUNT, item.dayDetail.mIncomeCount);
                 hm_attr.put(ValueShow.ATTR_INCOME_AMOUNT, item.dayDetail.mIncomeAmount);
                 vs.adjustAttribute(hm_attr);
-
-                viewHolder.getView(R.id.cl_day).setTag(new Object());
             }
             return viewHolder.getConvertView();
         }

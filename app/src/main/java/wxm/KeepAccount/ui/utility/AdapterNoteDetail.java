@@ -16,7 +16,7 @@ import java.util.Map;
 
 import wxm.KeepAccount.ui.base.Helper.ViewHelper;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.androidutil.util.FastViewHolder;
+import wxm.androidutil.ViewHolder.ViewHolder;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
@@ -58,7 +58,7 @@ public class AdapterNoteDetail extends SimpleAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        FastViewHolder vh = FastViewHolder.get(mCTSelf, convertView, R.layout.liit_data_swipe_holder);
+        ViewHolder vh = ViewHolder.get(mCTSelf, convertView, R.layout.liit_data_swipe_holder);
         HashMap<String, INote> hmData = UtilFun.cast_t(getItem(position));
         INote itemData = hmData.get(K_NODE);
 
