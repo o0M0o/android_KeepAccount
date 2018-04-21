@@ -4,15 +4,15 @@ android {
     signingConfigs {
         defkey {
             keyAlias 'defkey'
-            keyPassword 'hugo99505'
-            storeFile file('E:/backup/appkey/andriodapp-key.jks')
-            storePassword 'hugo99505'
+            keyPassword project.DEFKEY_KEY_PWD
+            storeFile file(project.DEFKEY_FILE_PATH)
+            storePassword project.DEFKEY_STORE_PWD
         }
         longTimeKey {
             keyAlias 'andriodapp-key-longtime'
-            keyPassword 'w789065'
-            storeFile file('E:/backup/appkey/andriodapp-key-longtime.jks')
-            storePassword 'w127865'
+            keyPassword project.LONGTIMEKEY_KEY_PWD
+            storeFile file(project.LONGTIMEKEY_FILE_PATH)
+            storePassword project.LONGTIMEKEY_STORE_PWD
         }
     }
 
@@ -23,8 +23,8 @@ android {
         applicationId "com.wxm.keepaccount"
         minSdkVersion 23
         targetSdkVersion 26
-        versionCode 21
-        versionName "1.21"
+        versionCode 22
+        versionName "1.22"
         signingConfig signingConfigs.defkey
     }
 

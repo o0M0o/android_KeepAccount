@@ -64,19 +64,16 @@ abstract class ChartBase extends ShowViewBase {
 
             private Viewport mVPMax;
             private Viewport mVPOrg;
-            private Viewport mVPOrgChart;
 
             private int mChartWidth;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                //Log.i(LOG_TAG, "in chart event = " + event.getAction());
                 int act = event.getAction();
                 switch (act) {
                     case MotionEvent.ACTION_DOWN: {
                         mDownX = event.getX();
                         mVPOrg = new Viewport(mPreviewChart.getCurrentViewport());
-                        mVPOrgChart = new Viewport(mChart.getCurrentViewport());
                         mVPMax = mPreviewChart.getMaximumViewport();
 
                         mChartWidth = mChart.getWidth();

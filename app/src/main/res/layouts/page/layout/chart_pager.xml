@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:longClickable="true"
     android:orientation="vertical">
@@ -15,8 +16,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingBottom="4dp"
-        android:paddingStart="4dp"
         android:paddingEnd="4dp"
+        android:paddingStart="4dp"
         android:paddingTop="4dp">
 
         <RelativeLayout
@@ -68,8 +69,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:paddingStart="12dp"
-            android:paddingEnd="6dp" />
+            android:paddingEnd="6dp"
+            android:paddingStart="12dp" />
 
         <View
             android:layout_width="match_parent"
@@ -78,41 +79,45 @@
             android:layout_marginTop="8dp"
             android:background="@android:color/darker_gray" />
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_width="match_parent"
-            android:layout_height="128dp"
-            android:orientation="horizontal">
+            android:layout_height="128dp">
 
             <LinearLayout
+                android:id="@+id/ll_buts"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <Button
                     android:id="@+id/bt_more_viewport"
                     android:layout_width="64dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="top|center_horizontal"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/cn_more_viewport" />
+                    android:layout_height="42dp"
+                    android:layout_gravity="center"
+                    android:text="@string/cn_more_viewport"
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/bt_less_viewport"
                     android:layout_width="64dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:layout_marginBottom="24dp"
-                    android:text="@string/cn_less_viewport" />
+                    android:layout_height="42dp"
+                    android:layout_gravity="center"
+                    android:text="@string/cn_less_viewport"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <wxm.KeepAccount.ui.base.TouchUI.TouchPreviewColumnChartView
                 android:id="@+id/chart_preview"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:paddingStart="12dp"
-                android:paddingEnd="6dp" />
-        </LinearLayout>
+                app:layout_constraintStart_toEndOf="@id/ll_buts"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingEnd="6dp"
+                android:paddingStart="12dp" />
+        </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 </LinearLayout>
