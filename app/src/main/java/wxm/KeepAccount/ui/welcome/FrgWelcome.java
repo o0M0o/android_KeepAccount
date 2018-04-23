@@ -82,15 +82,13 @@ public class FrgWelcome extends FrgSupportBaseAdv {
     @Override
     protected void loadUI(Bundle savedInstanceState) {
         mLSData.clear();
-        for (String i : PreferencesUtil.loadHotAction()) {
+        for (String i : PreferencesUtil.INSTANCE.INSTANCE.loadHotAction()) {
             HashMap<String, Object> ihm = new HashMap<>();
             ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
             mLSData.add(ihm);
         }
 
-        final DGVButtonAdapter apt = new DGVButtonAdapter(getActivity(), mLSData,
-                new String[]{}, new int[]{});
-
+        final DGVButtonAdapter apt = new DGVButtonAdapter(getActivity(), mLSData);
         mDGVActions.setAdapter(apt);
         mDGVActions.setOnChangeListener((from, to) -> {
             HashMap<String, Object> temp = mLSData.get(from);
@@ -111,7 +109,7 @@ public class FrgWelcome extends FrgSupportBaseAdv {
                 String an = UtilFun.cast_t(hi.get(DGVButtonAdapter.HKEY_ACT_NAME));
                 hot_name.add(an);
             }
-            PreferencesUtil.saveHotAction(hot_name);
+            PreferencesUtil.INSTANCE.saveHotAction(hot_name);
 
             apt.notifyDataSetChanged();
         });
@@ -120,11 +118,11 @@ public class FrgWelcome extends FrgSupportBaseAdv {
 
     private void initFrgs() {
         FrgPara fp = new FrgPara();
-        fp.mFPViewId = R.layout.banner_month;
+        fp.setMFPViewId(R.layout.banner_month);
         mALFrgs.add(fp);
 
         fp = new FrgPara();
-        fp.mFPViewId = R.layout.banner_year;
+        fp.setMFPViewId(R.layout.banner_year);
         mALFrgs.add(fp);
     }
 
@@ -139,10 +137,10 @@ public class FrgWelcome extends FrgSupportBaseAdv {
                     @Override
                     public void onDialogPositiveResult(DialogFragment dialog) {
                         DlgSelectChannel dsc = UtilFun.cast(dialog);
-                        PreferencesUtil.saveHotAction(dsc.getHotChannel());
+                        PreferencesUtil.INSTANCE.saveHotAction(dsc.getHotChannel());
 
                         mLSData.clear();
-                        for (String i : PreferencesUtil.loadHotAction()) {
+                        for (String i : PreferencesUtil.INSTANCE.loadHotAction()) {
                             HashMap<String, Object> ihm = new HashMap<>();
                             ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
                             mLSData.add(ihm);
@@ -157,7 +155,7 @@ public class FrgWelcome extends FrgSupportBaseAdv {
                     }
                 });
 
-                dlg.show(((AppCompatActivity) getActivity()).getSupportFragmentManager(),
+                dlg.show(getActivity().getSupportFragmentManager(),
                         "选择频道");
             }
             break;

@@ -2,7 +2,6 @@ package wxm.KeepAccount.ui.data.show.calendar;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -68,7 +67,7 @@ public class FrgCalendarShow extends FrgSupportBaseAdv {
     @Override
     protected void loadUI(Bundle bundle) {
         final String[] param = new String[1];
-        ToolUtil.runInBackground(this.getActivity(),
+        ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                 () -> {
                     HashMap<String, ArrayList<INote>> hm
                             = NoteDataHelper.getInstance().getNotesForMonth();

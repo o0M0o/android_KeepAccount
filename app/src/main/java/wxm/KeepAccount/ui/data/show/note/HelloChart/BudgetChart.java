@@ -1,10 +1,8 @@
 package wxm.KeepAccount.ui.data.show.note.HelloChart;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.util.UtilFun;
@@ -79,10 +76,10 @@ public class BudgetChart extends ShowViewBase {
     @Override
     protected void initUI(Bundle bundle) {
         mBFilter = false;
-        mHMColor = PreferencesUtil.loadChartColor();
+        mHMColor = PreferencesUtil.INSTANCE.loadChartColor();
 
         // 填充预算数据
-        mSPBudgetData = ContextUtil.getBudgetUtility().getBudgetForCurUsr();
+        mSPBudgetData = ContextUtil.Companion.getBudgetUtility().getBudgetForCurUsr();
         if (!UtilFun.ListIsNullOrEmpty(mSPBudgetData)) {
             ArrayList<String> data_ls = new ArrayList<>();
             for (BudgetItem i : mSPBudgetData) {
@@ -124,6 +121,8 @@ public class BudgetChart extends ShowViewBase {
                         break;
 
                     case MotionEvent.ACTION_UP:
+                        v.performClick();
+
                         float cur_x = event.getX();
                         float dif = cur_x - prv_x;
                         if ((1 < dif) || (-1 > dif)) {
@@ -163,6 +162,8 @@ public class BudgetChart extends ShowViewBase {
                     break;
 
                 case MotionEvent.ACTION_UP:
+                    v.performClick();
+
                     getRootActivity().disableViewPageTouch(false);
                     break;
 
@@ -214,7 +215,11 @@ public class BudgetChart extends ShowViewBase {
      */
     @OnClick({R.id.bt_less_viewport, R.id.bt_more_viewport})
     public void onLessOrMoreView(View v) {
-        final Button bt_less = UtilFun.cast(getView().findViewById(R.id.bt_less_viewport));
+        View vParent = getView();
+        if(null == vParent)
+            return;
+
+        final Button bt_less = UtilFun.cast(vParent.findViewById(R.id.bt_less_viewport));
         int vid = v.getId();
         switch (vid) {
             case R.id.bt_less_viewport: {
@@ -243,10 +248,10 @@ public class BudgetChart extends ShowViewBase {
             return;
 
         BudgetItem bi = mSPBudgetData.get(mSPBudgetHot);
-        List<PayNoteItem> pays = ContextUtil.getPayIncomeUtility().getPayNoteByBudget(bi);
+        List<PayNoteItem> pays = ContextUtil.Companion.getPayIncomeUtility().getPayNoteByBudget(bi);
         HashMap<String, ArrayList<PayNoteItem>> hm_ret = new HashMap<>();
 
-        ToolUtil.runInBackground(this.getActivity(),
+        ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                 () -> {
                     for (PayNoteItem i : pays) {
                         String k = i.getTs().toString().substring(0, 10);
@@ -276,7 +281,7 @@ public class BudgetChart extends ShowViewBase {
                         BigDecimal pay = BigDecimal.ZERO;
                         ArrayList<PayNoteItem> lsp = hm_ret.get(k);
                         for (PayNoteItem i : lsp) {
-                            pay = pay.add(i.getVal());
+                            pay = pay.add(i.getAmount());
                         }
 
                         all_pay = all_pay.add(pay);

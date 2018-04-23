@@ -56,7 +56,7 @@ abstract class ChartBase extends ShowViewBase {
     @Override
     protected void initUI(Bundle bundle) {
         mBFilter = false;
-        mHMColor = PreferencesUtil.loadChartColor();
+        mHMColor = PreferencesUtil.INSTANCE.loadChartColor();
 
         // main chart need respond touch event
         mChart.setOnTouchListener(new View.OnTouchListener() {

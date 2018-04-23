@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Locale;
-
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.PayNoteItem;
@@ -77,9 +75,9 @@ public class TFPreviewPay extends TFPreviewBase {
             mTVInfo.setText(mPIData.getInfo());
             mTVNote.setText(mPIData.getNote());
             mTVBudget.setText(null == mPIData.getBudget() ? "" : mPIData.getBudget().getName());
-            mTVDate.setText(ToolUtil.FormatDateString(mPIData.getTs().toString().substring(0, 10)));
+            mTVDate.setText(ToolUtil.INSTANCE.formatDateString(mPIData.getTs().toString().substring(0, 10)));
             mTVTime.setText(mPIData.getTs().toString().substring(11, 16));
-            mTVDayInWeek.setText(ToolUtil.getDayInWeek(mPIData.getTs()));
+            mTVDayInWeek.setText(ToolUtil.INSTANCE.getDayInWeek(mPIData.getTs()));
         } else {
             mTVAmount.setText("");
             mTVInfo.setText("");

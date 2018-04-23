@@ -99,7 +99,7 @@ public class ACRemindEdit extends AppCompatActivity {
      * 初始化view
      */
     private void init_view() {
-        mTLTabs = (TabLayout) findViewById(R.id.tl_tabs);
+        mTLTabs = findViewById(R.id.tl_tabs);
         mVPPages = UtilFun.cast(findViewById(R.id.vp_remind_pages));
         assert null != mTLTabs && null != mVPPages;
 

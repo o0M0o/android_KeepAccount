@@ -114,9 +114,10 @@ public class NoteDataHelper {
         mHMMonthInfo.clear();
         mHMYearInfo.clear();
 
-        mHMYearNotes = ContextUtil.getPayIncomeUtility().getAllNotesToYear();
-        mHMMonthNotes = ContextUtil.getPayIncomeUtility().getAllNotesToMonth();
-        mHMDayNotes = ContextUtil.getPayIncomeUtility().getAllNotesToDay();
+        List<INote> lsData = ContextUtil.Companion.getPayIncomeUtility().getAllNotes();
+        mHMYearNotes = ContextUtil.Companion.getPayIncomeUtility().getNotesToYear(lsData);
+        mHMMonthNotes = ContextUtil.Companion.getPayIncomeUtility().getNotesToMonth(lsData);
+        mHMDayNotes = ContextUtil.Companion.getPayIncomeUtility().getNotesToDay(lsData);
 
         mALOrderedDays = new ArrayList<>(mHMDayNotes.keySet());
         Collections.sort(mALOrderedDays);
@@ -246,10 +247,10 @@ public class NoteDataHelper {
             for (INote r : v) {
                 if (r.isPayNote()) {
                     ni.setPayCount(ni.getPayCount() + 1);
-                    ni.setPayAmount(ni.getPayAmount().add(r.getVal()));
+                    ni.setPayAmount(ni.getPayAmount().add(r.getAmount()));
                 } else {
                     ni.setIncomeCount(ni.getIncomeCount() + 1);
-                    ni.setIncomeAmount(ni.getIncomeAmount().add(r.getVal()));
+                    ni.setIncomeAmount(ni.getIncomeAmount().add(r.getAmount()));
                 }
             }
 

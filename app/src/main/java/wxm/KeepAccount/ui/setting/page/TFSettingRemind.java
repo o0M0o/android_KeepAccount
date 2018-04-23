@@ -1,11 +1,6 @@
 package wxm.KeepAccount.ui.setting.page;
 
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 /**
  * remind setting page
  * Created by WangXM on 2016/10/10.

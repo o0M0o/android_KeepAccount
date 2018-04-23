@@ -82,7 +82,7 @@ public class FrgReportDay extends FrgSupportSwitcher<FrgSupportBaseAdv> {
                 return;
 
             final Object[] param = new Object[3];
-            ToolUtil.runInBackground(this.getActivity(),
+            ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                     () -> {
                         String d_s = frg.mASParaLoad.get(0);
                         String d_e = frg.mASParaLoad.get(1);
@@ -96,9 +96,9 @@ public class FrgReportDay extends FrgSupportSwitcher<FrgSupportBaseAdv> {
                         for (ArrayList<INote> ls_n : ls_note.values()) {
                             for (INote id : ls_n) {
                                 if (id.isPayNote())
-                                    mBDTotalPay = mBDTotalPay.add(id.getVal());
+                                    mBDTotalPay = mBDTotalPay.add(id.getAmount());
                                 else
-                                    mBDTotalIncome = mBDTotalIncome.add(id.getVal());
+                                    mBDTotalIncome = mBDTotalIncome.add(id.getAmount());
                             }
                         }
 

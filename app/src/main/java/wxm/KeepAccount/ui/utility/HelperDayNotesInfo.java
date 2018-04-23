@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.androidutil.ViewHolder.ViewHolder;
@@ -23,7 +25,7 @@ public class HelperDayNotesInfo {
     private static int DIM_FULL_WIDTH;
 
     static {
-        Context ct = ContextUtil.getInstance();
+        Context ct = Objects.requireNonNull(ContextUtil.Companion.getInstance());
         Resources res = ct.getResources();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Resources.Theme te = ct.getTheme();
@@ -39,12 +41,13 @@ public class HelperDayNotesInfo {
 
     /**
      * fill note UI
-     * @param vh                holder for view
-     * @param pay_count         pay count in one day
-     * @param pay_amount        pay amount in one day
-     * @param income_count      income count in one day
-     * @param income_amount     income amount in one day
-     * @param amount            balance amount in one day
+     *
+     * @param vh            holder for view
+     * @param pay_count     pay count in one day
+     * @param pay_amount    pay amount in one day
+     * @param income_count  income count in one day
+     * @param income_amount income amount in one day
+     * @param amount        balance amount in one day
      */
     public static void fillNoteInfo(ViewHolder vh, String pay_count, String pay_amount,
                                     String income_count, String income_amount, String amount) {

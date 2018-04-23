@@ -2,10 +2,8 @@ package wxm.KeepAccount.ui.data.edit.RecordInfo;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
@@ -31,7 +29,6 @@ import wxm.KeepAccount.define.RecordTypeItem;
 import wxm.KeepAccount.ui.data.edit.base.TFEditBase;
 import wxm.KeepAccount.ui.dialog.DlgRecordInfo;
 import wxm.KeepAccount.utility.ContextUtil;
-import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * UI for record info
@@ -85,8 +82,11 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
     private static int mCLSelected;
     private static int mCLNotSelected;
     static {
-        mCLSelected = UiUtil.getColor(ContextUtil.getInstance(), R.color.peachpuff);
-        mCLNotSelected = UiUtil.getColor(ContextUtil.getInstance(), R.color.white);
+        Context ct = ContextUtil.Companion.getInstance();
+        if(null != ct) {
+            mCLSelected = UiUtil.getColor(ct, R.color.peachpuff);
+            mCLNotSelected = UiUtil.getColor(ct, R.color.white);
+        }
     }
 
     @Override
@@ -186,9 +186,9 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
         mLHMData.clear();
         List<RecordTypeItem> al_type;
         if (mEditType.equals(GlobalDef.STR_RECORD_PAY)) {
-            al_type = ContextUtil.getRecordTypeUtility().getAllPayItem();
+            al_type = ContextUtil.Companion.getRecordTypeUtility().getAllPayItem();
         } else {
-            al_type = ContextUtil.getRecordTypeUtility().getAllIncomeItem();
+            al_type = ContextUtil.Companion.getRecordTypeUtility().getAllIncomeItem();
         }
 
         if (null != al_type) {
@@ -272,7 +272,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
         if (!UtilFun.StringIsNullOrEmpty(mCurType)) {
             for (HashMap<String, String> hm : mLHMData) {
                 if (hm.get(KEY_NAME).equals(mCurType)) {
-                    ri = ContextUtil.getRecordTypeUtility().getData(Integer.valueOf(hm.get(KEY_ID)));
+                    ri = ContextUtil.Companion.getRecordTypeUtility().getData(Integer.valueOf(hm.get(KEY_ID)));
                     break;
                 }
             }
@@ -298,9 +298,9 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                         RecordTypeItem ri = cur_dp.getCurDate();
                         if (null != ri) {
                             if (R.id.rl_add == vid)
-                                ContextUtil.getRecordTypeUtility().createData(ri);
+                                ContextUtil.Companion.getRecordTypeUtility().createData(ri);
                             else
-                                ContextUtil.getRecordTypeUtility().modifyData(ri);
+                                ContextUtil.Companion.getRecordTypeUtility().modifyData(ri);
                             load_info();
                         }
                     }
@@ -341,7 +341,7 @@ public class TFEditRecordInfo extends TFEditBase implements View.OnClickListener
                     builder.setMessage("请确认是否删除数据!").setTitle("警告");
                     builder.setPositiveButton("确认", (dialog, which) -> {
                         for (int id : ll_i) {
-                            ContextUtil.getRecordTypeUtility().removeData(id);
+                            ContextUtil.Companion.getRecordTypeUtility().removeData(id);
                         }
 
                         mTVNote.setText("");

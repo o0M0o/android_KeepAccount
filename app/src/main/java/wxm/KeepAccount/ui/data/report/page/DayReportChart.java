@@ -6,14 +6,11 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -137,7 +134,7 @@ public class DayReportChart extends FrgSupportBaseAdv {
         // update show
         final PieChartData CVData = new PieChartData();
         showProgress(true);
-        ToolUtil.runInBackground(this.getActivity(),
+        ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                 () -> generateData(CVData),
                 () -> {
                     showProgress(false);
@@ -176,7 +173,7 @@ public class DayReportChart extends FrgSupportBaseAdv {
 
             final PieChartData CVData = new PieChartData();
             showProgress(true);
-            ToolUtil.runInBackground(this.getActivity(),
+            ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                     () -> {
                         String d_s = mASParaLoad.get(0);
                         String d_e = mASParaLoad.get(1);
@@ -244,7 +241,7 @@ public class DayReportChart extends FrgSupportBaseAdv {
                 continue;
 
             chartItem ci = new chartItem();
-            ci.mBDVal = data.getVal();
+            ci.mBDVal = data.getAmount();
             ci.mType = data.isPayNote() ? chartItem.PAY_ITEM : chartItem.INCOME_ITEM;
             ci.mSZName = data.getInfo();
 

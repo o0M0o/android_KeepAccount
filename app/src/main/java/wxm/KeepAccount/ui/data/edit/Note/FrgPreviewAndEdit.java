@@ -145,15 +145,21 @@ public class FrgPreviewAndEdit extends FrgSupportBaseAdv
             mNumOfFrags = PAGE_COUNT;
             mFRFrags = new Fragment[mNumOfFrags];
 
-            if (GlobalDef.STR_RECORD_INCOME.equals(mStrType)) {
-                mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewIncome();
-                mFRFrags[PAGE_IDX_EDIT] = new TFEditIncome();
-            } else if (GlobalDef.STR_RECORD_PAY.equals(mStrType)) {
-                mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewPay();
-                mFRFrags[PAGE_IDX_EDIT] = new TFEditPay();
-            } else {
-                mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewBudget();
-                mFRFrags[PAGE_IDX_EDIT] = new TFEditBudget();
+            switch (mStrType) {
+                case GlobalDef.STR_RECORD_INCOME:
+                    mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewIncome();
+                    mFRFrags[PAGE_IDX_EDIT] = new TFEditIncome();
+                    break;
+
+                case GlobalDef.STR_RECORD_PAY:
+                    mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewPay();
+                    mFRFrags[PAGE_IDX_EDIT] = new TFEditPay();
+                    break;
+
+                default:
+                    mFRFrags[PAGE_IDX_PREVIEW] = new TFPreviewBudget();
+                    mFRFrags[PAGE_IDX_EDIT] = new TFEditBudget();
+                    break;
             }
         }
 

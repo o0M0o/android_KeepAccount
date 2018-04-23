@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.dialog;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Message;
@@ -98,12 +99,15 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
         }
 
         String usr = null;
-        if (ContextCompat.checkSelfPermission(ContextUtil.getInstance(), READ_PHONE_STATE)
-                == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(ContextUtil.getInstance(), READ_SMS)
-                == PackageManager.PERMISSION_GRANTED) {
-            SIMCardUtil si = new SIMCardUtil(getContext());
-            usr = si.getNativePhoneNumber();
+        Context ct = ContextUtil.Companion.getInstance();
+        if(null != ct) {
+            if (ContextCompat.checkSelfPermission(ct, READ_PHONE_STATE)
+                    == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(ct, READ_SMS)
+                    == PackageManager.PERMISSION_GRANTED) {
+                SIMCardUtil si = new SIMCardUtil(getContext());
+                usr = si.getNativePhoneNumber();
+            }
         }
 
         return sendMsgByHttpPost(UtilFun.StringIsNullOrEmpty(usr) ? "null" : usr, msg);
@@ -137,7 +141,7 @@ public class DlgUsrMessage extends DlgOKOrNOBase {
         mPDDlg.incrementProgressBy(-mPDDlg.getProgress());
         mPDDlg.show();
 
-        ToolUtil.runInBackground(this.getActivity(),
+        ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                 () -> {
                     OkHttpClient client = new OkHttpClient();
                     try {

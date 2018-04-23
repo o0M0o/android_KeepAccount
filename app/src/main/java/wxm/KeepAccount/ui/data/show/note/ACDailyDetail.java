@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import wxm.KeepAccount.define.GlobalDef;
 import wxm.androidutil.Switcher.ACSwitcherActivity;
 import wxm.androidutil.util.UtilFun;
-import wxm.KeepAccount.define.GlobalDef;
 
 /**
  * day detail UI

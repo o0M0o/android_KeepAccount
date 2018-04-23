@@ -1,0 +1,43 @@
+package wxm.KeepAccount.define
+
+import com.j256.ormlite.field.DataType
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
+
+import wxm.androidutil.DBHelper.IDBRow
+
+/**
+ * usr class
+ * Created by WangXM on 2016/8/5.
+ */
+@DatabaseTable(tableName = "tbUsr")
+class UsrItem : IDBRow<Int> {
+    @DatabaseField(generatedId = true, columnName = FIELD_ID, dataType = DataType.INTEGER)
+    var id: Int = 0
+
+    @DatabaseField(columnName = FIELD_NAME, unique = true, dataType = DataType.STRING)
+    var name: String? = null
+
+    @DatabaseField(columnName = FIELD_PWD, dataType = DataType.STRING)
+    var pwd: String? = null
+
+    init {
+        name = ""
+        pwd = ""
+        id = -1
+    }
+
+    override fun getID(): Int {
+        return id
+    }
+
+    override fun setID(integer: Int) {
+        id = integer
+    }
+
+    companion object {
+        const val FIELD_ID = "_id"
+        const val FIELD_NAME = "name"
+        const val FIELD_PWD = "pwd"
+    }
+}

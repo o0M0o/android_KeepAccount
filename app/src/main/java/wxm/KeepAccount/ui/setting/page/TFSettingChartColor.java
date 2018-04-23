@@ -2,17 +2,13 @@ package wxm.KeepAccount.ui.setting.page;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.util.HashMap;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.UtilFun;
@@ -48,7 +44,7 @@ public class TFSettingChartColor extends TFSettingBase {
     @Override
     protected void initUI(Bundle bundle)    {
         if(null == bundle) {
-            mHMColors = PreferencesUtil.loadChartColor();
+            mHMColors = PreferencesUtil.INSTANCE.loadChartColor();
 
             mIVPay.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_PAY_COLOR));
             mIVIncome.setBackgroundColor(mHMColors.get(PreferencesUtil.SET_INCOME_COLOR));
@@ -101,7 +97,7 @@ public class TFSettingChartColor extends TFSettingBase {
     @Override
     public void updateSetting() {
         if (mBSettingDirty) {
-            PreferencesUtil.saveChartColor(mHMColors);
+            PreferencesUtil.INSTANCE.saveChartColor(mHMColors);
             mBSettingDirty = false;
         }
     }

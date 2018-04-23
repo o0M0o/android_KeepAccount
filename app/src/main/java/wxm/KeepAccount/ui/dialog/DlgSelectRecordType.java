@@ -56,18 +56,20 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
     private static int mCRTextFit;
     private static int mCRTextHalfFit;
     static {
-        Context ct = ContextUtil.getInstance();
-        Resources res = ct.getResources();
-        Resources.Theme te = ct.getTheme();
+        Context ct = ContextUtil.Companion.getInstance();
+        if(null != ct) {
+            Resources res = ct.getResources();
+            Resources.Theme te = ct.getTheme();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mCRWhite = res.getColor(R.color.white, te);
-            mCRTextFit= res.getColor(R.color.text_fit, te);
-            mCRTextHalfFit= res.getColor(R.color.text_half_fit, te);
-        } else {
-            mCRWhite = res.getColor(R.color.white);
-            mCRTextFit= res.getColor(R.color.text_fit);
-            mCRTextHalfFit= res.getColor(R.color.text_half_fit);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mCRWhite = res.getColor(R.color.white, te);
+                mCRTextFit = res.getColor(R.color.text_fit, te);
+                mCRTextHalfFit = res.getColor(R.color.text_half_fit, te);
+            } else {
+                mCRWhite = res.getColor(R.color.white);
+                mCRTextFit = res.getColor(R.color.text_fit);
+                mCRTextHalfFit = res.getColor(R.color.text_half_fit);
+            }
         }
     }
 
@@ -165,7 +167,7 @@ public class DlgSelectRecordType extends DlgOKOrNOBase {
 
 
     private void loadData() {
-        RecordTypeDBUtility rd = ContextUtil.getRecordTypeUtility();
+        RecordTypeDBUtility rd = ContextUtil.Companion.getRecordTypeUtility();
         List<RecordTypeItem> al_type = GlobalDef.STR_RECORD_PAY.equals(mRootType) ?
                 rd.getAllPayItem() : rd.getAllIncomeItem();
 

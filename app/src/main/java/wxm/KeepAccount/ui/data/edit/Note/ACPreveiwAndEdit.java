@@ -42,25 +42,18 @@ public class ACPreveiwAndEdit extends ACSwitcherActivity<FrgPreviewAndEdit> {
             return;
 
         Object ob = null;
-        PayIncomeDBUtility puit = ContextUtil.getPayIncomeUtility();
-        BudgetDBUtility buit = ContextUtil.getBudgetUtility();
+        PayIncomeDBUtility puit = ContextUtil.Companion.getPayIncomeUtility();
+        BudgetDBUtility buit = ContextUtil.Companion.getBudgetUtility();
         int id = it.getIntExtra(GlobalDef.INTENT_LOAD_RECORD_ID, -1);
         if(-1 != id)    {
-            switch (type)   {
-                case GlobalDef.STR_RECORD_PAY : {
-                    ob = puit.getPayDBUtility().getData(id);
-                }
-                break;
-
-                case GlobalDef.STR_RECORD_INCOME : {
-                    ob = puit.getIncomeDBUtility().getData(id);
-                }
-                break;
-
-                case GlobalDef.STR_RECORD_BUDGET : {
+            if(type.equals(GlobalDef.STR_RECORD_PAY)) {
+                ob = puit.getPayDBUtility().getData(id);
+            } else if(type.equals(GlobalDef.STR_RECORD_INCOME))   {
+                ob = puit.getIncomeDBUtility().getData(id);
+            } else {
+                if(type.equals(GlobalDef.STR_RECORD_BUDGET)) {
                     ob = buit.getData(id);
                 }
-                break;
             }
         }
 

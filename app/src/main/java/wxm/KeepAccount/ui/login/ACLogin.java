@@ -102,20 +102,28 @@ public class ACLogin extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         boolean b_resetview = false;
-        if (GlobalDef.INTRET_USR_ADD == resultCode) {
-            Log.i(TAG, "从'添加新帐户'页面返回");
-            b_resetview = true;
-        } else if (GlobalDef.INTRET_GIVEUP == resultCode) {
-            Log.i(TAG, "从'添加新帐户'页面返回(放弃添加新帐户)");
-        } else if (GlobalDef.INTRET_USR_LOGOUT == resultCode) {
-            Log.i(TAG, "注销帐户");
-            b_resetview = true;
+        switch (resultCode) {
+            case GlobalDef.INTRET_USR_ADD:
+                Log.i(TAG, "从'添加新帐户'页面返回");
+                b_resetview = true;
+                break;
 
-            Message m = Message.obtain(ContextUtil.getMsgHandler(),
-                    EMsgType.USR_LOGOUT.getId());
-            m.sendToTarget();
-        } else {
-            Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
+            case GlobalDef.INTRET_GIVEUP:
+                Log.i(TAG, "从'添加新帐户'页面返回(放弃添加新帐户)");
+                break;
+
+            case GlobalDef.INTRET_USR_LOGOUT:
+                Log.i(TAG, "注销帐户");
+                b_resetview = true;
+
+                Message m = Message.obtain(ContextUtil.Companion.getMsgHandler(),
+                        EMsgType.USR_LOGOUT.getId());
+                m.sendToTarget();
+                break;
+
+            default:
+                Log.d(TAG, String.format("不处理的resultCode(%d)!", resultCode));
+                break;
         }
 
         if (b_resetview) {

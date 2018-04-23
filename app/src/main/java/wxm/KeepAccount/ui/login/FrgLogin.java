@@ -9,9 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,8 +25,6 @@ import wxm.KeepAccount.ui.welcome.ACWelcome;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
-
-;
 
 /**
  * for login
@@ -70,9 +66,7 @@ public class FrgLogin extends FrgSupportBaseAdv {
             startActivityForResult(intent, 1);
         });
 
-        mBTDefUsrLogin.setOnClickListener(v -> {
-            doLogin(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD);
-        });
+        mBTDefUsrLogin.setOnClickListener(v -> doLogin(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD));
     }
 
     @Override
@@ -178,12 +172,10 @@ public class FrgLogin extends FrgSupportBaseAdv {
         showProgress(true);
 
         final boolean[] bret = {false};
-        ToolUtil.runInBackground(this.getActivity(),
+        ToolUtil.INSTANCE.runInBackground(this.getActivity(),
+                () -> bret[0] = ContextUtil.Companion.getUsrUtility().loginByUsr(usr, pwd),
                 () -> {
-                    bret[0] = ContextUtil.getUsrUtility().loginByUsr(usr, pwd);
-                },
-                () -> {
-                    new Handler().postDelayed(() -> showProgress(false), 100);
+                    new Handler().postDelayed(() -> showProgress(false), 50);
                     if (bret[0]) {
                         Intent intent = new Intent(getActivity(), ACWelcome.class);
                         startActivityForResult(intent, 1);

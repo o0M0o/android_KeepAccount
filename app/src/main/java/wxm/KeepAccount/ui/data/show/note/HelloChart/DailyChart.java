@@ -59,7 +59,7 @@ public class DailyChart extends ChartBase {
 
     @Override
     protected void refreshData()  {
-        ToolUtil.runInBackground(this.getActivity(),
+        ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                 () -> {
                     HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForDay();
 
@@ -82,10 +82,10 @@ public class DailyChart extends ChartBase {
                             for (Object i : ret.get(k)) {
                                 if (i instanceof PayNoteItem) {
                                     PayNoteItem pi = UtilFun.cast(i);
-                                    pay = pay.add(pi.getVal());
+                                    pay = pay.add(pi.getAmount());
                                 } else {
                                     IncomeNoteItem ii = UtilFun.cast(i);
-                                    income = income.add(ii.getVal());
+                                    income = income.add(ii.getAmount());
                                 }
                             }
 

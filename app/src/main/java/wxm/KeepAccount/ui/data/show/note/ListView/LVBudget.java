@@ -189,7 +189,7 @@ public class LVBudget extends LVBase {
                     MainAdapter sad = UtilFun.cast_t(mLVShow.getAdapter());
                     List<Integer> ls_dels = sad.getWaitDeleteItems();
                     if (!UtilFun.ListIsNullOrEmpty(ls_dels)) {
-                        ContextUtil.getBudgetUtility().removeDatas(ls_dels);
+                        ContextUtil.Companion.getBudgetUtility().removeDatas(ls_dels);
                     }
                 }
 
@@ -211,7 +211,7 @@ public class LVBudget extends LVBase {
         n_mainpara.addAll(mMainPara);
 
         // 设置listview adapter
-        MainAdapter mSNAdapter = new MainAdapter(ContextUtil.getInstance(), n_mainpara);
+        MainAdapter mSNAdapter = new MainAdapter(ContextUtil.Companion.getInstance(), n_mainpara);
         mLVShow.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
@@ -220,7 +220,7 @@ public class LVBudget extends LVBase {
     protected void initUI(Bundle bundle) {
         super.initUI(bundle);
 
-        ToolUtil.runInBackground(getActivity(),
+        ToolUtil.INSTANCE.runInBackground(getActivity(),
                 this::parseNotes,
                 () -> loadUI(bundle));
     }
@@ -247,7 +247,7 @@ public class LVBudget extends LVBase {
         mMainPara.clear();
         mHMSubPara.clear();
 
-        HashMap<BudgetItem, List<PayNoteItem>> mHMData = ContextUtil.getBudgetUtility().getBudgetWithPayNote();
+        HashMap<BudgetItem, List<PayNoteItem>> mHMData = ContextUtil.Companion.getBudgetUtility().getBudgetWithPayNote();
         Set<BudgetItem> set_bi = mHMData.keySet();
         ArrayList<BudgetItem> ls_bi = new ArrayList<>(set_bi);
         Collections.sort(ls_bi, (o1, o2) -> mBODownOrder ? o1.getName().compareTo(o2.getName())
@@ -291,10 +291,10 @@ public class LVBudget extends LVBase {
                 km = km.startsWith("0") ? km.replaceFirst("0", " ") : km;
                 map.dayNumber = km;
                 try {
-                    Timestamp ts = ToolUtil.StringToTimestamp(all_date);
+                    Timestamp ts = ToolUtil.INSTANCE.stringToTimestamp(all_date);
                     Calendar day = Calendar.getInstance();
                     day.setTimeInMillis(ts.getTime());
-                    map.dayInWeek = ToolUtil.getDayInWeek(day.get(Calendar.DAY_OF_WEEK));
+                    map.dayInWeek = ToolUtil.INSTANCE.getDayInWeek(day.get(Calendar.DAY_OF_WEEK));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

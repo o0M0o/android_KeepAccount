@@ -1,7 +1,5 @@
 package wxm.KeepAccount.ui.data.show.note.HelloChart;
 
-import android.app.Activity;
-
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -10,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Executors;
 
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.util.UtilFun;
@@ -44,7 +41,7 @@ public class YearlyChart extends ChartBase {
 
     @Override
     protected void refreshData() {
-        ToolUtil.runInBackground(this.getActivity(),
+        ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                 () -> {
                     HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForYear();
 
@@ -59,10 +56,10 @@ public class YearlyChart extends ChartBase {
                         for (Object i : ret.get(k)) {
                             if (i instanceof PayNoteItem) {
                                 PayNoteItem pi = UtilFun.cast(i);
-                                pay = pay.add(pi.getVal());
+                                pay = pay.add(pi.getAmount());
                             } else {
                                 IncomeNoteItem ii = UtilFun.cast(i);
-                                income = income.add(ii.getVal());
+                                income = income.add(ii.getAmount());
                             }
                         }
 
@@ -100,7 +97,7 @@ public class YearlyChart extends ChartBase {
                         i.setLabel(v);
                     }
                 },
-                () -> {loadUIUtility(true);});
+                () -> loadUIUtility(true));
     }
 
     /**

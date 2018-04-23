@@ -5,23 +5,19 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
-import java.sql.BatchUpdateException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,7 +30,7 @@ import java.util.Locale;
 
 import butterknife.BindString;
 import butterknife.BindView;
-import butterknife.ButterKnife;
+import butterknife.OnTouch;
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText;
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
@@ -56,7 +52,7 @@ import static java.lang.String.format;
  * edit pay
  * Created by WangXM on2016/9/28.
  */
-public class TFEditPay extends TFEditBase implements View.OnTouchListener {
+public class TFEditPay extends TFEditBase {
     private final static String TAG = "TFEditPay";
 
     @BindView(R.id.ar_et_info)
@@ -138,7 +134,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         // 填充预算数据
         ArrayList<String> data_ls = new ArrayList<>();
         data_ls.add("无预算(不使用预算)");
-        List<BudgetItem> bils = ContextUtil.getBudgetUtility().getBudgetForCurUsr();
+        List<BudgetItem> bils = ContextUtil.Companion.getBudgetUtility().getBudgetForCurUsr();
         if (!UtilFun.ListIsNullOrEmpty(bils)) {
             for (BudgetItem i : bils) {
                 data_ls.add(i.getName());
@@ -151,10 +147,6 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         mSPBudget.setAdapter(spAdapter);
 
         // 填充其他数据
-        mETDate.setOnTouchListener(this);
-        mETInfo.setOnTouchListener(this);
-        mTVNote.setOnTouchListener(this);
-
         mETAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -178,6 +170,109 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
         });
 
         loadUI(bundle);
+    }
+
+    @OnTouch({R.id.ar_et_info, R.id.ar_et_date, R.id.tv_note})
+    boolean OnTouchChildView(View v, MotionEvent event) {
+        switch (event.getAction())  {
+            case MotionEvent.ACTION_DOWN :  {
+                switch (v.getId())  {
+                    case R.id.ar_et_info :  {
+                        DlgSelectRecordType dp = new DlgSelectRecordType();
+                        dp.setOldType(GlobalDef.STR_RECORD_PAY, mETInfo.getText().toString());
+                        dp.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                            @Override
+                            public void onDialogPositiveResult(DialogFragment dialog) {
+                                DlgSelectRecordType dp_cur = UtilFun.cast_t(dialog);
+                                String cur_info = dp_cur.getCurType();
+                                mETInfo.setText(cur_info);
+                                mETInfo.requestFocus();
+                            }
+
+                            @Override
+                            public void onDialogNegativeResult(DialogFragment dialog) {
+                                mETInfo.requestFocus();
+                            }
+                        });
+
+                        dp.show(getFragmentManager(), "选择类型");
+                    }
+                    break;
+
+                    case R.id.ar_et_date :  {
+                        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+                        Date j_dt = new Date();
+                        try {
+                            j_dt = sd.parse(mETDate.getText().toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        Calendar cd = Calendar.getInstance();
+                        cd.setTime(j_dt);
+
+                        DatePickerDialog.OnDateSetListener dt = (view, year, month, dayOfMonth) -> {
+                            String str_date = format(Locale.CHINA, "%04d-%02d-%02d",
+                                    year, month + 1, dayOfMonth);
+
+                            TimePickerDialog.OnTimeSetListener ot = (view1, hourOfDay, minute) -> {
+                                String tm = format(Locale.CHINA, "%s %02d:%02d",
+                                        str_date, hourOfDay, minute);
+
+                                mETDate.setText(tm);
+                                mETDate.requestFocus();
+                            };
+
+                            TimePickerDialog td = new TimePickerDialog(getContext(), ot,
+                                    cd.get(Calendar.HOUR_OF_DAY),
+                                    cd.get(Calendar.MINUTE), true);
+                            td.show();
+                        };
+
+                        DatePickerDialog dd = new DatePickerDialog(getContext(), dt
+                                , cd.get(Calendar.YEAR)
+                                , cd.get(Calendar.MONTH)
+                                , cd.get(Calendar.DAY_OF_MONTH));
+                        dd.show();
+                    }
+                    break;
+
+                    case R.id.tv_note :  {
+                        String tv_sz = mTVNote.getText().toString();
+                        String lt = mSZDefNote.equals(tv_sz) ? "" : tv_sz;
+
+                        DlgLongTxt dlg = new DlgLongTxt();
+                        dlg.setLongTxt(lt);
+                        dlg.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
+                            @Override
+                            public void onDialogPositiveResult(DialogFragment dialogFragment) {
+                                String lt = ((DlgLongTxt) dialogFragment).getLongTxt();
+                                if (UtilFun.StringIsNullOrEmpty(lt))
+                                    lt = mSZDefNote;
+
+                                mTVNote.setText(lt);
+                                mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+                            }
+
+                            @Override
+                            public void onDialogNegativeResult(DialogFragment dialogFragment) {
+                            }
+                        });
+
+                        dlg.show(getActivity().getSupportFragmentManager(), "edit note");
+                    }
+                    break;
+                }
+            }
+            break;
+
+            case MotionEvent.ACTION_UP :    {
+                v.performClick();
+            }
+            break;
+        }
+
+        return true;
     }
 
 
@@ -204,7 +299,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             pi.setInfo(mETInfo.getText().toString());
 
             String str_val = mETAmount.getText().toString();
-            pi.setVal(UtilFun.StringIsNullOrEmpty(str_val) ? BigDecimal.ZERO : new BigDecimal(str_val));
+            pi.setAmount(UtilFun.StringIsNullOrEmpty(str_val) ? BigDecimal.ZERO : new BigDecimal(str_val));
 
             String tv_sz = mTVNote.getText().toString();
             pi.setNote(mSZDefNote.equals(tv_sz) ? null : tv_sz);
@@ -212,7 +307,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             String str_date = mETDate.getText().toString() + ":00";
             Timestamp tsDT;
             try {
-                tsDT = ToolUtil.StringToTimestamp(str_date);
+                tsDT = ToolUtil.INSTANCE.stringToTimestamp(str_date);
             } catch (Exception ex) {
                 tsDT = new Timestamp(0);
             }
@@ -221,7 +316,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             pi.setBudget(null);
             int pos = mSPBudget.getSelectedItemPosition();
             if (AdapterView.INVALID_POSITION != pos && 0 != pos) {
-                BudgetItem bi = ContextUtil.getBudgetUtility()
+                BudgetItem bi = ContextUtil.Companion.getBudgetUtility()
                         .getBudgetByName((String) mSPBudget.getSelectedItem());
                 if (null != bi) {
                     pi.setBudget(bi);
@@ -287,7 +382,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
         Timestamp tsDT;
         try {
-            tsDT = ToolUtil.StringToTimestamp(str_date + ":00");
+            tsDT = ToolUtil.INSTANCE.stringToTimestamp(str_date + ":00");
         } catch (Exception ex) {
             Log.e(TAG, format(Locale.CHINA, "解析'%s'到日期失败", str_date));
             return false;
@@ -302,13 +397,13 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
         pi.setInfo(str_info);
         pi.setTs(tsDT);
-        pi.setVal(new BigDecimal(str_val));
+        pi.setAmount(new BigDecimal(str_val));
         pi.setNote(str_note);
 
         pi.setBudget(null);
         int pos = mSPBudget.getSelectedItemPosition();
         if (AdapterView.INVALID_POSITION != pos && 0 != pos) {
-            BudgetItem bi = ContextUtil.getBudgetUtility()
+            BudgetItem bi = ContextUtil.Companion.getBudgetUtility()
                     .getBudgetByName((String) mSPBudget.getSelectedItem());
             if (null != bi) {
                 pi.setBudget(bi);
@@ -317,7 +412,7 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
 
         // add/modify data
         boolean b_create = mAction.equals(GlobalDef.STR_CREATE);
-        PayIncomeDBUtility uti = ContextUtil.getPayIncomeUtility();
+        PayIncomeDBUtility uti = ContextUtil.Companion.getPayIncomeUtility();
         boolean b_ret = b_create ?
                 1 == uti.addPayNotes(Collections.singletonList(pi))
                 : uti.getPayDBUtility().modifyData(pi);
@@ -329,103 +424,5 @@ public class TFEditPay extends TFEditBase implements View.OnTouchListener {
             dlg.show();
         }
         return b_ret;
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        View v_self = getView();
-        if (null != v_self && event.getAction() == MotionEvent.ACTION_DOWN) {
-            switch (v.getId()) {
-                case R.id.tv_note: {
-                    String tv_sz = mTVNote.getText().toString();
-                    String lt = mSZDefNote.equals(tv_sz) ? "" : tv_sz;
-
-                    DlgLongTxt dlg = new DlgLongTxt();
-                    dlg.setLongTxt(lt);
-                    dlg.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
-                        @Override
-                        public void onDialogPositiveResult(DialogFragment dialogFragment) {
-                            String lt = ((DlgLongTxt) dialogFragment).getLongTxt();
-                            if (UtilFun.StringIsNullOrEmpty(lt))
-                                lt = mSZDefNote;
-
-                            mTVNote.setText(lt);
-                            mTVNote.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-                        }
-
-                        @Override
-                        public void onDialogNegativeResult(DialogFragment dialogFragment) {
-                        }
-                    });
-
-                    dlg.show(getActivity().getSupportFragmentManager(), "edit note");
-                }
-                break;
-
-                case R.id.ar_et_date: {
-                    SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
-                    Date j_dt = new Date();
-                    try {
-                        j_dt = sd.parse(mETDate.getText().toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-                    Calendar cd = Calendar.getInstance();
-                    cd.setTime(j_dt);
-
-                    DatePickerDialog.OnDateSetListener dt = (view, year, month, dayOfMonth) -> {
-                        String str_date = format(Locale.CHINA, "%04d-%02d-%02d",
-                                year, month + 1, dayOfMonth);
-
-                        TimePickerDialog.OnTimeSetListener ot = (view1, hourOfDay, minute) -> {
-                            String tm = format(Locale.CHINA, "%s %02d:%02d",
-                                    str_date, hourOfDay, minute);
-
-                            mETDate.setText(tm);
-                            mETDate.requestFocus();
-                        };
-
-                        TimePickerDialog td = new TimePickerDialog(getContext(), ot,
-                                cd.get(Calendar.HOUR_OF_DAY),
-                                cd.get(Calendar.MINUTE), true);
-                        td.show();
-                    };
-
-                    DatePickerDialog dd = new DatePickerDialog(getContext(), dt
-                            , cd.get(Calendar.YEAR)
-                            , cd.get(Calendar.MONTH)
-                            , cd.get(Calendar.DAY_OF_MONTH));
-                    dd.show();
-                }
-                break;
-
-                case R.id.ar_et_info: {
-                    DlgSelectRecordType dp = new DlgSelectRecordType();
-                    dp.setOldType(GlobalDef.STR_RECORD_PAY, mETInfo.getText().toString());
-                    dp.addDialogListener(new DlgOKOrNOBase.DialogResultListener() {
-                        @Override
-                        public void onDialogPositiveResult(DialogFragment dialog) {
-                            DlgSelectRecordType dp_cur = UtilFun.cast_t(dialog);
-                            String cur_info = dp_cur.getCurType();
-                            mETInfo.setText(cur_info);
-                            mETInfo.requestFocus();
-                        }
-
-                        @Override
-                        public void onDialogNegativeResult(DialogFragment dialog) {
-                            mETInfo.requestFocus();
-                        }
-                    });
-
-                    dp.show(getFragmentManager(), "选择类型");
-                }
-                break;
-            }
-
-            return true;
-        }
-
-        return false;
     }
 }

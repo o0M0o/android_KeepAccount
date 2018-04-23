@@ -6,12 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.uilib.FrgCalendar.FrgCalendarItemAdapter;
 import wxm.uilib.FrgCalendar.FrgCalendarItemModel;
-import wxm.uilib.SimpleCalendar.BaseCalendarItemAdapter;
-import wxm.uilib.SimpleCalendar.BaseCalendarItemModel;
 import wxm.androidutil.util.UiUtil;
 
 /**
@@ -24,7 +24,7 @@ public class CalendarShowItemAdapter extends FrgCalendarItemAdapter<CalendarShow
     private final static int mCLDisable;
 
     static {
-        Context ct = ContextUtil.getInstance();
+        Context ct = Objects.requireNonNull(ContextUtil.Companion.getInstance());
         mCLToday = UiUtil.getColor(ct, R.color.red_ff725f);
         mCLHoliday = UiUtil.getColor(ct, R.color.red_ff725f);
         mCLDisable = UiUtil.getColor(ct, android.R.color.darker_gray);

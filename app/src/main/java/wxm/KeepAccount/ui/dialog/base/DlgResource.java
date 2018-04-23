@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
+import java.util.Objects;
+
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ContextUtil;
 
@@ -30,27 +32,18 @@ public class DlgResource {
     public static int mCLNotSelected;
 
     static {
-        Context ct = ContextUtil.getInstance();
+        Context ct = Objects.requireNonNull(ContextUtil.Companion.getInstance());
         Resources res = ct.getResources();
         Resources.Theme te = ct.getTheme();
 
         mSZSortByNameUp = res.getString(R.string.cn_sort_up_by_name);
         mSZSortByNameDown = res.getString(R.string.cn_sort_down_by_name);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mDAChannelNoSel = res.getDrawable(R.drawable.gi_channel_no_sel_shape, te);
-            mDAChannelSel = res.getDrawable(R.drawable.gi_channel_sel_shape, te);
+        mDAChannelNoSel = res.getDrawable(R.drawable.gi_channel_no_sel_shape, te);
+        mDAChannelSel = res.getDrawable(R.drawable.gi_channel_sel_shape, te);
 
-            mDASortDown = res.getDrawable(R.drawable.ic_sort_down_1, te);
-            mDASortUp = res.getDrawable(R.drawable.ic_sort_up_1, te);
-
-        } else {
-            mDAChannelNoSel = res.getDrawable(R.drawable.gi_channel_no_sel_shape);
-            mDAChannelSel = res.getDrawable(R.drawable.gi_channel_sel_shape);
-
-            mDASortDown = res.getDrawable(R.drawable.ic_sort_down_1);
-            mDASortUp = res.getDrawable(R.drawable.ic_sort_up_1);
-        }
+        mDASortDown = res.getDrawable(R.drawable.ic_sort_down_1, te);
+        mDASortUp = res.getDrawable(R.drawable.ic_sort_up_1, te);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mCLSelected = res.getColor(R.color.peachpuff, te);

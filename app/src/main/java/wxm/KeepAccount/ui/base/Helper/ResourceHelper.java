@@ -23,32 +23,34 @@ public class ResourceHelper {
     public static int mCRTextWhite;
     public static int mCRTextFit;
     static {
-        Context ct = ContextUtil.getInstance();
-        Resources res = ct.getResources();
-        Resources.Theme te = ct.getTheme();
+        Context ct = ContextUtil.Companion.getInstance();
+        if(null != ct) {
+            Resources res = ct.getResources();
+            Resources.Theme te = ct.getTheme();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mCRLVLineOne = res.getColor(R.color.color_1, te);
-            mCRLVLineTwo = res.getColor(R.color.color_2, te);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mCRLVLineOne = res.getColor(R.color.color_1, te);
+                mCRLVLineTwo = res.getColor(R.color.color_2, te);
 
-            mCRLVItemTransFull = res.getColor(R.color.trans_full, te);
+                mCRLVItemTransFull = res.getColor(R.color.trans_full, te);
 
-            mCRLVItemNoSel = res.getColor(R.color.red_ff725f_half, te);
-            mCRLVItemSel = res.getColor(R.color.red_ff725f, te);
+                mCRLVItemNoSel = res.getColor(R.color.red_ff725f_half, te);
+                mCRLVItemSel = res.getColor(R.color.red_ff725f, te);
 
-            mCRTextWhite = res.getColor(R.color.white, te);
-            mCRTextFit = res.getColor(R.color.text_fit, te);
-        } else {
-            mCRLVLineOne = res.getColor(R.color.color_1);
-            mCRLVLineTwo = res.getColor(R.color.color_2);
+                mCRTextWhite = res.getColor(R.color.white, te);
+                mCRTextFit = res.getColor(R.color.text_fit, te);
+            } else {
+                mCRLVLineOne = res.getColor(R.color.color_1);
+                mCRLVLineTwo = res.getColor(R.color.color_2);
 
-            mCRLVItemTransFull = res.getColor(R.color.trans_full);
+                mCRLVItemTransFull = res.getColor(R.color.trans_full);
 
-            mCRLVItemNoSel = res.getColor(R.color.red_ff725f_half);
-            mCRLVItemSel = res.getColor(R.color.red_ff725f);
+                mCRLVItemNoSel = res.getColor(R.color.red_ff725f_half);
+                mCRLVItemSel = res.getColor(R.color.red_ff725f);
 
-            mCRTextWhite = res.getColor(R.color.white);
-            mCRTextFit = res.getColor(R.color.text_fit);
+                mCRTextWhite = res.getColor(R.color.white);
+                mCRTextFit = res.getColor(R.color.text_fit);
+            }
         }
     }
 }

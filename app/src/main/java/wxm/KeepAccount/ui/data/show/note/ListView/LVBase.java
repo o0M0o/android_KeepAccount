@@ -4,28 +4,18 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
-import butterknife.BindDrawable;
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase;
-import wxm.uilib.IconButton.IconButton;
 
 /**
  * listview base for show record

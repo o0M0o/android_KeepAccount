@@ -1,18 +1,19 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     signingConfigs {
-        defkey {
+        yybKey {
             keyAlias 'defkey'
-            keyPassword project.DEFKEY_KEY_PWD
-            storeFile file(project.DEFKEY_FILE_PATH)
-            storePassword project.DEFKEY_STORE_PWD
+            keyPassword project.YYB_FILE_PATH
+            storeFile file(project.YYB_KEY_PWD)
+            storePassword project.YYB_STORE_PWD
         }
-        longTimeKey {
+        KuAnKey {
             keyAlias 'andriodapp-key-longtime'
-            keyPassword project.LONGTIMEKEY_KEY_PWD
-            storeFile file(project.LONGTIMEKEY_FILE_PATH)
-            storePassword project.LONGTIMEKEY_STORE_PWD
+            keyPassword project.KUAN_KEY_PWD
+            storeFile file(project.KUAN_FILE_PATH)
+            storePassword project.KUAN_STORE_PWD
         }
     }
 
@@ -25,7 +26,7 @@ android {
         targetSdkVersion 26
         versionCode 22
         versionName "1.22"
-        signingConfig signingConfigs.defkey
+        signingConfig signingConfigs.yybKey
     }
 
     sourceSets {
@@ -118,5 +119,9 @@ dependencies {
     implementation files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
     implementation project(':AndroidUtil')
     implementation project(':UiLib')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
 

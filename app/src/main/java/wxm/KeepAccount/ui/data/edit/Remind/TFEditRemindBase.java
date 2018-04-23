@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.OnTouch;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.RemindItem;
@@ -34,7 +35,7 @@ import wxm.KeepAccount.utility.ToolUtil;
  * 编辑提醒基类
  * Created by WangXM on 2016/10/9.
  */
-public abstract class TFEditRemindBase extends Fragment implements View.OnTouchListener {
+public abstract class TFEditRemindBase extends Fragment {
     private final static String TAG = "TFEditRemindBase";
     private final static String[] RAT_TYPE = {
             RemindItem.RAT_AMOUNT_BELOW,
@@ -71,9 +72,6 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
             mETEndDate = UtilFun.cast(view.findViewById(R.id.et_end_date));
             assert null != mETStartDate && null != mETEndDate;
 
-            mETStartDate.setOnTouchListener(this);
-            mETEndDate.setOnTouchListener(this);
-
             // init amount
             mETAmount = UtilFun.cast(view.findViewById(R.id.et_amount));
             mETAmount.addTextChangedListener(new TextWatcher() {
@@ -109,66 +107,70 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
      */
     public abstract boolean onAccept();
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            int vid = v.getId();
-            switch (vid) {
-                case R.id.et_end_date:
-                case R.id.et_start_date: {
-                    DatePickerDialog.OnDateSetListener dt = (view, year, month, dayOfMonth) -> {
-                        String str_date = String.format(Locale.CHINA, "%04d-%02d-%02d",
-                                year, month + 1, dayOfMonth);
 
-                        if (R.id.et_start_date == vid) {
-                            mETStartDate.setText(str_date);
-                        } else {
-                            mETEndDate.setText(str_date);
-                        }
-                    };
+    @OnTouch({R.id.et_end_date, R.id.et_start_date})
+    boolean OnTouchChildView(View v, MotionEvent event) {
+        switch (event.getAction())  {
+            case MotionEvent.ACTION_DOWN :  {
+                int vid = v.getId();
 
-                    SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-                    Date j_dt;
+                DatePickerDialog.OnDateSetListener dt = (view, year, month, dayOfMonth) -> {
+                    String str_date = String.format(Locale.CHINA, "%04d-%02d-%02d",
+                            year, month + 1, dayOfMonth);
+
                     if (R.id.et_start_date == vid) {
-                        final int inType = mETStartDate.getInputType();
-                        mETStartDate.setInputType(InputType.TYPE_NULL);
-                        mETStartDate.setInputType(inType);
-                        mETStartDate.setSelection(mETStartDate.getText().length());
-
-                        try {
-                            j_dt = sf.parse(mETStartDate.getText().toString());
-                        } catch (ParseException e) {
-                            j_dt = new Date();
-                            e.printStackTrace();
-                        }
+                        mETStartDate.setText(str_date);
                     } else {
-                        final int inType = mETEndDate.getInputType();
-                        mETEndDate.setInputType(InputType.TYPE_NULL);
-                        mETEndDate.setInputType(inType);
-                        mETEndDate.setSelection(mETEndDate.getText().length());
-
-                        try {
-                            j_dt = sf.parse(mETEndDate.getText().toString());
-                        } catch (ParseException e) {
-                            j_dt = new Date();
-                            e.printStackTrace();
-                        }
+                        mETEndDate.setText(str_date);
                     }
+                };
 
-                    Calendar cd = Calendar.getInstance();
-                    cd.setTime(j_dt);
-                    DatePickerDialog dd = new DatePickerDialog(getContext(), dt
-                            , cd.get(Calendar.YEAR)
-                            , cd.get(Calendar.MONTH)
-                            , cd.get(Calendar.DAY_OF_MONTH));
+                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+                Date j_dt;
+                if (R.id.et_start_date == vid) {
+                    final int inType = mETStartDate.getInputType();
+                    mETStartDate.setInputType(InputType.TYPE_NULL);
+                    mETStartDate.setInputType(inType);
+                    mETStartDate.setSelection(mETStartDate.getText().length());
 
-                    dd.show();
+                    try {
+                        j_dt = sf.parse(mETStartDate.getText().toString());
+                    } catch (ParseException e) {
+                        j_dt = new Date();
+                        e.printStackTrace();
+                    }
+                } else {
+                    final int inType = mETEndDate.getInputType();
+                    mETEndDate.setInputType(InputType.TYPE_NULL);
+                    mETEndDate.setInputType(inType);
+                    mETEndDate.setSelection(mETEndDate.getText().length());
+
+                    try {
+                        j_dt = sf.parse(mETEndDate.getText().toString());
+                    } catch (ParseException e) {
+                        j_dt = new Date();
+                        e.printStackTrace();
+                    }
                 }
-                break;
+
+                Calendar cd = Calendar.getInstance();
+                cd.setTime(j_dt);
+                DatePickerDialog dd = new DatePickerDialog(getContext(), dt
+                        , cd.get(Calendar.YEAR)
+                        , cd.get(Calendar.MONTH)
+                        , cd.get(Calendar.DAY_OF_MONTH));
+
+                dd.show();
             }
+            break;
+
+            case MotionEvent.ACTION_UP :    {
+                v.performClick();
+            }
+            break;
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -189,7 +191,7 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
             return false;
         }
 
-        if (ContextUtil.getRemindUtility().CheckRemindName(name)) {
+        if (ContextUtil.Companion.getRemindUtility().CheckRemindName(name)) {
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("提醒名不正确").
                     setMessage("提醒名已经存在!").
@@ -236,8 +238,8 @@ public abstract class TFEditRemindBase extends Fragment implements View.OnTouchL
 
 
         try {
-            mTSStartDate = ToolUtil.StringToTimestamp(s_de);
-            mTSEndDate = ToolUtil.StringToTimestamp(e_de);
+            mTSStartDate = ToolUtil.INSTANCE.stringToTimestamp(s_de);
+            mTSEndDate = ToolUtil.INSTANCE.stringToTimestamp(e_de);
         } catch (Exception ex) {
             Log.e(TAG, String.format(Locale.CHINA, "解析'%s'或'%s'到日期失败", s_de, e_de));
             return false;

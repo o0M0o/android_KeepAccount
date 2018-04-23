@@ -43,7 +43,7 @@ public class TFEditRemindBudget extends TFEditRemindBase {
 
             // init budget
             ArrayList<String> data_ls = new ArrayList<>();
-            List<BudgetItem> bils = ContextUtil.getBudgetUtility().getBudgetForCurUsr();
+            List<BudgetItem> bils = ContextUtil.Companion.getBudgetUtility().getBudgetForCurUsr();
             if (!UtilFun.ListIsNullOrEmpty(bils)) {
                 for (BudgetItem i : bils) {
                     data_ls.add(i.getName());
@@ -84,7 +84,7 @@ public class TFEditRemindBudget extends TFEditRemindBase {
         String r = UtilFun.cast(mSPRemindActiveType.getSelectedItem());
         ri.setReason(r);
 
-        return ContextUtil.getRemindUtility().AddOrUpdateRemind(ri);
+        return ContextUtil.Companion.getRemindUtility().AddOrUpdateRemind(ri);
     }
 
 
@@ -95,7 +95,7 @@ public class TFEditRemindBudget extends TFEditRemindBase {
      */
     private boolean checkBudget() {
         String sel_budget = UtilFun.cast(mSPBudget.getSelectedItem());
-        BudgetItem bi = ContextUtil.getBudgetUtility().getBudgetByName(sel_budget);
+        BudgetItem bi = ContextUtil.Companion.getBudgetUtility().getBudgetByName(sel_budget);
         if (null == bi) {
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("缺少预算项").

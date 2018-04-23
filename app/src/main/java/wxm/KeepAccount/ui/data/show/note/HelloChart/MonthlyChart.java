@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import wxm.KeepAccount.R;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.androidutil.util.UtilFun;
 import lecho.lib.hellocharts.model.Axis;
@@ -43,7 +42,7 @@ public class MonthlyChart extends ChartBase {
 
     @Override
     protected void refreshData() {
-        ToolUtil.runInBackground(this.getActivity(),
+        ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                 () -> {
                     HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForMonth();
 
@@ -55,7 +54,7 @@ public class MonthlyChart extends ChartBase {
                     for (String k : set_k) {
                         boolean ba = true;
                         if (mBFilter && !mFilterPara.isEmpty()) {
-                            //String ck = ToolUtil.FormatDateString(k);
+                            //String ck = ToolUtil.formatDateString(k);
                             if (!mFilterPara.contains(k))
                                 ba = false;
                         }
@@ -66,10 +65,10 @@ public class MonthlyChart extends ChartBase {
                             for (Object i : ret.get(k)) {
                                 if (i instanceof PayNoteItem) {
                                     PayNoteItem pi = UtilFun.cast(i);
-                                    pay = pay.add(pi.getVal());
+                                    pay = pay.add(pi.getAmount());
                                 } else {
                                     IncomeNoteItem ii = UtilFun.cast(i);
-                                    income = income.add(ii.getVal());
+                                    income = income.add(ii.getAmount());
                                 }
                             }
 

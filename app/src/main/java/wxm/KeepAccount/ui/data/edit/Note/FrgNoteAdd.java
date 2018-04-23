@@ -8,9 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -67,13 +64,9 @@ public class FrgNoteAdd extends FrgSupportBaseAdv {
         PagerAdapter adapter = new PagerAdapter(ac.getSupportFragmentManager());
         mVPPager.setAdapter(adapter);
 
-        mRLIncome.setOnClickListener(v -> {
-            mSWer.doSelect(mRLIncome);
-        });
+        mRLIncome.setOnClickListener(v -> mSWer.doSelect(mRLIncome));
 
-        mRLPay.setOnClickListener(v -> {
-            mSWer.doSelect(mRLPay);
-        });
+        mRLPay.setOnClickListener(v -> mSWer.doSelect(mRLPay));
 
         mSWer = new PageSwitcher();
         mSWer.addSelector(mRLPay,

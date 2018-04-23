@@ -20,11 +20,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -131,7 +126,7 @@ public class LVMonthly
             int month = Integer.valueOf(tag.substring(5, 7));
             int day = Integer.valueOf(tag.substring(8, 10));
             CL_DAY.set(year, month, day);
-            map.dayInWeek = ToolUtil.getDayInWeek(CL_DAY.get(Calendar.DAY_OF_WEEK));
+            map.dayInWeek = ToolUtil.INSTANCE.getDayInWeek(CL_DAY.get(Calendar.DAY_OF_WEEK));
 
             map.dayDetail.mPayCount = String.valueOf(ni.getPayCount());
             map.dayDetail.mIncomeCount = String.valueOf(ni.getIncomeCount());
@@ -294,7 +289,7 @@ public class LVMonthly
     protected void initUI(Bundle bundle) {
         super.initUI(bundle);
 
-        ToolUtil.runInBackground(getActivity(),
+        ToolUtil.INSTANCE.runInBackground(getActivity(),
                 () -> {
                     mMainPara.clear();
                     mHMSubPara.clear();
@@ -344,7 +339,7 @@ public class LVMonthly
         }
 
         // 设置listview adapter
-        MonthAdapter mSNAdapter = new MonthAdapter(ContextUtil.getInstance(), n_mainpara);
+        MonthAdapter mSNAdapter = new MonthAdapter(ContextUtil.Companion.getInstance(), n_mainpara);
         mLVShow.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }

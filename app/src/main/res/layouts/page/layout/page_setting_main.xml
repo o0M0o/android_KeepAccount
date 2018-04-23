@@ -9,6 +9,7 @@
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:focusable="true"
         android:clickable="true">
 
         <TextView
@@ -47,6 +48,7 @@
         android:layout_height="48dp"
         android:layout_below="@id/rl_remind"
         android:layout_marginTop="2dp"
+        android:focusable="true"
         android:clickable="true">
 
         <TextView
@@ -85,6 +87,7 @@
         android:layout_height="48dp"
         android:layout_below="@id/rl_reformat_data"
         android:layout_marginTop="2dp"
+        android:focusable="true"
         android:clickable="true">
 
         <TextView
@@ -123,6 +126,7 @@
         android:layout_height="48dp"
         android:layout_below="@id/rl_chart_color"
         android:layout_marginTop="16dp"
+        android:focusable="true"
         android:clickable="true">
 
         <TextView
@@ -160,6 +164,7 @@
         android:layout_height="48dp"
         android:layout_below="@id/rl_check_version"
         android:layout_marginTop="2dp"
+        android:focusable="true"
         android:clickable="true">
 
         <TextView

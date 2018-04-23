@@ -242,8 +242,8 @@ public class FrgDailyDetail extends FrgSupportBaseAdv {
                 String.format(Locale.CHINA, "%s年%s月", arr[0], arr[1]));
 
         try {
-            Timestamp ts = ToolUtil.StringToTimestamp(mSZHotDay);
-            mTVDayInWeek.setText(ToolUtil.getDayInWeek(ts));
+            Timestamp ts = ToolUtil.INSTANCE.stringToTimestamp(mSZHotDay);
+            mTVDayInWeek.setText(ToolUtil.INSTANCE.getDayInWeek(ts));
         } catch (ParseException e) {
             e.printStackTrace();
         }

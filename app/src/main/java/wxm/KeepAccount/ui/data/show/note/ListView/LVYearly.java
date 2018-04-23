@@ -273,7 +273,7 @@ public class LVYearly extends LVBase {
     protected void initUI(Bundle bundle) {
         super.initUI(bundle);
 
-        ToolUtil.runInBackground(getActivity(),
+        ToolUtil.INSTANCE.runInBackground(getActivity(),
                 () -> {
                     mMainPara.clear();
                     mHMSubPara.clear();
@@ -322,7 +322,7 @@ public class LVYearly extends LVBase {
         }
 
         // 设置listview adapter
-        YearAdapter mSNAdapter = new YearAdapter(ContextUtil.getInstance(), n_mainpara);
+        YearAdapter mSNAdapter = new YearAdapter(ContextUtil.Companion.getInstance(), n_mainpara);
         mLVShow.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }

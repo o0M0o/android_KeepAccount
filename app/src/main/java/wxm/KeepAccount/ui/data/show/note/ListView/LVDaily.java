@@ -1,16 +1,13 @@
 package wxm.KeepAccount.ui.data.show.note.ListView;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.RelativeLayout;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -23,7 +20,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Future;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -48,7 +44,6 @@ import wxm.KeepAccount.ui.utility.NoteShowInfo;
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.KeepAccount.utility.ToolUtil;
 import wxm.uilib.IconButton.IconButton;
-import wxm.uilib.SwipeLayout.SwipeLayout;
 
 /**
  * listview for daily data
@@ -118,7 +113,7 @@ public class LVDaily extends LVBase {
             int month = Integer.valueOf(tag.substring(5, 7));
             int day = Integer.valueOf(km);
             cl_day.set(year, month - 1, day);
-            item.dayInWeek = ToolUtil.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK));
+            item.dayInWeek = ToolUtil.INSTANCE.getDayInWeek(cl_day.get(Calendar.DAY_OF_WEEK));
 
             item.day.mPayCount = String.valueOf(ni.getPayCount());
             item.day.mIncomeCount = String.valueOf(ni.getIncomeCount());
@@ -305,7 +300,7 @@ public class LVDaily extends LVBase {
         super.initUI(bundle);
 
         showLoadingProgress(true);
-        ToolUtil.runInBackground(getActivity(),
+        ToolUtil.INSTANCE.runInBackground(getActivity(),
                 () -> {
                     mMainPara.clear();
                     // for day
@@ -347,7 +342,7 @@ public class LVDaily extends LVBase {
             n_mainpara = mMainPara;
         }
 
-        MainAdapter mSNAdapter = new MainAdapter(ContextUtil.getInstance(), n_mainpara);
+        MainAdapter mSNAdapter = new MainAdapter(ContextUtil.Companion.getInstance(), n_mainpara);
         mLVShow.setAdapter(mSNAdapter);
         mSNAdapter.notifyDataSetChanged();
     }
@@ -373,11 +368,11 @@ public class LVDaily extends LVBase {
         }
 
         if (!al_i.isEmpty()) {
-            ContextUtil.getPayIncomeUtility().deleteIncomeNotes(al_i);
+            ContextUtil.Companion.getPayIncomeUtility().deleteIncomeNotes(al_i);
         }
 
         if (!al_p.isEmpty()) {
-            ContextUtil.getPayIncomeUtility().deletePayNotes(al_p);
+            ContextUtil.Companion.getPayIncomeUtility().deletePayNotes(al_p);
         }
     }
 

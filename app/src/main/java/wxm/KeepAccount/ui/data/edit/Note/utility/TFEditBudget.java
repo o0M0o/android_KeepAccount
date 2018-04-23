@@ -3,22 +3,18 @@ package wxm.KeepAccount.ui.data.edit.Note.utility;
 import android.annotation.SuppressLint;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 import java.math.BigDecimal;
 
 import butterknife.BindString;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView;
 import wxm.androidutil.Dialog.DlgOKOrNOBase;
 import wxm.androidutil.util.UtilFun;
@@ -137,7 +133,7 @@ public class TFEditBudget extends TFEditBase {
             return false;
         }
 
-        BudgetItem cbi = ContextUtil.getBudgetUtility().getBudgetByName(name);
+        BudgetItem cbi = ContextUtil.Companion.getBudgetUtility().getBudgetByName(name);
         if ((null != cbi)
                 && ((null == mBIData) || (mBIData.get_id() != cbi.get_id()))) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -164,8 +160,8 @@ public class TFEditBudget extends TFEditBase {
         bi.setAmount(new BigDecimal(amount));
         bi.setNote(note);
 
-        boolean s_ret = b_create ? ContextUtil.getBudgetUtility().createData(bi)
-                : ContextUtil.getBudgetUtility().modifyData(bi);
+        boolean s_ret = b_create ? ContextUtil.Companion.getBudgetUtility().createData(bi)
+                : ContextUtil.Companion.getBudgetUtility().modifyData(bi);
         if (!s_ret) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage(b_create ? "创建预算数据失败!" : "更新预算数据失败")

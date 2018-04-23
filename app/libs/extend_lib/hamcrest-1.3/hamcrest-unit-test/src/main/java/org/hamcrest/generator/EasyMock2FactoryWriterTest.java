@@ -99,7 +99,7 @@ public class EasyMock2FactoryWriterTest extends TestCase {
 //        method.addParameter("T", "t");
 //        method.addParameter("List<V>", "v");
 //
-//        factoryWriter.writeMethod(method.getName(), method);
+//        factoryWriter.writeMethod(method.getActName(), method);
 //        assertEquals("" +
 //                "  public static <T, V extends String & Cheese> org.hamcrest.Matcher tricky(T t, List<V> v) {\n" +
 //                "    return com.example.MyMatcher.tricky(t, v);\n" +
@@ -112,7 +112,7 @@ public class EasyMock2FactoryWriterTest extends TestCase {
 //        FactoryMethod method = new FactoryMethod("com.example.MyMatcher", "needsDoc");
 //        method.setJavaDoc("This is a complicated method.\nIt needs docs.\n\n@see MoreStuff");
 //
-//        factoryWriter.writeMethod(method.getName(), method);
+//        factoryWriter.writeMethod(method.getActName(), method);
 //        assertEquals("" +
 //                "  /**\n" +
 //                "   * This is a complicated method.\n" +

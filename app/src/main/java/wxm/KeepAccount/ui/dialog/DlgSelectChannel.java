@@ -39,7 +39,7 @@ public class DlgSelectChannel extends DlgOKOrNOBase {
 
     /**
      * set followed channel(channel name)
-     * before use dlg, use this set init val
+     * before use dlg, use this set init amount
      * @param org_hot   followed list
      */
     public void setHotChannel(List<String> org_hot) {
@@ -69,7 +69,7 @@ public class DlgSelectChannel extends DlgOKOrNOBase {
         ArrayList<HashMap<String, Object>> ls_data = new ArrayList<>();
         for(EAction ea : EAction.values())  {
             HashMap<String, Object> hm = new HashMap<>();
-            hm.put(DGVButtonAdapter.HKEY_ACT_NAME, ea.getName());
+            hm.put(DGVButtonAdapter.HKEY_ACT_NAME, ea.getActName());
 
             ls_data.add(hm);
         }
@@ -114,7 +114,7 @@ public class DlgSelectChannel extends DlgOKOrNOBase {
                         DlgResource.mDAChannelSel : DlgResource.mDAChannelNoSel);
 
                 // for image
-                Bitmap bm = EAction.getIcon(hv);
+                Bitmap bm = EAction.Companion.getIcon(hv);
                 if (null != bm) {
                     ImageView iv = UtilFun.cast_t(v.findViewById(R.id.iv_act));
                     iv.setImageBitmap(bm);

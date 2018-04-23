@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import wxm.KeepAccount.utility.ContextUtil;
 import wxm.androidutil.util.UiUtil;
@@ -15,7 +16,6 @@ import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.ui.data.edit.base.TFPreviewBase;
-import wxm.KeepAccount.utility.ToolUtil;
 
 /**
  * preview fragment for budget
@@ -76,7 +76,7 @@ public class TFPreviewBudget extends TFPreviewBase {
             String ra = String.format(Locale.CHINA, "%.02f", mBIData.getRemainderAmount());
             mTVLeaveAmount.setText(ra);
             if (ra.startsWith("-")) {
-                mTVLeaveAmount.setTextColor(UiUtil.getColor(ContextUtil.getInstance(), R.color.darkred));
+                mTVLeaveAmount.setTextColor(UiUtil.getColor(Objects.requireNonNull(ContextUtil.Companion.getInstance()), R.color.darkred));
             }
         } else {
             mTVName.setText("");

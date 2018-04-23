@@ -26,6 +26,8 @@
     <string name="hint_new_usr_name">新用户名</string>
     <string name="hint_new_pwd">新用户密码</string>
     <string name="hint_new_repeat_pwd">请重复输入密码</string>
+    <string name="hint_input_long_txt">编辑长文本</string>
+
     <string name="error_repeatpwd_notmatch">两次输入密码不一样</string>
 
     <string name="navigation_drawer_open">打开导航绘图</string>

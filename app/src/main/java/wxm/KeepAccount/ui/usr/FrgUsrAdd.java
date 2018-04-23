@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,7 +76,7 @@ public class FrgUsrAdd extends FrgSupportBaseAdv
                     data.putExtra(UsrItem.FIELD_NAME, mETUsrName.getText().toString());
                     data.putExtra(UsrItem.FIELD_PWD, mETPwd.getText().toString());
 
-                    Message m = Message.obtain(ContextUtil.getMsgHandler(),
+                    Message m = Message.obtain(ContextUtil.Companion.getMsgHandler(),
                             EMsgType.USR_ADD.getId());
                     m.obj = new Object[]{data, mMHHandler};
                     m.sendToTarget();
@@ -112,7 +110,7 @@ public class FrgUsrAdd extends FrgSupportBaseAdv
             break;
 
             case R.id.et_repeat_pwd: {
-                Log.d(LOG_TAG, "now repeatpwd : " + mETRepeatPwd.getText().toString());
+                Log.d(LOG_TAG, "now repeatPWD : " + mETRepeatPwd.getText().toString());
             }
             break;
         }
@@ -173,12 +171,12 @@ public class FrgUsrAdd extends FrgSupportBaseAdv
 
         @Override
         protected void processMsg(Message m, FrgUsrAdd home) {
-            EMsgType et = EMsgType.getEMsgType(m.what);
+            EMsgType et = EMsgType.Companion.getEMsgType(m.what);
             if(null == et)
                 return;
 
             if(EMsgType.REPLAY == et)   {
-                EMsgType et_inner = EMsgType.getEMsgType(m.arg1);
+                EMsgType et_inner = EMsgType.Companion.getEMsgType(m.arg1);
                 if(null != et_inner)    {
                     if(EMsgType.USR_ADD == et_inner)    {
                         afterAddUsr(m, home);
@@ -204,7 +202,7 @@ public class FrgUsrAdd extends FrgSupportBaseAdv
                 if (2 < arr.length)
                     sstr = UtilFun.cast(arr[2]);
 
-                Toast.makeText(ContextUtil.getInstance(), sstr,
+                Toast.makeText(ContextUtil.Companion.getInstance(), sstr,
                         Toast.LENGTH_LONG).show();
                 home.repeatInput();
             }

@@ -1,13 +1,11 @@
 package wxm.KeepAccount.ui.data.report.page;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.webkit.WebView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -63,7 +61,7 @@ public class DayReportWebView extends FrgSupportWebView {
 
             final String[] param = new String[1];
             showProgress(true);
-            ToolUtil.runInBackground(this.getActivity(),
+            ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                     () -> {
                         String d_s = mASParaLoad.get(0);
                         String d_e = mASParaLoad.get(1);
@@ -71,7 +69,7 @@ public class DayReportWebView extends FrgSupportWebView {
                                 .getInstance().getNotesBetweenDays(d_s, d_e);
 
                         SimplePropertyPreFilter filter = new SimplePropertyPreFilter(INote.class,
-                                "info", "ts", "val", "payNote");
+                                "info", "ts", "amount", "payNote");
                         param[0] = JSON.toJSONString(hmData, filter);
                     },
                     () -> {

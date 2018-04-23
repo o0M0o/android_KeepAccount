@@ -23,6 +23,4 @@
         android:textColor="@color/gray_bbbbbb"
         android:textSize="10sp"
         android:visibility="gone" />
-
-
 </RelativeLayout>

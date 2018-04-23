@@ -82,7 +82,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         Date de = new Date();
         PayNoteItem pay_it = new PayNoteItem();
         pay_it.setInfo("tax");
-        pay_it.setVal(new BigDecimal(12.34));
+        pay_it.setAmount(new BigDecimal(12.34));
         pay_it.getTs().setTime(de.getTime());
         try {
             pay_dao.create(pay_it);
@@ -98,7 +98,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         pay_it = new PayNoteItem();
         pay_it.setUsr(ui);
         pay_it.setInfo("water cost");
-        pay_it.setVal(new BigDecimal(12.34));
+        pay_it.setAmount(new BigDecimal(12.34));
         pay_it.getTs().setTime(de.getTime());
         assertEquals(1, pay_dao.create(pay_it));
 
@@ -106,7 +106,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         pay_it = new PayNoteItem();
         pay_it.setUsr(ui);
         pay_it.setInfo("electrcity cost");
-        pay_it.setVal(new BigDecimal(12.34));
+        pay_it.setAmount(new BigDecimal(12.34));
         pay_it.getTs().setTime(de.getTime());
         assertEquals(1, pay_dao.create(pay_it));
 
@@ -114,7 +114,7 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         IncomeNoteItem income_it = new IncomeNoteItem();
         income_it.setUsr(ui);
         income_it.setInfo("工资");
-        income_it.setVal(new BigDecimal(12.34));
+        income_it.setAmount(new BigDecimal(12.34));
         income_it.getTs().setTime(de.getTime());
         assertEquals(1, income_dao.create(income_it));
 
@@ -125,17 +125,17 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         List<IncomeNoteItem> income_ret = income_dao.queryForAll();
         assertEquals(1, income_ret.size());
 
-        pay_ret = pay_dao.queryForEq(PayNoteItem.FIELD_USR, ui);
+        pay_ret = pay_dao.queryForEq(PayNoteItem.Companion.getFIELD_USR(), ui);
         assertEquals(3, pay_ret.size());
 
-        income_ret = income_dao.queryForEq(PayNoteItem.FIELD_USR, ui);
+        income_ret = income_dao.queryForEq(PayNoteItem.Companion.getFIELD_USR(), ui);
         assertEquals(1, income_ret.size());
 
 
         UsrItem nui = new UsrItem();
         nui.setName("wxm");
         nui.setPwd("123456");
-        pay_ret = pay_dao.queryForEq(PayNoteItem.FIELD_USR, nui);
+        pay_ret = pay_dao.queryForEq(PayNoteItem.Companion.getFIELD_USR(), nui);
         assertEquals(0, pay_ret.size());
     }
 
@@ -174,13 +174,13 @@ public class DBOrmliteHelperUT extends AndroidTestCase {
         List<UsrItem> rets = sdao.queryForAll();
         assertEquals(rets.size(), 2);
 
-        List<UsrItem> rets1 = sdao.queryForEq(UsrItem.FIELD_NAME, "hugo");
+        List<UsrItem> rets1 = sdao.queryForEq(UsrItem.Companion.getFIELD_NAME(), "hugo");
         assertEquals(rets1.size(), 1);
 
-        List<UsrItem> rets2 = sdao.queryForEq(UsrItem.FIELD_NAME, "ookoo");
+        List<UsrItem> rets2 = sdao.queryForEq(UsrItem.Companion.getFIELD_NAME(), "ookoo");
         assertEquals(rets2.size(), 1);
 
-        List<UsrItem> rets3 = sdao.queryForEq(UsrItem.FIELD_NAME, "flyer");
+        List<UsrItem> rets3 = sdao.queryForEq(UsrItem.Companion.getFIELD_NAME(), "flyer");
         assertEquals(rets3.size(), 0);
     }
 }

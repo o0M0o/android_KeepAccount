@@ -94,9 +94,9 @@ public class AdapterNoteDetail extends SimpleAdapter {
                             List<Integer> al = Collections.singletonList(data.getId());
 
                             if(data.isPayNote())    {
-                                ContextUtil.getPayIncomeUtility().deletePayNotes(al);
+                                ContextUtil.Companion.getPayIncomeUtility().deletePayNotes(al);
                             } else  {
-                                ContextUtil.getPayIncomeUtility().deleteIncomeNotes(al);
+                                ContextUtil.Companion.getPayIncomeUtility().deleteIncomeNotes(al);
                             }
                         }).
                         setNegativeButton("否", (dialog, which) -> {}).
