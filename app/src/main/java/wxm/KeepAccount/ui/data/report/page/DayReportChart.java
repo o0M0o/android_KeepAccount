@@ -177,7 +177,7 @@ public class DayReportChart extends FrgSupportBaseAdv {
                     () -> {
                         String d_s = mASParaLoad.get(0);
                         String d_e = mASParaLoad.get(1);
-                        HashMap<String, ArrayList<INote>> hm_note = NoteDataHelper.getInstance()
+                        HashMap<String, ArrayList<INote>> hm_note = NoteDataHelper.Companion.getInstance()
                                 .getNotesBetweenDays(d_s, d_e);
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

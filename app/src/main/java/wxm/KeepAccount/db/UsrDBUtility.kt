@@ -131,7 +131,7 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
         val ui = CheckAndGetUsr(usr, pwd) ?: return false
 
         ContextUtil.curUsr = ui
-        NoteDataHelper.getInstance().refreshData()
+        NoteDataHelper.instance.refreshData()
         return true
     }
 

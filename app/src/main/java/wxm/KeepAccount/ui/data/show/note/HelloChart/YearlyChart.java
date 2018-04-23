@@ -43,7 +43,9 @@ public class YearlyChart extends ChartBase {
     protected void refreshData() {
         ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                 () -> {
-                    HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForYear();
+                    HashMap<String, ArrayList<INote>> ret = NoteDataHelper.Companion.getInstance().getNotesForYear();
+                    if(null == ret)
+                        return;
 
                     int id_col = 0;
                     List<AxisValue> axisValues = new ArrayList<>();

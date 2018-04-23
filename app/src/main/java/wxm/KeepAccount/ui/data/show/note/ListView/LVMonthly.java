@@ -71,7 +71,7 @@ public class LVMonthly
 
         @Override
         protected MainAdapterItem getDataByTag(String tag) {
-            NoteShowInfo ni = NoteDataHelper.getInfoByMonth(tag);
+            NoteShowInfo ni = NoteDataHelper.Companion.getInfoByMonth(tag);
             MainAdapterItem map = new MainAdapterItem();
             map.month = tag;
             map.monthDetail.mPayCount = String.valueOf(ni.getPayCount());
@@ -115,7 +115,7 @@ public class LVMonthly
         @Override
         protected SubAdapterItem getDataByTag(String tag) {
             String mk = tag.substring(0, 7);
-            NoteShowInfo ni = NoteDataHelper.getInfoByDay(tag);
+            NoteShowInfo ni = NoteDataHelper.Companion.getInfoByDay(tag);
             SubAdapterItem map = new SubAdapterItem();
 
             String km = tag.substring(8, 10);
@@ -295,14 +295,14 @@ public class LVMonthly
                     mHMSubPara.clear();
 
                     // for month
-                    List<String> set_k_m = NoteDataHelper.getNotesMonths();
+                    List<String> set_k_m = NoteDataHelper.Companion.getNotesMonths();
                     Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
                     for(String k : set_k_m) {
                         mMainPara.add(new MainItemHolder(k));
                     }
 
                     // for day
-                    List<String> set_k_d = NoteDataHelper.getNotesDays();
+                    List<String> set_k_d = NoteDataHelper.Companion.getNotesDays();
                     Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
                     for(String k : set_k_d) {
                         String km = k.substring(0, 7);
@@ -373,7 +373,7 @@ public class LVMonthly
             DayAdapter mAdapter = new DayAdapter(getContext(), llhm);
             lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
-            ListViewHelper.setListViewHeightBasedOnChildren(lv);
+            ListViewHelper.INSTANCE.setListViewHeightBasedOnChildren(lv);
         }
     }
     /// END PRIVATE

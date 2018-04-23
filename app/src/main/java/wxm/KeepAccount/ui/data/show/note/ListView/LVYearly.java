@@ -73,7 +73,7 @@ public class LVYearly extends LVBase {
 
         @Override
         protected MainAdapterItem getDataByTag(String tag) {
-            NoteShowInfo ni = NoteDataHelper.getInfoByYear(tag);
+            NoteShowInfo ni = NoteDataHelper.Companion.getInfoByYear(tag);
 
             MainAdapterItem map = new MainAdapterItem();
             map.year = tag;
@@ -117,7 +117,7 @@ public class LVYearly extends LVBase {
         @Override
         protected SubAdapterItem getDataByTag(String tag) {
             String ky = tag.substring(0, 4);
-            NoteShowInfo ni = NoteDataHelper.getInfoByMonth(tag);
+            NoteShowInfo ni = NoteDataHelper.Companion.getInfoByMonth(tag);
             SubAdapterItem map = new SubAdapterItem();
 
             String km = tag.substring(5, 7);
@@ -279,14 +279,14 @@ public class LVYearly extends LVBase {
                     mHMSubPara.clear();
 
                     // for year
-                    List<String> set_k = NoteDataHelper.getNotesYears();
+                    List<String> set_k = NoteDataHelper.Companion.getNotesYears();
                     Collections.sort(set_k, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
                     for(String k : set_k) {
                         mMainPara.add(new MainItemHolder(k));
                     }
 
                     // for month
-                    List<String> set_k_m = NoteDataHelper.getNotesMonths();
+                    List<String> set_k_m = NoteDataHelper.Companion.getNotesMonths();
                     Collections.sort(set_k_m, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
                     for(String k : set_k_m) {
                         String ky = k.substring(0, 4);
@@ -357,7 +357,7 @@ public class LVYearly extends LVBase {
             MonthAdapter mAdapter = new MonthAdapter(getContext(), llhm);
             lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
-            ListViewHelper.setListViewHeightBasedOnChildren(lv);
+            ListViewHelper.INSTANCE.setListViewHeightBasedOnChildren(lv);
         }
     }
     /// END PRIVATE
@@ -486,7 +486,7 @@ public class LVYearly extends LVBase {
                 // for show
                 viewHolder.setText(R.id.tv_month, hm.month);
 
-                HelperDayNotesInfo.fillNoteInfo(viewHolder,
+                HelperDayNotesInfo.INSTANCE.fillNoteInfo(viewHolder,
                         hm.monthDetail.mPayCount, hm.monthDetail.mPayAmount,
                         hm.monthDetail.mIncomeCount, hm.monthDetail.mIncomeAmount,
                         hm.amount);

@@ -98,8 +98,8 @@ public class FrgDailyDetail extends FrgSupportBaseAdv {
         }
 
         if (!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
-            HashMap<String, ArrayList<INote>> hl = NoteDataHelper.getInstance().getNotesForDay();
-            mLSDayContents = hl.get(mSZHotDay);
+            HashMap<String, ArrayList<INote>> hl = NoteDataHelper.Companion.getInstance().getNotesForDay();
+            mLSDayContents = null == hl ? new ArrayList<>() : hl.get(mSZHotDay);
         }
 
         loadUI(bundle);
@@ -149,7 +149,7 @@ public class FrgDailyDetail extends FrgSupportBaseAdv {
         int vid = view.getId();
         switch (vid) {
             case R.id.rl_prv: {
-                String prv_day = NoteDataHelper.getInstance().getPrvDay(mSZHotDay);
+                String prv_day = NoteDataHelper.Companion.getInstance().getPrvDay(mSZHotDay);
                 if (!UtilFun.StringIsNullOrEmpty(prv_day)) {
                     mSZHotDay = prv_day;
 
@@ -162,7 +162,7 @@ public class FrgDailyDetail extends FrgSupportBaseAdv {
             break;
 
             case R.id.rl_next: {
-                String next_day = NoteDataHelper.getInstance().getNextDay(mSZHotDay);
+                String next_day = NoteDataHelper.Companion.getInstance().getNextDay(mSZHotDay);
                 if (!UtilFun.StringIsNullOrEmpty(next_day)) {
                     mSZHotDay = next_day;
 
@@ -176,8 +176,8 @@ public class FrgDailyDetail extends FrgSupportBaseAdv {
         }
 
         if (!UtilFun.StringIsNullOrEmpty(mSZHotDay) && !org_day.equals(mSZHotDay)) {
-            HashMap<String, ArrayList<INote>> hl = NoteDataHelper.getInstance().getNotesForDay();
-            mLSDayContents = hl.get(mSZHotDay);
+            HashMap<String, ArrayList<INote>> hl = NoteDataHelper.Companion.getInstance().getNotesForDay();
+            mLSDayContents = null == hl ? new ArrayList<>() :  hl.get(mSZHotDay);
 
             loadUI(null);
         }
@@ -253,7 +253,7 @@ public class FrgDailyDetail extends FrgSupportBaseAdv {
      * load day info
      */
     private void loadDayInfo() {
-        NoteShowInfo ni = NoteDataHelper.getInfoByDay(mSZHotDay);
+        NoteShowInfo ni = NoteDataHelper.Companion.getInfoByDay(mSZHotDay);
 
         String p_count;
         String i_count;
@@ -262,8 +262,8 @@ public class FrgDailyDetail extends FrgSupportBaseAdv {
         if (null != ni) {
             p_count = String.valueOf(ni.getPayCount());
             i_count = String.valueOf(ni.getIncomeCount());
-            p_amount = ni.getSZPayAmount();
-            i_amount = ni.getSZIncomeAmount();
+            p_amount = ni.getSzPayAmount();
+            i_amount = ni.getSzIncomeAmount();
         } else {
             p_count = "0";
             i_count = "0";

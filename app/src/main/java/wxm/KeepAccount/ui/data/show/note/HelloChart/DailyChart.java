@@ -61,7 +61,9 @@ public class DailyChart extends ChartBase {
     protected void refreshData()  {
         ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                 () -> {
-                    HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForDay();
+                    HashMap<String, ArrayList<INote>> ret = NoteDataHelper.Companion.getInstance().getNotesForDay();
+                    if(null == ret)
+                        return;
 
                     int id_col = 0;
                     List<AxisValue> axisValues = new ArrayList<>();

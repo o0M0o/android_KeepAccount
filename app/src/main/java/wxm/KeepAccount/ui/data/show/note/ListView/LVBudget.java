@@ -327,7 +327,7 @@ public class LVBudget extends LVBase {
             SubAdapter mAdapter = new SubAdapter(getContext(), llhm);
             lv.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
-            ListViewHelper.setListViewHeightBasedOnChildren(lv);
+            ListViewHelper.INSTANCE.setListViewHeightBasedOnChildren(lv);
         }
     }
     /// END PRIVATE

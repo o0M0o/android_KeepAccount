@@ -116,17 +116,17 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
     }
 
     override fun onDataModify(md: List<Int>) {
-        NoteDataHelper.getInstance().refreshData()
+        NoteDataHelper.instance.refreshData()
         EventBus.getDefault().post(DBDataChangeEvent())
     }
 
     override fun onDataCreate(cd: List<Int>) {
-        NoteDataHelper.getInstance().refreshData()
+        NoteDataHelper.instance.refreshData()
         EventBus.getDefault().post(DBDataChangeEvent())
     }
 
     override fun onDataRemove(dd: List<Int>) {
-        NoteDataHelper.getInstance().refreshData()
+        NoteDataHelper.instance.refreshData()
         EventBus.getDefault().post(DBDataChangeEvent())
     }
 

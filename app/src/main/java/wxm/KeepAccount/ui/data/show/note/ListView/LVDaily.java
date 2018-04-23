@@ -97,7 +97,7 @@ public class LVDaily extends LVBase {
         @Override
         protected MainAdapterItem getDataByTag(String tag) {
             Calendar cl_day = Calendar.getInstance();
-            NoteShowInfo ni = NoteDataHelper.getInfoByDay(tag);
+            NoteShowInfo ni = NoteDataHelper.Companion.getInfoByDay(tag);
 
             MainAdapterItem item = new MainAdapterItem();
             item.year = tag.substring(0, 4);
@@ -117,8 +117,8 @@ public class LVDaily extends LVBase {
 
             item.day.mPayCount = String.valueOf(ni.getPayCount());
             item.day.mIncomeCount = String.valueOf(ni.getIncomeCount());
-            item.day.mPayAmount = ni.getSZPayAmount();
-            item.day.mIncomeAmount = ni.getSZIncomeAmount();
+            item.day.mPayAmount = ni.getSzPayAmount();
+            item.day.mIncomeAmount = ni.getSzIncomeAmount();
 
             BigDecimal bd_l = ni.getBalance();
             item.amount = String.format(Locale.CHINA,
@@ -304,7 +304,7 @@ public class LVDaily extends LVBase {
                 () -> {
                     mMainPara.clear();
                     // for day
-                    List<String> set_k_d = NoteDataHelper.getNotesDays();
+                    List<String> set_k_d = NoteDataHelper.Companion.getNotesDays();
                     Collections.sort(set_k_d, (o1, o2) -> !mBTimeDownOrder ? o1.compareTo(o2) : o2.compareTo(o1));
 
                     for(String k : set_k_d) {
@@ -356,7 +356,10 @@ public class LVDaily extends LVBase {
         MainAdapter cur_ap = (MainAdapter) mLVShow.getAdapter();
         List<String> ls_days = cur_ap.getWaitDeleteDays();
         HashMap<String, ArrayList<INote>> hm =
-                NoteDataHelper.getInstance().getNotesForDay();
+                NoteDataHelper.Companion.getInstance().getNotesForDay();
+        if(null == hm)
+            return;
+
         for (String day : ls_days) {
             List<INote> ls_n = hm.get(day);
             for (INote n : ls_n) {

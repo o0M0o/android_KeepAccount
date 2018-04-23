@@ -44,12 +44,14 @@ public class MonthlyChart extends ChartBase {
     protected void refreshData() {
         ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                 () -> {
-                    HashMap<String, ArrayList<INote>> ret = NoteDataHelper.getInstance().getNotesForMonth();
+                    HashMap<String, ArrayList<INote>> ret = NoteDataHelper.Companion.getInstance().getNotesForMonth();
+                    if(null == ret)
+                        return;
 
                     int id_col = 0;
                     List<AxisValue> axisValues = new ArrayList<>();
                     List<Column> columns = new ArrayList<>();
-                    ArrayList<String> set_k = new ArrayList<>(ret.keySet());
+                    List<String> set_k = new ArrayList<>(ret.keySet());
                     Collections.sort(set_k);
                     for (String k : set_k) {
                         boolean ba = true;

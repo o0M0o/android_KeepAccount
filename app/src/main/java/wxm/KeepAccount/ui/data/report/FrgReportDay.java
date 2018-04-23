@@ -88,7 +88,7 @@ public class FrgReportDay extends FrgSupportSwitcher<FrgSupportBaseAdv> {
                         String d_e = frg.mASParaLoad.get(1);
                         param[0] = String.format(Locale.CHINA,
                                 "%s - %s", d_s, d_e);
-                        HashMap<String, ArrayList<INote>> ls_note = NoteDataHelper.getInstance()
+                        HashMap<String, ArrayList<INote>> ls_note = NoteDataHelper.Companion.getInstance()
                                 .getNotesBetweenDays(d_s, d_e);
 
                         BigDecimal mBDTotalPay = BigDecimal.ZERO;

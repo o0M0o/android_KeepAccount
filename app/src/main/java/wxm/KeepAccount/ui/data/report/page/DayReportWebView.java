@@ -65,7 +65,7 @@ public class DayReportWebView extends FrgSupportWebView {
                     () -> {
                         String d_s = mASParaLoad.get(0);
                         String d_e = mASParaLoad.get(1);
-                        HashMap<String, ArrayList<INote>> hmData = NoteDataHelper
+                        HashMap<String, ArrayList<INote>> hmData = NoteDataHelper.Companion
                                 .getInstance().getNotesBetweenDays(d_s, d_e);
 
                         SimplePropertyPreFilter filter = new SimplePropertyPreFilter(INote.class,

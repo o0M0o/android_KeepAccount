@@ -107,7 +107,7 @@ public class FrgCalendarContent extends FrgSupportBaseAdv {
         mTVMonthDay.setText(arr[2]);
         mTVYearMonth.setText(String.format(Locale.CHINA, "%s年%s月", arr[0], arr[1]));
 
-        NoteShowInfo ni = NoteDataHelper.getInfoByDay(mSZHotDay);
+        NoteShowInfo ni = NoteDataHelper.Companion.getInfoByDay(mSZHotDay);
         BigDecimal bb = null != ni ? ni.getBalance() : BigDecimal.ZERO;
         mTVBalance.setText(String.format(Locale.CHINA, "%s %.02f",
                 0 > bb.compareTo(BigDecimal.ZERO) ? "-" : "+",
@@ -137,7 +137,7 @@ public class FrgCalendarContent extends FrgSupportBaseAdv {
      */
     private void updateContent(String day) {
         mSZHotDay = day;
-        mLSDayContents = NoteDataHelper.getInstance().getNotesByDay(day);
+        mLSDayContents = NoteDataHelper.Companion.getInstance().getNotesByDay(day);
 
         loadUI(null);
     }

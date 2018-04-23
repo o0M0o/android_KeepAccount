@@ -70,7 +70,7 @@ public class FrgCalendarShow extends FrgSupportBaseAdv {
         ToolUtil.INSTANCE.runInBackground(this.getActivity(),
                 () -> {
                     HashMap<String, ArrayList<INote>> hm
-                            = NoteDataHelper.getInstance().getNotesForMonth();
+                            = NoteDataHelper.Companion.getInstance().getNotesForMonth();
                     if (null != hm) {
                         param[0] = UtilFun.cast_t(hm.keySet().toArray()[0]);
                     }
@@ -145,7 +145,7 @@ public class FrgCalendarShow extends FrgSupportBaseAdv {
         for(String day : tmDays.keySet()) {
             CalendarShowItemModel itModel = tmDays.get(day);
             if (itModel != null) {
-                NoteShowInfo ni = NoteDataHelper.getInfoByDay(day);
+                NoteShowInfo ni = NoteDataHelper.Companion.getInfoByDay(day);
                 if(ni != null && !day.startsWith(newMonth))    {
                     ni = null;
                 }
