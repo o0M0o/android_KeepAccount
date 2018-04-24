@@ -163,10 +163,10 @@ class NoteDataHelper private constructor() {
                 for (r in v) {
                     if (r.isPayNote) {
                         ni.payCount = ni.payCount + 1
-                        ni.payAmount = ni.payAmount!!.add(r.amount)
+                        ni.payAmount = ni.payAmount.add(r.amount)
                     } else {
                         ni.incomeCount = ni.incomeCount + 1
-                        ni.incomeAmount = ni.incomeAmount!!.add(r.amount)
+                        ni.incomeAmount = ni.incomeAmount.add(r.amount)
                     }
                 }
             }
@@ -193,8 +193,8 @@ class NoteDataHelper private constructor() {
             if(null != curDay) {
                 vData.payCount = curDay.payCount + vData.payCount
                 vData.incomeCount = curDay.incomeCount + vData.incomeCount
-                vData.payAmount = curDay.payAmount!!.add(vData.payAmount)
-                vData.incomeAmount = curDay.incomeAmount!!.add(vData.incomeAmount)
+                vData.payAmount = curDay.payAmount.add(vData.payAmount)
+                vData.incomeAmount = curDay.incomeAmount.add(vData.incomeAmount)
             }
         }
     }
@@ -217,8 +217,8 @@ class NoteDataHelper private constructor() {
             if (curMonth != null) {
                 vData.payCount = curMonth.payCount + vData.payCount
                 vData.incomeCount = curMonth.incomeCount + vData.incomeCount
-                vData.payAmount = curMonth.payAmount!!.add(vData.payAmount)
-                vData.incomeAmount = curMonth.incomeAmount!!.add(vData.incomeAmount)
+                vData.payAmount = curMonth.payAmount.add(vData.payAmount)
+                vData.incomeAmount = curMonth.incomeAmount.add(vData.incomeAmount)
             }
         }
     }

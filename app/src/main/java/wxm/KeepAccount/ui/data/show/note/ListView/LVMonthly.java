@@ -426,7 +426,7 @@ public class LVMonthly
 
                 ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
                 rl.setBackgroundColor(0 == position % 2 ?
-                        ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
+                        ResourceHelper.INSTANCE.getMCRLVLineOne() : ResourceHelper.INSTANCE.getMCRLVLineTwo());
                 rl.setOnClickListener(local_cl);
 
                 // for month
@@ -469,12 +469,12 @@ public class LVMonthly
 
                 ImageView ib = viewHolder.getView(R.id.iv_action);
                 ib.setBackgroundColor(mLLSubFilter.contains(sub_tag) ?
-                        ResourceHelper.mCRLVItemSel : ResourceHelper.mCRLVItemTransFull);
+                        ResourceHelper.INSTANCE.getMCRLVItemSel() : ResourceHelper.INSTANCE.getMCRLVItemTransFull());
                 ib.setOnClickListener(v -> {
                     String sub_tag1 = item.subTag;
 
                     if (!mLLSubFilter.contains(sub_tag1)) {
-                        v.setBackgroundColor(ResourceHelper.mCRLVItemSel);
+                        v.setBackgroundColor(ResourceHelper.INSTANCE.getMCRLVItemSel());
 
                         mLLSubFilter.add(sub_tag1);
                         mLLSubFilterVW.add(v);
@@ -484,7 +484,7 @@ public class LVMonthly
                             refreshAttachLayout();
                         }
                     } else {
-                        v.setBackgroundColor(ResourceHelper.mCRLVItemTransFull);
+                        v.setBackgroundColor(ResourceHelper.INSTANCE.getMCRLVItemTransFull());
 
                         mLLSubFilter.remove(sub_tag1);
                         mLLSubFilterVW.remove(v);

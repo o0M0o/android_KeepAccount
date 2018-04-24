@@ -350,10 +350,10 @@ public class LVBudget extends LVBase {
                     Integer id = Integer.parseInt(k_tag);
                     if (mALWaitDeleteItems.contains(id)) {
                         mALWaitDeleteItems.remove((Object) id);
-                        v.setBackgroundColor(ResourceHelper.mCRLVItemNoSel);
+                        v.setBackgroundColor(ResourceHelper.INSTANCE.getMCRLVItemNoSel());
                     } else {
                         mALWaitDeleteItems.add(id);
-                        v.setBackgroundColor(ResourceHelper.mCRLVItemSel);
+                        v.setBackgroundColor(ResourceHelper.INSTANCE.getMCRLVItemSel());
                     }
                 }
                 break;
@@ -415,7 +415,7 @@ public class LVBudget extends LVBase {
             ConstraintLayout rl = viewHolder.getView(R.id.cl_header);
             rl.setOnClickListener(local_cl);
             rl.setBackgroundColor(0 == position % 2 ?
-                    ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
+                    ResourceHelper.INSTANCE.getMCRLVLineOne() : ResourceHelper.INSTANCE.getMCRLVLineTwo());
 
             // for delete
             View rl_del = viewHolder.getView(R.id.rl_delete);

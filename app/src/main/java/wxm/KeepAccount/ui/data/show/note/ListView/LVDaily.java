@@ -440,7 +440,7 @@ public class LVDaily extends LVBase {
                 cb.setTag(it.getTag());
 
                 root_view.setBackgroundColor(0 == position % 2 ?
-                        ResourceHelper.mCRLVLineOne : ResourceHelper.mCRLVLineTwo);
+                        ResourceHelper.INSTANCE.getMCRLVLineOne() : ResourceHelper.INSTANCE.getMCRLVLineTwo());
                 root_view.setOnClickListener(mCLAdapter);
 
                 ItemHolder itPrv = position > 0 ? UtilFun.cast(getItem(position - 1)) : null;

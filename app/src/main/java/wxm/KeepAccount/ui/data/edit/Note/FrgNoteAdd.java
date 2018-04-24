@@ -73,27 +73,27 @@ public class FrgNoteAdd extends FrgSupportBaseAdv {
                 () -> {
                     mRLPay.setBackgroundResource(R.drawable.rl_item_left);
                     ((TextView)mRLPay.findViewById(R.id.tv_tag))
-                            .setTextColor(ResourceHelper.mCRTextWhite);
+                            .setTextColor(ResourceHelper.INSTANCE.getMCRTextWhite());
 
                     mVPPager.setCurrentItem(POS_PAY);
                 },
                 () -> {
                     mRLPay.setBackgroundResource(R.drawable.rl_item_left_nosel);
                     ((TextView)mRLPay.findViewById(R.id.tv_tag))
-                            .setTextColor(ResourceHelper.mCRTextFit);
+                            .setTextColor(ResourceHelper.INSTANCE.getMCRTextFit());
                 });
         mSWer.addSelector(mRLIncome,
                 () -> {
                     mRLIncome.setBackgroundResource(R.drawable.rl_item_right);
                     ((TextView)mRLIncome.findViewById(R.id.tv_tag))
-                            .setTextColor(ResourceHelper.mCRTextWhite);
+                            .setTextColor(ResourceHelper.INSTANCE.getMCRTextWhite());
 
                     mVPPager.setCurrentItem(POS_INCOME);
                 },
                 () -> {
                     mRLIncome.setBackgroundResource(R.drawable.rl_item_right_nosel);
                     ((TextView)mRLIncome.findViewById(R.id.tv_tag))
-                            .setTextColor(ResourceHelper.mCRTextFit);
+                            .setTextColor(ResourceHelper.INSTANCE.getMCRTextFit());
                 });
 
         mSWer.doSelect(mRLPay);

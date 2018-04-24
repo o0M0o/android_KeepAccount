@@ -23,11 +23,11 @@ import wxm.androidutil.util.UtilFun
  */
 @DatabaseTable(tableName = "tbBudget")
 class BudgetItem : IDBRow<Int> {
-    @DatabaseField(generatedId = true, columnName = "id", dataType = DataType.INTEGER)
+    @DatabaseField(generatedId = true, columnName = FIELD_ID, dataType = DataType.INTEGER)
     var _id: Int = 0
-    @DatabaseField(columnName = "name", canBeNull = false, dataType = DataType.STRING)
-    var name: String? = null
-    @DatabaseField(columnName = "usr_id", foreign = true, foreignColumnName = UsrItem.FIELD_ID, canBeNull = false)
+    @DatabaseField(columnName = FIELD_NAME, canBeNull = false, dataType = DataType.STRING)
+    var name: String = ""
+    @DatabaseField(columnName = FIELD_USR, foreign = true, foreignColumnName = UsrItem.FIELD_ID, canBeNull = false)
     var usr: UsrItem? = null
     @DatabaseField(columnName = "amount", dataType = DataType.BIG_DECIMAL, canBeNull = false)
     var amount: BigDecimal? = null
@@ -65,7 +65,7 @@ class BudgetItem : IDBRow<Int> {
     }
 
     override fun hashCode(): Int {
-        return name!!.hashCode() + amount!!.hashCode() + _id
+        return name.hashCode() + amount!!.hashCode() + _id
     }
 
     override fun getID(): Int? {

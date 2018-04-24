@@ -6,19 +6,18 @@ import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SimpleAdapter
-
-import java.util.HashMap
-import java.util.Locale
-
-import wxm.KeepAccount.ui.base.Helper.ViewHelper
-import wxm.KeepAccount.utility.ContextUtil
-import wxm.androidutil.ViewHolder.ViewHolder
-import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.define.INote
+import wxm.KeepAccount.define.IncomeNoteItem
+import wxm.KeepAccount.define.PayNoteItem
+import wxm.KeepAccount.ui.base.Helper.ViewHelper
 import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit
+import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.ViewHolder.ViewHolder
+import wxm.androidutil.util.UtilFun
 import wxm.uilib.SwipeLayout.SwipeLayout
+import java.util.*
 
 /**
  * adapter for note detail
@@ -51,36 +50,40 @@ class AdapterNoteDetail(private val mCTSelf: Context, data: List<Map<String, *>>
                 vhSwipe.setVisibility(R.id.rl_income, View.GONE)
 
                 vt.mContent = vhSwipe.getChildView(R.id.rl_pay)
-                initPay(vt.mContent, itemData)
+                initPay(vt.mContent!!, itemData.toPayNote()!!)
             } else {
                 vhSwipe.setVisibility(R.id.rl_pay, View.GONE)
 
                 vt.mContent = vhSwipe.getChildView(R.id.rl_income)
-                initIncome(vt.mContent, itemData)
+                initIncome(vt.mContent!!, itemData.toIncomeNote()!!)
             }
 
-            val vhRight = ViewHelper(vt.mRight)
+            val vhRight = ViewHelper(vt.mRight!!)
             vhRight.setTag(R.id.iv_delete, itemData)
             vhRight.setTag(R.id.iv_edit, itemData)
 
-            vhRight.getChildView<View>(R.id.iv_delete).setOnClickListener { v ->
-                val alertDialog = AlertDialog.Builder(mCTSelf).setTitle("删除数据").setMessage("此操作不能恢复，是否继续操作!").setPositiveButton("是") { dialog, which ->
-                    val data = v.tag as INote
-                    val al = listOf(data.id)
+            vhRight.getChildView<View>(R.id.iv_delete)!!.setOnClickListener { v ->
+                val alertDialog = AlertDialog.Builder(mCTSelf)
+                        .setTitle("删除数据")
+                        .setMessage("此操作不能恢复，是否继续!")
+                        .setPositiveButton("是") { _, _ ->
+                            val data = v.tag as INote
+                            val al = listOf(data.id)
 
-                    if (data.isPayNote) {
-                        ContextUtil.payIncomeUtility.deletePayNotes(al)
-                    } else {
-                        ContextUtil.payIncomeUtility.deleteIncomeNotes(al)
-                    }
-                }.setNegativeButton("否") { dialog, which -> }.create()
+                            if (data.isPayNote) {
+                                ContextUtil.payIncomeUtility.deletePayNotes(al)
+                            } else {
+                                ContextUtil.payIncomeUtility.deleteIncomeNotes(al)
+                            }
+                        }
+                        .setNegativeButton("否") { _, _ -> }
+                        .create()
                 alertDialog.show()
             }
 
-            vhRight.getChildView<View>(R.id.iv_edit).setOnClickListener { v ->
-                val intent: Intent
+            vhRight.getChildView<View>(R.id.iv_edit)!!.setOnClickListener { v ->
+                val intent = Intent(mCTSelf, ACPreveiwAndEdit::class.java)
                 val data = v.tag as INote
-                intent = Intent(mCTSelf, ACPreveiwAndEdit::class.java)
                 intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, data.id)
                 intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
                         if (data.isPayNote) GlobalDef.STR_RECORD_PAY else GlobalDef.STR_RECORD_INCOME)
@@ -99,38 +102,36 @@ class AdapterNoteDetail(private val mCTSelf: Context, data: List<Map<String, *>>
      * @param vh    view holder
      * @param data  pay data
      */
-    private fun initPay(vh: View?, data: INote) {
-        val pn = data.toPayNote()
+    private fun initPay(vh: View, data: PayNoteItem) {
         val vHelper = ViewHelper(vh)
+        vHelper.setText(R.id.tv_pay_title, data.info!!)
 
-        vHelper.setText(R.id.tv_pay_title, pn!!.info)
-
-        val bi = pn.budget
-        val b_name = if (bi == null) "" else bi.name
-        if (!UtilFun.StringIsNullOrEmpty(b_name)) {
-            vHelper.setText(R.id.tv_pay_budget, b_name)
+        val bi = data.budget
+        val bName = if (bi == null) "" else bi.name
+        if (!UtilFun.StringIsNullOrEmpty(bName)) {
+            vHelper.setText(R.id.tv_pay_budget, bName)
         } else {
             vHelper.setVisibility(R.id.tv_pay_budget, View.GONE)
             vHelper.setVisibility(R.id.iv_pay_budget, View.GONE)
         }
 
-        vHelper.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %s", pn.valToStr))
-        vHelper.setText(R.id.tv_pay_time, pn.ts.toString().substring(11, 16))
+        vHelper.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %s", data.valToStr))
+        vHelper.setText(R.id.tv_pay_time, data.ts.toString().substring(11, 16))
 
         // for look detail
         vHelper.setVisibility(R.id.iv_pay_action, View.GONE)
 
         // for budget
-        if (UtilFun.StringIsNullOrEmpty(b_name)) {
+        if (UtilFun.StringIsNullOrEmpty(bName)) {
             vHelper.setVisibility(R.id.rl_budget, View.GONE)
         }
 
         // for note
-        val nt = pn.note
+        val nt = data.note
         if (UtilFun.StringIsNullOrEmpty(nt)) {
             vHelper.setVisibility(R.id.rl_pay_note, View.GONE)
         } else {
-            vHelper.setText(R.id.tv_pay_note, nt)
+            vHelper.setText(R.id.tv_pay_note, nt!!)
         }
     }
 
@@ -139,24 +140,23 @@ class AdapterNoteDetail(private val mCTSelf: Context, data: List<Map<String, *>>
      * @param vh    view holder
      * @param data  income data
      */
-    private fun initIncome(vh: View?, data: INote) {
-        val i_n = data.toIncomeNote()
+    private fun initIncome(vh: View, data: IncomeNoteItem) {
         val vHelper = ViewHelper(vh)
 
-        vHelper.setText(R.id.tv_income_title, i_n!!.info)
+        vHelper.setText(R.id.tv_income_title, data.info!!)
 
-        vHelper.setText(R.id.tv_income_amount, i_n.valToStr)
-        vHelper.setText(R.id.tv_income_time, i_n.ts.toString().substring(11, 16))
+        vHelper.setText(R.id.tv_income_amount, data.valToStr!!)
+        vHelper.setText(R.id.tv_income_time, data.ts.toString().substring(11, 16))
 
         // for look detail
         vHelper.setVisibility(R.id.iv_income_action, View.GONE)
 
         // for note
-        val nt = i_n.note
+        val nt = data.note
         if (UtilFun.StringIsNullOrEmpty(nt)) {
             vHelper.setVisibility(R.id.rl_income_note, View.GONE)
         } else {
-            vHelper.setText(R.id.tv_income_note, nt)
+            vHelper.setText(R.id.tv_income_note, nt!!)
         }
     }
 

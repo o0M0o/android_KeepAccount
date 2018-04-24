@@ -1,8 +1,5 @@
 package wxm.KeepAccount.ui.utility
 
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.ListView
 
 /**

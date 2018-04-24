@@ -242,7 +242,7 @@ public class FrgNoteShow extends FrgSupportSwitcher<FrgSupportBaseAdv> {
 
         rl.setBackgroundResource(res);
         ((TextView)rl.findViewById(R.id.tv_tag))
-                .setTextColor(bIsSelected ? ResourceHelper.mCRTextWhite : ResourceHelper.mCRTextFit);
+                .setTextColor(bIsSelected ? ResourceHelper.INSTANCE.getMCRTextWhite() : ResourceHelper.INSTANCE.getMCRTextFit());
     }
 
     /**
