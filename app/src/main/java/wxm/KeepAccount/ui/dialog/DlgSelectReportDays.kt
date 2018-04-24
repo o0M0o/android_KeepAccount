@@ -4,24 +4,24 @@ import android.app.DatePickerDialog
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.TextView
+import kotterknife.bindView
 
 import java.util.Calendar
 import java.util.Locale
 
-import butterknife.OnClick
 import wxm.androidutil.Dialog.DlgOKOrNOBase
 import wxm.KeepAccount.R
+import wxm.KeepAccount.utility.ContextUtil
 
 /**
  * select day range for report
  * Created by WangXM on 2017/2/15.
  */
 class DlgSelectReportDays : DlgOKOrNOBase() {
-    private var mSZInputDay: String? = null
-        get() = getString(R.string.hint_input_day)
+    private val mSZInputDay: String = ContextUtil.getString(R.string.hint_input_day)
 
-    private var mTVStartDay: TextView? = null
-    private var mTVEndDay: TextView? = null
+    private val mTVStartDay: TextView by bindView(R.id.tv_start_day)
+    private val mTVEndDay: TextView by bindView(R.id.tv_end_day)
 
     /**
      * get start day
@@ -43,22 +43,19 @@ class DlgSelectReportDays : DlgOKOrNOBase() {
         InitDlgTitle("选择起始日期", "接受", "放弃")
         val vw = View.inflate(activity, R.layout.dlg_select_report_days, null)
 
-        mTVStartDay = vw.findViewById(R.id.tv_start_day)
-        mTVEndDay = vw.findViewById(R.id.tv_end_day)
-
-        mTVStartDay!!.setOnClickListener({ v -> tvClicks(v) })
-        mTVEndDay!!.setOnClickListener({ v -> tvClicks(v) })
+        mTVStartDay.setOnClickListener({ v -> tvClicks(v) })
+        mTVEndDay.setOnClickListener({ v -> tvClicks(v) })
 
         // 默认是过去3个月的数据
         val cd = Calendar.getInstance()
         endDay = dayToSZ(cd.get(Calendar.YEAR),
                 cd.get(Calendar.MONTH) + 1, cd.get(Calendar.DAY_OF_MONTH))
-        mTVEndDay!!.text = endDay
+        mTVEndDay.text = endDay
 
         cd.add(Calendar.MONTH, -3)
         startDay = dayToSZ(cd.get(Calendar.YEAR),
                 cd.get(Calendar.MONTH) + 1, cd.get(Calendar.DAY_OF_MONTH))
-        mTVStartDay!!.text = startDay
+        mTVStartDay.text = startDay
 
         return vw
     }

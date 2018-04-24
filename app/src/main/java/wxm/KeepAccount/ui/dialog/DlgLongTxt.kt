@@ -3,7 +3,6 @@ package wxm.KeepAccount.ui.dialog
 import android.view.View
 import android.widget.EditText
 
-import butterknife.ButterKnife
 import kotterknife.bindView
 import wxm.androidutil.Dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
@@ -34,7 +33,6 @@ class DlgLongTxt : DlgOKOrNOBase() {
     override fun InitDlgView(): View {
         InitDlgTitle("编辑内容", "接受", "放弃")
         val vw = View.inflate(activity, R.layout.dlg_long_txt, null)
-        ButterKnife.bind(this, vw)
 
         if (!UtilFun.StringIsNullOrEmpty(mSZInitLongTxt))
             mETLongTxt.setText(mSZInitLongTxt)

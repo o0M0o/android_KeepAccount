@@ -1,6 +1,9 @@
 package wxm.KeepAccount.utility
 
 import android.app.Application
+import android.support.annotation.ColorInt
+import android.support.annotation.ColorRes
+import android.support.annotation.StringRes
 import android.util.Log
 
 import wxm.KeepAccount.db.BudgetDBUtility
@@ -169,7 +172,18 @@ class ContextUtil : Application() {
             } catch (e: java.sql.SQLException) {
                 Log.e(LOG_TAG, "clearDB catch an exception", e)
             }
+        }
 
+        /**
+         * get res string
+         */
+        fun getString(@StringRes resId : Int): String   {
+            return instance!!.getString(resId)
+        }
+
+        @ColorInt
+        fun getColor(@ColorRes resId : Int): Int  {
+            return instance!!.getColor(resId)
         }
     }
 }

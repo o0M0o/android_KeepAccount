@@ -15,18 +15,21 @@ import wxm.androidutil.DBHelper.IDBRow
  */
 @DatabaseTable(tableName = "tbRecordType")
 class RecordTypeItem :  IDBRow<Int> {
-    @DatabaseField(generatedId = true, columnName = "id", dataType = DataType.INTEGER)
-    var _id: Int = 0
+    @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
+    var _id: Int = -1
+
     /**
      * 记录类型大类([.DEF_INCOME] or [.DEF_PAY])
      */
     @DatabaseField(columnName = "itemType", canBeNull = false, dataType = DataType.STRING)
-    var itemType: String? = null
+    var itemType: String = DEF_INCOME
+
     /**
      * 记录分类
      */
     @DatabaseField(columnName = "type", canBeNull = false, dataType = DataType.STRING)
-    var type: String? = null
+    var type: String = ""
+
     /**
      * 辅助注释信息
      */
@@ -41,9 +44,6 @@ class RecordTypeItem :  IDBRow<Int> {
     }
 
     init {
-        _id = -1
-        itemType = ""
-        type = ""
         note = ""
     }
 

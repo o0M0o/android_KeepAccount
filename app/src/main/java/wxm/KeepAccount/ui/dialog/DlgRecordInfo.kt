@@ -3,7 +3,6 @@ package wxm.KeepAccount.ui.dialog
 import android.support.design.widget.TextInputEditText
 import android.view.View
 
-import butterknife.ButterKnife
 import kotterknife.bindView
 import wxm.androidutil.Dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
@@ -57,7 +56,6 @@ class DlgRecordInfo : DlgOKOrNOBase() {
         InitDlgTitle(if (GlobalDef.STR_RECORD_PAY == mRecordType) "添加支付类型" else "添加收入类型",
                 "接受", "放弃")
         val vw = View.inflate(activity, R.layout.dlg_add_record_info, null)
-        ButterKnife.bind(this, vw)
 
         if (null != mOldData) {
             mTIETName.setText(mOldData!!.type)

@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.SimpleAdapter
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.Dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
 import java.util.*
@@ -22,7 +23,7 @@ class DlgSelectColor : DlgOKOrNOBase(), AdapterView.OnItemClickListener {
 
     val selectedColor: Int
         get() = if (GlobalDef.INVALID_ID != mHotPos)
-            resources.getColor(ARR_COLOR[mHotPos])
+            ContextUtil.getColor(ARR_COLOR[mHotPos])
         else
             GlobalDef.INVALID_ID
 
@@ -34,13 +35,11 @@ class DlgSelectColor : DlgOKOrNOBase(), AdapterView.OnItemClickListener {
      * @param id       param
      */
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        val res = resources
-
-        view.setBackgroundColor(res.getColor(R.color.red))
+        view.setBackgroundColor(ContextUtil.getColor(R.color.red))
         mHotPos = if (GlobalDef.INVALID_ID == mHotPos) {
             position
         } else {
-            parent.getChildAt(mHotPos).setBackgroundColor(res.getColor(R.color.white))
+            parent.getChildAt(mHotPos).setBackgroundColor(ContextUtil.getColor(R.color.white))
             position
         }
     }
@@ -52,11 +51,10 @@ class DlgSelectColor : DlgOKOrNOBase(), AdapterView.OnItemClickListener {
         val gv = UtilFun.cast<GridView>(vw.findViewById(R.id.gv_colors))!!
         gv.onItemClickListener = this
 
-        val res = resources
         val lsData = ArrayList<HashMap<String, Any>>()
         for (i in ARR_COLOR) {
             val hm = HashMap<String, Any>()
-            hm[PARA_COLOR] = res.getColor(i)
+            hm[PARA_COLOR] = ContextUtil.getColor(i)
             lsData.add(hm)
         }
 
@@ -82,7 +80,7 @@ class DlgSelectColor : DlgOKOrNOBase(), AdapterView.OnItemClickListener {
             return position
         }
 
-        override fun getView(position: Int, view: View, arg2: ViewGroup): View? {
+        override fun getView(position: Int, view: View?, arg2: ViewGroup?): View? {
             val v = super.getView(position, view, arg2)
             if (null != v) {
                 val hmd = UtilFun.cast<HashMap<String, Any>>(getItem(position))

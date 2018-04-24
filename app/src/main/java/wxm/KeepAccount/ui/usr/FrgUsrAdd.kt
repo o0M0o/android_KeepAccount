@@ -10,9 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 
-import butterknife.BindString
-import butterknife.BindView
-import butterknife.OnClick
+import kotterknife.bindView
 import wxm.KeepAccount.define.EMsgType
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
@@ -21,6 +19,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.define.UsrItem
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.EventHelper
 
 /**
  * add user
@@ -28,20 +27,15 @@ import wxm.KeepAccount.utility.ContextUtil
  */
 class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
     // for ui
-    @BindView(R.id.et_usr_name)
-    private var mETUsrName: EditText? = null
-    @BindView(R.id.et_pwd)
-    private var mETPwd: EditText? = null
-    @BindView(R.id.et_repeat_pwd)
-    internal var mETRepeatPwd: EditText? = null
-    // fro res
-    @BindString(R.string.error_no_usrname)
-    internal var mRSErrorNoUsrName: String? = null
+    private val mETUsrName: EditText by bindView(R.id.et_usr_name)
+    private val mETPwd: EditText by bindView(R.id.et_pwd)
+    private val mETRepeatPwd: EditText by bindView(R.id.et_repeat_pwd)
 
-    @BindString(R.string.error_invalid_password)
-    internal var mRSErrorInvalidPWD: String? = null
-    @BindString(R.string.error_repeatpwd_notmatch)
-    internal var mRSErrorRepeatPwdNotMatch: String? = null
+    // for res
+    private val mRSErrorNoUsrName: String = ContextUtil.getString(R.string.error_no_usrname)
+    private val mRSErrorInvalidPWD: String = ContextUtil.getString(R.string.error_invalid_password)
+    private var mRSErrorRepeatPwdNotMatch: String = ContextUtil.getString(R.string.error_repeatpwd_notmatch)
+
     // for data
     private var mMHHandler: LocalMsgHandler = LocalMsgHandler(this)
 
@@ -54,51 +48,51 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
     }
 
     override fun initUI(bundle: Bundle?) {
-        mETUsrName!!.setOnEditorActionListener(this)
-        mETPwd!!.setOnEditorActionListener(this)
-        mETRepeatPwd!!.setOnEditorActionListener(this)
-    }
+        if(null == bundle) {
+            mETUsrName.setOnEditorActionListener(this)
+            mETPwd.setOnEditorActionListener(this)
+            mETRepeatPwd.setOnEditorActionListener(this)
 
+            EventHelper.setOnClickListner(view!!,
+                    intArrayOf(R.id.bt_confirm, R.id.bt_giveup),
+                    View.OnClickListener { v ->
+                        when (v.id) {
+                            R.id.bt_confirm -> {
+                                if (checkInput()) {
+                                    val data = Intent()
+                                    data.putExtra(UsrItem.FIELD_NAME, mETUsrName!!.text.toString())
+                                    data.putExtra(UsrItem.FIELD_PWD, mETPwd.text.toString())
 
-    @OnClick(R.id.bt_confirm, R.id.bt_giveup)
-    internal fun onSelfClick(v: View) {
-        when (v.id) {
-            R.id.bt_confirm -> {
-                if (checkInput()) {
-                    val data = Intent()
-                    data.putExtra(UsrItem.FIELD_NAME, mETUsrName!!.text.toString())
-                    data.putExtra(UsrItem.FIELD_PWD, mETPwd!!.text.toString())
+                                    val m = Message.obtain(ContextUtil.msgHandler,
+                                            EMsgType.USR_ADD.id)
+                                    m.obj = arrayOf(data, mMHHandler)
+                                    m.sendToTarget()
+                                }
+                            }
 
-                    val m = Message.obtain(ContextUtil.msgHandler,
-                            EMsgType.USR_ADD.id)
-                    m.obj = arrayOf<Any>(data, mMHHandler)
-                    m.sendToTarget()
-                }
-            }
-
-            R.id.bt_giveup -> {
-                val ret_data = GlobalDef.INTRET_GIVEUP
-
-                val ac = activity
-                val data = Intent()
-                ac.setResult(ret_data, data)
-                ac.finish()
-            }
+                            R.id.bt_giveup -> {
+                                val ac = activity
+                                val data = Intent()
+                                ac.setResult(GlobalDef.INTRET_GIVEUP, data)
+                                ac.finish()
+                            }
+                        }
+                     })
         }
     }
 
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent): Boolean {
         when (v.id) {
             R.id.et_usr_name -> {
-                Log.d(LOG_TAG, "now usr name : " + mETUsrName!!.text.toString())
+                Log.d(LOG_TAG, "now usr name : " + mETUsrName.text.toString())
             }
 
             R.id.et_pwd -> {
-                Log.d(LOG_TAG, "now pwd : " + mETPwd!!.text.toString())
+                Log.d(LOG_TAG, "now pwd : " + mETPwd.text.toString())
             }
 
             R.id.et_repeat_pwd -> {
-                Log.d(LOG_TAG, "now repeatPWD : " + mETRepeatPwd!!.text.toString())
+                Log.d(LOG_TAG, "now repeatPWD : " + mETRepeatPwd.text.toString())
             }
         }
 
@@ -111,11 +105,11 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
      * clean UI
      */
     private fun repeatInput() {
-        mETUsrName!!.setText("")
-        mETPwd!!.setText("")
-        mETRepeatPwd!!.setText("")
+        mETUsrName.setText("")
+        mETPwd.setText("")
+        mETRepeatPwd.setText("")
 
-        mETUsrName!!.requestFocus()
+        mETUsrName.requestFocus()
     }
 
     /**
@@ -123,26 +117,26 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
      * @return  true if data legal else false
      */
     private fun checkInput(): Boolean {
-        val usr_name = mETUsrName!!.text.toString()
-        val usr_pwd = mETPwd!!.text.toString()
-        val usr_r_pwd = mETRepeatPwd!!.text.toString()
+        val usrName = mETUsrName.text.toString()
+        val usrPwd = mETPwd.text.toString()
+        val usrRPwd = mETRepeatPwd.text.toString()
 
         var bret = true
-        if (UtilFun.StringIsNullOrEmpty(usr_name)) {
-            mETUsrName!!.error = mRSErrorNoUsrName
-            mETUsrName!!.requestFocus()
+        if (UtilFun.StringIsNullOrEmpty(usrName)) {
+            mETUsrName.error = mRSErrorNoUsrName
+            mETUsrName.requestFocus()
             bret = false
         }
 
-        if (bret && 4 > usr_pwd.length) {
-            mETPwd!!.error = mRSErrorInvalidPWD
-            mETPwd!!.requestFocus()
+        if (bret && 4 > usrPwd.length) {
+            mETPwd.error = mRSErrorInvalidPWD
+            mETPwd.requestFocus()
             bret = false
         }
 
-        if (bret && usr_pwd != usr_r_pwd) {
-            mETRepeatPwd!!.error = mRSErrorRepeatPwdNotMatch
-            mETRepeatPwd!!.requestFocus()
+        if (bret && usrPwd != usrRPwd) {
+            mETRepeatPwd.error = mRSErrorRepeatPwdNotMatch
+            mETRepeatPwd.requestFocus()
             bret = false
         }
 
@@ -152,16 +146,16 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
 
     private class LocalMsgHandler internal constructor(ac: FrgUsrAdd) : WRMsgHandler<FrgUsrAdd>(ac) {
         init {
-            TAG = "LocalMsgHandler"
+            TAG = ::LocalMsgHandler.javaClass.simpleName
         }
 
         override fun processMsg(m: Message, home: FrgUsrAdd) {
             val et = EMsgType.getEMsgType(m.what) ?: return
 
             if (EMsgType.REPLAY === et) {
-                val et_inner = EMsgType.getEMsgType(m.arg1)
-                if (null != et_inner) {
-                    if (EMsgType.USR_ADD === et_inner) {
+                val etInner = EMsgType.getEMsgType(m.arg1)
+                if (null != etInner) {
+                    if (EMsgType.USR_ADD === etInner) {
                         afterAddUsr(m, home)
                     }
                 }

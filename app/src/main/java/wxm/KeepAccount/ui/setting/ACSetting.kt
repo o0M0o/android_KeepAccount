@@ -23,7 +23,7 @@ class ACSetting : ACSwitcherActivity<TFSettingBase>() {
     private val mTFMain = TFSettingMain()
     private val mTFChartColor = TFSettingChartColor()
     private val mTFCheckVer = TFSettingCheckVersion()
-    private val mTFRemind = TFSettingRemind()
+    //private val mTFRemind = TFSettingRemind()
 
     override fun leaveActivity() {
         if (mTFMain !== hotFragment) {
@@ -36,7 +36,7 @@ class ACSetting : ACSwitcherActivity<TFSettingBase>() {
         }
     }
 
-    override fun setupFragment(bundle: Bundle) {
+    override fun setupFragment(bundle: Bundle?) {
         addFragment(mTFMain)
         addFragment(mTFChartColor)
         addFragment(mTFCheckVer)

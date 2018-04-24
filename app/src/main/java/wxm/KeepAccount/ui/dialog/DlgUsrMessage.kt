@@ -15,7 +15,6 @@ import org.json.JSONObject
 
 import java.io.IOException
 
-import butterknife.ButterKnife
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.Dialog.DlgOKOrNOBase
 import wxm.androidutil.util.PackageUtil
@@ -72,7 +71,6 @@ class DlgUsrMessage : DlgOKOrNOBase() {
     override fun InitDlgView(): View {
         InitDlgTitle(mSZUsrMessage, mSZAccept, mSZGiveUp)
         val vw = View.inflate(activity, R.layout.dlg_send_message, null)
-        ButterKnife.bind(this, vw)
 
         // for progress
         mETUsrMessage = vw.findViewById(R.id.et_usr_message)

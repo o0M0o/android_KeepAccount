@@ -1,7 +1,6 @@
 package wxm.KeepAccount.ui.dialog
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
@@ -78,15 +77,15 @@ class DlgSelectChannel : DlgOKOrNOBase() {
     inner class GVChannelAdapter internal constructor(context: Context, data: List<Map<String, *>>,
                                                       from: Array<String>, to: IntArray) : SimpleAdapter(context, data, R.layout.gi_channel, from, to) {
         override fun getViewTypeCount(): Int {
-            val org_ct = count
-            return if (org_ct < 1) 1 else org_ct
+            val orgCount = count
+            return if (orgCount < 1) 1 else orgCount
         }
 
         override fun getItemViewType(position: Int): Int {
             return position
         }
 
-        override fun getView(position: Int, view: View, arg2: ViewGroup): View? {
+        override fun getView(position: Int, view: View?, arg2: ViewGroup?): View? {
             val v = super.getView(position, view, arg2)
             if (null != v) {
                 val hmd = UtilFun.cast<HashMap<String, Any>>(getItem(position))
