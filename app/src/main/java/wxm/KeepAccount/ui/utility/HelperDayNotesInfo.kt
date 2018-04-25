@@ -17,24 +17,9 @@ import wxm.androidutil.ViewHolder.ViewHolder
  * Created by WangXM on 2017/1/22.
  */
 object HelperDayNotesInfo {
-    private var CR_PAY: Int = 0
-    private var CR_INCOME: Int = 0
-    private var DIM_FULL_WIDTH: Int = 0
-
-    init {
-        val ct = Objects.requireNonNull<ContextUtil>(ContextUtil.instance)
-        val res = ct.resources
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val te = ct.theme
-            CR_PAY = res.getColor(R.color.darkred, te)
-            CR_INCOME = res.getColor(R.color.darkslategrey, te)
-        } else {
-            CR_PAY = res.getColor(R.color.darkred)
-            CR_INCOME = res.getColor(R.color.darkslategrey)
-        }
-
-        DIM_FULL_WIDTH = res.getDimension(R.dimen.rl_amount_info_width).toInt()
-    }
+    private val CR_PAY: Int = ContextUtil.getColor(R.color.darkred)
+    private val CR_INCOME: Int = ContextUtil.getColor(R.color.darkslategrey)
+    private val DIM_FULL_WIDTH: Int =ContextUtil.getDimension(R.dimen.rl_amount_info_width).toInt()
 
     /**
      * fill note UI

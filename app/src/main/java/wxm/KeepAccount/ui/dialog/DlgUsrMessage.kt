@@ -31,36 +31,21 @@ import wxm.KeepAccount.utility.ContextUtil
 
 import android.Manifest.permission.READ_PHONE_STATE
 import android.Manifest.permission.READ_SMS
-import kotterknife.bindView
 
 /**
  * submit usr msg
  * Created by WangXM on 2017/1/9.
  */
 class DlgUsrMessage : DlgOKOrNOBase() {
-    private var mSZUrlPost: String? = null
-        get() = getString(R.string.url_post_send_message)
+    private val mSZUrlPost: String = ContextUtil.getString(R.string.url_post_send_message)
+    private val mSZColUsr: String = ContextUtil.getString(R.string.col_usr)
+    private val mSZColMsg: String = ContextUtil.getString(R.string.col_message)
+    private val mSZColAppName: String = ContextUtil.getString(R.string.col_app_name)
+    private val mSZColValAppName: String = ContextUtil.getString(R.string.col_val_app_name)
 
-    private var mSZColUsr: String? = null
-        get() = getString(R.string.col_usr)
-
-    private var mSZColMsg: String? = null
-        get() = getString(R.string.col_message)
-
-    private var mSZColAppName: String? = null
-        get() = getString(R.string.col_app_name)
-
-    private var mSZColValAppName: String? = null
-        get() = getString(R.string.col_val_app_name)
-
-    private var mSZUsrMessage: String? = null
-        get() = getString(R.string.cn_usr_message)
-
-    private var mSZAccept: String? = null
-        get() = getString(R.string.cn_accept)
-
-    private var mSZGiveUp: String? = null
-        get() = getString(R.string.cn_giveup)
+    private val mSZUsrMessage: String = ContextUtil.getString(R.string.cn_usr_message)
+    private val mSZAccept: String = ContextUtil.getString(R.string.cn_accept)
+    private val mSZGiveUp: String = ContextUtil.getString(R.string.cn_giveup)
 
     private var mETUsrMessage: TextInputEditText? = null
 

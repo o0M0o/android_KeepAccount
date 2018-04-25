@@ -1,0 +1,145 @@
+package wxm.KeepAccount.ui.data.report
+
+import android.os.Bundle
+import android.support.v4.app.DialogFragment
+import android.view.View
+import android.widget.TextView
+
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+
+import java.math.BigDecimal
+import java.util.ArrayList
+import java.util.Locale
+
+import butterknife.BindView
+import butterknife.OnClick
+import wxm.KeepAccount.R
+import wxm.KeepAccount.ui.data.report.base.EventSelectDays
+import wxm.KeepAccount.ui.data.report.page.DayReportChart
+import wxm.KeepAccount.ui.data.report.page.DayReportWebView
+import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
+import wxm.KeepAccount.ui.utility.NoteDataHelper
+import wxm.KeepAccount.utility.ToolUtil
+import wxm.androidutil.Dialog.DlgOKOrNOBase
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import wxm.androidutil.FrgUtility.FrgSupportSwitcher
+import wxm.androidutil.util.UtilFun
+
+/**
+ * day data report
+ * Created by WangXM on 2017/2/15.
+ */
+class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
+    @BindView(R.id.tv_day)
+    private var mTVDay: TextView? = null
+    @BindView(R.id.tv_pay)
+    private var mTVPay: TextView? = null
+    @BindView(R.id.tv_income)
+    private var mTVIncome: TextView? = null
+    private var mASParaLoad: ArrayList<String>? = null
+
+    private val mPGWebView = DayReportWebView()
+    private val mPGChart = DayReportChart()
+
+    init {
+        setupFrgID(R.layout.vw_report, R.id.fl_page_holder)
+    }
+
+    /**
+     * update date range
+     * @param event     event with start & end day
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onSelectDaysEvent(event: EventSelectDays) {
+        mASParaLoad!![0] = event.mSZStartDay
+        mASParaLoad!![1] = event.mSZEndDay
+
+        loadUI(null)
+    }
+
+    override fun setupFragment(bundle: Bundle) {
+        val bd = arguments
+
+        mPGWebView.arguments = bd
+        mPGChart.arguments = bd
+
+        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD)
+        addChildFrg(mPGWebView)
+        addChildFrg(mPGChart)
+    }
+
+    override fun loadUI(savedInstanceState: Bundle?) {
+        val frg = this
+        if (!UtilFun.ListIsNullOrEmpty(frg.mASParaLoad)) {
+            if (2 != frg.mASParaLoad!!.size)
+                return
+
+            val param = arrayOfNulls<Any>(3)
+            ToolUtil.runInBackground(this.activity,
+                    Runnable {
+                        val dStart = frg.mASParaLoad!![0]
+                        val dEnd = frg.mASParaLoad!![1]
+                        param[0] = String.format(Locale.CHINA,
+                                "%s - %s", dStart, dEnd)
+                        val lsNote = NoteDataHelper.instance
+                                .getNotesBetweenDays(dStart, dEnd)
+
+                        var mBDTotalPay = BigDecimal.ZERO
+                        var mBDTotalIncome = BigDecimal.ZERO
+                        for (ls_n in lsNote.values) {
+                            for (id in ls_n!!) {
+                                if (id.isPayNote)
+                                    mBDTotalPay = mBDTotalPay.add(id.amount)
+                                else
+                                    mBDTotalIncome = mBDTotalIncome.add(id.amount)
+                            }
+                        }
+
+                        param[1] = mBDTotalPay
+                        param[2] = mBDTotalIncome
+                    },
+                    Runnable {
+                        frg.mTVDay!!.text = param[0] as String
+                        frg.mTVPay!!.text = String.format(Locale.CHINA,
+                                "%.02f", (param[1] as BigDecimal).toFloat())
+                        frg.mTVIncome!!.text = String.format(Locale.CHINA,
+                                "%.02f", (param[2] as BigDecimal).toFloat())
+
+                        super.loadUI(savedInstanceState)
+                    })
+        }
+    }
+
+    /**
+     * switch page
+     * @param v     clicked view
+     */
+    @OnClick(R.id.iv_switch)
+    fun onSwitchShow(v: View) {
+        switchPage()
+    }
+
+    /**
+     * reselect start & end time
+     * @param v     action view
+     */
+    @OnClick(R.id.tv_select_days)
+    fun onSelectDays(v: View) {
+        val dlgDay = DlgSelectReportDays()
+        dlgDay.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
+            override fun onDialogPositiveResult(dialogFragment: DialogFragment) {
+                EventBus.getDefault().post(
+                        EventSelectDays(dlgDay.startDay!!, dlgDay.endDay!!))
+            }
+
+            override fun onDialogNegativeResult(dialogFragment: DialogFragment) {}
+        })
+
+        dlgDay.show(activity.supportFragmentManager, "select days")
+    }
+
+    /// PRIVATE BEGIN
+    /// PRIVATE END
+}

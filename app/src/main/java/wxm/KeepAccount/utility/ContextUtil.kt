@@ -1,9 +1,8 @@
 package wxm.KeepAccount.utility
 
 import android.app.Application
-import android.support.annotation.ColorInt
-import android.support.annotation.ColorRes
-import android.support.annotation.StringRes
+import android.graphics.drawable.Drawable
+import android.support.annotation.*
 import android.util.Log
 
 import wxm.KeepAccount.db.BudgetDBUtility
@@ -181,9 +180,26 @@ class ContextUtil : Application() {
             return instance!!.getString(resId)
         }
 
+        /**
+         * get res color
+         */
         @ColorInt
         fun getColor(@ColorRes resId : Int): Int  {
             return instance!!.getColor(resId)
+        }
+
+        /**
+         * get res drawable
+         */
+        fun getDrawable(@DrawableRes resId : Int): Drawable {
+            return instance!!.getDrawable(resId)
+        }
+
+        /**
+         * get dimension by pixel
+         */
+        fun getDimension(@DimenRes resId : Int): Float   {
+            return instance!!.resources.getDimension(resId)
         }
     }
 }

@@ -76,7 +76,7 @@ class DlgSelectReportDays : DlgOKOrNOBase() {
                         context,
                         { _, year, month, dayOfMonth ->
                             startDay = dayToSZ(year, month + 1, dayOfMonth)
-                            mTVStartDay!!.text = startDay
+                            mTVStartDay.text = startDay
                         },
                         y, m, d)
 
@@ -91,7 +91,7 @@ class DlgSelectReportDays : DlgOKOrNOBase() {
                         context,
                         { _, year, month, dayOfMonth ->
                             endDay = dayToSZ(year, month + 1, dayOfMonth)
-                            mTVEndDay!!.text = endDay
+                            mTVEndDay.text = endDay
                         },
                         y, m, d)
             }
