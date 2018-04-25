@@ -53,7 +53,7 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
             mETPwd.setOnEditorActionListener(this)
             mETRepeatPwd.setOnEditorActionListener(this)
 
-            EventHelper.setOnClickListner(view!!,
+            EventHelper.setOnClickListener(view!!,
                     intArrayOf(R.id.bt_confirm, R.id.bt_giveup),
                     View.OnClickListener { v ->
                         when (v.id) {

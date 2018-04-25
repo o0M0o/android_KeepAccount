@@ -21,7 +21,7 @@ class ACReport : ACSwitcherActivity<Fragment>() {
         finish()
     }
 
-    override fun setupFragment(bundle: Bundle) {
+    override fun setupFragment(bundle: Bundle?) {
         // check invoke intent
         val it = intent
         val szType = it.getStringExtra(PARA_TYPE)

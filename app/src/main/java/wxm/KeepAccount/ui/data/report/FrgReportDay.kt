@@ -15,6 +15,7 @@ import java.util.Locale
 
 import butterknife.BindView
 import butterknife.OnClick
+import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays
 import wxm.KeepAccount.ui.data.report.page.DayReportChart
@@ -32,12 +33,10 @@ import wxm.androidutil.util.UtilFun
  * Created by WangXM on 2017/2/15.
  */
 class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
-    @BindView(R.id.tv_day)
-    private var mTVDay: TextView? = null
-    @BindView(R.id.tv_pay)
-    private var mTVPay: TextView? = null
-    @BindView(R.id.tv_income)
-    private var mTVIncome: TextView? = null
+    private val mTVDay: TextView by bindView(R.id.tv_day)
+    private val mTVPay: TextView by bindView(R.id.tv_pay)
+    private val mTVIncome: TextView by bindView(R.id.tv_income)
+
     private var mASParaLoad: ArrayList<String>? = null
 
     private val mPGWebView = DayReportWebView()
@@ -59,7 +58,7 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
         loadUI(null)
     }
 
-    override fun setupFragment(bundle: Bundle) {
+    override fun setupFragment(bundle: Bundle?) {
         val bd = arguments
 
         mPGWebView.arguments = bd
@@ -101,10 +100,10 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
                         param[2] = mBDTotalIncome
                     },
                     Runnable {
-                        frg.mTVDay!!.text = param[0] as String
-                        frg.mTVPay!!.text = String.format(Locale.CHINA,
+                        frg.mTVDay.text = param[0] as String
+                        frg.mTVPay.text = String.format(Locale.CHINA,
                                 "%.02f", (param[1] as BigDecimal).toFloat())
-                        frg.mTVIncome!!.text = String.format(Locale.CHINA,
+                        frg.mTVIncome.text = String.format(Locale.CHINA,
                                 "%.02f", (param[2] as BigDecimal).toFloat())
 
                         super.loadUI(savedInstanceState)

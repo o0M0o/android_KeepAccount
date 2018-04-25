@@ -40,7 +40,7 @@ class DlgRecordInfo : DlgOKOrNOBase() {
             return ri
         }
 
-    fun setInitDate(initData: RecordTypeItem) {
+    fun setInitDate(initData: RecordTypeItem?) {
         mOldData = initData
     }
 

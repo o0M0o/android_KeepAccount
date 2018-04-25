@@ -21,6 +21,7 @@ import java.util.Locale
 
 import butterknife.BindView
 import butterknife.OnClick
+import kotterknife.bindView
 import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener
 import lecho.lib.hellocharts.model.PieChartData
 import lecho.lib.hellocharts.model.SliceValue
@@ -40,14 +41,11 @@ import wxm.androidutil.util.UtilFun
  * Created by WangXM on 2017/3/4.
  */
 class DayReportChart : FrgSupportBaseAdv() {
-    @BindView(R.id.chart)
-    internal var mCVchart: PieChartView? = null
-    @BindView(R.id.pb_load_data)
-    internal var mPBLoadData: ProgressBar? = null
-    @BindView(R.id.tb_income)
-    internal var mTBIncome: ToggleButton? = null
-    @BindView(R.id.tb_pay)
-    internal var mTBPay: ToggleButton? = null
+    private val mCVchart: PieChartView by bindView(R.id.chart)
+    private val mPBLoadData: ProgressBar by bindView(R.id.pb_load_data)
+    private val mTBIncome: ToggleButton by bindView(R.id.tb_income)
+    private val mTBPay: ToggleButton by bindView(R.id.tb_pay)
+
     private var mASParaLoad: ArrayList<String>? = null
     private var mLLOrgData: LinkedList<INote> = LinkedList()
 

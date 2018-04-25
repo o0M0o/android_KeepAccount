@@ -8,7 +8,6 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.GridView
 import android.widget.SimpleAdapter
 import android.widget.TextView
-import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.data.edit.RecordInfo.ACRecordInfoEdit
@@ -85,13 +84,13 @@ class DlgSelectRecordType : DlgOKOrNOBase() {
         }
 
         // for click
-        EventHelper.setOnClickListner(vw!!,
+        EventHelper.setOnClickListener(vw!!,
                 intArrayOf(R.id.ib_manage, R.id.ib_sort),
                 View.OnClickListener { v ->
                     when (v.id) {
                         R.id.ib_manage -> {
                             val it = Intent(context, ACRecordInfoEdit::class.java)
-                            it.putExtra(ACRecordInfoEdit.IT_PARA_RECORDTYPE, mRootType)
+                            it.putExtra(ACRecordInfoEdit.IT_PARA_RECORD_TYPE, mRootType)
 
                             startActivityForResult(it, 1)
                         }

@@ -49,7 +49,7 @@ class FrgLogin : FrgSupportBaseAdv() {
             startActivityForResult(intent, 1)
         }
 
-        mBTDefUsrLogin.setOnClickListener { v -> doLogin(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD) }
+        mBTDefUsrLogin.setOnClickListener { _ -> doLogin(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD) }
     }
 
     override fun getLayoutID(): Int {

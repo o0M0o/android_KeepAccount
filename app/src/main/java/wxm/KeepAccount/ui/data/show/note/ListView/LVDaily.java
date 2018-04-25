@@ -32,7 +32,7 @@ import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.INote;
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper;
-import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd;
+import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate;
 import wxm.KeepAccount.ui.data.report.ACReport;
 import wxm.KeepAccount.ui.data.show.note.ACDailyDetail;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
@@ -185,7 +185,7 @@ public class LVDaily extends LVBase {
 
                 case R.id.ib_add: {
                     ACNoteShow ac = getRootActivity();
-                    Intent intent = new Intent(ac, ACNoteAdd.class);
+                    Intent intent = new Intent(ac, ACNoteCreate.class);
                     Calendar cal = Calendar.getInstance();
                     cal.setTimeInMillis(System.currentTimeMillis());
                     intent.putExtra(GlobalDef.STR_RECORD_DATE,

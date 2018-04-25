@@ -53,7 +53,7 @@
             android:label="@string/label_welcome"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.data.edit.Note.ACNoteAdd"
+            android:name=".ui.data.edit.NoteCreate.ACNoteCreate"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -76,7 +76,7 @@
             android:label="日历展示"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.data.edit.Note.ACPreveiwAndEdit"
+            android:name=".ui.data.edit.NoteEdit.ACNoteEdit"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.data.edit.RecordInfo.ACRecordInfoEdit"

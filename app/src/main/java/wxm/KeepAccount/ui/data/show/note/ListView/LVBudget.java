@@ -33,7 +33,7 @@ import wxm.KeepAccount.define.BudgetItem;
 import wxm.KeepAccount.define.GlobalDef;
 import wxm.KeepAccount.define.PayNoteItem;
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper;
-import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit;
+import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit;
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow;
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent;
 import wxm.KeepAccount.ui.utility.ListViewHelper;
@@ -137,7 +137,7 @@ public class LVBudget extends LVBase {
 
                 case R.id.ib_add: {
                     ACNoteShow ac = getRootActivity();
-                    Intent intent = new Intent(ac, ACPreveiwAndEdit.class);
+                    Intent intent = new Intent(ac, ACNoteEdit.class);
                     intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
                     ac.startActivityForResult(intent, 1);
                 }
@@ -361,7 +361,7 @@ public class LVBudget extends LVBase {
                 case R.id.iv_edit: {
                     int tag_id = Integer.parseInt(hm.id);
                     Activity ac = getRootActivity();
-                    Intent it = new Intent(ac, ACPreveiwAndEdit.class);
+                    Intent it = new Intent(ac, ACNoteEdit.class);
                     it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, tag_id);
                     it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET);
                     ac.startActivityForResult(it, 1);
@@ -473,7 +473,7 @@ public class LVBudget extends LVBase {
             vh.getView(R.id.iv_look).setOnClickListener(v -> {
                 ACNoteShow ac = getRootActivity();
                 Intent intent;
-                intent = new Intent(ac, ACPreveiwAndEdit.class);
+                intent = new Intent(ac, ACNoteEdit.class);
                 intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(hm.id));
                 intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
                         GlobalDef.STR_RECORD_PAY);

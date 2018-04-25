@@ -5,7 +5,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.DialogFragment
-import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -25,8 +24,8 @@ import wxm.KeepAccount.define.EAction
 import wxm.androidutil.Dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.ui.data.edit.Note.ACNoteAdd
-import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit
+import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
+import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow
 import wxm.KeepAccount.ui.dialog.DlgUsrMessage
@@ -132,13 +131,13 @@ class ACWelcome : AppCompatActivity(), View.OnClickListener, NavigationView.OnNa
             }
 
             EAction.ADD_BUDGET -> {
-                val intent = Intent(this, ACPreveiwAndEdit::class.java)
+                val intent = Intent(this, ACNoteEdit::class.java)
                 intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET)
                 startActivityForResult(intent, 1)
             }
 
             EAction.ADD_DATA -> {
-                val intent = Intent(this, ACNoteAdd::class.java)
+                val intent = Intent(this, ACNoteCreate::class.java)
                 val cal = Calendar.getInstance()
                 cal.timeInMillis = System.currentTimeMillis()
                 intent.putExtra(GlobalDef.STR_RECORD_DATE,

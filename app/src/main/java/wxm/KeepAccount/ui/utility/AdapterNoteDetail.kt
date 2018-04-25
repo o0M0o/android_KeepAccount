@@ -12,7 +12,7 @@ import wxm.KeepAccount.define.INote
 import wxm.KeepAccount.define.IncomeNoteItem
 import wxm.KeepAccount.define.PayNoteItem
 import wxm.KeepAccount.ui.base.Helper.ViewHelper
-import wxm.KeepAccount.ui.data.edit.Note.ACPreveiwAndEdit
+import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.ViewHolder.ViewHolder
 import wxm.androidutil.util.UtilFun
@@ -82,7 +82,7 @@ class AdapterNoteDetail(private val mCTSelf: Context, data: List<Map<String, *>>
             }
 
             vhRight.getChildView<View>(R.id.iv_edit)!!.setOnClickListener { v ->
-                val intent = Intent(mCTSelf, ACPreveiwAndEdit::class.java)
+                val intent = Intent(mCTSelf, ACNoteEdit::class.java)
                 val data = v.tag as INote
                 intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, data.id)
                 intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,

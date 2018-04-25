@@ -43,7 +43,7 @@ class TFSettingChartColor : TFSettingBase() {
             mHMColors[PreferencesUtil.SET_BUDGET_BALANCE_COLOR]?.let { mIVBudgetBalance.setBackgroundColor(it) }
             mHMColors[PreferencesUtil.SET_BUDGET_UESED_COLOR]?.let { mIVBudgetUsed.setBackgroundColor(it) }
 
-            EventHelper.setOnClickListner(view!!,
+            EventHelper.setOnClickListener(view!!,
                     intArrayOf(R.id.iv_pay, R.id.iv_income, R.id.iv_budget_balance, R.id.iv_budget_used),
                     View.OnClickListener { v ->
                         run {

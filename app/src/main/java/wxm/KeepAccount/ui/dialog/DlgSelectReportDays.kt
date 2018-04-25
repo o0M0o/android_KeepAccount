@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.TextView
+import butterknife.BindView
 import kotterknife.bindView
 
 import java.util.Calendar
@@ -20,8 +21,10 @@ import wxm.KeepAccount.utility.ContextUtil
 class DlgSelectReportDays : DlgOKOrNOBase() {
     private val mSZInputDay: String = ContextUtil.getString(R.string.hint_input_day)
 
-    private val mTVStartDay: TextView by bindView(R.id.tv_start_day)
-    private val mTVEndDay: TextView by bindView(R.id.tv_end_day)
+    //private val mTVStartDay: TextView by bindView(R.id.tv_start_day)
+    //private val mTVEndDay: TextView by bindView(R.id.tv_end_day)
+    private var mTVStartDay: TextView? = null
+    private var mTVEndDay: TextView? = null
 
     /**
      * get start day
@@ -40,22 +43,25 @@ class DlgSelectReportDays : DlgOKOrNOBase() {
         endDay = null
         startDay = null
 
-        InitDlgTitle("选择起始日期", "接受", "放弃")
+        InitDlgTitle(mSZInputDay, "接受", "放弃")
         val vw = View.inflate(activity, R.layout.dlg_select_report_days, null)
 
-        mTVStartDay.setOnClickListener({ v -> tvClicks(v) })
-        mTVEndDay.setOnClickListener({ v -> tvClicks(v) })
+        mTVStartDay = vw.findViewById(R.id.tv_start_day)
+        mTVEndDay = vw.findViewById(R.id.tv_end_day)
+
+        mTVStartDay!!.setOnClickListener({ v -> tvClicks(v) })
+        mTVEndDay!!.setOnClickListener({ v -> tvClicks(v) })
 
         // 默认是过去3个月的数据
         val cd = Calendar.getInstance()
         endDay = dayToSZ(cd.get(Calendar.YEAR),
                 cd.get(Calendar.MONTH) + 1, cd.get(Calendar.DAY_OF_MONTH))
-        mTVEndDay.text = endDay
+        mTVEndDay!!.text = endDay
 
         cd.add(Calendar.MONTH, -3)
         startDay = dayToSZ(cd.get(Calendar.YEAR),
                 cd.get(Calendar.MONTH) + 1, cd.get(Calendar.DAY_OF_MONTH))
-        mTVStartDay.text = startDay
+        mTVStartDay!!.text = startDay
 
         return vw
     }
@@ -76,7 +82,7 @@ class DlgSelectReportDays : DlgOKOrNOBase() {
                         context,
                         { _, year, month, dayOfMonth ->
                             startDay = dayToSZ(year, month + 1, dayOfMonth)
-                            mTVStartDay.text = startDay
+                            mTVStartDay!!.text = startDay
                         },
                         y, m, d)
 
@@ -91,7 +97,7 @@ class DlgSelectReportDays : DlgOKOrNOBase() {
                         context,
                         { _, year, month, dayOfMonth ->
                             endDay = dayToSZ(year, month + 1, dayOfMonth)
-                            mTVEndDay.text = endDay
+                            mTVEndDay!!.text = endDay
                         },
                         y, m, d)
             }

@@ -32,7 +32,7 @@ class TFSettingMain : TFSettingBase() {
             mRLRemind.visibility = View.GONE
             mRLShareApp.visibility = View.GONE
 
-            EventHelper.setOnClickListner(view!!,
+            EventHelper.setOnClickListener(view!!,
                     intArrayOf(R.id.rl_check_version, R.id.rl_chart_color, R.id.rl_reformat_data),
                     View.OnClickListener { v ->
                         when (v.id) {
