@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.dialog
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -44,11 +45,13 @@ class DlgSelectColor : DlgOKOrNOBase(), AdapterView.OnItemClickListener {
         }
     }
 
-    override fun InitDlgView(): View {
-        InitDlgTitle("选择颜色", "接受", "放弃")
+    override fun createDlgView(savedInstanceState: Bundle?): View {
+        initDlgTitle("选择颜色", "接受", "放弃")
+        return View.inflate(activity, R.layout.dlg_select_color, null)
+    }
 
-        val vw = View.inflate(activity, R.layout.dlg_select_color, null)
-        val gv = UtilFun.cast<GridView>(vw.findViewById(R.id.gv_colors))!!
+    override fun initDlgView(savedInstanceState: Bundle?) {
+        val gv: GridView = findDlgChildView(R.id.gv_colors)!!
         gv.onItemClickListener = this
 
         val lsData = ArrayList<HashMap<String, Any>>()
@@ -61,7 +64,6 @@ class DlgSelectColor : DlgOKOrNOBase(), AdapterView.OnItemClickListener {
         val ga = GVChannelAdapter(activity, lsData, arrayOf(), intArrayOf())
         gv.adapter = ga
         ga.notifyDataSetChanged()
-        return vw
     }
 
 

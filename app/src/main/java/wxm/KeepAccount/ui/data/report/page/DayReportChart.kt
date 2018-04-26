@@ -102,11 +102,11 @@ class DayReportChart : FrgSupportBaseAdv() {
         val vid = v.id
         when (vid) {
             R.id.tb_income -> {
-                mTBPay!!.isClickable = mTBIncome!!.isChecked
+                mTBPay.isClickable = mTBIncome!!.isChecked
             }
 
             R.id.tb_pay -> {
-                mTBIncome!!.isClickable = mTBPay!!.isChecked
+                mTBIncome.isClickable = mTBPay!!.isChecked
             }
         }
 
@@ -118,8 +118,8 @@ class DayReportChart : FrgSupportBaseAdv() {
                 Runnable {
                     showProgress(false)
 
-                    mCVchart!!.circleFillRatio = 0.6f
-                    mCVchart!!.pieChartData = CVData
+                    mCVchart.circleFillRatio = 0.6f
+                    mCVchart.pieChartData = CVData
                 })
     }
 
@@ -134,11 +134,11 @@ class DayReportChart : FrgSupportBaseAdv() {
         val shortAnimTime = resources
                 .getInteger(android.R.integer.config_shortAnimTime)
 
-        mPBLoadData!!.visibility = if (show) View.VISIBLE else View.GONE
-        mPBLoadData!!.animate().setDuration(shortAnimTime.toLong())
+        mPBLoadData.visibility = if (show) View.VISIBLE else View.GONE
+        mPBLoadData.animate().setDuration(shortAnimTime.toLong())
                 .alpha((if (show) 1 else 0).toFloat()).setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        mPBLoadData!!.visibility = if (show) View.VISIBLE else View.GONE
+                        mPBLoadData.visibility = if (show) View.VISIBLE else View.GONE
                     }
                 })
     }
@@ -164,8 +164,8 @@ class DayReportChart : FrgSupportBaseAdv() {
                     Runnable {
                         showProgress(false)
 
-                        mCVchart!!.circleFillRatio = 0.6f
-                        mCVchart!!.pieChartData = cvData
+                        mCVchart.circleFillRatio = 0.6f
+                        mCVchart.pieChartData = cvData
                     })
         }
     }
@@ -197,8 +197,8 @@ class DayReportChart : FrgSupportBaseAdv() {
         }
 
         // create chart item list
-        val bPay = mTBPay!!.isChecked
-        val bIncome = mTBIncome!!.isChecked
+        val bPay = mTBPay.isChecked
+        val bIncome = mTBIncome.isChecked
         val lsCI = LinkedList<ChartItem>()
         for (data in mLLOrgData) {
             if (data.isPayNote && !bPay)

@@ -10,7 +10,7 @@ import wxm.androidutil.Switcher.ACSwitcherActivity
  */
 class ACHelp : ACSwitcherActivity<FrgHelp>() {
 
-    override fun setupFragment(bundle: Bundle) {
+    override fun setupFragment(bundle: Bundle?) {
         addFragment(FrgHelp())
     }
 

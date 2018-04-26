@@ -14,5 +14,5 @@ class FrgReportMonth : FrgSupportSwitcher<FrgSupportBaseAdv>() {
         setupFrgID(R.layout.vw_report, R.id.fl_page_holder)
     }
 
-    override fun setupFragment(bundle: Bundle) {}
+    override fun setupFragment(bundle: Bundle?) {}
 }

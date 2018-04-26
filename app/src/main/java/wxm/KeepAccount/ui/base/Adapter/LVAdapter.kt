@@ -90,14 +90,7 @@ open class LVAdapter
 
     private fun createViewFromResource(inflater: LayoutInflater, position: Int, convertView: View?,
                                        parent: ViewGroup, resource: Int): View {
-        val v: View
-        if (convertView == null) {
-            v = inflater.inflate(resource, parent, false)
-        } else {
-            v = convertView
-        }
-
-        return v
+        return convertView ?: inflater.inflate(resource, parent, false)
     }
 
     /**

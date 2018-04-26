@@ -4,29 +4,25 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
 import android.widget.TextView
-
+import butterknife.OnClick
+import kotterknife.bindView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-
-import java.math.BigDecimal
-import java.util.ArrayList
-import java.util.Locale
-
-import butterknife.BindView
-import butterknife.OnClick
-import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays
 import wxm.KeepAccount.ui.data.report.page.DayReportChart
 import wxm.KeepAccount.ui.data.report.page.DayReportWebView
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
+import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.Dialog.DlgOKOrNOBase
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
 import wxm.androidutil.FrgUtility.FrgSupportSwitcher
 import wxm.androidutil.util.UtilFun
+import java.math.BigDecimal
+import java.util.*
 
 /**
  * day data report
@@ -69,6 +65,37 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
         addChildFrg(mPGChart)
     }
 
+    override fun initUI(savedInstanceState: Bundle?) {
+        super.initUI(savedInstanceState)
+        if (null == savedInstanceState) {
+            EventHelper.setOnClickListener(view!!,
+                    intArrayOf(R.id.iv_switch, R.id.tv_select_days),
+                    View.OnClickListener { v ->
+                        when (v.id) {
+                            // switch report type
+                            R.id.iv_switch -> {
+                                switchPage()
+                            }
+
+                            // reset start-end day
+                            R.id.tv_select_days -> {
+                                val dlgDay = DlgSelectReportDays()
+                                dlgDay.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
+                                    override fun onDialogPositiveResult(dialogFragment: DialogFragment) {
+                                        EventBus.getDefault().post(
+                                                EventSelectDays(dlgDay.startDay!!, dlgDay.endDay!!))
+                                    }
+
+                                    override fun onDialogNegativeResult(dialogFragment: DialogFragment) {}
+                                })
+
+                                dlgDay.show(activity.supportFragmentManager, "select days")
+                            }
+                        }
+                    })
+        }
+    }
+
     override fun loadUI(savedInstanceState: Bundle?) {
         val frg = this
         if (!UtilFun.ListIsNullOrEmpty(frg.mASParaLoad)) {
@@ -109,34 +136,6 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
                         super.loadUI(savedInstanceState)
                     })
         }
-    }
-
-    /**
-     * switch page
-     * @param v     clicked view
-     */
-    @OnClick(R.id.iv_switch)
-    fun onSwitchShow(v: View) {
-        switchPage()
-    }
-
-    /**
-     * reselect start & end time
-     * @param v     action view
-     */
-    @OnClick(R.id.tv_select_days)
-    fun onSelectDays(v: View) {
-        val dlgDay = DlgSelectReportDays()
-        dlgDay.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
-            override fun onDialogPositiveResult(dialogFragment: DialogFragment) {
-                EventBus.getDefault().post(
-                        EventSelectDays(dlgDay.startDay!!, dlgDay.endDay!!))
-            }
-
-            override fun onDialogNegativeResult(dialogFragment: DialogFragment) {}
-        })
-
-        dlgDay.show(activity.supportFragmentManager, "select days")
     }
 
     /// PRIVATE BEGIN

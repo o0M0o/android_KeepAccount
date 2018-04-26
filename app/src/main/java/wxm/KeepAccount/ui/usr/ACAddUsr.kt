@@ -15,7 +15,7 @@ class ACAddUsr : ACSwitcherActivity<FrgUsrAdd>() {
         hotFragment.reInitUI()
     }
 
-    override fun setupFragment(bundle: Bundle) {
+    override fun setupFragment(bundle: Bundle?) {
         addFragment(FrgUsrAdd())
     }
 }

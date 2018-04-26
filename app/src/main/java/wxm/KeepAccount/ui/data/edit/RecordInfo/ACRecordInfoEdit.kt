@@ -18,7 +18,7 @@ class ACRecordInfoEdit : ACSwitcherActivity<FrgRecordInfoEdit>() {
         giveUpEdit()
     }
 
-    override fun setupFragment(bundle: Bundle) {
+    override fun setupFragment(bundle: Bundle?) {
         val it = intent
         val tf = FrgRecordInfoEdit()
         tf.mEditType = it.getStringExtra(IT_PARA_RECORD_TYPE)

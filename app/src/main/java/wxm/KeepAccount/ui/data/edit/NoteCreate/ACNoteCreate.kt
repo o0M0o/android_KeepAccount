@@ -20,7 +20,7 @@ class ACNoteCreate : ACSwitcherActivity<FrgNoteCreate>() {
         finish()
     }
 
-    override fun setupFragment(bundle: Bundle) {
+    override fun setupFragment(bundle: Bundle?) {
         val hf = FrgNoteCreate()
         val it = intent!!
 

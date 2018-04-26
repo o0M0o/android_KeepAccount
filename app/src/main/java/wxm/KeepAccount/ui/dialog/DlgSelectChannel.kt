@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.dialog
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
@@ -35,11 +36,13 @@ class DlgSelectChannel : DlgOKOrNOBase() {
             mLSHotChannel.addAll(org_hot)
         }
 
-    override fun InitDlgView(): View {
-        InitDlgTitle("选择首页项", "接受", "放弃")
+    override fun createDlgView(savedInstanceState: Bundle?): View {
+        initDlgTitle("选择首页项", "接受", "放弃")
+        return View.inflate(activity, R.layout.dlg_select_channel, null)
+    }
 
-        val vw = View.inflate(activity, R.layout.dlg_select_channel, null)
-        val gv = UtilFun.cast_t<GridView>(vw.findViewById(R.id.gv_channels))
+    override fun initDlgView(savedInstanceState: Bundle?) {
+        val gv: GridView = findDlgChildView(R.id.gv_channels)!!
         gv.setOnItemClickListener { parent, view, position, _ ->
             val hmd = UtilFun.cast<HashMap<String, Any>>(parent.adapter.getItem(position))
             val act = UtilFun.cast<String>(hmd[DGVButtonAdapter.HKEY_ACT_NAME])
@@ -54,28 +57,28 @@ class DlgSelectChannel : DlgOKOrNOBase() {
             }
         }
 
-        val ls_data = ArrayList<HashMap<String, Any>>()
+        val lsData = ArrayList<HashMap<String, Any>>()
         for (ea in EAction.values()) {
             val hm = HashMap<String, Any>()
             hm[DGVButtonAdapter.HKEY_ACT_NAME] = ea.actName
 
-            ls_data.add(hm)
+            lsData.add(hm)
         }
 
-        val ga = GVChannelAdapter(activity, ls_data,
-                arrayOf(DGVButtonAdapter.HKEY_ACT_NAME),
-                intArrayOf(R.id.tv_name))
+        val ga = GVChannelAdapter(activity, lsData, arrayOf(DGVButtonAdapter.HKEY_ACT_NAME),
+                        intArrayOf(R.id.tv_name))
         gv.adapter = ga
         ga.notifyDataSetChanged()
-        return vw
     }
 
 
     /**
      * adapter for gridview
      */
-    inner class GVChannelAdapter internal constructor(context: Context, data: List<Map<String, *>>,
-                                                      from: Array<String>, to: IntArray) : SimpleAdapter(context, data, R.layout.gi_channel, from, to) {
+    inner class GVChannelAdapter
+        internal constructor(context: Context, data: List<Map<String, *>>,
+                            from: Array<String>, to: IntArray)
+        : SimpleAdapter(context, data, R.layout.gi_channel, from, to) {
         override fun getViewTypeCount(): Int {
             val orgCount = count
             return if (orgCount < 1) 1 else orgCount

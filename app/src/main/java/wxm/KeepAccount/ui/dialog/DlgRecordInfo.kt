@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.dialog
 
+import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.view.View
 
@@ -15,8 +16,8 @@ import wxm.KeepAccount.define.RecordTypeItem
  * Created by WangXM on 2016/11/1.
  */
 class DlgRecordInfo : DlgOKOrNOBase() {
-    private val mTIETName: TextInputEditText by bindView(R.id.ti_name)
-    private val mTIETNote: TextInputEditText by bindView(R.id.ti_note)
+    private lateinit var mTIETName: TextInputEditText
+    private lateinit var mTIETNote: TextInputEditText
 
     private var mOldData: RecordTypeItem? = null
     private var mRecordType: String? = null
@@ -48,19 +49,23 @@ class DlgRecordInfo : DlgOKOrNOBase() {
         mRecordType = type
     }
 
-
-    override fun InitDlgView(): View? {
-        if (UtilFun.StringIsNullOrEmpty(mRecordType) || GlobalDef.STR_RECORD_PAY != mRecordType && GlobalDef.STR_RECORD_INCOME != mRecordType)
+    override fun createDlgView(savedInstanceState: Bundle?): View? {
+        if (UtilFun.StringIsNullOrEmpty(mRecordType)
+                || (GlobalDef.STR_RECORD_PAY != mRecordType && GlobalDef.STR_RECORD_INCOME != mRecordType))
             return null
 
-        InitDlgTitle(if (GlobalDef.STR_RECORD_PAY == mRecordType) "添加支付类型" else "添加收入类型",
+        initDlgTitle(if (GlobalDef.STR_RECORD_PAY == mRecordType) "添加支付类型" else "添加收入类型",
                 "接受", "放弃")
-        val vw = View.inflate(activity, R.layout.dlg_add_record_info, null)
+        return View.inflate(activity, R.layout.dlg_add_record_info, null)
+    }
 
-        if (null != mOldData) {
-            mTIETName.setText(mOldData!!.type)
-            mTIETNote.setText(mOldData!!.note)
+    override fun initDlgView(savedInstanceState: Bundle?) {
+        mTIETName = findDlgChildView(R.id.ti_name)!!
+        mTIETNote = findDlgChildView(R.id.ti_note)!!
+
+        mOldData?.let {
+            mTIETName.setText(it.type)
+            mTIETNote.setText(it.note)
         }
-        return vw
     }
 }

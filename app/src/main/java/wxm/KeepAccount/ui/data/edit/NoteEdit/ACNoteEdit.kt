@@ -22,7 +22,7 @@ class ACNoteEdit : ACSwitcherActivity<FrgEditBase>() {
         finish()
     }
 
-    override fun setupFragment(bundle: Bundle) {
+    override fun setupFragment(bundle: Bundle?) {
         val it = intent
         val type = it.getStringExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE)
         val id = it.getIntExtra(GlobalDef.INTENT_LOAD_RECORD_ID, -1)

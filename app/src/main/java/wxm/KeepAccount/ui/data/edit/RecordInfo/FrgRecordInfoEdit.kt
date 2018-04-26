@@ -324,7 +324,7 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
         override fun getView(position: Int, view: View?, arg2: ViewGroup?): View? {
             val v = super.getView(position, view, arg2)
             if (null != v) {
-                val hm = mLHMData!![position]
+                val hm = mLHMData[position]
                 val curCL = if (hm[KEY_SELECTED] == VAL_SELECTED)
                     mCLSelected
                 else

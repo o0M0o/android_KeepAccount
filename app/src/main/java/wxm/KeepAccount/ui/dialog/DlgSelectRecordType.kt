@@ -2,6 +2,7 @@ package wxm.KeepAccount.ui.dialog
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
@@ -25,9 +26,9 @@ import kotlin.collections.ArrayList
  */
 class DlgSelectRecordType : DlgOKOrNOBase() {
     //private val mGVMain: GridView by bindView(R.id.gv_record_info)
-    private var mGVMain: GridView? = null
+    private lateinit var mGVMain: GridView
     //private val mIBSort: IconButton by bindView(R.id.ib_sort)
-    private var mIBSort: IconButton? = null
+    private lateinit var mIBSort: IconButton
 
     private var mLHMData: ArrayList<HashMap<String, String>> = ArrayList()
     private var mGAAdapter: GVTypeAdapter? = null
@@ -51,21 +52,23 @@ class DlgSelectRecordType : DlgOKOrNOBase() {
         curType = ot
     }
 
-    override fun InitDlgView(): View {
-        InitDlgTitle(if (GlobalDef.STR_RECORD_PAY == mRootType) "选择支出类型" else "选择收入类型",
+    override fun createDlgView(savedInstanceState: Bundle?): View {
+        initDlgTitle(if (GlobalDef.STR_RECORD_PAY == mRootType) "选择支出类型" else "选择收入类型",
                 "接受", "放弃")
 
-        // for UI component
-        val vw = View.inflate(activity, R.layout.dlg_select_record_info, null)
-        mGVMain = vw.findViewById(R.id.gv_record_info)
-        mIBSort = vw.findViewById(R.id.ib_sort)
+        return View.inflate(activity, R.layout.dlg_select_record_info, null)
+    }
+
+    override fun initDlgView(savedInstanceState: Bundle?) {
+        mGVMain = findDlgChildView(R.id.gv_record_info)!!
+        mIBSort = findDlgChildView(R.id.ib_sort)!!
 
         mGAAdapter = GVTypeAdapter(activity, mLHMData,
                 arrayOf(KEY_NAME, KEY_NOTE),
                 intArrayOf(R.id.tv_type_name, R.id.tv_type_note))
 
-        mGVMain!!.adapter = mGAAdapter
-        mGVMain!!.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
+        mGVMain.adapter = mGAAdapter
+        mGVMain.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
             run {
                 val tvStr = mLHMData[pos][KEY_NAME]
                 if (tvStr != curType) {
@@ -84,7 +87,7 @@ class DlgSelectRecordType : DlgOKOrNOBase() {
         }
 
         // for click
-        EventHelper.setOnClickListener(vw!!,
+        EventHelper.setOnClickListener(dlgView,
                 intArrayOf(R.id.ib_manage, R.id.ib_sort),
                 View.OnClickListener { v ->
                     when (v.id) {
@@ -109,7 +112,6 @@ class DlgSelectRecordType : DlgOKOrNOBase() {
 
         // for gridview show
         loadData()
-        return vw
     }
 
     private fun loadData() {

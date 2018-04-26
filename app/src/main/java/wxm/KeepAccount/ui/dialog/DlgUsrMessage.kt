@@ -31,6 +31,7 @@ import wxm.KeepAccount.utility.ContextUtil
 
 import android.Manifest.permission.READ_PHONE_STATE
 import android.Manifest.permission.READ_SMS
+import android.os.Bundle
 
 /**
  * submit usr msg
@@ -47,25 +48,26 @@ class DlgUsrMessage : DlgOKOrNOBase() {
     private val mSZAccept: String = ContextUtil.getString(R.string.cn_accept)
     private val mSZGiveUp: String = ContextUtil.getString(R.string.cn_giveup)
 
-    private var mETUsrMessage: TextInputEditText? = null
+    private lateinit var mETUsrMessage: TextInputEditText
 
     private var mProgressStatus = 0
-    private var mHDProgress: LocalMsgHandler? = null
-    private var mPDDlg: ProgressDialog? = null
+    private lateinit var mHDProgress: LocalMsgHandler
+    private lateinit var mPDDlg: ProgressDialog
 
-    override fun InitDlgView(): View {
-        InitDlgTitle(mSZUsrMessage, mSZAccept, mSZGiveUp)
-        val vw = View.inflate(activity, R.layout.dlg_send_message, null)
+    override fun createDlgView(savedInstanceState: Bundle?): View {
+        initDlgTitle(mSZUsrMessage, mSZAccept, mSZGiveUp)
+        return View.inflate(activity, R.layout.dlg_send_message, null)
+    }
 
-        // for progress
-        mETUsrMessage = vw.findViewById(R.id.et_usr_message)
+    override fun initDlgView(savedInstanceState: Bundle?) {
+        mETUsrMessage = findDlgChildView(R.id.et_usr_message)!!
+
         mHDProgress = LocalMsgHandler(this)
         mPDDlg = ProgressDialog(context)
-        return vw
     }
 
     override fun checkBeforeOK(): Boolean {
-        val msg = mETUsrMessage!!.text.toString()
+        val msg = mETUsrMessage.text.toString()
         if (UtilFun.StringIsNullOrEmpty(msg)) {
             val builder = AlertDialog.Builder(context)
             builder.setMessage("消息不能为空")
@@ -96,23 +98,23 @@ class DlgUsrMessage : DlgOKOrNOBase() {
     private fun sendMsgByHttpPost(usr: String, msg: String): Boolean {
         mProgressStatus = 0
 
-        mPDDlg!!.max = 100
+        mPDDlg.max = 100
         // 设置对话框的标题
-        mPDDlg!!.setTitle("发送消息")
+        mPDDlg.setTitle("发送消息")
         // 设置对话框 显示的内容
-        mPDDlg!!.setMessage("发送进度")
+        mPDDlg.setMessage("发送进度")
         // 设置对话框不能用“取消”按钮关闭
-        mPDDlg!!.setCancelable(true)
-        mPDDlg!!.setButton(DialogInterface.BUTTON_NEGATIVE, "取消") { _, _ -> }
+        mPDDlg.setCancelable(true)
+        mPDDlg.setButton(DialogInterface.BUTTON_NEGATIVE, "取消") { _, _ -> }
 
         // 设置对话框的进度条风格
-        mPDDlg!!.setProgressStyle(ProgressDialog.STYLE_SPINNER)
-        mPDDlg!!.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+        mPDDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER)
+        mPDDlg.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
         // 设置对话框的进度条是否显示进度
-        mPDDlg!!.isIndeterminate = false
+        mPDDlg.isIndeterminate = false
 
-        mPDDlg!!.incrementProgressBy(-mPDDlg!!.progress)
-        mPDDlg!!.show()
+        mPDDlg.incrementProgressBy(-mPDDlg.progress)
+        mPDDlg.show()
 
         ToolUtil.runInBackground(this.activity,
                 Runnable {
@@ -131,23 +133,23 @@ class DlgUsrMessage : DlgOKOrNOBase() {
                         mProgressStatus = 50
                         val m = Message()
                         m.what = MSG_PROGRESS_UPDATE
-                        mHDProgress!!.sendMessage(m)
+                        mHDProgress.sendMessage(m)
 
                         val request = Request.Builder()
-                                .url(mSZUrlPost!!).post(body).build()
+                                .url(mSZUrlPost).post(body).build()
                         client.newCall(request).execute()
 
                         mProgressStatus = 100
                         val m1 = Message()
                         m1.what = MSG_PROGRESS_UPDATE
-                        mHDProgress!!.sendMessage(m1)
+                        mHDProgress.sendMessage(m1)
                     } catch (e: JSONException) {
                         e.printStackTrace()
                     } catch (e: IOException) {
                         e.printStackTrace()
                     }
                 },
-                Runnable {  mPDDlg!!.dismiss() })
+                Runnable {  mPDDlg.dismiss() })
 
         return true
     }
@@ -163,7 +165,7 @@ class DlgUsrMessage : DlgOKOrNOBase() {
         override fun processMsg(m: Message, home: DlgUsrMessage) {
             when (m.what) {
                 MSG_PROGRESS_UPDATE -> {
-                    home.mPDDlg!!.progress = home.mProgressStatus
+                    home.mPDDlg.progress = home.mProgressStatus
                 }
 
                 else -> Log.e(TAG, String.format("msg(%s) can not process", m.toString()))
