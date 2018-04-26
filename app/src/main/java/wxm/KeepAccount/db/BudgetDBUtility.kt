@@ -3,7 +3,6 @@ package wxm.KeepAccount.db
 import android.util.Log
 
 import com.j256.ormlite.dao.RuntimeExceptionDao
-
 import org.greenrobot.eventbus.EventBus
 
 import java.sql.SQLException

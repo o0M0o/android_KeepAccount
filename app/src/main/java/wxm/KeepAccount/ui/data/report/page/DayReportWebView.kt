@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.data.report.page
 
 import android.os.Bundle
+import android.util.Log
 import android.webkit.WebView
 
 import com.alibaba.fastjson.JSON
@@ -42,7 +43,7 @@ class DayReportWebView : FrgSupportWebView() {
     }
 
     override fun onWVPageFinished(wvPage: WebView?, para: Any?) {
-        wvPage!!.evaluateJavascript("onLoadData($para)") { _ -> }
+        wvPage!!.evaluateJavascript("onLoadData($para)") { _ -> Log.i(LOG_TAG, "page finished")}
     }
 
 

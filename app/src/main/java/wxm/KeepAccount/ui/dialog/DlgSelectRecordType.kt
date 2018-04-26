@@ -99,11 +99,11 @@ class DlgSelectRecordType : DlgOKOrNOBase() {
                         }
 
                         R.id.ib_sort -> {
-                            val curName = mIBSort!!.actName
+                            val curName = mIBSort.actName
                             val isUp = DlgResource.mSZSortByNameUp == curName
 
-                            mIBSort!!.actName = if (isUp) DlgResource.mSZSortByNameDown else DlgResource.mSZSortByNameUp
-                            mIBSort!!.setActIcon(if (isUp) R.drawable.ic_sort_down_1 else R.drawable.ic_sort_up_1)
+                            mIBSort.actName = if (isUp) DlgResource.mSZSortByNameDown else DlgResource.mSZSortByNameUp
+                            mIBSort.setActIcon(if (isUp) R.drawable.ic_sort_down_1 else R.drawable.ic_sort_up_1)
 
                             loadData()
                         }
@@ -121,7 +121,7 @@ class DlgSelectRecordType : DlgOKOrNOBase() {
         else
             ArrayList(rd.allIncomeItem)
 
-        val isUp = DlgResource.mSZSortByNameUp == mIBSort!!.actName
+        val isUp = DlgResource.mSZSortByNameUp == mIBSort.actName
         alType.sortWith(Comparator { o1, o2 ->
             if (isUp)
                 o1.type.compareTo(o2.type)

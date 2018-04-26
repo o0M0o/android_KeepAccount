@@ -60,7 +60,7 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
                             R.id.bt_confirm -> {
                                 if (checkInput()) {
                                     val data = Intent()
-                                    data.putExtra(UsrItem.FIELD_NAME, mETUsrName!!.text.toString())
+                                    data.putExtra(UsrItem.FIELD_NAME, mETUsrName.text.toString())
                                     data.putExtra(UsrItem.FIELD_PWD, mETPwd.text.toString())
 
                                     val m = Message.obtain(ContextUtil.msgHandler,

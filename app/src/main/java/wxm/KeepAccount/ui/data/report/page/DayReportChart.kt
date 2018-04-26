@@ -76,7 +76,7 @@ class DayReportChart : FrgSupportBaseAdv() {
     }
 
     override fun loadUI(bundle: Bundle?) {
-        mCVchart!!.onValueTouchListener = object : PieChartOnValueSelectListener {
+        mCVchart.onValueTouchListener = object : PieChartOnValueSelectListener {
             override fun onValueSelected(i: Int, sliceValue: SliceValue) {
                 val sz = String.format(Locale.CHINA,
                         "%s : %.02f",
@@ -102,11 +102,11 @@ class DayReportChart : FrgSupportBaseAdv() {
         val vid = v.id
         when (vid) {
             R.id.tb_income -> {
-                mTBPay.isClickable = mTBIncome!!.isChecked
+                mTBPay.isClickable = mTBIncome.isChecked
             }
 
             R.id.tb_pay -> {
-                mTBIncome.isClickable = mTBPay!!.isChecked
+                mTBIncome.isClickable = mTBPay.isChecked
             }
         }
 

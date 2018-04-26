@@ -54,6 +54,10 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
         loadUI(null)
     }
 
+    override fun isUseEventBus(): Boolean {
+        return true
+    }
+
     override fun setupFragment(bundle: Bundle?) {
         val bd = arguments
 
