@@ -15,7 +15,7 @@ import wxm.androidutil.DBHelper.IDBRow
  * Created by WangXM on 2016/5/3.
  */
 @DatabaseTable(tableName = "tbPayNote")
-class PayNoteItem : INote, IDBRow<Int> {
+class PayNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone {
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     override var id: Int = GlobalDef.INVALID_ID
 
@@ -63,7 +63,6 @@ class PayNoteItem : INote, IDBRow<Int> {
 
     init {
         info = ""
-        note = ""
     }
 
     override fun toPayNote(): PayNoteItem {
@@ -84,6 +83,32 @@ class PayNoteItem : INote, IDBRow<Int> {
 
     override fun setID(integer: Int) {
         id = integer
+    }
+
+    override fun clone(): Any {
+        val obj = PayNoteItem()
+
+        obj.id = this.id
+        this.usr?.let {
+            obj.usr = it.publicClone() as UsrItem
+        }
+
+        this.budget?.let {
+            obj.budget = it.publicClone() as BudgetItem
+        }
+
+        obj.amount = this.amount
+        obj.info = this.info
+        obj.note = this.note
+        obj.ts = this.ts
+
+        obj.valToStr = this.valToStr
+        obj.tsToStr = this.tsToStr
+        return obj
+    }
+
+    override fun publicClone(): Any {
+        return clone()
     }
 
     companion object {

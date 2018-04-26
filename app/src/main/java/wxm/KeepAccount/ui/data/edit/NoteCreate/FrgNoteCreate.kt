@@ -16,13 +16,11 @@ import java.util.ArrayList
 
 import wxm.KeepAccount.ui.base.Switcher.PageSwitcher
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
-import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
-import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PageIncomeEdit
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PagePayEdit
-import wxm.KeepAccount.ui.data.edit.base.TFEditBase
+import wxm.KeepAccount.ui.data.edit.base.IEdit
 
 /**
  * UI for add note
@@ -89,8 +87,8 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
     fun onAccept(): Boolean {
         val ob = mSWer.selected ?: return false
 
-        val pa = UtilFun.cast<PagerAdapter>(mVPPager.adapter)
-        val tb = UtilFun.cast<TFEditBase>(pa.getItem(if (ob === mRLPay) POS_PAY else POS_INCOME))
+        val pa = mVPPager.adapter as PagerAdapter
+        val tb = (pa.getItem(if (ob === mRLPay) POS_PAY else POS_INCOME)) as IEdit
         return tb.onAccept()
     }
 

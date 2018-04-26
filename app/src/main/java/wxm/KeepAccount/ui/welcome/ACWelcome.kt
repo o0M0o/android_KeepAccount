@@ -67,11 +67,11 @@ class ACWelcome : AppCompatActivity(), View.OnClickListener, NavigationView.OnNa
         if (v is RelativeLayout) {
             val tv = UtilFun.cast<TextView>(v.findViewById(R.id.tv_name))
             if (null != tv) {
-                do_click(tv.text.toString())
+                doClick(tv.text.toString())
             }
         } else if (v is Button) {
             val bt = UtilFun.cast<Button>(v)
-            do_click(bt.text.toString())
+            doClick(bt.text.toString())
         }
     }
 
@@ -110,7 +110,7 @@ class ACWelcome : AppCompatActivity(), View.OnClickListener, NavigationView.OnNa
      * click handler
      * @param act   name for action
      */
-    private fun do_click(act: String) {
+    private fun doClick(act: String) {
         val ea = EAction.getEAction(act)!!
         when (ea) {
             EAction.LOOK_BUDGET -> {
@@ -147,10 +147,7 @@ class ACWelcome : AppCompatActivity(), View.OnClickListener, NavigationView.OnNa
             }
 
             EAction.LOGOUT -> {
-                val ret_data = GlobalDef.INTRET_USR_LOGOUT
-
-                val data = Intent()
-                setResult(ret_data, data)
+                setResult(GlobalDef.INTRET_USR_LOGOUT, Intent())
                 finish()
             }
         }/*

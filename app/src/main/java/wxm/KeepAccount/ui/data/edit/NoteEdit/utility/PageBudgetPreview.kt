@@ -3,14 +3,12 @@ package wxm.KeepAccount.ui.data.edit.NoteEdit.utility
 import android.os.Bundle
 import android.widget.TextView
 import kotterknife.bindView
-
-import java.util.Locale
-
-import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.BudgetItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
+import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import java.util.*
 
 /**
  * preview fragment for budget
@@ -37,25 +35,23 @@ class PageBudgetPreview : FrgSupportBaseAdv(), IPreview {
     }
 
     override fun initUI(savedInstanceState: Bundle?) {
-        if(null == savedInstanceState)  {
-            if (null != mBIData) {
-                val data = mBIData!!
+        if (null != mBIData) {
+            val data = mBIData!!
 
-                mTVName.text = data.name
-                mTVNote.text = data.note
-                mTVAllAmount.text = String.format(Locale.CHINA, "%.02f", data.amount)
+            mTVName.text = data.name
+            mTVNote.text = data.note
+            mTVAllAmount.text = String.format(Locale.CHINA, "%.02f", data.amount)
 
-                val ra = String.format(Locale.CHINA, "%.02f", data.remainderAmount)
-                mTVLeaveAmount.text = ra
-                if (ra.startsWith("-")) {
-                    mTVLeaveAmount.setTextColor(ContextUtil.getColor(R.color.darkred))
-                }
-            } else {
-                mTVName.text = ""
-                mTVNote.text = ""
-                mTVAllAmount.text = ""
-                mTVLeaveAmount.text = ""
+            val ra = String.format(Locale.CHINA, "%.02f", data.remainderAmount)
+            mTVLeaveAmount.text = ra
+            if (ra.startsWith("-")) {
+                mTVLeaveAmount.setTextColor(ContextUtil.getColor(R.color.darkred))
             }
+        } else {
+            mTVName.text = ""
+            mTVNote.text = ""
+            mTVAllAmount.text = ""
+            mTVLeaveAmount.text = ""
         }
     }
 }

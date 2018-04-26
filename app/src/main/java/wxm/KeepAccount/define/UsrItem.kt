@@ -11,21 +11,16 @@ import wxm.androidutil.DBHelper.IDBRow
  * Created by WangXM on 2016/8/5.
  */
 @DatabaseTable(tableName = "tbUsr")
-class UsrItem : IDBRow<Int> {
+class UsrItem : IDBRow<Int>, Cloneable, IPublicClone {
+
     @DatabaseField(generatedId = true, columnName = FIELD_ID, dataType = DataType.INTEGER)
-    var id: Int = 0
+    var id: Int = GlobalDef.INVALID_ID
 
     @DatabaseField(columnName = FIELD_NAME, unique = true, dataType = DataType.STRING)
-    var name: String? = null
+    var name: String? = ""
 
     @DatabaseField(columnName = FIELD_PWD, dataType = DataType.STRING)
-    var pwd: String? = null
-
-    init {
-        name = ""
-        pwd = ""
-        id = -1
-    }
+    var pwd: String? = ""
 
     override fun getID(): Int {
         return id
@@ -33,6 +28,20 @@ class UsrItem : IDBRow<Int> {
 
     override fun setID(integer: Int) {
         id = integer
+    }
+
+    override fun clone(): Any {
+        val obj = UsrItem()
+
+        obj.id = this.id
+        obj.name = this.name
+        obj.pwd = this.pwd
+
+        return obj
+    }
+
+    override fun publicClone(): Any {
+        return clone()
     }
 
     companion object {

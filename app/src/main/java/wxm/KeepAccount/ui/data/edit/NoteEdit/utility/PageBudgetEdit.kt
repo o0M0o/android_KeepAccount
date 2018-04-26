@@ -93,8 +93,8 @@ class PageBudgetEdit : FrgSupportBaseAdv(), IEdit  {
             override fun afterTextChanged(s: Editable) {
                 val pos = s.toString().indexOf(".")
                 if (pos >= 0) {
-                    val after_len = s.length - (pos + 1)
-                    if (after_len > 2) {
+                    val afterLen = s.length - (pos + 1)
+                    if (afterLen > 2) {
                         mETAmount.error = "小数点后超过两位数!"
                         mETAmount.setText(s.subSequence(0, pos + 3))
                     }
@@ -192,10 +192,10 @@ class PageBudgetEdit : FrgSupportBaseAdv(), IEdit  {
     override fun loadUI(bundle: Bundle?) {
         mBIData?.let {
             mETName.setText(it.name)
-            mETAmount.setText(it.amount!!.toPlainString())
+            mETAmount.setText(it.amount.toPlainString())
 
             mTVNote.paint.flags = Paint.UNDERLINE_TEXT_FLAG
-            val note = mBIData!!.note
+            val note = it.note
             mTVNote.text = if (UtilFun.StringIsNullOrEmpty(note)) mSZDefNote else note
         }
     }

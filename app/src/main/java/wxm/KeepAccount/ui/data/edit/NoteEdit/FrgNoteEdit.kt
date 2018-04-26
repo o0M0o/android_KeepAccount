@@ -6,10 +6,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.view.ViewPager
 import kotterknife.bindView
 import wxm.KeepAccount.R
-import wxm.KeepAccount.define.BudgetItem
-import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.IncomeNoteItem
-import wxm.KeepAccount.define.PayNoteItem
+import wxm.KeepAccount.define.*
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.*
 import wxm.KeepAccount.ui.data.edit.base.*
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
@@ -19,6 +16,19 @@ import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
  * @version     create：2018/4/25
  */
 class FrgNoteEdit :  FrgEditBase() {
+    /*
+    class PageListener : ViewPager.OnPageChangeListener {
+        override fun onPageScrollStateChanged(state: Int) {
+        }
+
+        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        }
+
+        override fun onPageSelected(position: Int) {
+        }
+    }
+    */
+
     private val mVPPages: ViewPager by bindView(R.id.vp_pages)
     private var mCurData: Any? = null
     private var mCurDataType: String? = null
@@ -34,6 +44,11 @@ class FrgNoteEdit :  FrgEditBase() {
     override fun setCurData(type: String,  obj: Any?) {
         mCurDataType = type
         mCurData = obj
+
+        obj?.let {
+            val clone = it as IPublicClone
+            mCurData = clone.publicClone()
+        }
     }
 
     override fun getCurData(): Any {
@@ -49,11 +64,19 @@ class FrgNoteEdit :  FrgEditBase() {
     }
 
     override fun toPreviewStatus() {
-        mVPPages.currentItem = PAGE_IDX_PREVIEW
+        if(!isPreviewStatus()) {
+            val pa = mVPPages.adapter as PagerAdapter
+            (pa.getItem(PAGE_IDX_EDIT) as IEdit).refillData()
+
+            mVPPages.currentItem = PAGE_IDX_PREVIEW
+            pa.getItem(PAGE_IDX_PREVIEW).reInitUI()
+        }
     }
 
     override fun toEditStatus() {
-        mVPPages.currentItem = PAGE_IDX_EDIT
+        if(!isEditStatus()) {
+            mVPPages.currentItem = PAGE_IDX_EDIT
+        }
     }
 
     override fun isUseEventBus(): Boolean {

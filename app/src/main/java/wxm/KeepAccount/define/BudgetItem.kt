@@ -12,7 +12,7 @@ import java.sql.Timestamp
  * Created by WangXM on 2016/9/1.
  */
 @DatabaseTable(tableName = "tbBudget")
-class BudgetItem : IDBRow<Int> {
+class BudgetItem : IDBRow<Int>, Cloneable, IPublicClone  {
     @DatabaseField(generatedId = true, columnName = FIELD_ID, dataType = DataType.INTEGER)
     var _id: Int = GlobalDef.INVALID_ID
     @DatabaseField(columnName = FIELD_NAME, canBeNull = false, dataType = DataType.STRING)
@@ -45,6 +45,22 @@ class BudgetItem : IDBRow<Int> {
         return name.hashCode() + amount.hashCode() + _id
     }
 
+    override fun clone(): Any {
+        val obj = BudgetItem()
+
+        obj._id = this._id
+        obj.name = this.name
+        this.usr?.let {
+            obj.usr = it.publicClone() as UsrItem
+        }
+
+        obj.amount = this.amount
+        obj.remainderAmount = this.remainderAmount
+        obj.note = this.note
+        obj.ts = this.ts
+        return obj
+    }
+
     override fun getID(): Int? {
         return _id
     }
@@ -70,9 +86,13 @@ class BudgetItem : IDBRow<Int> {
         return true
     }
 
+    override fun publicClone(): Any {
+        return clone()
+    }
+
     companion object {
         const val FIELD_USR = "usr_id"
         const val FIELD_NAME = "name"
-        const val FIELD_ID = "id"
+        const val FIELD_ID = "_id"
     }
 }
