@@ -20,8 +20,8 @@ class PageSwitcher {
     /**
      * holder for selector
      */
-    data class PageHelper(val mRLSelector: Any, val mSelfIdx: Int,
-                          val mRAEnable: Runnable, val mRADisable: Runnable)
+    data class PageHelper(val mRLSelector: Any,
+                          val mRAEnable: () -> Unit, val mRADisable: () -> Unit)
 
     /**
      * add selector
@@ -29,9 +29,9 @@ class PageSwitcher {
      * @param ea    run when doSelect
      * @param da    run when unselected
      */
-    fun addSelector(oj: Any, ea: Runnable, da: Runnable) {
-        da.run()
-        mPHHelper.add(PageHelper(oj, mPHHelper.size, ea, da))
+    fun addSelector(oj: Any, ea: () -> Unit, da: () -> Unit) {
+        da()
+        mPHHelper.add(PageHelper(oj, ea, da))
     }
 
     /**
@@ -40,13 +40,13 @@ class PageSwitcher {
      * @param oj    selector object
      */
     fun doSelect(oj: Any) {
-        mPHHelper.find { it.mRLSelector === oj && mIdxHot != it.mSelfIdx }?.let {
+        mPHHelper.find { it.mRLSelector === oj && mIdxHot != mPHHelper.indexOf(it) }?.let {
             if (INVALID_POS != mIdxHot) {
-                mPHHelper[mIdxHot].mRADisable.run()
+                mPHHelper[mIdxHot].mRADisable()
             }
 
-            it.mRAEnable.run()
-            mIdxHot = it.mSelfIdx
+            it.mRAEnable()
+            mIdxHot = mPHHelper.indexOf(it)
         }
     }
 

@@ -57,27 +57,27 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
             mRLPay.setOnClickListener { _ -> mSWer.doSelect(mRLPay) }
 
             mSWer.addSelector(mRLPay,
-                    Runnable {
+                    {
                         mRLPay.setBackgroundResource(R.drawable.rl_item_left)
                         (mRLPay.findViewById<View>(R.id.tv_tag) as TextView)
                                 .setTextColor(ResourceHelper.mCRTextWhite)
 
                         mVPPager.currentItem = POS_PAY
                     },
-                    Runnable {
+                    {
                         mRLPay.setBackgroundResource(R.drawable.rl_item_left_nosel)
                         (mRLPay.findViewById<View>(R.id.tv_tag) as TextView)
                                 .setTextColor(ResourceHelper.mCRTextFit)
                     })
             mSWer.addSelector(mRLIncome,
-                    Runnable {
+                    {
                         mRLIncome.setBackgroundResource(R.drawable.rl_item_right)
                         (mRLIncome.findViewById<View>(R.id.tv_tag) as TextView)
                                 .setTextColor(ResourceHelper.mCRTextWhite)
 
                         mVPPager.currentItem = POS_INCOME
                     },
-                    Runnable {
+                    {
                         mRLIncome.setBackgroundResource(R.drawable.rl_item_right_nosel)
                         (mRLIncome.findViewById<View>(R.id.tv_tag) as TextView)
                                 .setTextColor(ResourceHelper.mCRTextFit)
@@ -102,8 +102,6 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
     }
 
     /// PRIVATE BEGIN
-    /// PRIVATE END
-
     /**
      * fragment adapter
      */
@@ -130,6 +128,7 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
             return mALFra.size
         }
     }
+    /// PRIVATE END
 
     companion object {
         private const val POS_PAY = 0
