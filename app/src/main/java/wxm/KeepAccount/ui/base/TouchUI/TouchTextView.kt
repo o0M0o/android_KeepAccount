@@ -10,12 +10,12 @@ import android.util.AttributeSet
  * Created by WangXM on 2018/3/24.
  */
 class TouchTextView : android.support.v7.widget.AppCompatTextView {
-
-    constructor(context: Context) : super(context) {}
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
+    constructor(context: Context)
+            : super(context)
+    constructor(context: Context, attrs: AttributeSet)
+            : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int)
+            : super(context, attrs, defStyle)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun performClick(): Boolean {

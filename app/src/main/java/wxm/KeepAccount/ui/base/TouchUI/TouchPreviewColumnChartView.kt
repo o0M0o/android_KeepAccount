@@ -11,11 +11,12 @@ import lecho.lib.hellocharts.view.PreviewColumnChartView
  * @version create：2018/4/9
  */
 class TouchPreviewColumnChartView : PreviewColumnChartView {
-    constructor(context: Context) : super(context) {}
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}
-
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {}
+    constructor(context: Context)
+            : super(context)
+    constructor(context: Context, attrs: AttributeSet)
+            : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int)
+            : super(context, attrs, defStyle)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun performClick(): Boolean {
