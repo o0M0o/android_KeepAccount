@@ -229,7 +229,7 @@ public class LVBudget extends LVBase {
     private void refreshAttachLayout() {
         setAttachLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
         setFilterLayoutVisible(View.GONE);
-        setAccpetGiveupLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
+        setAcceptGiveUpLayoutVisible(ACTION_EDIT != mActionType ? View.VISIBLE : View.GONE);
     }
 
 

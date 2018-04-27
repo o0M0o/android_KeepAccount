@@ -55,7 +55,7 @@ abstract class ChartBase extends ShowViewBase {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initUI(Bundle bundle) {
-        mBFilter = false;
+        setMBFilter(false);
         mHMColor = PreferencesUtil.INSTANCE.loadChartColor();
 
         // main chart need respond touch event
@@ -194,7 +194,7 @@ abstract class ChartBase extends ShowViewBase {
             break;
 
             case R.id.bt_giveup_filter: {
-                mBFilter = false;
+                setMBFilter(false);
                 refreshData();
             }
             break;
@@ -205,9 +205,9 @@ abstract class ChartBase extends ShowViewBase {
 
 
     private void refreshAttachLayout() {
-        setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
-        setAccpetGiveupLayoutVisible(View.GONE);
+        setAttachLayoutVisible(getMBFilter() ? View.VISIBLE : View.GONE);
+        setFilterLayoutVisible(getMBFilter() ? View.VISIBLE : View.GONE);
+        setAcceptGiveUpLayoutVisible(View.GONE);
     }
 
 

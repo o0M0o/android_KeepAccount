@@ -49,9 +49,9 @@ public class DailyChart extends ChartBase {
         List<String> e_p = event.getFilterTag();
         if ((NoteDataHelper.TAB_TITLE_MONTHLY.equals(event.getSender()))
                 && (null != e_p)) {
-            mBFilter = true;
-            mFilterPara.clear();
-            mFilterPara.addAll(e_p);
+            setMBFilter(true);
+            getMFilterPara().clear();
+            getMFilterPara().addAll(e_p);
 
             refreshData();
         }
@@ -72,9 +72,9 @@ public class DailyChart extends ChartBase {
                     Collections.sort(set_k);
                     for (String k : set_k) {
                         boolean ba = true;
-                        if (mBFilter && !mFilterPara.isEmpty()) {
+                        if (getMBFilter() && !getMFilterPara().isEmpty()) {
                             //String ck = ToolUtil.FormatDateString(k);
-                            if (!mFilterPara.contains(k))
+                            if (!getMFilterPara().contains(k))
                                 ba = false;
                         }
 

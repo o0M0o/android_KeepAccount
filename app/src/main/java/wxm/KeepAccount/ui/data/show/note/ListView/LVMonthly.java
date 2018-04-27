@@ -222,11 +222,11 @@ public class LVMonthly
         List<String> e_p = event.getFilterTag();
         if ((NoteDataHelper.TAB_TITLE_YEARLY.equals(event.getSender()))
                 && (null != e_p)) {
-            mBFilter = true;
+            setMBFilter(true);
             mBSelectSubFilter = false;
 
-            mFilterPara.clear();
-            mFilterPara.addAll(e_p);
+            getMFilterPara().clear();
+            getMFilterPara().addAll(e_p);
             loadUI(null);
         }
     }
@@ -278,7 +278,7 @@ public class LVMonthly
             break;
 
             case R.id.bt_giveup_filter: {
-                mBFilter = false;
+                setMBFilter(false);
                 loadUI(null);
             }
             break;
@@ -324,10 +324,10 @@ public class LVMonthly
 
         // load show data
         LinkedList<MainItemHolder> n_mainpara;
-        if (mBFilter) {
+        if (getMBFilter()) {
             n_mainpara = new LinkedList<>();
             for (MainItemHolder i : mMainPara) {
-                for (String ii : mFilterPara) {
+                for (String ii : getMFilterPara()) {
                     if (i.getTag().equals(ii)) {
                         n_mainpara.add(i);
                         break;
@@ -357,9 +357,9 @@ public class LVMonthly
      * update attach layout
      */
     private void refreshAttachLayout() {
-        setAttachLayoutVisible(mBFilter || mBSelectSubFilter ? View.VISIBLE : View.GONE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
-        setAccpetGiveupLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.GONE);
+        setAttachLayoutVisible(getMBFilter() || mBSelectSubFilter ? View.VISIBLE : View.GONE);
+        setFilterLayoutVisible(getMBFilter() ? View.VISIBLE : View.GONE);
+        setAcceptGiveUpLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.GONE);
     }
 
     /**

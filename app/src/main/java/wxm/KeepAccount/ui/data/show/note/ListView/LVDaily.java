@@ -257,11 +257,11 @@ public class LVDaily extends LVBase {
         List<String> e_p = event.getFilterTag();
         if ((NoteDataHelper.TAB_TITLE_MONTHLY.equals(event.getSender()))
                 && (null != e_p)) {
-            mBFilter = true;
+            setMBFilter(true);
             mAction = EAction.EDIT;
 
-            mFilterPara.clear();
-            mFilterPara.addAll(e_p);
+            getMFilterPara().clear();
+            getMFilterPara().addAll(e_p);
             reloadUI();
         }
     }
@@ -289,7 +289,7 @@ public class LVDaily extends LVBase {
                 break;
 
             case R.id.bt_giveup_filter:
-                mBFilter = false;
+                setMBFilter(false);
                 reloadUI();
                 break;
         }
@@ -321,17 +321,17 @@ public class LVDaily extends LVBase {
     @Override
     protected void loadUI(Bundle bundle) {
         // adjust attach layout
-        setAttachLayoutVisible(mAction.isDelete() || mBFilter ?
+        setAttachLayoutVisible(mAction.isDelete() || getMBFilter() ?
                 View.VISIBLE : View.GONE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
-        setAccpetGiveupLayoutVisible(mAction.isDelete() && !mBFilter ? View.VISIBLE : View.GONE);
+        setFilterLayoutVisible(getMBFilter() ? View.VISIBLE : View.GONE);
+        setAcceptGiveUpLayoutVisible(mAction.isDelete() && !getMBFilter() ? View.VISIBLE : View.GONE);
 
         // load show data
         LinkedList<ItemHolder> n_mainpara;
-        if (mBFilter) {
+        if (getMBFilter()) {
             n_mainpara = new LinkedList<>();
             for (ItemHolder i : mMainPara) {
-                for (String ii : mFilterPara) {
+                for (String ii : getMFilterPara()) {
                     if (i.getTag().equals(ii)) {
                         n_mainpara.add(i);
                         break;
@@ -384,10 +384,10 @@ public class LVDaily extends LVBase {
      */
     private void redrawUI() {
         // adjust attach layout
-        setAttachLayoutVisible(mAction.isDelete() || mBFilter ?
+        setAttachLayoutVisible(mAction.isDelete() || getMBFilter() ?
                 View.VISIBLE : View.GONE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
-        setAccpetGiveupLayoutVisible(mAction.isDelete() && !mBFilter ? View.VISIBLE : View.GONE);
+        setFilterLayoutVisible(getMBFilter() ? View.VISIBLE : View.GONE);
+        setAcceptGiveUpLayoutVisible(mAction.isDelete() && !getMBFilter() ? View.VISIBLE : View.GONE);
 
         MainAdapter cur_ap = (MainAdapter) mLVShow.getAdapter();
         cur_ap.notifyDataSetChanged();

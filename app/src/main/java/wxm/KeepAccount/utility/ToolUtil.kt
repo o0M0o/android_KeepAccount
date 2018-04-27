@@ -8,7 +8,9 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.concurrent.Callable
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 /**
  * tool helper
@@ -82,19 +84,12 @@ object ToolUtil {
         val ret: String
         when (dw) {
             Calendar.SUNDAY -> ret = "星期日"
-
             Calendar.MONDAY -> ret = "星期一"
-
             Calendar.TUESDAY -> ret = "星期二"
-
             Calendar.WEDNESDAY -> ret = "星期三"
-
             Calendar.THURSDAY -> ret = "星期四"
-
             Calendar.FRIDAY -> ret = "星期五"
-
             Calendar.SATURDAY -> ret = "星期六"
-
             else -> ret = ""
         }
 
@@ -117,5 +112,16 @@ object ToolUtil {
                 cur.runOnUiThread(ui)
             }
         }
+    }
+
+    /**
+     * wait done in background
+     * @param unit      wait time unit
+     * @param timeout   wait time
+     * @param back      run in background
+     */
+    fun<T> callInBackground(unit: TimeUnit, timeout: Long, back: Callable<T>): T {
+        val task = Executors.newCachedThreadPool().submit(back)
+        return task.get(timeout, unit)
     }
 }

@@ -10,11 +10,10 @@ import android.util.AttributeSet
  * Created by WangXM on 2018/3/24.
  */
 class TouchEditText : TextInputEditText {
-    constructor(context: Context) : super(context) {}
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int)
+            : super(context, attrs, defStyleAttr)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun performClick(): Boolean {

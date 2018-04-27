@@ -55,9 +55,9 @@ public class MonthlyChart extends ChartBase {
                     Collections.sort(set_k);
                     for (String k : set_k) {
                         boolean ba = true;
-                        if (mBFilter && !mFilterPara.isEmpty()) {
+                        if (getMBFilter() && !getMFilterPara().isEmpty()) {
                             //String ck = ToolUtil.formatDateString(k);
-                            if (!mFilterPara.contains(k))
+                            if (!getMFilterPara().contains(k))
                                 ba = false;
                         }
 
@@ -128,9 +128,9 @@ public class MonthlyChart extends ChartBase {
         List<String> e_p = event.getFilterTag();
         if ((NoteDataHelper.TAB_TITLE_YEARLY.equals(event.getSender()))
                 && (null != e_p)) {
-            mBFilter = true;
-            mFilterPara.clear();
-            mFilterPara.addAll(e_p);
+            setMBFilter(true);
+            getMFilterPara().clear();
+            getMFilterPara().addAll(e_p);
 
             refreshData();
         }

@@ -1,13 +1,9 @@
 package wxm.KeepAccount.ui.dialog
 
-import android.app.ProgressDialog
-import android.content.DialogInterface
 import android.content.pm.PackageManager
-import android.os.Message
 import android.support.design.widget.TextInputEditText
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.view.View
 
 import org.json.JSONException
@@ -20,7 +16,6 @@ import wxm.androidutil.Dialog.DlgOKOrNOBase
 import wxm.androidutil.util.PackageUtil
 import wxm.androidutil.util.SIMCardUtil
 import wxm.androidutil.util.UtilFun
-import wxm.androidutil.util.WRMsgHandler
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -31,7 +26,15 @@ import wxm.KeepAccount.utility.ContextUtil
 
 import android.Manifest.permission.READ_PHONE_STATE
 import android.Manifest.permission.READ_SMS
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.app.Activity
 import android.os.Bundle
+import android.support.design.widget.TextInputLayout
+import android.widget.ProgressBar
+import java.lang.ref.WeakReference
+import java.util.concurrent.Callable
+import java.util.concurrent.TimeUnit
 
 /**
  * submit usr msg
@@ -50,9 +53,8 @@ class DlgUsrMessage : DlgOKOrNOBase() {
 
     private lateinit var mETUsrMessage: TextInputEditText
 
-    private var mProgressStatus = 0
-    private lateinit var mHDProgress: LocalMsgHandler
-    private lateinit var mPDDlg: ProgressDialog
+    private lateinit var mPDBar: ProgressBar
+    private lateinit var mTLMessage: TextInputLayout
 
     override fun createDlgView(savedInstanceState: Bundle?): View {
         initDlgTitle(mSZUsrMessage, mSZAccept, mSZGiveUp)
@@ -61,19 +63,19 @@ class DlgUsrMessage : DlgOKOrNOBase() {
 
     override fun initDlgView(savedInstanceState: Bundle?) {
         mETUsrMessage = findDlgChildView(R.id.et_usr_message)!!
+        mPDBar = findDlgChildView(R.id.pb_large)!!
+        mTLMessage = findDlgChildView(R.id.tl_message)!!
 
-        mHDProgress = LocalMsgHandler(this)
-        mPDDlg = ProgressDialog(context)
+        showProgress(false)
     }
 
     override fun checkBeforeOK(): Boolean {
         val msg = mETUsrMessage.text.toString()
         if (UtilFun.StringIsNullOrEmpty(msg)) {
-            val builder = AlertDialog.Builder(context)
-            builder.setMessage("消息不能为空")
+            AlertDialog.Builder(context)
                     .setTitle("警告")
-            val dlg = builder.create()
-            dlg.show()
+                    .setMessage("消息不能为空")
+                    .create().show()
             return false
         }
 
@@ -86,7 +88,20 @@ class DlgUsrMessage : DlgOKOrNOBase() {
             }
         }
 
-        return sendMsgByHttpPost(if (UtilFun.StringIsNullOrEmpty(usr)) "null" else usr!!, msg)
+        val ret = sendMsgByHttpPost(if (UtilFun.StringIsNullOrEmpty(usr)) "null" else usr!!, msg)
+        if(!(ret[0] as Boolean)) {
+            AlertDialog.Builder(context)
+                    .setTitle("警告")
+                    .setMessage("消息发送失败!!\n" + "原因 : " + (ret[1] as String))
+                    .create().show()
+            return false
+        }
+
+        AlertDialog.Builder(context)
+                .setTitle("信息")
+                .setMessage("消息发送成功!!")
+                .create().show()
+        return true
     }
 
     /**
@@ -95,32 +110,14 @@ class DlgUsrMessage : DlgOKOrNOBase() {
      * @param msg       msg
      * @return          true if success
      */
-    private fun sendMsgByHttpPost(usr: String, msg: String): Boolean {
-        mProgressStatus = 0
-
-        mPDDlg.max = 100
-        // 设置对话框的标题
-        mPDDlg.setTitle("发送消息")
-        // 设置对话框 显示的内容
-        mPDDlg.setMessage("发送进度")
-        // 设置对话框不能用“取消”按钮关闭
-        mPDDlg.setCancelable(true)
-        mPDDlg.setButton(DialogInterface.BUTTON_NEGATIVE, "取消") { _, _ -> }
-
-        // 设置对话框的进度条风格
-        mPDDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER)
-        mPDDlg.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
-        // 设置对话框的进度条是否显示进度
-        mPDDlg.isIndeterminate = false
-
-        mPDDlg.incrementProgressBy(-mPDDlg.progress)
-        mPDDlg.show()
-
-        ToolUtil.runInBackground(this.activity,
-                Runnable {
-                    val client = OkHttpClient()
+    private fun sendMsgByHttpPost(usr: String, msg: String): Array<Any> {
+        showProgress(true)
+        val wrHome = WeakReference(activity as Activity?)
+        return ToolUtil.callInBackground(TimeUnit.SECONDS, 6,
+                Callable<Array<Any>> {
+                    var sendResult: Boolean
+                    var sendExplain: String
                     try {
-                        // set param
                         val param = JSONObject()
                         param.put(mSZColUsr, usr)
                         param.put(mSZColMsg, msg)
@@ -129,54 +126,62 @@ class DlgUsrMessage : DlgOKOrNOBase() {
                                         + PackageUtil.getVerName(context, GlobalDef.PACKAGE_NAME))
 
                         val body = RequestBody.create(JSON, param.toString())
+                        runInUIThread(wrHome, Runnable { mPDBar.progress = 50 })
 
-                        mProgressStatus = 50
-                        val m = Message()
-                        m.what = MSG_PROGRESS_UPDATE
-                        mHDProgress.sendMessage(m)
-
-                        val request = Request.Builder()
-                                .url(mSZUrlPost).post(body).build()
-                        client.newCall(request).execute()
-
-                        mProgressStatus = 100
-                        val m1 = Message()
-                        m1.what = MSG_PROGRESS_UPDATE
-                        mHDProgress.sendMessage(m1)
+                        val request = Request.Builder().url(mSZUrlPost).post(body).build()
+                        OkHttpClient().newCall(request).execute()
+                        sendResult = true
+                        sendExplain = "success"
                     } catch (e: JSONException) {
+                        sendResult = false
+                        sendExplain = "JSONException"
                         e.printStackTrace()
                     } catch (e: IOException) {
+                        sendResult = false
+                        sendExplain = "IOException"
                         e.printStackTrace()
+                    } finally {
+                        runInUIThread(wrHome, Runnable { showProgress(false) })
                     }
-                },
-                Runnable {  mPDDlg.dismiss() })
 
-        return true
+                    return@Callable arrayOf(sendResult, sendExplain)
+                })
     }
 
-    /**
-     * safe message hanlder
-     */
-    private class LocalMsgHandler internal constructor(ac: DlgUsrMessage) : WRMsgHandler<DlgUsrMessage>(ac) {
-        init {
-            TAG = "LocalMsgHandler"
-        }
 
-        override fun processMsg(m: Message, home: DlgUsrMessage) {
-            when (m.what) {
-                MSG_PROGRESS_UPDATE -> {
-                    home.mPDDlg.progress = home.mProgressStatus
-                }
-
-                else -> Log.e(TAG, String.format("msg(%s) can not process", m.toString()))
+    private fun runInUIThread(wrActivity : WeakReference<Activity?>, uiRun : Runnable)   {
+        val cur = wrActivity.get() as Activity?
+        cur?.let {
+            if(!(it.isDestroyed || it.isFinishing)) {
+                it.runOnUiThread(uiRun)
             }
         }
     }
 
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    private fun showProgress(show: Boolean) {
+        val shortAnimTime = 200
+
+        mTLMessage.visibility = if (show) View.GONE else View.VISIBLE
+        mTLMessage.animate().setDuration(shortAnimTime.toLong()).alpha(
+                (if (show) 0 else 1).toFloat()).setListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                mTLMessage.visibility = if (show) View.GONE else View.VISIBLE
+            }
+        })
+
+        mPDBar.visibility = if (show) View.VISIBLE else View.GONE
+        mPDBar.animate().setDuration(shortAnimTime.toLong())
+                .alpha((if (show) 1 else 0).toFloat()).setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        mPDBar.visibility = if (show) View.VISIBLE else View.GONE
+                    }
+                })
+    }
+
     companion object {
-        // for progress dialog when send http post
-        private const val PROGRESS_DIALOG = 0x112
-        private const val MSG_PROGRESS_UPDATE = 0x111
         // for http post
         private val JSON = MediaType.parse("application/json; charset=utf-8")
     }

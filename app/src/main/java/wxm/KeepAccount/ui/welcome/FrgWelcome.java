@@ -82,7 +82,7 @@ public class FrgWelcome extends FrgSupportBaseAdv {
     @Override
     protected void loadUI(Bundle savedInstanceState) {
         mLSData.clear();
-        for (String i : PreferencesUtil.INSTANCE.INSTANCE.loadHotAction()) {
+        for (String i : PreferencesUtil.INSTANCE.loadHotAction()) {
             HashMap<String, Object> ihm = new HashMap<>();
             ihm.put(DGVButtonAdapter.HKEY_ACT_NAME, i);
             mLSData.add(ihm);

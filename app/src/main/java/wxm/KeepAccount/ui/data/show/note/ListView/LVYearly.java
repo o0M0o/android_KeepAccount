@@ -307,10 +307,10 @@ public class LVYearly extends LVBase {
 
         // update data
         LinkedList<MainItemHolder> n_mainpara;
-        if (mBFilter) {
+        if (getMBFilter()) {
             n_mainpara = new LinkedList<>();
             for (MainItemHolder i : mMainPara) {
-                for (String ii : mFilterPara) {
+                for (String ii : getMFilterPara()) {
                     if (i.getTag().equals(ii)) {
                         n_mainpara.add(i);
                         break;
@@ -340,9 +340,9 @@ public class LVYearly extends LVBase {
      * 更新附加layout
      */
     private void refreshAttachLayout() {
-        setAttachLayoutVisible(mBFilter || mBSelectSubFilter ? View.VISIBLE : View.GONE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
-        setAccpetGiveupLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.GONE);
+        setAttachLayoutVisible(getMBFilter() || mBSelectSubFilter ? View.VISIBLE : View.GONE);
+        setFilterLayoutVisible(getMBFilter() ? View.VISIBLE : View.GONE);
+        setAcceptGiveUpLayoutVisible(mBSelectSubFilter ? View.VISIBLE : View.GONE);
     }
 
     /**

@@ -75,7 +75,7 @@ public class BudgetChart extends ShowViewBase {
 
     @Override
     protected void initUI(Bundle bundle) {
-        mBFilter = false;
+        setMBFilter(false);
         mHMColor = PreferencesUtil.INSTANCE.loadChartColor();
 
         // 填充预算数据
@@ -340,9 +340,9 @@ public class BudgetChart extends ShowViewBase {
     }
 
     private void refreshAttachLayout() {
-        setAttachLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
-        setFilterLayoutVisible(mBFilter ? View.VISIBLE : View.GONE);
-        setAccpetGiveupLayoutVisible(View.GONE);
+        setAttachLayoutVisible(getMBFilter() ? View.VISIBLE : View.GONE);
+        setFilterLayoutVisible(getMBFilter() ? View.VISIBLE : View.GONE);
+        setAcceptGiveUpLayoutVisible(View.GONE);
     }
 
 
