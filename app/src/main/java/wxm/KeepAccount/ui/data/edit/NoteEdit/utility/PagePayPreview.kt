@@ -14,7 +14,7 @@ import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
  * preview fragment for budget
  * Created by WangXM on 2016/10/29.
  */
-class TFPreviewPay : FrgSupportBaseAdv(), IPreview {
+class PagePayPreview : FrgSupportBaseAdv(), IPreview {
     private val mTVAmount: TextView by bindView(R.id.tv_amount)
     private val mTVInfo: TextView by bindView(R.id.tv_info)
     private val mTVNote: TextView by bindView(R.id.tv_note)

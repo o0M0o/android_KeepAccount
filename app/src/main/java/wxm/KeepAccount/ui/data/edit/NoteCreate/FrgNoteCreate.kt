@@ -17,6 +17,8 @@ import java.util.ArrayList
 import wxm.KeepAccount.ui.base.Switcher.PageSwitcher
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
 import wxm.KeepAccount.R
+import wxm.KeepAccount.define.IncomeNoteItem
+import wxm.KeepAccount.define.PayNoteItem
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PageIncomeEdit
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PagePayEdit
@@ -47,10 +49,11 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
             // for vp
             val ac = activity as AppCompatActivity
             val adapter = PagerAdapter(ac.supportFragmentManager)
+            (adapter.getItem(POS_PAY) as IEdit).setEditData(PayNoteItem())
+            (adapter.getItem(POS_INCOME) as IEdit).setEditData(IncomeNoteItem())
             mVPPager.adapter = adapter
 
             mRLIncome.setOnClickListener { _ -> mSWer.doSelect(mRLIncome) }
-
             mRLPay.setOnClickListener { _ -> mSWer.doSelect(mRLPay) }
 
             mSWer.addSelector(mRLPay,
@@ -79,9 +82,15 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
                         (mRLIncome.findViewById<View>(R.id.tv_tag) as TextView)
                                 .setTextColor(ResourceHelper.mCRTextFit)
                     })
-
-            mSWer.doSelect(mRLPay)
         }
+
+        loadUI(savedInstanceState)
+    }
+
+
+    override fun loadUI(savedInstanceState: Bundle?) {
+        super.loadUI(savedInstanceState)
+        mSWer.doSelect(mRLPay)
     }
 
     fun onAccept(): Boolean {

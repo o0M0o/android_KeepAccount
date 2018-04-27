@@ -3,23 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/mi_switch"
-        android:icon="@drawable/ic_switch_1"
-        android:orderInCategory="800"
-        android:title="@string/cn_edit"
-        app:showAsAction="ifRoom|withText" />
-
-    <item
         android:id="@+id/mi_save"
-        android:icon="@drawable/ic_accept_1"
+        android:icon="@drawable/ic_accept_2"
         android:orderInCategory="900"
         android:title="@string/cn_save"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/mi_giveup"
-        android:icon="@drawable/ic_reject_1"
-        android:orderInCategory="901"
-        android:title="@string/cn_giveup"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/mi_switch"
+        android:icon="@drawable/ic_switch_1"
+        android:orderInCategory="902"
+        android:title="@string/cn_edit"
+        app:showAsAction="ifRoom|withText" />
 </menu>

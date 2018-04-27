@@ -15,8 +15,7 @@ import wxm.androidutil.util.UtilFun
  */
 class ACNoteCreate : ACSwitcherActivity<FrgNoteCreate>() {
     override fun leaveActivity() {
-        val data = Intent()
-        setResult(GlobalDef.INTRET_GIVEUP, data)
+        setResult(GlobalDef.INTRET_GIVEUP, Intent())
         finish()
     }
 
@@ -46,14 +45,9 @@ class ACNoteCreate : ACSwitcherActivity<FrgNoteCreate>() {
             R.id.mi_save -> {
                 val hf = hotFragment
                 if (hf.onAccept()) {
-                    val data = Intent()
-                    setResult(GlobalDef.INTRET_SURE, data)
+                    setResult(GlobalDef.INTRET_SURE, Intent())
                     finish()
                 }
-            }
-
-            R.id.mi_giveup -> {
-                leaveActivity()
             }
 
             else -> return super.onOptionsItemSelected(item)

@@ -16,19 +16,6 @@ import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
  * @version     create：2018/4/25
  */
 class FrgNoteEdit :  FrgEditBase() {
-    /*
-    class PageListener : ViewPager.OnPageChangeListener {
-        override fun onPageScrollStateChanged(state: Int) {
-        }
-
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        }
-
-        override fun onPageSelected(position: Int) {
-        }
-    }
-    */
-
     private val mVPPages: ViewPager by bindView(R.id.vp_pages)
     private var mCurData: Any? = null
     private var mCurDataType: String? = null
@@ -57,7 +44,7 @@ class FrgNoteEdit :  FrgEditBase() {
 
     override fun onAccept(): Boolean {
         if(isPreviewStatus())
-            return true
+            toEditStatus()
 
         val pa = mVPPages.adapter as PagerAdapter
         return (pa.getItem(PAGE_IDX_EDIT) as IEdit).onAccept()
@@ -89,9 +76,6 @@ class FrgNoteEdit :  FrgEditBase() {
 
     override fun initUI(bundle: Bundle?) {
         if(null == bundle) {
-            val adapter = PagerAdapter(fragmentManager)
-            mVPPages.adapter = adapter
-
             val idx = if(null == mCurData)  PAGE_IDX_EDIT  else PAGE_IDX_PREVIEW
             if(null == mCurData) {
                 mCurData = when (mCurDataType!!) {
@@ -109,8 +93,10 @@ class FrgNoteEdit :  FrgEditBase() {
                 }
             }
 
+            val adapter = PagerAdapter(fragmentManager)
             (adapter.getItem(PAGE_IDX_PREVIEW) as IPreview).setPreviewData(mCurData!!)
             (adapter.getItem(PAGE_IDX_EDIT) as IEdit).setEditData(mCurData!!)
+            mVPPages.adapter = adapter
             mVPPages.currentItem = idx
         }
 
@@ -135,7 +121,7 @@ class FrgNoteEdit :  FrgEditBase() {
                 }
 
                 GlobalDef.STR_RECORD_PAY -> {
-                    arrayOf(TFPreviewPay(), PagePayEdit())
+                    arrayOf(PagePayPreview(), PagePayEdit())
                 }
 
                 else -> {

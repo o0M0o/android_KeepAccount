@@ -15,8 +15,8 @@ import wxm.androidutil.Switcher.ACSwitcherActivity
  * preview/edit UI for note
  */
 class ACNoteEdit : ACSwitcherActivity<FrgEditBase>() {
-    private var mMISwitch: MenuItem? = null
-    private var mMISave: MenuItem? = null
+    private lateinit var mMISwitch: MenuItem
+    private lateinit var mMISave: MenuItem
 
     override fun leaveActivity() {
         setResult(GlobalDef.INTRET_GIVEUP, Intent())
@@ -52,16 +52,16 @@ class ACNoteEdit : ACSwitcherActivity<FrgEditBase>() {
 
         mMISwitch = menu.findItem(R.id.mi_switch)
         mMISave = menu.findItem(R.id.mi_save)
-        mMISwitch!!.title = if (hotFragment.isEditStatus()) TITLE_EDIT else TITLE_PREVIEW
-        mMISave!!.isVisible = hotFragment.isEditStatus()
+        mMISwitch.title = if (hotFragment.isEditStatus()) TITLE_EDIT else TITLE_PREVIEW
+        mMISave.isVisible = hotFragment.isEditStatus()
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.mi_switch -> {
-                mMISave!!.isVisible = hotFragment.isPreviewStatus()
-                mMISwitch!!.title = if (hotFragment.isEditStatus()) TITLE_EDIT else TITLE_PREVIEW
+                mMISave.isVisible = hotFragment.isPreviewStatus()
+                mMISwitch.title = if (hotFragment.isEditStatus()) TITLE_EDIT else TITLE_PREVIEW
                 if (hotFragment.isPreviewStatus())
                     hotFragment.toEditStatus()
                 else
@@ -74,10 +74,6 @@ class ACNoteEdit : ACSwitcherActivity<FrgEditBase>() {
                     setResult(GlobalDef.INTRET_SURE, data)
                     finish()
                 }
-            }
-
-            R.id.mi_giveup -> {
-                leaveActivity()
             }
 
             else -> return super.onOptionsItemSelected(item)

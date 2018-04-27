@@ -1,6 +1,6 @@
 package wxm.KeepAccount.ui.base.Switcher
 
-import java.util.ArrayList
+import java.util.*
 
 /**
  * for page switch
@@ -8,7 +8,7 @@ import java.util.ArrayList
  */
 class PageSwitcher {
     private val mPHHelper: ArrayList<PageHelper> = ArrayList()
-    private var mIdxHot: Int = 0
+    private var mIdxHot: Int = INVALID_POS
 
     /**
      * get object for selected
@@ -20,13 +20,8 @@ class PageSwitcher {
     /**
      * holder for selector
      */
-    internal inner class PageHelper {
-        var mRLSelector: Any? = null
-        var mSelfIdx: Int = 0
-
-        var mRAEnable: Runnable? = null
-        var mRADisable: Runnable? = null
-    }
+    data class PageHelper(val mRLSelector: Any, val mSelfIdx: Int,
+                          val mRAEnable: Runnable, val mRADisable: Runnable)
 
     /**
      * add selector
@@ -36,15 +31,7 @@ class PageSwitcher {
      */
     fun addSelector(oj: Any, ea: Runnable, da: Runnable) {
         da.run()
-
-        val ph = PageHelper()
-        ph.mRLSelector = oj
-        ph.mSelfIdx = mPHHelper.size
-
-        ph.mRAEnable = ea
-        ph.mRADisable = da
-
-        mPHHelper.add(ph)
+        mPHHelper.add(PageHelper(oj, mPHHelper.size, ea, da))
     }
 
     /**
@@ -53,24 +40,14 @@ class PageSwitcher {
      * @param oj    selector object
      */
     fun doSelect(oj: Any) {
-        var cph: PageHelper? = null
-        for (ph in mPHHelper) {
-            if (ph.mRLSelector === oj) {
-                cph = ph
-                break
+        mPHHelper.find { it.mRLSelector === oj && mIdxHot != it.mSelfIdx }?.let {
+            if (INVALID_POS != mIdxHot) {
+                mPHHelper[mIdxHot].mRADisable.run()
             }
+
+            it.mRAEnable.run()
+            mIdxHot = it.mSelfIdx
         }
-
-        if (null == cph || mIdxHot == cph.mSelfIdx)
-            return
-
-        val oldHot = mIdxHot
-        mIdxHot = cph.mSelfIdx
-        if (INVALID_POS != oldHot) {
-            mPHHelper[oldHot].mRADisable!!.run()
-        }
-
-        cph.mRAEnable!!.run()
     }
 
     companion object {
