@@ -65,7 +65,10 @@ class DailyChart : ChartBase() {
                                     listOf(SubcolumnValue(pay.toFloat(), mPayColor),
                                             SubcolumnValue(income.toFloat(), mIncomeColor)))
                                     .setHasLabels(true))
-                            axisValues.add(AxisValue(idCol.toFloat()).setLabel(it.key))
+                            axisValues.add(AxisValue(idCol.toFloat()).apply {
+                                setLabel(if(0 == idCol % 3) { it.key } else  { "" })
+                            })
+
                             idCol++
                         }
                     }
@@ -82,10 +85,10 @@ class DailyChart : ChartBase() {
                         it.setHasLabels(false)
                     }
 
-                    var cc = 0
                     mPreviewData!!.axisXBottom.values.forEach {
-                        it.setLabel(if (0 == cc % 5) String(it.labelAsChars).substring(0, 7) else "")
-                        cc += 1
+                        it.setLabel(if (null != it.labelAsChars && 4 < it.labelAsChars.size)
+                                    String(it.labelAsChars).substring(0, 4)
+                                else "")
                     }
                 },
                 { loadUIUtility(true) })

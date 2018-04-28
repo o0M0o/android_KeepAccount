@@ -121,7 +121,11 @@ object ToolUtil {
     fun runInBackground(h: Activity, back: () -> Unit, ui:  () -> Unit) {
         val weakActivity = WeakReference(h)
         Executors.newCachedThreadPool().submit {
-            back()
+            try {
+                back()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
 
             weakActivity.get()?.let {
                 if(!(it.isDestroyed || it.isFinishing))   {
