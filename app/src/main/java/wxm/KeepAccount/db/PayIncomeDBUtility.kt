@@ -77,7 +77,7 @@ class PayIncomeDBUtility {
     fun getNotesToMonth(lsData : List<INote>) : HashMap<String, ArrayList<INote>> {
         val hmData = HashMap<String, ArrayList<INote>>()
         for (i in lsData) {
-            val hK = i.tsToStr!!.substring(0, 10)
+            val hK = i.tsToStr!!.substring(0, 7)
             val hV = hmData[hK]
             if (null == hV) {
                 val v = ArrayList<INote>()

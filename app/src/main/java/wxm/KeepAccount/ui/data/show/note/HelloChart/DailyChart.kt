@@ -61,12 +61,10 @@ class DailyChart : ChartBase() {
                                 }
                             }
 
-                            val values = ArrayList<SubcolumnValue>()
-                            values.add(SubcolumnValue(pay.toFloat(), mPayColor))
-                            values.add(SubcolumnValue(income.toFloat(), mIncomeColor))
-
-                            columns.add(Column(values).setHasLabels(true))
-
+                            columns.add(Column(
+                                    listOf(SubcolumnValue(pay.toFloat(), mPayColor),
+                                            SubcolumnValue(income.toFloat(), mIncomeColor)))
+                                    .setHasLabels(true))
                             axisValues.add(AxisValue(idCol.toFloat()).setLabel(it.key))
                             idCol++
                         }

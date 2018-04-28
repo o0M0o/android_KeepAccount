@@ -1,12 +1,10 @@
 package wxm.KeepAccount.ui.data.show.note.HelloChart
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import butterknife.OnClick
 import kotterknife.bindView
 import lecho.lib.hellocharts.gesture.ZoomType
 import lecho.lib.hellocharts.listener.ViewportChangeListener
@@ -18,38 +16,36 @@ import wxm.KeepAccount.ui.base.TouchUI.TouchPreviewColumnChartView
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase
 import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.PreferencesUtil
-import wxm.KeepAccount.utility.ToolUtil
-import java.util.*
 
 /**
  * chart view base helper
  * Created by WangXM on2016/9/29.
  */
 abstract class ChartBase : ShowViewBase() {
-    var mChartData: ColumnChartData? = null
-    var mPreviewData: ColumnChartData? = null
-
-    var mPrvWidth = 12f
-    val mHMColor: HashMap<String, Int> = PreferencesUtil.loadChartColor()
-
-    val mPayColor= PreferencesUtil.loadChartColor()[PreferencesUtil.SET_PAY_COLOR]!!
-    val mIncomeColor = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_INCOME_COLOR]!!
-
     private val mChart: TouchColumnChartView by bindView(R.id.chart)
     private val mPreviewChart: TouchPreviewColumnChartView by bindView(R.id.chart_preview)
     private val mIVIncome: ImageView by bindView(R.id.iv_income)
     private val mIVPay: ImageView by bindView(R.id.iv_pay)
     private val mBTLessViewPort: Button by bindView(R.id.bt_less_viewport)
 
+    var mChartData: ColumnChartData? = null
+    var mPreviewData: ColumnChartData? = null
+
+    var mPrvWidth = 12f
+
+    companion object {
+        val mPayColor: Int = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_PAY_COLOR]!!
+        val mIncomeColor: Int = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_INCOME_COLOR]!!
+    }
+
     override fun getLayoutID(): Int {
         return R.layout.chart_pager
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun initUI(bundle: Bundle?) {
-        if(null == bundle) {
-            mBFilter = false
+        mBFilter = false
 
+        if (null == bundle) {
             // main chart need respond touch event
             mChart.setOnTouchListener(object : View.OnTouchListener {
                 private var mDownX = -1f
@@ -134,8 +130,8 @@ abstract class ChartBase : ShowViewBase() {
 
         if (b_full) {
             // 展示条
-            mIVIncome.setBackgroundColor(mHMColor[PreferencesUtil.SET_INCOME_COLOR]!!)
-            mIVPay.setBackgroundColor(mHMColor[PreferencesUtil.SET_PAY_COLOR]!!)
+            mIVIncome.setBackgroundColor(mIncomeColor)
+            mIVPay.setBackgroundColor(mPayColor)
 
             /* for chart */
             mChart.columnChartData = mChartData

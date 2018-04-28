@@ -43,53 +43,57 @@ class MonthlyChart : ChartBase() {
     }
 
     override fun refreshData() {
+        val ret = NoteDataHelper.instance.notesForMonth ?: return
+
+        var idCol = 0
+        val axisValues = ArrayList<AxisValue>()
+        val columns = ArrayList<Column>()
+
+        ret.toSortedMap().entries.forEach {
+            if (!mBFilter || mFilterPara.contains(it.key)) {
+                var pay = BigDecimal.ZERO
+                var income = BigDecimal.ZERO
+                it.value.forEach {
+                    when (it) {
+                        is PayNoteItem -> pay = pay.add(it.amount)
+                        is IncomeNoteItem -> income = income.add(it.amount)
+                    }
+                }
+
+                columns.add(Column(
+                        listOf(SubcolumnValue(pay.toFloat(), mPayColor),
+                                SubcolumnValue(income.toFloat(), mIncomeColor)))
+                        .setHasLabels(true))
+                axisValues.add(AxisValue(idCol.toFloat()).setLabel(it.key))
+                idCol++
+            }
+        }
+
+        mChartData = ColumnChartData(columns)
+        mChartData!!.axisXBottom = Axis(axisValues)
+        mChartData!!.axisYLeft = Axis().setHasLines(true)
+
+        // prepare preview data, is better to use separate deep copy for preview chart.
+        // set color to grey to make preview area more visible.
+        mPreviewData = ColumnChartData(mChartData!!)
+        mPreviewData!!.columns.forEach {
+            it.values.forEach { it.color = ChartUtils.DEFAULT_DARKEN_COLOR }
+            it.setHasLabels(false)
+        }
+
+        var ic = 0
+        mPreviewData!!.axisXBottom.values.forEach {
+            it.setLabel(if (0 == ic % 2) String(it.labelAsChars).substring(0, 4) else "")
+            ic += 1
+        }
+
+        loadUIUtility(true)
+        /*
         ToolUtil.runInBackground(this.activity,
                 {
-                    val ret = NoteDataHelper.instance.notesForMonth ?: return@runInBackground
 
-                    var idCol = 0
-                    val axisValues = ArrayList<AxisValue>()
-                    val columns = ArrayList<Column>()
-                    ret.toSortedMap().entries.forEach{
-                        if (!mBFilter || mFilterPara.contains(it.key)) {
-                            var pay = BigDecimal.ZERO
-                            var income = BigDecimal.ZERO
-                            it.value.forEach {
-                                when (it) {
-                                    is PayNoteItem -> pay = pay.add(it.amount)
-                                    is IncomeNoteItem -> income = income.add(it.amount)
-                                }
-                            }
-
-                            val values = ArrayList<SubcolumnValue>()
-                            values.add(SubcolumnValue(pay.toFloat(), mPayColor))
-                            values.add(SubcolumnValue(income.toFloat(), mIncomeColor))
-
-                            columns.add(Column(values).setHasLabels(true))
-
-                            axisValues.add(AxisValue(idCol.toFloat()).setLabel(it.key))
-                            idCol++
-                        }
-                    }
-
-                    mChartData = ColumnChartData(columns)
-                    mChartData!!.axisXBottom = Axis(axisValues)
-                    mChartData!!.axisYLeft = Axis().setHasLines(true)
-
-                    // prepare preview data, is better to use separate deep copy for preview chart.
-                    // set color to grey to make preview area more visible.
-                    mPreviewData = ColumnChartData(mChartData!!)
-                    mPreviewData!!.columns.forEach {
-                        it.values.forEach { it.color = ChartUtils.DEFAULT_DARKEN_COLOR }
-                        it.setHasLabels(false)
-                    }
-
-                    var ic = 0
-                    mPreviewData!!.axisXBottom.values.forEach {
-                        it.setLabel(if (0 == ic % 2) String(it.labelAsChars).substring(0, 4) else "")
-                        ic += 1
-                    }
                 },
                 { loadUIUtility(true) })
+                */
     }
 }
