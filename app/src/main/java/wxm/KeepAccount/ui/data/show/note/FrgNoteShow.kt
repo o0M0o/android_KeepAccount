@@ -214,7 +214,7 @@ class FrgNoteShow : FrgSupportSwitcher<FrgSupportBaseAdv>() {
             }
 
             it.setBackgroundResource(res)
-            (rl.findViewById<View>(R.id.tv_tag) as TextView)
+            (it.findViewById<View>(R.id.tv_tag) as TextView)
                     .setTextColor(if (bIsSelected) ResourceHelper.mCRTextWhite else ResourceHelper.mCRTextFit)
         }
     }

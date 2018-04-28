@@ -81,19 +81,16 @@ object ToolUtil {
      * @return      "星期*"
      */
     fun getDayInWeek(dw: Int): String {
-        val ret: String
-        when (dw) {
-            Calendar.SUNDAY -> ret = "星期日"
-            Calendar.MONDAY -> ret = "星期一"
-            Calendar.TUESDAY -> ret = "星期二"
-            Calendar.WEDNESDAY -> ret = "星期三"
-            Calendar.THURSDAY -> ret = "星期四"
-            Calendar.FRIDAY -> ret = "星期五"
-            Calendar.SATURDAY -> ret = "星期六"
-            else -> ret = ""
+        return when (dw) {
+            Calendar.SUNDAY -> "星期日"
+            Calendar.MONDAY -> "星期一"
+            Calendar.TUESDAY -> "星期二"
+            Calendar.WEDNESDAY -> "星期三"
+            Calendar.THURSDAY -> "星期四"
+            Calendar.FRIDAY -> "星期五"
+            Calendar.SATURDAY -> "星期六"
+            else -> ""
         }
-
-        return ret
     }
 
     /**
@@ -107,9 +104,29 @@ object ToolUtil {
         Executors.newCachedThreadPool().submit {
             back.run()
 
-            val cur = weakActivity.get()
-            if (!(null == cur || cur.isDestroyed || cur.isFinishing)) {
-                cur.runOnUiThread(ui)
+            weakActivity.get()?.let {
+                if(!(it.isDestroyed || it.isFinishing))   {
+                    it.runOnUiThread(ui)
+                }
+            }
+        }
+    }
+
+    /**
+     * do in background then show in UI
+     * @param h         current activity
+     * @param back      run in background
+     * @param ui        run in UI
+     */
+    fun runInBackground(h: Activity, back: () -> Unit, ui:  () -> Unit) {
+        val weakActivity = WeakReference(h)
+        Executors.newCachedThreadPool().submit {
+            back()
+
+            weakActivity.get()?.let {
+                if(!(it.isDestroyed || it.isFinishing))   {
+                    it.runOnUiThread(ui)
+                }
             }
         }
     }
@@ -123,5 +140,13 @@ object ToolUtil {
     fun<T> callInBackground(unit: TimeUnit, timeout: Long, back: Callable<T>): T {
         val task = Executors.newCachedThreadPool().submit(back)
         return task.get(timeout, unit)
+    }
+
+    fun runIfElse(flag: Boolean, ifBlock: () -> Unit, elseBlock: () -> Unit = {}) {
+        if(flag)    {
+            ifBlock()
+        } else  {
+            elseBlock()
+        }
     }
 }
