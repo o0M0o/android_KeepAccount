@@ -94,63 +94,89 @@ object ToolUtil {
     }
 
     /**
-     * do in background then show in UI
-     * @param h         current activity
-     * @param back      run in background
-     * @param ui        run in UI
+     * in background-thread run [back]
+     * after [back] and if no exception happen then run [ui] in ui-thread
      */
+    @Deprecated(
+            "this function is deprecated!",
+            ReplaceWith("runInBackground"),
+            level = DeprecationLevel.WARNING
+    )
     fun runInBackground(h: Activity, back: Runnable, ui: Runnable) {
         val weakActivity = WeakReference(h)
-        Executors.newCachedThreadPool().submit {
-            back.run()
-
-            weakActivity.get()?.let {
-                if(!(it.isDestroyed || it.isFinishing))   {
-                    it.runOnUiThread(ui)
-                }
-            }
-        }
-    }
-
-    /**
-     * do in background then show in UI
-     * @param h         current activity
-     * @param back      run in background
-     * @param ui        run in UI
-     */
-    fun runInBackground(h: Activity, back: () -> Unit, ui:  () -> Unit) {
-        val weakActivity = WeakReference(h)
+        var runRet = false
         Executors.newCachedThreadPool().submit {
             try {
-                back()
+                back.run()
+                runRet = true
             } catch (e: Exception) {
                 e.printStackTrace()
             }
 
-            weakActivity.get()?.let {
-                if(!(it.isDestroyed || it.isFinishing))   {
-                    it.runOnUiThread(ui)
+            if(runRet) {
+                weakActivity.get()?.let {
+                    if (!(it.isDestroyed || it.isFinishing)) {
+                        it.runOnUiThread(ui)
+                    }
                 }
             }
         }
     }
 
     /**
-     * wait done in background
-     * @param unit      wait time unit
-     * @param timeout   wait time
-     * @param back      run in background
+     * in background-thread run [back]
+     * after [back] and if no exception happen then run [ui] in ui-thread
      */
-    fun<T> callInBackground(unit: TimeUnit, timeout: Long, back: Callable<T>): T {
-        val task = Executors.newCachedThreadPool().submit(back)
-        return task.get(timeout, unit)
+    fun runInBackground(h: Activity, back: () -> Unit, ui:  () -> Unit) {
+        val weakActivity = WeakReference(h)
+        var runRet = false
+        Executors.newCachedThreadPool().submit {
+            try {
+                back()
+                runRet = true
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            if(runRet) {
+                weakActivity.get()?.let {
+                    if (!(it.isDestroyed || it.isFinishing)) {
+                        it.runOnUiThread(ui)
+                    }
+                }
+            }
+        }
     }
 
-    fun runIfElse(flag: Boolean, ifBlock: () -> Unit, elseBlock: () -> Unit = {}) {
-        if(flag)    {
-            ifBlock()
-        } else  {
-            elseBlock()
+    /**
+     * in background-thread run [back]
+     * return callable result or [defRet] if exception happens
+     * caller will wait result with timeout parameter [unit] and [timeout]
+     */
+    fun<T> callInBackground(back: Callable<T>, defRet:T, unit: TimeUnit, timeout: Long): T {
+        val task = Executors.newCachedThreadPool().submit(back)
+        try {
+            return task.get(timeout, unit)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+
+        return defRet
+    }
+
+    /**
+     * in background-thread run [back]
+     * return callable result or [defRet] if exception happens
+     * caller will wait result with timeout parameter [unit] and [timeout]
+     */
+    fun<T> callInBackground(back: ()->T, defRet: T, unit: TimeUnit, timeout: Long): T {
+        val task = Executors.newCachedThreadPool().submit(back)
+        try {
+            return task.get(timeout, unit)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return defRet
     }
 }

@@ -18,10 +18,6 @@ import java.util.*
  * Created by WangXM on2016/9/29.
  */
 class MonthlyChart : ChartBase() {
-    init {
-        mPrvWidth = 5.5f
-    }
-
     override fun isUseEventBus(): Boolean {
         return true
     }

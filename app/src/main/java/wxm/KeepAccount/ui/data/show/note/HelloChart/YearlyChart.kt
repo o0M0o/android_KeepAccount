@@ -17,10 +17,6 @@ import java.util.*
  * Created by WangXM on2016/9/29.
  */
 class YearlyChart : ChartBase() {
-    init {
-        mPrvWidth = 6f
-    }
-
     override fun isUseEventBus(): Boolean {
         return true
     }

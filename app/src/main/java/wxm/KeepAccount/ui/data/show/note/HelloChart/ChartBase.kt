@@ -22,16 +22,19 @@ import wxm.KeepAccount.utility.PreferencesUtil
  * Created by WangXM on2016/9/29.
  */
 abstract class ChartBase : ShowViewBase() {
-    private val mChart: TouchColumnChartView by bindView(R.id.chart)
+    val mChart: TouchColumnChartView by bindView(R.id.chart)
     private val mPreviewChart: TouchPreviewColumnChartView by bindView(R.id.chart_preview)
     private val mIVIncome: ImageView by bindView(R.id.iv_income)
     private val mIVPay: ImageView by bindView(R.id.iv_pay)
     private val mBTLessViewPort: Button by bindView(R.id.bt_less_viewport)
+    private val mBTMoreViewPort: Button by bindView(R.id.bt_more_viewport)
 
     var mChartData: ColumnChartData? = null
     var mPreviewData: ColumnChartData? = null
 
-    var mPrvWidth = 12f
+    private var mPrvVPWidth = 5f
+    private var mPrvVPOneDataWidth = 1f
+    private var mPrvVPMaxWidth = 1f
 
     companion object {
         val mPayColor: Int = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_PAY_COLOR]!!
@@ -46,6 +49,17 @@ abstract class ChartBase : ShowViewBase() {
         mBFilter = false
 
         if (null == bundle) {
+            mIVIncome.setBackgroundColor(mIncomeColor)
+            mIVPay.setBackgroundColor(mPayColor)
+
+            // Disable zoom/scroll for previewed chart, visible chart ranges depends on preview chart viewport so
+            // zoom/scroll is unnecessary.
+            mChart.isZoomEnabled = false
+            mChart.isScrollEnabled = false
+
+            mPreviewChart.setViewportChangeListener(ViewportListener())
+            mPreviewChart.zoomType = ZoomType.HORIZONTAL
+
             // main chart need respond touch event
             mChart.setOnTouchListener(object : View.OnTouchListener {
                 private var mDownX = -1f
@@ -129,21 +143,23 @@ abstract class ChartBase : ShowViewBase() {
         refreshAttachLayout()
 
         if (b_full) {
-            // 展示条
-            mIVIncome.setBackgroundColor(mIncomeColor)
-            mIVPay.setBackgroundColor(mPayColor)
-
             /* for chart */
-            mChart.columnChartData = mChartData
-            // Disable zoom/scroll for previewed chart, visible chart ranges depends on preview chart viewport so
-            // zoom/scroll is unnecessary.
-            mChart.isZoomEnabled = false
-            mChart.isScrollEnabled = false
-            //mChart.setValueSelectionEnabled(true);
+            mChartData?.let {
+                mChart.columnChartData = it
+                mPreviewChart.columnChartData = mPreviewData
 
-            mPreviewChart.columnChartData = mPreviewData
-            mPreviewChart.setViewportChangeListener(ViewportListener())
-            mPreviewChart.zoomType = ZoomType.HORIZONTAL
+                val colCount = it.columns.count()
+                if(0 < colCount) {
+                    mPrvVPMaxWidth= mChart.maximumViewport.width()
+                    mPrvVPOneDataWidth = mPrvVPMaxWidth / colCount
+                    mPrvVPWidth = if (colCount >= 5) {
+                        5 * mPrvVPOneDataWidth
+                    } else {
+                        mPrvVPMaxWidth
+                    }
+                }
+            }
+
             refreshViewPort()
         }
     }
@@ -156,27 +172,26 @@ abstract class ChartBase : ShowViewBase() {
      */
     fun onLessOrMoreView(v: View) {
         when (v.id) {
-            R.id.bt_less_viewport -> {
-                mPrvWidth += 0.2f
-                refreshViewPort()
-
-                if (!mBTLessViewPort.isClickable && 1 < mPrvWidth)
-                    mBTLessViewPort.isClickable = true
+            R.id.bt_more_viewport -> {
+                mPrvVPWidth = mPreviewChart.currentViewport.width()
+                mPrvVPWidth = Math.min(mPrvVPWidth + mPrvVPOneDataWidth / 2, mPrvVPMaxWidth)
             }
 
-            R.id.bt_more_viewport -> {
-                if (1 < mPrvWidth) {
-                    mPrvWidth -= 0.2f
-                    refreshViewPort()
-                } else {
-                    mBTLessViewPort.isClickable = false
-                }
+            R.id.bt_less_viewport -> {
+                mPrvVPWidth = mPreviewChart.currentViewport.width()
+                mPrvVPWidth = Math.max(mPrvVPWidth - mPrvVPOneDataWidth / 2, mPrvVPOneDataWidth)
             }
 
             R.id.bt_giveup_filter -> {
                 mBFilter = false
                 refreshData()
             }
+        }
+
+        if(v.id in setOf(R.id.bt_less_viewport, R.id.bt_more_viewport))  {
+            refreshViewPort()
+            mBTMoreViewPort.isClickable = mPrvVPMaxWidth > mPrvVPWidth
+            mBTLessViewPort.isClickable = mPrvVPOneDataWidth < mPrvVPWidth
         }
     }
 
@@ -191,9 +206,21 @@ abstract class ChartBase : ShowViewBase() {
 
 
     private fun refreshViewPort() {
-        val tempViewport = Viewport(mChart.maximumViewport)
-        tempViewport.right = tempViewport.left + mPrvWidth
-        mPreviewChart.setCurrentViewportWithAnimation(tempViewport)
+        val vpTmp = Viewport(mChart.currentViewport)
+        val vpMax = Viewport(mChart.maximumViewport)
+        val newRight = vpTmp.left + mPrvVPWidth
+        if (newRight <= vpMax.right) {
+            vpTmp.right = newRight
+        } else {
+            if(vpMax.width() > mPrvVPWidth) {
+                vpTmp.right = vpMax.right
+                vpTmp.left = vpMax.right - mPrvVPWidth
+            } else  {
+                vpTmp.right = vpMax.right
+                vpTmp.left = vpMax.left
+            }
+        }
+        mPreviewChart.setCurrentViewportWithAnimation(vpTmp)
     }
 
 

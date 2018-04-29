@@ -113,8 +113,7 @@ class DlgUsrMessage : DlgOKOrNOBase() {
     private fun sendMsgByHttpPost(usr: String, msg: String): Array<Any> {
         showProgress(true)
         val wrHome = WeakReference(activity as Activity?)
-        return ToolUtil.callInBackground(TimeUnit.SECONDS, 6,
-                Callable<Array<Any>> {
+        return ToolUtil.callInBackground({
                     var sendResult: Boolean
                     var sendExplain: String
                     try {
@@ -144,8 +143,8 @@ class DlgUsrMessage : DlgOKOrNOBase() {
                         runInUIThread(wrHome, Runnable { showProgress(false) })
                     }
 
-                    return@Callable arrayOf(sendResult, sendExplain)
-                })
+                    arrayOf(sendResult, sendExplain)
+                }, arrayOf(false, "time out"), TimeUnit.SECONDS, 6)
     }
 
 

@@ -24,6 +24,7 @@ import wxm.KeepAccount.ui.welcome.ACWelcome
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import java.util.concurrent.TimeUnit
 
 /**
  * for login
@@ -146,20 +147,17 @@ class FrgLogin : FrgSupportBaseAdv() {
      */
     private fun doLogin(usr: String, pwd: String) {
         showProgress(true)
+        val bRet = ToolUtil.callInBackground(
+                        { ContextUtil.usrUtility.loginByUsr(usr, pwd)}, false,
+                        TimeUnit.SECONDS, 3)
+        showProgress(false)
 
-        val bret = booleanArrayOf(false)
-        ToolUtil.runInBackground(this.activity,
-                Runnable { bret[0] = ContextUtil.usrUtility.loginByUsr(usr, pwd) },
-                Runnable {
-                    Handler().postDelayed({ showProgress(false) }, 10)
-                    if (bret[0]) {
-                        val intent = Intent(activity, ACWelcome::class.java)
-                        startActivityForResult(intent, 1)
-                    } else {
-                        mETPassword.error = mHSErrorPassword
-                        mETPassword.requestFocus()
-                    }
-                })
+        if(bRet)    {
+            startActivityForResult(Intent(activity, ACWelcome::class.java), 1)
+        } else  {
+            mETPassword.error = mHSErrorPassword
+            mETPassword.requestFocus()
+        }
     }
     /// PRIVATE END
 }

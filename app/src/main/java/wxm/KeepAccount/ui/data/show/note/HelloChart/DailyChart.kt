@@ -18,10 +18,6 @@ import java.util.*
  * Created by WangXM on2016/9/29.
  */
 class DailyChart : ChartBase() {
-    init {
-        mPrvWidth = 4.5f
-    }
-
     override fun isUseEventBus(): Boolean {
         return true
     }
@@ -66,7 +62,11 @@ class DailyChart : ChartBase() {
                                             SubcolumnValue(income.toFloat(), mIncomeColor)))
                                     .setHasLabels(true))
                             axisValues.add(AxisValue(idCol.toFloat()).apply {
-                                setLabel(if(0 == idCol % 3) { it.key } else  { "" })
+                                setLabel(if (0 == idCol % 3) {
+                                    it.key
+                                } else {
+                                    ""
+                                })
                             })
 
                             idCol++
@@ -87,8 +87,8 @@ class DailyChart : ChartBase() {
 
                     mPreviewData!!.axisXBottom.values.forEach {
                         it.setLabel(if (null != it.labelAsChars && 4 < it.labelAsChars.size)
-                                    String(it.labelAsChars).substring(0, 4)
-                                else "")
+                            String(it.labelAsChars).substring(0, 4)
+                        else "")
                     }
                 },
                 { loadUIUtility(true) })
