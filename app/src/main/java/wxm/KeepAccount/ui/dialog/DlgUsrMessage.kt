@@ -149,8 +149,7 @@ class DlgUsrMessage : DlgOKOrNOBase() {
 
 
     private fun runInUIThread(wrActivity : WeakReference<Activity?>, uiRun : Runnable)   {
-        val cur = wrActivity.get() as Activity?
-        cur?.let {
+        wrActivity.get()?.let {
             if(!(it.isDestroyed || it.isFinishing)) {
                 it.runOnUiThread(uiRun)
             }

@@ -46,6 +46,7 @@ class FrgCalendarContent : FrgSupportBaseAdv() {
      * handler for DB data change
      * @param event     for event
      */
+    @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDBDataChange(event: DBDataChangeEvent) {
         mSZHotDay?.let {

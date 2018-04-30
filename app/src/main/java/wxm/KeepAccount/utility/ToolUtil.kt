@@ -65,6 +65,18 @@ object ToolUtil {
     }
 
     /**
+     * get day-in-week for [szDate]
+     * string can be :
+     * "2016-08-06",
+     * "2016年08月06日"
+     * "2016-08-06 12:00:00",
+     * "2016年08月06日 12:00:00"
+     */
+    fun getDayInWeek(szDate: String): String {
+        return getDayInWeek(stringToTimestamp(szDate))
+    }
+
+    /**
      * get day in week for timestamp
      * @param ts    time
      * @return      "星期*"

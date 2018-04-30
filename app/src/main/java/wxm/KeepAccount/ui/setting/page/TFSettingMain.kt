@@ -55,8 +55,8 @@ class TFSettingMain : TFSettingBase() {
                                                     .setTitle("提示")
                                                     .setMessage("请等待数据清理完毕...").create()
                                             ToolUtil.runInBackground(this.activity,
-                                                    Runnable { ContextUtil.clearDB() },
-                                                    Runnable { mADDlg.dismiss() })
+                                                    { ContextUtil.clearDB() },
+                                                    { mADDlg.dismiss() })
                                         }.setNegativeButton("否") { _, _ -> }
                                         .create()
                                 alertDialog.show()

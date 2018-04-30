@@ -73,6 +73,7 @@ class FrgNoteShow : FrgSupportSwitcher<FrgSupportBaseAdv>() {
      * DB data change handler
      * @param event     event param
      */
+    @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDBChangeEvent(event: DBDataChangeEvent) {
         val tb = hotTabItem
@@ -153,8 +154,9 @@ class FrgNoteShow : FrgSupportSwitcher<FrgSupportBaseAdv>() {
         }
     }
 
-    fun disableViewPageTouch(bflag: Boolean) {
-        //getHotTabItem().requestDisallowInterceptTouchEvent(bflag);
+    @Suppress("UNUSED_PARAMETER")
+    fun disableViewPageTouch(bFlag: Boolean) {
+        //getHotTabItem().requestDisallowInterceptTouchEvent(bFlag);
     }
 
     /**

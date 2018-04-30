@@ -84,12 +84,13 @@ open class LVAdapter
     /**
      * @see android.widget.Adapter.getView
      */
-    override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         return createViewFromResource(mInflater, position, convertView, parent, mResource)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun createViewFromResource(inflater: LayoutInflater, position: Int, convertView: View?,
-                                       parent: ViewGroup, resource: Int): View {
+                                       parent: ViewGroup?, resource: Int): View {
         return convertView ?: inflater.inflate(resource, parent, false)
     }
 

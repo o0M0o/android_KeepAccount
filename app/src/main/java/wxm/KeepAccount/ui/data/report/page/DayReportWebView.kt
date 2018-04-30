@@ -58,7 +58,7 @@ class DayReportWebView : FrgSupportWebView() {
             val param = arrayOfNulls<String>(1)
             showProgress(true)
             ToolUtil.runInBackground(this.activity,
-                    Runnable {
+                    {
                         val dStart = mASParaLoad!![0]
                         val dEnd = mASParaLoad!![1]
                         val hmData = NoteDataHelper.instance.getNotesBetweenDays(dStart, dEnd)
@@ -67,7 +67,7 @@ class DayReportWebView : FrgSupportWebView() {
                                 "info", "ts", "amount", "payNote")
                         param[0] = JSON.toJSONString(hmData, filter)
                     },
-                    Runnable {
+                    {
                         showProgress(false)
                         if (!UtilFun.StringIsNullOrEmpty(param[0])) {
                             loadPage("file:///android_asset/report/report_day.html", param[0])

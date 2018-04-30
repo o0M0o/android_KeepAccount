@@ -5,43 +5,36 @@ import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import android.widget.ToggleButton
-
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
-
-import java.math.BigDecimal
-import java.util.ArrayList
-import java.util.LinkedList
-import java.util.Locale
-
-import butterknife.BindView
-import butterknife.OnClick
 import kotterknife.bindView
 import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener
 import lecho.lib.hellocharts.model.PieChartData
 import lecho.lib.hellocharts.model.SliceValue
 import lecho.lib.hellocharts.util.ChartUtils
 import lecho.lib.hellocharts.view.PieChartView
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.INote
 import wxm.KeepAccount.ui.data.report.ACReport
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
+import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
+import java.math.BigDecimal
+import java.util.*
 
 /**
  * daily report(webview)
  * Created by WangXM on 2017/3/4.
  */
 class DayReportChart : FrgSupportBaseAdv() {
-    private val mCVchart: PieChartView by bindView(R.id.chart)
+    private val mCVChart: PieChartView by bindView(R.id.chart)
     private val mPBLoadData: ProgressBar by bindView(R.id.pb_load_data)
     private val mTBIncome: ToggleButton by bindView(R.id.tb_income)
     private val mTBPay: ToggleButton by bindView(R.id.tb_pay)
@@ -71,12 +64,38 @@ class DayReportChart : FrgSupportBaseAdv() {
     override fun initUI(bundle: Bundle?) {
         val bd = arguments
         mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD)
+        EventHelper.setOnClickOperator(view!!,
+                intArrayOf(R.id.tb_income, R.id.tb_pay),
+                { v ->
+                    val vid = v.id
+                    when (vid) {
+                        R.id.tb_income -> {
+                            mTBPay.isClickable = mTBIncome.isChecked
+                        }
+
+                        R.id.tb_pay -> {
+                            mTBIncome.isClickable = mTBPay.isChecked
+                        }
+                    }
+
+                    // update show
+                    val cvData = PieChartData()
+                    showProgress(true)
+                    ToolUtil.runInBackground(this.activity,
+                            { generateData(cvData) },
+                            {
+                                showProgress(false)
+
+                                mCVChart.circleFillRatio = 0.6f
+                                mCVChart.pieChartData = cvData
+                            })
+                })
 
         loadUI(bundle)
     }
 
     override fun loadUI(bundle: Bundle?) {
-        mCVchart.onValueTouchListener = object : PieChartOnValueSelectListener {
+        mCVChart.onValueTouchListener = object : PieChartOnValueSelectListener {
             override fun onValueSelected(i: Int, sliceValue: SliceValue) {
                 val sz = String.format(Locale.CHINA,
                         "%s : %.02f",
@@ -91,37 +110,6 @@ class DayReportChart : FrgSupportBaseAdv() {
         loadData()
     }
 
-    /**
-     * switch UI according to click
-     * @param v clicked view
-     */
-    @OnClick(R.id.tb_income, R.id.tb_pay)
-    fun onTBClick(v: View) {
-        Log.d(LOG_TAG, "in onSWClick")
-
-        val vid = v.id
-        when (vid) {
-            R.id.tb_income -> {
-                mTBPay.isClickable = mTBIncome.isChecked
-            }
-
-            R.id.tb_pay -> {
-                mTBIncome.isClickable = mTBPay.isChecked
-            }
-        }
-
-        // update show
-        val CVData = PieChartData()
-        showProgress(true)
-        ToolUtil.runInBackground(this.activity,
-                Runnable {  generateData(CVData) },
-                Runnable {
-                    showProgress(false)
-
-                    mCVchart.circleFillRatio = 0.6f
-                    mCVchart.pieChartData = CVData
-                })
-    }
 
     /**
      * Shows the progress UI and hides the login form.
@@ -145,27 +133,20 @@ class DayReportChart : FrgSupportBaseAdv() {
 
     private fun loadData() {
         mLLOrgData.clear()
-        if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
-            if (2 != mASParaLoad!!.size)
-                return
-
+        mASParaLoad?.let {
             val cvData = PieChartData()
             showProgress(true)
             ToolUtil.runInBackground(this.activity,
-                    Runnable {
-                        val dStart = mASParaLoad!![0]
-                        val dEnd = mASParaLoad!![1]
-                        val hmNote = NoteDataHelper.instance.getNotesBetweenDays(dStart, dEnd)
-
-                        hmNote.values.filterNotNull().iterator()
-                                .forEach { mLLOrgData.addAll(it) }
+                    {
+                        val hmNote = NoteDataHelper.instance.getNotesBetweenDays(it[0], it[1])
+                        hmNote.values.iterator().forEach { mLLOrgData.addAll(it!!) }
                         generateData(cvData)
                     },
-                    Runnable {
+                    {
                         showProgress(false)
 
-                        mCVchart.circleFillRatio = 0.6f
-                        mCVchart.pieChartData = cvData
+                        mCVChart.circleFillRatio = 0.6f
+                        mCVChart.pieChartData = cvData
                     })
         }
     }
@@ -241,7 +222,7 @@ class DayReportChart : FrgSupportBaseAdv() {
     }
 
     companion object {
-        const val PAY_ITEM : Int = 1
-        const val INCOME_ITEM : Int = 2
+        const val PAY_ITEM: Int = 1
+        const val INCOME_ITEM: Int = 2
     }
 }

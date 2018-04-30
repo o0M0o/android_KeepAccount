@@ -108,7 +108,7 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
 
             val param = arrayOfNulls<Any>(3)
             ToolUtil.runInBackground(this.activity,
-                    Runnable {
+                    {
                         val dStart = frg.mASParaLoad!![0]
                         val dEnd = frg.mASParaLoad!![1]
                         param[0] = String.format(Locale.CHINA,
@@ -130,7 +130,7 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
                         param[1] = mBDTotalPay
                         param[2] = mBDTotalIncome
                     },
-                    Runnable {
+                    {
                         frg.mTVDay.text = param[0] as String
                         frg.mTVPay.text = String.format(Locale.CHINA,
                                 "%.02f", (param[1] as BigDecimal).toFloat())

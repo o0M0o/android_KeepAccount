@@ -75,6 +75,7 @@ class BudgetChart : ShowViewBase() {
      *
      * @param event 事件
      */
+    @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onFilterShowEvent(event: FilterShowEvent) {
     }

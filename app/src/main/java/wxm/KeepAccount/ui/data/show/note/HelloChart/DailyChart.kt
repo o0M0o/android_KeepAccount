@@ -41,12 +41,10 @@ class DailyChart : ChartBase() {
     override fun refreshData() {
         ToolUtil.runInBackground(this.activity,
                 {
-                    val ret = NoteDataHelper.instance.notesForDay ?: return@runInBackground
-
                     var idCol = 0
                     val axisValues = ArrayList<AxisValue>()
                     val columns = ArrayList<Column>()
-                    ret.toSortedMap().entries.forEach {
+                    NoteDataHelper.instance.notesForDay.toSortedMap().entries.forEach {
                         if (!mBFilter || mFilterPara.contains(it.key)) {
                             var pay = BigDecimal.ZERO
                             var income = BigDecimal.ZERO

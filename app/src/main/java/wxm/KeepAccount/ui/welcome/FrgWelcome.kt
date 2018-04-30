@@ -47,6 +47,7 @@ class FrgWelcome : FrgSupportBaseAdv() {
      * handler for DB data change
      * @param event     for event
      */
+    @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDBEvent(event: DBDataChangeEvent) {
         mLBanners.setAdapter(FrgAdapter(activity, null), mALFrgPara)

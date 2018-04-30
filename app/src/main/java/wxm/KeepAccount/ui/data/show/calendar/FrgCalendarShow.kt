@@ -52,13 +52,11 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
     override fun loadUI(bundle: Bundle?) {
         val param = arrayOfNulls<String>(1)
         ToolUtil.runInBackground(this.activity,
-                Runnable {
+                {
                     val hm = NoteDataHelper.instance.notesForMonth
-                    if (null != hm) {
-                        param[0] = UtilFun.cast_t<String>(hm.keys.toTypedArray()[0])
-                    }
+                    param[0] = UtilFun.cast_t<String>(hm.keys.toTypedArray()[0])
                 },
-                Runnable {
+                {
                     val fistMonth = param[0]
                     if (UtilFun.StringIsNullOrEmpty(fistMonth)) {
                         val ac = activity
@@ -68,12 +66,12 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
 
                         val dlg = builder.create()
                         dlg.show()
-                        return@Runnable
+                        return@runInBackground
                     }
 
                     mSZCurrentMonth?.let {
                         updateCalendar(it)
-                        return@Runnable
+                        return@runInBackground
                     }
 
                     val curMonth = YEAR_MONTH.format(Calendar.getInstance().time)
@@ -109,6 +107,7 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
      * handler for DB event
      * @param event     param
      */
+    @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDBChangeEvent(event: DBDataChangeEvent) {
         loadUI(null)
