@@ -7,22 +7,21 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
 import kotterknife.bindView
-
-import java.util.ArrayList
-
-import wxm.KeepAccount.ui.base.Switcher.PageSwitcher
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.IncomeNoteItem
 import wxm.KeepAccount.define.PayNoteItem
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
+import wxm.KeepAccount.ui.base.Switcher.PageSwitcher
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PageIncomeEdit
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PagePayEdit
 import wxm.KeepAccount.ui.data.edit.base.IEdit
+import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import java.util.*
 
 /**
  * UI for add note
@@ -45,7 +44,7 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
     }
 
     override fun initUI(savedInstanceState: Bundle?) {
-        if(null == savedInstanceState) {
+        if (null == savedInstanceState) {
             // for vp
             val ac = activity as AppCompatActivity
             val adapter = PagerAdapter(ac.supportFragmentManager)
@@ -62,7 +61,8 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
                         (mRLPay.findViewById<View>(R.id.tv_tag) as TextView)
                                 .setTextColor(ResourceHelper.mCRTextWhite)
 
-                        mVPPager.currentItem = POS_PAY
+                        if (mVPPager.currentItem != POS_PAY)
+                            mVPPager.currentItem = POS_PAY
                     },
                     {
                         mRLPay.setBackgroundResource(R.drawable.rl_item_left_nosel)
@@ -75,22 +75,38 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
                         (mRLIncome.findViewById<View>(R.id.tv_tag) as TextView)
                                 .setTextColor(ResourceHelper.mCRTextWhite)
 
-                        mVPPager.currentItem = POS_INCOME
+                        if (mVPPager.currentItem != POS_INCOME)
+                            mVPPager.currentItem = POS_INCOME
                     },
                     {
                         mRLIncome.setBackgroundResource(R.drawable.rl_item_right_nosel)
                         (mRLIncome.findViewById<View>(R.id.tv_tag) as TextView)
                                 .setTextColor(ResourceHelper.mCRTextFit)
                     })
+
+            mVPPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {
+                    Log.i(LOG_TAG, "in onPageScrollStateChanged, state=$state")
+                }
+
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                    Log.i(LOG_TAG, "in onPageScrolled, position=$position, " +
+                            "positionOffset=$positionOffset, positionOffsetPixels=$positionOffsetPixels")
+                    if(0 == positionOffsetPixels)   {
+                        when(position) {
+                            POS_PAY -> mSWer.doSelect(mRLPay)
+                            POS_INCOME -> mSWer.doSelect(mRLIncome)
+                        }
+                    }
+                }
+
+                override fun onPageSelected(position: Int) {
+                    Log.i(LOG_TAG, "in onPageSelected, state=$position")
+                }
+            })
         }
 
         loadUI(savedInstanceState)
-    }
-
-
-    override fun loadUI(savedInstanceState: Bundle?) {
-        super.loadUI(savedInstanceState)
-        mSWer.doSelect(mRLPay)
     }
 
     fun onAccept(): Boolean {
@@ -105,7 +121,8 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
     /**
      * fragment adapter
      */
-    private inner class PagerAdapter internal constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+    private inner class PagerAdapter internal constructor(fm: FragmentManager)
+        : FragmentStatePagerAdapter(fm) {
         internal var mALFra: ArrayList<Fragment> = ArrayList()
 
         init {
