@@ -53,8 +53,11 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
         val param = arrayOfNulls<String>(1)
         ToolUtil.runInBackground(this.activity,
                 {
-                    val hm = NoteDataHelper.instance.notesForMonth
-                    param[0] = UtilFun.cast_t<String>(hm.keys.toTypedArray()[0])
+                    NoteDataHelper.notesMonths.let {
+                        if(it.isNotEmpty()) {
+                            param[0] = it[0]
+                        }
+                    }
                 },
                 {
                     val fistMonth = param[0]

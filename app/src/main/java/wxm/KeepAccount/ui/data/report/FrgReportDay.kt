@@ -113,8 +113,7 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
                         val dEnd = frg.mASParaLoad!![1]
                         param[0] = String.format(Locale.CHINA,
                                 "%s - %s", dStart, dEnd)
-                        val lsNote = NoteDataHelper.instance
-                                .getNotesBetweenDays(dStart, dEnd)
+                        val lsNote = NoteDataHelper.getNotesBetweenDays(dStart, dEnd)
 
                         var mBDTotalPay = BigDecimal.ZERO
                         var mBDTotalIncome = BigDecimal.ZERO

@@ -259,7 +259,7 @@ class LVDaily : LVBase() {
         val lsIncome = ArrayList<Int>()
         val lsPay = ArrayList<Int>()
         (mLVShow.adapter as MainAdapter).waitDeleteDays.forEach {
-            NoteDataHelper.instance.notesForDay[it]?.forEach {
+            NoteDataHelper.getNotesByDay(it).forEach {
                 (if (it.isPayNote) lsPay else lsIncome).add(it.id)
             }
         }

@@ -41,31 +41,22 @@ class MonthlyChart : ChartBase() {
     override fun refreshData() {
         ToolUtil.runInBackground(this.activity,
                 {
-                    val ret = NoteDataHelper.instance.notesForMonth ?: return@runInBackground
-
                     var idCol = 0
                     val axisValues = ArrayList<AxisValue>()
                     val columns = ArrayList<Column>()
-
-                    ret.toSortedMap().entries.forEach {
-                        if (!mBFilter || mFilterPara.contains(it.key)) {
-                            var pay = BigDecimal.ZERO
-                            var income = BigDecimal.ZERO
-                            it.value.forEach {
-                                when (it) {
-                                    is PayNoteItem -> pay = pay.add(it.amount)
-                                    is IncomeNoteItem -> income = income.add(it.amount)
+                    NoteDataHelper.notesMonths
+                            .filter { !mBFilter || mFilterPara.contains(it) }
+                            .forEach {
+                                val tag = it
+                                NoteDataHelper.getInfoByMonth(it)?.let {
+                                    columns.add(Column(
+                                            listOf(SubcolumnValue(it.payAmount.toFloat(), mPayColor),
+                                                    SubcolumnValue(it.incomeAmount.toFloat(), mIncomeColor)))
+                                            .setHasLabels(true))
+                                    axisValues.add(AxisValue(idCol.toFloat()).setLabel(tag))
+                                    idCol++
                                 }
                             }
-
-                            columns.add(Column(
-                                    listOf(SubcolumnValue(pay.toFloat(), mPayColor),
-                                            SubcolumnValue(income.toFloat(), mIncomeColor)))
-                                    .setHasLabels(true))
-                            axisValues.add(AxisValue(idCol.toFloat()).setLabel(it.key))
-                            idCol++
-                        }
-                    }
 
                     mChartData = ColumnChartData(columns)
                     mChartData!!.axisXBottom = Axis(axisValues)

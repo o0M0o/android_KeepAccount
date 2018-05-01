@@ -5,155 +5,101 @@ import wxm.KeepAccount.define.INote
 import wxm.KeepAccount.utility.ContextUtil
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Data helper for NoteShow
  * Created by WangXM on2016/5/30.
  */
 class NoteDataHelper private constructor() {
+    data class NoteKey(val szDay: String) {
+        val szYear: String = szDay.substring(0, 4)
+        val szMonth: String = szDay.substring(0, 7)
+
+        override fun equals(other: Any?): Boolean {
+            return when (other) {
+                !is NoteKey -> false
+                else -> this === other || szDay == other.szDay
+            }
+        }
+
+        override fun hashCode(): Int {
+            return szDay.hashCode()
+        }
+    }
+
     /**
      * example :
-     * '2016-10-24' ---- data   (日数据）
-     * '2016-10'    ---- data   (月数据)
-     * '2016'       ---- data   (年数据)
+     * '2016-10-24' ---- NoteInfo   (day)
+     * '2016-10'    ---- NoteInfo   (month)
+     * '2016'       ---- NoteInfo   (year)
      */
     private val mHMDayInfo: HashMap<String, NoteShowInfo> = HashMap()
     private val mHMMonthInfo: HashMap<String, NoteShowInfo> = HashMap()
     private val mHMYearInfo: HashMap<String, NoteShowInfo> = HashMap()
 
     /**
-     * get data group by day
-     * '2016-10-24' ---- pay/income record
+     * example :
+     * '2016-10-24 12:00:00' ---- pay/income note
      */
-    var notesForDay: HashMap<String, ArrayList<INote>> = HashMap()
-        private set
+    private val allNotes: HashMap<NoteKey, ArrayList<INote>> = HashMap()
 
     /**
-     * get data group by month
-     * '2016-10' ---- pay/income record
+     * day/month/year that have pay/income note
      */
-    var notesForMonth: HashMap<String, ArrayList<INote>> = HashMap()
-        private set
-
-    /**
-     * get data group by year
-     * '2016' ---- pay/income record
-     */
-    var notesForYear: HashMap<String, ArrayList<INote>> = HashMap()
-        private set
+    private val dayHaveNote: ArrayList<String> = ArrayList()
+    private val monthHaveNote: ArrayList<String> = ArrayList()
+    private val yearHaveNote: ArrayList<String> = ArrayList()
 
     /**
      * update data for day/month/year
      */
-    fun refreshData() {
+    private fun refreshData() {
+        allNotes.clear()
+
         mHMDayInfo.clear()
         mHMMonthInfo.clear()
         mHMYearInfo.clear()
 
-        notesForDay.clear()
-        notesForMonth.clear()
-        notesForYear.clear()
+        dayHaveNote.clear()
+        monthHaveNote.clear()
+        yearHaveNote.clear()
         ContextUtil.payIncomeUtility.allNotes.forEach {
-            // day
-            val dTag = it.tsToStr!!.substring(0, 10)
-            var lsDay = notesForDay[dTag]
-            if (null == lsDay) {
-                lsDay = ArrayList()
-                notesForDay[dTag] = lsDay
+            val nk = NoteKey(szDay = it.tsToStr!!.substring(0, 10))
+            var lsNote = allNotes[nk]
+            if(null == lsNote)    {
+                lsNote = ArrayList()
+                allNotes[nk] = lsNote
             }
-            lsDay.add(it)
+            lsNote.add(it)
 
-            // month
-            val mTag = dTag.substring(0, 7)
-            var lsMonth = notesForMonth[mTag]
-            if (null == lsMonth) {
-                lsMonth = ArrayList()
-                notesForMonth[mTag] = lsMonth
-            }
-            lsMonth.add(it)
+            dayHaveNote.apply {
+                if(!contains(nk.szDay)) {
+                    add(nk.szDay)
+                } }
 
-            // day
-            val yTag = mTag.substring(0, 4)
-            var lsYear = notesForYear[yTag]
-            if (null == lsYear) {
-                lsYear = ArrayList()
-                notesForYear[yTag] = lsYear
-            }
-            lsYear.add(it)
+            monthHaveNote.apply {
+                if(!contains(nk.szMonth)) {
+                    add(nk.szMonth)
+                } }
+
+            yearHaveNote.apply {
+                if(!contains(nk.szYear)) {
+                    add(nk.szYear)
+                } }
         }
 
-        notesForDay.toSortedMap(kotlin.Comparator { o1, o2 ->  o1.compareTo(o2)})
+        dayHaveNote.sort()
+        monthHaveNote.sort()
+        yearHaveNote.sort()
+        /*
+        allNotes.toSortedMap(kotlin.Comparator {
+            o1, o2 ->  o1.szDay.compareTo(o2.szDay)})
+            */
 
         refreshDay()
         refreshMonth()
         refreshYear()
-    }
-
-    /**
-     * get data between start to end
-     * @param start     start day
-     * @param end       end day
-     * @return          data
-     */
-    fun getNotesBetweenDays(start: String, end: String): HashMap<String, ArrayList<INote>?> {
-        return HashMap<String, ArrayList<INote>?>().apply {
-            notesForDay.filter { it.key in start..end }.forEach {
-                put(it.key, it.value) } }
-    }
-
-    /**
-     * get records for day
-     * @param day   day(example : '2017-07-06')
-     * @return      records
-     */
-    fun getNotesByDay(day: String): List<INote>? {
-        return notesForDay[day]
-    }
-
-
-    /**
-     * get next day have record
-     * @param orgDay   origin day(example : "2017-02-24")
-     * @return          next day or ""
-     */
-    fun getNextDay(orgDay: String): String {
-        notesForDay.keys.let {
-            for((pos, day) in it.withIndex())   {
-                if(day == orgDay)  {
-                    return if(pos == it.size - 1)   ""   else it.elementAt(pos + 1)
-                }
-
-                if(day > orgDay)
-                    return day
-            }
-        }
-
-        return ""
-    }
-
-
-    /**
-     * get prior day have record
-     * @param orgDay   origin day(example : "2017-02-24")
-     * @return          prior day or ""
-     */
-    fun getPrvDay(orgDay: String): String {
-        notesForDay.keys.let {
-            if(it.isEmpty())
-                return ""
-
-            for(pos in it.size - 1 downTo 0)    {
-                val day = it.elementAt(pos)
-                if(day == orgDay)  {
-                    return if(pos == 0)   ""   else it.elementAt(pos - 1)
-                }
-
-                if(day < orgDay)
-                    return day
-            }
-        }
-
-        return ""
     }
 
     /// PRIVATE BEGIN
@@ -162,8 +108,8 @@ class NoteDataHelper private constructor() {
      * data from sqlite
      */
     private fun refreshDay() {
-        notesForDay.forEach{
-            mHMDayInfo[it.key] = NoteShowInfo().apply {
+        allNotes.forEach{
+            mHMDayInfo[it.key.szDay] = NoteShowInfo().apply {
                 it.value.forEach{
                     if (it.isPayNote) {
                         payCount += 1
@@ -230,6 +176,86 @@ class NoteDataHelper private constructor() {
         val instance = NoteDataHelper()
 
         /**
+         * reload data from DB
+         * invoke it when DB changed
+         */
+        fun reloadData()    {
+            instance.refreshData()
+        }
+
+        /**
+         * get note between [[start] - [end]]
+         */
+        fun getNotesBetweenDays(start: String, end: String): HashMap<String, ArrayList<INote>?> {
+            return HashMap<String, ArrayList<INote>?>().apply {
+                instance.allNotes.filter { it.key.szDay in start..end }.forEach {
+                    put(it.key.szDay, it.value) } }
+        }
+
+        /**
+         * get note for [day]
+         */
+        fun getNotesByDay(day: String): List<INote> {
+            return ArrayList(instance.allNotes[NoteKey(day)])
+        }
+
+        /**
+         * get note for [month]
+         */
+        fun getNotesByMonth(month: String): List<INote> {
+            return ArrayList<INote>().apply {
+                instance.allNotes.filter { it.key.szMonth == month }.values.forEach {
+                    addAll(it)
+                }
+            }
+        }
+
+
+        /**
+         * get next day for [orgDay] have record or ""
+         */
+        fun getNextDay(orgDay: String): String {
+            instance.dayHaveNote.let {
+                for((pos, day) in it.withIndex())   {
+                    if(day == orgDay)  {
+                        return if(pos == it.size - 1)   ""   else it.elementAt(pos + 1)
+                    }
+
+                    if(day > orgDay)
+                        return day
+                }
+            }
+
+            return ""
+        }
+
+
+        /**
+         * get prior day have record
+         * @param orgDay   origin day(example : "2017-02-24")
+         * @return          prior day or ""
+         */
+        fun getPrvDay(orgDay: String): String {
+            instance.dayHaveNote.let {
+                if(it.isEmpty())
+                    return ""
+
+                for(pos in it.size - 1 downTo 0)    {
+                    val day = it.elementAt(pos)
+                    if(day == orgDay)  {
+                        return if(pos == 0)   ""   else it.elementAt(pos - 1)
+                    }
+
+                    if(day < orgDay)
+                        return day
+                }
+            }
+
+            return ""
+        }
+
+
+        /**
          * get data for month
          * @param mt    month（example : '2017-01')
          * @return      data
@@ -244,7 +270,7 @@ class NoteDataHelper private constructor() {
          */
         val notesMonths: List<String>
             get() {
-                return LinkedList<String>().apply {  addAll(instance.mHMMonthInfo.keys) }
+                return ArrayList<String>().apply {  addAll(instance.monthHaveNote) }
             }
 
         /**
@@ -262,7 +288,7 @@ class NoteDataHelper private constructor() {
          */
         val notesYears: List<String>
             get() {
-                return LinkedList<String>().apply { addAll(instance.mHMYearInfo.keys) }
+                return ArrayList<String>().apply { addAll(instance.yearHaveNote) }
             }
 
         /**
@@ -280,7 +306,7 @@ class NoteDataHelper private constructor() {
          */
         val notesDays: List<String>
             get() {
-                return LinkedList<String>().apply { addAll(instance.mHMDayInfo.keys) }
+                return ArrayList<String>().apply { addAll(instance.dayHaveNote) }
             }
     }
     /// PRIVATE END

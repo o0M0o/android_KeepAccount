@@ -138,7 +138,7 @@ class DayReportChart : FrgSupportBaseAdv() {
             showProgress(true)
             ToolUtil.runInBackground(this.activity,
                     {
-                        val hmNote = NoteDataHelper.instance.getNotesBetweenDays(it[0], it[1])
+                        val hmNote = NoteDataHelper.getNotesBetweenDays(it[0], it[1])
                         hmNote.values.iterator().forEach { mLLOrgData.addAll(it!!) }
                         generateData(cvData)
                     },

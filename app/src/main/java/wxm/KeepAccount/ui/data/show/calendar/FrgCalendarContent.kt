@@ -50,7 +50,7 @@ class FrgCalendarContent : FrgSupportBaseAdv() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDBDataChange(event: DBDataChangeEvent) {
         mSZHotDay?.let {
-            mLSDayContents = NoteDataHelper.instance.getNotesByDay(it)
+            mLSDayContents = NoteDataHelper.getNotesByDay(it)
             loadUI(null)
         }
     }
@@ -126,7 +126,7 @@ class FrgCalendarContent : FrgSupportBaseAdv() {
      */
     private fun updateContent(day: String) {
         mSZHotDay = day
-        mLSDayContents = NoteDataHelper.instance.getNotesByDay(day)
+        mLSDayContents = NoteDataHelper.getNotesByDay(day)
 
         loadUI(null)
     }

@@ -61,7 +61,7 @@ class DayReportWebView : FrgSupportWebView() {
                     {
                         val dStart = mASParaLoad!![0]
                         val dEnd = mASParaLoad!![1]
-                        val hmData = NoteDataHelper.instance.getNotesBetweenDays(dStart, dEnd)
+                        val hmData = NoteDataHelper.getNotesBetweenDays(dStart, dEnd)
 
                         val filter = SimplePropertyPreFilter(INote::class.java,
                                 "info", "ts", "amount", "payNote")

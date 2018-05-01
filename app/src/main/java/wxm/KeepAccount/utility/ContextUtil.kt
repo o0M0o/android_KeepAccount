@@ -166,7 +166,7 @@ class ContextUtil : Application() {
                     dbRemind.where().eq(RemindItem.FIELD_USR, uid)
                     dbRemind.delete()
 
-                    NoteDataHelper.instance.refreshData()
+                    NoteDataHelper.reloadData()
                 }
             } catch (e: java.sql.SQLException) {
                 Log.e(LOG_TAG, "clearDB catch an exception", e)

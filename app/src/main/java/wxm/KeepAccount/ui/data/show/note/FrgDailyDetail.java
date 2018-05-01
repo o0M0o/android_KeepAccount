@@ -98,8 +98,7 @@ public class FrgDailyDetail extends FrgSupportBaseAdv {
         }
 
         if (!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
-            HashMap<String, ArrayList<INote>> hl = NoteDataHelper.Companion.getInstance().getNotesForDay();
-            mLSDayContents = null == hl ? new ArrayList<>() : hl.get(mSZHotDay);
+            mLSDayContents = NoteDataHelper.Companion.getNotesByDay(mSZHotDay);
         }
 
         loadUI(bundle);
@@ -149,7 +148,7 @@ public class FrgDailyDetail extends FrgSupportBaseAdv {
         int vid = view.getId();
         switch (vid) {
             case R.id.rl_prv: {
-                String prv_day = NoteDataHelper.Companion.getInstance().getPrvDay(mSZHotDay);
+                String prv_day = NoteDataHelper.Companion.getPrvDay(mSZHotDay);
                 if (!UtilFun.StringIsNullOrEmpty(prv_day)) {
                     mSZHotDay = prv_day;
 
@@ -162,7 +161,7 @@ public class FrgDailyDetail extends FrgSupportBaseAdv {
             break;
 
             case R.id.rl_next: {
-                String next_day = NoteDataHelper.Companion.getInstance().getNextDay(mSZHotDay);
+                String next_day = NoteDataHelper.Companion.getNextDay(mSZHotDay);
                 if (!UtilFun.StringIsNullOrEmpty(next_day)) {
                     mSZHotDay = next_day;
 
@@ -176,9 +175,7 @@ public class FrgDailyDetail extends FrgSupportBaseAdv {
         }
 
         if (!UtilFun.StringIsNullOrEmpty(mSZHotDay) && !org_day.equals(mSZHotDay)) {
-            HashMap<String, ArrayList<INote>> hl = NoteDataHelper.Companion.getInstance().getNotesForDay();
-            mLSDayContents = null == hl ? new ArrayList<>() :  hl.get(mSZHotDay);
-
+            mLSDayContents  = NoteDataHelper.Companion.getNotesByDay(mSZHotDay);
             loadUI(null);
         }
     }

@@ -47,72 +47,6 @@ class PayIncomeDBUtility {
             return lsData
         }
 
-    /**
-     * daily pay/income data
-     * @param lsData    pay/income data
-     * @return          year-month-day <----> pay/income data
-     */
-    fun getNotesToDay(lsData : List<INote>) : HashMap<String, ArrayList<INote>> {
-        val hmData = HashMap<String, ArrayList<INote>>()
-        for (i in lsData) {
-            val hK = i.tsToStr!!.substring(0, 10)
-            val hV = hmData[hK]
-            if (null == hV) {
-                val v = ArrayList<INote>()
-                v.add(i)
-                hmData[hK] = v
-            } else {
-                hV.add(i)
-            }
-        }
-
-        return hmData
-    }
-
-    /**
-     * monthly pay/income data
-     * @param lsData    pay/income data
-     * @return          year-month <----> pay/income data
-     */
-    fun getNotesToMonth(lsData : List<INote>) : HashMap<String, ArrayList<INote>> {
-        val hmData = HashMap<String, ArrayList<INote>>()
-        for (i in lsData) {
-            val hK = i.tsToStr!!.substring(0, 7)
-            val hV = hmData[hK]
-            if (null == hV) {
-                val v = ArrayList<INote>()
-                v.add(i)
-                hmData[hK] = v
-            } else {
-                hV.add(i)
-            }
-        }
-
-        return hmData
-    }
-
-    /**
-     * yearly pay/income data
-     * @param lsData    pay/income data
-     * @return          year <----> pay/income data
-     */
-    fun getNotesToYear(lsData : List<INote>) : HashMap<String, ArrayList<INote>> {
-        val hmData = HashMap<String, ArrayList<INote>>()
-        for (i in lsData) {
-            val hK = i.tsToStr!!.substring(0, 4)
-            val hV = hmData[hK]
-            if (null == hV) {
-                val v = ArrayList<INote>()
-                v.add(i)
-                hmData[hK] = v
-            } else {
-                hV.add(i)
-            }
-        }
-
-        return hmData
-    }
-
     init {
         payDBUtility = PayDBUtility()
         incomeDBUtility = IncomeDBUtility()
@@ -252,17 +186,17 @@ class PayIncomeDBUtility {
         }
 
         override fun onDataModify(md: List<Int>) {
-            NoteDataHelper.instance.refreshData()
+            NoteDataHelper.reloadData()
             EventBus.getDefault().post(DBDataChangeEvent())
         }
 
         override fun onDataCreate(cd: List<Int>) {
-            NoteDataHelper.instance.refreshData()
+            NoteDataHelper.reloadData()
             EventBus.getDefault().post(DBDataChangeEvent())
         }
 
         override fun onDataRemove(dd: List<Int>) {
-            NoteDataHelper.instance.refreshData()
+            NoteDataHelper.reloadData()
             EventBus.getDefault().post(DBDataChangeEvent())
         }
 
@@ -303,17 +237,17 @@ class PayIncomeDBUtility {
         }
 
         override fun onDataModify(md: List<Int>) {
-            NoteDataHelper.instance.refreshData()
+            NoteDataHelper.reloadData()
             EventBus.getDefault().post(DBDataChangeEvent())
         }
 
         override fun onDataCreate(cd: List<Int>) {
-            NoteDataHelper.instance.refreshData()
+            NoteDataHelper.reloadData()
             EventBus.getDefault().post(DBDataChangeEvent())
         }
 
         override fun onDataRemove(dd: List<Int>) {
-            NoteDataHelper.instance.refreshData()
+            NoteDataHelper.reloadData()
             EventBus.getDefault().post(DBDataChangeEvent())
         }
 

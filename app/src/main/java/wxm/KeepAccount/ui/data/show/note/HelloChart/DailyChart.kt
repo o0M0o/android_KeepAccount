@@ -44,32 +44,22 @@ class DailyChart : ChartBase() {
                     var idCol = 0
                     val axisValues = ArrayList<AxisValue>()
                     val columns = ArrayList<Column>()
-                    NoteDataHelper.instance.notesForDay.toSortedMap().entries.forEach {
-                        if (!mBFilter || mFilterPara.contains(it.key)) {
-                            var pay = BigDecimal.ZERO
-                            var income = BigDecimal.ZERO
-                            it.value.forEach {
-                                when (it) {
-                                    is PayNoteItem -> pay = pay.add(it.amount)
-                                    is IncomeNoteItem -> income = income.add(it.amount)
+                    NoteDataHelper.notesDays
+                            .filter { !mBFilter || mFilterPara.contains(it) }
+                            .forEach {
+                                val tag = it
+                                NoteDataHelper.getInfoByDay(it)?.let {
+                                    columns.add(Column(
+                                            listOf(SubcolumnValue(it.payAmount.toFloat(), mPayColor),
+                                                    SubcolumnValue(it.incomeAmount.toFloat(), mIncomeColor)))
+                                            .setHasLabels(true))
+                                    axisValues.add(AxisValue(idCol.toFloat()).apply {
+                                        setLabel(if (0 == idCol % 3) tag  else   "")
+                                    })
+
+                                idCol++
                                 }
                             }
-
-                            columns.add(Column(
-                                    listOf(SubcolumnValue(pay.toFloat(), mPayColor),
-                                            SubcolumnValue(income.toFloat(), mIncomeColor)))
-                                    .setHasLabels(true))
-                            axisValues.add(AxisValue(idCol.toFloat()).apply {
-                                setLabel(if (0 == idCol % 3) {
-                                    it.key
-                                } else {
-                                    ""
-                                })
-                            })
-
-                            idCol++
-                        }
-                    }
 
                     mChartData = ColumnChartData(columns)
                     mChartData!!.axisXBottom = Axis(axisValues)
