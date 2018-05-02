@@ -3,26 +3,22 @@ package wxm.KeepAccount.ui.data.show.calendar
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
-
+import kotterknife.bindView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-
-import kotterknife.bindView
+import wxm.KeepAccount.R
+import wxm.KeepAccount.db.DBDataChangeEvent
 import wxm.KeepAccount.ui.data.show.calendar.base.CalendarShowItemAdapter
 import wxm.KeepAccount.ui.data.show.calendar.base.SelectedDayEvent
+import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
-import wxm.KeepAccount.R
-import wxm.KeepAccount.db.DBDataChangeEvent
-import wxm.KeepAccount.ui.utility.NoteDataHelper
-
+import wxm.uilib.FrgCalendar.Base.ICalendarListener
 import wxm.uilib.FrgCalendar.FrgCalendar
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -35,7 +31,7 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
     private val mFLHolder: FrameLayout by bindView(R.id.fl_holder)
 
     // for data
-    private var mCSIAdapter: CalendarShowItemAdapter? = null
+    private lateinit var mCSIAdapter: CalendarShowItemAdapter
     private val mFGContent = FrgCalendarContent()
 
     private var mSZCurrentMonth: String? = null
@@ -53,15 +49,14 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
         val param = arrayOfNulls<String>(1)
         ToolUtil.runInBackground(this.activity,
                 {
-                    NoteDataHelper.notesMonths.let {
-                        if(it.isNotEmpty()) {
+                    NoteDataHelper.notesYears.let {
+                        if (it.isNotEmpty()) {
                             param[0] = it[0]
                         }
                     }
                 },
                 {
-                    val fistMonth = param[0]
-                    if (UtilFun.StringIsNullOrEmpty(fistMonth)) {
+                    if (UtilFun.StringIsNullOrEmpty(param[0])) {
                         val ac = activity
                         val builder = android.app.AlertDialog.Builder(ac)
                         builder.setMessage("当前用户没有数据，请先添加数据!").setTitle("警告")
@@ -72,13 +67,18 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
                         return@runInBackground
                     }
 
-                    mSZCurrentMonth?.let {
-                        updateCalendar(it)
+                    mSZCurrentDay?.let {
+                        mHGVDays.setCalendarSelectedDay(Integer.parseInt(it.substring(0, 4)),
+                                Integer.parseInt(it.substring(5, 7)) - 1,
+                                Integer.parseInt(it.substring(8, 10)))
                         return@runInBackground
                     }
 
-                    val curMonth = YEAR_MONTH.format(Calendar.getInstance().time)
-                    updateCalendar(curMonth)
+                    YEAR_MONTH_DAY_FORMAT.format(Calendar.getInstance().time).let {
+                        mHGVDays.setCalendarSelectedDay(Integer.parseInt(it.substring(0, 4)),
+                                Integer.parseInt(it.substring(5, 7)) - 1,
+                                Integer.parseInt(it.substring(8, 10)))
+                    }
                 })
     }
 
@@ -89,17 +89,18 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
             ft.commit()
         }
 
-        mCSIAdapter = CalendarShowItemAdapter(activity)
+        mCSIAdapter = CalendarShowItemAdapter(context)
         mHGVDays.setCalendarItemAdapter(mCSIAdapter)
 
-        mHGVDays.setDateChangeListener(object : FrgCalendar.DateChangeListener {
-            override fun onDayChanged(view: View, s: String, i: Int) {
-                mSZCurrentDay = s
-                EventBus.getDefault().post(SelectedDayEvent(mSZCurrentDay!!))
+        mHGVDays.setDateChangeListener(object : ICalendarListener {
+            override fun onDayChanged(view: View?, s: String?) {
+                s?.let {
+                    mSZCurrentDay = it
+                    EventBus.getDefault().post(SelectedDayEvent(it))
+                }
             }
 
             override fun onMonthChanged(s: String) {
-                updateCalendar(s)
             }
         })
 
@@ -116,29 +117,7 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
         loadUI(null)
     }
 
-    /**
-     * update calendar
-     * @param newMonth     calendar month(example : "2016-07")
-     */
-    private fun updateCalendar(newMonth: String) {
-        mSZCurrentMonth = newMonth
-
-        val tmDays = mCSIAdapter!!.dayModelList
-        for (day in tmDays.keys) {
-            val itModel = tmDays[day]
-            if (itModel != null) {
-                var ni = NoteDataHelper.getInfoByDay(day)
-                if (ni != null && !day.startsWith(newMonth)) {
-                    ni = null
-                }
-
-                itModel.recordCount = if (ni != null) ni.incomeCount + ni.payCount else 0
-            }
-        }
-        mCSIAdapter!!.notifyDataSetChanged()
-    }
-
     companion object {
-        val YEAR_MONTH = SimpleDateFormat("yyyy-MM", Locale.CHINA)
+        private val YEAR_MONTH_DAY_FORMAT = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
     }
 }

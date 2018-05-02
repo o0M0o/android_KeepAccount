@@ -1,33 +1,32 @@
 package wxm.KeepAccount.ui.data.show.calendar.base
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
-import java.util.Objects
-
 import wxm.KeepAccount.R
 import wxm.KeepAccount.utility.ContextUtil
-import wxm.uilib.FrgCalendar.FrgCalendarItemAdapter
-import wxm.uilib.FrgCalendar.FrgCalendarItemModel
+import wxm.androidutil.ViewHolder.ViewHolder
 import wxm.androidutil.util.UiUtil
+import wxm.uilib.FrgCalendar.CalendarItem.BaseItemAdapter
+import wxm.uilib.FrgCalendar.CalendarItem.EItemStatus
+import java.util.*
 
 /**
  * adapter for calendar
  * Created by WangXM on 2017/07/03.
  */
-class CalendarShowItemAdapter(context: Context) : FrgCalendarItemAdapter<CalendarShowItemModel>(context) {
+class CalendarShowItemAdapter(context: Context) : BaseItemAdapter<CalendarShowItemModel>(context) {
 
     override fun getView(date: String?, model: CalendarShowItemModel, convertView: View?, parent: ViewGroup?): View {
-        val view = LayoutInflater.from(mContext).inflate(R.layout.gi_calendar_item, null) as ViewGroup
-        view.setBackgroundResource(if (model.recordCount > 0)
+        val vhParent = ViewHolder.get(mContext, convertView, R.layout.gi_calendar_item)
+        val vwParent = vhParent.convertView
+        vwParent.setBackgroundResource(if (model.recordCount > 0)
             R.drawable.day_shape
         else
             R.drawable.day_empty_shape)
 
-        val dayNum = view.findViewById<TextView>(R.id.tv_day_num)
+        val dayNum = vhParent.getView<TextView>(R.id.tv_day_num)
         dayNum.text = model.dayNumber
         if (model.isToday) {
             dayNum.setTextColor(mCLToday)
@@ -38,24 +37,19 @@ class CalendarShowItemAdapter(context: Context) : FrgCalendarItemAdapter<Calenda
             dayNum.setTextColor(mCLHoliday)
         }
 
-        if (model.status == FrgCalendarItemModel.Status.DISABLE) {
+        if (model.status == EItemStatus.DISABLE) {
             dayNum.setTextColor(mCLDisable)
         }
 
-        val dayNewsCount = view.findViewById<TextView>(R.id.tv_day_new_count)
-        if (model.isNotCurrentMonth) {
-            dayNum.visibility = View.GONE
-            dayNewsCount.visibility = View.GONE
+        val dayNewsCount = vhParent.getView<TextView>(R.id.tv_day_new_count)
+        if (model.recordCount > 0) {
+            dayNewsCount.text = String.format(mContext.resources.getString(R.string.calendar_item_new_count), model.recordCount)
+            dayNewsCount.visibility = View.VISIBLE
         } else {
-            if (model.recordCount > 0) {
-                dayNewsCount.text = String.format(mContext.resources.getString(R.string.calendar_item_new_count), model.recordCount)
-                dayNewsCount.visibility = View.VISIBLE
-            } else {
-                dayNewsCount.visibility = View.GONE
-            }
+            dayNewsCount.visibility = View.GONE
         }
 
-        return view
+        return vwParent
     }
 
     companion object {
