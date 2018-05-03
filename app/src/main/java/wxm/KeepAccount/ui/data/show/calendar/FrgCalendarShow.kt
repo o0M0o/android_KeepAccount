@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.data.show.calendar
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import kotterknife.bindView
@@ -93,11 +94,12 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
         mHGVDays.setCalendarItemAdapter(mCSIAdapter)
 
         mHGVDays.setDateChangeListener(object : ICalendarListener {
-            override fun onDayChanged(view: View?, s: String?) {
-                s?.let {
-                    mSZCurrentDay = it
-                    EventBus.getDefault().post(SelectedDayEvent(it))
-                }
+            override fun onDayChanged(view: View?, s: String) {
+                if(null == view)
+                    Log.i(LOG_TAG, "date = $s, with null view!" )
+
+                mSZCurrentDay = s
+                EventBus.getDefault().post(SelectedDayEvent(s))
             }
 
             override fun onMonthChanged(s: String) {

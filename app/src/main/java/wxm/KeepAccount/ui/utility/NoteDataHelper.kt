@@ -195,8 +195,10 @@ class NoteDataHelper private constructor() {
         /**
          * get note for [day]
          */
-        fun getNotesByDay(day: String): List<INote> {
-            return ArrayList(instance.allNotes[NoteKey(day)])
+        fun getNotesByDay(day: String): List<INote>? {
+            val nk = NoteKey(day)
+            return if(instance.allNotes.containsKey(nk))    ArrayList(instance.allNotes[nk])
+            else null
         }
 
         /**
@@ -214,11 +216,11 @@ class NoteDataHelper private constructor() {
         /**
          * get next day for [orgDay] have record or ""
          */
-        fun getNextDay(orgDay: String): String {
+        fun getNextDay(orgDay: String): String? {
             instance.dayHaveNote.let {
                 for((pos, day) in it.withIndex())   {
                     if(day == orgDay)  {
-                        return if(pos == it.size - 1)   ""   else it.elementAt(pos + 1)
+                        return if(pos == it.size - 1)   null   else it.elementAt(pos + 1)
                     }
 
                     if(day > orgDay)
@@ -226,7 +228,7 @@ class NoteDataHelper private constructor() {
                 }
             }
 
-            return ""
+            return null
         }
 
 
@@ -235,15 +237,12 @@ class NoteDataHelper private constructor() {
          * @param orgDay   origin day(example : "2017-02-24")
          * @return          prior day or ""
          */
-        fun getPrvDay(orgDay: String): String {
+        fun getPrvDay(orgDay: String): String? {
             instance.dayHaveNote.let {
-                if(it.isEmpty())
-                    return ""
-
                 for(pos in it.size - 1 downTo 0)    {
                     val day = it.elementAt(pos)
                     if(day == orgDay)  {
-                        return if(pos == 0)   ""   else it.elementAt(pos - 1)
+                        return if(pos == 0)   null   else it.elementAt(pos - 1)
                     }
 
                     if(day < orgDay)
@@ -251,7 +250,7 @@ class NoteDataHelper private constructor() {
                 }
             }
 
-            return ""
+            return null
         }
 
 
