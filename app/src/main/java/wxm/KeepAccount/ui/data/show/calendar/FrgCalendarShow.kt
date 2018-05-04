@@ -29,13 +29,11 @@ import java.util.*
 class FrgCalendarShow : FrgSupportBaseAdv() {
     // for ui
     private val mHGVDays: FrgCalendar by bindView(R.id.frg_calender_lv)
-    private val mFLHolder: FrameLayout by bindView(R.id.fl_holder)
 
     // for data
     private lateinit var mCSIAdapter: CalendarShowItemAdapter
     private val mFGContent = FrgCalendarContent()
 
-    private var mSZCurrentMonth: String? = null
     private var mSZCurrentDay: String? = null
 
     override fun getLayoutID(): Int {
@@ -75,10 +73,9 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
                         return@runInBackground
                     }
 
-                    YEAR_MONTH_DAY_FORMAT.format(Calendar.getInstance().time).let {
-                        mHGVDays.setCalendarSelectedDay(Integer.parseInt(it.substring(0, 4)),
-                                Integer.parseInt(it.substring(5, 7)) - 1,
-                                Integer.parseInt(it.substring(8, 10)))
+                    Calendar.getInstance().let {
+                        mHGVDays.setCalendarSelectedDay(it.get(Calendar.YEAR),
+                                it.get(Calendar.MONTH), it.get(Calendar.DAY_OF_MONTH))
                     }
                 })
     }
@@ -91,15 +88,27 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
         }
 
         mCSIAdapter = CalendarShowItemAdapter(context)
-        mHGVDays.setCalendarItemAdapter(mCSIAdapter)
+        mHGVDays.setCalendarItemAdapter(CalendarShowItemAdapter(context), CalendarShowItemAdapter(context))
 
         mHGVDays.setDateChangeListener(object : ICalendarListener {
-            override fun onDayChanged(view: View?, s: String) {
-                if(null == view)
-                    Log.i(LOG_TAG, "date = $s, with null view!" )
+            override fun onDayChanged(day: String) {
+                if(day != mSZCurrentDay) {
+                    mSZCurrentDay = day
+                    EventBus.getDefault().post(SelectedDayEvent(day))
 
-                mSZCurrentDay = s
-                EventBus.getDefault().post(SelectedDayEvent(s))
+                    var noteCount = 0
+                    NoteDataHelper.getInfoByDay(day)?.let {
+                        noteCount = it.incomeCount + it.payCount
+                    }
+
+                    if (noteCount > 4) {
+                        if (!mHGVDays.isShrinkMode)
+                            mHGVDays.isShrinkMode = true
+                    } else {
+                        if (mHGVDays.isShrinkMode)
+                            mHGVDays.isShrinkMode = false
+                    }
+                }
             }
 
             override fun onMonthChanged(s: String) {
