@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ListView
-import butterknife.OnClick
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -75,11 +74,7 @@ class LVMonthly : LVBase() {
             val mk = tag.substring(0, 7)
             val map = DayDetailItem(mk, tag)
             NoteDataHelper.getInfoByDay(tag)?.let {
-                map.dayNumber = tag.substring(8, 10).apply {
-                    if (startsWith("0"))
-                        replaceFirst("0", " ")
-                }
-
+                map.dayNumber = tag.substring(8, 10).removePrefix("0")
                 map.dayInWeek = ToolUtil.getDayInWeek(tag)
                 map.dayDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
                         it.incomeCount.toString(), it.szIncomeAmount)
@@ -116,10 +111,10 @@ class LVMonthly : LVBase() {
 
             EventHelper.setOnClickOperator(parentView,
                     intArrayOf(R.id.ib_sort, R.id.ib_refresh),
-                    this::onActionClick)
+                    this::onActClick)
         }
 
-        fun onActionClick(v: View) {
+        private fun onActClick(v: View) {
             when (v.id) {
                 R.id.ib_sort -> {
                     mBTimeDownOrder = !mBTimeDownOrder
@@ -166,9 +161,9 @@ class LVMonthly : LVBase() {
     }
 
     /**
-     * 'accpet' or 'giveup' when [v] click
+     * click [v] for 'accept' or 'cancel'
      */
-    fun onAccpetOrGiveupClick(v: View) {
+    private fun onAcceptOrCancelClick(v: View) {
         val vid = v.id
         when (vid) {
             R.id.bt_accpet -> {
@@ -177,8 +172,8 @@ class LVMonthly : LVBase() {
                         val ac = rootActivity
                         ac!!.jumpByTabName(NoteDataHelper.TAB_TITLE_DAILY)
 
-                        val al_s = ArrayList(mLLSubFilter)
-                        EventBus.getDefault().post(FilterShowEvent(NoteDataHelper.TAB_TITLE_MONTHLY, al_s))
+                        val lsSub = ArrayList(mLLSubFilter)
+                        EventBus.getDefault().post(FilterShowEvent(NoteDataHelper.TAB_TITLE_MONTHLY, lsSub))
 
                         mLLSubFilter.clear()
                     }
@@ -218,7 +213,7 @@ class LVMonthly : LVBase() {
         super.initUI(bundle)
         EventHelper.setOnClickOperator(view!!,
                 intArrayOf(R.id.bt_accpet, R.id.bt_giveup, R.id.bt_giveup_filter),
-                this::onAccpetOrGiveupClick)
+                this::onAcceptOrCancelClick)
 
         ToolUtil.runInBackground(activity,
                 {
@@ -340,7 +335,9 @@ class LVMonthly : LVBase() {
                 }
 
                 // for month
-                viewHolder.setText(R.id.tv_month, item.month)
+                viewHolder.setText(R.id.tv_month,
+                        "${item.month.subSequence(0, 4)}年" +
+                                "${item.month.subSequence(5,7).removePrefix("0")}月")
 
                 // for graph value
                 item.monthDetail?.let {

@@ -35,8 +35,8 @@ class LVYearly : LVBase() {
     // 若为true则数据以时间降序排列
     private var mBTimeDownOrder = true
 
-    private val mMainPara: LinkedList<MainItemHolder> = LinkedList()
-    private val mHMSubPara: HashMap<String, LinkedList<SubItemHolder>> = HashMap()
+    private val mYearPara: LinkedList<YearItemHolder> = LinkedList()
+    private val mHMMonthPara: HashMap<String, LinkedList<MonthItemHolder>> = HashMap()
 
     // for main listview
     internal data class YearData(val year: String) {
@@ -46,7 +46,7 @@ class LVYearly : LVBase() {
         var amount: String? = null
     }
 
-    internal inner class MainItemHolder(tag: String)
+    internal inner class YearItemHolder(tag: String)
         : ViewDataHolder<String, YearData>(tag) {
         override fun getDataByTag(tag: String): YearData {
             val map = YearData(tag)
@@ -69,14 +69,11 @@ class LVYearly : LVBase() {
         var amount: String? = null
     }
 
-    internal inner class SubItemHolder(tag: String)
+    internal inner class MonthItemHolder(tag: String)
         : ViewDataHolder<String, MonthData>(tag) {
         override fun getDataByTag(tag: String): MonthData {
             val map = MonthData(tag.substring(0, 4), tag)
-            map.month = tag.substring(5, 7).apply {
-                if (startsWith("0"))
-                    replaceFirst("0".toRegex(), " ")
-            }
+            map.month = tag.substring(5, 7).removePrefix("0")
 
             NoteDataHelper.getInfoByMonth(tag)?.let {
                 map.monthDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
@@ -113,10 +110,10 @@ class LVYearly : LVBase() {
 
             EventHelper.setOnClickOperator(parentView,
                     intArrayOf(R.id.ib_sort, R.id.ib_refresh),
-                    this::onActionClick)
+                    this::onActClick)
         }
 
-        fun onActionClick(v: View) {
+        private fun onActClick(v: View) {
             when (v.id) {
                 R.id.ib_sort -> {
                     mBTimeDownOrder = !mBTimeDownOrder
@@ -158,9 +155,9 @@ class LVYearly : LVBase() {
 
 
     /**
-     * 'accpet' or 'giveup' when [v] click
+     * 'accept' or 'cancel' when [v] click
      */
-    fun onAccpetOrGiveupClick(v: View) {
+    private fun onAcceptOrCancelClick(v: View) {
         val vid = v.id
         when (vid) {
             R.id.bt_accpet -> if (mBSelectSubFilter) {
@@ -173,11 +170,9 @@ class LVYearly : LVBase() {
                     mLLSubFilter.clear()
                 }
 
-
-
                 for (i in mLLSubFilterVW) {
-                    i.setSelected(false)
-                    i.getBackground().setAlpha(0)
+                    i.isSelected = false
+                    i.background.alpha = 0
                 }
                 mLLSubFilterVW.clear()
 
@@ -190,8 +185,8 @@ class LVYearly : LVBase() {
                 mLLSubFilter.clear()
 
                 for (i in mLLSubFilterVW) {
-                    i.setSelected(false)
-                    i.getBackground().setAlpha(0)
+                    i.isSelected = false
+                    i.background.alpha = 0
                 }
                 mLLSubFilterVW.clear()
 
@@ -207,12 +202,12 @@ class LVYearly : LVBase() {
         super.initUI(bundle)
         EventHelper.setOnClickOperator(view!!,
                 intArrayOf(R.id.bt_accpet, R.id.bt_giveup),
-                this::onAccpetOrGiveupClick)
+                this::onAcceptOrCancelClick)
 
         ToolUtil.runInBackground(activity,
                 {
-                    mMainPara.clear()
-                    mHMSubPara.clear()
+                    mYearPara.clear()
+                    mHMMonthPara.clear()
 
                     // for year
                     NoteDataHelper.notesYears.toSortedSet(
@@ -220,7 +215,7 @@ class LVYearly : LVBase() {
                                 if (!mBTimeDownOrder) o1.compareTo(o2)
                                 else o2.compareTo(o1)
                             }).forEach {
-                        mMainPara.add(MainItemHolder(it))
+                        mYearPara.add(YearItemHolder(it))
                     }
 
                     // for month
@@ -230,12 +225,12 @@ class LVYearly : LVBase() {
                                 else o2.compareTo(o1)
                             }).forEach {
                         val ky = it.substring(0, 4)
-                        var lsDay: LinkedList<SubItemHolder>? = mHMSubPara[ky]
+                        var lsDay: LinkedList<MonthItemHolder>? = mHMMonthPara[ky]
                         if (null == lsDay) {
                             lsDay = LinkedList()
-                            mHMSubPara[ky] = lsDay
+                            mHMMonthPara[ky] = lsDay
                         }
-                        lsDay.add(SubItemHolder(it))
+                        lsDay.add(MonthItemHolder(it))
                     }
                 },
                 { loadUI(bundle) })
@@ -246,7 +241,7 @@ class LVYearly : LVBase() {
 
         // set listview adapter
         val mSNAdapter = YearAdapter(ContextUtil.instance!!,
-                mMainPara.filter {
+                mYearPara.filter {
                     if (mBFilter) mFilterPara.contains(it.tag) else true
                 })
         mLVShow.adapter = mSNAdapter
@@ -259,7 +254,7 @@ class LVYearly : LVBase() {
      * 调整数据排序
      */
     private fun reorderData() {
-        mMainPara.reverse()
+        mYearPara.reverse()
     }
 
     /**
@@ -275,7 +270,7 @@ class LVYearly : LVBase() {
      * load month view for [lv] with [tag]
      */
     private fun loadMonthDetailView(lv: ListView, tag: String) {
-        mHMSubPara[tag]?.let {
+        mHMMonthPara[tag]?.let {
             lv.adapter = MonthAdapter(context, it)
             //(lv.adapter as MonthAdapter).notifyDataSetChanged()
             ListViewHelper.setListViewHeightBasedOnChildren(lv)
@@ -288,14 +283,14 @@ class LVYearly : LVBase() {
      * year item view adapter
      */
     private inner class YearAdapter
-    internal constructor(context: Context, mdata: List<MainItemHolder>)
+    internal constructor(context: Context, mdata: List<YearItemHolder>)
         : LVAdapter(context, mdata, R.layout.li_yearly_show) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val viewHolder = ViewHolder.get(context, convertView, R.layout.li_yearly_show)
             if (null == viewHolder.getSelfTag(SELF_TAG_ID)) {
                 viewHolder.setSelfTag(SELF_TAG_ID, Any())
 
-                val hm = (getItem(position) as MainItemHolder).data
+                val hm = (getItem(position) as YearItemHolder).data
                 val lv = viewHolder.getView<ListView>(R.id.lv_show_detail)
                 val doFold = { lvMonth: ListView, tagData: YearData ->
                     lvMonth.visibility = if (tagData.show.isFold()) {
@@ -321,7 +316,7 @@ class LVYearly : LVBase() {
                 }
 
                 // for year
-                viewHolder.setText(R.id.tv_year, hm.year)
+                viewHolder.setText(R.id.tv_year, "${hm.year}年")
 
                 // for graph value
                 hm.yearDetail?.let {
@@ -348,7 +343,7 @@ class LVYearly : LVBase() {
             if (null == viewHolder.getSelfTag(SELF_TAG_ID)) {
                 viewHolder.setSelfTag(SELF_TAG_ID, Any())
 
-                val hm = (getItem(position) as SubItemHolder).data
+                val hm = (getItem(position) as MonthItemHolder).data
                 viewHolder.getView<ImageView>(R.id.iv_action).let {
                     it.setBackgroundColor(if (mLLSubFilter.contains(hm.subTag)) ResourceHelper.mCRLVItemSel
                     else ResourceHelper.mCRLVItemTransFull)

@@ -138,8 +138,7 @@ open class LVAdapter
     }
 
     override fun getViewTypeCount(): Int {
-        val org_ct = count
-        return if (org_ct < 1) 1 else org_ct
+        return count.let { if (it < 1) 1 else it }
     }
 
     override fun getItemViewType(position: Int): Int {

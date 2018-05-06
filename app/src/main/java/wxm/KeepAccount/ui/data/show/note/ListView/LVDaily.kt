@@ -7,7 +7,6 @@ import android.support.v4.app.DialogFragment
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import butterknife.BindView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
@@ -28,7 +27,6 @@ import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.Dialog.DlgOKOrNOBase
 import wxm.androidutil.ViewHolder.ViewDataHolder
 import wxm.androidutil.ViewHolder.ViewHolder
-import wxm.androidutil.util.UtilFun
 import wxm.uilib.IconButton.IconButton
 import java.util.ArrayList
 import java.util.Calendar
@@ -59,14 +57,8 @@ class LVDaily : LVBase() {
     internal inner class ItemHolder(tag: String)
         : ViewDataHolder<String, MainAdapterItem>(tag) {
         override fun getDataByTag(tag: String): MainAdapterItem {
-            val szMonth = tag.substring(5, 7).apply {
-                if (startsWith("0"))
-                    replaceFirst("0", " ")
-            }
-            val szDay = tag.substring(8, 10).apply {
-                if (startsWith("0"))
-                    replaceFirst("0", " ")
-            }
+            val szMonth = tag.substring(5, 7).removePrefix("0")
+            val szDay = tag.substring(8, 10).removePrefix("0")
             val item = MainAdapterItem(tag.substring(0, 4), szMonth, szDay)
 
             NoteDataHelper.getInfoByDay(tag)?.let {
@@ -100,7 +92,7 @@ class LVDaily : LVBase() {
                     this::onActionClick)
         }
 
-        fun onActionClick(v: View) {
+        private fun onActionClick(v: View) {
             when (v.id) {
                 R.id.ib_sort -> {
                     mBTimeDownOrder = !mBTimeDownOrder
@@ -190,7 +182,7 @@ class LVDaily : LVBase() {
     /**
      * handler for 'accept' or 'cancel'
      */
-    fun onAccpetOrGiveupClick(v: View) {
+    private fun onAcceptOrCancelClick(v: View) {
         val vid = v.id
         when (vid) {
             R.id.bt_accpet -> if (mAction.isDelete) {
@@ -216,7 +208,7 @@ class LVDaily : LVBase() {
         super.initUI(bundle)
         EventHelper.setOnClickOperator(view!!,
                 intArrayOf(R.id.bt_accpet, R.id.bt_giveup, R.id.bt_giveup_filter),
-                this::onAccpetOrGiveupClick)
+                this::onAcceptOrCancelClick)
 
         showLoadingProgress(true)
         ToolUtil.runInBackground(activity,
@@ -245,12 +237,13 @@ class LVDaily : LVBase() {
         setAcceptGiveUpLayoutVisible(if (mAction.isDelete && !mBFilter) View.VISIBLE else View.GONE)
 
         // load show data
-        val mSNAdapter = MainAdapter(ContextUtil.instance!!,
+        MainAdapter(context,
                 mMainPara.filter {
                     if (mBFilter) mFilterPara.contains(it.tag) else true
-                })
-        mLVShow.adapter = mSNAdapter
-        mSNAdapter.notifyDataSetChanged()
+                }).let {
+            mLVShow.adapter = it
+            it.notifyDataSetChanged()
+        }
     }
 
 
@@ -285,7 +278,13 @@ class LVDaily : LVBase() {
         setFilterLayoutVisible(if (mBFilter) View.VISIBLE else View.GONE)
         setAcceptGiveUpLayoutVisible(if (mAction.isDelete && !mBFilter) View.VISIBLE else View.GONE)
 
-        (mLVShow.adapter as MainAdapter).notifyDataSetChanged()
+        MainAdapter(context,
+                mMainPara.filter {
+                    if (mBFilter) mFilterPara.contains(it.tag) else true
+                }).let {
+            mLVShow.adapter = it
+            it.notifyDataSetChanged()
+        }
     }
 
     /**
@@ -302,12 +301,13 @@ class LVDaily : LVBase() {
     private inner class MainAdapter internal constructor(context: Context, data: List<ItemHolder>)
         : LVAdapter(context, data, R.layout.li_daily_show) {
         private val mCLAdapter = View.OnClickListener { v ->
-            val ac = rootActivity!!
             val pos = mLVShow.getPositionForView(v)
             val hm = getItem(pos) as ItemHolder
 
-            ac.startActivity(Intent(ac, ACDailyDetail::class.java)
-                    .putExtra(ACDailyDetail.K_HOTDAY, hm.tag))
+            rootActivity?.let {
+                it.startActivity(Intent(it, ACDailyDetail::class.java)
+                        .putExtra(ACDailyDetail.K_HOTDAY, hm.tag))
+            }
         }
 
         /**
@@ -336,7 +336,7 @@ class LVDaily : LVBase() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val viewHolder = ViewHolder.get(context, convertView, R.layout.li_daily_show)
             val cb = viewHolder.getView<CheckBox>(R.id.cb_del)
-            cb.visibility = if (!mAction.isDelete) {
+            cb.visibility = if (mAction.isEdit) {
                 cb.isChecked = false
                 View.GONE
             } else {
@@ -364,9 +364,8 @@ class LVDaily : LVBase() {
 
         private fun initItemShow(vh: ViewHolder, item: MainAdapterItem, prvItem: MainAdapterItem?) {
             if (null == prvItem || prvItem.year != item.year) {
-                vh.setText(R.id.tv_year_number, item.year)
+                vh.setText(R.id.tv_year_number, "${item.year}年")
             } else {
-                //vh.setText(R.id.tv_year_number, item.year);
                 vh.getView<View>(R.id.tv_year_number).visibility = View.INVISIBLE
             }
 
