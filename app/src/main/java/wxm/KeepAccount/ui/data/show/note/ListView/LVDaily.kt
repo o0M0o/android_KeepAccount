@@ -242,7 +242,7 @@ class LVDaily : LVBase() {
                     if (mBFilter) mFilterPara.contains(it.tag) else true
                 }).let {
             mLVShow.adapter = it
-            it.notifyDataSetChanged()
+            //it.notifyDataSetChanged()
         }
     }
 
@@ -283,7 +283,7 @@ class LVDaily : LVBase() {
                     if (mBFilter) mFilterPara.contains(it.tag) else true
                 }).let {
             mLVShow.adapter = it
-            it.notifyDataSetChanged()
+            //it.notifyDataSetChanged()
         }
     }
 
@@ -323,12 +323,11 @@ class LVDaily : LVBase() {
                 val ret = LinkedList<String>()
                 val count = mLVShow.childCount
                 for (pos in 0 until count) {
-                    mLVShow.getChildAt(pos).findViewById<CheckBox>(R.id.cb_del)
-                            .apply {
-                                if (isChecked) {
-                                    ret.add(tag as String)
-                                }
-                            }
+                    mLVShow.getChildAt(pos).findViewById<CheckBox>(R.id.cb_del).apply {
+                        if (isChecked) {
+                            ret.add(tag as String)
+                        }
+                    }
                 }
                 return ret
             }
