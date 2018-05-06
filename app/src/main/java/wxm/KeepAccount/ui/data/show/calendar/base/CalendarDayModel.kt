@@ -8,7 +8,7 @@ import wxm.uilib.FrgCalendar.CalendarItem.BaseItemModel
  * for extended
  * Created by WangXM on 2017/07/06
  */
-class CalendarShowItemModel : BaseItemModel() {
+class CalendarDayModel : BaseItemModel() {
     var recordCount: Int = -1
         private set
         get() {

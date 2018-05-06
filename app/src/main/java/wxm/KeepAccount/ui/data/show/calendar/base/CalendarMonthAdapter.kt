@@ -10,35 +10,40 @@ import wxm.androidutil.ViewHolder.ViewHolder
 import wxm.uilib.FrgCalendar.CalendarItem.BaseItemAdapter
 
 /**
- * adapter for calendar
+ * for calendar-month-mode
  * Created by WangXM on 2017/07/03.
  */
-class CalendarShowItemAdapter(context: Context)
-    : BaseItemAdapter<CalendarShowItemModel>(context) {
-    override fun getView(date: String, model: CalendarShowItemModel,
+open class CalendarMonthAdapter(context: Context)
+    : BaseItemAdapter<CalendarDayModel>(context) {
+    override fun getView(date: String, model: CalendarDayModel,
                          convertView: View?, parent: ViewGroup?): View {
         val vhParent = ViewHolder.get(mContext, convertView, R.layout.gi_calendar_item)
         val vwParent = vhParent.convertView
         vwParent.setBackgroundResource(
-                if (model.isCurrentMonth) {
-                    if (model.recordCount > 0) R.drawable.day_shape
-                    else R.drawable.day_empty_shape
-                } else R.drawable.day_empty_shape
+                when {
+                    model.isCurrentMonth -> {
+                        if (model.recordCount > 0) R.drawable.day_shape
+                        else R.drawable.day_empty_shape
+                    }
+
+                    else -> R.drawable.day_other_month_shape
+                }
         )
 
         vhParent.getView<TextView>(R.id.tv_day_num).apply {
-            text = if (model.isToday) {
-                ContextUtil.getString(R.string.today)
-            } else model.dayNumber
-
+            text = if (model.isToday) mSZToday else model.dayNumber
             setTextColor(
-                    if (model.isCurrentMonth) {
-                        when {
-                            model.isToday -> mCLToday
-                            model.isHoliday -> mCLHoliday
-                            else -> mCLCurrentMonth
+                    when {
+                        model.isCurrentMonth -> {
+                            when {
+                                model.isToday -> mCLToday
+                                model.isHoliday -> mCLHoliday
+                                else -> mCLCurrentMonth
+                            }
                         }
-                    } else mCLOtherMonth
+
+                        else -> mCLOtherMonth
+                    }
             )
         }
 
@@ -62,5 +67,7 @@ class CalendarShowItemAdapter(context: Context)
 
         private val mCLOtherMonth = ContextUtil.getColor(R.color.text_half_fit)
         private val mCLCurrentMonth = ContextUtil.getColor(R.color.text_fit)
+
+        private val mSZToday = ContextUtil.getString(R.string.today)
     }
 }

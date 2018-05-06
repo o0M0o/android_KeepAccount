@@ -1,16 +1,14 @@
 package wxm.KeepAccount.ui.data.show.calendar
 
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.FrameLayout
 import kotterknife.bindView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.DBDataChangeEvent
-import wxm.KeepAccount.ui.data.show.calendar.base.CalendarShowItemAdapter
+import wxm.KeepAccount.ui.data.show.calendar.base.CalendarMonthAdapter
+import wxm.KeepAccount.ui.data.show.calendar.base.CalendarWeekAdapter
 import wxm.KeepAccount.ui.data.show.calendar.base.SelectedDayEvent
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
@@ -26,12 +24,12 @@ import java.util.*
  * in upper part show calendar, if usr click day, in bottom part show day data
  * Created by WangXM on 2016/12/4.
  */
-class FrgCalendarShow : FrgSupportBaseAdv() {
+class FrgCalendarHolder : FrgSupportBaseAdv() {
     // for ui
     private val mHGVDays: FrgCalendar by bindView(R.id.frg_calender_lv)
 
     // for data
-    private lateinit var mCSIAdapter: CalendarShowItemAdapter
+    private lateinit var mCSIAdapter: CalendarMonthAdapter
     private val mFGContent = FrgCalendarContent()
 
     private var mSZCurrentDay: String? = null
@@ -87,27 +85,14 @@ class FrgCalendarShow : FrgSupportBaseAdv() {
             ft.commit()
         }
 
-        mCSIAdapter = CalendarShowItemAdapter(context)
-        mHGVDays.setCalendarItemAdapter(CalendarShowItemAdapter(context), CalendarShowItemAdapter(context))
+        mCSIAdapter = CalendarMonthAdapter(context)
+        mHGVDays.setCalendarItemAdapter(CalendarMonthAdapter(context), CalendarWeekAdapter(context))
 
         mHGVDays.setDateChangeListener(object : ICalendarListener {
             override fun onDayChanged(day: String) {
                 if(day != mSZCurrentDay) {
                     mSZCurrentDay = day
                     EventBus.getDefault().post(SelectedDayEvent(day))
-
-                    var noteCount = 0
-                    NoteDataHelper.getInfoByDay(day)?.let {
-                        noteCount = it.incomeCount + it.payCount
-                    }
-
-                    if (noteCount > 4) {
-                        if (!mHGVDays.isShrinkMode)
-                            mHGVDays.isShrinkMode = true
-                    } else {
-                        if (mHGVDays.isShrinkMode)
-                            mHGVDays.isShrinkMode = false
-                    }
                 }
             }
 
