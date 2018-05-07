@@ -100,7 +100,6 @@ class LVDaily : LVBase() {
                     mIBSort.setActIcon(if (mBTimeDownOrder) R.drawable.ic_sort_up_1 else R.drawable.ic_sort_down_1)
                     mIBSort.setActName(if (mBTimeDownOrder) R.string.cn_sort_up_by_time else R.string.cn_sort_down_by_time)
 
-                    reorderData()
                     reloadUI()
                 }
 
@@ -214,11 +213,7 @@ class LVDaily : LVBase() {
         ToolUtil.runInBackground(activity,
                 {
                     mMainPara.clear()
-                    NoteDataHelper.notesDays.toSortedSet(
-                            Comparator { o1, o2 ->
-                                if (!mBTimeDownOrder) o1.compareTo(o2)
-                                else o2.compareTo(o1)
-                            }).forEach {
+                    NoteDataHelper.notesDays.forEach {
                         mMainPara.add(ItemHolder(it))
                     }
                 },
@@ -237,13 +232,12 @@ class LVDaily : LVBase() {
         setAcceptGiveUpLayoutVisible(if (mAction.isDelete && !mBFilter) View.VISIBLE else View.GONE)
 
         // load show data
-        MainAdapter(context,
-                mMainPara.filter {
-                    if (mBFilter) mFilterPara.contains(it.tag) else true
-                }).let {
-            mLVShow.adapter = it
-            //it.notifyDataSetChanged()
-        }
+        mLVShow.adapter = MainAdapter(context,
+                mMainPara.filter { !mBFilter || mFilterPara.contains(it.tag) }
+                        .sortedWith(Comparator { o1, o2 ->
+                            if (!mBTimeDownOrder) o1.tag.compareTo(o2.tag)
+                            else o2.tag.compareTo(o1.tag)
+                        }))
     }
 
 
@@ -287,12 +281,6 @@ class LVDaily : LVBase() {
         }
     }
 
-    /**
-     * reorder data
-     */
-    private fun reorderData() {
-        mMainPara.reverse()
-    }
     /// END PRIVATE
 
     /**

@@ -18,7 +18,7 @@ import wxm.androidutil.DBHelper.IDBRow
 @DatabaseTable(tableName = "tbIncomeNote")
 class IncomeNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone  {
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
-    override var id: Int = 0
+    override var id: Int = GlobalDef.INVALID_ID
 
     @DatabaseField(columnName = FIELD_USR, foreign = true, foreignColumnName = UsrItem.FIELD_ID, canBeNull = false)
     override var usr: UsrItem? = null

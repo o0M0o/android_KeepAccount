@@ -17,7 +17,6 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.ViewHolder.ViewDataHolder
@@ -87,7 +86,6 @@ class LVMonthly : LVBase() {
         }
     }
 
-
     internal inner class MonthlyActionHelper : ActionHelper() {
         private lateinit var mIBSort: IconButton
         private lateinit var mIBReport: IconButton
@@ -124,7 +122,6 @@ class LVMonthly : LVBase() {
                     mIBSort.setActName(if (mBTimeDownOrder) R.string.cn_sort_up_by_time
                     else R.string.cn_sort_down_by_time)
 
-                    reorderData()
                     loadUI(null)
                 }
 
@@ -221,20 +218,12 @@ class LVMonthly : LVBase() {
                     mHMDayPara.clear()
 
                     // for month
-                    NoteDataHelper.notesMonths.toSortedSet(
-                            Comparator { o1, o2 ->
-                                if (!mBTimeDownOrder) o1.compareTo(o2)
-                                else o2.compareTo(o1)
-                            }).forEach {
+                    NoteDataHelper.notesMonths.forEach {
                         mLSMonthPara.add(MonthItemHolder(it))
                     }
 
                     // for day
-                    NoteDataHelper.notesDays.toSortedSet(
-                            Comparator { o1, o2 ->
-                                if (!mBTimeDownOrder) o1.compareTo(o2)
-                                else o2.compareTo(o1)
-                            }).forEach {
+                    NoteDataHelper.notesDays.forEach {
                         val km = it.substring(0, 7)
                         var lsDay: LinkedList<DayItemHolder>? = mHMDayPara[km]
                         if (null == lsDay) {
@@ -252,22 +241,15 @@ class LVMonthly : LVBase() {
         refreshAttachLayout()
 
         // set listview adapter
-        val mSNAdapter = MonthAdapter(ContextUtil.instance!!,
-                mLSMonthPara.filter {
-                    if (mBFilter) mFilterPara.contains(it.tag) else true
-                })
-        mLVShow.adapter = mSNAdapter
-        mSNAdapter.notifyDataSetChanged()
+        mLVShow.adapter = MonthAdapter(context,
+                mLSMonthPara.filter { !mBFilter || mFilterPara.contains(it.tag) }
+                        .sortedWith(Comparator { o1, o2 ->
+                            if (!mBTimeDownOrder) o1.tag.compareTo(o2.tag)
+                            else o2.tag.compareTo(o1.tag)
+                        }))
     }
 
     /// BEGIN PRIVATE
-
-    /**
-     * adjust data order
-     */
-    private fun reorderData() {
-        mLSMonthPara.reverse()
-    }
 
     /**
      * update attach layout
@@ -285,8 +267,11 @@ class LVMonthly : LVBase() {
      */
     private fun loadDayDetailView(lv: ListView, tag: String?) {
         mHMDayPara[tag]?.let {
-            lv.adapter = DayAdapter(context, it)
-            //(lv.adapter as DayAdapter).notifyDataSetChanged()
+            lv.adapter = DayAdapter(context,
+                    it.sortedWith(Comparator { o1, o2 ->
+                        if (!mBTimeDownOrder) o1.tag.compareTo(o2.tag)
+                        else o2.tag.compareTo(o1.tag)
+                    }))
             ListViewHelper.setListViewHeightBasedOnChildren(lv)
         }
     }
@@ -337,7 +322,7 @@ class LVMonthly : LVBase() {
                 // for month
                 viewHolder.setText(R.id.tv_month,
                         "${item.month.subSequence(0, 4)}年" +
-                                "${item.month.subSequence(5,7).removePrefix("0")}月")
+                                "${item.month.subSequence(5, 7).removePrefix("0")}月")
 
                 // for graph value
                 item.monthDetail?.let {
@@ -346,7 +331,9 @@ class LVMonthly : LVBase() {
                                 put(ValueShow.ATTR_PAY_COUNT, it.mPayCount)
                                 put(ValueShow.ATTR_PAY_AMOUNT, it.mPayAmount)
                                 put(ValueShow.ATTR_INCOME_COUNT, it.mIncomeCount)
-                                put(ValueShow.ATTR_INCOME_AMOUNT, it.mIncomeAmount) }) }
+                                put(ValueShow.ATTR_INCOME_AMOUNT, it.mIncomeAmount)
+                            })
+                }
             }
 
             return viewHolder.convertView
@@ -405,7 +392,9 @@ class LVMonthly : LVBase() {
                                 put(ValueShow.ATTR_PAY_COUNT, it.mPayCount)
                                 put(ValueShow.ATTR_PAY_AMOUNT, it.mPayAmount)
                                 put(ValueShow.ATTR_INCOME_COUNT, it.mIncomeCount)
-                                put(ValueShow.ATTR_INCOME_AMOUNT, it.mIncomeAmount) }) }
+                                put(ValueShow.ATTR_INCOME_AMOUNT, it.mIncomeAmount)
+                            })
+                }
             }
 
             return viewHolder.convertView

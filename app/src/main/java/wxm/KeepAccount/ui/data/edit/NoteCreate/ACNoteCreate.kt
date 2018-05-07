@@ -20,17 +20,13 @@ class ACNoteCreate : ACSwitcherActivity<FrgNoteCreate>() {
     }
 
     override fun setupFragment(bundle: Bundle?) {
-        val hf = FrgNoteCreate()
-        val it = intent!!
-
-        val bd = Bundle()
-        val date = it.getStringExtra(GlobalDef.STR_RECORD_DATE)
-        if (!UtilFun.StringIsNullOrEmpty(date)) {
-            bd.putString(GlobalDef.STR_RECORD_DATE, date)
+        val date = intent.getStringExtra(GlobalDef.STR_RECORD_DATE)!!
+        FrgNoteCreate().let {
+            it.arguments = Bundle().apply {
+                putString(GlobalDef.STR_RECORD_DATE, date)
+            }
+            addFragment(it)
         }
-        hf.arguments = bd
-
-        addFragment(hf)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

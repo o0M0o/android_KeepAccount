@@ -160,13 +160,13 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
         // 添加recordtype
         val reDao = rtItemREDao
         val res = ContextUtil.instance!!.resources
-        var type = res.getStringArray(R.array.payinfo)
+        var type = res.getStringArray(R.array.pay_info)
         for (ln in type) {
             val ri = line2item(RecordTypeItem.DEF_PAY, ln)
             reDao.create(ri)
         }
 
-        type = res.getStringArray(R.array.incomeinfo)
+        type = res.getStringArray(R.array.income_info)
         for (ln in type) {
             val ri = line2item(RecordTypeItem.DEF_INCOME, ln)
             reDao.create(ri)

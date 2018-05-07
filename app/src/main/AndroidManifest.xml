@@ -14,13 +14,13 @@
         android:name=".utility.ContextUtil"
         android:allowBackup="true"
         android:icon="@drawable/ic_keepaccount_app"
-        android:label="@string/cn_keepaccount_applabel"
+        android:label="@string/cn_app_label"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon, android:theme, android:label">
         <activity
             android:name=".ui.login.ACLogin"
-            android:label="@string/cn_keepaccount_applabel">
+            android:label="@string/cn_app_label">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,9 +56,6 @@
             android:name=".ui.data.edit.NoteCreate.ACNoteCreate"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.data.edit.Remind.ACRemindEdit"
-            android:exported="true" />
         <activity android:name=".ui.data.show.remind.ACRemindShow" />
         <activity
             android:name=".ui.setting.ACSetting"

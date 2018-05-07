@@ -32,9 +32,9 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
     private val mETRepeatPwd: EditText by bindView(R.id.et_repeat_pwd)
 
     // for res
-    private val mRSErrorNoUsrName: String = ContextUtil.getString(R.string.error_no_usrname)
+    private val mRSErrorNoUsrName: String = ContextUtil.getString(R.string.error_no_usr_name)
     private val mRSErrorInvalidPWD: String = ContextUtil.getString(R.string.error_invalid_password)
-    private var mRSErrorRepeatPwdNotMatch: String = ContextUtil.getString(R.string.error_repeatpwd_notmatch)
+    private var mRSErrorRepeatPwdNotMatch: String = ContextUtil.getString(R.string.error_pwd_not_match)
 
     // for data
     private var mMHHandler: LocalMsgHandler = LocalMsgHandler(this)

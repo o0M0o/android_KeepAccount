@@ -6,29 +6,30 @@
     <string name="cn_help">帮助</string>
     <string name="cn_save">保存</string>
     <string name="cn_edit">编辑</string>
-    <string name="cn_giveup">放弃</string>
+    <string name="cn_cancel">放弃</string>
     <string name="cn_delete">删除</string>
-    <string name="cn_keepaccount_applabel">随手帐</string>
-
+    <string name="cn_app_label">随手帐</string>
 
     <string name="label_add_usr">新建用户</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_usrname">用户名</string>
+    <!-- for login -->
+    <string name="prompt_usr_name">用户名</string>
     <string name="prompt_password">密码</string>
+
     <string name="action_sign_in">登录</string>
     <string name="action_register">注册账号</string>
     <string name="action_sign_in_short">登录</string>
-    <string name="error_no_usrname">请输入用户名</string>
-    <string name="error_invalid_password">密码太短</string>
-    <string name="error_incorrect_password">密码不正确或用户名不存在</string>
-    <string name="error_field_required">需此项信息</string>
+
     <string name="hint_new_usr_name">新用户名</string>
     <string name="hint_new_pwd">新用户密码</string>
     <string name="hint_new_repeat_pwd">请重复输入密码</string>
     <string name="hint_input_long_txt">编辑长文本</string>
 
-    <string name="error_repeatpwd_notmatch">两次输入密码不一样</string>
+    <string name="error_pwd_not_match">两次输入密码不一样</string>
+    <string name="error_no_usr_name">请输入用户名</string>
+    <string name="error_invalid_password">密码太短</string>
+    <string name="error_incorrect_password">密码不正确或用户名不存在</string>
+    <string name="error_field_required">需此项信息</string>
 
     <string name="navigation_drawer_open">打开导航绘图</string>
     <string name="navigation_drawer_close">关闭导航绘图</string>
@@ -46,7 +47,7 @@
 
     <string name="cn_date">日期</string>
     <string name="cn_amount">金额</string>
-    <string name="cn_swith_view">切换视图</string>
+    <string name="cn_switch_view">切换视图</string>
     <string name="cn_income_type">收入类型</string>
     <string name="cn_pay_type">支出类型</string>
     <string name="cn_setting">设定</string>
@@ -72,7 +73,6 @@
     <string name="hint_name">名字</string>
     <string name="hint_note">说明</string>
     <string name="manager"> 管理 </string>
-
 
     <string name="action_def_usr_login">使用默认用户登录</string>
     <string name="cn_accept">确认</string>

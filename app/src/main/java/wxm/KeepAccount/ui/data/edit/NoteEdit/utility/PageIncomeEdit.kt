@@ -8,7 +8,6 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import kotterknife.bindView
@@ -90,7 +89,7 @@ class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
                 }
             })
 
-            val listener = View.OnTouchListener { v, event -> OnTouchChildView(v, event) }
+            val listener = View.OnTouchListener { v, event -> onTouchChildView(v, event) }
             mETInfo.setOnTouchListener(listener)
             mETDate.setOnTouchListener(listener)
             mTVNote.setOnTouchListener(listener)
@@ -108,12 +107,9 @@ class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
     }
 
     override fun loadUI(bundle: Bundle?) {
+        val paraDate = arguments?.getString(GlobalDef.STR_RECORD_DATE)
         mOldIncomeNote?.let {
-            mETDate.setText(
-                if (null != arguments)
-                    arguments.getString(GlobalDef.STR_RECORD_DATE) ?: it.tsToStr!!.substring(0, 16)
-                else it.tsToStr!!.substring(0, 16))
-
+            mETDate.setText(paraDate ?: it.tsToStr!!.substring(0, 16))
             mETInfo.setText(it.info)
 
             val szNote = it.note
@@ -192,7 +188,7 @@ class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
         return false
     }
 
-    private fun OnTouchChildView(v: View, event: MotionEvent): Boolean {
+    private fun onTouchChildView(v: View, event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 when (v.id) {

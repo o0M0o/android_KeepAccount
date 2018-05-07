@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="payinfo">
+    <string-array name="pay_info">
         <item>生活费-生活</item>
         <item>通讯费-手机/电话/宽带</item>
         <item>社交费用-交友社交</item>
@@ -10,7 +10,7 @@
         <item>水电煤气-日常生活开销</item>
         <item>交通费-打车/公交/地铁</item>
     </string-array>
-    <string-array name="incomeinfo">
+    <string-array name="income_info">
         <item>工资-劳动收入</item>
         <item>奖金-劳动收入</item>
         <item>租金-资产收入</item>

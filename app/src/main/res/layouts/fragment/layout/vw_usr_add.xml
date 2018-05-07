@@ -70,7 +70,7 @@
             android:layout_below="@id/bt_confirm"
             android:layout_marginTop="10dp"
             android:background="@drawable/bt_big_shape"
-            android:text="@string/cn_giveup" />
+            android:text="@string/cn_cancel" />
     </RelativeLayout>
 
 </LinearLayout>

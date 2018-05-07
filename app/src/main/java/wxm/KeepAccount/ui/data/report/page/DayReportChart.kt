@@ -25,7 +25,6 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
-import wxm.androidutil.util.UtilFun
 import java.math.BigDecimal
 import java.util.*
 
@@ -218,7 +217,7 @@ class DayReportChart : FrgSupportBaseAdv() {
 
         // Get font size from dimens.xml and convert it to sp(library uses sp values).
         pd.centerText1FontSize = ChartUtils.px2sp(
-                resources.displayMetrics.scaledDensity, resources.getDimension(R.dimen.pie_chart_text1_size).toInt())
+                resources.displayMetrics.scaledDensity, resources.getDimension(R.dimen.pie_chart_text_size).toInt())
     }
 
     companion object {

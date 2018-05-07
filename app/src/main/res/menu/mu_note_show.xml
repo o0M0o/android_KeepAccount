@@ -6,7 +6,7 @@
         android:id="@+id/mi_switch"
         android:icon="@drawable/ic_swtich_white"
         android:orderInCategory="9001"
-        android:title="@string/cn_swith_view"
+        android:title="@string/cn_switch_view"
         app:showAsAction="ifRoom" />
 
 

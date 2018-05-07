@@ -97,14 +97,7 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
     }
 
     override fun loadUI(bundle: Bundle?) {
-        val bd = arguments
-        if (null != bd) {
-            val paraDate = bd.getString(GlobalDef.STR_RECORD_DATE)
-            if (!UtilFun.StringIsNullOrEmpty(paraDate)) {
-                mETDate.setText(paraDate)
-            }
-        }
-
+        val paraDate = arguments?.getString(GlobalDef.STR_RECORD_DATE)
         mTVNote.paint.flags = Paint.UNDERLINE_TEXT_FLAG
         mOldPayNote?.let {
             val bi = it.budget
@@ -120,7 +113,7 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
                 }
             }
 
-            mETDate.setText(it.ts.toString().substring(0, 16))
+            mETDate.setText(paraDate ?: it.tsToStr!!.substring(0, 16))
             mETInfo.setText(it.info)
 
             val szNote = it.note

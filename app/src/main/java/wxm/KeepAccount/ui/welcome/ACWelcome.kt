@@ -44,7 +44,7 @@ class ACWelcome : AppCompatActivity(), View.OnClickListener, NavigationView.OnNa
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ac_welcome)
 
-        init_component(savedInstanceState)
+        initComponent(savedInstanceState)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -163,7 +163,7 @@ class ACWelcome : AppCompatActivity(), View.OnClickListener, NavigationView.OnNa
      * init UI component
      * @param savedInstanceState    saved component state
      */
-    private fun init_component(savedInstanceState: Bundle?) {
+    private fun initComponent(savedInstanceState: Bundle?) {
         // set nav view
         val tb = UtilFun.cast<Toolbar>(findViewById(R.id.ac_navw_toolbar))
         setSupportActionBar(tb)

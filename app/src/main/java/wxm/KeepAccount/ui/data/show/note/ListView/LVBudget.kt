@@ -77,7 +77,7 @@ class LVBudget : LVBase() {
                     this::onActionClick)
         }
 
-        fun onActionClick(v: View) {
+        private fun onActionClick(v: View) {
             when (v.id) {
                 R.id.ib_sort -> {
                     mBODownOrder = !mBODownOrder
@@ -221,11 +221,11 @@ class LVBudget : LVBase() {
         lsPay.sortedBy { it.ts }.forEach {
             val allDate = it.tsToStr!!
             val map = SubAdapterItem(parentTag, allDate.substring(0, 10))
-            map.month = allDate.substring(0, 7)
+            allDate.substring(0, 7).let {
+                map.month = "${it.substring(0, 4)}年${it.substring(5, 7).removePrefix("0")}月"
+            }
 
-            var km = allDate.substring(8, 10)
-            km = if (km.startsWith("0")) km.replaceFirst("0".toRegex(), " ") else km
-            map.dayNumber = km
+            map.dayNumber = allDate.substring(8, 10).removePrefix("0")
             map.dayInWeek = ToolUtil.getDayInWeek(it.ts)
 
             it.note?.let {

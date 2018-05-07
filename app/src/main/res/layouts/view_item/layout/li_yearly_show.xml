@@ -19,7 +19,7 @@
             android:layout_marginStart="12dp"
             android:text="2016年"
             android:textColor="@color/black"
-            android:textSize="22sp"
+            android:textSize="@dimen/item_big_text_size"
             app:layout_constraintBottom_toBottomOf="@+id/vs_yearly_info"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/vs_yearly_info" />

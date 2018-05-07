@@ -123,7 +123,6 @@ class LVYearly : LVBase() {
                     mIBSort.setActName(if (mBTimeDownOrder) R.string.cn_sort_up_by_time
                     else R.string.cn_sort_down_by_time)
 
-                    reorderData()
                     loadUI(null)
                 }
 
@@ -210,20 +209,12 @@ class LVYearly : LVBase() {
                     mHMMonthPara.clear()
 
                     // for year
-                    NoteDataHelper.notesYears.toSortedSet(
-                            Comparator { o1, o2 ->
-                                if (!mBTimeDownOrder) o1.compareTo(o2)
-                                else o2.compareTo(o1)
-                            }).forEach {
+                    NoteDataHelper.notesYears.forEach {
                         mYearPara.add(YearItemHolder(it))
                     }
 
                     // for month
-                    NoteDataHelper.notesMonths.toSortedSet(
-                            Comparator { o1, o2 ->
-                                if (!mBTimeDownOrder) o1.compareTo(o2)
-                                else o2.compareTo(o1)
-                            }).forEach {
+                    NoteDataHelper.notesMonths.forEach {
                         val ky = it.substring(0, 4)
                         var lsDay: LinkedList<MonthItemHolder>? = mHMMonthPara[ky]
                         if (null == lsDay) {
@@ -240,22 +231,15 @@ class LVYearly : LVBase() {
         refreshAttachLayout()
 
         // set listview adapter
-        val mSNAdapter = YearAdapter(ContextUtil.instance!!,
-                mYearPara.filter {
-                    if (mBFilter) mFilterPara.contains(it.tag) else true
-                })
-        mLVShow.adapter = mSNAdapter
-        mSNAdapter.notifyDataSetChanged()
+        mLVShow.adapter = YearAdapter(context,
+                mYearPara.filter { !mBFilter || mFilterPara.contains(it.tag) }
+                        .sortedWith(Comparator { o1, o2 ->
+                            if (!mBTimeDownOrder) o1.tag.compareTo(o2.tag)
+                            else o2.tag.compareTo(o1.tag)
+                        }))
     }
 
     /// BEGIN PRIVATE
-
-    /**
-     * 调整数据排序
-     */
-    private fun reorderData() {
-        mYearPara.reverse()
-    }
 
     /**
      * 更新附加layout
@@ -271,13 +255,14 @@ class LVYearly : LVBase() {
      */
     private fun loadMonthDetailView(lv: ListView, tag: String) {
         mHMMonthPara[tag]?.let {
-            lv.adapter = MonthAdapter(context, it)
-            //(lv.adapter as MonthAdapter).notifyDataSetChanged()
+            lv.adapter = MonthAdapter(context, it.sortedWith(Comparator { o1, o2 ->
+                if (!mBTimeDownOrder) o1.tag.compareTo(o2.tag)
+                else o2.tag.compareTo(o1.tag)
+            }))
             ListViewHelper.setListViewHeightBasedOnChildren(lv)
         }
     }
     /// END PRIVATE
-
 
     /**
      * year item view adapter

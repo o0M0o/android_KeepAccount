@@ -33,7 +33,6 @@ import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.widget.ProgressBar
 import java.lang.ref.WeakReference
-import java.util.concurrent.Callable
 import java.util.concurrent.TimeUnit
 
 /**
@@ -49,7 +48,7 @@ class DlgUsrMessage : DlgOKOrNOBase() {
 
     private val mSZUsrMessage: String = ContextUtil.getString(R.string.cn_usr_message)
     private val mSZAccept: String = ContextUtil.getString(R.string.cn_accept)
-    private val mSZGiveUp: String = ContextUtil.getString(R.string.cn_giveup)
+    private val mSZGiveUp: String = ContextUtil.getString(R.string.cn_cancel)
 
     private lateinit var mETUsrMessage: TextInputEditText
 
