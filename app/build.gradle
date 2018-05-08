@@ -3,17 +3,17 @@ apply plugin: 'kotlin-android'
 
 android {
     signingConfigs {
-        yybKey {
-            keyAlias 'defkey'
-            keyPassword project.YYB_KEY_PWD
-            storeFile file(project.YYB_FILE_PATH)
-            storePassword project.YYB_STORE_PWD
+        YYBKey {
+            keyAlias        project.YYB_KEY_ALIAS
+            keyPassword     project.YYB_KEY_PWD
+            storeFile       file(project.YYB_FILE_PATH)
+            storePassword   project.YYB_STORE_PWD
         }
         KuAnKey {
-            keyAlias 'andriodapp-key-longtime'
-            keyPassword project.KUAN_KEY_PWD
-            storeFile file(project.KUAN_FILE_PATH)
-            storePassword project.KUAN_STORE_PWD
+            keyAlias        project.KUAN_KEY_ALIAS
+            keyPassword     project.KUAN_KEY_PWD
+            storeFile       file(project.KUAN_FILE_PATH)
+            storePassword   project.KUAN_STORE_PWD
         }
     }
 
@@ -24,9 +24,8 @@ android {
         applicationId "com.wxm.keepaccount"
         minSdkVersion 24
         targetSdkVersion 26
-        versionCode 22
-        versionName "1.22"
-        signingConfig signingConfigs.yybKey
+        versionCode 23
+        versionName "1.23"
     }
 
     sourceSets {
@@ -53,6 +52,7 @@ android {
 
             buildConfigField "Boolean", "FILL_TESTDATA", "false"
         }
+
         debug {
             debuggable true
             buildConfigField "Boolean", "FILL_TESTDATA", "true"
@@ -60,17 +60,18 @@ android {
     }
 
     productFlavors {
-        yyb_keepaccount {}
+        YYB_keepaccount {
+            signingConfig signingConfigs.YYBKey
+        }
+
+        KuAn_keepaccount {
+            signingConfig signingConfigs.KuAnKey
+        }
     }
 
     android.applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                //这里修改apk文件名
-                def fileName = "${variant.productFlavors[0].name}-${variant.buildType.name}-${defaultConfig.versionName}-${releaseTime()}.apk"
-                output.outputFileName = fileName
-            }
+        variant.outputs.all {
+            outputFileName = "${variant.name}-${variant.versionName}-${releaseTime()}.apk"
         }
     }
 
@@ -130,10 +131,9 @@ dependencies {
     implementation project(':AndroidUtil')
     implementation project(':UiLib')
 }
+
 repositories {
     mavenCentral()
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 }
 
