@@ -17,7 +17,8 @@ import wxm.KeepAccount.ui.data.report.ACReport
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.FrgWebView.FrgSupportWebView
+import wxm.androidutil.frgUtil.FrgSupportWebView
+import wxm.androidutil.log.TagLog
 import wxm.androidutil.util.UtilFun
 
 /**
@@ -43,7 +44,7 @@ class DayReportWebView : FrgSupportWebView() {
     }
 
     override fun onWVPageFinished(wvPage: WebView?, para: Any?) {
-        wvPage!!.evaluateJavascript("onLoadData($para)") { _ -> Log.i(LOG_TAG, "page finished")}
+        wvPage!!.evaluateJavascript("onLoadData($para)") { _ -> TagLog.i( "page finished")}
     }
 
 

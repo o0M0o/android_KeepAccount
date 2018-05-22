@@ -10,7 +10,7 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.LinkedList
 
-import wxm.androidutil.DBHelper.DBUtilityBase
+import wxm.androidutil.dbUtil.DBUtilityBase
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.BudgetItem
 import wxm.KeepAccount.define.INote

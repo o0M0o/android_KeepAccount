@@ -2,8 +2,8 @@ package wxm.KeepAccount.ui.data.report
 
 import android.os.Bundle
 import wxm.KeepAccount.R
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
-import wxm.androidutil.FrgUtility.FrgSupportSwitcher
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.frgUtil.FrgSupportSwitcher
 
 /**
  * data month report

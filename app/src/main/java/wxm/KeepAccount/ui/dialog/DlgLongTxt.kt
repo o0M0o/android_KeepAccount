@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 
-import wxm.androidutil.Dialog.DlgOKOrNOBase
+import wxm.androidutil.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 

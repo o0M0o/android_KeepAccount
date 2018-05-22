@@ -94,7 +94,7 @@ abstract class LVBase : ShowViewBase() {
             if (20 < mUnfoldItems.size)
                 mUnfoldItems.removeFirst()
 
-            //Log.i(LOG_TAG, "addUnfoldItem, tag = " + tag);
+            //TagLog.i(LOG_TAG, "addUnfoldItem, tag = " + tag);
             mUnfoldItems.addLast(tag)
         }
     }

@@ -7,7 +7,7 @@ import android.view.MenuItem
 
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.androidutil.Switcher.ACSwitcherActivity
+import wxm.androidutil.switcher.ACSwitcherActivity
 import wxm.androidutil.util.UtilFun
 
 /**

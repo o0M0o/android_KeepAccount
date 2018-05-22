@@ -7,7 +7,7 @@ import com.j256.ormlite.table.DatabaseTable
 import java.math.BigDecimal
 import java.sql.Timestamp
 
-import wxm.androidutil.DBHelper.IDBRow
+import wxm.androidutil.dbUtil.IDBRow
 
 /**
  * remind

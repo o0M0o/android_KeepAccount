@@ -5,8 +5,8 @@ import android.os.Bundle
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.data.show.note.HelloChart.MonthlyChart
 import wxm.KeepAccount.ui.data.show.note.ListView.LVMonthly
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
-import wxm.androidutil.FrgUtility.FrgSupportSwitcher
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.frgUtil.FrgSupportSwitcher
 
 /**
  * for monthly data

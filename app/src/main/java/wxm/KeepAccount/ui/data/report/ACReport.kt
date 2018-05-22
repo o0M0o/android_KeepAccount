@@ -5,19 +5,18 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
 
-import wxm.androidutil.Switcher.ACSwitcherActivity
+import wxm.androidutil.switcher.ACSwitcherActivity
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.GlobalDef
+import wxm.androidutil.log.TagLog
 
 /**
  * UI for report
  * Created by WangXM on 2017/2/15.
  */
 class ACReport : ACSwitcherActivity<Fragment>() {
-
     override fun leaveActivity() {
-        val data = Intent()
-        setResult(GlobalDef.INTRET_GIVEUP, data)
+        setResult(GlobalDef.INTRET_GIVEUP, Intent())
         finish()
     }
 
@@ -26,13 +25,13 @@ class ACReport : ACSwitcherActivity<Fragment>() {
         val it = intent
         val szType = it.getStringExtra(PARA_TYPE)
         if (UtilFun.StringIsNullOrEmpty(szType)) {
-            Log.e(LOG_TAG, "调用intent缺少'PARA_TYPE'参数")
+            TagLog.e( "调用intent缺少'PARA_TYPE'参数")
             return
         }
 
         val alLoad = it.getStringArrayListExtra(PARA_LOAD)
         if (UtilFun.ListIsNullOrEmpty(alLoad)) {
-            Log.e(LOG_TAG, "调用intent缺少'PARA_LOAD'参数")
+            TagLog.e( "调用intent缺少'PARA_LOAD'参数")
             return
         }
 

@@ -1,15 +1,10 @@
 package wxm.KeepAccount.utility
 
 import android.content.Context
-
-import java.util.ArrayList
-import java.util.Collections
-import java.util.HashMap
-import java.util.Locale
-
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.EAction
 import wxm.androidutil.util.UiUtil
+import java.util.*
 
 /**
  * preference helper
@@ -30,17 +25,16 @@ object PreferencesUtil {
      * @return      action in first page
      */
     fun loadHotAction(): List<String> {
-        val param = ContextUtil.instance!!
-                .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
-
-        val def = String.format(Locale.CHINA,
+        val param = ContextUtil.self.getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
+        return String.format(Locale.CHINA,
                 "%s:%s:%s:%s:%s:%s",
                 EAction.ADD_DATA.actName, EAction.LOOK_DATA.actName,
                 EAction.CALENDAR_VIEW.actName, EAction.LOOK_BUDGET.actName,
-                EAction.ADD_BUDGET.actName, EAction.LOGOUT.actName)
-
-        val load = param.getString(SET_HOT_ACTION, def)
-        return parsePreferences(load!!)
+                EAction.ADD_BUDGET.actName, EAction.LOGOUT.actName).let {
+            param.getString(SET_HOT_ACTION, it)
+        }.let {
+            parsePreferences(it)
+        }
     }
 
 
@@ -49,11 +43,8 @@ object PreferencesUtil {
      * @param acts  action in fist page
      */
     fun saveHotAction(acts: List<String>) {
-        val param = ContextUtil.instance!!
-                .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
-
-        val pr = parseToPreferences(acts)
-        param.edit().putString(SET_HOT_ACTION, pr).apply()
+        ContextUtil.self.getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
+                .edit().putString(SET_HOT_ACTION, parseToPreferences(acts)).apply()
     }
     /// END
 
@@ -64,11 +55,11 @@ object PreferencesUtil {
      * @return  color setting
      */
     fun loadChartColor(): HashMap<String, Int> {
-        val param = ContextUtil.instance!!
+        val param = ContextUtil.self
                 .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
 
-        val ct = ContextUtil.instance
-        val sb = SET_PAY_COLOR + ":" + UiUtil.getColor(ct!!, R.color.sienna).toString() +
+        val ct = ContextUtil.self
+        val sb = SET_PAY_COLOR + ":" + UiUtil.getColor(ct, R.color.sienna).toString() +
                 " " + SET_INCOME_COLOR + ":" + UiUtil.getColor(ct, R.color.teal).toString() +
                 " " + SET_BUDGET_UESED_COLOR + ":" + UiUtil.getColor(ct, R.color.sienna).toString() +
                 " " + SET_BUDGET_BALANCE_COLOR + ":" + UiUtil.getColor(ct, R.color.teal).toString()

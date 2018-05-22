@@ -12,7 +12,7 @@ import android.widget.Toast
 
 import kotterknife.bindView
 import wxm.KeepAccount.define.EMsgType
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.androidutil.util.WRMsgHandler
 import wxm.KeepAccount.R
@@ -20,6 +20,7 @@ import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.define.UsrItem
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.EventHelper
+import wxm.androidutil.log.TagLog
 
 /**
  * add user
@@ -84,15 +85,15 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent): Boolean {
         when (v.id) {
             R.id.et_usr_name -> {
-                Log.d(LOG_TAG, "now usr name : " + mETUsrName.text.toString())
+                TagLog.d("now usr name : " + mETUsrName.text.toString())
             }
 
             R.id.et_pwd -> {
-                Log.d(LOG_TAG, "now pwd : " + mETPwd.text.toString())
+                TagLog.d("now pwd : " + mETPwd.text.toString())
             }
 
             R.id.et_repeat_pwd -> {
-                Log.d(LOG_TAG, "now repeatPWD : " + mETRepeatPwd.text.toString())
+                TagLog.d("now repeatPWD : " + mETRepeatPwd.text.toString())
             }
         }
 
@@ -145,10 +146,6 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
     /// PRIVATE END
 
     private class LocalMsgHandler internal constructor(ac: FrgUsrAdd) : WRMsgHandler<FrgUsrAdd>(ac) {
-        init {
-            TAG = ::LocalMsgHandler.javaClass.simpleName
-        }
-
         override fun processMsg(m: Message, home: FrgUsrAdd) {
             val et = EMsgType.getEMsgType(m.what) ?: return
 
@@ -160,7 +157,7 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
                     }
                 }
             } else {
-                Log.e(TAG, String.format("msg(%s) can not process", m.toString()))
+                TagLog.e(String.format("msg(%s) can not process", m.toString()))
             }
         }
 
@@ -178,8 +175,7 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
                 if (2 < arr.size)
                     sstr = UtilFun.cast(arr[2])
 
-                Toast.makeText(ContextUtil.instance, sstr,
-                        Toast.LENGTH_LONG).show()
+                Toast.makeText(ContextUtil.self, sstr, Toast.LENGTH_LONG).show()
                 home.repeatInput()
             }
         }

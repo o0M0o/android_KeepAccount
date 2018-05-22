@@ -16,6 +16,7 @@ import java.util.Locale
 import kotterknife.bindView
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
+import wxm.androidutil.log.TagLog
 
 
 /**
@@ -95,7 +96,7 @@ class ValueShow(context: Context, attrs: AttributeSet)
 
             updateShow()
         } catch (ex: Exception) {
-            Log.e(LOG_TAG, "catch ex : " + ex.toString())
+            TagLog.e("", ex)
         } finally {
             array.recycle()
         }

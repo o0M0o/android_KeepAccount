@@ -5,7 +5,7 @@ import android.support.design.widget.TextInputEditText
 import android.view.View
 
 import kotterknife.bindView
-import wxm.androidutil.Dialog.DlgOKOrNOBase
+import wxm.androidutil.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef

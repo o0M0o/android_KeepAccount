@@ -8,7 +8,7 @@ import java.util.LinkedList
 
 import butterknife.BindView
 import kotterknife.bindView
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow

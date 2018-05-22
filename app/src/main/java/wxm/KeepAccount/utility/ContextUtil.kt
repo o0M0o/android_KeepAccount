@@ -1,48 +1,38 @@
 package wxm.KeepAccount.utility
 
-import android.app.Application
+import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.support.annotation.*
-import android.util.Log
-
-import wxm.KeepAccount.db.BudgetDBUtility
-import wxm.KeepAccount.db.DBOrmLiteHelper
-import wxm.KeepAccount.db.PayIncomeDBUtility
-import wxm.KeepAccount.db.RecordTypeDBUtility
-import wxm.KeepAccount.db.RemindDBUtility
-import wxm.KeepAccount.db.UsrDBUtility
-import wxm.KeepAccount.define.BudgetItem
-import wxm.KeepAccount.define.IncomeNoteItem
-import wxm.KeepAccount.define.PayNoteItem
-import wxm.KeepAccount.define.RemindItem
-import wxm.KeepAccount.define.UsrItem
+import wxm.KeepAccount.db.*
+import wxm.KeepAccount.define.*
 import wxm.KeepAccount.ui.utility.NoteDataHelper
+import wxm.androidutil.app.AppBase
+import wxm.androidutil.log.TagLog
 
 /**
  * get global context & helper
  * Created by WangXM on 2016/5/7.
  */
-class ContextUtil : Application() {
+class ContextUtil : AppBase() {
     // data for global use
     private var mUICurUsr: UsrItem? = null
-    private var mMHHandler: GlobalMsgHandler? = null
+    private lateinit var mMHHandler: GlobalMsgHandler
 
     // mainly for sqlite
-    private var mDBHelper: DBOrmLiteHelper? = null
-    private var mUsrUtility: UsrDBUtility? = null
-    private var mRecordTypeUtility: RecordTypeDBUtility? = null
-    private var mBudgetUtility: BudgetDBUtility? = null
-    private var mPayIncomeUtility: PayIncomeDBUtility? = null
-    private var mRemindUtility: RemindDBUtility? = null
+    private lateinit var mDBHelper: DBOrmLiteHelper
+    private lateinit var mUsrUtility: UsrDBUtility
+    private lateinit var mRecordTypeUtility: RecordTypeDBUtility
+    private lateinit var mBudgetUtility: BudgetDBUtility
+    private lateinit var mPayIncomeUtility: PayIncomeDBUtility
+    private lateinit var mRemindUtility: RemindDBUtility
 
     override fun onCreate() {
         // TODO Auto-generated method stub
         super.onCreate()
-        instance = this
         mMHHandler = GlobalMsgHandler()
 
         // for db
-        mDBHelper = DBOrmLiteHelper(instance!!)
+        mDBHelper = DBOrmLiteHelper(appContext())
 
         mUsrUtility = UsrDBUtility()
         mRecordTypeUtility = RecordTypeDBUtility()
@@ -55,41 +45,26 @@ class ContextUtil : Application() {
         super.onTerminate()
 
         // for db
-        if (null != mDBHelper) {
-            mDBHelper!!.close()
-            mDBHelper = null
-        }
-
-        mUsrUtility = null
-        mRecordTypeUtility = null
-        mBudgetUtility = null
-        mPayIncomeUtility = null
-        mRemindUtility = null
+        mDBHelper.close()
     }
 
     companion object {
-        private val LOG_TAG = ::ContextUtil.javaClass.simpleName
-
-        /**
-         * get global context
-         * @return      application context
-         */
-        var instance: ContextUtil? = null
-            private set
+        val self: ContextUtil
+            get() = (appContext() as ContextUtil)
 
         /**
          * get global msg handler
          * @return      msg handler
          */
         val msgHandler: GlobalMsgHandler
-            get() = instance!!.mMHHandler!!
+            get() = self.mMHHandler
 
         /**
          * get DB helper
          * @return      helper
          */
         val dbHelper: DBOrmLiteHelper
-            get() = instance!!.mDBHelper!!
+            get() = self.mDBHelper
 
         /**
          * get current usr
@@ -100,9 +75,9 @@ class ContextUtil : Application() {
          * @param cur_usr   current usr
          */
         var curUsr: UsrItem?
-            get() = instance!!.mUICurUsr
+            get() = self.mUICurUsr
             set(cur_usr) {
-                instance!!.mUICurUsr = cur_usr
+                self.mUICurUsr = cur_usr
             }
 
         /**
@@ -110,96 +85,106 @@ class ContextUtil : Application() {
          * @return      usr db helper
          */
         val usrUtility: UsrDBUtility
-            get() = instance!!.mUsrUtility!!
+            get() = self.mUsrUtility
 
         /**
          * get record type db helper
          * @return      helper
          */
         val recordTypeUtility: RecordTypeDBUtility
-            get() = instance!!.mRecordTypeUtility!!
+            get() = self.mRecordTypeUtility
 
         /**
          * get budget helper
          * @return      helper
          */
         val budgetUtility: BudgetDBUtility
-            get() = instance!!.mBudgetUtility!!
+            get() = self.mBudgetUtility
 
         /**
          * get pay & income data helper
          * @return      helper
          */
         val payIncomeUtility: PayIncomeDBUtility
-            get() = instance!!.mPayIncomeUtility!!
+            get() = self.mPayIncomeUtility
 
         /**
          * get remind data helper
          * @return      helper
          */
-        val remindUtility: RemindDBUtility?
-            get() = instance!!.mRemindUtility
+        val remindUtility: RemindDBUtility
+            get() = self.mRemindUtility
 
         /**
          * clean db
          */
         fun clearDB() {
             try {
-                val ui = curUsr
-                if (null != ui) {
-                    val dh = instance!!.mDBHelper
-                    val uid = ui.id
+                curUsr?.let {
+                    val uid = it.id
+                    self.mDBHelper.let {
+                        it.payDataREDao.deleteBuilder().apply {
+                            where().eq(PayNoteItem.FIELD_USR, uid)
+                            delete()
+                        }
 
-                    val dbPay = dh!!.payDataREDao.deleteBuilder()
-                    dbPay.where().eq(PayNoteItem.FIELD_USR, uid)
-                    dbPay.delete()
+                        it.incomeDataREDao.deleteBuilder().apply {
+                            where().eq(IncomeNoteItem.FIELD_USR, uid)
+                            delete()
+                        }
 
-                    val dbIncome = dh.incomeDataREDao.deleteBuilder()
-                    dbIncome.where().eq(IncomeNoteItem.FIELD_USR, uid)
-                    dbIncome.delete()
+                        it.budgetDataREDao.deleteBuilder().apply {
+                            where().eq(BudgetItem.FIELD_USR, uid)
+                            delete()
+                        }
 
-                    val dbBudget = dh.budgetDataREDao.deleteBuilder()
-                    dbBudget.where().eq(BudgetItem.FIELD_USR, uid)
-                    dbBudget.delete()
+                        it.remindREDao.deleteBuilder().apply {
+                            where().eq(RemindItem.FIELD_USR, uid)
+                            delete()
+                        }
 
-                    val dbRemind = dh.remindREDao.deleteBuilder()
-                    dbRemind.where().eq(RemindItem.FIELD_USR, uid)
-                    dbRemind.delete()
+                        Unit
+                    }
 
                     NoteDataHelper.reloadData()
                 }
             } catch (e: java.sql.SQLException) {
-                Log.e(LOG_TAG, "clearDB catch an exception", e)
+                TagLog.e("clearDB catch an exception", e)
             }
         }
 
         /**
+         * get app resources
+         */
+        fun getResources(): Resources = self.resources
+
+        /**
          * get res string
          */
-        fun getString(@StringRes resId : Int): String   {
-            return instance!!.getString(resId)
+        fun getString(@StringRes resId: Int): String {
+            return self.getString(resId)
         }
 
         /**
          * get res color
          */
         @ColorInt
-        fun getColor(@ColorRes resId : Int): Int  {
-            return instance!!.getColor(resId)
+        fun getColor(@ColorRes resId: Int): Int {
+            return self.getColor(resId)
         }
 
         /**
          * get res drawable
          */
-        fun getDrawable(@DrawableRes resId : Int): Drawable {
-            return instance!!.getDrawable(resId)
+        fun getDrawable(@DrawableRes resId: Int): Drawable {
+            return self.getDrawable(resId)
         }
 
         /**
          * get dimension by pixel
          */
-        fun getDimension(@DimenRes resId : Int): Float   {
-            return instance!!.resources.getDimension(resId)
+        fun getDimension(@DimenRes resId: Int): Float {
+            return self.resources.getDimension(resId)
         }
     }
 }

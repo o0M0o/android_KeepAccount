@@ -20,7 +20,8 @@ import wxm.KeepAccount.ui.base.Switcher.PageSwitcher
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PageIncomeEdit
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PagePayEdit
 import wxm.KeepAccount.ui.data.edit.base.IEdit
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.log.TagLog
 import java.util.*
 
 /**
@@ -86,11 +87,11 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
 
             mVPPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {
-                    Log.i(LOG_TAG, "in onPageScrollStateChanged, state=$state")
+                    TagLog.i("in onPageScrollStateChanged, state=$state")
                 }
 
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                    Log.i(LOG_TAG, "in onPageScrolled, position=$position, " +
+                    TagLog.i("in onPageScrolled, position=$position, " +
                             "positionOffset=$positionOffset, positionOffsetPixels=$positionOffsetPixels")
                     if(0 == positionOffsetPixels)   {
                         when(position) {
@@ -101,7 +102,7 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
                 }
 
                 override fun onPageSelected(position: Int) {
-                    Log.i(LOG_TAG, "in onPageSelected, state=$position")
+                    TagLog.i( "in onPageSelected, state=$position")
                 }
             })
         }

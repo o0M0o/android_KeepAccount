@@ -1,6 +1,6 @@
 package wxm.KeepAccount.ui.data.edit.base
 
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 
 /**
  * @author      WangXM

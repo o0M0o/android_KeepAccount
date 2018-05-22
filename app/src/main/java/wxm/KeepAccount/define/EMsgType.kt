@@ -18,12 +18,7 @@ enum class EMsgType(val type: String, val id: Int) {
          * @return      EMsgType or null
          */
         fun getEMsgType(id: Int): EMsgType? {
-            for (et in EMsgType.values()) {
-                if (et.id == id)
-                    return et
-            }
-
-            return null
+            return EMsgType.values().find { it.id == id }
         }
     }
 }

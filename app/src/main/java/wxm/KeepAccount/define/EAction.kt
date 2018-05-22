@@ -22,8 +22,7 @@ enum class EAction(val actName: String, bm_id: Int) {
      * get icon
      * @return      icon
      */
-    val icon: Bitmap = BitmapFactory.decodeResource(
-            ContextUtil.instance!!.resources, bm_id)
+    val icon: Bitmap = BitmapFactory.decodeResource(ContextUtil.getResources(), bm_id)
 
     companion object {
         /**

@@ -8,7 +8,7 @@ import java.math.BigDecimal
 import java.sql.Timestamp
 import java.util.Locale
 
-import wxm.androidutil.DBHelper.IDBRow
+import wxm.androidutil.dbUtil.IDBRow
 
 /**
  * pay record

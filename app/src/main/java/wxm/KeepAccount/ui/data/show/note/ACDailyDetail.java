@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.androidutil.Switcher.ACSwitcherActivity;
+import wxm.androidutil.switcher.ACSwitcherActivity;
 import wxm.androidutil.util.UtilFun;
 
 /**
@@ -29,7 +29,7 @@ public class ACDailyDetail extends ACSwitcherActivity<FrgDailyDetail> {
         assert null != it;
         String hot_day = it.getStringExtra(K_HOTDAY);
         if (UtilFun.StringIsNullOrEmpty(hot_day)) {
-            Log.e(LOG_TAG, "调用intent缺少'K_HOTDAY'参数");
+            TagLog.e(LOG_TAG, "调用intent缺少'K_HOTDAY'参数");
             return;
         }
 

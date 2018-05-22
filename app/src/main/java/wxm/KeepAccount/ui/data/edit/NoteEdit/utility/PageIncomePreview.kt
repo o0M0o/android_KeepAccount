@@ -8,7 +8,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.define.IncomeNoteItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 
 /**
  * preview fragment for income

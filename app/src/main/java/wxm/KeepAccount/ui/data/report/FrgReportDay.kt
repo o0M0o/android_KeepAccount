@@ -17,9 +17,9 @@ import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.Dialog.DlgOKOrNOBase
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
-import wxm.androidutil.FrgUtility.FrgSupportSwitcher
+import wxm.androidutil.dialog.DlgOKOrNOBase
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.frgUtil.FrgSupportSwitcher
 import wxm.androidutil.util.UtilFun
 import java.math.BigDecimal
 import java.util.*

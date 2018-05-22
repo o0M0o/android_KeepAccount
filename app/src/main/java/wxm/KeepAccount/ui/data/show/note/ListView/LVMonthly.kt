@@ -19,8 +19,8 @@ import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.ViewHolder.ViewDataHolder
-import wxm.androidutil.ViewHolder.ViewHolder
+import wxm.androidutil.viewUtil.ViewDataHolder
+import wxm.androidutil.viewUtil.ViewHolder
 import wxm.androidutil.util.UtilFun
 import wxm.uilib.IconButton.IconButton
 import java.util.*

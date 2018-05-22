@@ -8,6 +8,7 @@ import android.util.Log
 import wxm.KeepAccount.define.EMsgType
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.UsrItem
+import wxm.androidutil.log.TagLog
 
 
 /**
@@ -16,7 +17,7 @@ import wxm.KeepAccount.define.UsrItem
  */
 class GlobalMsgHandler : Handler() {
     override fun handleMessage(msg: Message) {
-        Log.i(LOG_TAG, "receive msg : " + msg.toString())
+        TagLog.i("receive msg : " + msg.toString())
         val et = EMsgType.getEMsgType(msg.what) ?: return
 
         when (et) {
@@ -58,14 +59,12 @@ class GlobalMsgHandler : Handler() {
             }
 
             else -> {
-                Log.e(LOG_TAG, "can not handle msg : " + msg.toString())
+                TagLog.e("can not handle msg : " + msg.toString())
             }
         }
     }
 
     companion object {
-        private val LOG_TAG = ::GlobalMsgHandler.javaClass.simpleName
-
         /**
          * reply msg
          * @param mh        receive handler

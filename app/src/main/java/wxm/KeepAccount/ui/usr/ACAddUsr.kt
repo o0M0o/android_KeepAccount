@@ -3,7 +3,7 @@ package wxm.KeepAccount.ui.usr
 import android.content.res.Configuration
 import android.os.Bundle
 
-import wxm.androidutil.Switcher.ACSwitcherActivity
+import wxm.androidutil.switcher.ACSwitcherActivity
 
 /**
  * add usr

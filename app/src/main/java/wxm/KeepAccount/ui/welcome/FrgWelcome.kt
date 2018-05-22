@@ -17,9 +17,9 @@ import java.util.HashMap
 
 import kotterknife.bindView
 import wxm.KeepAccount.db.DBDataChangeEvent
-import wxm.androidutil.Dialog.DlgOKOrNOBase
-import wxm.androidutil.DragGrid.DragGridView
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import wxm.androidutil.dialog.DlgOKOrNOBase
+import wxm.androidutil.dragGrid.DragGridView
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.dialog.DlgSelectChannel

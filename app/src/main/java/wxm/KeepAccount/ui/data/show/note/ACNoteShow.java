@@ -9,8 +9,8 @@ import android.view.MenuItem;
 
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.define.GlobalDef;
-import wxm.androidutil.FrgUtility.FrgSupportSwitcher;
-import wxm.androidutil.Switcher.ACSwitcherActivity;
+import wxm.androidutil.frgUtil.FrgSupportSwitcher;
+import wxm.androidutil.switcher.ACSwitcherActivity;
 
 /**
  * for Note show

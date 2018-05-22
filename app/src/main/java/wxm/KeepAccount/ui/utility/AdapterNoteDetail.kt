@@ -14,7 +14,7 @@ import wxm.KeepAccount.define.PayNoteItem
 import wxm.KeepAccount.ui.base.Helper.ViewHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.utility.ContextUtil
-import wxm.androidutil.ViewHolder.ViewHolder
+import wxm.androidutil.viewUtil.ViewHolder
 import wxm.androidutil.util.UtilFun
 import wxm.uilib.SwipeLayout.SwipeLayout
 import java.util.*

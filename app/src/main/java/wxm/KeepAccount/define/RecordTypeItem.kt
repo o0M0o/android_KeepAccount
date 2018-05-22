@@ -7,7 +7,7 @@ import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 
-import wxm.androidutil.DBHelper.IDBRow
+import wxm.androidutil.dbUtil.IDBRow
 
 /**
  * record type

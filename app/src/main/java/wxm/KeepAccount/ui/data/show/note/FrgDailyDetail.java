@@ -28,7 +28,7 @@ import java.util.Locale;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.OnClick;
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv;
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv;
 import wxm.androidutil.util.UtilFun;
 import wxm.KeepAccount.R;
 import wxm.KeepAccount.db.DBDataChangeEvent;

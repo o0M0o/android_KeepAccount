@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.utility.ContextUtil
-import wxm.androidutil.ViewHolder.ViewHolder
+import wxm.androidutil.viewUtil.ViewHolder
 import wxm.uilib.FrgCalendar.CalendarItem.BaseItemAdapter
 
 /**

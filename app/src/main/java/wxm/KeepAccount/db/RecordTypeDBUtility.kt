@@ -4,7 +4,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao
 
 import org.greenrobot.eventbus.EventBus
 
-import wxm.androidutil.DBHelper.DBUtilityBase
+import wxm.androidutil.dbUtil.DBUtilityBase
 import wxm.KeepAccount.define.RecordTypeItem
 import wxm.KeepAccount.utility.ContextUtil
 

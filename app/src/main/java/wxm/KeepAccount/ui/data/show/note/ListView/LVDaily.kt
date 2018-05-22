@@ -24,9 +24,9 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.Dialog.DlgOKOrNOBase
-import wxm.androidutil.ViewHolder.ViewDataHolder
-import wxm.androidutil.ViewHolder.ViewHolder
+import wxm.androidutil.dialog.DlgOKOrNOBase
+import wxm.androidutil.viewUtil.ViewDataHolder
+import wxm.androidutil.viewUtil.ViewHolder
 import wxm.uilib.IconButton.IconButton
 import java.util.ArrayList
 import java.util.Calendar

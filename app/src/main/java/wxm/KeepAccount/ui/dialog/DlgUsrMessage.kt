@@ -1,37 +1,33 @@
 package wxm.KeepAccount.ui.dialog
 
-import android.content.pm.PackageManager
-import android.support.design.widget.TextInputEditText
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
-import android.view.View
-
-import org.json.JSONException
-import org.json.JSONObject
-
-import java.io.IOException
-
-import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.Dialog.DlgOKOrNOBase
-import wxm.androidutil.util.PackageUtil
-import wxm.androidutil.util.SIMCardUtil
-import wxm.androidutil.util.UtilFun
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import wxm.KeepAccount.R
-import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.utility.ContextUtil
-
 import android.Manifest.permission.READ_PHONE_STATE
 import android.Manifest.permission.READ_SMS
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
+import android.view.View
 import android.widget.ProgressBar
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import org.json.JSONException
+import org.json.JSONObject
+import wxm.KeepAccount.R
+import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.ToolUtil
+import wxm.androidutil.dialog.DlgOKOrNOBase
+import wxm.androidutil.util.PackageUtil
+import wxm.androidutil.util.SIMCardUtil
+import wxm.androidutil.util.UtilFun
+import java.io.IOException
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
 
@@ -78,17 +74,15 @@ class DlgUsrMessage : DlgOKOrNOBase() {
             return false
         }
 
-        var usr: String? = null
-        val ct = ContextUtil.instance
-        if (null != ct) {
-            if (ContextCompat.checkSelfPermission(ct, READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(ct, READ_SMS) == PackageManager.PERMISSION_GRANTED) {
-                val si = SIMCardUtil(context)
-                usr = si.nativePhoneNumber
-            }
+        val usr: String = ContextUtil.self.let {
+            if (ContextCompat.checkSelfPermission(it, READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(it, READ_SMS) == PackageManager.PERMISSION_GRANTED) {
+                SIMCardUtil(context).nativePhoneNumber
+            } else "null"
         }
 
-        val ret = sendMsgByHttpPost(if (UtilFun.StringIsNullOrEmpty(usr)) "null" else usr!!, msg)
-        if(!(ret[0] as Boolean)) {
+        val ret = sendMsgByHttpPost(usr, msg)
+        if (!(ret[0] as Boolean)) {
             AlertDialog.Builder(context)
                     .setTitle("警告")
                     .setMessage("消息发送失败!!\n" + "原因 : " + (ret[1] as String))
@@ -113,43 +107,43 @@ class DlgUsrMessage : DlgOKOrNOBase() {
         showProgress(true)
         val wrHome = WeakReference(activity as Activity?)
         return ToolUtil.callInBackground({
-                    var sendResult: Boolean
-                    var sendExplain: String
-                    try {
-                        val param = JSONObject()
-                        param.put(mSZColUsr, usr)
-                        param.put(mSZColMsg, msg)
-                        param.put(mSZColAppName,
-                                mSZColValAppName + "-"
-                                        + PackageUtil.getVerName(context, GlobalDef.PACKAGE_NAME))
+            var sendResult: Boolean
+            var sendExplain: String
+            try {
+                val param = JSONObject()
+                param.put(mSZColUsr, usr)
+                param.put(mSZColMsg, msg)
+                param.put(mSZColAppName,
+                        mSZColValAppName + "-"
+                                + PackageUtil.getVerName(context, GlobalDef.PACKAGE_NAME))
 
-                        val body = RequestBody.create(JSON, param.toString())
-                        runInUIThread(wrHome, Runnable { mPDBar.progress = 50 })
+                val body = RequestBody.create(JSON, param.toString())
+                runInUIThread(wrHome, Runnable { mPDBar.progress = 50 })
 
-                        val request = Request.Builder().url(mSZUrlPost).post(body).build()
-                        OkHttpClient().newCall(request).execute()
-                        sendResult = true
-                        sendExplain = "success"
-                    } catch (e: JSONException) {
-                        sendResult = false
-                        sendExplain = "JSONException"
-                        e.printStackTrace()
-                    } catch (e: IOException) {
-                        sendResult = false
-                        sendExplain = "IOException"
-                        e.printStackTrace()
-                    } finally {
-                        runInUIThread(wrHome, Runnable { showProgress(false) })
-                    }
+                val request = Request.Builder().url(mSZUrlPost).post(body).build()
+                OkHttpClient().newCall(request).execute()
+                sendResult = true
+                sendExplain = "success"
+            } catch (e: JSONException) {
+                sendResult = false
+                sendExplain = "JSONException"
+                e.printStackTrace()
+            } catch (e: IOException) {
+                sendResult = false
+                sendExplain = "IOException"
+                e.printStackTrace()
+            } finally {
+                runInUIThread(wrHome, Runnable { showProgress(false) })
+            }
 
-                    arrayOf(sendResult, sendExplain)
-                }, arrayOf(false, "time out"), TimeUnit.SECONDS, 6)
+            arrayOf(sendResult, sendExplain)
+        }, arrayOf(false, "time out"), TimeUnit.SECONDS, 6)
     }
 
 
-    private fun runInUIThread(wrActivity : WeakReference<Activity?>, uiRun : Runnable)   {
+    private fun runInUIThread(wrActivity: WeakReference<Activity?>, uiRun: Runnable) {
         wrActivity.get()?.let {
-            if(!(it.isDestroyed || it.isFinishing)) {
+            if (!(it.isDestroyed || it.isFinishing)) {
                 it.runOnUiThread(uiRun)
             }
         }

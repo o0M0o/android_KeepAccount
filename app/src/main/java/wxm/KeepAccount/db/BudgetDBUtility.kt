@@ -1,19 +1,15 @@
 package wxm.KeepAccount.db
 
-import android.util.Log
-
 import com.j256.ormlite.dao.RuntimeExceptionDao
 import org.greenrobot.eventbus.EventBus
-
-import java.sql.SQLException
-import java.util.HashMap
-
-import wxm.androidutil.DBHelper.DBUtilityBase
-import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.BudgetItem
 import wxm.KeepAccount.define.PayNoteItem
-import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.dbUtil.DBUtilityBase
+import wxm.androidutil.log.TagLog
+import wxm.androidutil.util.UtilFun
+import java.sql.SQLException
+import java.util.*
 
 /**
  * Budget DB utility
@@ -59,16 +55,15 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
         if (UtilFun.StringIsNullOrEmpty(bn))
             return null
 
-        val cur_usr = ContextUtil.curUsr ?: return null
+        val curUsr = ContextUtil.curUsr ?: return null
 
-        var ret: List<BudgetItem>?
-        try {
-            ret = dbHelper.queryBuilder()
-                    .where().eq(BudgetItem.FIELD_USR, cur_usr.id)
+        val ret = try {
+            dbHelper.queryBuilder()
+                    .where().eq(BudgetItem.FIELD_USR, curUsr.id)
                     .and().eq(BudgetItem.FIELD_NAME, bn).query()
         } catch (e: SQLException) {
-            Log.e(LOG_TAG, UtilFun.ExceptionToString(e))
-            ret = null
+            TagLog.e("", e)
+            null
         }
 
         return if (UtilFun.ListIsNullOrEmpty(ret)) null else ret!![0]
@@ -82,9 +77,9 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
      */
     override fun createData(bi: BudgetItem): Boolean {
         if (null == bi.usr || -1 == bi.usr!!.id) {
-            val cur_usr = ContextUtil.curUsr ?: return false
+            val curUsr = ContextUtil.curUsr ?: return false
 
-            bi.usr = cur_usr
+            bi.usr = curUsr
         }
 
         return super.createData(bi)
@@ -96,40 +91,28 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
      * @return          removed budget data count
      */
     override fun removeDatas(lsBiId: List<Int>): Int {
-        if (!UtilFun.ListIsNullOrEmpty(lsBiId)) {
-            for (id in lsBiId) {
-                val ls_pay = ContextUtil.dbHelper.payDataREDao
-                        .queryForEq(PayNoteItem.FIELD_BUDGET, id)
-                if (!UtilFun.ListIsNullOrEmpty(ls_pay)) {
-                    for (i in ls_pay) {
-                        i.budget = null
-                        ContextUtil.dbHelper.payDataREDao.update(i)
+        lsBiId.forEach {
+            ContextUtil.dbHelper.payDataREDao.queryForEq(PayNoteItem.FIELD_BUDGET, it)
+                .apply {
+                    forEach {
+                        it.budget = null
+                        ContextUtil.dbHelper.payDataREDao.update(it)
                     }
                 }
-            }
-
-            return super.removeDatas(lsBiId)
         }
 
-        return 0
+        return super.removeDatas(lsBiId)
     }
 
     override fun onDataModify(md: List<Int>) {
-        //NoteDataHelper.reloadData()
         EventBus.getDefault().post(DBDataChangeEvent())
     }
 
     override fun onDataCreate(cd: List<Int>) {
-        //NoteDataHelper.reloadData()
         EventBus.getDefault().post(DBDataChangeEvent())
     }
 
     override fun onDataRemove(dd: List<Int>) {
-        //NoteDataHelper.reloadData()
         EventBus.getDefault().post(DBDataChangeEvent())
-    }
-
-    companion object {
-        private val LOG_TAG = ::BudgetDBUtility.javaClass.simpleName
     }
 }

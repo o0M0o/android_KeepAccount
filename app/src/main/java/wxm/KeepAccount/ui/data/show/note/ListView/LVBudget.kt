@@ -22,7 +22,7 @@ import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.ViewHolder.ViewHolder
+import wxm.androidutil.viewUtil.ViewHolder
 import wxm.androidutil.util.UtilFun
 import wxm.uilib.IconButton.IconButton
 import java.util.*
@@ -130,10 +130,7 @@ class LVBudget : LVBase() {
 
     override fun loadUI(bundle: Bundle?) {
         refreshAttachLayout()
-
-        val mSNAdapter = MainAdapter(ContextUtil.instance!!, LinkedList<MainAdapterItem>(mMainPara))
-        mLVShow.adapter = mSNAdapter
-        mSNAdapter.notifyDataSetChanged()
+        mLVShow.adapter = MainAdapter(ContextUtil.self, LinkedList<MainAdapterItem>(mMainPara))
     }
 
     override fun initUI(bundle: Bundle?) {

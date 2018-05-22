@@ -24,7 +24,7 @@ import wxm.KeepAccount.ui.data.report.base.EventSelectDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 import java.math.BigDecimal
 import java.util.*
 

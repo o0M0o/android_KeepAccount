@@ -15,6 +15,7 @@ import wxm.KeepAccount.define.EMsgType
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.help.ACHelp
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.log.TagLog
 
 /**
  * A login screen that offers login via email/password.
@@ -93,31 +94,25 @@ class ACLogin : AppCompatActivity() {
         var bResetView = false
         when (resultCode) {
             GlobalDef.INTRET_USR_ADD -> {
-                Log.i(LOG_TAG, "从'添加新帐户'页面返回")
+                TagLog.i("从'添加新帐户'页面返回")
                 bResetView = true
             }
 
-            GlobalDef.INTRET_GIVEUP -> Log.i(LOG_TAG, "从'添加新帐户'页面返回(放弃添加新帐户)")
+            GlobalDef.INTRET_GIVEUP -> TagLog.i("从'添加新帐户'页面返回(放弃添加新帐户)")
 
             GlobalDef.INTRET_USR_LOGOUT -> {
-                Log.i(LOG_TAG, "注销帐户")
+                TagLog.i("注销帐户")
                 bResetView = true
 
-                val m = Message.obtain(ContextUtil.msgHandler,
-                        EMsgType.USR_LOGOUT.id)
-                m.sendToTarget()
+                Message.obtain(ContextUtil.msgHandler, EMsgType.USR_LOGOUT.id).sendToTarget()
             }
 
-            else -> Log.d(LOG_TAG, String.format("不处理的resultCode(%d)!", resultCode))
+            else -> TagLog.d(String.format("不处理的resultCode(%d)!", resultCode))
         }
 
         if (bResetView) {
             mFGLogin.reInitUI()
         }
-    }
-
-    companion object {
-        private val LOG_TAG = ::ACLogin.javaClass.simpleName
     }
 }
 

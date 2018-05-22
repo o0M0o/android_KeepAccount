@@ -4,7 +4,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao
 
 import org.greenrobot.eventbus.EventBus
 
-import wxm.androidutil.DBHelper.DBUtilityBase
+import wxm.androidutil.dbUtil.DBUtilityBase
 import wxm.androidutil.util.MD5Util
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.GlobalDef
@@ -17,8 +17,6 @@ import wxm.KeepAccount.utility.ContextUtil
  * Created by WangXM on 2016/8/9.
  */
 class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
-    private val TAG = "UsrDBUtility"
-
     override fun getDBHelper(): RuntimeExceptionDao<UsrItem, Int> {
         return ContextUtil.dbHelper.usrItemREDao
     }

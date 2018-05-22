@@ -17,8 +17,8 @@ import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.utility.ContextUtil
-import wxm.androidutil.Dialog.DlgOKOrNOBase
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import wxm.androidutil.dialog.DlgOKOrNOBase
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import java.math.BigDecimal
 

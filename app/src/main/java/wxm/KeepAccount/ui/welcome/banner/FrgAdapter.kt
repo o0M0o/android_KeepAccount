@@ -29,13 +29,13 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.ui.utility.NoteShowInfo
 import wxm.KeepAccount.utility.PreferencesUtil
+import wxm.androidutil.log.TagLog
 
 /**
  * for frg
  * Created by wangxm on 16/12/15.
  */
 class FrgAdapter(private val mContext: Context, private val mVGGroup: ViewGroup?) : LBaseAdapter<FrgPara> {
-
     init {
         initView()
     }
@@ -58,7 +58,7 @@ class FrgAdapter(private val mContext: Context, private val mVGGroup: ViewGroup?
     }
 
     private fun initView() {
-        Log.d(LOG_TAG, "initView")
+        TagLog.d("initView")
 
         var v = LayoutInflater.from(mContext).inflate(R.layout.banner_month, mVGGroup)
         fillMonth(v)

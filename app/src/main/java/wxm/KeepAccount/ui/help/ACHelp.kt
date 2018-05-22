@@ -2,7 +2,7 @@ package wxm.KeepAccount.ui.help
 
 import android.os.Bundle
 
-import wxm.androidutil.Switcher.ACSwitcherActivity
+import wxm.androidutil.switcher.ACSwitcherActivity
 
 
 /**

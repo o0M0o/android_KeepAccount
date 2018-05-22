@@ -11,7 +11,7 @@ import android.widget.SimpleAdapter
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.utility.ContextUtil
-import wxm.androidutil.Dialog.DlgOKOrNOBase
+import wxm.androidutil.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
 import java.util.*
 

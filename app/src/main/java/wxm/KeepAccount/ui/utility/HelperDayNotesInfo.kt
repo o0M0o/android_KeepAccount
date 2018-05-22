@@ -1,16 +1,13 @@
 package wxm.KeepAccount.ui.utility
 
-import android.os.Build
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 
-import java.util.Objects
-
 import wxm.KeepAccount.R
 import wxm.KeepAccount.utility.ContextUtil
-import wxm.androidutil.ViewHolder.ViewHolder
+import wxm.androidutil.viewUtil.ViewHolder
 
 /**
  * day data helper
@@ -78,7 +75,7 @@ object HelperDayNotesInfo {
             val iv = vh.getView<ImageView>(if (pay < income) R.id.iv_pay_line else R.id.iv_income_line)
             val para = iv.layoutParams
             val ratio = (if (pay > income) income else pay) / if (pay < income) income else pay
-            //Log.v(LOG_TAG, "ratio : " + ratio + ", width : " + org_para.width);
+            //TagLog.v(LOG_TAG, "ratio : " + ratio + ", width : " + org_para.width);
 
             para.width = (DIM_FULL_WIDTH * ratio).toInt()
             iv.layoutParams = para

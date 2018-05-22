@@ -26,8 +26,8 @@ import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.Dialog.DlgOKOrNOBase
-import wxm.androidutil.FrgUtility.FrgSupportBaseAdv
+import wxm.androidutil.dialog.DlgOKOrNOBase
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import java.lang.String.format
 import java.math.BigDecimal
