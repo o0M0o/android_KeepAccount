@@ -12,7 +12,7 @@ import java.util.ArrayList
 import java.util.HashMap
 
 import wxm.KeepAccount.define.EAction
-import wxm.androidutil.dialog.DlgOKOrNOBase
+import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.dialog.base.DlgResource
@@ -45,7 +45,7 @@ class DlgSelectChannel : DlgOKOrNOBase() {
         val gv: GridView = findDlgChildView(R.id.gv_channels)!!
         gv.setOnItemClickListener { parent, view, position, _ ->
             val hmd = UtilFun.cast<HashMap<String, Any>>(parent.adapter.getItem(position))
-            val act = UtilFun.cast<String>(hmd[DGVButtonAdapter.HKEY_ACT_NAME])
+            val act = UtilFun.cast<String>(hmd[DGVButtonAdapter.KEY_ACT_NAME])
 
             val hot = mLSHotChannel.contains(act)
             if (hot) {
@@ -60,12 +60,12 @@ class DlgSelectChannel : DlgOKOrNOBase() {
         val lsData = ArrayList<HashMap<String, Any>>()
         for (ea in EAction.values()) {
             val hm = HashMap<String, Any>()
-            hm[DGVButtonAdapter.HKEY_ACT_NAME] = ea.actName
+            hm[DGVButtonAdapter.KEY_ACT_NAME] = ea.actName
 
             lsData.add(hm)
         }
 
-        val ga = GVChannelAdapter(activity, lsData, arrayOf(DGVButtonAdapter.HKEY_ACT_NAME),
+        val ga = GVChannelAdapter(activity, lsData, arrayOf(DGVButtonAdapter.KEY_ACT_NAME),
                         intArrayOf(R.id.tv_name))
         gv.adapter = ga
         ga.notifyDataSetChanged()
@@ -92,7 +92,7 @@ class DlgSelectChannel : DlgOKOrNOBase() {
             val v = super.getView(position, view, arg2)
             if (null != v) {
                 val hmd = UtilFun.cast<HashMap<String, Any>>(getItem(position))
-                val hv = UtilFun.cast<String>(hmd[DGVButtonAdapter.HKEY_ACT_NAME])
+                val hv = UtilFun.cast<String>(hmd[DGVButtonAdapter.KEY_ACT_NAME])
 
                 v.background = if (mLSHotChannel.contains(hv))
                     DlgResource.mDAChannelSel

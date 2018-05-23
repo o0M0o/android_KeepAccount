@@ -17,11 +17,11 @@ import wxm.KeepAccount.ui.welcome.banner.FrgAdapter
 import wxm.KeepAccount.ui.welcome.banner.FrgPara
 import wxm.KeepAccount.utility.DGVButtonAdapter
 import wxm.KeepAccount.utility.PreferencesUtil
-import wxm.androidutil.dialog.DlgOKOrNOBase
-import wxm.androidutil.dragGrid.DragGridView
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.ui.dialog.DlgOKOrNOBase
+import wxm.androidutil.ui.dragGrid.DragGridView
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
-import wxm.androidutil.viewUtil.EventHelper
+import wxm.androidutil.ui.view.EventHelper
 import java.util.*
 
 /**
@@ -68,7 +68,7 @@ class FrgWelcome : FrgSupportBaseAdv() {
     override fun loadUI(savedInstanceState: Bundle?) {
         mLSData.clear()
         mLSData.addAll(PreferencesUtil.loadHotAction()
-                .map { HashMap<String, Any>().apply { put(DGVButtonAdapter.HKEY_ACT_NAME, it) } })
+                .map { HashMap<String, Any>().apply { put(DGVButtonAdapter.KEY_ACT_NAME, it) } })
 
         mDGVActions.adapter = DGVButtonAdapter(activity, mLSData)
         mDGVActions.setOnChangeListener { from, to ->
@@ -86,7 +86,7 @@ class FrgWelcome : FrgSupportBaseAdv() {
 
             // save position to preferences
             PreferencesUtil.saveHotAction(ArrayList<String>().apply {
-                addAll(mLSData.map { it[DGVButtonAdapter.HKEY_ACT_NAME] as String })
+                addAll(mLSData.map { it[DGVButtonAdapter.KEY_ACT_NAME] as String })
             })
         }
     }
@@ -109,7 +109,7 @@ class FrgWelcome : FrgSupportBaseAdv() {
                         mLSData.clear()
                         for (i in PreferencesUtil.loadHotAction()) {
                             val ihm = HashMap<String, Any>()
-                            ihm[DGVButtonAdapter.HKEY_ACT_NAME] = i
+                            ihm[DGVButtonAdapter.KEY_ACT_NAME] = i
                             mLSData.add(ihm)
                         }
 

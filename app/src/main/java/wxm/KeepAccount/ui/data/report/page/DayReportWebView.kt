@@ -17,7 +17,7 @@ import wxm.KeepAccount.ui.data.report.ACReport
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.frgUtil.FrgSupportWebView
+import wxm.androidutil.ui.frg.FrgSupportWebView
 import wxm.androidutil.log.TagLog
 import wxm.androidutil.util.UtilFun
 

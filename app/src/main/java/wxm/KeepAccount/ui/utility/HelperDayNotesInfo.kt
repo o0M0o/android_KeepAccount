@@ -8,7 +8,7 @@ import android.widget.TextView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
-import wxm.androidutil.viewUtil.ViewHolder
+import wxm.androidutil.ui.view.ViewHolder
 
 /**
  * day data helper

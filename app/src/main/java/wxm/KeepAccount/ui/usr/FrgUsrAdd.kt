@@ -12,7 +12,7 @@ import android.widget.Toast
 
 import kotterknife.bindView
 import wxm.KeepAccount.define.EMsgType
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.androidutil.util.WRMsgHandler
 import wxm.KeepAccount.R
@@ -21,7 +21,7 @@ import wxm.KeepAccount.define.UsrItem
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.log.TagLog
-import wxm.androidutil.viewUtil.EventHelper
+import wxm.androidutil.ui.view.EventHelper
 
 /**
  * add user

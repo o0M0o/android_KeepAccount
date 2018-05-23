@@ -136,10 +136,12 @@ class NoteDataHelper private constructor() {
                 mHMMonthInfo[curMonth] = vData
             }
 
-            vData.payCount += it.value.payCount
-            vData.incomeCount += it.value.incomeCount
-            vData.payAmount = it.value.payAmount.add(vData.payAmount)
-            vData.incomeAmount = it.value.incomeAmount.add(vData.incomeAmount)
+            vData.apply {
+                payCount += it.value.payCount
+                incomeCount += it.value.incomeCount
+                payAmount = it.value.payAmount.add(vData.payAmount)
+                incomeAmount = it.value.incomeAmount.add(vData.incomeAmount)
+            }
         }
     }
 
@@ -156,10 +158,12 @@ class NoteDataHelper private constructor() {
                 mHMYearInfo[curYear] = vData
             }
 
-            vData.payCount += it.value.payCount
-            vData.incomeCount += it.value.incomeCount
-            vData.payAmount = it.value.payAmount.add(vData.payAmount)
-            vData.incomeAmount = it.value.incomeAmount.add(vData.incomeAmount)
+            vData.apply {
+                payCount += it.value.payCount
+                incomeCount += it.value.incomeCount
+                payAmount = it.value.payAmount.add(vData.payAmount)
+                incomeAmount = it.value.incomeAmount.add(vData.incomeAmount)
+            }
         }
     }
 

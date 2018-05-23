@@ -9,7 +9,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.define.*
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.*
 import wxm.KeepAccount.ui.data.edit.base.*
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 
 /**
  * @author      WangXM

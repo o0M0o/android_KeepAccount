@@ -21,65 +21,16 @@ import java.util.*
  * Created by WangXM on 2016/8/5.
  */
 class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-    // the DAO object we use to access the SimpleData table
-    private var mUsrNoteRDao: RuntimeExceptionDao<UsrItem, Int>? = null
-    private var mRTNoteRDao: RuntimeExceptionDao<RecordTypeItem, Int>? = null
-    private var mBudgetNoteRDao: RuntimeExceptionDao<BudgetItem, Int>? = null
-    private var mPayNoteRDao: RuntimeExceptionDao<PayNoteItem, Int>? = null
-    private var mIncomeNoteRDao: RuntimeExceptionDao<IncomeNoteItem, Int>? = null
-    private var mRemindRDao: RuntimeExceptionDao<RemindItem, Int>? = null
-
     /**
      * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our SimpleData class. It will
      * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
      */
-    val usrItemREDao: RuntimeExceptionDao<UsrItem, Int>
-        get() {
-            if (mUsrNoteRDao == null) {
-                mUsrNoteRDao = getRuntimeExceptionDao(UsrItem::class.java)
-            }
-            return mUsrNoteRDao!!
-        }
-
-    val rtItemREDao: RuntimeExceptionDao<RecordTypeItem, Int>
-        get() {
-            if (mRTNoteRDao == null) {
-                mRTNoteRDao = getRuntimeExceptionDao(RecordTypeItem::class.java)
-            }
-            return mRTNoteRDao!!
-        }
-
-    val budgetDataREDao: RuntimeExceptionDao<BudgetItem, Int>
-        get() {
-            if (mBudgetNoteRDao == null) {
-                mBudgetNoteRDao = getRuntimeExceptionDao(BudgetItem::class.java)
-            }
-            return mBudgetNoteRDao!!
-        }
-
-    val payDataREDao: RuntimeExceptionDao<PayNoteItem, Int>
-        get() {
-            if (mPayNoteRDao == null) {
-                mPayNoteRDao = getRuntimeExceptionDao(PayNoteItem::class.java)
-            }
-            return mPayNoteRDao!!
-        }
-
-    val incomeDataREDao: RuntimeExceptionDao<IncomeNoteItem, Int>
-        get() {
-            if (mIncomeNoteRDao == null) {
-                mIncomeNoteRDao = getRuntimeExceptionDao(IncomeNoteItem::class.java)
-            }
-            return mIncomeNoteRDao!!
-        }
-
-    val remindREDao: RuntimeExceptionDao<RemindItem, Int>
-        get() {
-            if (mRemindRDao == null) {
-                mRemindRDao = getRuntimeExceptionDao(RemindItem::class.java)
-            }
-            return mRemindRDao!!
-        }
+    val usrItemREDao: RuntimeExceptionDao<UsrItem, Int> = getRuntimeExceptionDao(UsrItem::class.java)
+    val rtItemREDao: RuntimeExceptionDao<RecordTypeItem, Int> = getRuntimeExceptionDao(RecordTypeItem::class.java)
+    val budgetDataREDao: RuntimeExceptionDao<BudgetItem, Int> = getRuntimeExceptionDao(BudgetItem::class.java)
+    val payDataREDao: RuntimeExceptionDao<PayNoteItem, Int> = getRuntimeExceptionDao(PayNoteItem::class.java)
+    val incomeDataREDao: RuntimeExceptionDao<IncomeNoteItem, Int> = getRuntimeExceptionDao(IncomeNoteItem::class.java)
+    val remindREDao: RuntimeExceptionDao<RemindItem, Int> = getRuntimeExceptionDao(RemindItem::class.java)
 
     /**
      * This is called when the database is first created. Usually you should call createTable statements here to create
@@ -121,19 +72,6 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
             throw RuntimeException(e)
         }
 
-    }
-
-    /**
-     * Close the database connections and clear any cached DAOs.
-     */
-    override fun close() {
-        super.close()
-        mUsrNoteRDao = null
-        mRTNoteRDao = null
-        mBudgetNoteRDao = null
-        mPayNoteRDao = null
-        mIncomeNoteRDao = null
-        mRemindRDao = null
     }
 
     private fun createAndInitTable() {

@@ -16,7 +16,7 @@ import java.util.Locale
 import kotterknife.bindView
 import wxm.KeepAccount.db.DBDataChangeEvent
 import wxm.KeepAccount.ui.data.show.calendar.base.SelectedDayEvent
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.INote

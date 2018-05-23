@@ -37,7 +37,7 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.PreferencesUtil
-import wxm.androidutil.viewUtil.EventHelper
+import wxm.androidutil.ui.view.EventHelper
 
 /**
  * 预算chart辅助类

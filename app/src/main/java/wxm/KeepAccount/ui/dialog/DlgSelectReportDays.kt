@@ -10,7 +10,7 @@ import kotterknife.bindView
 import java.util.Calendar
 import java.util.Locale
 
-import wxm.androidutil.dialog.DlgOKOrNOBase
+import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.KeepAccount.R
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase

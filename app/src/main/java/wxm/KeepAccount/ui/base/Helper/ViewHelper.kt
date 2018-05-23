@@ -1,7 +1,6 @@
 package wxm.KeepAccount.ui.base.Helper
 
 import android.annotation.TargetApi
-import android.content.res.Resources
 import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.annotation.IdRes

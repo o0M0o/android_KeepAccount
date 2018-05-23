@@ -23,7 +23,7 @@ import wxm.KeepAccount.ui.usr.ACAddUsr
 import wxm.KeepAccount.ui.welcome.ACWelcome
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import java.util.concurrent.TimeUnit
 
 /**

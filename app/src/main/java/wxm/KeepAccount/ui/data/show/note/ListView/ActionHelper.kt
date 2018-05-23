@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import wxm.KeepAccount.R
 import wxm.androidutil.app.AppBase
-import wxm.androidutil.viewUtil.EventHelper
+import wxm.androidutil.ui.view.EventHelper
 
 /**
  * helper for action layout

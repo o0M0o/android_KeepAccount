@@ -8,7 +8,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.define.PayNoteItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 
 /**
  * preview fragment for budget

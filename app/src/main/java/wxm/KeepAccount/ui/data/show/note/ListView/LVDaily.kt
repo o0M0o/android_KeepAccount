@@ -23,10 +23,10 @@ import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.dialog.DlgOKOrNOBase
-import wxm.androidutil.viewUtil.EventHelper
-import wxm.androidutil.viewUtil.ViewDataHolder
-import wxm.androidutil.viewUtil.ViewHolder
+import wxm.androidutil.ui.dialog.DlgOKOrNOBase
+import wxm.androidutil.ui.view.EventHelper
+import wxm.androidutil.ui.view.ViewDataHolder
+import wxm.androidutil.ui.view.ViewHolder
 import wxm.uilib.IconButton.IconButton
 import java.util.ArrayList
 import java.util.Calendar

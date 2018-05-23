@@ -6,11 +6,11 @@ import org.greenrobot.eventbus.EventBus
 
 import java.sql.SQLException
 
-import wxm.androidutil.dbUtil.DBUtilityBase
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.define.RemindItem
 import wxm.KeepAccount.define.UsrItem
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.db.DBUtilityBase
 
 /**
  * 提醒数据辅助类

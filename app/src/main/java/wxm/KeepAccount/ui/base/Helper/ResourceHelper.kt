@@ -1,11 +1,6 @@
 package wxm.KeepAccount.ui.base.Helper
 
-import android.content.Context
-import android.content.res.Resources
-import android.os.Build
-
 import wxm.KeepAccount.R
-import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
 
 /**

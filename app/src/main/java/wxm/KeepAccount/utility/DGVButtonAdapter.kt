@@ -27,15 +27,12 @@ class DGVButtonAdapter(private val mCTContext: Context, data: List<Map<String, *
      */
     val curAction: List<String>
         get() {
-            val retLs = ArrayList<String>()
-            val ic = count
-            for (i in 0 until ic) {
-                val hmd = UtilFun.cast<HashMap<String, Any>>(getItem(i))
-                val hv = UtilFun.cast<String>(hmd[HKEY_ACT_NAME])
-                retLs.add(hv)
+            return  ArrayList<String>().apply {
+                val ic = count
+                for (i in 0 until ic) {
+                    add(((getItem(i) as HashMap<String, Any>)[KEY_ACT_NAME] as String))
+                }
             }
-
-            return retLs
         }
 
     override fun getViewTypeCount(): Int {
@@ -51,23 +48,19 @@ class DGVButtonAdapter(private val mCTContext: Context, data: List<Map<String, *
         val v = super.getView(position, view, arg2)
         if (null != v) {
             val hmd = UtilFun.cast<HashMap<String, Any>>(getItem(position))
-            val hv = UtilFun.cast<String>(hmd[HKEY_ACT_NAME])
+            val hv = UtilFun.cast<String>(hmd[KEY_ACT_NAME])
 
-            val tv = UtilFun.cast<TextView>(v.findViewById(R.id.tv_name))
-            tv.text = hv
-
+            v.findViewById<TextView>(R.id.tv_name).text = hv
             if (mCTContext is View.OnClickListener) {
-                val ac_cl = UtilFun.cast<View.OnClickListener>(mCTContext)
-                //bt.setOnClickListener(ac_cl);
-                v.setOnClickListener(ac_cl)
+                v.setOnClickListener(mCTContext as View.OnClickListener)
             }
 
             // for image
-            val iv = UtilFun.cast<ImageView>(v.findViewById(R.id.iv_image))!!
-            val bm = EAction.getIcon(hv)
-            if (null != bm) {
-                iv.setImageBitmap(bm)
-                iv.scaleType = ImageView.ScaleType.CENTER_CROP
+            EAction.getIcon(hv)!!.let {
+                v.findViewById<ImageView>(R.id.iv_image)!!.apply {
+                    setImageBitmap(it)
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                }
             }
         }
 
@@ -75,6 +68,6 @@ class DGVButtonAdapter(private val mCTContext: Context, data: List<Map<String, *
     }
 
     companion object {
-        const val HKEY_ACT_NAME = "HKEY_ACT_NAME"
+        const val KEY_ACT_NAME = "KEY_ACT_NAME"
     }
 }

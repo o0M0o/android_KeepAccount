@@ -14,7 +14,7 @@ import wxm.KeepAccount.ui.setting.page.TFSettingMain
 import wxm.KeepAccount.ui.setting.page.TFSettingRemind
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.androidutil.switcher.ACSwitcherActivity
+import wxm.androidutil.ui.activity.ACSwitcherActivity
 
 /**
  * for app setting

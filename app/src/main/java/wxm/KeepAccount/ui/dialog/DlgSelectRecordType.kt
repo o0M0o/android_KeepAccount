@@ -15,8 +15,8 @@ import wxm.KeepAccount.ui.data.edit.RecordInfo.ACRecordInfoEdit
 import wxm.KeepAccount.ui.dialog.base.DlgResource
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
-import wxm.androidutil.dialog.DlgOKOrNOBase
-import wxm.androidutil.viewUtil.EventHelper
+import wxm.androidutil.ui.dialog.DlgOKOrNOBase
+import wxm.androidutil.ui.view.EventHelper
 import wxm.uilib.IconButton.IconButton
 import java.util.*
 import kotlin.collections.ArrayList

@@ -5,8 +5,8 @@ import android.os.Bundle
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.data.show.note.HelloChart.BudgetChart
 import wxm.KeepAccount.ui.data.show.note.ListView.LVBudget
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
-import wxm.androidutil.frgUtil.FrgSupportSwitcher
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
+import wxm.androidutil.ui.frg.FrgSupportSwitcher
 
 /**
  * for budget

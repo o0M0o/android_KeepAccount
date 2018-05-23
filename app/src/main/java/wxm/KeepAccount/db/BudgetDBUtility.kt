@@ -5,7 +5,7 @@ import org.greenrobot.eventbus.EventBus
 import wxm.KeepAccount.define.BudgetItem
 import wxm.KeepAccount.define.PayNoteItem
 import wxm.KeepAccount.utility.ContextUtil
-import wxm.androidutil.dbUtil.DBUtilityBase
+import wxm.androidutil.db.DBUtilityBase
 import wxm.androidutil.log.TagLog
 import wxm.androidutil.util.UtilFun
 import java.sql.SQLException

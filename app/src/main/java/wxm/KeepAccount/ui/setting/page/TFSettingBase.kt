@@ -1,6 +1,6 @@
 package wxm.KeepAccount.ui.setting.page
 
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 
 /**
  * for base setting

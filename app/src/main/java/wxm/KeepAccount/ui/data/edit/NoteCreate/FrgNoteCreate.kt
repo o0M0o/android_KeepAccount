@@ -20,7 +20,7 @@ import wxm.KeepAccount.ui.base.Switcher.PageSwitcher
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PageIncomeEdit
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PagePayEdit
 import wxm.KeepAccount.ui.data.edit.base.IEdit
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.log.TagLog
 import java.util.*
 

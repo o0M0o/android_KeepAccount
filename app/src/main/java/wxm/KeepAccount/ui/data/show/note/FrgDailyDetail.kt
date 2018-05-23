@@ -23,7 +23,7 @@ import java.util.LinkedList
 import java.util.Locale
 
 import kotterknife.bindView
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.DBDataChangeEvent
@@ -36,7 +36,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.EasyOperator
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.app.AppBase
-import wxm.androidutil.viewUtil.EventHelper
+import wxm.androidutil.ui.view.EventHelper
 
 
 /**

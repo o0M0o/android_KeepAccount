@@ -20,13 +20,14 @@ import okhttp3.RequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import wxm.KeepAccount.R
-import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
+import wxm.KeepAccount.utility.ToolUtil.callInBackground
 import wxm.androidutil.app.AppBase
-import wxm.androidutil.dialog.DlgOKOrNOBase
-import wxm.androidutil.util.PackageUtil
+import wxm.androidutil.ui.dialog.DlgAlert
+import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.SIMCardUtil
+import wxm.androidutil.util.ThreadUtil.runInUIThread
 import wxm.androidutil.util.UtilFun
 import java.io.IOException
 import java.lang.ref.WeakReference
@@ -84,17 +85,12 @@ class DlgUsrMessage : DlgOKOrNOBase() {
 
         val ret = sendMsgByHttpPost(usr, msg)
         if (!(ret[0] as Boolean)) {
-            AlertDialog.Builder(context)
-                    .setTitle("警告")
-                    .setMessage("消息发送失败!!\n" + "原因 : " + (ret[1] as String))
-                    .create().show()
+            DlgAlert.showAlert(context, "警告",
+                    "消息发送失败!!\n原因 : ${ret[1] as String}")
             return false
         }
 
-        AlertDialog.Builder(context)
-                .setTitle("信息")
-                .setMessage("消息发送成功!!")
-                .create().show()
+        DlgAlert.showAlert(context, "信息", "消息发送成功!!")
         return true
     }
 
@@ -107,22 +103,23 @@ class DlgUsrMessage : DlgOKOrNOBase() {
     private fun sendMsgByHttpPost(usr: String, msg: String): Array<Any> {
         showProgress(true)
         val wrHome = WeakReference(activity as Activity?)
-        return ToolUtil.callInBackground({
+        return callInBackground({
             var sendResult: Boolean
             var sendExplain: String
             try {
-                val param = JSONObject()
-                param.put(mSZColUsr, usr)
-                param.put(mSZColMsg, msg)
-                param.put(mSZColAppName,
-                        mSZColValAppName + "-"
-                                + PackageUtil.getVerName(context, GlobalDef.PACKAGE_NAME))
+                val body = JSONObject().apply {
+                    put(mSZColUsr, usr)
+                    put(mSZColMsg, msg)
+                    put(mSZColAppName, "$mSZColValAppName-${AppBase.getVerName()}")
+                }.let {
+                    RequestBody.create(JSON, it.toString())
+                }
 
-                val body = RequestBody.create(JSON, param.toString())
                 runInUIThread(wrHome, Runnable { mPDBar.progress = 50 })
 
-                val request = Request.Builder().url(mSZUrlPost).post(body).build()
-                OkHttpClient().newCall(request).execute()
+                Request.Builder().url(mSZUrlPost).post(body).build().let {
+                    OkHttpClient().newCall(it).execute()
+                }
                 sendResult = true
                 sendExplain = "success"
             } catch (e: JSONException) {
@@ -139,15 +136,6 @@ class DlgUsrMessage : DlgOKOrNOBase() {
 
             arrayOf(sendResult, sendExplain)
         }, arrayOf(false, "time out"), TimeUnit.SECONDS, 6)
-    }
-
-
-    private fun runInUIThread(wrActivity: WeakReference<Activity?>, uiRun: Runnable) {
-        wrActivity.get()?.let {
-            if (!(it.isDestroyed || it.isFinishing)) {
-                it.runOnUiThread(uiRun)
-            }
-        }
     }
 
     /**

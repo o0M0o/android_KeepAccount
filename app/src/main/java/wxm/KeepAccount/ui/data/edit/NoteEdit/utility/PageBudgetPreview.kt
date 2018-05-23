@@ -8,7 +8,7 @@ import wxm.KeepAccount.define.BudgetItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import java.util.*
 
 /**

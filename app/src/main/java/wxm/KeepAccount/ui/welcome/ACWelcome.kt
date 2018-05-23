@@ -21,7 +21,7 @@ import java.util.Calendar
 import java.util.Locale
 
 import wxm.KeepAccount.define.EAction
-import wxm.androidutil.dialog.DlgOKOrNOBase
+import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate

@@ -5,7 +5,7 @@ import android.os.Bundle
 
 import wxm.KeepAccount.define.GlobalDef
 import wxm.androidutil.log.TagLog
-import wxm.androidutil.switcher.ACSwitcherActivity
+import wxm.androidutil.ui.activity.ACSwitcherActivity
 import wxm.androidutil.util.UtilFun
 
 /**

@@ -18,10 +18,10 @@ import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.viewUtil.ViewDataHolder
-import wxm.androidutil.viewUtil.ViewHolder
+import wxm.androidutil.ui.view.ViewDataHolder
+import wxm.androidutil.ui.view.ViewHolder
 import wxm.androidutil.util.UtilFun
-import wxm.androidutil.viewUtil.EventHelper
+import wxm.androidutil.ui.view.EventHelper
 import wxm.uilib.IconButton.IconButton
 import java.util.*
 

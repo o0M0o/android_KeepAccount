@@ -1,20 +1,17 @@
 package wxm.KeepAccount.define
 
-import android.os.Parcel
-import android.os.Parcelable
 
 import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
-
-import wxm.androidutil.dbUtil.IDBRow
+import wxm.androidutil.db.IDBRow
 
 /**
  * record type
  * Created by WangXM on 2016/8/8.
  */
 @DatabaseTable(tableName = "tbRecordType")
-class RecordTypeItem :  IDBRow<Int> {
+class RecordTypeItem : IDBRow<Int> {
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     var _id: Int = -1
 

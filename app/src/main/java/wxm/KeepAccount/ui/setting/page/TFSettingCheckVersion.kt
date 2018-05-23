@@ -2,13 +2,13 @@ package wxm.KeepAccount.ui.setting.page
 
 import android.os.Bundle
 import android.widget.TextView
+import com.trello.rxlifecycle.RxLifecycle.bindView
 
 import java.util.Locale
 
 import kotterknife.bindView
-import wxm.androidutil.util.PackageUtil
 import wxm.KeepAccount.R
-import wxm.KeepAccount.define.GlobalDef
+import wxm.androidutil.app.AppBase
 
 /**
  * check version
@@ -27,13 +27,11 @@ class TFSettingCheckVersion : TFSettingBase() {
     }
 
     override fun initUI(bundle: Bundle?) {
-        var s = String.format(Locale.CHINA, "当前版本号 : %d",
-                PackageUtil.getVerCode(context, GlobalDef.PACKAGE_NAME))
-        mTVVerNumber.text = s
+        mTVVerNumber.text = String.format(Locale.CHINA, "当前版本号 : %d",
+                AppBase.getVerCode())
 
-        s = String.format(Locale.CHINA, "当前版本名 : %s",
-                PackageUtil.getVerName(context, GlobalDef.PACKAGE_NAME))
-        mTVVerName.text = s
+        mTVVerName.text = String.format(Locale.CHINA, "当前版本名 : %s",
+                AppBase.getVerName())
     }
 
     override fun updateSetting() {

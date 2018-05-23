@@ -7,18 +7,16 @@ import org.greenrobot.eventbus.EventBus
 
 import java.math.BigDecimal
 import java.util.ArrayList
-import java.util.HashMap
 import java.util.LinkedList
 
-import wxm.androidutil.dbUtil.DBUtilityBase
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.BudgetItem
 import wxm.KeepAccount.define.INote
 import wxm.KeepAccount.define.IncomeNoteItem
 import wxm.KeepAccount.define.PayNoteItem
-import wxm.KeepAccount.define.UsrItem
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.db.DBUtilityBase
 
 /**
  * 备忘本数据库工具类

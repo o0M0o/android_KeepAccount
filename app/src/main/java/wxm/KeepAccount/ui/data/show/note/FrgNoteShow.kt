@@ -17,8 +17,8 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowDaily
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowMonthly
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowYearly
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
-import wxm.androidutil.frgUtil.FrgSupportSwitcher
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
+import wxm.androidutil.ui.frg.FrgSupportSwitcher
 import wxm.androidutil.util.UtilFun
 
 

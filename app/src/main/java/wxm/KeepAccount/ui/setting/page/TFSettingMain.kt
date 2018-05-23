@@ -9,7 +9,8 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.setting.ACSetting
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.viewUtil.EventHelper
+import wxm.androidutil.ui.dialog.DlgAlert
+import wxm.androidutil.ui.view.EventHelper
 
 /**
  * main page for setting
@@ -47,19 +48,19 @@ class TFSettingMain : TFSettingBase() {
                             }
 
                             R.id.rl_reformat_data -> {
-                                val alertDialog = AlertDialog.Builder(context)
-                                        .setTitle("清除所有数据!")
-                                        .setMessage("此操作不能恢复，是否继续操作!")
-                                        .setPositiveButton("是") { _, _ ->
-                                            val mADDlg = AlertDialog.Builder(this.activity)
-                                                    .setTitle("提示")
-                                                    .setMessage("请等待数据清理完毕...").create()
-                                            ToolUtil.runInBackground(this.activity,
-                                                    { ContextUtil.clearDB() },
-                                                    { mADDlg.dismiss() })
-                                        }.setNegativeButton("否") { _, _ -> }
-                                        .create()
-                                alertDialog.show()
+                                DlgAlert.showAlert(context, "清除所有数据!", "此操作不能恢复，是否继续操作!",
+                                        { b ->
+                                            b.setPositiveButton("是") { _, _ ->
+                                                AlertDialog.Builder(this.activity).setTitle("提示")
+                                                        .setMessage("请等待数据清理完毕...").create().let {
+                                                            it.show()
+                                                            ToolUtil.runInBackground(this.activity,
+                                                                    { ContextUtil.clearDB() },
+                                                                    { it.dismiss() })
+                                                        }
+                                            }
+                                            b.setNegativeButton("否") { _, _ -> }
+                                        })
                             }
                         }
                     })

@@ -9,12 +9,12 @@ import android.widget.ImageView
 import java.util.HashMap
 
 import kotterknife.bindView
-import wxm.androidutil.dialog.DlgOKOrNOBase
+import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.dialog.DlgSelectColor
 import wxm.KeepAccount.utility.PreferencesUtil
-import wxm.androidutil.viewUtil.EventHelper
+import wxm.androidutil.ui.view.EventHelper
 
 /**
  * setting for chart color

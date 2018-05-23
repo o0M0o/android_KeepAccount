@@ -3,9 +3,8 @@ package wxm.KeepAccount.ui.data.report
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 
-import wxm.androidutil.switcher.ACSwitcherActivity
+import wxm.androidutil.ui.activity.ACSwitcherActivity
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.GlobalDef
 import wxm.androidutil.log.TagLog
