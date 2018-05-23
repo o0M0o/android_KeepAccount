@@ -50,7 +50,7 @@ open class CalendarMonthAdapter(context: Context)
 
         vhParent.getView<TextView>(R.id.tv_day_new_count).apply {
             visibility = if (model.recordCount > 0) {
-                text = AppBase.getString(R.string.calendar_item_new_count, model.recordCount)
+                text = context.getString(R.string.calendar_item_new_count, model.recordCount)
                 View.VISIBLE
             } else {
                 View.GONE

@@ -20,7 +20,7 @@
         app:isVertical="false"
         app:scroll_duration="1000" />
 
-    <wxm.androidutil.DragGrid.DragGridView
+    <wxm.androidutil.ui.dragGrid.DragGridView
         android:id="@+id/dgv_buttons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

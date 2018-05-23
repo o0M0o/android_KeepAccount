@@ -3,25 +3,23 @@ package wxm.KeepAccount.ui.usr
 import android.content.Intent
 import android.os.Bundle
 import android.os.Message
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-
 import kotterknife.bindView
-import wxm.KeepAccount.define.EMsgType
-import wxm.androidutil.ui.frg.FrgSupportBaseAdv
-import wxm.androidutil.util.UtilFun
-import wxm.androidutil.util.WRMsgHandler
 import wxm.KeepAccount.R
+import wxm.KeepAccount.define.EMsgType
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.define.UsrItem
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.log.TagLog
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.ui.view.EventHelper
+import wxm.androidutil.util.UtilFun
+import wxm.androidutil.util.WRMsgHandler
 
 /**
  * add user
@@ -50,7 +48,7 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
     }
 
     override fun initUI(bundle: Bundle?) {
-        if(null == bundle) {
+        if (null == bundle) {
             mETUsrName.setOnEditorActionListener(this)
             mETPwd.setOnEditorActionListener(this)
             mETRepeatPwd.setOnEditorActionListener(this)
@@ -61,25 +59,27 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
                         when (v.id) {
                             R.id.bt_confirm -> {
                                 if (checkInput()) {
-                                    val data = Intent()
-                                    data.putExtra(UsrItem.FIELD_NAME, mETUsrName.text.toString())
-                                    data.putExtra(UsrItem.FIELD_PWD, mETPwd.text.toString())
+                                    val data = Intent().apply {
+                                        putExtra(UsrItem.FIELD_NAME, mETUsrName.text.toString())
+                                        putExtra(UsrItem.FIELD_PWD, mETPwd.text.toString())
+                                    }
 
-                                    val m = Message.obtain(ContextUtil.msgHandler,
-                                            EMsgType.USR_ADD.id)
-                                    m.obj = arrayOf(data, mMHHandler)
-                                    m.sendToTarget()
+                                    Message.obtain(ContextUtil.msgHandler,
+                                            EMsgType.USR_ADD.id).let {
+                                        it.obj = arrayOf(data, mMHHandler)
+                                        it.sendToTarget()
+                                    }
                                 }
                             }
 
                             R.id.bt_giveup -> {
-                                val ac = activity
-                                val data = Intent()
-                                ac.setResult(GlobalDef.INTRET_GIVEUP, data)
-                                ac.finish()
+                                activity.let {
+                                    it.setResult(GlobalDef.INTRET_GIVEUP, Intent())
+                                    it.finish()
+                                }
                             }
                         }
-                     })
+                    })
         }
     }
 
@@ -123,58 +123,64 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
         val usrPwd = mETPwd.text.toString()
         val usrRPwd = mETRepeatPwd.text.toString()
 
-        var bret = true
         if (UtilFun.StringIsNullOrEmpty(usrName)) {
-            mETUsrName.error = mRSErrorNoUsrName
-            mETUsrName.requestFocus()
-            bret = false
+            mETUsrName.apply {
+                error = mRSErrorNoUsrName
+                requestFocus()
+            }
+
+            return false
         }
 
-        if (bret && 4 > usrPwd.length) {
-            mETPwd.error = mRSErrorInvalidPWD
-            mETPwd.requestFocus()
-            bret = false
+        if (4 > usrPwd.length) {
+            mETPwd.apply {
+                error = mRSErrorInvalidPWD
+                requestFocus()
+            }
+
+            return false
         }
 
-        if (bret && usrPwd != usrRPwd) {
-            mETRepeatPwd.error = mRSErrorRepeatPwdNotMatch
-            mETRepeatPwd.requestFocus()
-            bret = false
+        if (usrPwd != usrRPwd) {
+            mETRepeatPwd.apply {
+                error = mRSErrorRepeatPwdNotMatch
+                requestFocus()
+            }
+
+            return false
         }
 
-        return bret
+        return true
     }
     /// PRIVATE END
 
     private class LocalMsgHandler internal constructor(ac: FrgUsrAdd) : WRMsgHandler<FrgUsrAdd>(ac) {
         override fun processMsg(m: Message, home: FrgUsrAdd) {
-            val et = EMsgType.getEMsgType(m.what) ?: return
-
-            if (EMsgType.REPLAY === et) {
-                val etInner = EMsgType.getEMsgType(m.arg1)
-                if (null != etInner) {
-                    if (EMsgType.USR_ADD === etInner) {
-                        afterAddUsr(m, home)
+            when(EMsgType.getEMsgType(m.what))  {
+                EMsgType.REPLAY -> {
+                    EMsgType.getEMsgType(m.arg1)?.let {
+                        if (EMsgType.USR_ADD === it) {
+                            afterAddUsr(m, home)
+                        }
                     }
                 }
-            } else {
-                TagLog.e(String.format("msg(%s) can not process", m.toString()))
+
+                else  -> {
+                    TagLog.e("msg($m) can not process")
+                }
             }
         }
 
         private fun afterAddUsr(m: Message, home: FrgUsrAdd) {
-            val ac = home.activity
             val arr = UtilFun.cast_t<Array<Any>>(m.obj)
-            val ret = arr[0] as Boolean
-            if (ret) {
-                val data = UtilFun.cast_t<Intent>(arr[1])
-
-                ac.setResult(GlobalDef.INTRET_USR_ADD, data)
-                ac.finish()
+            if (arr[0] as Boolean) {
+                home.activity.apply {
+                    setResult(GlobalDef.INTRET_USR_ADD, arr[1] as Intent)
+                    finish()
+                }
             } else {
-                var sstr = "添加用户失败!"
-                if (2 < arr.size)
-                    sstr = UtilFun.cast(arr[2])
+                val sstr = if (2 < arr.size) UtilFun.cast(arr[2])
+                else "添加用户失败!"
 
                 Toast.makeText(ContextUtil.self, sstr, Toast.LENGTH_LONG).show()
                 home.repeatInput()

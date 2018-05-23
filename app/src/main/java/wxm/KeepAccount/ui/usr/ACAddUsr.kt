@@ -10,7 +10,6 @@ import wxm.androidutil.ui.activity.ACSwitcherActivity
  */
 class ACAddUsr : ACSwitcherActivity<FrgUsrAdd>() {
     override fun onConfigurationChanged(newConfig: Configuration) {
-        // TODO Auto-generated method stub
         super.onConfigurationChanged(newConfig)
         hotFragment.reInitUI()
     }
