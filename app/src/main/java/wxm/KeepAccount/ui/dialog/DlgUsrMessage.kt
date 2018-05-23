@@ -23,6 +23,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
+import wxm.androidutil.app.AppBase
 import wxm.androidutil.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.PackageUtil
 import wxm.androidutil.util.SIMCardUtil
@@ -36,15 +37,15 @@ import java.util.concurrent.TimeUnit
  * Created by WangXM on 2017/1/9.
  */
 class DlgUsrMessage : DlgOKOrNOBase() {
-    private val mSZUrlPost: String = ContextUtil.getString(R.string.url_post_send_message)
-    private val mSZColUsr: String = ContextUtil.getString(R.string.col_usr)
-    private val mSZColMsg: String = ContextUtil.getString(R.string.col_message)
-    private val mSZColAppName: String = ContextUtil.getString(R.string.col_app_name)
-    private val mSZColValAppName: String = ContextUtil.getString(R.string.col_val_app_name)
+    private val mSZUrlPost: String = AppBase.getString(R.string.url_post_send_message)
+    private val mSZColUsr: String = AppBase.getString(R.string.col_usr)
+    private val mSZColMsg: String = AppBase.getString(R.string.col_message)
+    private val mSZColAppName: String = AppBase.getString(R.string.col_app_name)
+    private val mSZColValAppName: String = AppBase.getString(R.string.col_val_app_name)
 
-    private val mSZUsrMessage: String = ContextUtil.getString(R.string.cn_usr_message)
-    private val mSZAccept: String = ContextUtil.getString(R.string.cn_accept)
-    private val mSZGiveUp: String = ContextUtil.getString(R.string.cn_cancel)
+    private val mSZUsrMessage: String = AppBase.getString(R.string.cn_usr_message)
+    private val mSZAccept: String = AppBase.getString(R.string.cn_accept)
+    private val mSZGiveUp: String = AppBase.getString(R.string.cn_cancel)
 
     private lateinit var mETUsrMessage: TextInputEditText
 

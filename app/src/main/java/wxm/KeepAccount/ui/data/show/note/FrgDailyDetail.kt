@@ -15,18 +15,14 @@ import android.widget.TextView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-import java.sql.Timestamp
 import java.text.ParseException
-import java.util.ArrayList
 import java.util.Calendar
 import java.util.Collections
 import java.util.HashMap
 import java.util.LinkedList
 import java.util.Locale
 
-import butterknife.BindColor
-import butterknife.BindView
-import butterknife.OnClick
+import kotterknife.bindView
 import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
@@ -37,9 +33,10 @@ import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.ui.utility.NoteShowInfo
+import wxm.KeepAccount.utility.EasyOperator
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.uilib.IconButton.IconButton
+import wxm.androidutil.app.AppBase
+import wxm.androidutil.viewUtil.EventHelper
 
 
 /**
@@ -48,43 +45,24 @@ import wxm.uilib.IconButton.IconButton
  */
 class FrgDailyDetail : FrgSupportBaseAdv() {
     // 展示时间信息的UI
-    @BindView(R.id.tv_day)
-    internal var mTVMonthDay: TextView? = null
-
-    @BindView(R.id.tv_year_month)
-    internal var mTVYearMonth: TextView? = null
-
-    @BindView(R.id.tv_day_in_week)
-    internal var mTVDayInWeek: TextView? = null
+    private val mTVMonthDay: TextView by bindView(R.id.tv_day)
+    private val mTVYearMonth: TextView by bindView(R.id.tv_year_month)
+    private val mTVDayInWeek: TextView by bindView(R.id.tv_day_in_week)
 
     // 展示数据的UI
-    @BindView(R.id.lv_note)
-    internal var mLVBody: ListView? = null
+    private val mLVBody: ListView by bindView(R.id.lv_note)
 
     // 跳转日期的UI
-    @BindView(R.id.rl_prv)
-    internal var mRLPrv: RelativeLayout? = null
-
-    @BindView(R.id.rl_next)
-    internal var mRLNext: RelativeLayout? = null
+    private val mRLPrv: RelativeLayout by bindView(R.id.rl_prv)
+    private val mRLNext: RelativeLayout by bindView(R.id.rl_next)
 
     // 展示日统计数据的UI
-    @BindView(R.id.vs_daily_info)
-    internal var mVSDataUI: ValueShow? = null
-
-    @BindView(R.id.login_progress)
-    internal var mPBLoginProgress: ProgressBar? = null
-
-    // create new data
-    @BindView(R.id.ib_add)
-    internal var mIBAdd: IconButton? = null
+    private val mVSDataUI: ValueShow by bindView(R.id.vs_daily_info)
+    private val mPBLoginProgress: ProgressBar by bindView(R.id.login_progress)
 
     // for color
-    @BindColor(R.color.darkred)
-    internal var mCLPay: Int = 0
-
-    @BindColor(R.color.darkslategrey)
-    internal var mCLIncome: Int = 0
+    internal var mCLPay: Int = AppBase.getColor(R.color.darkred)
+    internal var mCLIncome: Int =AppBase.getColor(R.color.darkslategrey)
 
     // for data
     private var mSZHotDay: String? = null
@@ -92,12 +70,16 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
 
     override fun initUI(bundle: Bundle?) {
         if (UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
-            mSZHotDay = arguments.getString(ACDailyDetail.getK_HOTDAY())
+            mSZHotDay = arguments.getString(ACDailyDetail.K_HOTDAY)
         }
 
         if (!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
             mLSDayContents = NoteDataHelper.getNotesByDay(mSZHotDay!!)
         }
+
+        EventHelper.setOnClickOperator(view!!,
+                intArrayOf(R.id.rl_prv, R.id.rl_next, R.id.ib_add),
+                ::onClick)
 
         loadUI(bundle)
     }
@@ -131,58 +113,35 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
         initUI(null)
     }
 
-
-    /**
-     * process day prior/next browse
-     * @param view      for button
-     */
-    @OnClick(R.id.rl_prv, R.id.rl_next)
-    fun dayButtonClick(view: View) {
-        val org_day = mSZHotDay
-
-        val vid = view.id
-        when (vid) {
+    fun onClick(view: View) {
+        val orgDay = mSZHotDay
+        when (view.id) {
             R.id.rl_prv -> {
-                val prv_day = NoteDataHelper.getPrvDay(mSZHotDay!!)
-                if (!UtilFun.StringIsNullOrEmpty(prv_day)) {
-                    mSZHotDay = prv_day
+                NoteDataHelper.getPrvDay(mSZHotDay!!).let {
+                    if (it.isNullOrEmpty()) {
+                        mRLPrv.visibility = View.GONE
+                    } else {
+                        mSZHotDay = it
 
-                    if (View.VISIBLE != mRLNext!!.visibility)
-                        mRLNext!!.visibility = View.VISIBLE
-                } else {
-                    mRLPrv!!.visibility = View.GONE
+                        if (View.VISIBLE != mRLNext.visibility)
+                            mRLNext.visibility = View.VISIBLE
+                    }
                 }
             }
 
             R.id.rl_next -> {
-                val next_day = NoteDataHelper.getNextDay(mSZHotDay!!)
-                if (!UtilFun.StringIsNullOrEmpty(next_day)) {
-                    mSZHotDay = next_day
+                NoteDataHelper.getNextDay(mSZHotDay!!).let {
+                    if(it.isNullOrEmpty())  {
+                        mRLNext.visibility = View.GONE
+                    } else  {
+                    mSZHotDay = it
 
-                    if (View.VISIBLE != mRLPrv!!.visibility)
-                        mRLPrv!!.visibility = View.VISIBLE
-                } else {
-                    mRLNext!!.visibility = View.GONE
+                    if (View.VISIBLE != mRLPrv.visibility)
+                        mRLPrv.visibility = View.VISIBLE
+                    }
                 }
             }
-        }
 
-        if (!UtilFun.StringIsNullOrEmpty(mSZHotDay) && org_day != mSZHotDay) {
-            mLSDayContents = NoteDataHelper.getNotesByDay(mSZHotDay!!)
-            loadUI(null)
-        }
-    }
-
-
-    /**
-     * click on action
-     * @param view      for action
-     */
-    @OnClick(R.id.ib_add)
-    fun dayActionClick(view: View) {
-        val vid = view.id
-        when (vid) {
-        // 添加数据
             R.id.ib_add -> {
                 val intent = Intent(activity, ACNoteCreate::class.java)
                 val cal = Calendar.getInstance()
@@ -193,10 +152,14 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
                 startActivityForResult(intent, 1)
             }
         }
+
+        if (!UtilFun.StringIsNullOrEmpty(mSZHotDay) && orgDay != mSZHotDay) {
+            mLSDayContents = NoteDataHelper.getNotesByDay(mSZHotDay!!)
+            loadUI(null)
+        }
     }
 
     /// PRIVATE BEGIN
-
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -208,11 +171,11 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
         val shortAnimTime = resources
                 .getInteger(android.R.integer.config_shortAnimTime)
 
-        mPBLoginProgress!!.visibility = if (show) View.VISIBLE else View.GONE
-        mPBLoginProgress!!.animate().setDuration(shortAnimTime.toLong())
+        mPBLoginProgress.visibility = if (show) View.VISIBLE else View.GONE
+        mPBLoginProgress.animate().setDuration(shortAnimTime.toLong())
                 .alpha((if (show) 1 else 0).toFloat()).setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        mPBLoginProgress!!.visibility = if (show) View.VISIBLE else View.GONE
+                        mPBLoginProgress.visibility = if (show) View.VISIBLE else View.GONE
                     }
                 })
     }
@@ -222,12 +185,12 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
      */
     private fun loadDayHeader() {
         val arr = mSZHotDay!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        mTVMonthDay!!.text = arr[2]
-        mTVYearMonth!!.text = String.format(Locale.CHINA, "%s年%s月", arr[0], arr[1])
+        mTVMonthDay.text = arr[2]
+        mTVYearMonth.text = String.format(Locale.CHINA, "%s年%s月", arr[0], arr[1])
 
         try {
             val ts = ToolUtil.stringToTimestamp(mSZHotDay!!)
-            mTVDayInWeek!!.text = ToolUtil.getDayInWeek(ts)
+            mTVDayInWeek.text = ToolUtil.getDayInWeek(ts)
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -238,30 +201,24 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
      * load day info
      */
     private fun loadDayInfo() {
-        val ni = NoteDataHelper.getInfoByDay(mSZHotDay!!)
+        HashMap<String, Any>().let {
+            EasyOperator.doObj(NoteDataHelper.getInfoByDay(mSZHotDay!!),
+                    { t ->
+                        it[ValueShow.ATTR_PAY_COUNT] = t.payCount.toString()
+                        it[ValueShow.ATTR_PAY_AMOUNT] = t.szPayAmount
+                        it[ValueShow.ATTR_INCOME_COUNT] = t.incomeCount.toString()
+                        it[ValueShow.ATTR_INCOME_AMOUNT] = t.szIncomeAmount
+                        Unit
+                    },
+                    {
+                        it[ValueShow.ATTR_PAY_COUNT] = "0"
+                        it[ValueShow.ATTR_PAY_AMOUNT] = "0.00"
+                        it[ValueShow.ATTR_INCOME_COUNT] = "0"
+                        it[ValueShow.ATTR_INCOME_AMOUNT] = "0.00"
+                        Unit})
 
-        val p_count: String
-        val i_count: String
-        val p_amount: String
-        val i_amount: String
-        if (null != ni) {
-            p_count = ni.payCount.toString()
-            i_count = ni.incomeCount.toString()
-            p_amount = ni.szPayAmount
-            i_amount = ni.szIncomeAmount
-        } else {
-            p_count = "0"
-            i_count = "0"
-            p_amount = "0.00"
-            i_amount = "0.00"
+            mVSDataUI.adjustAttribute(it)
         }
-
-        val hm = HashMap<String, Any>()
-        hm[ValueShow.ATTR_PAY_COUNT] = p_count
-        hm[ValueShow.ATTR_PAY_AMOUNT] = p_amount
-        hm[ValueShow.ATTR_INCOME_COUNT] = i_count
-        hm[ValueShow.ATTR_INCOME_AMOUNT] = i_amount
-        mVSDataUI!!.adjustAttribute(hm)
     }
 
     /**
@@ -280,7 +237,7 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
         }
 
         val ap = AdapterNoteDetail(activity, c_para)
-        mLVBody!!.adapter = ap
+        mLVBody.adapter = ap
         ap.notifyDataSetChanged()
     }
 
@@ -289,9 +246,9 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
      * @param vis       visibility param
      */
     private fun setVisibility(vis: Int) {
-        mTVMonthDay!!.visibility = vis
-        mTVYearMonth!!.visibility = vis
-        mLVBody!!.visibility = vis
+        mTVMonthDay.visibility = vis
+        mTVYearMonth.visibility = vis
+        mLVBody.visibility = vis
     }
     /// PRIVATE END
 }

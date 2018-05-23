@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 
 import wxm.KeepAccount.R
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.app.AppBase
 
 /**
  * Action in welcome page
@@ -22,7 +23,7 @@ enum class EAction(val actName: String, bm_id: Int) {
      * get icon
      * @return      icon
      */
-    val icon: Bitmap = BitmapFactory.decodeResource(ContextUtil.getResources(), bm_id)
+    val icon: Bitmap = BitmapFactory.decodeResource(AppBase.getResources(), bm_id)
 
     companion object {
         /**

@@ -28,8 +28,6 @@ import lecho.lib.hellocharts.model.ColumnChartData
 import lecho.lib.hellocharts.model.SubcolumnValue
 import lecho.lib.hellocharts.model.Viewport
 import lecho.lib.hellocharts.util.ChartUtils
-import lecho.lib.hellocharts.view.ColumnChartView
-import lecho.lib.hellocharts.view.PreviewColumnChartView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.BudgetItem
 import wxm.KeepAccount.define.PayNoteItem
@@ -38,8 +36,8 @@ import wxm.KeepAccount.ui.base.TouchUI.TouchPreviewColumnChartView
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase
 import wxm.KeepAccount.utility.ContextUtil
-import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.PreferencesUtil
+import wxm.androidutil.viewUtil.EventHelper
 
 /**
  * 预算chart辅助类

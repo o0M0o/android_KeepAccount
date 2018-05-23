@@ -14,8 +14,9 @@ import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.data.edit.RecordInfo.ACRecordInfoEdit
 import wxm.KeepAccount.ui.dialog.base.DlgResource
 import wxm.KeepAccount.utility.ContextUtil
-import wxm.KeepAccount.utility.EventHelper
+import wxm.androidutil.app.AppBase
 import wxm.androidutil.dialog.DlgOKOrNOBase
+import wxm.androidutil.viewUtil.EventHelper
 import wxm.uilib.IconButton.IconButton
 import java.util.*
 import kotlin.collections.ArrayList
@@ -194,8 +195,8 @@ class DlgSelectRecordType : DlgOKOrNOBase() {
         private const val VAL_SELECTED = "val_selected"
         private const val VAL_NOT_SELECTED = "val_not_selected"
 
-        private val mCRWhite: Int = ContextUtil.getColor(R.color.white)
-        private val mCRTextFit: Int = ContextUtil.getColor(R.color.text_fit)
-        private val mCRTextHalfFit: Int = ContextUtil.getColor(R.color.text_half_fit)
+        private val mCRWhite: Int = AppBase.getColor(R.color.white)
+        private val mCRTextFit: Int = AppBase.getColor(R.color.text_fit)
+        private val mCRTextHalfFit: Int = AppBase.getColor(R.color.text_half_fit)
     }
 }

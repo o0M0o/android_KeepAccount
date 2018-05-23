@@ -8,6 +8,6 @@ import org.junit.runners.Suite;
  * Created by WangXM on 2016/8/2.
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ExampleUnitTest.class})
-public class JavaUTSuite {
+@Suite.SuiteClasses({EasyOperatorUT.class})
+public class UTSuite {
 }

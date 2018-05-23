@@ -1,4 +1,4 @@
-package com.wxm.KeepAccountAndriodTest;
+package com.wxm.KeepAccountTest;
 
 import android.app.Application;
 import android.support.test.runner.AndroidJUnit4;

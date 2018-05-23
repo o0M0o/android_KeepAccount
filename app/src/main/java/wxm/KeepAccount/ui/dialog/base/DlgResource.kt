@@ -9,6 +9,7 @@ import java.util.Objects
 
 import wxm.KeepAccount.R
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.app.AppBase
 
 /**
  * dialog会用到的资源
@@ -16,18 +17,18 @@ import wxm.KeepAccount.utility.ContextUtil
  */
 object DlgResource {
     // for channel item shape
-    val mDAChannelSel: Drawable = ContextUtil.getDrawable(R.drawable.gi_channel_sel_shape)
-    val mDAChannelNoSel: Drawable = ContextUtil.getDrawable(R.drawable.gi_channel_no_sel_shape)
+    val mDAChannelSel: Drawable = AppBase.getDrawable(R.drawable.gi_channel_sel_shape)
+    val mDAChannelNoSel: Drawable = AppBase.getDrawable(R.drawable.gi_channel_no_sel_shape)
 
     // for sort icon
-    val mDASortDown: Drawable = ContextUtil.getDrawable(R.drawable.ic_sort_down_1)
-    val mDASortUp: Drawable = ContextUtil.getDrawable(R.drawable.ic_sort_up_1)
+    val mDASortDown: Drawable = AppBase.getDrawable(R.drawable.ic_sort_down_1)
+    val mDASortUp: Drawable = AppBase.getDrawable(R.drawable.ic_sort_up_1)
 
     // for show string
-    val mSZSortByNameDown: String = ContextUtil.getString(R.string.cn_sort_down_by_name)
-    val mSZSortByNameUp: String = ContextUtil.getString(R.string.cn_sort_up_by_name)
+    val mSZSortByNameDown: String = AppBase.getString(R.string.cn_sort_down_by_name)
+    val mSZSortByNameUp: String = AppBase.getString(R.string.cn_sort_up_by_name)
 
     // for color
-    val mCLSelected: Int = ContextUtil.getColor(R.color.peachpuff)
-    val mCLNotSelected: Int = ContextUtil.getColor(R.color.white)
+    val mCLSelected: Int = AppBase.getColor(R.color.peachpuff)
+    val mCLNotSelected: Int = AppBase.getColor(R.color.white)
 }

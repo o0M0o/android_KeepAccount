@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.app.AppBase
 import wxm.androidutil.viewUtil.ViewHolder
 import wxm.uilib.FrgCalendar.CalendarItem.BaseItemAdapter
 
@@ -53,7 +54,7 @@ open class CalendarWeekAdapter(context: Context)
 
         vhParent.getView<TextView>(R.id.tv_day_new_count).apply {
             visibility = if (model.recordCount > 0) {
-                text = String.format(ContextUtil.getString(R.string.calendar_item_new_count),
+                text = String.format(AppBase.getString(R.string.calendar_item_new_count),
                         model.recordCount)
                 View.VISIBLE
             } else {
@@ -65,13 +66,13 @@ open class CalendarWeekAdapter(context: Context)
     }
 
     companion object {
-        private val mCLToday = ContextUtil.getColor(R.color.red_ff725f)
-        private val mCLHoliday = ContextUtil.getColor(R.color.red_ff725f)
-        private val mCLDisable = ContextUtil.getColor(R.color.grey)
+        private val mCLToday = AppBase.getColor(R.color.red_ff725f)
+        private val mCLHoliday = AppBase.getColor(R.color.red_ff725f)
+        private val mCLDisable = AppBase.getColor(R.color.grey)
 
-        private val mCLOtherMonth = ContextUtil.getColor(R.color.text_half_fit)
-        private val mCLCurrentMonth = ContextUtil.getColor(R.color.text_fit)
+        private val mCLOtherMonth = AppBase.getColor(R.color.text_half_fit)
+        private val mCLCurrentMonth = AppBase.getColor(R.color.text_fit)
 
-        private val mSZToday = ContextUtil.getString(R.string.today)
+        private val mSZToday = AppBase.getString(R.string.today)
     }
 }

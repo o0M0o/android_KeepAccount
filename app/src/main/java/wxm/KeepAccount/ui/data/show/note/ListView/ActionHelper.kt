@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import wxm.KeepAccount.R
-import wxm.KeepAccount.utility.ContextUtil
-import wxm.KeepAccount.utility.EventHelper
+import wxm.androidutil.app.AppBase
+import wxm.androidutil.viewUtil.EventHelper
 
 /**
  * helper for action layout
@@ -20,8 +20,8 @@ abstract class ActionHelper internal constructor() {
     private lateinit var mRLAction: RelativeLayout
     private lateinit var mRLLVNote: RelativeLayout
 
-    private val mDAExpand: Drawable = ContextUtil.getDrawable(R.drawable.ic_to_left)
-    private val mDAHide: Drawable = ContextUtil.getDrawable(R.drawable.ic_to_right)
+    private val mDAExpand: Drawable = AppBase.getDrawable(R.drawable.ic_to_left)
+    private val mDAHide: Drawable = AppBase.getDrawable(R.drawable.ic_to_right)
 
     private var mIsShow: Boolean = false
 

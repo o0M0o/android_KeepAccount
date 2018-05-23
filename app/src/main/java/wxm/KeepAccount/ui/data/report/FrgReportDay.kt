@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
 import android.widget.TextView
-import butterknife.OnClick
 import kotterknife.bindView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -15,12 +14,12 @@ import wxm.KeepAccount.ui.data.report.page.DayReportChart
 import wxm.KeepAccount.ui.data.report.page.DayReportWebView
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.dialog.DlgOKOrNOBase
 import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 import wxm.androidutil.frgUtil.FrgSupportSwitcher
 import wxm.androidutil.util.UtilFun
+import wxm.androidutil.viewUtil.EventHelper
 import java.math.BigDecimal
 import java.util.*
 

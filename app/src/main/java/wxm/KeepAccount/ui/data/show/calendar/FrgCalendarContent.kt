@@ -23,6 +23,7 @@ import wxm.KeepAccount.define.INote
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.app.AppBase
 
 /**
  * for note pad content detail
@@ -35,8 +36,8 @@ class FrgCalendarContent : FrgSupportBaseAdv() {
     private val mTVBalance: TextView by bindView(R.id.header_day_balance)
     private val mLVBody: ListView by bindView(R.id.lv_body)
 
-    private val mCLPay: Int = ContextUtil.getColor(R.color.darkred)
-    private val mCLIncome: Int = ContextUtil.getColor(R.color.darkslategrey)
+    private val mCLPay: Int = AppBase.getColor(R.color.darkred)
+    private val mCLIncome: Int = AppBase.getColor(R.color.darkslategrey)
 
     // for data
     private var mSZHotDay: String? = null

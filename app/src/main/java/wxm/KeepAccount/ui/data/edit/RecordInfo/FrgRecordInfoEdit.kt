@@ -16,6 +16,7 @@ import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.define.RecordTypeItem
 import wxm.KeepAccount.ui.dialog.DlgRecordInfo
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.app.AppBase
 import wxm.androidutil.dialog.DlgOKOrNOBase
 import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
@@ -348,7 +349,7 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
         private const val VAL_SELECTED = "val_selected"
         private const val VAL_NOT_SELECTED = "val_not_selected"
 
-        private val mCLSelected: Int = ContextUtil.getColor(R.color.peachpuff)
-        private val mCLNotSelected: Int = ContextUtil.getColor(R.color.white)
+        private val mCLSelected: Int = AppBase.getColor(R.color.peachpuff)
+        private val mCLNotSelected: Int = AppBase.getColor(R.color.white)
     }
 }

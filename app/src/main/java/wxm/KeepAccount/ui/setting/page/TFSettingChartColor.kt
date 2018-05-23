@@ -13,8 +13,8 @@ import wxm.androidutil.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.dialog.DlgSelectColor
-import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.PreferencesUtil
+import wxm.androidutil.viewUtil.EventHelper
 
 /**
  * setting for chart color

@@ -152,39 +152,5 @@ class ContextUtil : AppBase() {
                 TagLog.e("clearDB catch an exception", e)
             }
         }
-
-        /**
-         * get app resources
-         */
-        fun getResources(): Resources = self.resources
-
-        /**
-         * get res string
-         */
-        fun getString(@StringRes resId: Int): String {
-            return self.getString(resId)
-        }
-
-        /**
-         * get res color
-         */
-        @ColorInt
-        fun getColor(@ColorRes resId: Int): Int {
-            return self.getColor(resId)
-        }
-
-        /**
-         * get res drawable
-         */
-        fun getDrawable(@DrawableRes resId: Int): Drawable {
-            return self.getDrawable(resId)
-        }
-
-        /**
-         * get dimension by pixel
-         */
-        fun getDimension(@DimenRes resId: Int): Float {
-            return self.resources.getDimension(resId)
-        }
     }
 }

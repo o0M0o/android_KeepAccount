@@ -10,6 +10,7 @@ import wxm.KeepAccount.BuildConfig
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.*
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.app.AppBase
 import wxm.androidutil.log.TagLog
 import java.math.BigDecimal
 import java.sql.SQLException
@@ -149,7 +150,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
         }
 
         // 添加recordtype
-        ContextUtil.getResources().let {
+        AppBase.getResources().let {
             it.getStringArray(R.array.pay_info).filterNotNull().forEach {
                 line2item(RecordTypeItem.DEF_PAY, it).let {
                     rtItemREDao.create(it)

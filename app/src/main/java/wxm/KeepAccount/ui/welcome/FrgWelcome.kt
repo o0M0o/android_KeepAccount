@@ -4,31 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
-
 import com.allure.lbanners.LMBanners
 import com.allure.lbanners.transformer.TransitionEffect
-
+import kotterknife.bindView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-
-import java.util.ArrayList
-import java.util.Collections
-import java.util.HashMap
-
-import kotterknife.bindView
-import wxm.KeepAccount.db.DBDataChangeEvent
-import wxm.androidutil.dialog.DlgOKOrNOBase
-import wxm.androidutil.dragGrid.DragGridView
-import wxm.androidutil.frgUtil.FrgSupportBaseAdv
-import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.DBDataChangeEvent
 import wxm.KeepAccount.ui.dialog.DlgSelectChannel
 import wxm.KeepAccount.ui.setting.ACSetting
 import wxm.KeepAccount.ui.welcome.banner.FrgAdapter
 import wxm.KeepAccount.ui.welcome.banner.FrgPara
 import wxm.KeepAccount.utility.DGVButtonAdapter
-import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.PreferencesUtil
+import wxm.androidutil.dialog.DlgOKOrNOBase
+import wxm.androidutil.dragGrid.DragGridView
+import wxm.androidutil.frgUtil.FrgSupportBaseAdv
+import wxm.androidutil.util.UtilFun
+import wxm.androidutil.viewUtil.EventHelper
+import java.util.*
 
 /**
  * for welcome
@@ -73,16 +67,12 @@ class FrgWelcome : FrgSupportBaseAdv() {
 
     override fun loadUI(savedInstanceState: Bundle?) {
         mLSData.clear()
-        for (i in PreferencesUtil.loadHotAction()) {
-            val ihm = HashMap<String, Any>()
-            ihm[DGVButtonAdapter.HKEY_ACT_NAME] = i
-            mLSData.add(ihm)
-        }
+        mLSData.addAll(PreferencesUtil.loadHotAction()
+                .map { HashMap<String, Any>().apply { put(DGVButtonAdapter.HKEY_ACT_NAME, it) } })
 
-        val apt = DGVButtonAdapter(activity, mLSData)
-        mDGVActions.adapter = apt
+        mDGVActions.adapter = DGVButtonAdapter(activity, mLSData)
         mDGVActions.setOnChangeListener { from, to ->
-            val temp = mLSData[from]
+            // adjust position
             if (from < to) {
                 for (i in from until to) {
                     Collections.swap(mLSData, i, i + 1)
@@ -92,29 +82,18 @@ class FrgWelcome : FrgSupportBaseAdv() {
                     Collections.swap(mLSData, i, i - 1)
                 }
             }
+            mLSData[to] = mLSData[from]
 
-            mLSData[to] = temp
-
-            val hotName = ArrayList<String>()
-            for (hi in mLSData) {
-                val an = UtilFun.cast_t<String>(hi[DGVButtonAdapter.HKEY_ACT_NAME])
-                hotName.add(an)
-            }
-            PreferencesUtil.saveHotAction(hotName)
-
-            apt.notifyDataSetChanged()
+            // save position to preferences
+            PreferencesUtil.saveHotAction(ArrayList<String>().apply {
+                addAll(mLSData.map { it[DGVButtonAdapter.HKEY_ACT_NAME] as String })
+            })
         }
-        apt.notifyDataSetChanged()
     }
 
     private fun initFrgPara() {
-        var fp = FrgPara()
-        fp.mFPViewId = R.layout.banner_month
-        mALFrgPara.add(fp)
-
-        fp = FrgPara()
-        fp.mFPViewId = R.layout.banner_year
-        mALFrgPara.add(fp)
+        mALFrgPara.add(FrgPara().apply { mFPViewId = R.layout.banner_month })
+        mALFrgPara.add(FrgPara().apply { mFPViewId = R.layout.banner_year })
     }
 
     private fun onActClick(v: View) {
@@ -154,21 +133,23 @@ class FrgWelcome : FrgSupportBaseAdv() {
      * banner is show in head of welcome page
      */
     private fun initBanner() {
-        mLBanners.setAdapter(FrgAdapter(activity, null), mALFrgPara)
+        mLBanners.let {
+            it.setAdapter(FrgAdapter(activity, null), mALFrgPara)
 
-        //参数设置
-        mLBanners.setAutoPlay(false)//自动播放
-        mLBanners.setVertical(false)//是否可以垂直
-        mLBanners.setScrollDurtion(222)//两页切换时间
-        mLBanners.setCanLoop(true)//循环播放
-        mLBanners.setSelectIndicatorRes(R.drawable.page_indicator_select)//选中的原点
-        mLBanners.setUnSelectUnIndicatorRes(R.drawable.page_indicator_unselect)//未选中的原点
-        mLBanners.setIndicatorWidth(5)//默认为5dp
-        mLBanners.setHoriZontalTransitionEffect(TransitionEffect.Default)//选中喜欢的样式
-        //mLBanners.setHoriZontalCustomTransformer(new ParallaxTransformer(R.id.id_image));//自定义样式
-        mLBanners.setDurtion(5000)//切换时间
-        mLBanners.hideIndicatorLayout()//隐藏原点
-        mLBanners.showIndicatorLayout()//显示原点
-        mLBanners.setIndicatorPosition(LMBanners.IndicaTorPosition.BOTTOM_MID)//设置原点显示位置
+            //参数设置
+            it.setAutoPlay(false)//自动播放
+            it.setVertical(false)//是否可以垂直
+            it.setScrollDurtion(222)//两页切换时间
+            it.setCanLoop(true)//循环播放
+            it.setSelectIndicatorRes(R.drawable.page_indicator_select)//选中的原点
+            it.setUnSelectUnIndicatorRes(R.drawable.page_indicator_unselect)//未选中的原点
+            it.setIndicatorWidth(5)//默认为5dp
+            it.setHoriZontalTransitionEffect(TransitionEffect.Default)//选中喜欢的样式
+            //it.setHoriZontalCustomTransformer(new ParallaxTransformer(R.id.id_image));//自定义样式
+            it.setDurtion(5000)//切换时间
+            it.hideIndicatorLayout()//隐藏原点
+            it.showIndicatorLayout()//显示原点
+            it.setIndicatorPosition(LMBanners.IndicaTorPosition.BOTTOM_MID)//设置原点显示位置
+        }
     }
 }

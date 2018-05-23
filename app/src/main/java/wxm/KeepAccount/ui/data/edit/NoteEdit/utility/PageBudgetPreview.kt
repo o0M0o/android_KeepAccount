@@ -7,6 +7,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.define.BudgetItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.app.AppBase
 import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 import java.util.*
 
@@ -45,7 +46,7 @@ class PageBudgetPreview : FrgSupportBaseAdv(), IPreview {
             val ra = String.format(Locale.CHINA, "%.02f", data.remainderAmount)
             mTVLeaveAmount.text = ra
             if (ra.startsWith("-")) {
-                mTVLeaveAmount.setTextColor(ContextUtil.getColor(R.color.darkred))
+                mTVLeaveAmount.setTextColor(AppBase.getColor(R.color.darkred))
             }
         } else {
             mTVName.text = ""

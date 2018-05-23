@@ -11,6 +11,7 @@ import android.widget.SimpleAdapter
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.app.AppBase
 import wxm.androidutil.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
 import java.util.*
@@ -24,7 +25,7 @@ class DlgSelectColor : DlgOKOrNOBase(), AdapterView.OnItemClickListener {
 
     val selectedColor: Int
         get() = if (GlobalDef.INVALID_ID != mHotPos)
-            ContextUtil.getColor(ARR_COLOR[mHotPos])
+            AppBase.getColor(ARR_COLOR[mHotPos])
         else
             GlobalDef.INVALID_ID
 
@@ -36,11 +37,11 @@ class DlgSelectColor : DlgOKOrNOBase(), AdapterView.OnItemClickListener {
      * @param id       param
      */
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        view.setBackgroundColor(ContextUtil.getColor(R.color.red))
+        view.setBackgroundColor(AppBase.getColor(R.color.red))
         mHotPos = if (GlobalDef.INVALID_ID == mHotPos) {
             position
         } else {
-            parent.getChildAt(mHotPos).setBackgroundColor(ContextUtil.getColor(R.color.white))
+            parent.getChildAt(mHotPos).setBackgroundColor(AppBase.getColor(R.color.white))
             position
         }
     }
@@ -57,7 +58,7 @@ class DlgSelectColor : DlgOKOrNOBase(), AdapterView.OnItemClickListener {
         val lsData = ArrayList<HashMap<String, Any>>()
         for (i in ARR_COLOR) {
             val hm = HashMap<String, Any>()
-            hm[PARA_COLOR] = ContextUtil.getColor(i)
+            hm[PARA_COLOR] = AppBase.getColor(i)
             lsData.add(hm)
         }
 

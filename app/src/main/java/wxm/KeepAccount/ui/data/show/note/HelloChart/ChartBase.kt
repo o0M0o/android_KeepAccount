@@ -14,8 +14,8 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.base.TouchUI.TouchColumnChartView
 import wxm.KeepAccount.ui.base.TouchUI.TouchPreviewColumnChartView
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase
-import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.PreferencesUtil
+import wxm.androidutil.viewUtil.EventHelper
 
 /**
  * chart view base helper

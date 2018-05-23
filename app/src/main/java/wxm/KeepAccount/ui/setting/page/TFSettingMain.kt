@@ -8,8 +8,8 @@ import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.setting.ACSetting
 import wxm.KeepAccount.utility.ContextUtil
-import wxm.KeepAccount.utility.EventHelper
 import wxm.KeepAccount.utility.ToolUtil
+import wxm.androidutil.viewUtil.EventHelper
 
 /**
  * main page for setting

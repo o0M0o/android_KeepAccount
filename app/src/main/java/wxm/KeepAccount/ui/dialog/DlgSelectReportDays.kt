@@ -13,13 +13,14 @@ import java.util.Locale
 import wxm.androidutil.dialog.DlgOKOrNOBase
 import wxm.KeepAccount.R
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.app.AppBase
 
 /**
  * select day range for report
  * Created by WangXM on 2017/2/15.
  */
 class DlgSelectReportDays : DlgOKOrNOBase() {
-    private val mSZInputDay: String = ContextUtil.getString(R.string.hint_input_day)
+    private val mSZInputDay: String = AppBase.getString(R.string.hint_input_day)
 
     private lateinit var mTVStartDay: TextView
     private lateinit var mTVEndDay: TextView

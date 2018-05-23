@@ -26,6 +26,7 @@ import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
+import wxm.androidutil.app.AppBase
 import wxm.androidutil.dialog.DlgOKOrNOBase
 import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
@@ -48,7 +49,7 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
     private val mTVBudget: TextView by bindView(R.id.ar_tv_budget)
     private val mTVNote: TouchTextView by bindView(R.id.tv_note)
 
-    private val mSZDefNote: String = ContextUtil.getString(R.string.notice_input_note)
+    private val mSZDefNote: String = AppBase.getString(R.string.notice_input_note)
     private var mOldPayNote: PayNoteItem? = null
 
     override fun setEditData(data: Any) {

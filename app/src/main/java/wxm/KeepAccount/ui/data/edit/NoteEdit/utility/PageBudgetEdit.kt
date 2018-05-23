@@ -17,6 +17,7 @@ import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.app.AppBase
 import wxm.androidutil.dialog.DlgOKOrNOBase
 import wxm.androidutil.frgUtil.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
@@ -31,7 +32,7 @@ class PageBudgetEdit : FrgSupportBaseAdv(), IEdit  {
     private val mETAmount: TextInputEditText by bindView(R.id.et_budget_amount)
     private val mTVNote: TouchTextView by bindView(R.id.tv_note)
 
-    private val mSZDefNote: String = ContextUtil.getString(R.string.notice_input_note)
+    private val mSZDefNote: String = AppBase.getString(R.string.notice_input_note)
     private var mBIData: BudgetItem? = null
 
     override fun refillData() {

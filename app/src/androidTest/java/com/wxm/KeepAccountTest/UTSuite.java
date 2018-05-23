@@ -1,4 +1,4 @@
-package com.wxm.KeepAccountAndriodTest;
+package com.wxm.KeepAccountTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -9,6 +9,6 @@ import org.junit.runners.Suite;
  */
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({DBOrmliteHelperUT.class})
+@Suite.SuiteClasses({EasyOperatorUT.class})
 public class UTSuite {
 }

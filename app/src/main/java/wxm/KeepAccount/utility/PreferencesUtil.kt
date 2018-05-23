@@ -3,7 +3,6 @@ package wxm.KeepAccount.utility
 import android.content.Context
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.EAction
-import wxm.androidutil.util.UiUtil
 import java.util.*
 
 /**
@@ -55,17 +54,18 @@ object PreferencesUtil {
      * @return  color setting
      */
     fun loadChartColor(): HashMap<String, Int> {
-        val param = ContextUtil.self
-                .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
-
-        val ct = ContextUtil.self
-        val sb = SET_PAY_COLOR + ":" + UiUtil.getColor(ct, R.color.sienna).toString() +
-                " " + SET_INCOME_COLOR + ":" + UiUtil.getColor(ct, R.color.teal).toString() +
-                " " + SET_BUDGET_UESED_COLOR + ":" + UiUtil.getColor(ct, R.color.sienna).toString() +
-                " " + SET_BUDGET_BALANCE_COLOR + ":" + UiUtil.getColor(ct, R.color.teal).toString()
-
-        val load = param.getString(SET_CHART_COLOR, sb)
-        return parseChartColors(load!!)
+        return ContextUtil.self.let {
+            "$SET_PAY_COLOR:${it.getColor(R.color.sienna)}" +
+                    " $SET_INCOME_COLOR:${it.getColor(R.color.teal)}" +
+                    " $SET_BUDGET_UESED_COLOR:${it.getColor(R.color.sienna)}" +
+                    " $SET_BUDGET_BALANCE_COLOR:${it.getColor(R.color.teal)}"
+        }.let {
+            ContextUtil.self
+                    .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
+                    .getString(SET_CHART_COLOR, it)!!
+        }.let {
+            parseChartColors(it)
+        }
     }
 
 
@@ -74,16 +74,20 @@ object PreferencesUtil {
      * @param ccs   color setting
      */
     fun saveChartColor(ccs: HashMap<String, Int>) {
-        val param = ContextUtil.instance!!
-                .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
-
-        val pr = parseChartColorsToString(ccs)
-        param.edit().putString(SET_CHART_COLOR, pr).apply()
+        ContextUtil.self.getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE).apply {
+            edit().putString(SET_CHART_COLOR, parseChartColorsToString(ccs)).apply()
+        }
     }
     /// END
 
 
     /// BEGIN PRIVATE
+    /**
+     * use [delimiter] split lns to arry
+     */
+    private fun splitString(lns: String, delimiter: String): Array<String> {
+        return lns.split(delimiter.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+    }
 
     /**
      * parse setting string
@@ -91,11 +95,9 @@ object PreferencesUtil {
      * @return      settings
      */
     private fun parsePreferences(pr: String): List<String> {
-        val ret = ArrayList<String>()
-        val pr_arr = pr.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        Collections.addAll(ret, *pr_arr)
-
-        return ret
+        return ArrayList<String>().apply {
+            Collections.addAll(this, *splitString(pr, ":"))
+        }
     }
 
     /**
@@ -106,14 +108,14 @@ object PreferencesUtil {
     private fun parseToPreferences(acts: List<String>): String {
         var ff = true
         val sb = StringBuilder()
-        for (i in acts) {
+        acts.forEach {
             if (!ff) {
                 sb.append(":")
             } else {
                 ff = false
             }
 
-            sb.append(i)
+            sb.append(it)
         }
 
         return sb.toString()
@@ -125,17 +127,14 @@ object PreferencesUtil {
      * @return      chart color setting
      */
     private fun parseChartColors(cc: String): HashMap<String, Int> {
-        val ret = HashMap<String, Int>()
-        val ccLns = cc.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        for (i in ccLns) {
-            val iiLns = i.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-
-            ret[iiLns[0]] = Integer.parseInt(iiLns[1])
+        return HashMap<String, Int>().apply {
+            splitString(cc, " ").forEach {
+                splitString(it, ":").let {
+                    put(it[0], Integer.parseInt(it[1]))
+                }
+            }
         }
-
-        return ret
     }
-
 
     /**
      * parse chart color to setting string
@@ -144,14 +143,17 @@ object PreferencesUtil {
      */
     private fun parseChartColorsToString(hmCC: HashMap<String, Int>): String {
         val ret = StringBuilder()
-        for (i in hmCC.keys) {
-            val sb = StringBuilder()
-            sb.append(i).append(":").append(hmCC[i].toString())
+        hmCC.forEach { t, u ->
+            StringBuilder().apply {
+                append(t).append(":").append(u.toString())
+            }.let {
+                if (ret.isEmpty())
+                    ret.append(it)
+                else
+                    ret.append(" ").append(it)
 
-            if (ret.isEmpty())
-                ret.append(sb)
-            else
-                ret.append(" ").append(sb)
+                Unit
+            }
         }
 
         return ret.toString()

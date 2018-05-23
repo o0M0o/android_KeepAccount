@@ -6,20 +6,21 @@ import android.os.Build
 
 import wxm.KeepAccount.R
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.app.AppBase
 
 /**
  * Resource helper
  * Created by WangXM on 2017/3/3.
  */
 object ResourceHelper {
-    val mCRLVLineOne: Int = ContextUtil.getColor(R.color.color_1)
-    val mCRLVLineTwo: Int = ContextUtil.getColor(R.color.color_2)
+    val mCRLVLineOne: Int = AppBase.getColor(R.color.color_1)
+    val mCRLVLineTwo: Int = AppBase.getColor(R.color.color_2)
 
-    val mCRLVItemTransFull: Int = ContextUtil.getColor(R.color.trans_full)
+    val mCRLVItemTransFull: Int = AppBase.getColor(R.color.trans_full)
 
-    val mCRLVItemNoSel: Int = ContextUtil.getColor(R.color.red_ff725f_half)
-    val mCRLVItemSel: Int =  ContextUtil.getColor(R.color.red_ff725f)
+    val mCRLVItemNoSel: Int = AppBase.getColor(R.color.red_ff725f_half)
+    val mCRLVItemSel: Int =  AppBase.getColor(R.color.red_ff725f)
 
-    val mCRTextWhite: Int = ContextUtil.getColor(R.color.white)
-    val mCRTextFit: Int = ContextUtil.getColor(R.color.text_fit)
+    val mCRTextWhite: Int = AppBase.getColor(R.color.white)
+    val mCRTextFit: Int = AppBase.getColor(R.color.text_fit)
 }

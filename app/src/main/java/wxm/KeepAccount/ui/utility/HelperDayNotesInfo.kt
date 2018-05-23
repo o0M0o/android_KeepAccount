@@ -7,6 +7,7 @@ import android.widget.TextView
 
 import wxm.KeepAccount.R
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.androidutil.app.AppBase
 import wxm.androidutil.viewUtil.ViewHolder
 
 /**
@@ -14,9 +15,9 @@ import wxm.androidutil.viewUtil.ViewHolder
  * Created by WangXM on 2017/1/22.
  */
 object HelperDayNotesInfo {
-    private val CR_PAY: Int = ContextUtil.getColor(R.color.darkred)
-    private val CR_INCOME: Int = ContextUtil.getColor(R.color.darkslategrey)
-    private val DIM_FULL_WIDTH: Int =ContextUtil.getDimension(R.dimen.rl_amount_info_width).toInt()
+    private val CR_PAY: Int = AppBase.getColor(R.color.darkred)
+    private val CR_INCOME: Int = AppBase.getColor(R.color.darkslategrey)
+    private val DIM_FULL_WIDTH: Int = AppBase.getDimension(R.dimen.rl_amount_info_width).toInt()
 
     /**
      * fill note UI
