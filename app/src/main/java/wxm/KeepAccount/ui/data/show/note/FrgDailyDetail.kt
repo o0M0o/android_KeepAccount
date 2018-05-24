@@ -17,7 +17,6 @@ import org.greenrobot.eventbus.ThreadMode
 
 import java.text.ParseException
 import java.util.Calendar
-import java.util.Collections
 import java.util.HashMap
 import java.util.LinkedList
 import java.util.Locale
@@ -33,10 +32,10 @@ import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.utility.EasyOperator
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.view.EventHelper
+import wxm.androidutil.util.forObj
 
 
 /**
@@ -202,7 +201,7 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
      */
     private fun loadDayInfo() {
         HashMap<String, Any>().let {
-            EasyOperator.doObj(NoteDataHelper.getInfoByDay(mSZHotDay!!),
+            NoteDataHelper.getInfoByDay(mSZHotDay!!).forObj(
                     { t ->
                         it[ValueShow.ATTR_PAY_COUNT] = t.payCount.toString()
                         it[ValueShow.ATTR_PAY_AMOUNT] = t.szPayAmount
@@ -225,20 +224,14 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
      * load day data
      */
     private fun loadDayNotes() {
-        val c_para = LinkedList<HashMap<String, INote>>()
-        if (!UtilFun.ListIsNullOrEmpty(mLSDayContents)) {
-            Collections.sort(mLSDayContents!!) { t1, t2 -> t1.ts.compareTo(t2.ts) }
-            for (ci in mLSDayContents!!) {
-                val hm = HashMap<String, INote>()
-                hm[AdapterNoteDetail.K_NODE] = ci
-
-                c_para.add(hm)
+        val para = LinkedList<HashMap<String, INote>>()
+        mLSDayContents!!.let {
+            it.sortedBy { it.ts }.forEach {
+                para.add(HashMap<String, INote>().apply { put(AdapterNoteDetail.K_NODE, it) })
             }
         }
 
-        val ap = AdapterNoteDetail(activity, c_para)
-        mLVBody.adapter = ap
-        ap.notifyDataSetChanged()
+        mLVBody.adapter = AdapterNoteDetail(activity, para)
     }
 
     /**

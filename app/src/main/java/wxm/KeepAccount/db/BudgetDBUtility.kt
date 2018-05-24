@@ -24,9 +24,7 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
         get() {
             val bret = HashMap<BudgetItem, List<PayNoteItem>>()
             budgetForCurUsr?.forEach { bi ->
-                val pi = ContextUtil.payIncomeUtility.getPayNoteByBudget(bi)
-                val nbi = getData(bi._id)
-                bret[nbi] = pi
+                bret[getData(bi._id)] = ContextUtil.payIncomeUtility.getPayNoteByBudget(bi)
             }
 
             return bret

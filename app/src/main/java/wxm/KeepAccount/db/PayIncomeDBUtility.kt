@@ -2,14 +2,7 @@ package wxm.KeepAccount.db
 
 
 import com.j256.ormlite.dao.RuntimeExceptionDao
-
 import org.greenrobot.eventbus.EventBus
-
-import java.math.BigDecimal
-import java.util.ArrayList
-import java.util.LinkedList
-
-import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.BudgetItem
 import wxm.KeepAccount.define.INote
 import wxm.KeepAccount.define.IncomeNoteItem
@@ -17,6 +10,10 @@ import wxm.KeepAccount.define.PayNoteItem
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.db.DBUtilityBase
+import wxm.androidutil.util.UtilFun
+import wxm.androidutil.util.forObj
+import java.math.BigDecimal
+import java.util.*
 
 /**
  * 备忘本数据库工具类
@@ -26,29 +23,23 @@ class PayIncomeDBUtility {
     /**
      * pay data helper
      */
-    val payDBUtility: PayDBUtility
+    val payDBUtility = PayDBUtility()
 
     /**
      * income data helper
      */
-    val incomeDBUtility: IncomeDBUtility
+    val incomeDBUtility = IncomeDBUtility()
 
     /**
      * current usr all pay/income data
      */
     val allNotes: List<INote>
         get() {
-            val lsData = LinkedList<INote>()
-            lsData.addAll(payDBUtility.allData)
-            lsData.addAll(incomeDBUtility.allData)
-
-            return lsData
+            return LinkedList<INote>().apply {
+                addAll(payDBUtility.allData)
+                addAll(incomeDBUtility.allData)
+            }
         }
-
-    init {
-        payDBUtility = PayDBUtility()
-        incomeDBUtility = IncomeDBUtility()
-    }
 
     /**
      * use budget get it's pay data
@@ -58,15 +49,15 @@ class PayIncomeDBUtility {
     fun getPayNoteByBudget(bi: BudgetItem): List<PayNoteItem> {
         val lsPay = ContextUtil.dbHelper.payDataREDao
                 .queryForEq(PayNoteItem.FIELD_BUDGET, bi._id)
-
         bi.useBudget(BigDecimal.ZERO)
         if (!UtilFun.ListIsNullOrEmpty(lsPay)) {
             var allPay = BigDecimal.ZERO
-            for (i in lsPay) {
-                allPay = allPay.add(i.amount)
+            lsPay.forEach {
+                allPay = allPay.add(it.amount)
 
-                i.amount = i.amount
-                i.ts = i.ts
+                // this for update string
+                it.amount = it.amount
+                it.ts = it.ts
             }
 
             bi.useBudget(allPay)
@@ -82,30 +73,16 @@ class PayIncomeDBUtility {
      * @return      added record count
      */
     fun addPayNotes(lsi: List<PayNoteItem>): Int {
-        val curUsr = ContextUtil.curUsr
-        var ret = 0
-        if (null != curUsr) {
-            for (i in lsi) {
-                if (null == i.usr)
-                    i.usr = curUsr
+        return ContextUtil.curUsr.forObj({ t ->
+            lsi.filter { null == it.usr }.forEach {
+                it.usr = t
             }
-
-            ret = payDBUtility.createDatas(lsi)
-        } else {
-            var nousr = false
-            for (i in lsi) {
-                if (null == i.usr) {
-                    nousr = true
-                    break
-                }
-            }
-
-            if (!nousr) {
-                ret = payDBUtility.createDatas(lsi)
-            }
-        }
-
-        return ret
+            payDBUtility.createDatas(lsi)
+        }, {
+            if (null != lsi.find { null == it.usr }) {
+                payDBUtility.createDatas(lsi)
+            } else 0
+        })
     }
 
     /**
@@ -115,30 +92,27 @@ class PayIncomeDBUtility {
      * @return 返回添加成功的数据量
      */
     fun addIncomeNotes(lsi: List<IncomeNoteItem>): Int {
-        val curUsr = ContextUtil.curUsr
-        var ret = 0
-        if (null != curUsr) {
-            for (i in lsi) {
-                if (null == i.usr)
-                    i.usr = curUsr
-            }
+        return ContextUtil.curUsr.forObj(
+                { t ->
+                    lsi.filter { null == it.usr }.forEach {
+                        it.usr = t
+                    }
+                    incomeDBUtility.createDatas(lsi)
+                },
+                {
+                    var nousr = false
+                    for (i in lsi) {
+                        if (null == i.usr) {
+                            nousr = true
+                            break
+                        }
+                    }
 
-            ret = incomeDBUtility.createDatas(lsi)
-        } else {
-            var nousr = false
-            for (i in lsi) {
-                if (null == i.usr) {
-                    nousr = true
-                    break
+                    if (null != lsi.find { null == it.usr }) {
+                        incomeDBUtility.createDatas(lsi)
+                    } else 0
                 }
-            }
-
-            if (!nousr) {
-                ret = incomeDBUtility.createDatas(lsi)
-            }
-        }
-
-        return ret
+        )
     }
 
     /**
@@ -166,12 +140,10 @@ class PayIncomeDBUtility {
         }
 
         override fun getData(id: Int?): PayNoteItem? {
-            val pi = super.getData(id)
-            if (null != pi) {
-                updateNote(pi)
+            return super.getData(id).let {
+                if(null != it)  updateNote(it)
+                it
             }
-
-            return pi
         }
 
         override fun getAllData(): List<PayNoteItem> {
