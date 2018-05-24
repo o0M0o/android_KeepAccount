@@ -3,6 +3,7 @@ package wxm.KeepAccount.define
 import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
+import wxm.KeepAccount.utility.toShowString
 
 import java.math.BigDecimal
 import java.sql.Timestamp
@@ -35,7 +36,7 @@ class PayNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone {
     override var amount: BigDecimal = BigDecimal.ZERO
         set(newAmount) {
             field = newAmount
-            valToStr = String.format(Locale.CHINA, "%.02f", field)
+            valToStr = field.toShowString()
         }
 
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
@@ -45,12 +46,12 @@ class PayNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone {
             tsToStr = field.toString()
         }
 
-    override var valToStr: String? = null
+    override var valToStr: String = BigDecimal.ZERO.toShowString()
         private set(value) {
             field = value
         }
 
-    override var tsToStr: String? = null
+    override var tsToStr: String = Timestamp(0).toString()
         private set(value) {
             field = value
         }

@@ -21,7 +21,7 @@ class RecordTypeDBUtility : DBUtilityBase<RecordTypeItem, Int>() {
      */
     val allPayItem: List<RecordTypeItem>
         get() = dbHelper
-                .queryForEq(RecordTypeItem.FIELD_ITEMTYPE, RecordTypeItem.DEF_PAY)
+                .queryForEq(RecordTypeItem.FIELD_ITEM_TYPE, RecordTypeItem.DEF_PAY)
 
 
     /**
@@ -31,7 +31,7 @@ class RecordTypeDBUtility : DBUtilityBase<RecordTypeItem, Int>() {
      */
     val allIncomeItem: List<RecordTypeItem>
         get() = dbHelper
-                .queryForEq(RecordTypeItem.FIELD_ITEMTYPE, RecordTypeItem.DEF_INCOME)
+                .queryForEq(RecordTypeItem.FIELD_ITEM_TYPE, RecordTypeItem.DEF_INCOME)
 
 
     override fun getDBHelper(): RuntimeExceptionDao<RecordTypeItem, Int> {

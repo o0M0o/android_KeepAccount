@@ -54,10 +54,6 @@ class PayIncomeDBUtility {
             var allPay = BigDecimal.ZERO
             lsPay.forEach {
                 allPay = allPay.add(it.amount)
-
-                // this for update string
-                it.amount = it.amount
-                it.ts = it.ts
             }
 
             bi.useBudget(allPay)
@@ -94,20 +90,12 @@ class PayIncomeDBUtility {
     fun addIncomeNotes(lsi: List<IncomeNoteItem>): Int {
         return ContextUtil.curUsr.forObj(
                 { t ->
-                    lsi.filter { null == it.usr }.forEach {
-                        it.usr = t
-                    }
+                    lsi.filter { null == it.usr }
+                            .forEach { it.usr = t }
+
                     incomeDBUtility.createDatas(lsi)
                 },
                 {
-                    var nousr = false
-                    for (i in lsi) {
-                        if (null == i.usr) {
-                            nousr = true
-                            break
-                        }
-                    }
-
                     if (null != lsi.find { null == it.usr }) {
                         incomeDBUtility.createDatas(lsi)
                     } else 0
@@ -139,20 +127,11 @@ class PayIncomeDBUtility {
             return ContextUtil.dbHelper.payDataREDao
         }
 
-        override fun getData(id: Int?): PayNoteItem? {
-            return super.getData(id).let {
-                if(null != it)  updateNote(it)
-                it
-            }
-        }
-
         override fun getAllData(): List<PayNoteItem> {
-            val ui = ContextUtil.curUsr ?: return ArrayList()
-            val ret = dbHelper.queryForEq(PayNoteItem.FIELD_USR, ui.id)
-            for (it in ret) {
-                updateNote(it)
-            }
-            return ret
+            return ContextUtil.curUsr.forObj(
+                    { t -> dbHelper.queryForEq(PayNoteItem.FIELD_USR, t.id) },
+                    { ArrayList() }
+            )
         }
 
         override fun onDataModify(md: List<Int>) {
@@ -168,15 +147,6 @@ class PayIncomeDBUtility {
         override fun onDataRemove(dd: List<Int>) {
             NoteDataHelper.reloadData()
             EventBus.getDefault().post(DBDataChangeEvent())
-        }
-
-        /**
-         * update pay data
-         * @param pi   pay data
-         */
-        private fun updateNote(pi: PayNoteItem) {
-            pi.amount = pi.amount
-            pi.ts = pi.ts
         }
     }
 
@@ -188,22 +158,11 @@ class PayIncomeDBUtility {
             return ContextUtil.dbHelper.incomeDataREDao
         }
 
-        override fun getData(id: Int?): IncomeNoteItem? {
-            val pi = super.getData(id)
-            if (null != pi) {
-                updateNote(pi)
-            }
-
-            return pi
-        }
-
         override fun getAllData(): List<IncomeNoteItem> {
-            val ui = ContextUtil.curUsr ?: return ArrayList()
-            val ret = dbHelper.queryForEq(PayNoteItem.FIELD_USR, ui.id)
-            for (it in ret) {
-                updateNote(it)
-            }
-            return ret
+            return ContextUtil.curUsr.forObj(
+                    { t -> dbHelper.queryForEq(IncomeNoteItem.FIELD_USR, t.id) },
+                    { ArrayList() }
+            )
         }
 
         override fun onDataModify(md: List<Int>) {
@@ -219,15 +178,6 @@ class PayIncomeDBUtility {
         override fun onDataRemove(dd: List<Int>) {
             NoteDataHelper.reloadData()
             EventBus.getDefault().post(DBDataChangeEvent())
-        }
-
-        /**
-         * update income data
-         * @param ii   data
-         */
-        private fun updateNote(ii: IncomeNoteItem) {
-            ii.amount = ii.amount
-            ii.ts = ii.ts
         }
     }
 }

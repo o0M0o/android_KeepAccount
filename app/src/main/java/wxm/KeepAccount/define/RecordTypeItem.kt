@@ -18,7 +18,7 @@ class RecordTypeItem : IDBRow<Int> {
     /**
      * 记录类型大类([.DEF_INCOME] or [.DEF_PAY])
      */
-    @DatabaseField(columnName = "itemType", canBeNull = false, dataType = DataType.STRING)
+    @DatabaseField(columnName = FIELD_ITEM_TYPE, canBeNull = false, dataType = DataType.STRING)
     var itemType: String = DEF_INCOME
 
     /**
@@ -34,7 +34,7 @@ class RecordTypeItem : IDBRow<Int> {
     var note: String? = null
 
     companion object {
-        const val FIELD_ITEMTYPE = "itemType"
+        const val FIELD_ITEM_TYPE = "itemType"
 
         const val DEF_INCOME = "income"
         const val DEF_PAY = "pay"

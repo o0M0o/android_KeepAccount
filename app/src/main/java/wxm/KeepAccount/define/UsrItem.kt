@@ -31,13 +31,13 @@ class UsrItem : IDBRow<Int>, Cloneable, IPublicClone {
     }
 
     override fun clone(): Any {
-        val obj = UsrItem()
+        return UsrItem().let{
+            it.id = this.id
+            it.name = this.name
+            it.pwd = this.pwd
 
-        obj.id = this.id
-        obj.name = this.name
-        obj.pwd = this.pwd
-
-        return obj
+            it
+        }
     }
 
     override fun publicClone(): Any {

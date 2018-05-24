@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ListView
 import org.greenrobot.eventbus.Subscribe
@@ -13,7 +12,6 @@ import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.define.PayNoteItem
-import wxm.KeepAccount.ui.base.Adapter.LVAdapter
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent
@@ -21,11 +19,14 @@ import wxm.KeepAccount.ui.data.show.note.base.EOperation
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.ui.view.ViewHolder
-import wxm.androidutil.util.UtilFun
+import wxm.KeepAccount.utility.doJudge
+import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
+import wxm.androidutil.ui.view.ViewHolder
 import wxm.uilib.IconButton.IconButton
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * budget listview
@@ -35,8 +36,13 @@ class LVBudget : LVBase() {
     private var mActionType: EOperation = EOperation.EDIT
 
     private var mBODownOrder = true
-    private val mMainPara: LinkedList<MainAdapterItem> = LinkedList()
+    private val mMainPara: LinkedList<HashMap<String, MainAdapterItem>> = LinkedList()
     private val mHMSubPara: HashMap<String, LinkedList<SubAdapterItem>> = HashMap()
+
+    companion object {
+        private const val KEY_DATA = "data"
+    }
+
 
     internal data class MainAdapterItem(val tag: String, val title: String) {
         var show: String = EShowFold.FOLD.showStatus
@@ -68,9 +74,9 @@ class LVBudget : LVBase() {
             mIBReport.visibility = View.GONE
 
             mIBSort.setActIcon(if (mBODownOrder) R.drawable.ic_sort_up_1
-                    else R.drawable.ic_sort_down_1)
+            else R.drawable.ic_sort_down_1)
             mIBSort.setActName(if (mBODownOrder) R.string.cn_sort_up_by_name
-                    else R.string.cn_sort_down_by_name)
+            else R.string.cn_sort_down_by_name)
 
             EventHelper.setOnClickOperator(parentView,
                     intArrayOf(R.id.ib_sort, R.id.ib_delete, R.id.ib_add, R.id.ib_refresh),
@@ -130,7 +136,7 @@ class LVBudget : LVBase() {
 
     override fun loadUI(bundle: Bundle?) {
         refreshAttachLayout()
-        mLVShow.adapter = MainAdapter(ContextUtil.self, LinkedList<MainAdapterItem>(mMainPara))
+        mLVShow.adapter = MainAdapter(ContextUtil.self, mMainPara)
     }
 
     override fun initUI(bundle: Bundle?) {
@@ -140,13 +146,11 @@ class LVBudget : LVBase() {
                 {
                     when (it.id) {
                         R.id.bt_accpet -> {
-                            if (EOperation.DELETE  == mActionType) {
+                            if (EOperation.DELETE == mActionType) {
                                 mActionType = EOperation.DELETE
 
-                                val sad = UtilFun.cast_t<MainAdapter>(mLVShow.adapter)
-                                val lsDel = sad.waitDeleteItems
-                                if (!UtilFun.ListIsNullOrEmpty(lsDel)) {
-                                    ContextUtil.budgetUtility.removeDatas(lsDel)
+                                (mLVShow.adapter as MainAdapter).waitDeleteItems.let {
+                                    ContextUtil.budgetUtility.removeDatas(it)
                                 }
                             }
 
@@ -206,7 +210,8 @@ class LVBudget : LVBase() {
 
                     map.amount = szShow
                     map.show = LVBase.EShowFold.getByFold(!checkUnfoldItem(tag)).showStatus
-                    mMainPara.add(map)
+                    mMainPara.add(HashMap<String, MainAdapterItem>()
+                            .apply { put(KEY_DATA, map) })
 
                     parseSub(tag, it.value)
                 }
@@ -245,9 +250,14 @@ class LVBudget : LVBase() {
      * @param tag       data tag
      */
     private fun loadDayPayView(lv: ListView, tag: String?) {
-        val mAdapter = SubAdapter(context, mHMSubPara[tag]!!)
-        lv.adapter = mAdapter
-        mAdapter.notifyDataSetChanged()
+        ArrayList<Map<String, SubAdapterItem>>().apply {
+            mHMSubPara[tag]!!.forEach {
+                add(HashMap<String, SubAdapterItem>().apply { put(KEY_DATA, it) })
+            }
+        }.let {
+            lv.adapter = SubAdapter(context, it)
+        }
+
         ListViewHelper.setListViewHeightBasedOnChildren(lv)
     }
     /// END PRIVATE
@@ -255,7 +265,8 @@ class LVBudget : LVBase() {
     /**
      * adapter for budget
      */
-    private inner class MainAdapter internal constructor(context: Context, mdata: List<*>) : LVAdapter(context, mdata, R.layout.li_budget_show) {
+    private inner class MainAdapter internal constructor(context: Context, data: List<Map<String, MainAdapterItem>>)
+        : MoreAdapter(context, data, R.layout.li_budget_show) {
         private val mALWaitDeleteItems = ArrayList<Int>()
 
         private val mCLAdapter = View.OnClickListener { v ->
@@ -286,99 +297,101 @@ class LVBudget : LVBase() {
         val waitDeleteItems: List<Int>
             get() = mALWaitDeleteItems
 
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            val viewHolder = ViewHolder.get(rootActivity, convertView, R.layout.li_budget_show)
+        private fun getTypedItem(pos: Int): MainAdapterItem {
+            @Suppress("UNCHECKED_CAST")
+            return (getItem(pos) as Map<String, MainAdapterItem>)[KEY_DATA]!!
+        }
 
-            val hm = getItem(position) as MainAdapterItem
-            val lv = viewHolder.getView<ListView>(R.id.lv_show_detail)
+        override fun loadView(pos: Int, vhHolder: ViewHolder) {
+            val hm = getTypedItem(pos)
+            val lv = vhHolder.getView<ListView>(R.id.lv_show_detail)
             val tag = hm.tag
-            lv.visibility = if (EShowFold.getByShowStatus(hm.show).isFold()) {
-                View.GONE
-            } else {
-                loadDayPayView(lv, tag)
-                View.VISIBLE
-            }
-
-            val selfListener = View.OnClickListener { _ ->
-                val bf = EShowFold.getByShowStatus(hm.show).isFold()
-                hm.show = EShowFold.getByFold(!bf).showStatus
-                lv.visibility = if (bf) {
-                    loadDayPayView(lv, tag)
-                    addUnfoldItem(tag)
-                    View.VISIBLE
-                } else {
-                    removeUnfoldItem(tag)
-                    View.GONE
-                }
-            }
+            EShowFold.getByShowStatus(hm.show).isFold().doJudge(
+                    { lv.visibility = View.GONE },
+                    {
+                        loadDayPayView(lv, tag)
+                        lv.visibility = View.VISIBLE
+                    })
 
             // for background color
-            val rl = viewHolder.getView<ConstraintLayout>(R.id.cl_header)
-            rl.setOnClickListener(selfListener)
-            rl.setBackgroundColor(if (0 == position % 2)
-                ResourceHelper.mCRLVLineOne
-            else
-                ResourceHelper.mCRLVLineTwo)
+            vhHolder.getView<ConstraintLayout>(R.id.cl_header).let {
+                it.setOnClickListener {
+                    val bf = EShowFold.getByShowStatus(hm.show).isFold()
+                    hm.show = EShowFold.getByFold(!bf).showStatus
+                    bf.doJudge(
+                            {
+                                loadDayPayView(lv, tag)
+                                addUnfoldItem(tag)
+                                lv.visibility = View.VISIBLE
+                            },
+                            {
+                                removeUnfoldItem(tag)
+                                lv.visibility = View.GONE
+                            })
+                }
+
+                it.setBackgroundColor((0 == pos % 2).doJudge(ResourceHelper.mCRLVLineOne, ResourceHelper.mCRLVLineTwo))
+            }
 
             // for delete
-            val rlDel = viewHolder.getView<View>(R.id.rl_delete)
-            rlDel.visibility = if (mActionType == EOperation.EDIT) View.GONE else View.VISIBLE
-            rlDel.setOnClickListener(mCLAdapter)
+            vhHolder.getView<View>(R.id.rl_delete).let {
+                it.visibility = (mActionType == EOperation.EDIT).doJudge(View.GONE, View.VISIBLE)
+                it.setOnClickListener(mCLAdapter)
+            }
 
             // for note
-            val nt = hm.note
-            val bNote = UtilFun.StringIsNullOrEmpty(nt)
-            viewHolder.getView<View>(R.id.iv_note).visibility = if (bNote) View.GONE else View.VISIBLE
-            viewHolder.getView<View>(R.id.tv_budget_note).visibility = if (bNote) View.GONE else View.VISIBLE
-            if (!bNote)
-                viewHolder.setText(R.id.tv_budget_note, nt)
+            hm.note.let {
+                it.isNullOrEmpty().doJudge(
+                        {
+                            vhHolder.getView<View>(R.id.iv_note).visibility = View.GONE
+                            vhHolder.getView<View>(R.id.tv_budget_note).visibility = View.GONE
+                        },
+                        {
+                            vhHolder.setText(R.id.tv_budget_note, it)
+                            vhHolder.getView<View>(R.id.iv_note).visibility = View.VISIBLE
+                            vhHolder.getView<View>(R.id.tv_budget_note).visibility = View.VISIBLE
+                        }
+                )
+            }
 
-            viewHolder.setText(R.id.tv_budget_name, hm.title)
-            viewHolder.setText(R.id.tv_budget_amount, hm.amount)
-
-            viewHolder.getView<ImageView>(R.id.iv_edit).setOnClickListener(mCLAdapter)
-            return viewHolder.convertView
+            vhHolder.setText(R.id.tv_budget_name, hm.title)
+            vhHolder.setText(R.id.tv_budget_amount, hm.amount)
+            vhHolder.getView<ImageView>(R.id.iv_edit).setOnClickListener(mCLAdapter)
         }
     }
-
 
     /**
      * sub adapter
      */
     private inner class SubAdapter
-    internal constructor(context: Context, sData: List<SubAdapterItem>)
-        : LVAdapter(context, sData, R.layout.li_budget_show_detail) {
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            val vh = ViewHolder.get(rootActivity, convertView, R.layout.li_budget_show_detail)
-
-            val hm = getItem(position) as SubAdapterItem
+    internal constructor(context: Context, sData: List<Map<String, SubAdapterItem>>)
+        : MoreAdapter(context, sData, R.layout.li_budget_show_detail) {
+        override fun loadView(pos: Int, vhHolder: ViewHolder) {
+            @Suppress("UNCHECKED_CAST")
+            val hm = (getItem(pos) as Map<String, SubAdapterItem>)[KEY_DATA]!!
             val nt = hm.note
-            if (UtilFun.StringIsNullOrEmpty(nt)) {
-                vh.getView<View>(R.id.rl_pay_note).visibility = View.GONE
+            if (nt.isNullOrEmpty()) {
+                vhHolder.getView<View>(R.id.rl_pay_note).visibility = View.GONE
             }
 
             // for show
-            vh.setText(R.id.tv_month, hm.month)
-            vh.setText(R.id.tv_day_number, hm.dayNumber)
-            vh.setText(R.id.tv_day_in_week, hm.dayInWeek)
-            vh.setText(R.id.tv_pay_title, hm.title)
-            vh.setText(R.id.tv_pay_amount, hm.amount)
-            vh.setText(R.id.tv_pay_note, hm.note)
-            vh.setText(R.id.tv_pay_time, hm.time)
+            vhHolder.setText(R.id.tv_month, hm.month)
+            vhHolder.setText(R.id.tv_day_number, hm.dayNumber)
+            vhHolder.setText(R.id.tv_day_in_week, hm.dayInWeek)
+            vhHolder.setText(R.id.tv_pay_title, hm.title)
+            vhHolder.setText(R.id.tv_pay_amount, hm.amount)
+            vhHolder.setText(R.id.tv_pay_note, hm.note)
+            vhHolder.setText(R.id.tv_pay_time, hm.time)
 
             // for look action
-            vh.getView<View>(R.id.iv_look).setOnClickListener { _ ->
-                val ac = rootActivity!!
-                val intent: Intent
-                intent = Intent(ac, ACNoteEdit::class.java)
-                intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(hm.id))
-                intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
-                        GlobalDef.STR_RECORD_PAY)
+            vhHolder.getView<View>(R.id.iv_look).setOnClickListener { _ ->
+                Intent(activity, ACNoteEdit::class.java).let {
+                    it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(hm.id))
+                    it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_PAY)
 
-                ac.startActivityForResult(intent, 1)
+                    activity.startActivityForResult(it, 1)
+                }
             }
-            return vh.convertView
         }
     }
 }
