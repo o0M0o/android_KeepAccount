@@ -17,9 +17,7 @@ import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent
 import wxm.KeepAccount.ui.data.show.note.base.EOperation
 import wxm.KeepAccount.ui.utility.ListViewHelper
-import wxm.KeepAccount.utility.ContextUtil
-import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.utility.doJudge
+import wxm.KeepAccount.utility.*
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewHolder
@@ -200,15 +198,13 @@ class LVBudget : LVBase() {
                 })
                 .forEach {
                     val tag = it.key._id.toString()
-                    val szShow = String.format(Locale.CHINA, "(总额)%.02f/(剩余)%.02f",
-                            it.key.amount, it.key.remainderAmount)
-
                     val map = MainAdapterItem(tag, it.key.name)
                     it.key.note?.let {
                         map.note = it
                     }
 
-                    map.amount = szShow
+                    map.amount = String.format(Locale.CHINA, "(总额)%.02f/(剩余)%.02f",
+                            it.key.amount, it.key.remainderAmount)
                     map.show = LVBase.EShowFold.getByFold(!checkUnfoldItem(tag)).showStatus
                     mMainPara.add(HashMap<String, MainAdapterItem>()
                             .apply { put(KEY_DATA, map) })
@@ -221,20 +217,19 @@ class LVBudget : LVBase() {
     private fun parseSub(parentTag: String, lsPay: List<PayNoteItem>) {
         val curLs = LinkedList<SubAdapterItem>()
         lsPay.sortedBy { it.ts }.forEach {
-            val allDate = it.tsToStr!!
-            val map = SubAdapterItem(parentTag, allDate.substring(0, 10))
-            allDate.substring(0, 7).let {
-                map.month = "${it.substring(0, 4)}年${it.substring(5, 7).removePrefix("0")}月"
-            }
+            val cl = getCalendarByTimeStamp(it.ts)
 
-            map.dayNumber = allDate.substring(8, 10).removePrefix("0")
-            map.dayInWeek = ToolUtil.getDayInWeek(it.ts)
+            val map = SubAdapterItem(parentTag, it.tsToStr.substring(0, 10))
+            map.month = "${cl.getYear()}年${cl.getMonth()}月"
+
+            map.dayNumber = cl.getDayInMonth().toString()
+            map.dayInWeek = cl.getDayInWeekString()
 
             it.note?.let {
                 map.note = if (it.length > 10) it.substring(0, 10) + "..." else it
             }
 
-            map.time = allDate.substring(11, 16)
+            map.time = cl.getHourMinuteString()
             map.title = it.info
             map.amount = it.valToStr
             map.id = it.id
