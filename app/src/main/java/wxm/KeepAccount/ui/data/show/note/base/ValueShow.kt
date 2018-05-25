@@ -16,7 +16,9 @@ import java.util.Locale
 import kotterknife.bindView
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
+import wxm.KeepAccount.utility.let1
 import wxm.androidutil.log.TagLog
+import wxm.androidutil.util.UiUtil
 
 
 /**
@@ -90,9 +92,8 @@ class ValueShow(context: Context, attrs: AttributeSet)
             mAttrIncomeAmount = array.getString(R.styleable.ValueShow_szIncomeAmount)
             mAttrIncomeAmount = if (UtilFun.StringIsNullOrEmpty(mAttrIncomeAmount)) "0" else mAttrIncomeAmount
 
-            val dst = getContext().resources.displayMetrics.density
             mAttrDMLineLen = array.getLayoutDimension(R.styleable.ValueShow_pxLineLen,
-                    (200 * dst).toInt())
+                    UiUtil.dip2px(getContext(), 200f))
 
             updateShow()
         } catch (ex: Exception) {
@@ -150,9 +151,10 @@ class ValueShow(context: Context, attrs: AttributeSet)
      * @param percent   new length(percentage)
      */
     private fun adjustLineLen(iv: ImageView, percent: Float) {
-        val lp = iv.layoutParams
-        lp.width = (mAttrDMLineLen * percent).toInt()
-        iv.layoutParams = lp
+        iv.layoutParams.let1 {
+            it.width = (mAttrDMLineLen * percent).toInt()
+            iv.layoutParams = it
+        }
     }
 
     companion object {
@@ -160,6 +162,5 @@ class ValueShow(context: Context, attrs: AttributeSet)
         const val ATTR_PAY_AMOUNT = "pay_amount"
         const val ATTR_INCOME_COUNT = "income_count"
         const val ATTR_INCOME_AMOUNT = "income_amount"
-        private val LOG_TAG = ::ValueShow.javaClass.simpleName
     }
 }

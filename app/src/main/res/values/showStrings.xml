@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+this file include show strings in app
+-->
+<resources>
+    <string name="show_version_code">当前版本号 : %d</string>
+    <string name="show_version_name">当前版本名 : %s</string>
+
+    <string name="show_accept">确认</string>
+</resources>

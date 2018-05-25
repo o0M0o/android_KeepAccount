@@ -11,6 +11,7 @@ import wxm.KeepAccount.define.PayNoteItem
 import wxm.KeepAccount.ui.base.Helper.ViewHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.ViewHolder
@@ -85,63 +86,63 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
 
     /**
      * init pay node
-     * @param vh    view holder
+     * @param vw    root view
      * @param data  pay data
      */
-    private fun initPay(vh: View, data: PayNoteItem) {
-        val vHelper = ViewHelper(vh)
-        vHelper.setText(R.id.tv_pay_title, data.info!!)
+    private fun initPay(vw: View, data: PayNoteItem) {
+        ViewHelper(vw).let1 { vh ->
+            vh.setText(R.id.tv_pay_title, data.info)
 
-        val bi = data.budget
-        val bName = bi?.name ?: ""
-        if (!UtilFun.StringIsNullOrEmpty(bName)) {
-            vHelper.setText(R.id.tv_pay_budget, bName)
-        } else {
-            vHelper.setVisibility(R.id.tv_pay_budget, View.GONE)
-            vHelper.setVisibility(R.id.iv_pay_budget, View.GONE)
-        }
+            (data.budget?.name).let1 {
+                if (!it.isNullOrEmpty()) {
+                    vh.setText(R.id.tv_pay_budget, it!!)
+                } else {
+                    vh.setVisibility(R.id.tv_pay_budget, View.GONE)
+                    vh.setVisibility(R.id.iv_pay_budget, View.GONE)
+                    vh.setVisibility(R.id.rl_budget, View.GONE)
+                }
+            }
 
-        vHelper.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %s", data.valToStr))
-        vHelper.setText(R.id.tv_pay_time, data.ts.toString().substring(11, 16))
+            vh.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %s", data.valToStr))
+            vh.setText(R.id.tv_pay_time, data.ts.toString().substring(11, 16))
 
-        // for look detail
-        vHelper.setVisibility(R.id.iv_pay_action, View.GONE)
+            // for look detail
+            vh.setVisibility(R.id.iv_pay_action, View.GONE)
 
-        // for budget
-        if (UtilFun.StringIsNullOrEmpty(bName)) {
-            vHelper.setVisibility(R.id.rl_budget, View.GONE)
-        }
-
-        // for note
-        val nt = data.note
-        if (UtilFun.StringIsNullOrEmpty(nt)) {
-            vHelper.setVisibility(R.id.rl_pay_note, View.GONE)
-        } else {
-            vHelper.setText(R.id.tv_pay_note, nt!!)
+            // for note
+            data.note.let1 {
+                if (it.isNullOrEmpty()) {
+                    vh.setVisibility(R.id.rl_pay_note, View.GONE)
+                } else {
+                    vh.setText(R.id.tv_pay_note, it!!)
+                }
+            }
         }
     }
 
     /**
      * init income node
-     * @param vh    view holder
+     * @param vw    root view
      * @param data  income data
      */
-    private fun initIncome(vh: View, data: IncomeNoteItem) {
-        val vHelper = ViewHelper(vh)
-        vHelper.setText(R.id.tv_income_title, data.info!!)
+    private fun initIncome(vw: View, data: IncomeNoteItem) {
+        ViewHelper(vw).let1 { vh ->
+            vh.setText(R.id.tv_income_title, data.info)
 
-        vHelper.setText(R.id.tv_income_amount, data.valToStr!!)
-        vHelper.setText(R.id.tv_income_time, data.ts.toString().substring(11, 16))
+            vh.setText(R.id.tv_income_amount, data.valToStr)
+            vh.setText(R.id.tv_income_time, data.ts.toString().substring(11, 16))
 
-        // for look detail
-        vHelper.setVisibility(R.id.iv_income_action, View.GONE)
+            // for look detail
+            vh.setVisibility(R.id.iv_income_action, View.GONE)
 
-        // for note
-        val nt = data.note
-        if (UtilFun.StringIsNullOrEmpty(nt)) {
-            vHelper.setVisibility(R.id.rl_income_note, View.GONE)
-        } else {
-            vHelper.setText(R.id.tv_income_note, nt!!)
+            // for note
+            data.note.let1 {
+                if (it.isNullOrEmpty()) {
+                    vh.setVisibility(R.id.rl_income_note, View.GONE)
+                } else {
+                    vh.setText(R.id.tv_income_note, it!!)
+                }
+            }
         }
     }
 

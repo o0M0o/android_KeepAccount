@@ -27,7 +27,7 @@ class PayNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone {
     override var budget: BudgetItem? = null
 
     @DatabaseField(columnName = "info", canBeNull = false, dataType = DataType.STRING)
-    override var info: String? = null
+    override var info: String = ""
 
     @DatabaseField(columnName = "note", dataType = DataType.STRING)
     override var note: String? = null

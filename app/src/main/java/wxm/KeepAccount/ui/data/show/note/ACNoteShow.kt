@@ -1,15 +1,11 @@
 package wxm.KeepAccount.ui.data.show.note
 
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 
 import wxm.KeepAccount.R
-import wxm.KeepAccount.define.GlobalDef
-import wxm.androidutil.ui.frg.FrgSupportSwitcher
 import wxm.androidutil.ui.activity.ACSwitcherActivity
 
 /**
@@ -17,14 +13,6 @@ import wxm.androidutil.ui.activity.ACSwitcherActivity
  * Created by WangXM on2016/12/1.
  */
 class ACNoteShow : ACSwitcherActivity<FrgNoteShow>() {
-    override fun leaveActivity() {
-        val ret_data = GlobalDef.INTRET_USR_LOGOUT
-
-        val data = Intent()
-        setResult(ret_data, data)
-        finish()
-    }
-
     override fun setupFragment(bundle: Bundle?) {
         addFragment(FrgNoteShow())
     }
@@ -40,8 +28,7 @@ class ACNoteShow : ACSwitcherActivity<FrgNoteShow>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.mi_switch -> {
-                val hot = hotFragment.hotTabItem
-                hot?.switchPage()
+                hotFragment.hotTabItem!!.switchPage()
             }
 
             else -> return super.onOptionsItemSelected(item)
@@ -66,9 +53,9 @@ class ACNoteShow : ACSwitcherActivity<FrgNoteShow>() {
 
     /**
      * jump to page with name
-     * @param tabname   tab name
+     * @param tn   tab name
      */
-    fun jumpByTabName(tabname: String) {
-        hotFragment.jumpByTabName(tabname)
+    fun jumpByTabName(tn: String) {
+        hotFragment.jumpByTabName(tn)
     }
 }

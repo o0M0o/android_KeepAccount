@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import wxm.KeepAccount.R
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.doJudge
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.view.ViewHolder
 import wxm.uilib.FrgCalendar.CalendarItem.BaseItemAdapter
@@ -19,20 +19,8 @@ open class CalendarMonthAdapter(context: Context)
     override fun getView(date: String, model: CalendarDayModel,
                          convertView: View?, parent: ViewGroup?): View {
         val vhParent = ViewHolder.get(mContext, convertView, R.layout.gi_calendar_item)
-        val vwParent = vhParent.convertView
-        vwParent.setBackgroundResource(
-                when {
-                    model.isCurrentMonth -> {
-                        if (model.recordCount > 0) R.drawable.day_shape
-                        else R.drawable.day_empty_shape
-                    }
-
-                    else -> R.drawable.day_other_month_shape
-                }
-        )
-
         vhParent.getView<TextView>(R.id.tv_day_num).apply {
-            text = if (model.isToday) mSZToday else model.dayNumber
+            text = (model.isToday).doJudge(context.getString(R.string.today), model.dayNumber)
             setTextColor(
                     when {
                         model.isCurrentMonth -> {
@@ -49,15 +37,25 @@ open class CalendarMonthAdapter(context: Context)
         }
 
         vhParent.getView<TextView>(R.id.tv_day_new_count).apply {
-            visibility = if (model.recordCount > 0) {
-                text = context.getString(R.string.calendar_item_new_count, model.recordCount)
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
+            visibility = (model.recordCount > 0)
+                    .doJudge({
+                        text = context.getString(R.string.calendar_item_new_count, model.recordCount)
+                        View.VISIBLE
+                    }, { View.GONE })
         }
 
-        return vwParent
+        return vhParent.convertView.apply {
+            setBackgroundResource(
+                    when {
+                        model.isCurrentMonth -> {
+                            (model.recordCount > 0)
+                                    .doJudge(R.drawable.day_shape, R.drawable.day_empty_shape)
+                        }
+
+                        else -> R.drawable.day_other_month_shape
+                    }
+            )
+        }
     }
 
     companion object {
@@ -67,7 +65,5 @@ open class CalendarMonthAdapter(context: Context)
 
         private val mCLOtherMonth = AppBase.getColor(R.color.text_half_fit)
         private val mCLCurrentMonth = AppBase.getColor(R.color.text_fit)
-
-        private val mSZToday = AppBase.getString(R.string.today)
     }
 }

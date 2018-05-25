@@ -37,6 +37,7 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.PreferencesUtil
+import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.view.EventHelper
 
 /**
@@ -83,17 +84,17 @@ class BudgetChart : ShowViewBase() {
             mBFilter = false
 
             // 填充预算数据
-            mSPBudgetData = ContextUtil.budgetUtility.budgetForCurUsr
+            mSPBudgetData = ContextUtil.budgetUtility.budgetForCurUsr!!
             if (!UtilFun.ListIsNullOrEmpty(mSPBudgetData)) {
-                val lsData = ArrayList<String>()
-                for (i in mSPBudgetData!!) {
-                    lsData.add(i.name)
+                val lsData = ArrayList<String>().apply {
+                    addAll(mSPBudgetData!!.map { it.name })
                 }
 
-                val spAdapter = ArrayAdapter(rootActivity!!,
-                        android.R.layout.simple_spinner_item, lsData)
-                spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                mSPBudget.adapter = spAdapter
+                ArrayAdapter(activity, android.R.layout.simple_spinner_item,
+                        lsData).let1 {
+                    it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    mSPBudget.adapter = it
+                }
 
                 mSPBudget.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -137,22 +138,23 @@ class BudgetChart : ShowViewBase() {
 
                             val dif = (event.x - mDownX) / mChartWidth
                             if (0.05 < Math.abs(dif) || act == MotionEvent.ACTION_UP) {
-                                val cp = Viewport(mVPOrg)
-                                if (cp.left > mVPMax.left || cp.right < mVPMax.right) {
-                                    val w = cp.width()
-                                    val m = -(dif * w)
-                                    cp.offset(m, 0f)
-                                    if (cp.left < mVPMax.left) {
-                                        cp.left = mVPMax.left
-                                        cp.right = mVPMax.left + w
-                                    }
+                                Viewport(mVPOrg).let1 { cp ->
+                                    if (cp.left > mVPMax.left || cp.right < mVPMax.right) {
+                                        val w = cp.width()
+                                        val m = -(dif * w)
+                                        cp.offset(m, 0f)
+                                        if (cp.left < mVPMax.left) {
+                                            cp.left = mVPMax.left
+                                            cp.right = mVPMax.left + w
+                                        }
 
-                                    if (cp.right > mVPMax.right) {
-                                        cp.right = mVPMax.right
-                                        cp.left = cp.right - w
-                                    }
+                                        if (cp.right > mVPMax.right) {
+                                            cp.right = mVPMax.right
+                                            cp.left = cp.right - w
+                                        }
 
-                                    mPreviewChart.currentViewport = cp
+                                        mPreviewChart.currentViewport = cp
+                                    }
                                 }
                             }
                         }
@@ -252,9 +254,8 @@ class BudgetChart : ShowViewBase() {
         val bi = mSPBudgetData!![mSPBudgetHot]
         ToolUtil.runInBackground(this.activity,
                 {
-                    val pays = ContextUtil.payIncomeUtility.getPayNoteByBudget(bi)
                     val hmRet = HashMap<String, ArrayList<PayNoteItem>>()
-                    pays.forEach    {
+                    ContextUtil.payIncomeUtility.getPayNoteByBudget(bi).forEach    {
                         val k = it.ts.toString().substring(0, 10)
                         val lsp = hmRet[k]
                         if (UtilFun.ListIsNullOrEmpty(lsp)) {
@@ -277,15 +278,16 @@ class BudgetChart : ShowViewBase() {
                         it.value.forEach { pay = pay.add(it.amount) }
 
                         allPay = allPay.add(pay)
-
                         val leftBudget = bi.amount.subtract(allPay)
-                        val values = ArrayList<SubcolumnValue>()
-                        values.add(SubcolumnValue(leftBudget.toFloat(), mColorRemainder))
-                        values.add(SubcolumnValue(allPay.toFloat(), mColorUsed))
 
-                        val cd = Column(values)
-                        cd.setHasLabels(true)
-                        columns.add(cd)
+                        ArrayList<SubcolumnValue>().apply {
+                            add(SubcolumnValue(leftBudget.toFloat(), mColorRemainder))
+                            add(SubcolumnValue(allPay.toFloat(), mColorUsed))
+                        }.let1 {
+                            Column(it).apply { setHasLabels(true) }.let1 {
+                                columns.add(it)
+                            }
+                        }
 
                         axisValues.add(AxisValue(idCol.toFloat()).setLabel(it.key))
                         idCol++
@@ -312,21 +314,18 @@ class BudgetChart : ShowViewBase() {
                 { loadUIUtility(true) })
     }
 
-
-
     private fun refreshAttachLayout() {
         setAttachLayoutVisible(if (mBFilter) View.VISIBLE else View.GONE)
         setFilterLayoutVisible(if (mBFilter) View.VISIBLE else View.GONE)
         setAcceptGiveUpLayoutVisible(View.GONE)
     }
 
-
     private fun refreshViewPort() {
-        val tempViewport = Viewport(mChart.maximumViewport)
-        tempViewport.right = tempViewport.left + mPrvWidth
-        mPreviewChart.setCurrentViewportWithAnimation(tempViewport)
+        Viewport(mChart.maximumViewport).let1 {
+            it.right = it.left + mPrvWidth
+            mPreviewChart.setCurrentViewportWithAnimation(it)
+        }
     }
-
 
     /**
      * Viewport listener for preview chart(lower one). in [.onViewportChanged] method change

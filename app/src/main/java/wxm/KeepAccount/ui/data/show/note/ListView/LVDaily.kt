@@ -1,17 +1,16 @@
 package wxm.KeepAccount.ui.data.show.note.ListView
 
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
-import android.view.ViewGroup
 import android.widget.CheckBox
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.ui.base.Adapter.LVAdapter
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
 import wxm.KeepAccount.ui.data.report.ACReport
@@ -23,7 +22,10 @@ import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
+import wxm.KeepAccount.utility.doJudge
+import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
+import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder
 import wxm.androidutil.ui.view.ViewHolder
@@ -44,7 +46,7 @@ class LVDaily : LVBase() {
 
     // 若为true则数据以时间降序排列
     private var mBTimeDownOrder = true
-    private val mMainPara: LinkedList<ItemHolder> = LinkedList()
+    private val mMainPara: LinkedList<HashMap<String, ItemHolder>> = LinkedList()
 
     internal data class MainAdapterItem(val year: String, val month: String, val day: String) {
         var show: String = EShowFold.FOLD.showStatus
@@ -105,7 +107,7 @@ class LVDaily : LVBase() {
 
                 R.id.ib_refresh -> {
                     mAction = EOperation.EDIT
-                    reloadView(context, false)
+                    reloadView(false)
                 }
 
                 R.id.ib_delete -> {
@@ -214,7 +216,7 @@ class LVDaily : LVBase() {
                 {
                     mMainPara.clear()
                     NoteDataHelper.notesDays.forEach {
-                        mMainPara.add(ItemHolder(it))
+                        mMainPara.add(HashMap<String, ItemHolder>().apply { put(KEY_DATA, ItemHolder(it)) })
                     }
                 },
                 {
@@ -232,12 +234,13 @@ class LVDaily : LVBase() {
         setAcceptGiveUpLayoutVisible(if (mAction.isDelete && !mBFilter) View.VISIBLE else View.GONE)
 
         // load show data
-        mLVShow.adapter = MainAdapter(context,
-                mMainPara.filter { !mBFilter || mFilterPara.contains(it.tag) }
-                        .sortedWith(Comparator { o1, o2 ->
-                            if (!mBTimeDownOrder) o1.tag.compareTo(o2.tag)
-                            else o2.tag.compareTo(o1.tag)
-                        }))
+        mMainPara.filter { !mBFilter || mFilterPara.contains(it[KEY_DATA]!!.tag) }
+                .sortedWith(Comparator { o1, o2 ->
+                    if (!mBTimeDownOrder) o1[KEY_DATA]!!.tag.compareTo(o2[KEY_DATA]!!.tag)
+                    else o2[KEY_DATA]!!.tag.compareTo(o1[KEY_DATA]!!.tag)
+                }).let1 {
+                    mLVShow.adapter = MainAdapter(context, it)
+                }
     }
 
 
@@ -272,12 +275,10 @@ class LVDaily : LVBase() {
         setFilterLayoutVisible(if (mBFilter) View.VISIBLE else View.GONE)
         setAcceptGiveUpLayoutVisible(if (mAction.isDelete && !mBFilter) View.VISIBLE else View.GONE)
 
-        MainAdapter(context,
-                mMainPara.filter {
-                    if (mBFilter) mFilterPara.contains(it.tag) else true
-                }).let {
-            mLVShow.adapter = it
-            //it.notifyDataSetChanged()
+        mMainPara.filter {
+            if (mBFilter) mFilterPara.contains(it[KEY_DATA]!!.tag) else true
+        }.let1 {
+            mLVShow.adapter = MainAdapter(context, it)
         }
     }
 
@@ -286,16 +287,21 @@ class LVDaily : LVBase() {
     /**
      * main adapter
      */
-    private inner class MainAdapter internal constructor(context: Context, data: List<ItemHolder>)
-        : LVAdapter(context, data, R.layout.li_daily_show) {
-        private val mCLAdapter = View.OnClickListener { v ->
-            val pos = mLVShow.getPositionForView(v)
-            val hm = getItem(pos) as ItemHolder
+    private inner class MainAdapter internal constructor(context: Context, data: List<Map<String, ItemHolder>>)
+        : MoreAdapter(context, data, R.layout.li_daily_show) {
 
-            rootActivity?.let {
-                it.startActivity(Intent(it, ACDailyDetail::class.java)
-                        .putExtra(ACDailyDetail.K_HOTDAY, hm.tag))
+        private val mCLAdapter = View.OnClickListener { v ->
+            getTypedItem(mLVShow.getPositionForView(v)).let1 { hm ->
+                activity.let1 {
+                    it.startActivity(Intent(it, ACDailyDetail::class.java)
+                            .putExtra(ACDailyDetail.KEY_HOT_DAY, hm.tag))
+                }
             }
+        }
+
+        private fun getTypedItem(pos:Int): ItemHolder   {
+            @Suppress("UNCHECKED_CAST")
+            return (getItem(pos) as Map<String, ItemHolder>)[KEY_DATA]!!
         }
 
         /**
@@ -304,25 +310,25 @@ class LVDaily : LVBase() {
          */
         internal val waitDeleteDays: List<String>
             get() {
-                if (!mAction.isDelete) {
-                    return emptyList()
-                }
+                return mAction.isDelete.doJudge(
+                        LinkedList<String>().let { ret ->
+                            forEachChildView({ vw, _ ->
+                                vw.findViewById<CheckBox>(R.id.cb_del)!!.let1 {
+                                    if (it.isChecked) {
+                                        ret.add(tag as kotlin.String)
+                                    }
+                                }
 
-                val ret = LinkedList<String>()
-                val count = mLVShow.childCount
-                for (pos in 0 until count) {
-                    mLVShow.getChildAt(pos).findViewById<CheckBox>(R.id.cb_del).apply {
-                        if (isChecked) {
-                            ret.add(tag as String)
-                        }
-                    }
-                }
-                return ret
+                                true
+                            })
+
+                            ret
+                        },
+                        emptyList())
             }
 
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            val viewHolder = ViewHolder.get(context, convertView, R.layout.li_daily_show)
-            val cb = viewHolder.getView<CheckBox>(R.id.cb_del)
+        override fun loadView(pos: Int, vhHolder: ViewHolder) {
+            val cb = vhHolder.getView<CheckBox>(R.id.cb_del)
             cb.visibility = if (mAction.isEdit) {
                 cb.isChecked = false
                 View.GONE
@@ -330,23 +336,21 @@ class LVDaily : LVBase() {
                 View.VISIBLE
             }
 
-            val vwRoot = viewHolder.convertView
-            if (null == viewHolder.getSelfTag(SELF_TAG_ID)) {
-                viewHolder.setSelfTag(SELF_TAG_ID, Any())
+            val vwRoot = vhHolder.convertView
+            if (null == vhHolder.getSelfTag(SELF_TAG_ID)) {
+                vhHolder.setSelfTag(SELF_TAG_ID, Any())
 
-                val it = getItem(position) as ItemHolder
+                val it = getTypedItem(pos)
                 cb.tag = it.tag
 
-                vwRoot.setBackgroundColor(if (0 == position % 2) ResourceHelper.mCRLVLineOne
+                vwRoot.setBackgroundColor(if (0 == pos % 2) ResourceHelper.mCRLVLineOne
                 else ResourceHelper.mCRLVLineTwo)
                 vwRoot.setOnClickListener(mCLAdapter)
 
-                initItemShow(viewHolder, it.data,
-                        if (position > 0) (getItem(position - 1) as ItemHolder).data
+                initItemShow(vhHolder, it.data,
+                        if (pos > 0) getTypedItem(pos - 1).data
                         else null)
             }
-
-            return vwRoot
         }
 
         private fun initItemShow(vh: ViewHolder, item: MainAdapterItem, prvItem: MainAdapterItem?) {
@@ -374,6 +378,8 @@ class LVDaily : LVBase() {
 
     companion object {
         private const val SELF_TAG_ID = 0
+
+        private const val KEY_DATA = "data"
     }
 }
 

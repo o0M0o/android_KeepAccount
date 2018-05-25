@@ -4,26 +4,29 @@ import android.content.Context
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ListView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
-import wxm.KeepAccount.ui.base.Adapter.LVAdapter
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
+import wxm.KeepAccount.utility.doJudge
+import wxm.KeepAccount.utility.let1
+import wxm.androidutil.ui.moreAdapter.MoreAdapter
+import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder
 import wxm.androidutil.ui.view.ViewHolder
 import wxm.androidutil.util.UtilFun
-import wxm.androidutil.ui.view.EventHelper
+import wxm.androidutil.util.forObj
 import wxm.uilib.IconButton.IconButton
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * ListView for monthly data
@@ -32,7 +35,7 @@ import java.util.*
 class LVMonthly : LVBase() {
     // 若为true则数据以时间降序排列
     private var mBTimeDownOrder = true
-    private val mLSMonthPara: LinkedList<MonthItemHolder> = LinkedList()
+    private val mLSMonthPara: LinkedList<HashMap<String, MonthItemHolder>> = LinkedList()
     private val mHMDayPara: HashMap<String, LinkedList<DayItemHolder>> = HashMap()
 
     internal data class MonthDetailItem(val month: String) {
@@ -117,16 +120,15 @@ class LVMonthly : LVBase() {
                 R.id.ib_sort -> {
                     mBTimeDownOrder = !mBTimeDownOrder
 
-                    mIBSort.setActIcon(if (mBTimeDownOrder) R.drawable.ic_sort_up_1
-                    else R.drawable.ic_sort_down_1)
-                    mIBSort.setActName(if (mBTimeDownOrder) R.string.cn_sort_up_by_time
-                    else R.string.cn_sort_down_by_time)
+                    mIBSort.setActIcon(mBTimeDownOrder.doJudge(R.drawable.ic_sort_up_1, R.drawable.ic_sort_down_1))
+                    mIBSort.setActName(mBTimeDownOrder.doJudge(R.string.cn_sort_up_by_time,
+                            R.string.cn_sort_down_by_time))
 
-                    loadUI(null)
+                    reloadUI()
                 }
 
                 R.id.ib_refresh -> {
-                    reloadView(v.context, false)
+                    reloadView(false)
                 }
             }
         }
@@ -137,9 +139,7 @@ class LVMonthly : LVBase() {
         mAHActs = MonthlyActionHelper()
     }
 
-    override fun isUseEventBus(): Boolean {
-        return true
-    }
+    override fun isUseEventBus(): Boolean = true
 
     /**
      * filter view
@@ -166,18 +166,16 @@ class LVMonthly : LVBase() {
             R.id.bt_accpet -> {
                 if (mBSelectSubFilter) {
                     if (!UtilFun.ListIsNullOrEmpty(mLLSubFilter)) {
-                        val ac = rootActivity
-                        ac!!.jumpByTabName(NoteDataHelper.TAB_TITLE_DAILY)
-
-                        val lsSub = ArrayList(mLLSubFilter)
-                        EventBus.getDefault().post(FilterShowEvent(NoteDataHelper.TAB_TITLE_MONTHLY, lsSub))
+                        rootActivity!!.jumpByTabName(NoteDataHelper.TAB_TITLE_DAILY)
+                        FilterShowEvent(NoteDataHelper.TAB_TITLE_MONTHLY, ArrayList(mLLSubFilter))
+                                .let1 { EventBus.getDefault().post(it) }
 
                         mLLSubFilter.clear()
                     }
 
-                    for (i in mLLSubFilterVW) {
-                        i.isSelected = false
-                        i.background.alpha = 0
+                    mLLSubFilterVW.forEach {
+                        it.isSelected = false
+                        it.background.alpha = 0
                     }
                     mLLSubFilterVW.clear()
 
@@ -219,18 +217,25 @@ class LVMonthly : LVBase() {
 
                     // for month
                     NoteDataHelper.notesMonths.forEach {
-                        mLSMonthPara.add(MonthItemHolder(it))
+                        mLSMonthPara.add(HashMap<String, MonthItemHolder>().apply {
+                            put(KEY_DATA, MonthItemHolder(it))
+                        })
                     }
 
                     // for day
                     NoteDataHelper.notesDays.forEach {
                         val km = it.substring(0, 7)
-                        var lsDay: LinkedList<DayItemHolder>? = mHMDayPara[km]
-                        if (null == lsDay) {
-                            lsDay = LinkedList()
-                            mHMDayPara[km] = lsDay
-                        }
-                        lsDay.add(DayItemHolder(it))
+                        mHMDayPara[km].forObj(
+                                { ls ->
+                                    ls.add(DayItemHolder(it))
+                                    Unit
+                                },
+                                {
+                                    mHMDayPara[km] = LinkedList<DayItemHolder>().apply {
+                                        add(DayItemHolder(it))
+                                    }
+                                }
+                        )
                     }
                 },
                 { loadUI(bundle) })
@@ -242,10 +247,10 @@ class LVMonthly : LVBase() {
 
         // set listview adapter
         mLVShow.adapter = MonthAdapter(context,
-                mLSMonthPara.filter { !mBFilter || mFilterPara.contains(it.tag) }
+                mLSMonthPara.filter { !mBFilter || mFilterPara.contains(it[KEY_DATA]!!.tag) }
                         .sortedWith(Comparator { o1, o2 ->
-                            if (!mBTimeDownOrder) o1.tag.compareTo(o2.tag)
-                            else o2.tag.compareTo(o1.tag)
+                            if (!mBTimeDownOrder) o1[KEY_DATA]!!.tag.compareTo(o2[KEY_DATA]!!.tag)
+                            else o2[KEY_DATA]!!.tag.compareTo(o1[KEY_DATA]!!.tag)
                         }))
     }
 
@@ -267,11 +272,15 @@ class LVMonthly : LVBase() {
      */
     private fun loadDayDetailView(lv: ListView, tag: String?) {
         mHMDayPara[tag]?.let {
-            lv.adapter = DayAdapter(context,
-                    it.sortedWith(Comparator { o1, o2 ->
-                        if (!mBTimeDownOrder) o1.tag.compareTo(o2.tag)
-                        else o2.tag.compareTo(o1.tag)
-                    }))
+            LinkedList<HashMap<String, DayItemHolder>>().apply {
+                addAll(it.sortedWith(Comparator { o1, o2 ->
+                    if (!mBTimeDownOrder) o1.tag.compareTo(o2.tag)
+                    else o2.tag.compareTo(o1.tag)
+                }).map { HashMap<String, DayItemHolder>().apply { put(KEY_DATA, it) } })
+            }.let {
+                lv.adapter = DayAdapter(context, it)
+            }
+
             ListViewHelper.setListViewHeightBasedOnChildren(lv)
         }
     }
@@ -280,53 +289,63 @@ class LVMonthly : LVBase() {
     /**
      * month data adapter
      */
-    private inner class MonthAdapter internal constructor(context: Context, data: List<MonthItemHolder>)
-        : LVAdapter(context, data, R.layout.li_monthly_show) {
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            val viewHolder = ViewHolder.get(context, convertView, R.layout.li_monthly_show)
-            if (null == viewHolder.getSelfTag(SELF_TAG_ID)) {
-                viewHolder.setSelfTag(SELF_TAG_ID, Any())
+    private inner class MonthAdapter internal constructor(context: Context, data: List<Map<String, MonthItemHolder>>)
+        : MoreAdapter(context, data, R.layout.li_monthly_show) {
 
-                val item = (getItem(position) as MonthItemHolder).data
-                val lv = viewHolder.getView<ListView>(R.id.lv_show_detail)
-                lv.visibility = if (EShowFold.getByShowStatus(item.show).isFold()) {
-                    View.GONE
-                } else {
-                    if (0 == lv.count)
-                        loadDayDetailView(lv, item.month)
+        private fun getTypedItem(pos: Int): MonthItemHolder {
+            @Suppress("UNCHECKED_CAST")
+            return (getItem(pos) as Map<String, MonthItemHolder>)[KEY_DATA]!!
+        }
 
-                    View.VISIBLE
-                }
+        override fun loadView(pos: Int, vhHolder: ViewHolder) {
+            if (null == vhHolder.getSelfTag(SELF_TAG_ID)) {
+                vhHolder.setSelfTag(SELF_TAG_ID, Any())
 
-                val localListener = View.OnClickListener { _ ->
-                    val bf = EShowFold.getByShowStatus(item.show).isFold()
-                    item.show = EShowFold.getByFold(!bf).showStatus
-                    lv.visibility = if (bf) {
-                        if (0 == lv.count)
-                            loadDayDetailView(lv, item.month)
+                val item = getTypedItem(pos).data
+                val lv = vhHolder.getView<ListView>(R.id.lv_show_detail)
+                lv.visibility = EShowFold.getByShowStatus(item.show).isFold().doJudge(
+                        { View.GONE },
+                        {
+                            if (0 == lv.count)
+                                loadDayDetailView(lv, item.month)
 
-                        addUnfoldItem(item.month)
-                        View.VISIBLE
-                    } else {
-                        removeUnfoldItem(item.month)
-                        View.GONE
+                            View.VISIBLE
+                        })
+
+                View.OnClickListener { _ ->
+                    lv.visibility = EShowFold.getByShowStatus(item.show).isFold().doJudge(
+                            {
+                                if (0 == lv.count)
+                                    loadDayDetailView(lv, item.month)
+
+                                addUnfoldItem(item.month)
+                                item.show = EShowFold.getByFold(false).showStatus
+
+                                View.VISIBLE
+                            },
+                            {
+                                removeUnfoldItem(item.month)
+                                item.show = EShowFold.getByFold(true).showStatus
+
+                                View.GONE
+                            }
+                    )
+                }.let1 {
+                    vhHolder.getView<ConstraintLayout>(R.id.cl_header).apply {
+                        setBackgroundColor((0 == pos % 2)
+                                .doJudge(ResourceHelper.mCRLVLineOne, ResourceHelper.mCRLVLineTwo))
+                        setOnClickListener(it)
                     }
                 }
 
-                viewHolder.getView<ConstraintLayout>(R.id.cl_header).apply {
-                    setBackgroundColor(if (0 == position % 2) ResourceHelper.mCRLVLineOne
-                    else ResourceHelper.mCRLVLineTwo)
-                    setOnClickListener(localListener)
-                }
-
                 // for month
-                viewHolder.setText(R.id.tv_month,
+                vhHolder.setText(R.id.tv_month,
                         "${item.month.subSequence(0, 4)}年" +
                                 "${item.month.subSequence(5, 7).removePrefix("0")}月")
 
                 // for graph value
-                item.monthDetail?.let {
-                    viewHolder.getView<ValueShow>(R.id.vs_monthly_info).adjustAttribute(
+                item.monthDetail!!.let {
+                    vhHolder.getView<ValueShow>(R.id.vs_monthly_info).adjustAttribute(
                             HashMap<String, Any>().apply {
                                 put(ValueShow.ATTR_PAY_COUNT, it.mPayCount)
                                 put(ValueShow.ATTR_PAY_AMOUNT, it.mPayAmount)
@@ -335,8 +354,6 @@ class LVMonthly : LVBase() {
                             })
                 }
             }
-
-            return viewHolder.convertView
         }
     }
 
@@ -344,50 +361,57 @@ class LVMonthly : LVBase() {
     /**
      * day data adapter
      */
-    private inner class DayAdapter internal constructor(context: Context, data: List<DayItemHolder>)
-        : LVAdapter(context, data, R.layout.li_monthly_show_detail) {
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            val viewHolder = ViewHolder.get(rootActivity,
-                    convertView, R.layout.li_monthly_show_detail)
-            if (null == viewHolder.getSelfTag(SELF_TAG_ID)) {
-                viewHolder.setSelfTag(SELF_TAG_ID, Any())
+    private inner class DayAdapter internal constructor(context: Context, data: List<Map<String, DayItemHolder>>)
+        : MoreAdapter(context, data, R.layout.li_monthly_show_detail) {
 
-                val item = (getItem(position) as DayItemHolder).data
-                viewHolder.getView<ImageView>(R.id.iv_action).apply {
-                    setBackgroundColor(if (mLLSubFilter.contains(item.subTag)) ResourceHelper.mCRLVItemSel
-                    else ResourceHelper.mCRLVItemTransFull)
+        private fun getTypedItem(pos: Int): DayItemHolder {
+            @Suppress("UNCHECKED_CAST")
+            return (getItem(pos) as Map<String, DayItemHolder>)[KEY_DATA]!!
+        }
+
+        override fun loadView(pos: Int, vhHolder: ViewHolder) {
+            if (null == vhHolder.getSelfTag(SELF_TAG_ID)) {
+                vhHolder.setSelfTag(SELF_TAG_ID, Any())
+
+                val item = getTypedItem(pos).data
+                vhHolder.getView<ImageView>(R.id.iv_action).apply {
+                    setBackgroundColor(mLLSubFilter.contains(item.subTag)
+                            .doJudge(ResourceHelper.mCRLVItemSel, ResourceHelper.mCRLVItemTransFull))
                     setOnClickListener { v ->
                         val subTag = item.subTag
-                        v.setBackgroundColor(if (!mLLSubFilter.contains(subTag)) {
-                            mLLSubFilter.add(subTag)
-                            mLLSubFilterVW.add(v)
-                            if (!mBSelectSubFilter) {
-                                mBSelectSubFilter = true
-                                refreshAttachLayout()
-                            }
+                        mLLSubFilter.contains(subTag).doJudge(
+                                {
+                                    mLLSubFilter.remove(subTag)
+                                    mLLSubFilterVW.remove(v)
+                                    if (mLLSubFilter.isEmpty()) {
+                                        mLLSubFilterVW.clear()
+                                        mBSelectSubFilter = false
+                                        refreshAttachLayout()
+                                    }
 
-                            ResourceHelper.mCRLVItemSel
-                        } else {
-                            mLLSubFilter.remove(subTag)
-                            mLLSubFilterVW.remove(v)
-                            if (mLLSubFilter.isEmpty()) {
-                                mLLSubFilterVW.clear()
-                                mBSelectSubFilter = false
-                                refreshAttachLayout()
-                            }
+                                    v.setBackgroundColor(ResourceHelper.mCRLVItemTransFull)
+                                },
+                                {
+                                    mLLSubFilter.add(subTag)
+                                    mLLSubFilterVW.add(v)
+                                    if (!mBSelectSubFilter) {
+                                        mBSelectSubFilter = true
+                                        refreshAttachLayout()
+                                    }
 
-                            ResourceHelper.mCRLVItemTransFull
-                        })
+                                    v.setBackgroundColor(ResourceHelper.mCRLVItemSel)
+                                }
+                        )
                     }
                 }
 
                 // for show
-                viewHolder.setText(R.id.tv_day_number, item.dayNumber)
-                viewHolder.setText(R.id.tv_day_in_week, item.dayInWeek)
+                vhHolder.setText(R.id.tv_day_number, item.dayNumber)
+                vhHolder.setText(R.id.tv_day_in_week, item.dayInWeek)
 
                 // for graph value
                 item.dayDetail?.let {
-                    viewHolder.getView<ValueShow>(R.id.vs_daily_info).adjustAttribute(
+                    vhHolder.getView<ValueShow>(R.id.vs_daily_info).adjustAttribute(
                             HashMap<String, Any>().apply {
                                 put(ValueShow.ATTR_PAY_COUNT, it.mPayCount)
                                 put(ValueShow.ATTR_PAY_AMOUNT, it.mPayAmount)
@@ -397,11 +421,12 @@ class LVMonthly : LVBase() {
                 }
             }
 
-            return viewHolder.convertView
         }
     }
 
     companion object {
         private const val SELF_TAG_ID = 0
+
+        private const val KEY_DATA = "data"
     }
 }

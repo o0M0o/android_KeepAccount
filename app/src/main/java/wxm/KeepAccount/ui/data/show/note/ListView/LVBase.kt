@@ -14,6 +14,7 @@ import android.widget.RelativeLayout
 import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase
+import wxm.androidutil.ui.dialog.DlgAlert
 import java.util.*
 
 /**
@@ -120,17 +121,12 @@ abstract class LVBase : ShowViewBase() {
 
     /**
      * reload data & view
-     * @param v             context
      * @param bShowDialog   show dialog if true
      */
-    protected fun reloadView(v: Context, bShowDialog: Boolean) {
+    protected fun reloadView(bShowDialog: Boolean) {
         reInitUI()
         if (bShowDialog) {
-            val builder = android.app.AlertDialog.Builder(v)
-            builder.setMessage("数据已刷新!").setTitle("提醒")
-
-            val dlg = builder.create()
-            dlg.show()
+            DlgAlert.showAlert(context, R.string.dlg_prompt, R.string.dlg_data_refreshed)
         }
     }
 

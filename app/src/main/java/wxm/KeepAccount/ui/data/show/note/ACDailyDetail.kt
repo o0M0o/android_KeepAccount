@@ -1,32 +1,29 @@
 package wxm.KeepAccount.ui.data.show.note
 
-import android.content.Intent
 import android.os.Bundle
 
-import wxm.KeepAccount.define.GlobalDef
 import wxm.androidutil.log.TagLog
 import wxm.androidutil.ui.activity.ACSwitcherActivity
-import wxm.androidutil.util.UtilFun
 
 /**
  * day detail UI
  */
 class ACDailyDetail : ACSwitcherActivity<FrgDailyDetail>() {
     override fun setupFragment(bundle: Bundle?) {
-        val hotDay = intent!!.getStringExtra(K_HOTDAY)
-        if (UtilFun.StringIsNullOrEmpty(hotDay)) {
-            TagLog.e("调用intent缺少'K_HOTDAY'参数")
+        val hotDay = intent!!.getStringExtra(KEY_HOT_DAY)
+        if (hotDay.isNullOrEmpty()) {
+            TagLog.e("调用intent缺少'KEY_HOT_DAY'参数")
             return
         }
 
         // for holder
         FrgDailyDetail().apply {
-            arguments = Bundle().apply { putString(K_HOTDAY, hotDay) }
+            arguments = Bundle().apply { putString(KEY_HOT_DAY, hotDay) }
             addFragment(this)
         }
     }
 
     companion object {
-        const val K_HOTDAY = "hotday"
+        const val KEY_HOT_DAY = "hotday"
     }
 }

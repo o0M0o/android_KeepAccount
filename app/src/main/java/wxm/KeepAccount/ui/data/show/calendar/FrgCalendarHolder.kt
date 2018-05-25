@@ -12,6 +12,8 @@ import wxm.KeepAccount.ui.data.show.calendar.base.CalendarWeekAdapter
 import wxm.KeepAccount.ui.data.show.calendar.base.SelectedDayEvent
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
+import wxm.KeepAccount.utility.let1
+import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.uilib.FrgCalendar.Base.ICalendarListener
@@ -54,13 +56,14 @@ class FrgCalendarHolder : FrgSupportBaseAdv() {
                 },
                 {
                     if (UtilFun.StringIsNullOrEmpty(param[0])) {
-                        val ac = activity
-                        val builder = android.app.AlertDialog.Builder(ac)
-                        builder.setMessage("当前用户没有数据，请先添加数据!").setTitle("警告")
-                        builder.setNegativeButton("确认") { _, _ -> ac.finish() }
+                        activity.let1 { ac ->
+                            DlgAlert.showAlert(ac, R.string.dlg_warn, R.string.dlg_usr_no_data,
+                                    { b ->
+                                        b.setNegativeButton(R.string.show_accept)
+                                        { _, _ -> ac.finish() }
+                                    })
+                        }
 
-                        val dlg = builder.create()
-                        dlg.show()
                         return@runInBackground
                     }
 

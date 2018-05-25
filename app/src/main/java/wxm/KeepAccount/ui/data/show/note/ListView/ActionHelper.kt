@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import wxm.KeepAccount.R
+import wxm.KeepAccount.utility.let1
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.view.EventHelper
 
@@ -73,11 +74,12 @@ abstract class ActionHelper internal constructor() {
         rp.width = if (bShow) ViewGroup.LayoutParams.MATCH_PARENT else 0
         mRLActions.layoutParams = rp
 
-        val rpLv = mRLLVNote.layoutParams as RelativeLayout.LayoutParams
-        if (bShow)
-            rpLv.addRule(RelativeLayout.ABOVE, R.id.rl_action)
-        else
-            rpLv.removeRule(RelativeLayout.ABOVE)
-        mRLLVNote.layoutParams = rpLv
+        (mRLLVNote.layoutParams as RelativeLayout.LayoutParams).let1 {
+            if (bShow)
+                it.addRule(RelativeLayout.ABOVE, R.id.rl_action)
+            else
+                it.removeRule(RelativeLayout.ABOVE)
+            mRLLVNote.layoutParams = it
+        }
     }
 }

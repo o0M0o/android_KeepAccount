@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+this file include dialog strings in app
+-->
+<resources>
+    <string name="dlg_prompt">提示</string>
+    <string name="dlg_warn">警告</string>
+
+    <string name="dlg_clear_all_data">此操作不能恢复，是否继续操作!</string>
+    <string name="dlg_data_refreshed">数据已刷新!</string>
+
+    <string name="dlg_usr_no_data">当前用户没有数据!</string>
+</resources>

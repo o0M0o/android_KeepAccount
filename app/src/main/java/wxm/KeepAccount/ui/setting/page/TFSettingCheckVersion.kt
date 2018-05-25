@@ -27,16 +27,11 @@ class TFSettingCheckVersion : TFSettingBase() {
     }
 
     override fun initUI(bundle: Bundle?) {
-        mTVVerNumber.text = String.format(Locale.CHINA, "当前版本号 : %d",
-                AppBase.getVerCode())
-
-        mTVVerName.text = String.format(Locale.CHINA, "当前版本名 : %s",
-                AppBase.getVerName())
+        mTVVerNumber.text = context.getString(R.string.show_version_code, AppBase.getVerCode())
+        mTVVerName.text = context.getString(R.string.show_version_name, AppBase.getVerName())
     }
 
     override fun updateSetting() {
-        if (isSettingDirty) {
-            isSettingDirty = false
-        }
+        isSettingDirty = false
     }
 }

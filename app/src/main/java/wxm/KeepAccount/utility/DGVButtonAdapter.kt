@@ -21,7 +21,7 @@ import wxm.KeepAccount.R
 class DGVButtonAdapter(private val mCTContext: Context, data: List<Map<String, *>>)
         : SimpleAdapter(mCTContext, data, R.layout.gi_button,
                 arrayOf(""), IntArray(0)) {
-    /**
+            /**
      * get current action
      * @return      action
      */
@@ -29,6 +29,7 @@ class DGVButtonAdapter(private val mCTContext: Context, data: List<Map<String, *
         get() {
             return  ArrayList<String>().apply {
                 val ic = count
+                @Suppress("UNCHECKED_CAST")
                 for (i in 0 until ic) {
                     add(((getItem(i) as HashMap<String, Any>)[KEY_ACT_NAME] as String))
                 }

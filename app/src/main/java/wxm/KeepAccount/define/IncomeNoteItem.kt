@@ -32,7 +32,7 @@ class IncomeNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone  {
         get() = null
 
     @DatabaseField(columnName = "info", canBeNull = false, dataType = DataType.STRING)
-    override var info: String? = null
+    override var info: String = ""
 
     @DatabaseField(columnName = "note", dataType = DataType.STRING)
     override var note: String? = null

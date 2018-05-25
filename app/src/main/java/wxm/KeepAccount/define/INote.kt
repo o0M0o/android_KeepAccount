@@ -14,7 +14,7 @@ interface INote {
 
     var id: Int
 
-    var info: String?
+    var info: String
 
     var note: String?
 

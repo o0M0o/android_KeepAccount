@@ -110,7 +110,7 @@ class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
     override fun loadUI(bundle: Bundle?) {
         val paraDate = arguments?.getString(GlobalDef.STR_RECORD_DATE)
         mOldIncomeNote?.let {
-            mETDate.setText(paraDate ?: it.tsToStr!!.substring(0, 16))
+            mETDate.setText(paraDate ?: it.tsToStr.substring(0, 16))
             mETInfo.setText(it.info)
 
             val szNote = it.note

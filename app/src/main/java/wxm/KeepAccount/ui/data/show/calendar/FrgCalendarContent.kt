@@ -23,6 +23,7 @@ import wxm.KeepAccount.define.INote
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.doJudge
 import wxm.androidutil.app.AppBase
 
 /**
@@ -99,25 +100,22 @@ class FrgCalendarContent : FrgSupportBaseAdv() {
 
         val ni = NoteDataHelper.getInfoByDay(mSZHotDay!!)
         val bb = ni?.balance ?: BigDecimal.ZERO
-        mTVBalance.text = String.format(Locale.CHINA, "%s %.02f",
-                if (bb < BigDecimal.ZERO) "-" else "+",
+        mTVBalance.text = String.format(Locale.CHINA,
+                "${(bb < BigDecimal.ZERO).doJudge("-", "+")} %.02f",
                 Math.abs(bb.toFloat()))
-        mTVBalance.setTextColor(if (bb < BigDecimal.ZERO) mCLPay else mCLIncome)
+        mTVBalance.setTextColor((bb < BigDecimal.ZERO).doJudge(mCLPay, mCLIncome))
 
         // for list body
         val cPara = LinkedList<HashMap<String, INote>>()
         if (!UtilFun.ListIsNullOrEmpty(mLSDayContents)) {
-            for (ci in mLSDayContents!!) {
-                val hm = HashMap<String, INote>()
-                hm[AdapterNoteDetail.K_NODE] = ci
-
-                cPara.add(hm)
+            mLSDayContents!!.forEach {
+                HashMap<String, INote>().apply {
+                    put(AdapterNoteDetail.K_NODE, it)
+                }.let { cPara.add(it) }
             }
         }
 
-        val ap = AdapterNoteDetail(activity, cPara)
-        mLVBody.adapter = ap
-        ap.notifyDataSetChanged()
+        mLVBody.adapter = AdapterNoteDetail(activity, cPara)
     }
 
     /// PRIVATE BEGIN

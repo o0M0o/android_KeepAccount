@@ -39,29 +39,17 @@ class FrgLogin : FrgSupportBaseAdv() {
     private val mBTDefUsrLogin: Button by bindView(R.id.bt_def_usr_login)
     private val mLLLogin: LinearLayout by bindView(R.id.ll_login)
 
-    private var mHSErrorPassword: String? = null
-        get() = getString(R.string.error_incorrect_password)
-
     override fun initUI(bundle: Bundle?) {
         mBTEmailSignIn.setOnClickListener { _ -> attemptLogin() }
 
         mBTEmailRegister.setOnClickListener { _ ->
-            val intent = Intent(activity, ACAddUsr::class.java)
-            startActivityForResult(intent, 1)
+            startActivityForResult(Intent(activity, ACAddUsr::class.java), 1)
         }
 
         mBTDefUsrLogin.setOnClickListener { _ -> doLogin(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD) }
     }
 
-    override fun getLayoutID(): Int {
-        return R.layout.vw_login
-    }
-
-    override fun isUseEventBus(): Boolean {
-        return false
-    }
-
-    override fun loadUI(bundle: Bundle?) {}
+    override fun getLayoutID(): Int = R.layout.vw_login
 
     /// PRIVATE BEGIN
 
@@ -155,7 +143,7 @@ class FrgLogin : FrgSupportBaseAdv() {
         if(bRet)    {
             startActivityForResult(Intent(activity, ACWelcome::class.java), 1)
         } else  {
-            mETPassword.error = mHSErrorPassword
+            mETPassword.error = getString(R.string.error_incorrect_password)
             mETPassword.requestFocus()
         }
     }

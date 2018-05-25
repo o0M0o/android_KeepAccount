@@ -20,13 +20,7 @@ class TFSettingMain : TFSettingBase() {
     private val mRLRemind: RelativeLayout by bindView(R.id.rl_remind)
     private val mRLShareApp: RelativeLayout by bindView(R.id.rl_share_app)
 
-    override fun getLayoutID(): Int {
-        return R.layout.page_setting_main
-    }
-
-    override fun isUseEventBus(): Boolean {
-        return false
-    }
+    override fun getLayoutID(): Int = R.layout.page_setting_main
 
     override fun initUI(bundle: Bundle?) {
         if (null == bundle) {
@@ -48,7 +42,7 @@ class TFSettingMain : TFSettingBase() {
                             }
 
                             R.id.rl_reformat_data -> {
-                                DlgAlert.showAlert(context, "清除所有数据!", "此操作不能恢复，是否继续操作!",
+                                DlgAlert.showAlert(context, R.string.dlg_prompt, R.string.dlg_clear_all_data,
                                         { b ->
                                             b.setPositiveButton("是") { _, _ ->
                                                 AlertDialog.Builder(this.activity).setTitle("提示")
@@ -68,8 +62,6 @@ class TFSettingMain : TFSettingBase() {
     }
 
     override fun updateSetting() {
-        if (isSettingDirty) {
-            isSettingDirty = false
-        }
+        isSettingDirty = false
     }
 }

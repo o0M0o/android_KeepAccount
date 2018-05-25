@@ -95,21 +95,22 @@ class LVBudget : LVBase() {
 
                 R.id.ib_refresh -> {
                     mActionType = EOperation.EDIT
-                    reloadView(context, false)
+                    reloadView(false)
                 }
 
                 R.id.ib_delete -> {
                     if (EOperation.DELETE != mActionType) {
                         mActionType = EOperation.DELETE
-                        reloadView(v.context, false)
+                        reloadView(false)
                     }
                 }
 
                 R.id.ib_add -> {
-                    val ac = rootActivity
-                    val intent = Intent(ac, ACNoteEdit::class.java)
-                    intent.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET)
-                    ac!!.startActivityForResult(intent, 1)
+                    Intent(activity, ACNoteEdit::class.java).apply {
+                        putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET)
+                    }.let1 {
+                        activity.startActivityForResult(it, 1)
+                    }
                 }
             }
         }
@@ -280,11 +281,12 @@ class LVBudget : LVBase() {
                 }
 
                 R.id.iv_edit -> {
-                    val ac = rootActivity!!
-                    val it = Intent(ac, ACNoteEdit::class.java)
-                    it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, tagId)
-                    it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET)
-                    ac.startActivityForResult(it, 1)
+                    Intent(activity, ACNoteEdit::class.java).apply {
+                        putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, tagId)
+                        putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET)
+                    }.let1 {
+                        activity.startActivityForResult(it, 1)
+                    }
                 }
             }
         }

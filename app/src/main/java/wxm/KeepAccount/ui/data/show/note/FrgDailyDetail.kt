@@ -69,7 +69,7 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
 
     override fun initUI(bundle: Bundle?) {
         if (UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
-            mSZHotDay = arguments.getString(ACDailyDetail.K_HOTDAY)
+            mSZHotDay = arguments.getString(ACDailyDetail.KEY_HOT_DAY)
         }
 
         if (!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
@@ -107,6 +107,7 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
      * handler for DB data change
      * @param event     for event
      */
+    @Suppress("unused", "UNUSED_PARAMETER")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDBDataChangeEvent(event: DBDataChangeEvent) {
         initUI(null)
