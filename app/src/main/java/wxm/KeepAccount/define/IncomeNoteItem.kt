@@ -3,6 +3,7 @@ package wxm.KeepAccount.define
 import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
+import wxm.KeepAccount.utility.doJudge
 import wxm.KeepAccount.utility.toShowString
 import wxm.androidutil.db.IDBRow
 
@@ -51,12 +52,20 @@ class IncomeNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone  {
             tsToStr = field.toString()
         }
 
-    override var valToStr: String = BigDecimal.ZERO.toShowString()
+    override var valToStr: String = ""
+        get() {
+            if(field.isEmpty())  field = amount.toShowString()
+            return field
+        }
         private set(value) {
             field = value
         }
 
-    override var tsToStr: String = Timestamp(0).toString()
+    override var tsToStr: String = ""
+        get() {
+            if(field.isEmpty())  field = ts.toString()
+            return field
+        }
         private set(value) {
             field = value
         }
@@ -66,10 +75,6 @@ class IncomeNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone  {
 
     override val isIncomeNote: Boolean
         get() = true
-
-    init {
-        info = ""
-    }
 
     override fun toPayNote(): PayNoteItem? {
         return null

@@ -9,5 +9,5 @@ import java.util.*
  */
 
 fun BigDecimal.toShowString(): String   {
-    return String.format(Locale.CHINA, ".02f", this)
+    return String.format(Locale.CHINA, "%.02f", this)
 }
