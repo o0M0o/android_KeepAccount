@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.setting.page
+package wxm.KeepAccount.ui.setting
 
 
 import android.os.Bundle

@@ -39,6 +39,14 @@ class FrgWelcome : FrgSupportSwitcher<FrgSupportBaseAdv>() {
         onActClick(view!!.findViewById(R.id.ib_channel))
     }
 
+    fun leaveFrg(): Boolean {
+        if(hotPage === mPageSetting)    {
+            return mPageSetting.leaveFrg()
+        }
+
+        return true
+    }
+
 
     private fun onActClick(v: View) {
         val setHot = { vId: Int ->

@@ -58,11 +58,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.data.show.remind.ACRemindShow" />
         <activity
-            android:name=".ui.setting.ACSetting"
-            android:exported="true"
-            android:label="@string/app_setting"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".ui.data.show.note.ACDailyDetail"
             android:exported="false"
             android:label="@string/title_daily_detail"

@@ -1,12 +1,12 @@
-package wxm.KeepAccount.ui.setting.page
+package wxm.KeepAccount.ui.setting
 
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.RelativeLayout
 import kotterknife.bindView
+import org.greenrobot.eventbus.EventBus
 import wxm.KeepAccount.R
-import wxm.KeepAccount.ui.setting.ACSetting
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.ui.dialog.DlgAlert
@@ -32,13 +32,11 @@ class TFSettingMain : TFSettingBase() {
                     View.OnClickListener { v ->
                         when (v.id) {
                             R.id.rl_check_version -> {
-                                (activity as ACSetting)
-                                        .switchToPageByType(TFSettingCheckVersion::class.java.name)
+                                EventBus.getDefault().post(ChangePageEvent(TFSettingCheckVersion::class.java.name))
                             }
 
                             R.id.rl_chart_color -> {
-                                (activity as ACSetting)
-                                        .switchToPageByType(TFSettingChartColor::class.java.name)
+                                EventBus.getDefault().post(ChangePageEvent(TFSettingChartColor::class.java.name))
                             }
 
                             R.id.rl_reformat_data -> {

@@ -18,8 +18,6 @@ import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow
-import wxm.KeepAccount.ui.dialog.DlgSelectChannel
-import wxm.KeepAccount.ui.setting.ACSetting
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.ui.welcome.banner.FrgAdapter
 import wxm.KeepAccount.ui.welcome.banner.FrgPara
@@ -27,12 +25,8 @@ import wxm.KeepAccount.utility.DGVButtonAdapter
 import wxm.KeepAccount.utility.PreferencesUtil
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.time.CalendarUtility
-import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.dragGrid.DragGridView
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
-import wxm.androidutil.ui.view.EventHelper
-import wxm.androidutil.util.UtilFun
-import wxm.uilib.IconButton.IconButton
 import java.util.*
 
 /**
