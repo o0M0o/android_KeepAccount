@@ -31,6 +31,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
     val payDataREDao: RuntimeExceptionDao<PayNoteItem, Int> = getRuntimeExceptionDao(PayNoteItem::class.java)
     val incomeDataREDao: RuntimeExceptionDao<IncomeNoteItem, Int> = getRuntimeExceptionDao(IncomeNoteItem::class.java)
     val remindREDao: RuntimeExceptionDao<RemindItem, Int> = getRuntimeExceptionDao(RemindItem::class.java)
+    val loginHistoryREDao: RuntimeExceptionDao<LoginHistoryItem, Int> = getRuntimeExceptionDao(LoginHistoryItem::class.java)
 
     /**
      * This is called when the database is first created. Usually you should call createTable statements here to create
@@ -46,32 +47,17 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
      */
     override fun onUpgrade(db: SQLiteDatabase, connectionSource: ConnectionSource, oldVersion: Int, newVersion: Int) {
         try {
-            // 版本9中budgetitem表结构有调整
-            // 删除旧表，创建新表，然后把旧数据导入新表
-            if (9 == newVersion && (8 == oldVersion || 7 == oldVersion)) {
-                TableUtils.dropTable<BudgetItem, Any>(connectionSource, BudgetItem::class.java, true)
-                TableUtils.createTable(connectionSource, BudgetItem::class.java)
-
-                budgetDataREDao.queryForAll().let {
-                    budgetDataREDao.create(it)
+            when(newVersion)    {
+                10 -> {
+                    if(oldVersion < newVersion) {
+                        TableUtils.createTable(connectionSource, LoginHistoryItem::class.java)
+                    }
                 }
-            }
-
-            if (8 == newVersion || 7 == newVersion) {
-                TableUtils.dropTable<UsrItem, Any>(connectionSource, UsrItem::class.java, true)
-                TableUtils.dropTable<RecordTypeItem, Any>(connectionSource, RecordTypeItem::class.java, true)
-                TableUtils.dropTable<PayNoteItem, Any>(connectionSource, PayNoteItem::class.java, true)
-                TableUtils.dropTable<IncomeNoteItem, Any>(connectionSource, IncomeNoteItem::class.java, true)
-                TableUtils.dropTable<BudgetItem, Any>(connectionSource, BudgetItem::class.java, true)
-                TableUtils.dropTable<RemindItem, Any>(connectionSource, RemindItem::class.java, true)
-
-                onCreate(db, connectionSource)
             }
         } catch (e: SQLException) {
             TagLog.e("Can't upgrade databases", e)
             throw RuntimeException(e)
         }
-
     }
 
     private fun createAndInitTable() {
@@ -82,6 +68,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
             TableUtils.createTable(connectionSource, PayNoteItem::class.java)
             TableUtils.createTable(connectionSource, IncomeNoteItem::class.java)
             TableUtils.createTable(connectionSource, RemindItem::class.java)
+            TableUtils.createTable(connectionSource, LoginHistoryItem::class.java)
         } catch (e: SQLException) {
             TagLog.e("Can't create database", e)
             throw RuntimeException(e)
@@ -277,7 +264,9 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
     companion object {
         // dataBase file name
         private const val DATABASE_NAME = "AppLocal.db"
+
         // dataBase version
-        private const val DATABASE_VERSION = 9
+        // in version 10, add login-history
+        private const val DATABASE_VERSION = 10
     }
 }

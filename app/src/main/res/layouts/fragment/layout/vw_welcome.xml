@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <wxm.uilib.IconButton.IconButton
-            android:id="@+id/ib_channel"
+            android:id="@+id/ib_main_page"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="4dp"
@@ -58,7 +58,7 @@
             app:ibOrientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/ib_usr"
-            app:layout_constraintStart_toEndOf="@id/ib_channel"
+            app:layout_constraintStart_toEndOf="@id/ib_main_page"
             app:layout_constraintTop_toTopOf="parent" />
 
 

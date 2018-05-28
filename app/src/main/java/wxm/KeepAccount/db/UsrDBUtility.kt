@@ -127,9 +127,14 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
      */
     fun loginByUsr(usr: String, pwd: String): Boolean {
         val ui = CheckAndGetUsr(usr, pwd) ?: return false
+        return loginByUsr(ui, true)
+    }
 
-        ContextUtil.curUsr = ui
+    fun loginByUsr(usr:UsrItem, recordHistory:Boolean): Boolean    {
+        ContextUtil.curUsr = usr
         NoteDataHelper.reloadData()
+
+        if(recordHistory) LoginHistoryUtility.addHistory(usr)
         return true
     }
 

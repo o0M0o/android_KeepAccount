@@ -2,9 +2,8 @@ package wxm.KeepAccount.ui.welcome.page
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import com.allure.lbanners.LMBanners
 import com.allure.lbanners.transformer.TransitionEffect
 import kotterknife.bindView
@@ -33,7 +32,7 @@ import java.util.*
  * for welcome
  * Created by WangXM on 2016/12/7.
  */
-class PageMain : FrgSupportBaseAdv() {
+class PageMain : FrgSupportBaseAdv(), PageBase {
     // for ui
     private val mDGVActions: DragGridView by bindView(R.id.dgv_buttons)
     private val mLBanners: LMBanners<FrgPara> by bindView(R.id.banners)
@@ -52,8 +51,12 @@ class PageMain : FrgSupportBaseAdv() {
         mLBanners.setAdapter(FrgAdapter(activity, null), mALFrgPara)
     }
 
-    override fun getLayoutID(): Int = R.layout.vw_main
+    override fun getLayoutID(): Int = R.layout.page_main_page
     override fun isUseEventBus(): Boolean = true
+
+    override fun leavePage(): Boolean {
+        return true
+    }
 
     override fun initUI(savedInstanceState: Bundle?) {
         initFrgPara()
@@ -88,7 +91,9 @@ class PageMain : FrgSupportBaseAdv() {
         }
 
         mDGVActions.setOnItemClickListener { _, view, _, _ ->
-            doClick((view as Button).text.toString())
+            view.findViewById<TextView>(R.id.tv_name)?.let {
+                doClick(it.text.toString())
+            }
         }
     }
 
@@ -162,10 +167,7 @@ class PageMain : FrgSupportBaseAdv() {
             }
 
             EAction.LOGOUT -> {
-                activity.let1 {
-                    it.setResult(GlobalDef.INTRET_USR_LOGOUT, Intent())
-                    it.finish()
-                }
+                doLogout(activity)
             }
         }
     }

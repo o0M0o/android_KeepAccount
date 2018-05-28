@@ -12,7 +12,6 @@ import wxm.androidutil.db.IDBRow
  */
 @DatabaseTable(tableName = "tbUsr")
 class UsrItem : IDBRow<Int>, Cloneable, IPublicClone {
-
     @DatabaseField(generatedId = true, columnName = FIELD_ID, dataType = DataType.INTEGER)
     var id: Int = GlobalDef.INVALID_ID
 

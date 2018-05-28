@@ -43,10 +43,6 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
         return R.layout.vw_usr_add
     }
 
-    override fun isUseEventBus(): Boolean {
-        return false
-    }
-
     override fun initUI(bundle: Bundle?) {
         if (null == bundle) {
             mETUsrName.setOnEditorActionListener(this)

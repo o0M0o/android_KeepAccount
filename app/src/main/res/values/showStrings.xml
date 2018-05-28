@@ -7,6 +7,7 @@ this file include show strings in app
     <string name="version_name">当前版本名 : %s</string>
 
     <string name="act_accept">确认</string>
+    <string name="act_logout">退出登录</string>
 
     <string name="page_first">首页</string>
     <string name="page_stats">统计</string>

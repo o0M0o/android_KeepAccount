@@ -11,7 +11,7 @@ import wxm.androidutil.ui.frg.FrgSupportSwitcher
  * for welcome
  * Created by WangXM on 2016/12/7.
  */
-class PageSetting : FrgSupportSwitcher<TFSettingBase>() {
+class PageSetting : FrgSupportSwitcher<TFSettingBase>(), PageBase {
     private val mTFChartColor = TFSettingChartColor()
     private val mTFCheckVer = TFSettingCheckVersion()
     private val mTFMain = TFSettingMain()
@@ -28,7 +28,7 @@ class PageSetting : FrgSupportSwitcher<TFSettingBase>() {
         addChildFrg(mTFCheckVer)
     }
 
-    fun leaveFrg(): Boolean {
+    override fun leavePage(): Boolean {
         if(hotPage !== mTFMain)    {
             switchToPage(mTFMain)
             return false

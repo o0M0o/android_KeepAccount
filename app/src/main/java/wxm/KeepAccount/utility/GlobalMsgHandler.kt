@@ -4,10 +4,14 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Message
 import android.util.Log
+import org.greenrobot.eventbus.EventBus
+import wxm.KeepAccount.db.LoginHistoryUtility
 
 import wxm.KeepAccount.define.EMsgType
+import wxm.KeepAccount.define.LoginHistoryItem
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.UsrItem
+import wxm.KeepAccount.ui.login.DoLoginEvent
 import wxm.androidutil.log.TagLog
 
 
@@ -56,6 +60,8 @@ class GlobalMsgHandler : Handler() {
 
             EMsgType.USR_LOGOUT -> {
                 ContextUtil.curUsr = null
+                LoginHistoryUtility.cleanHistory()
+                EventBus.getDefault().post(DoLoginEvent(this.javaClass.simpleName))
             }
 
             else -> {
