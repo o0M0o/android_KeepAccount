@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_usr_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -53,6 +54,92 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_change_pwd"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@id/cl_usr_info">
+
+        <wxm.uilib.IconButton.IconButton
+            android:id="@+id/ib_change_pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            app:ibActName="@string/act_change_pwd"
+            app:ibActNameSize="16sp"
+            app:ibColorCold="@color/text_fit"
+            app:ibColorHot="@color/red_ff725f"
+            app:ibIcon="@drawable/ic_change_pwd"
+            app:ibIconHeight="36dp"
+            app:ibIconWidth="36dp"
+            app:ibOrientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cl_input_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/ib_change_pwd">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ti_old_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:padding="2dp">
+
+                <wxm.KeepAccount.ui.base.TouchUI.TouchEditText
+                    android:id="@+id/te_old_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/hint_input_old_pwd"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ti_new_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:padding="2dp"
+                app:layout_constraintTop_toBottomOf="@id/ti_old_pwd">
+
+                <wxm.KeepAccount.ui.base.TouchUI.TouchEditText
+                    android:id="@+id/te_new_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/hint_input_new_pwd"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ti_repeat_new_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:padding="2dp"
+                app:layout_constraintTop_toBottomOf="@id/ti_new_pwd">
+
+                <wxm.KeepAccount.ui.base.TouchUI.TouchEditText
+                    android:id="@+id/te_repeat_new_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/hint_new_repeat_pwd"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>
 

@@ -8,9 +8,14 @@ this file include show strings in app
 
     <string name="act_accept">确认</string>
     <string name="act_logout">退出登录</string>
+    <string name="act_change_pwd">修改密码</string>
 
     <string name="page_first">首页</string>
     <string name="page_stats">统计</string>
     <string name="page_setting">设置</string>
     <string name="page_usr">用户</string>
+
+    <string name="hint_input_old_pwd">旧密码</string>
+    <string name="hint_input_new_pwd">新密码</string>
+    <string name="hint_repeat_input_new_pwd">再次输入新密码</string>
 </resources>
