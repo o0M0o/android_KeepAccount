@@ -17,11 +17,13 @@ import wxm.KeepAccount.ui.welcome.banner.FrgAdapter
 import wxm.KeepAccount.ui.welcome.banner.FrgPara
 import wxm.KeepAccount.utility.DGVButtonAdapter
 import wxm.KeepAccount.utility.PreferencesUtil
+import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.dragGrid.DragGridView
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
-import wxm.androidutil.util.UtilFun
 import wxm.androidutil.ui.view.EventHelper
+import wxm.androidutil.util.UtilFun
+import wxm.uilib.IconButton.IconButton
 import java.util.*
 
 /**
@@ -61,7 +63,8 @@ class FrgWelcome : FrgSupportBaseAdv() {
         initBanner()
 
         EventHelper.setOnClickOperator(view!!,
-                intArrayOf(R.id.ib_channel, R.id.ib_setting), this::onActClick)
+                intArrayOf(R.id.ib_channel, R.id.ib_stats, R.id.ib_usr, R.id.ib_setting),
+                this::onActClick)
         loadUI(savedInstanceState)
     }
 
@@ -97,6 +100,12 @@ class FrgWelcome : FrgSupportBaseAdv() {
     }
 
     private fun onActClick(v: View) {
+        val setColdExcept = { vId: Int ->
+            intArrayOf(R.id.ib_channel, R.id.ib_stats, R.id.ib_usr, R.id.ib_setting).forEach {
+                (view!!.findViewById<IconButton>(it)).setColdOrHot(it == vId)
+            }
+        }
+
         when (v.id) {
             R.id.ib_channel -> {
                 val dlg = DlgSelectChannel()
@@ -123,8 +132,15 @@ class FrgWelcome : FrgSupportBaseAdv() {
             }
 
             R.id.ib_setting -> {
-                val intent = Intent(activity, ACSetting::class.java)
-                startActivity(intent)
+                startActivity(Intent(activity, ACSetting::class.java))
+            }
+
+            R.id.ib_stats -> {
+                setColdExcept(R.id.ib_stats)
+            }
+
+            R.id.ib_usr -> {
+                setColdExcept(R.id.ib_usr)
             }
         }
     }

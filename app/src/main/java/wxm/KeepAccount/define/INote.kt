@@ -2,6 +2,8 @@ package wxm.KeepAccount.define
 
 import java.math.BigDecimal
 import java.sql.Timestamp
+import java.util.*
+import wxm.androidutil.time.*
 
 /**
  * Created by WangXM on 2016/10/21.
@@ -20,9 +22,28 @@ interface INote {
 
     var amount: BigDecimal
 
-    val valToStr: String?
+    val valToStr: String
 
-    val tsToStr: String?
+    val tsToStr: String
+
+    val tsYearTag:String
+        get() {
+            val cl = ts.toCalendar()
+            return "${cl.getYear()}"
+        }
+
+    val tsYearMonthTag:String
+        get() {
+            val cl = ts.toCalendar()
+            return String.format(Locale.CHINA, "${cl.getYear()}-%02d", cl.getMonth())
+        }
+
+    val tsYearMonthDayTag:String
+        get() {
+            val cl = ts.toCalendar()
+            return String.format(Locale.CHINA, "${cl.getYear()}-%02d-%02d",
+                    cl.getMonth(), cl.getDayInMonth())
+        }
 
     var ts: Timestamp
 

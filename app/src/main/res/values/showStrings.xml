@@ -3,8 +3,13 @@
 this file include show strings in app
 -->
 <resources>
-    <string name="show_version_code">当前版本号 : %d</string>
-    <string name="show_version_name">当前版本名 : %s</string>
+    <string name="version_code">当前版本号 : %d</string>
+    <string name="version_name">当前版本名 : %s</string>
 
-    <string name="show_accept">确认</string>
+    <string name="act_accept">确认</string>
+
+    <string name="page_first">首页</string>
+    <string name="page_stats">统计</string>
+    <string name="page_setting">设置</string>
+    <string name="page_usr">用户</string>
 </resources>

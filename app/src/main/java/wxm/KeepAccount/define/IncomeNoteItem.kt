@@ -3,8 +3,7 @@ package wxm.KeepAccount.define
 import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
-import wxm.KeepAccount.utility.doJudge
-import wxm.KeepAccount.utility.toShowString
+import wxm.KeepAccount.utility.toMoneyString
 import wxm.androidutil.db.IDBRow
 
 import java.math.BigDecimal
@@ -42,7 +41,7 @@ class IncomeNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone  {
     override var amount: BigDecimal = BigDecimal.ZERO
         set(newAmount) {
             field = newAmount
-            valToStr = field.toShowString()
+            valToStr = field.toMoneyString()
         }
 
     @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
@@ -54,7 +53,7 @@ class IncomeNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone  {
 
     override var valToStr: String = ""
         get() {
-            if(field.isEmpty())  field = amount.toShowString()
+            if(field.isEmpty())  field = amount.toMoneyString()
             return field
         }
         private set(value) {

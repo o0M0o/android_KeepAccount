@@ -15,7 +15,6 @@ import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.ViewHolder
-import wxm.androidutil.util.UtilFun
 import wxm.uilib.SwipeLayout.SwipeLayout
 import java.util.*
 
@@ -25,31 +24,32 @@ import java.util.*
  */
 class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
     : MoreAdapter(ct, data, R.layout.liit_data_swipe_holder) {
+    private val mSelfContext = ct
     internal data class ViewTag(var mContent: View, var mRight: View)
 
-    override fun loadView(pos: Int, vh: ViewHolder) {
+    override fun loadView(pos: Int, vhHolder: ViewHolder) {
         @Suppress("UNCHECKED_CAST")
         val itemData = (getItem(pos) as Map<String, INote>)[K_NODE]!!
 
-        val sl = vh.getView<SwipeLayout>(R.id.swipe)
+        val sl = vhHolder.getView<SwipeLayout>(R.id.swipe)
         var vt: ViewTag? = sl.tag as ViewTag?
         if (null == vt) {
-            vt = ViewTag(mContent = vh.getView(if (itemData.isPayNote) R.id.rl_pay else R.id.rl_income),
-                    mRight = vh.getView(R.id.cl_swipe_right))
+            vt = ViewTag(mContent = vhHolder.getView(if (itemData.isPayNote) R.id.rl_pay else R.id.rl_income),
+                    mRight = vhHolder.getView(R.id.cl_swipe_right))
             if (itemData.isPayNote) {
-                vh.getView<View>(R.id.rl_income).visibility = View.GONE
+                vhHolder.getView<View>(R.id.rl_income).visibility = View.GONE
                 initPay(vt.mContent, itemData.toPayNote()!!)
             } else {
-                vh.getView<View>(R.id.rl_pay).visibility = View.GONE
+                vhHolder.getView<View>(R.id.rl_pay).visibility = View.GONE
                 initIncome(vt.mContent, itemData.toIncomeNote()!!)
             }
 
-            ViewHelper(vt.mRight).let {
+            ViewHelper(vt.mRight).let1 {
                 it.setTag(R.id.iv_delete, itemData)
                 it.setTag(R.id.iv_edit, itemData)
 
                 it.getChildView<View>(R.id.iv_delete)!!.setOnClickListener { v ->
-                    DlgAlert.showAlert(context, "删除数据", "此操作不能恢复，是否继续!",
+                    DlgAlert.showAlert(mSelfContext, "删除数据", "此操作不能恢复，是否继续!",
                             { b ->
                                 b.setPositiveButton("是") { _, _ ->
                                     (v.tag as INote).let {
@@ -65,19 +65,15 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
                 }
 
                 it.getChildView<View>(R.id.iv_edit)!!.setOnClickListener { v ->
-                    Intent(context, ACNoteEdit::class.java).let {
+                    Intent(mSelfContext, ACNoteEdit::class.java).let1 {
                         val data = v.tag as INote
                         it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, data.id)
                         it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
                                 if (data.isPayNote) GlobalDef.STR_RECORD_PAY else GlobalDef.STR_RECORD_INCOME)
 
-                        context.startActivity(it)
-
-                        Unit
+                        mSelfContext.startActivity(it)
                     }
                 }
-
-                Unit
             }
 
             sl.tag = vt

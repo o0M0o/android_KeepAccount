@@ -24,6 +24,7 @@ import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.KeepAccount.utility.doJudge
 import wxm.KeepAccount.utility.let1
+import wxm.androidutil.time.CalendarUtility
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
@@ -84,10 +85,8 @@ class LVDaily : LVBase() {
         override fun initActs(parentView: View) {
             mIBSort = parentView.findViewById(R.id.ib_sort)
 
-            mIBSort.setActIcon(if (mBTimeDownOrder) R.drawable.ic_sort_up_1
-            else R.drawable.ic_sort_down_1)
-            mIBSort.setActName(if (mBTimeDownOrder) R.string.cn_sort_up_by_name
-            else R.string.cn_sort_down_by_name)
+            mIBSort.setActIcon(mBTimeDownOrder.doJudge(R.drawable.ic_sort_up_1, R.drawable.ic_sort_down_1))
+            mIBSort.setActName(mBTimeDownOrder.doJudge(R.string.cn_sort_up_by_name, R.string.cn_sort_down_by_name))
 
             EventHelper.setOnClickOperator(parentView,
                     intArrayOf(R.id.ib_sort, R.id.ib_delete, R.id.ib_add, R.id.ib_refresh, R.id.ib_report),
@@ -99,8 +98,8 @@ class LVDaily : LVBase() {
                 R.id.ib_sort -> {
                     mBTimeDownOrder = !mBTimeDownOrder
 
-                    mIBSort.setActIcon(if (mBTimeDownOrder) R.drawable.ic_sort_up_1 else R.drawable.ic_sort_down_1)
-                    mIBSort.setActName(if (mBTimeDownOrder) R.string.cn_sort_up_by_time else R.string.cn_sort_down_by_time)
+                    mIBSort.setActIcon(mBTimeDownOrder.doJudge(R.drawable.ic_sort_up_1, R.drawable.ic_sort_down_1))
+                    mIBSort.setActName(mBTimeDownOrder.doJudge(R.string.cn_sort_up_by_time, R.string.cn_sort_down_by_time))
 
                     reloadUI()
                 }
@@ -122,32 +121,32 @@ class LVDaily : LVBase() {
                 }
 
                 R.id.ib_add -> {
-                    val ac = rootActivity
-                    val intent = Intent(ac, ACNoteCreate::class.java)
-                    val cal = Calendar.getInstance()
-                    cal.timeInMillis = System.currentTimeMillis()
-                    intent.putExtra(GlobalDef.STR_RECORD_DATE,
-                            String.format(Locale.CHINA, "%d-%02d-%02d %02d:%02d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)))
+                    Intent(activity, ACNoteCreate::class.java).let1 {
+                        it.putExtra(GlobalDef.STR_RECORD_DATE,
+                                CalendarUtility.SDF_YEAR_MONTH_DAY_HOUR_MINUTE.format(System.currentTimeMillis()))
 
-                    ac!!.startActivityForResult(intent, 1)
+                        activity.startActivityForResult(it, 1)
+                    }
                 }
 
                 R.id.ib_report -> {
-                    val dlgDay = DlgSelectReportDays()
-                    dlgDay.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
-                        override fun onDialogPositiveResult(dialogFragment: DialogFragment) {
-                            val it = Intent(rootActivity, ACReport::class.java)
-                            it.putExtra(ACReport.PARA_TYPE, ACReport.PT_DAY)
-                            it.putStringArrayListExtra(ACReport.PARA_LOAD,
-                                    arrayListOf(dlgDay.startDay!!, dlgDay.endDay!!))
-                            rootActivity!!.startActivity(it)
-                        }
+                    DlgSelectReportDays().let1 { dlg ->
+                        dlg.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
+                            override fun onDialogPositiveResult(dialogFragment: DialogFragment) {
+                                Intent(activity, ACReport::class.java).let1 {
+                                    it.putExtra(ACReport.PARA_TYPE, ACReport.PT_DAY)
+                                    it.putStringArrayListExtra(ACReport.PARA_LOAD,
+                                            arrayListOf(dlg.startDay!!, dlg.endDay!!))
+                                    activity.startActivity(it)
+                                }
+                            }
 
-                        override fun onDialogNegativeResult(dialogFragment: DialogFragment) {
-                        }
-                    })
+                            override fun onDialogNegativeResult(dialogFragment: DialogFragment) {
+                            }
+                        })
 
-                    dlgDay.show(rootActivity!!.supportFragmentManager, "select days")
+                        dlg.show(activity.supportFragmentManager, "select days")
+                    }
                 }
             }
         }

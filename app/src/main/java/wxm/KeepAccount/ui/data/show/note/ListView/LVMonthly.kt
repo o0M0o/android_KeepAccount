@@ -18,6 +18,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.KeepAccount.utility.doJudge
 import wxm.KeepAccount.utility.let1
+import wxm.KeepAccount.utility.toSignalMoneyString
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder
@@ -48,18 +49,18 @@ class LVMonthly : LVBase() {
     internal inner class MonthItemHolder(tag: String)
         : ViewDataHolder<String, MonthDetailItem>(tag) {
         override fun getDataByTag(tag: String): MonthDetailItem {
-            val map = MonthDetailItem(tag)
-            NoteDataHelper.getInfoByMonth(tag)?.let {
-                map.monthDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
-                        it.incomeCount.toString(), it.szIncomeAmount)
+            return MonthDetailItem(tag).let { map ->
+                NoteDataHelper.getInfoByMonth(tag)?.let1 {
+                    map.monthDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
+                            it.incomeCount.toString(), it.szIncomeAmount)
 
-                map.amount = String.format(Locale.CHINA,
-                        if (0 < it.balance.toFloat()) "+ %.02f" else "%.02f", it.balance)
+                    map.amount = it.balance.toSignalMoneyString()
 
-                map.show = EShowFold.getByFold(!checkUnfoldItem(tag)).showStatus
+                    map.show = EShowFold.getByFold(!checkUnfoldItem(tag)).showStatus
+                }
+
+                map
             }
-
-            return map
         }
     }
 
@@ -81,8 +82,7 @@ class LVMonthly : LVBase() {
                 map.dayDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
                         it.incomeCount.toString(), it.szIncomeAmount)
 
-                map.amount = String.format(Locale.CHINA,
-                        if (0 < it.balance.toFloat()) "+ %.02f" else "%.02f", it.balance)
+                map.amount = it.balance.toSignalMoneyString()
             }
 
             return map
@@ -181,6 +181,8 @@ class LVMonthly : LVBase() {
 
                     mBSelectSubFilter = false
                     refreshAttachLayout()
+
+
                 }
             }
 
@@ -260,8 +262,8 @@ class LVMonthly : LVBase() {
      * update attach layout
      */
     private fun refreshAttachLayout() {
-        setAttachLayoutVisible(if (mBFilter || mBSelectSubFilter) View.VISIBLE else View.GONE)
-        setFilterLayoutVisible(if (mBFilter) View.VISIBLE else View.GONE)
+        setAttachLayoutVisible((mBFilter || mBSelectSubFilter).doJudge(View.VISIBLE, View.GONE))
+        setFilterLayoutVisible((mBFilter).doJudge(View.VISIBLE, View.GONE))
         setAcceptGiveUpLayoutVisible(if (mBSelectSubFilter) View.VISIBLE else View.GONE)
     }
 

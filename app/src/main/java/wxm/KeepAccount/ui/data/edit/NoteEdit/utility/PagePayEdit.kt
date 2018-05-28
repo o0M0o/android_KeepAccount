@@ -114,7 +114,7 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
                 }
             }
 
-            mETDate.setText(paraDate ?: it.tsToStr!!.substring(0, 16))
+            mETDate.setText(paraDate ?: it.tsToStr.substring(0, 16))
             mETInfo.setText(it.info)
 
             val szNote = it.note

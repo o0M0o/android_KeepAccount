@@ -18,6 +18,7 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent
 import wxm.KeepAccount.ui.data.show.note.base.EOperation
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.utility.*
+import wxm.androidutil.time.*
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewHolder
@@ -218,7 +219,7 @@ class LVBudget : LVBase() {
     private fun parseSub(parentTag: String, lsPay: List<PayNoteItem>) {
         val curLs = LinkedList<SubAdapterItem>()
         lsPay.sortedBy { it.ts }.forEach {
-            val cl = getCalendarByTimeStamp(it.ts)
+            val cl = it.ts.toCalendar()
 
             val map = SubAdapterItem(parentTag, it.tsToStr.substring(0, 10))
             map.month = "${cl.getYear()}年${cl.getMonth()}月"

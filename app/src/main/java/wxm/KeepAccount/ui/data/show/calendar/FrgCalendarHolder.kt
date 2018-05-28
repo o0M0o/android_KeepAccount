@@ -59,7 +59,7 @@ class FrgCalendarHolder : FrgSupportBaseAdv() {
                         activity.let1 { ac ->
                             DlgAlert.showAlert(ac, R.string.dlg_warn, R.string.dlg_usr_no_data,
                                     { b ->
-                                        b.setNegativeButton(R.string.show_accept)
+                                        b.setNegativeButton(R.string.act_accept)
                                         { _, _ -> ac.finish() }
                                     })
                         }

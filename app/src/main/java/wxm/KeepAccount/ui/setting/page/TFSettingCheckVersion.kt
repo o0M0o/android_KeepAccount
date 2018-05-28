@@ -2,9 +2,6 @@ package wxm.KeepAccount.ui.setting.page
 
 import android.os.Bundle
 import android.widget.TextView
-import com.trello.rxlifecycle.RxLifecycle.bindView
-
-import java.util.Locale
 
 import kotterknife.bindView
 import wxm.KeepAccount.R
@@ -27,8 +24,8 @@ class TFSettingCheckVersion : TFSettingBase() {
     }
 
     override fun initUI(bundle: Bundle?) {
-        mTVVerNumber.text = context.getString(R.string.show_version_code, AppBase.getVerCode())
-        mTVVerName.text = context.getString(R.string.show_version_name, AppBase.getVerName())
+        mTVVerNumber.text = context.getString(R.string.version_code, AppBase.getVerCode())
+        mTVVerName.text = context.getString(R.string.version_name, AppBase.getVerName())
     }
 
     override fun updateSetting() {

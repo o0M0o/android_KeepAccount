@@ -18,6 +18,8 @@ import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.KeepAccount.utility.doJudge
+import wxm.KeepAccount.utility.let1
+import wxm.KeepAccount.utility.toSignalMoneyString
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder
@@ -80,8 +82,7 @@ class LVYearly : LVBase() {
                 map.monthDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
                         it.incomeCount.toString(), it.szIncomeAmount)
 
-                map.amount = String.format(Locale.CHINA,
-                        if (0 < it.balance.toFloat()) "+ %.02f" else "%.02f", it.balance)
+                map.amount = it.balance.toSignalMoneyString()
             }
 
             return map
@@ -105,8 +106,7 @@ class LVYearly : LVBase() {
             mIBDelete.visibility = View.GONE
 
             mIBSort.setActIcon(mBTimeDownOrder.doJudge(R.drawable.ic_sort_up_1, R.drawable.ic_sort_down_1))
-            mIBSort.setActName(mBTimeDownOrder
-                    .doJudge(R.string.cn_sort_up_by_time, R.string.cn_sort_down_by_time))
+            mIBSort.setActName(mBTimeDownOrder.doJudge(R.string.cn_sort_up_by_time, R.string.cn_sort_down_by_time))
 
             EventHelper.setOnClickOperator(parentView,
                     intArrayOf(R.id.ib_sort, R.id.ib_refresh),
@@ -118,10 +118,8 @@ class LVYearly : LVBase() {
                 R.id.ib_sort -> {
                     mBTimeDownOrder = !mBTimeDownOrder
 
-                    mIBSort.setActIcon(if (mBTimeDownOrder) R.drawable.ic_sort_up_1
-                    else R.drawable.ic_sort_down_1)
-                    mIBSort.setActName(if (mBTimeDownOrder) R.string.cn_sort_up_by_time
-                    else R.string.cn_sort_down_by_time)
+                    mIBSort.setActIcon(mBTimeDownOrder.doJudge(R.drawable.ic_sort_up_1, R.drawable.ic_sort_down_1))
+                    mIBSort.setActName(mBTimeDownOrder.doJudge(R.string.cn_sort_up_by_time, R.string.cn_sort_down_by_time))
 
                     loadUI(null)
                 }
@@ -154,8 +152,7 @@ class LVYearly : LVBase() {
      * 'accept' or 'cancel' when [v] click
      */
     private fun onAcceptOrCancelClick(v: View) {
-        val vid = v.id
-        when (vid) {
+        when (v.id) {
             R.id.bt_accpet -> if (mBSelectSubFilter) {
                 if (!UtilFun.ListIsNullOrEmpty(mLLSubFilter)) {
                     rootActivity!!.jumpByTabName(NoteDataHelper.TAB_TITLE_MONTHLY)
@@ -166,9 +163,9 @@ class LVYearly : LVBase() {
                     mLLSubFilter.clear()
                 }
 
-                for (i in mLLSubFilterVW) {
-                    i.isSelected = false
-                    i.background.alpha = 0
+                mLLSubFilterVW.forEach {
+                    it.isSelected = false
+                    it.background.alpha = 0
                 }
                 mLLSubFilterVW.clear()
 
@@ -180,9 +177,9 @@ class LVYearly : LVBase() {
                 mBSelectSubFilter = false
                 mLLSubFilter.clear()
 
-                for (i in mLLSubFilterVW) {
-                    i.isSelected = false
-                    i.background.alpha = 0
+                mLLSubFilterVW.forEach {
+                    it.isSelected = false
+                    it.background.alpha = 0
                 }
                 mLLSubFilterVW.clear()
 
@@ -206,10 +203,11 @@ class LVYearly : LVBase() {
                     mHMMonthPara.clear()
 
                     // for year
-                    NoteDataHelper.notesYears.forEach {
-                        mYearPara.add(HashMap<String, YearItemHolder>().apply {
-                            put(KEY_DATA, YearItemHolder(it))
-                        })
+                    NoteDataHelper.notesYears.map {
+                        HashMap<String, YearItemHolder>()
+                                .apply { put(KEY_DATA, YearItemHolder(it)) }
+                    }.let1 {
+                        mYearPara.addAll(it)
                     }
 
                     // for month
@@ -239,8 +237,8 @@ class LVYearly : LVBase() {
         mLVShow.adapter = YearAdapter(context,
                 mYearPara.filter { !mBFilter || mFilterPara.contains(it[KEY_DATA]!!.tag) }
                         .sortedWith(Comparator { o1, o2 ->
-                            if (!mBTimeDownOrder) o1[KEY_DATA]!!.tag.compareTo(o2[KEY_DATA]!!.tag)
-                            else o2[KEY_DATA]!!.tag.compareTo(o1[KEY_DATA]!!.tag)
+                            mBTimeDownOrder.doJudge(o1[KEY_DATA]!!.tag.compareTo(o2[KEY_DATA]!!.tag),
+                                    o2[KEY_DATA]!!.tag.compareTo(o1[KEY_DATA]!!.tag))
                         }))
     }
 
@@ -250,9 +248,9 @@ class LVYearly : LVBase() {
      * 更新附加layout
      */
     private fun refreshAttachLayout() {
-        setAttachLayoutVisible(if (mBFilter || mBSelectSubFilter) View.VISIBLE else View.GONE)
-        setFilterLayoutVisible(if (mBFilter) View.VISIBLE else View.GONE)
-        setAcceptGiveUpLayoutVisible(if (mBSelectSubFilter) View.VISIBLE else View.GONE)
+        setAttachLayoutVisible((mBFilter || mBSelectSubFilter).doJudge(View.VISIBLE, View.GONE))
+        setFilterLayoutVisible(mBFilter.doJudge(View.VISIBLE, View.GONE))
+        setAcceptGiveUpLayoutVisible(mBSelectSubFilter.doJudge(View.VISIBLE, View.GONE))
     }
 
     /**
@@ -262,8 +260,7 @@ class LVYearly : LVBase() {
         mHMMonthPara[tag]?.let {
             LinkedList<HashMap<String, MonthItemHolder>>().apply {
                 addAll(it.sortedWith(Comparator { o1, o2 ->
-                    if (!mBTimeDownOrder) o1.tag.compareTo(o2.tag)
-                    else o2.tag.compareTo(o1.tag)
+                    mBTimeDownOrder.doJudge(o1.tag.compareTo(o2.tag), o2.tag.compareTo(o1.tag))
                 }).map { HashMap<String, MonthItemHolder>().apply { put(KEY_DATA, it) } })
             }.let {
                 lv.adapter = MonthAdapter(context, it)

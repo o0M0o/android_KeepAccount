@@ -65,7 +65,7 @@ class NoteDataHelper private constructor() {
         monthHaveNote.clear()
         yearHaveNote.clear()
         ContextUtil.payIncomeUtility.allNotes.forEach {
-            val nk = NoteKey(szDay = it.tsToStr!!.substring(0, 10))
+            val nk = NoteKey(szDay = it.tsYearMonthDayTag)
             var lsNote = allNotes[nk]
             if(null == lsNote)    {
                 lsNote = ArrayList()
@@ -92,10 +92,6 @@ class NoteDataHelper private constructor() {
         dayHaveNote.sort()
         monthHaveNote.sort()
         yearHaveNote.sort()
-        /*
-        allNotes.toSortedMap(kotlin.Comparator {
-            o1, o2 ->  o1.szDay.compareTo(o2.szDay)})
-            */
 
         refreshDay()
         refreshMonth()
@@ -130,17 +126,15 @@ class NoteDataHelper private constructor() {
     private fun refreshMonth() {
         mHMDayInfo.forEach {
             val curMonth = it.key.substring(0, 7)
-            var vData: NoteShowInfo? = mHMMonthInfo[curMonth]
-            if (null == vData) {
-                vData = NoteShowInfo()
-                mHMMonthInfo[curMonth] = vData
+            if (null == mHMMonthInfo[curMonth]) {
+                mHMMonthInfo[curMonth] = NoteShowInfo()
             }
 
-            vData.apply {
+            mHMMonthInfo[curMonth]!!.apply {
                 payCount += it.value.payCount
                 incomeCount += it.value.incomeCount
-                payAmount = it.value.payAmount.add(vData.payAmount)
-                incomeAmount = it.value.incomeAmount.add(vData.incomeAmount)
+                payAmount = it.value.payAmount.add(payAmount)
+                incomeAmount = it.value.incomeAmount.add(incomeAmount)
             }
         }
     }
@@ -152,17 +146,15 @@ class NoteDataHelper private constructor() {
     private fun refreshYear() {
         mHMMonthInfo.forEach {
             val curYear = it.key.substring(0, 4)
-            var vData: NoteShowInfo? = mHMYearInfo[curYear]
-            if (null == vData) {
-                vData = NoteShowInfo()
-                mHMYearInfo[curYear] = vData
+            if (null == mHMYearInfo[curYear]) {
+                mHMYearInfo[curYear] = NoteShowInfo()
             }
 
-            vData.apply {
+            mHMYearInfo[curYear]!!.apply {
                 payCount += it.value.payCount
                 incomeCount += it.value.incomeCount
-                payAmount = it.value.payAmount.add(vData.payAmount)
-                incomeAmount = it.value.incomeAmount.add(vData.incomeAmount)
+                payAmount = it.value.payAmount.add(payAmount)
+                incomeAmount = it.value.incomeAmount.add(incomeAmount)
             }
         }
     }

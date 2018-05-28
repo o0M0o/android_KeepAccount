@@ -103,7 +103,7 @@ class DlgSelectRecordType : DlgOKOrNOBase() {
                             val curName = mIBSort.actName
                             val isUp = DlgResource.mSZSortByNameUp == curName
 
-                            mIBSort.actName = if (isUp) DlgResource.mSZSortByNameDown else DlgResource.mSZSortByNameUp
+                            mIBSort.setActName(if (isUp) DlgResource.mSZSortByNameDown else DlgResource.mSZSortByNameUp)
                             mIBSort.setActIcon(if (isUp) R.drawable.ic_sort_down_1 else R.drawable.ic_sort_up_1)
 
                             loadData()
