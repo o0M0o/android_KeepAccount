@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.allure.lbanners.LMBanners
+        android:id="@+id/banners"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/banner_height"
+        app:auto_play="false"
+        app:canLoop="true"
+        app:durtion="5000"
+        app:horizontal_transitionEffect="accordion"
+        app:indicator_position="bottom_mid"
+        app:indicator_select="@drawable/page_indicator_select"
+        app:indicator_unselect="@drawable/page_indicator_unselect"
+        app:indicator_width="5"
+        app:isVertical="false"
+        app:scroll_duration="1000" />
+
+    <wxm.androidutil.ui.dragGrid.DragGridView
+        android:id="@+id/dgv_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/banners"
+        android:gravity="center"
+        android:horizontalSpacing="2dp"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="4"
+        android:padding="4dp"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="2dp" />
+
+</RelativeLayout>

@@ -1,56 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.allure.lbanners.LMBanners
-        android:id="@+id/banners"
+    <FrameLayout
+        android:id="@+id/fl_page"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/banner_height"
-        app:auto_play="false"
-        app:canLoop="true"
-        app:durtion="5000"
-        app:horizontal_transitionEffect="accordion"
-        app:indicator_position="bottom_mid"
-        app:indicator_select="@drawable/page_indicator_select"
-        app:indicator_unselect="@drawable/page_indicator_unselect"
-        app:indicator_width="5"
-        app:isVertical="false"
-        app:scroll_duration="1000" />
-
-    <wxm.androidutil.ui.dragGrid.DragGridView
-        android:id="@+id/dgv_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/rl_buttons"
-        android:layout_below="@+id/banners"
-        android:gravity="center"
-        android:horizontalSpacing="2dp"
-        android:listSelector="@android:color/transparent"
-        android:numColumns="4"
-        android:padding="4dp"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="2dp" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/rl_buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/rl_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="4dp"
-        android:background="@color/white" >
+        android:background="@color/white"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <wxm.uilib.IconButton.IconButton
             android:id="@+id/ib_channel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="4dp"
-            app:ibColorCold="@color/text_fit"
-            app:ibColorHot="@color/red_ff725f"
             app:ibActName="@string/page_first"
             app:ibActNameSize="12sp"
+            app:ibColorCold="@color/text_fit"
+            app:ibColorHot="@color/red_ff725f"
             app:ibIcon="@drawable/ic_first_page"
             app:ibIconHeight="26dp"
             app:ibIconWidth="26dp"
@@ -65,17 +48,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="4dp"
-            app:ibColorCold="@color/text_fit"
-            app:ibColorHot="@color/red_ff725f"
             app:ibActName="@string/page_stats"
             app:ibActNameSize="12sp"
+            app:ibColorCold="@color/text_fit"
+            app:ibColorHot="@color/red_ff725f"
             app:ibIcon="@drawable/ic_stats"
             app:ibIconHeight="26dp"
             app:ibIconWidth="26dp"
             app:ibOrientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/ib_channel"
             app:layout_constraintEnd_toStartOf="@id/ib_usr"
+            app:layout_constraintStart_toEndOf="@id/ib_channel"
             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -84,10 +67,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="4dp"
-            app:ibColorCold="@color/text_fit"
-            app:ibColorHot="@color/red_ff725f"
             app:ibActName="@string/page_usr"
             app:ibActNameSize="12sp"
+            app:ibColorCold="@color/text_fit"
+            app:ibColorHot="@color/red_ff725f"
             app:ibIcon="@drawable/ic_usr"
             app:ibIconHeight="26dp"
             app:ibIconWidth="26dp"
@@ -103,10 +86,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="4dp"
-            app:ibColorCold="@color/text_fit"
-            app:ibColorHot="@color/red_ff725f"
             app:ibActName="@string/page_setting"
             app:ibActNameSize="12sp"
+            app:ibColorCold="@color/text_fit"
+            app:ibColorHot="@color/red_ff725f"
             app:ibIcon="@drawable/ic_help"
             app:ibIconHeight="26dp"
             app:ibIconWidth="26dp"
@@ -117,4 +100,4 @@
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

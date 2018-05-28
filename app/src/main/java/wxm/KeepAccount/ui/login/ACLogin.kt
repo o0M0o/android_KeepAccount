@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.os.Message
 import android.os.Process
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.EMsgType
 import wxm.KeepAccount.define.GlobalDef
@@ -90,29 +88,16 @@ class ACLogin : AppCompatActivity() {
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        var bResetView = false
         when (resultCode) {
-            GlobalDef.INTRET_USR_ADD -> {
-                TagLog.i("从'添加新帐户'页面返回")
-                bResetView = true
-            }
-
-            GlobalDef.INTRET_GIVEUP -> TagLog.i("从'添加新帐户'页面返回(放弃添加新帐户)")
-
             GlobalDef.INTRET_USR_LOGOUT -> {
-                TagLog.i("注销帐户")
-                bResetView = true
-
+                TagLog.i("usr logout")
                 Message.obtain(ContextUtil.msgHandler, EMsgType.USR_LOGOUT.id).sendToTarget()
             }
 
-            else -> TagLog.d(String.format("不处理的resultCode(%d)!", resultCode))
+            else -> TagLog.d("do nothing for resultCode = $resultCode!")
         }
 
-        if (bResetView) {
-            mFGLogin.reInitUI()
-        }
+        mFGLogin.reInitUI()
     }
 }
 
