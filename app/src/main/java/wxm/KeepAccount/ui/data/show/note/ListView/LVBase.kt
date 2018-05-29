@@ -126,7 +126,7 @@ abstract class LVBase : ShowViewBase() {
     protected fun reloadView(bShowDialog: Boolean) {
         reInitUI()
         if (bShowDialog) {
-            DlgAlert.showAlert(context, R.string.dlg_prompt, R.string.dlg_data_refreshed)
+            DlgAlert.showAlert(context!!, R.string.dlg_prompt, R.string.dlg_data_refreshed)
         }
     }
 

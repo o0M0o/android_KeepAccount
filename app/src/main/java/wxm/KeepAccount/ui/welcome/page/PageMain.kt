@@ -48,7 +48,7 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
     @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDBEvent(event: DBDataChangeEvent) {
-        mLBanners.setAdapter(FrgAdapter(activity, null), mALFrgPara)
+        mLBanners.setAdapter(FrgAdapter(activity!!, null), mALFrgPara)
     }
 
     override fun getLayoutID(): Int = R.layout.page_main_page
@@ -70,7 +70,7 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
         mLSData.addAll(PreferencesUtil.loadHotAction()
                 .map { HashMap<String, Any>().apply { put(DGVButtonAdapter.KEY_ACT_NAME, it) } })
 
-        mDGVActions.adapter = DGVButtonAdapter(activity, mLSData)
+        mDGVActions.adapter = DGVButtonAdapter(activity!!, mLSData)
         mDGVActions.setOnChangeListener { from, to ->
             // adjust position
             if (from < to) {
@@ -107,7 +107,7 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
      */
     private fun initBanner() {
         mLBanners.let {
-            it.setAdapter(FrgAdapter(activity, null), mALFrgPara)
+            it.setAdapter(FrgAdapter(activity!!, null), mALFrgPara)
 
             //参数设置
             it.setAutoPlay(false)//自动播放
@@ -167,7 +167,7 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
             }
 
             EAction.LOGOUT -> {
-                doLogout(activity)
+                doLogout(activity!!)
             }
         }
     }

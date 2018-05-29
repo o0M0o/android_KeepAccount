@@ -46,7 +46,7 @@ class FrgCalendarHolder : FrgSupportBaseAdv() {
 
     override fun loadUI(bundle: Bundle?) {
         val param = arrayOfNulls<String>(1)
-        ToolUtil.runInBackground(this.activity,
+        ToolUtil.runInBackground(this.activity!!,
                 {
                     NoteDataHelper.notesYears.let {
                         if (it.isNotEmpty()) {
@@ -57,7 +57,7 @@ class FrgCalendarHolder : FrgSupportBaseAdv() {
                 {
                     if (UtilFun.StringIsNullOrEmpty(param[0])) {
                         activity.let1 { ac ->
-                            DlgAlert.showAlert(ac, R.string.dlg_warn, R.string.dlg_usr_no_data,
+                            DlgAlert.showAlert(ac!!, R.string.dlg_warn, R.string.dlg_usr_no_data,
                                     { b ->
                                         b.setNegativeButton(R.string.act_accept)
                                         { _, _ -> ac.finish() }
@@ -88,8 +88,8 @@ class FrgCalendarHolder : FrgSupportBaseAdv() {
             ft.commit()
         }
 
-        mCSIAdapter = CalendarMonthAdapter(context)
-        mHGVDays.setCalendarItemAdapter(CalendarMonthAdapter(context), CalendarWeekAdapter(context))
+        mCSIAdapter = CalendarMonthAdapter(context!!)
+        mHGVDays.setCalendarItemAdapter(CalendarMonthAdapter(context!!), CalendarWeekAdapter(context!!))
 
         mHGVDays.setDateChangeListener(object : ICalendarListener {
             override fun onDayChanged(day: String) {

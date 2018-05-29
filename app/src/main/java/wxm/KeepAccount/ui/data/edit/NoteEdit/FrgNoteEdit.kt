@@ -9,6 +9,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.define.*
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.*
 import wxm.KeepAccount.ui.data.edit.base.*
+import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 
 /**
@@ -93,11 +94,12 @@ class FrgNoteEdit :  FrgEditBase() {
                 }
             }
 
-            val adapter = PagerAdapter(fragmentManager)
-            (adapter.getItem(PAGE_IDX_PREVIEW) as IPreview).setPreviewData(mCurData!!)
-            (adapter.getItem(PAGE_IDX_EDIT) as IEdit).setEditData(mCurData!!)
-            mVPPages.adapter = adapter
-            mVPPages.currentItem = idx
+            PagerAdapter(fragmentManager!!).let1 {
+                (it.getItem(PAGE_IDX_PREVIEW) as IPreview).setPreviewData(mCurData!!)
+                (it.getItem(PAGE_IDX_EDIT) as IEdit).setEditData(mCurData!!)
+                mVPPages.adapter = it
+                mVPPages.currentItem = idx
+            }
         }
 
         loadUI(bundle)

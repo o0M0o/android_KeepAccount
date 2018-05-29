@@ -68,11 +68,8 @@ class DlgUsrMessage : DlgOKOrNOBase() {
 
     override fun checkBeforeOK(): Boolean {
         val msg = mETUsrMessage.text.toString()
-        if (UtilFun.StringIsNullOrEmpty(msg)) {
-            AlertDialog.Builder(context)
-                    .setTitle("警告")
-                    .setMessage("消息不能为空")
-                    .create().show()
+        if (msg.isEmpty()) {
+            DlgAlert.showAlert(context!!, R.string.dlg_warn, "消息不能为空!!")
             return false
         }
 
@@ -85,12 +82,12 @@ class DlgUsrMessage : DlgOKOrNOBase() {
 
         val ret = sendMsgByHttpPost(usr, msg)
         if (!(ret[0] as Boolean)) {
-            DlgAlert.showAlert(context, "警告",
+            DlgAlert.showAlert(context!!, R.string.dlg_warn,
                     "消息发送失败!!\n原因 : ${ret[1] as String}")
             return false
         }
 
-        DlgAlert.showAlert(context, "信息", "消息发送成功!!")
+        DlgAlert.showAlert(context!!, R.string.dlg_info, "消息发送成功!!")
         return true
     }
 

@@ -61,8 +61,7 @@ class DayReportChart : FrgSupportBaseAdv() {
     }
 
     override fun initUI(bundle: Bundle?) {
-        val bd = arguments
-        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD)
+        mASParaLoad = arguments!!.getStringArrayList(ACReport.PARA_LOAD)
         EventHelper.setOnClickOperator(view!!,
                 intArrayOf(R.id.tb_income, R.id.tb_pay),
                 { v ->
@@ -80,7 +79,7 @@ class DayReportChart : FrgSupportBaseAdv() {
                     // update show
                     val cvData = PieChartData()
                     showProgress(true)
-                    ToolUtil.runInBackground(this.activity,
+                    ToolUtil.runInBackground(this.activity!!,
                             { generateData(cvData) },
                             {
                                 showProgress(false)
@@ -135,7 +134,7 @@ class DayReportChart : FrgSupportBaseAdv() {
         mASParaLoad?.let {
             val cvData = PieChartData()
             showProgress(true)
-            ToolUtil.runInBackground(this.activity,
+            ToolUtil.runInBackground(this.activity!!,
                     {
                         val hmNote = NoteDataHelper.getNotesBetweenDays(it[0], it[1])
                         hmNote.values.iterator().forEach { mLLOrgData.addAll(it!!) }

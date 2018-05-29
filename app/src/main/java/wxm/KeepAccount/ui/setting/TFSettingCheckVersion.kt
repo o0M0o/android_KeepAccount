@@ -24,8 +24,8 @@ class TFSettingCheckVersion : TFSettingBase() {
     }
 
     override fun initUI(bundle: Bundle?) {
-        mTVVerNumber.text = context.getString(R.string.version_code, AppBase.getVerCode())
-        mTVVerName.text = context.getString(R.string.version_name, AppBase.getVerName())
+        mTVVerNumber.text = context!!.getString(R.string.version_code, AppBase.getVerCode())
+        mTVVerName.text = context!!.getString(R.string.version_name, AppBase.getVerName())
     }
 
     override fun updateSetting() {

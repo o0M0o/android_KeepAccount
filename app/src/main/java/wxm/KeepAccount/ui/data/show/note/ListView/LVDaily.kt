@@ -22,7 +22,6 @@ import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.utility.doJudge
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.time.CalendarUtility
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
@@ -30,6 +29,7 @@ import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder
 import wxm.androidutil.ui.view.ViewHolder
+import wxm.androidutil.util.doJudge
 import wxm.uilib.IconButton.IconButton
 import java.util.ArrayList
 import java.util.Calendar
@@ -125,7 +125,7 @@ class LVDaily : LVBase() {
                         it.putExtra(GlobalDef.STR_RECORD_DATE,
                                 CalendarUtility.SDF_YEAR_MONTH_DAY_HOUR_MINUTE.format(System.currentTimeMillis()))
 
-                        activity.startActivityForResult(it, 1)
+                        activity!!.startActivityForResult(it, 1)
                     }
                 }
 
@@ -137,7 +137,7 @@ class LVDaily : LVBase() {
                                     it.putExtra(ACReport.PARA_TYPE, ACReport.PT_DAY)
                                     it.putStringArrayListExtra(ACReport.PARA_LOAD,
                                             arrayListOf(dlg.startDay!!, dlg.endDay!!))
-                                    activity.startActivity(it)
+                                    activity!!.startActivity(it)
                                 }
                             }
 
@@ -145,7 +145,7 @@ class LVDaily : LVBase() {
                             }
                         })
 
-                        dlg.show(activity.supportFragmentManager, "select days")
+                        dlg.show(activity!!.supportFragmentManager, "select days")
                     }
                 }
             }
@@ -211,7 +211,7 @@ class LVDaily : LVBase() {
                 this::onAcceptOrCancelClick)
 
         showLoadingProgress(true)
-        ToolUtil.runInBackground(activity,
+        ToolUtil.runInBackground(activity!!,
                 {
                     mMainPara.clear()
                     NoteDataHelper.notesDays.forEach {
@@ -238,7 +238,7 @@ class LVDaily : LVBase() {
                     if (!mBTimeDownOrder) o1[KEY_DATA]!!.tag.compareTo(o2[KEY_DATA]!!.tag)
                     else o2[KEY_DATA]!!.tag.compareTo(o1[KEY_DATA]!!.tag)
                 }).let1 {
-                    mLVShow.adapter = MainAdapter(context, it)
+                    mLVShow.adapter = MainAdapter(context!!, it)
                 }
     }
 
@@ -277,7 +277,7 @@ class LVDaily : LVBase() {
         mMainPara.filter {
             if (mBFilter) mFilterPara.contains(it[KEY_DATA]!!.tag) else true
         }.let1 {
-            mLVShow.adapter = MainAdapter(context, it)
+            mLVShow.adapter = MainAdapter(context!!, it)
         }
     }
 
@@ -291,7 +291,7 @@ class LVDaily : LVBase() {
 
         private val mCLAdapter = View.OnClickListener { v ->
             getTypedItem(mLVShow.getPositionForView(v)).let1 { hm ->
-                activity.let1 {
+                activity!!.let1 {
                     it.startActivity(Intent(it, ACDailyDetail::class.java)
                             .putExtra(ACDailyDetail.KEY_HOT_DAY, hm.tag))
                 }

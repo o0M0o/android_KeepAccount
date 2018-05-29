@@ -18,9 +18,11 @@ import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
+import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
+import wxm.androidutil.util.doJudge
 import java.math.BigDecimal
 
 /**
@@ -79,7 +81,7 @@ class PageBudgetEdit : FrgSupportBaseAdv(), IEdit  {
                     override fun onDialogNegativeResult(dialogFragment: DialogFragment) {}
                 })
 
-                dlg.show(activity.supportFragmentManager, "edit note")
+                dlg.show(activity!!.supportFragmentManager, "edit note")
                 return@setOnTouchListener true
             }
 
@@ -115,36 +117,21 @@ class PageBudgetEdit : FrgSupportBaseAdv(), IEdit  {
      * @return      true if data validity
      */
     private fun checkResult(): Boolean {
-        val amount = mETAmount.text.toString()
-        val name = mETName.text.toString()
-
-        if (UtilFun.StringIsNullOrEmpty(name)) {
-            val builder = AlertDialog.Builder(context)
-            builder.setMessage("请输入预算名!").setTitle("警告")
-            val dlg = builder.create()
-            dlg.show()
-
+        if (mETName.text.isEmpty()) {
+            DlgAlert.showAlert(context!!, R.string.dlg_warn, R.string.dlg_need_budget_name)
             mETName.requestFocus()
             return false
         }
 
-        val cbi = ContextUtil.budgetUtility.getBudgetByName(name)
+        val cbi = ContextUtil.budgetUtility.getBudgetByName(mETName.text.toString())
         if (null != cbi && (null == mBIData || mBIData!!._id != cbi._id)) {
-            val builder = AlertDialog.Builder(context)
-            builder.setMessage("预算名已经存在!").setTitle("警告")
-            val dlg = builder.create()
-            dlg.show()
-
+            DlgAlert.showAlert(context!!, R.string.dlg_warn, R.string.dlg_already_have_budget_name)
             mETName.requestFocus()
             return false
         }
 
-        if (UtilFun.StringIsNullOrEmpty(amount)) {
-            val builder = AlertDialog.Builder(context)
-            builder.setMessage("请输入预算金额!").setTitle("警告")
-            val dlg = builder.create()
-            dlg.show()
-
+        if (mETAmount.text.isEmpty()) {
+            DlgAlert.showAlert(context!!, R.string.dlg_warn, R.string.dlg_need_budget_amount)
             mETAmount.requestFocus()
             return false
         }
@@ -166,11 +153,8 @@ class PageBudgetEdit : FrgSupportBaseAdv(), IEdit  {
             else
                 ContextUtil.budgetUtility.modifyData(it)
             if (!sRet) {
-                val dlg = AlertDialog.Builder(context)
-                        .setTitle("警告")
-                        .setMessage(if (newItem) "创建预算数据失败!" else "更新预算数据失败")
-                        .create()
-                dlg.show()
+                DlgAlert.showAlert(context!!, R.string.dlg_warn,
+                        newItem.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
             }
             return sRet
         }

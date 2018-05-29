@@ -252,7 +252,7 @@ class BudgetChart : ShowViewBase() {
             return
 
         val bi = mSPBudgetData!![mSPBudgetHot]
-        ToolUtil.runInBackground(this.activity,
+        ToolUtil.runInBackground(this.activity!!,
                 {
                     val hmRet = HashMap<String, ArrayList<PayNoteItem>>()
                     ContextUtil.payIncomeUtility.getPayNoteByBudget(bi).forEach    {

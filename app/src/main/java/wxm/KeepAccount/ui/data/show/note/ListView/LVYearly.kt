@@ -17,7 +17,6 @@ import wxm.KeepAccount.ui.utility.HelperDayNotesInfo
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.utility.doJudge
 import wxm.KeepAccount.utility.let1
 import wxm.KeepAccount.utility.toSignalMoneyString
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
@@ -25,6 +24,7 @@ import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder
 import wxm.androidutil.ui.view.ViewHolder
 import wxm.androidutil.util.UtilFun
+import wxm.androidutil.util.doJudge
 import wxm.androidutil.util.forObj
 import wxm.uilib.IconButton.IconButton
 import java.util.*
@@ -197,7 +197,7 @@ class LVYearly : LVBase() {
                 intArrayOf(R.id.bt_accpet, R.id.bt_giveup),
                 this::onAcceptOrCancelClick)
 
-        ToolUtil.runInBackground(activity,
+        ToolUtil.runInBackground(activity!!,
                 {
                     mYearPara.clear()
                     mHMMonthPara.clear()
@@ -234,7 +234,7 @@ class LVYearly : LVBase() {
         refreshAttachLayout()
 
         // set listview adapter
-        mLVShow.adapter = YearAdapter(context,
+        mLVShow.adapter = YearAdapter(context!!,
                 mYearPara.filter { !mBFilter || mFilterPara.contains(it[KEY_DATA]!!.tag) }
                         .sortedWith(Comparator { o1, o2 ->
                             mBTimeDownOrder.doJudge(o1[KEY_DATA]!!.tag.compareTo(o2[KEY_DATA]!!.tag),
@@ -263,7 +263,7 @@ class LVYearly : LVBase() {
                     mBTimeDownOrder.doJudge(o1.tag.compareTo(o2.tag), o2.tag.compareTo(o1.tag))
                 }).map { HashMap<String, MonthItemHolder>().apply { put(KEY_DATA, it) } })
             }.let {
-                lv.adapter = MonthAdapter(context, it)
+                lv.adapter = MonthAdapter(context!!, it)
             }
 
             ListViewHelper.setListViewHeightBasedOnChildren(lv)

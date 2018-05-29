@@ -90,7 +90,7 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
 
         // init gv
         mLHMData.clear()
-        mGVAdapter = GVTypeAdapter(activity, mLHMData,
+        mGVAdapter = GVTypeAdapter(activity!!, mLHMData,
                 arrayOf(KEY_NAME), intArrayOf(R.id.tv_type_name))
         mGVHolder.adapter = mGVAdapter
         mGVHolder.setOnItemClickListener { _, _, position, _ -> onGVItemClick(position) }

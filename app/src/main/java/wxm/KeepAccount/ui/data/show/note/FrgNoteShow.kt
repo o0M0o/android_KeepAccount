@@ -17,6 +17,7 @@ import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowDaily
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowMonthly
 import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowYearly
 import wxm.KeepAccount.ui.utility.NoteDataHelper
+import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.ui.frg.FrgSupportSwitcher
 import wxm.androidutil.util.UtilFun
@@ -141,12 +142,10 @@ class FrgNoteShow : FrgSupportSwitcher<FrgSupportBaseAdv>() {
 
         // 默认选择第一页为首页
         // 根据调用参数跳转到指定首页
-        val itActivity = activity.intent
-        if (null != itActivity) {
-            val ft = itActivity.getStringExtra(NoteDataHelper.INTENT_PARA_FIRST_TAB)
-            if (!UtilFun.StringIsNullOrEmpty(ft)) {
-                jumpByTabName(ft)
-            }
+        activity!!.intent?.let1 {
+                it.getStringExtra(NoteDataHelper.INTENT_PARA_FIRST_TAB)?.let1 {
+                        jumpByTabName(it)
+                }
         }
 
         if (null == mPSSwitcher.selected) {

@@ -39,7 +39,7 @@ class DailyChart : ChartBase() {
     }
 
     override fun refreshData() {
-        ToolUtil.runInBackground(this.activity,
+        ToolUtil.runInBackground(this.activity!!,
                 {
                     var idCol = 0
                     val axisValues = ArrayList<AxisValue>()

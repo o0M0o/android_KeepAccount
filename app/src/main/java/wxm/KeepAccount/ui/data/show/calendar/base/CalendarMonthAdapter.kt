@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import wxm.KeepAccount.R
-import wxm.KeepAccount.utility.doJudge
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.view.ViewHolder
+import wxm.androidutil.util.doJudge
 import wxm.uilib.FrgCalendar.CalendarItem.BaseItemAdapter
 
 /**

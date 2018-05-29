@@ -27,9 +27,11 @@ import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.app.AppBase
+import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
+import wxm.androidutil.util.doJudge
 import java.lang.String.format
 import java.math.BigDecimal
 import java.sql.Timestamp
@@ -242,7 +244,7 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
                             override fun onDialogNegativeResult(dialogFragment: DialogFragment) {}
                         })
 
-                        dlg.show(activity.supportFragmentManager, "edit note")
+                        dlg.show(activity!!.supportFragmentManager, "edit note")
                     }
                 }
             }
@@ -310,11 +312,8 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
             else
                 ContextUtil.payIncomeUtility.payDBUtility.modifyData(it)
             if (!bRet) {
-                val dlg = AlertDialog.Builder(context)
-                        .setTitle("警告")
-                        .setMessage(if (bCreate) "创建支出数据失败!" else "更新支出数据失败")
-                        .create()
-                dlg.show()
+                DlgAlert.showAlert(context!!, R.string.dlg_warn,
+                        bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
             }
             return bRet
         }

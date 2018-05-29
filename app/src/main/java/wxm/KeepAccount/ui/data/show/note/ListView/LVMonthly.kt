@@ -16,7 +16,6 @@ import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.utility.doJudge
 import wxm.KeepAccount.utility.let1
 import wxm.KeepAccount.utility.toSignalMoneyString
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
@@ -24,6 +23,7 @@ import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder
 import wxm.androidutil.ui.view.ViewHolder
 import wxm.androidutil.util.UtilFun
+import wxm.androidutil.util.doJudge
 import wxm.androidutil.util.forObj
 import wxm.uilib.IconButton.IconButton
 import java.util.*
@@ -212,7 +212,7 @@ class LVMonthly : LVBase() {
                 intArrayOf(R.id.bt_accpet, R.id.bt_giveup, R.id.bt_giveup_filter),
                 this::onAcceptOrCancelClick)
 
-        ToolUtil.runInBackground(activity,
+        ToolUtil.runInBackground(activity!!,
                 {
                     mLSMonthPara.clear()
                     mHMDayPara.clear()
@@ -248,7 +248,7 @@ class LVMonthly : LVBase() {
         refreshAttachLayout()
 
         // set listview adapter
-        mLVShow.adapter = MonthAdapter(context,
+        mLVShow.adapter = MonthAdapter(context!!,
                 mLSMonthPara.filter { !mBFilter || mFilterPara.contains(it[KEY_DATA]!!.tag) }
                         .sortedWith(Comparator { o1, o2 ->
                             if (!mBTimeDownOrder) o1[KEY_DATA]!!.tag.compareTo(o2[KEY_DATA]!!.tag)
@@ -280,7 +280,7 @@ class LVMonthly : LVBase() {
                     else o2.tag.compareTo(o1.tag)
                 }).map { HashMap<String, DayItemHolder>().apply { put(KEY_DATA, it) } })
             }.let {
-                lv.adapter = DayAdapter(context, it)
+                lv.adapter = DayAdapter(context!!, it)
             }
 
             ListViewHelper.setListViewHeightBasedOnChildren(lv)

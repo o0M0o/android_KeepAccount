@@ -40,13 +40,13 @@ class TFSettingMain : TFSettingBase() {
                             }
 
                             R.id.rl_reformat_data -> {
-                                DlgAlert.showAlert(context, R.string.dlg_prompt, R.string.dlg_clear_all_data,
+                                DlgAlert.showAlert(context!!, R.string.dlg_prompt, R.string.dlg_clear_all_data,
                                         { b ->
                                             b.setPositiveButton("是") { _, _ ->
-                                                AlertDialog.Builder(this.activity).setTitle("提示")
+                                                AlertDialog.Builder(this.activity!!).setTitle("提示")
                                                         .setMessage("请等待数据清理完毕...").create().let {
                                                             it.show()
-                                                            ToolUtil.runInBackground(this.activity,
+                                                            ToolUtil.runInBackground(this.activity!!,
                                                                     { ContextUtil.clearDB() },
                                                                     { it.dismiss() })
                                                         }

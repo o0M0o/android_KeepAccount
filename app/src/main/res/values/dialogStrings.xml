@@ -4,10 +4,19 @@ this file include dialog strings in app
 -->
 <resources>
     <string name="dlg_prompt">提示</string>
+    <string name="dlg_info">信息</string>
     <string name="dlg_warn">警告</string>
+    <string name="dlg_erro">错误</string>
 
     <string name="dlg_clear_all_data">此操作不能恢复，是否继续操作!</string>
     <string name="dlg_data_refreshed">数据已刷新!</string>
 
     <string name="dlg_usr_no_data">当前用户没有数据!</string>
+
+    <string name="dlg_need_budget_name">请输入预算名!</string>
+    <string name="dlg_need_budget_amount">请输入预算金额!</string>
+    <string name="dlg_already_have_budget_name">预算名已经存在!</string>
+
+    <string name="dlg_create_data_failure">创建数据失败!</string>
+    <string name="dlg_modify_data_failure">更新数据失败!</string>
 </resources>

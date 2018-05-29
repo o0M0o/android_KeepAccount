@@ -69,7 +69,7 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
                             }
 
                             R.id.bt_giveup -> {
-                                activity.let {
+                                activity!!.let {
                                     it.setResult(GlobalDef.INTRET_GIVEUP, Intent())
                                     it.finish()
                                 }
@@ -170,7 +170,7 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
         private fun afterAddUsr(m: Message, home: FrgUsrAdd) {
             val arr = UtilFun.cast_t<Array<Any>>(m.obj)
             if (arr[0] as Boolean) {
-                home.activity.apply {
+                home.activity!!.apply {
                     setResult(GlobalDef.INTRET_USR_ADD, arr[1] as Intent)
                     finish()
                 }

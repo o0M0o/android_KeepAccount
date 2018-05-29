@@ -69,7 +69,7 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
 
     override fun initUI(bundle: Bundle?) {
         if (UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
-            mSZHotDay = arguments.getString(ACDailyDetail.KEY_HOT_DAY)
+            mSZHotDay = arguments!!.getString(ACDailyDetail.KEY_HOT_DAY)
         }
 
         if (!UtilFun.StringIsNullOrEmpty(mSZHotDay)) {
@@ -232,7 +232,7 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
             }
         }
 
-        mLVBody.adapter = AdapterNoteDetail(activity, para)
+        mLVBody.adapter = AdapterNoteDetail(activity!!, para)
     }
 
     /**

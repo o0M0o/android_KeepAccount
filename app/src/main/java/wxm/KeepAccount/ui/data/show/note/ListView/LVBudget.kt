@@ -22,6 +22,7 @@ import wxm.androidutil.time.*
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewHolder
+import wxm.androidutil.util.doJudge
 import wxm.uilib.IconButton.IconButton
 import java.util.*
 import kotlin.collections.ArrayList
@@ -110,7 +111,7 @@ class LVBudget : LVBase() {
                     Intent(activity, ACNoteEdit::class.java).apply {
                         putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET)
                     }.let1 {
-                        activity.startActivityForResult(it, 1)
+                        activity!!.startActivityForResult(it, 1)
                     }
                 }
             }
@@ -164,7 +165,7 @@ class LVBudget : LVBase() {
                     }
                 })
 
-        ToolUtil.runInBackground(activity,
+        ToolUtil.runInBackground(activity!!,
                 { this.parseNotes() },
                 { loadUI(bundle) })
     }
@@ -252,7 +253,7 @@ class LVBudget : LVBase() {
                 add(HashMap<String, SubAdapterItem>().apply { put(KEY_DATA, it) })
             }
         }.let {
-            lv.adapter = SubAdapter(context, it)
+            lv.adapter = SubAdapter(context!!, it)
         }
 
         ListViewHelper.setListViewHeightBasedOnChildren(lv)
@@ -286,7 +287,7 @@ class LVBudget : LVBase() {
                         putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, tagId)
                         putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET)
                     }.let1 {
-                        activity.startActivityForResult(it, 1)
+                        activity!!.startActivityForResult(it, 1)
                     }
                 }
             }
@@ -387,7 +388,7 @@ class LVBudget : LVBase() {
                     it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, Integer.valueOf(hm.id))
                     it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_PAY)
 
-                    activity.startActivityForResult(it, 1)
+                    activity!!.startActivityForResult(it, 1)
                 }
             }
         }

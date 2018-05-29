@@ -113,3 +113,5 @@
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+
+#-keep class android.support.v7.widget.** { *; }

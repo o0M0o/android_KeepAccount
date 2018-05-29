@@ -57,7 +57,7 @@ class FrgWelcome : FrgSupportSwitcher<FrgSupportBaseAdv>() {
 
         val ibVW = (v as IconButton)
         if (!ibVW.isHot) {
-            activity.title = ibVW.actName
+            activity!!.title = ibVW.actName
             when (v.id) {
                 R.id.ib_main_page-> {
                     setHot(R.id.ib_main_page)

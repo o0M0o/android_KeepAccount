@@ -14,6 +14,8 @@ import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.KeepAccount.R
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
+import wxm.androidutil.ui.dialog.DlgAlert
+import wxm.androidutil.util.doJudge
 
 /**
  * select day range for report
@@ -107,28 +109,15 @@ class DlgSelectReportDays : DlgOKOrNOBase() {
      * @return      true if ok
      */
     override fun checkBeforeOK(): Boolean {
-        val sz_alert = "警告"
-        val sz_sure = "确定"
         if (null == startDay || null == endDay) {
-            val msg = if (null == startDay) "未选择开始日期!" else "未选择结束日期"
-
-            AlertDialog.Builder(context)
-                    .setTitle(sz_alert)
-                    .setMessage(msg)
-                    .setPositiveButton(sz_sure, null)
-                    .show()
+            DlgAlert.showAlert(context!!, R.string.dlg_warn,
+                    (null == startDay).doJudge("未选择开始日期!", "未选择结束日期"))
             return false
         }
 
-        if (0 <= startDay!!.compareTo(endDay!!)) {
-            val msg = String.format(Locale.CHINA,
-                    "开始日期(%s)比结束日期(%s)晚!", startDay, endDay)
-
-            AlertDialog.Builder(context)
-                    .setTitle(sz_alert)
-                    .setMessage(msg)
-                    .setPositiveButton(sz_sure, null)
-                    .show()
+        if (startDay!! >= endDay!!) {
+            DlgAlert.showAlert(context!!, R.string.dlg_warn,
+                    "开始日期($startDay)比结束日期($endDay)晚!")
             return false
         }
 

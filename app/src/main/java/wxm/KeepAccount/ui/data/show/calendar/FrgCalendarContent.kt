@@ -22,9 +22,8 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.define.INote
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.utility.ContextUtil
-import wxm.KeepAccount.utility.doJudge
 import wxm.androidutil.app.AppBase
+import wxm.androidutil.util.doJudge
 
 /**
  * for note pad content detail
@@ -115,7 +114,7 @@ class FrgCalendarContent : FrgSupportBaseAdv() {
             }
         }
 
-        mLVBody.adapter = AdapterNoteDetail(activity, cPara)
+        mLVBody.adapter = AdapterNoteDetail(activity!!, cPara)
     }
 
     /// PRIVATE BEGIN

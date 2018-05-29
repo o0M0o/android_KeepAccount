@@ -65,7 +65,7 @@ class DlgSelectChannel : DlgOKOrNOBase() {
             lsData.add(hm)
         }
 
-        val ga = GVChannelAdapter(activity, lsData, arrayOf(DGVButtonAdapter.KEY_ACT_NAME),
+        val ga = GVChannelAdapter(activity!!, lsData, arrayOf(DGVButtonAdapter.KEY_ACT_NAME),
                         intArrayOf(R.id.tv_name))
         gv.adapter = ga
         ga.notifyDataSetChanged()

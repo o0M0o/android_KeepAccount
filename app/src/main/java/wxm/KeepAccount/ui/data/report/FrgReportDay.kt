@@ -15,6 +15,7 @@ import wxm.KeepAccount.ui.data.report.page.DayReportWebView
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
+import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.ui.frg.FrgSupportSwitcher
@@ -58,14 +59,14 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
     }
 
     override fun setupFragment(bundle: Bundle?) {
-        val bd = arguments
+        arguments!!.let1 {
+            mPGWebView.arguments = it
+            mPGChart.arguments = it
 
-        mPGWebView.arguments = bd
-        mPGChart.arguments = bd
-
-        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD)
-        addChildFrg(mPGWebView)
-        addChildFrg(mPGChart)
+            mASParaLoad = it.getStringArrayList(ACReport.PARA_LOAD)
+            addChildFrg(mPGWebView)
+            addChildFrg(mPGChart)
+        }
     }
 
     override fun initUI(savedInstanceState: Bundle?) {
@@ -92,7 +93,7 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
                                     override fun onDialogNegativeResult(dialogFragment: DialogFragment) {}
                                 })
 
-                                dlgDay.show(activity.supportFragmentManager, "select days")
+                                dlgDay.show(activity!!.supportFragmentManager, "select days")
                             }
                         }
                     })
@@ -106,7 +107,7 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
                 return
 
             val param = arrayOfNulls<Any>(3)
-            ToolUtil.runInBackground(this.activity,
+            ToolUtil.runInBackground(this.activity!!,
                     {
                         val dStart = frg.mASParaLoad!![0]
                         val dEnd = frg.mASParaLoad!![1]

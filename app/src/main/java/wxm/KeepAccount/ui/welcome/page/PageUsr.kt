@@ -1,38 +1,17 @@
 package wxm.KeepAccount.ui.welcome.page
 
-import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import com.allure.lbanners.LMBanners
-import com.allure.lbanners.transformer.TransitionEffect
 import kotterknife.bindView
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
-import wxm.KeepAccount.db.DBDataChangeEvent
-import wxm.KeepAccount.define.EAction
-import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
-import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
-import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow
-import wxm.KeepAccount.ui.data.show.note.ACNoteShow
-import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.ui.welcome.banner.FrgAdapter
-import wxm.KeepAccount.ui.welcome.banner.FrgPara
 import wxm.KeepAccount.utility.ContextUtil
-import wxm.KeepAccount.utility.DGVButtonAdapter
-import wxm.KeepAccount.utility.PreferencesUtil
 import wxm.KeepAccount.utility.let1
-import wxm.androidutil.time.CalendarUtility
-import wxm.androidutil.ui.dragGrid.DragGridView
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.uilib.IconButton.IconButton
-import java.util.*
 
 /**
  * for welcome
@@ -56,58 +35,65 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
             mIVUsr.setImageResource(R.drawable.ic_usr_big)
             mTVUsrName.text = it.name
 
-            mIBLogout.setOnClickListener {
-                doLogout(activity)
-            }
-
+            mIBLogout.setOnClickListener(::onClick)
         }
 
         mIBChangePwd.setColdOrHot(false)
         mCLInputPwd.visibility = View.GONE
-        mIBChangePwd.setOnClickListener { vw ->
-            if(mIBChangePwd.isHot)  {
-                mCLInputPwd.visibility = View.GONE
-                mIBChangePwd.setColdOrHot(false)
-            } else  {
-                mCLInputPwd.visibility = View.VISIBLE
-                mIBChangePwd.setColdOrHot(true)
-            }
-        }
+        mIBChangePwd.setOnClickListener(::onClick)
 
-        val vwHome = view!!
-        vwHome.setOnClickListener { vw ->
-            if(0 != vwHome.scrollY) {
-                vwHome.scrollY = 0
-            }
-        }
+        view!!.setOnClickListener(::onClick)
 
-        getDisplayTop(mCLChangePwd).let1 {
-            autoScroll(R.id.te_old_pwd, it)
-            autoScroll(R.id.te_new_pwd, it)
-            autoScroll(R.id.te_repeat_new_pwd, it)
+        autoScroll(R.id.te_old_pwd, mCLChangePwd)
+        autoScroll(R.id.te_new_pwd, mCLChangePwd)
+        autoScroll(R.id.te_repeat_new_pwd, mCLChangePwd)
+    }
+
+    fun onClick(vw:View)    {
+        when(vw.id) {
+            R.id.ib_logout -> doLogout(activity!!)
+            R.id.ib_change_pwd ->  {
+                if (mIBChangePwd.isHot) {
+                    mCLInputPwd.visibility = View.GONE
+                    mIBChangePwd.setColdOrHot(false)
+                } else {
+                    mCLInputPwd.visibility = View.VISIBLE
+                    mIBChangePwd.setColdOrHot(true)
+                }
+            }
+
+            else -> {
+                view!!.let1 {
+                    if (0 != it.scrollY) {
+                        it.scrollY = 0
+                    }
+                }
+            }
         }
     }
 
 
     /**
-     * auto scroll to view [vw] with margin to top [topMargin]
+     * auto scroll to view [v] to top of [topVW]
      */
-    private fun autoScroll(vw: Any, top: Int) {
+    private fun autoScroll(v: Any, topVW: Any) {
         val vwHome = view!!
-        { v: View, hasFocus: Boolean ->
-            vwHome.scrollY = if (hasFocus) {
-                getDisplayTop(mCLChangePwd) - getDisplayTop(vwHome)
-            } else 0
-        }.apply{
-            when(vw)    {
-                is Int -> vwHome.findViewById<View>(vw)!!.setOnFocusChangeListener(this)
-                is View -> vw.setOnFocusChangeListener(this)
-                else -> throw IllegalStateException("${vw.javaClass.name} not support scroll!")
+
+        val getVWObj = { vw: Any ->
+            when (vw) {
+                is Int -> vwHome.findViewById(vw)!!
+                is View -> vw
+                else -> throw IllegalStateException("${vw.javaClass.name} not view!")
             }
         }
-    }
 
-    private fun getDisplayTop(vw:View): Int   {
-        return Rect().apply { vw.getGlobalVisibleRect(this) }.top
+        val getTop = { vw: Any ->
+            Rect().apply { getVWObj(vw).getGlobalVisibleRect(this) }.top
+        }
+
+        getVWObj(v).setOnFocusChangeListener({ _: View, hasFocus: Boolean ->
+            vwHome.scrollY = if (hasFocus) { getTop(topVW) - getTop(vwHome)
+            } else 0
+        })
     }
 }

@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.SimpleAdapter
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.let1
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
@@ -55,16 +55,16 @@ class DlgSelectColor : DlgOKOrNOBase(), AdapterView.OnItemClickListener {
         val gv: GridView = findDlgChildView(R.id.gv_colors)!!
         gv.onItemClickListener = this
 
-        val lsData = ArrayList<HashMap<String, Any>>()
-        for (i in ARR_COLOR) {
-            val hm = HashMap<String, Any>()
-            hm[PARA_COLOR] = AppBase.getColor(i)
-            lsData.add(hm)
+        ArrayList<HashMap<String, Any>>().apply {
+            addAll(
+                    ARR_COLOR.map {
+                        HashMap<String, Any>()
+                                .apply { put(PARA_COLOR, context!!.getColor(it)) }
+                    }
+            )
+        }.let1 {
+            gv.adapter = GVChannelAdapter(activity!!, it, arrayOf(), intArrayOf())
         }
-
-        val ga = GVChannelAdapter(activity, lsData, arrayOf(), intArrayOf())
-        gv.adapter = ga
-        ga.notifyDataSetChanged()
     }
 
 

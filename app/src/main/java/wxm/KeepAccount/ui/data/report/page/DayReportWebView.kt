@@ -49,8 +49,7 @@ class DayReportWebView : FrgSupportWebView() {
 
 
     override fun loadUI(savedInstanceState: Bundle?) {
-        val bd = arguments
-        mASParaLoad = bd.getStringArrayList(ACReport.PARA_LOAD)
+        mASParaLoad = arguments!!.getStringArrayList(ACReport.PARA_LOAD)
 
         if (!UtilFun.ListIsNullOrEmpty(mASParaLoad)) {
             if (2 != mASParaLoad!!.size)
@@ -58,7 +57,7 @@ class DayReportWebView : FrgSupportWebView() {
 
             val param = arrayOfNulls<String>(1)
             showProgress(true)
-            ToolUtil.runInBackground(this.activity,
+            ToolUtil.runInBackground(this.activity!!,
                     {
                         val dStart = mASParaLoad!![0]
                         val dEnd = mASParaLoad!![1]

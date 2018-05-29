@@ -64,7 +64,7 @@ class DlgSelectRecordType : DlgOKOrNOBase() {
         mGVMain = findDlgChildView(R.id.gv_record_info)!!
         mIBSort = findDlgChildView(R.id.ib_sort)!!
 
-        mGAAdapter = GVTypeAdapter(activity, mLHMData,
+        mGAAdapter = GVTypeAdapter(activity!!, mLHMData,
                 arrayOf(KEY_NAME, KEY_NOTE),
                 intArrayOf(R.id.tv_type_name, R.id.tv_type_note))
 
