@@ -8,7 +8,7 @@ import wxm.androidutil.db.DBUtilityBase
 import wxm.androidutil.util.MD5Util
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.UsrItem
+import wxm.KeepAccount.item.UsrItem
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ContextUtil
 
@@ -130,7 +130,7 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
         return loginByUsr(ui, true)
     }
 
-    fun loginByUsr(usr:UsrItem, recordHistory:Boolean): Boolean    {
+    fun loginByUsr(usr: UsrItem, recordHistory:Boolean): Boolean    {
         ContextUtil.curUsr = usr
         NoteDataHelper.reloadData()
 

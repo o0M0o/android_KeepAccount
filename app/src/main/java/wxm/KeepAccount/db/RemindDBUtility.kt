@@ -7,8 +7,7 @@ import org.greenrobot.eventbus.EventBus
 import java.sql.SQLException
 
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.RemindItem
-import wxm.KeepAccount.define.UsrItem
+import wxm.KeepAccount.item.RemindItem
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.db.DBUtilityBase
 

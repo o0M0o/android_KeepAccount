@@ -11,7 +11,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.PayNoteItem
+import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent

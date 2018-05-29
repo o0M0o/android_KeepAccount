@@ -27,7 +27,7 @@ import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.DBDataChangeEvent
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.INote
+import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail

@@ -4,6 +4,7 @@ import android.os.Bundle
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
+import wxm.KeepAccount.event.ChangePage
 import wxm.KeepAccount.ui.setting.*
 import wxm.androidutil.ui.frg.FrgSupportSwitcher
 
@@ -43,7 +44,7 @@ class PageSetting : FrgSupportSwitcher<TFSettingBase>(), PageBase {
      */
     @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onChangePageEvent(event: ChangePageEvent) {
+    fun onChangePageEvent(event: ChangePage) {
         when(event.JavaClassName)   {
             TFSettingCheckVersion::class.java.name ->    {
                 switchToPage(mTFCheckVer)

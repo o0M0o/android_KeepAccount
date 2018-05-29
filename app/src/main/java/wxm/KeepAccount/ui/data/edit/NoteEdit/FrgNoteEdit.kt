@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager
 import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.*
+import wxm.KeepAccount.item.BudgetItem
+import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.*
 import wxm.KeepAccount.ui.data.edit.base.*
 import wxm.KeepAccount.utility.let1

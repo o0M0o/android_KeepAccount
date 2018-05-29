@@ -3,6 +3,10 @@ package wxm.KeepAccount.define
 import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
+import wxm.KeepAccount.item.BudgetItem
+import wxm.KeepAccount.item.INote
+import wxm.KeepAccount.item.PayNoteItem
+import wxm.KeepAccount.item.UsrItem
 import wxm.KeepAccount.utility.toMoneyString
 import wxm.androidutil.db.IDBRow
 

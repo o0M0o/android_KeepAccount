@@ -8,7 +8,6 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
@@ -18,7 +17,7 @@ import android.widget.TextView
 import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.PayNoteItem
+import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.data.edit.base.IEdit

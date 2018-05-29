@@ -1,10 +1,7 @@
 package wxm.KeepAccount.db
 
-import android.content.Context
-import com.j256.ormlite.stmt.PreparedQuery
-import com.j256.ormlite.stmt.QueryBuilder
-import wxm.KeepAccount.define.LoginHistoryItem
-import wxm.KeepAccount.define.UsrItem
+import wxm.KeepAccount.item.LoginHistoryItem
+import wxm.KeepAccount.item.UsrItem
 import wxm.KeepAccount.utility.ContextUtil
 import java.sql.Timestamp
 
@@ -16,7 +13,7 @@ object LoginHistoryUtility {
     private fun getREDao() = ContextUtil.dbHelper.loginHistoryREDao
     private fun getUsrREDao() = ContextUtil.dbHelper.usrItemREDao
 
-    fun addHistory(usr:UsrItem) {
+    fun addHistory(usr: UsrItem) {
         getREDao().create(LoginHistoryItem().apply {
             usrId = usr.id
             loginTime = Timestamp(System.currentTimeMillis())

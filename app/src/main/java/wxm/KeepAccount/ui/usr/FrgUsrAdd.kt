@@ -12,7 +12,7 @@ import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.EMsgType
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.UsrItem
+import wxm.KeepAccount.item.UsrItem
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.log.TagLog

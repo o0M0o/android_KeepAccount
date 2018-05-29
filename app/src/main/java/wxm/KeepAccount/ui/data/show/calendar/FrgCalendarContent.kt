@@ -19,7 +19,7 @@ import wxm.KeepAccount.ui.data.show.calendar.base.SelectedDayEvent
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
-import wxm.KeepAccount.define.INote
+import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.androidutil.app.AppBase

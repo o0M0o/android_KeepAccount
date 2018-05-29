@@ -1,9 +1,8 @@
 package wxm.KeepAccount.ui.utility
 
 
-import wxm.KeepAccount.define.INote
+import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.utility.ContextUtil
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 

@@ -5,13 +5,12 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
 import kotterknife.bindView
 import wxm.KeepAccount.R
-import wxm.KeepAccount.define.BudgetItem
+import wxm.KeepAccount.item.BudgetItem
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.data.edit.base.IEdit

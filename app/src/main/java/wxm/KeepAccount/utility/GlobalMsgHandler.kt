@@ -3,14 +3,12 @@ package wxm.KeepAccount.utility
 import android.content.Intent
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import org.greenrobot.eventbus.EventBus
 import wxm.KeepAccount.db.LoginHistoryUtility
 
 import wxm.KeepAccount.define.EMsgType
-import wxm.KeepAccount.define.LoginHistoryItem
 import wxm.androidutil.util.UtilFun
-import wxm.KeepAccount.define.UsrItem
+import wxm.KeepAccount.item.UsrItem
 import wxm.KeepAccount.ui.login.DoLoginEvent
 import wxm.androidutil.log.TagLog
 

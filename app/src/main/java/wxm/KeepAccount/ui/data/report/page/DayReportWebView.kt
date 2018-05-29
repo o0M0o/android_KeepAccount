@@ -1,7 +1,6 @@
 package wxm.KeepAccount.ui.data.report.page
 
 import android.os.Bundle
-import android.util.Log
 import android.webkit.WebView
 
 import com.alibaba.fastjson.JSON
@@ -12,7 +11,7 @@ import org.greenrobot.eventbus.ThreadMode
 
 import java.util.ArrayList
 
-import wxm.KeepAccount.define.INote
+import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.data.report.ACReport
 import wxm.KeepAccount.ui.data.report.base.EventSelectDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper

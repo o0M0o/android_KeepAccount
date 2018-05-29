@@ -7,6 +7,7 @@ import android.widget.RelativeLayout
 import kotterknife.bindView
 import org.greenrobot.eventbus.EventBus
 import wxm.KeepAccount.R
+import wxm.KeepAccount.event.ChangePage
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.ui.dialog.DlgAlert
@@ -32,11 +33,11 @@ class TFSettingMain : TFSettingBase() {
                     View.OnClickListener { v ->
                         when (v.id) {
                             R.id.rl_check_version -> {
-                                EventBus.getDefault().post(ChangePageEvent(TFSettingCheckVersion::class.java.name))
+                                EventBus.getDefault().post(ChangePage(TFSettingCheckVersion::class.java.name))
                             }
 
                             R.id.rl_chart_color -> {
-                                EventBus.getDefault().post(ChangePageEvent(TFSettingChartColor::class.java.name))
+                                EventBus.getDefault().post(ChangePage(TFSettingChartColor::class.java.name))
                             }
 
                             R.id.rl_reformat_data -> {

@@ -5,9 +5,9 @@ import android.content.Intent
 import android.view.View
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.INote
+import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.define.IncomeNoteItem
-import wxm.KeepAccount.define.PayNoteItem
+import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.base.Helper.ViewHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.utility.ContextUtil

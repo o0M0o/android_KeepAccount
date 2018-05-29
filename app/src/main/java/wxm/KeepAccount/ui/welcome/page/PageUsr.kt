@@ -1,15 +1,24 @@
 package wxm.KeepAccount.ui.welcome.page
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotterknife.bindView
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
+import wxm.KeepAccount.event.UsrImage
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.let1
+import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.uilib.IconButton.IconButton
 
@@ -28,6 +37,7 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
     private val mCLChangePwd: ConstraintLayout by bindView(R.id.cl_change_pwd)
 
     override fun getLayoutID(): Int = R.layout.page_usr
+    //override fun isUseEventBus(): Boolean = true
     override fun leavePage(): Boolean = true
 
     override fun initUI(savedInstanceState: Bundle?) {
@@ -36,6 +46,7 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
             mTVUsrName.text = it.name
 
             mIBLogout.setOnClickListener(::onClick)
+            mIVUsr.setOnClickListener(::onClick)
         }
 
         mIBChangePwd.setColdOrHot(false)
@@ -49,6 +60,18 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
         autoScroll(R.id.te_repeat_new_pwd, mCLChangePwd)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == Activity.RESULT_OK) {
+                mIVUsr.setImageURI(result.uri)
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                DlgAlert.showAlert(activity!!, R.string.dlg_erro, result.error.toString())
+            }
+        }
+    }
+
     fun onClick(vw:View)    {
         when(vw.id) {
             R.id.ib_logout -> doLogout(activity!!)
@@ -60,6 +83,10 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
                     mCLInputPwd.visibility = View.VISIBLE
                     mIBChangePwd.setColdOrHot(true)
                 }
+            }
+
+            R.id.iv_usr ->  {
+                CropImage.activity().start(context!!, this)
             }
 
             else -> {

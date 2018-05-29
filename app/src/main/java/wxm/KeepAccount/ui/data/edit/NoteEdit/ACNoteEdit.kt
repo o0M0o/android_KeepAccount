@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuItem
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.PayNoteItem
 import wxm.KeepAccount.ui.data.edit.base.FrgEditBase
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.ui.activity.ACSwitcherActivity

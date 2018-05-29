@@ -15,11 +15,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.db.LoginHistoryUtility
 import wxm.KeepAccount.define.EMsgType
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.LoginHistoryItem
 import wxm.KeepAccount.ui.help.ACHelp
-import wxm.KeepAccount.ui.setting.ChangePageEvent
-import wxm.KeepAccount.ui.setting.TFSettingChartColor
-import wxm.KeepAccount.ui.setting.TFSettingCheckVersion
 import wxm.KeepAccount.ui.welcome.ACWelcome
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.KeepAccount.utility.ToolUtil

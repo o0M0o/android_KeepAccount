@@ -13,7 +13,7 @@ import android.widget.TextView
 import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.RecordTypeItem
+import wxm.KeepAccount.item.RecordTypeItem
 import wxm.KeepAccount.ui.dialog.DlgRecordInfo
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase

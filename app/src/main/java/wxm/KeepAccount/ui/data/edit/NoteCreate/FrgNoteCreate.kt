@@ -7,14 +7,13 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
 import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.IncomeNoteItem
-import wxm.KeepAccount.define.PayNoteItem
+import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.base.Switcher.PageSwitcher
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PageIncomeEdit

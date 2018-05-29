@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.view.View
 
-import kotterknife.bindView
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.RecordTypeItem
+import wxm.KeepAccount.item.RecordTypeItem
 
 /**
  * record info dlg

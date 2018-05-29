@@ -9,6 +9,7 @@ import com.j256.ormlite.table.TableUtils
 import wxm.KeepAccount.BuildConfig
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.*
+import wxm.KeepAccount.item.*
 import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.log.TagLog
