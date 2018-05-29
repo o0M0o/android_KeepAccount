@@ -23,7 +23,7 @@ import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgAlert
@@ -81,7 +81,7 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
                 it.budget = null
                 val pos = mSPBudget.selectedItemPosition
                 if (AdapterView.INVALID_POSITION != pos && 0 != pos) {
-                    val bi = ContextUtil.budgetUtility.getBudgetByName(mSPBudget.selectedItem as String)
+                    val bi = AppUtil.budgetUtility.getBudgetByName(mSPBudget.selectedItem as String)
                     if (null != bi) {
                         it.budget = bi
                     }
@@ -130,7 +130,7 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
             // 填充预算数据
             val lsBudgetName = ArrayList<String>()
             lsBudgetName.add("无预算(不使用预算)")
-            ContextUtil.budgetUtility.budgetForCurUsr?.forEach {
+            AppUtil.budgetUtility.budgetForCurUsr?.forEach {
                 lsBudgetName.add(it.name)
             }
 
@@ -307,9 +307,9 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
         mOldPayNote?.let {
             val bCreate = GlobalDef.INVALID_ID == it.id
             val bRet = if (bCreate)
-                1 == ContextUtil.payIncomeUtility.addPayNotes(listOf(it))
+                1 == AppUtil.payIncomeUtility.addPayNotes(listOf(it))
             else
-                ContextUtil.payIncomeUtility.payDBUtility.modifyData(it)
+                AppUtil.payIncomeUtility.payDBUtility.modifyData(it)
             if (!bRet) {
                 DlgAlert.showAlert(context!!, R.string.dlg_warn,
                         bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))

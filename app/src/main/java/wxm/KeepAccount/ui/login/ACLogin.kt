@@ -17,7 +17,7 @@ import wxm.KeepAccount.define.EMsgType
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.help.ACHelp
 import wxm.KeepAccount.ui.welcome.ACWelcome
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.log.TagLog
@@ -102,7 +102,7 @@ class ACLogin : AppCompatActivity() {
         val usr = LoginHistoryUtility.getLastLoginAfter(cl.toTimestamp())
         if(null != usr) {
             val bRet = ToolUtil.callInBackground(
-                    { ContextUtil.usrUtility.loginByUsr(usr, false)}, false,
+                    { AppUtil.usrUtility.loginByUsr(usr, false)}, false,
                     TimeUnit.SECONDS, 3)
             if(bRet)    {
                 loadUI = false
@@ -132,7 +132,7 @@ class ACLogin : AppCompatActivity() {
         when (resultCode) {
             GlobalDef.INTRET_USR_LOGOUT -> {
                 TagLog.i("usr logout")
-                Message.obtain(ContextUtil.msgHandler, EMsgType.USR_LOGOUT.id).sendToTarget()
+                Message.obtain(AppUtil.msgHandler, EMsgType.USR_LOGOUT.id).sendToTarget()
             }
 
             else -> TagLog.d("do nothing for resultCode = $resultCode!")

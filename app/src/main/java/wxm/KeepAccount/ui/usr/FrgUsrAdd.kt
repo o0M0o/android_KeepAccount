@@ -13,7 +13,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.define.EMsgType
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.UsrItem
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.log.TagLog
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
@@ -60,7 +60,7 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
                                         putExtra(UsrItem.FIELD_PWD, mETPwd.text.toString())
                                     }
 
-                                    Message.obtain(ContextUtil.msgHandler,
+                                    Message.obtain(AppUtil.msgHandler,
                                             EMsgType.USR_ADD.id).let {
                                         it.obj = arrayOf(data, mMHHandler)
                                         it.sendToTarget()
@@ -178,7 +178,7 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
                 val sstr = if (2 < arr.size) UtilFun.cast(arr[2])
                 else "添加用户失败!"
 
-                Toast.makeText(ContextUtil.self, sstr, Toast.LENGTH_LONG).show()
+                Toast.makeText(AppUtil.self, sstr, Toast.LENGTH_LONG).show()
                 home.repeatInput()
             }
         }

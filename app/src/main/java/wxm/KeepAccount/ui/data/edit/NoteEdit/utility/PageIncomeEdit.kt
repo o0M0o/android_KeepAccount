@@ -5,7 +5,6 @@ import android.app.TimePickerDialog
 import android.graphics.Paint
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
@@ -19,7 +18,7 @@ import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgAlert
@@ -175,9 +174,9 @@ class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
         mOldIncomeNote?.let {
             val bCreate = GlobalDef.INVALID_ID == it.id
             val bRet = if (bCreate)
-                1 == ContextUtil.payIncomeUtility.addIncomeNotes(listOf(it))
+                1 == AppUtil.payIncomeUtility.addIncomeNotes(listOf(it))
             else
-                ContextUtil.payIncomeUtility.incomeDBUtility.modifyData(it)
+                AppUtil.payIncomeUtility.incomeDBUtility.modifyData(it)
             if (!bRet) {
                 DlgAlert.showAlert(context!!, R.string.dlg_erro,
                         bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))

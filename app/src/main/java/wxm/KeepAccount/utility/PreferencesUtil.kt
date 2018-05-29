@@ -24,7 +24,7 @@ object PreferencesUtil {
      * @return      action in first page
      */
     fun loadHotAction(): List<String> {
-        val param = ContextUtil.self.getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
+        val param = AppUtil.self.getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
         return String.format(Locale.CHINA,
                 "%s:%s:%s:%s:%s:%s",
                 EAction.ADD_DATA.actName, EAction.LOOK_DATA.actName,
@@ -42,7 +42,7 @@ object PreferencesUtil {
      * @param acts  action in fist page
      */
     fun saveHotAction(acts: List<String>) {
-        ContextUtil.self.getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
+        AppUtil.self.getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
                 .edit().putString(SET_HOT_ACTION, parseToPreferences(acts)).apply()
     }
     /// END
@@ -54,13 +54,13 @@ object PreferencesUtil {
      * @return  color setting
      */
     fun loadChartColor(): HashMap<String, Int> {
-        return ContextUtil.self.let {
+        return AppUtil.self.let {
             "$SET_PAY_COLOR:${it.getColor(R.color.sienna)}" +
                     " $SET_INCOME_COLOR:${it.getColor(R.color.teal)}" +
                     " $SET_BUDGET_UESED_COLOR:${it.getColor(R.color.sienna)}" +
                     " $SET_BUDGET_BALANCE_COLOR:${it.getColor(R.color.teal)}"
         }.let {
-            ContextUtil.self
+            AppUtil.self
                     .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
                     .getString(SET_CHART_COLOR, it)!!
         }.let {
@@ -74,7 +74,7 @@ object PreferencesUtil {
      * @param ccs   color setting
      */
     fun saveChartColor(ccs: HashMap<String, Int>) {
-        ContextUtil.self.getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE).apply {
+        AppUtil.self.getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE).apply {
             edit().putString(SET_CHART_COLOR, parseChartColorsToString(ccs)).apply()
         }
     }

@@ -3,24 +3,22 @@ package wxm.KeepAccount.ui.welcome.page
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import kotterknife.bindView
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
-import wxm.KeepAccount.event.UsrImage
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.let1
+import wxm.KeepAccount.utility.saveImage
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.uilib.IconButton.IconButton
+import java.io.File
 
 /**
  * for welcome
@@ -41,13 +39,8 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
     override fun leavePage(): Boolean = true
 
     override fun initUI(savedInstanceState: Bundle?) {
-        ContextUtil.curUsr?.let1 {
-            mIVUsr.setImageResource(R.drawable.ic_usr_big)
-            mTVUsrName.text = it.name
-
-            mIBLogout.setOnClickListener(::onClick)
-            mIVUsr.setOnClickListener(::onClick)
-        }
+        mIBLogout.setOnClickListener(::onClick)
+        mIVUsr.setOnClickListener(::onClick)
 
         mIBChangePwd.setColdOrHot(false)
         mCLInputPwd.visibility = View.GONE
@@ -58,6 +51,15 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
         autoScroll(R.id.te_old_pwd, mCLChangePwd)
         autoScroll(R.id.te_new_pwd, mCLChangePwd)
         autoScroll(R.id.te_repeat_new_pwd, mCLChangePwd)
+
+        loadUI(savedInstanceState)
+    }
+
+    override fun loadUI(savedInstanceState: Bundle?) {
+        AppUtil.curUsr?.let1 {
+            mIVUsr.setImageURI(Uri.fromFile(File(it.iconPath)))
+            mTVUsrName.text = it.name
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -65,17 +67,19 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
             if (resultCode == Activity.RESULT_OK) {
-                mIVUsr.setImageURI(result.uri)
+                saveImage(result.uri).let1 {
+                    mIVUsr.setImageURI(Uri.fromFile(File(it)))
+                }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 DlgAlert.showAlert(activity!!, R.string.dlg_erro, result.error.toString())
             }
         }
     }
 
-    fun onClick(vw:View)    {
-        when(vw.id) {
+    fun onClick(vw: View) {
+        when (vw.id) {
             R.id.ib_logout -> doLogout(activity!!)
-            R.id.ib_change_pwd ->  {
+            R.id.ib_change_pwd -> {
                 if (mIBChangePwd.isHot) {
                     mCLInputPwd.visibility = View.GONE
                     mIBChangePwd.setColdOrHot(false)
@@ -85,7 +89,7 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
                 }
             }
 
-            R.id.iv_usr ->  {
+            R.id.iv_usr -> {
                 CropImage.activity().start(context!!, this)
             }
 
@@ -119,7 +123,8 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
         }
 
         getVWObj(v).setOnFocusChangeListener({ _: View, hasFocus: Boolean ->
-            vwHome.scrollY = if (hasFocus) { getTop(topVW) - getTop(vwHome)
+            vwHome.scrollY = if (hasFocus) {
+                getTop(topVW) - getTop(vwHome)
             } else 0
         })
     }

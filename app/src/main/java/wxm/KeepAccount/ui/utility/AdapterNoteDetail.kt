@@ -10,7 +10,7 @@ import wxm.KeepAccount.define.IncomeNoteItem
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.base.Helper.ViewHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
@@ -54,9 +54,9 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
                                 b.setPositiveButton("是") { _, _ ->
                                     (v.tag as INote).let {
                                         if (it.isPayNote) {
-                                            ContextUtil.payIncomeUtility.deletePayNotes(listOf(it.id))
+                                            AppUtil.payIncomeUtility.deletePayNotes(listOf(it.id))
                                         } else {
-                                            ContextUtil.payIncomeUtility.deleteIncomeNotes(listOf(it.id))
+                                            AppUtil.payIncomeUtility.deleteIncomeNotes(listOf(it.id))
                                         }
                                     }
                                 }

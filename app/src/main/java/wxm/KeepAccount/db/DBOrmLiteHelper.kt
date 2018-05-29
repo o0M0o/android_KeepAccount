@@ -10,7 +10,7 @@ import wxm.KeepAccount.BuildConfig
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.*
 import wxm.KeepAccount.item.*
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.log.TagLog
 import java.math.BigDecimal
@@ -49,9 +49,18 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
     override fun onUpgrade(db: SQLiteDatabase, connectionSource: ConnectionSource, oldVersion: Int, newVersion: Int) {
         try {
             when(newVersion)    {
-                10 -> {
+                11 -> {
                     if(oldVersion < newVersion) {
-                        TableUtils.createTable(connectionSource, LoginHistoryItem::class.java)
+                        TableUtils.createTableIfNotExists(connectionSource, LoginHistoryItem::class.java)
+
+                        // for usr
+                        val oldUsr = AppUtil.usrUtility.allData
+                        TableUtils.dropTable<UsrItem, Int>(connectionSource, UsrItem::class.java, true)
+                        TableUtils.createTable(connectionSource, UsrItem::class.java)
+                        // 添加默认用户
+                        oldUsr.forEach {
+                            AppUtil.usrUtility.addUsr(it.name, it.pwd)
+                        }
                     }
                 }
             }
@@ -94,7 +103,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
 
 
         // 添加默认用户
-        ContextUtil.usrUtility.addUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD)
+        AppUtil.usrUtility.addUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD)
 
         @Suppress("ConstantConditionIf")
         if (BuildConfig.FILL_TESTDATA)
@@ -127,8 +136,8 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
      * 填充测试数据
      */
     private fun addTestData() {
-        val uiWxm = ContextUtil.usrUtility.addUsr("wxm", "123456")
-        val uiHugo = ContextUtil.usrUtility.addUsr("hugo", "123456")
+        val uiWxm = AppUtil.usrUtility.addUsr("wxm", "123456")
+        val uiHugo = AppUtil.usrUtility.addUsr("hugo", "123456")
 
         // for wxm
         val lsPay = LinkedList<PayNoteItem>()
@@ -153,7 +162,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
             amount = BigDecimal(12.34)
             ts.time = de.time
         })
-        ContextUtil.payIncomeUtility.addPayNotes(lsPay)
+        AppUtil.payIncomeUtility.addPayNotes(lsPay)
 
         val lsIncome = LinkedList<IncomeNoteItem>().apply {
             add(IncomeNoteItem().apply {
@@ -163,7 +172,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
                 ts.time = de.time
             })
         }.let {
-            ContextUtil.payIncomeUtility.addIncomeNotes(it)
+            AppUtil.payIncomeUtility.addIncomeNotes(it)
             it
         }
 
@@ -172,13 +181,13 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
             it.id = GlobalDef.INVALID_ID
             it.usr = uiHugo
         }
-        ContextUtil.payIncomeUtility.addPayNotes(lsPay)
+        AppUtil.payIncomeUtility.addPayNotes(lsPay)
 
         lsIncome.forEach {
             it.id = GlobalDef.INVALID_ID
             it.usr = uiHugo
         }
-        ContextUtil.payIncomeUtility.addIncomeNotes(lsIncome)
+        AppUtil.payIncomeUtility.addIncomeNotes(lsIncome)
 
         createTestDataForDefaultUsr()
     }
@@ -205,7 +214,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
         }
 
         val ci = CreateUtility()
-        val defUi = ContextUtil.usrUtility
+        val defUi = AppUtil.usrUtility
                 .CheckAndGetUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD)
         if (null != defUi) {
             val oneDayMSec = (1000 * 3600 * 24).toLong()
@@ -233,7 +242,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
                                 })
                             }
                         }.let {
-                            ContextUtil.payIncomeUtility.addPayNotes(it)
+                            AppUtil.payIncomeUtility.addPayNotes(it)
                         }
                     }
 
@@ -252,7 +261,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
                                 })
                             }
                         }.let {
-                            ContextUtil.payIncomeUtility.addIncomeNotes(it)
+                            AppUtil.payIncomeUtility.addIncomeNotes(it)
                         }
                     }
                 }
@@ -268,6 +277,6 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
 
         // dataBase version
         // in version 10, add login-history
-        private const val DATABASE_VERSION = 10
+        private const val DATABASE_VERSION = 12
     }
 }

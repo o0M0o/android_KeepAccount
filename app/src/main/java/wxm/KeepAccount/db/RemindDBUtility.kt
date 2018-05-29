@@ -8,7 +8,7 @@ import java.sql.SQLException
 
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.RemindItem
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.db.DBUtilityBase
 
 /**
@@ -24,13 +24,13 @@ class RemindDBUtility : DBUtilityBase<RemindItem, Int>() {
      */
     val allRemind: List<RemindItem>?
         get() {
-            val cur_usr = ContextUtil.curUsr ?: return null
+            val cur_usr = AppUtil.curUsr ?: return null
 
             return dbHelper.queryForEq(RemindItem.FIELD_USR, cur_usr.id)
         }
 
     override fun getDBHelper(): RuntimeExceptionDao<RemindItem, Int> {
-        return ContextUtil.dbHelper.remindREDao
+        return AppUtil.dbHelper.remindREDao
     }
 
     /**
@@ -40,7 +40,7 @@ class RemindDBUtility : DBUtilityBase<RemindItem, Int>() {
      * @return 如果重名返回true, 否则返回false
      */
     fun CheckRemindName(name: String): Boolean {
-        val cur_usr = ContextUtil.curUsr ?: return true
+        val cur_usr = AppUtil.curUsr ?: return true
 
         var r: Boolean
         try {
@@ -64,7 +64,7 @@ class RemindDBUtility : DBUtilityBase<RemindItem, Int>() {
      */
     fun AddOrUpdateRemind(ri: RemindItem): Boolean {
         if (null == ri.usr) {
-            val cur_usr = ContextUtil.curUsr ?: return false
+            val cur_usr = AppUtil.curUsr ?: return false
 
             ri.usr = cur_usr
         }

@@ -1,14 +1,8 @@
 package wxm.KeepAccount.ui.dialog.base
 
-import android.content.Context
-import android.content.res.Resources
 import android.graphics.drawable.Drawable
-import android.os.Build
-
-import java.util.Objects
 
 import wxm.KeepAccount.R
-import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
 
 /**

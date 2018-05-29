@@ -5,6 +5,7 @@ import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.define.IPublicClone
+import wxm.KeepAccount.utility.defaultUsrIcon
 import wxm.androidutil.db.IDBRow
 
 
@@ -18,10 +19,13 @@ class UsrItem : IDBRow<Int>, Cloneable, IPublicClone {
     var id: Int = GlobalDef.INVALID_ID
 
     @DatabaseField(columnName = FIELD_NAME, unique = true, dataType = DataType.STRING)
-    var name: String? = ""
+    var name: String = ""
 
     @DatabaseField(columnName = FIELD_PWD, dataType = DataType.STRING)
-    var pwd: String? = ""
+    var pwd: String = ""
+
+    @DatabaseField(columnName = FIELD_ICON_PATH, dataType = DataType.STRING)
+    var iconPath: String = defaultUsrIcon()
 
     override fun getID(): Int {
         return id
@@ -36,6 +40,7 @@ class UsrItem : IDBRow<Int>, Cloneable, IPublicClone {
             it.id = this.id
             it.name = this.name
             it.pwd = this.pwd
+            it.iconPath = this.iconPath
 
             it
         }
@@ -49,5 +54,6 @@ class UsrItem : IDBRow<Int>, Cloneable, IPublicClone {
         const val FIELD_ID = "_id"
         const val FIELD_NAME = "name"
         const val FIELD_PWD = "pwd"
+        const val FIELD_ICON_PATH = "icon_path"
     }
 }

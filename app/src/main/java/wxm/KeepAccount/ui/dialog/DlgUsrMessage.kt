@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.ProgressBar
 import okhttp3.MediaType
@@ -20,15 +19,13 @@ import okhttp3.RequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import wxm.KeepAccount.R
-import wxm.KeepAccount.utility.ContextUtil
-import wxm.KeepAccount.utility.ToolUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil.callInBackground
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.SIMCardUtil
 import wxm.androidutil.util.ThreadUtil.runInUIThread
-import wxm.androidutil.util.UtilFun
 import java.io.IOException
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
@@ -73,7 +70,7 @@ class DlgUsrMessage : DlgOKOrNOBase() {
             return false
         }
 
-        val usr: String = ContextUtil.self.let {
+        val usr: String = AppUtil.self.let {
             if (ContextCompat.checkSelfPermission(it, READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
                     && ContextCompat.checkSelfPermission(it, READ_SMS) == PackageManager.PERMISSION_GRANTED) {
                 SIMCardUtil(context).nativePhoneNumber

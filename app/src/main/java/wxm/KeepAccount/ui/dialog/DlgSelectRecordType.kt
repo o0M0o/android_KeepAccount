@@ -13,7 +13,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.data.edit.RecordInfo.ACRecordInfoEdit
 import wxm.KeepAccount.ui.dialog.base.DlgResource
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.view.EventHelper
@@ -116,7 +116,7 @@ class DlgSelectRecordType : DlgOKOrNOBase() {
     }
 
     private fun loadData() {
-        val rd = ContextUtil.recordTypeUtility
+        val rd = AppUtil.recordTypeUtility
         val alType = if (GlobalDef.STR_RECORD_PAY == mRootType)
             ArrayList(rd.allPayItem)
         else

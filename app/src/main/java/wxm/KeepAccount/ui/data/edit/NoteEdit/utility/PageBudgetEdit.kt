@@ -15,7 +15,7 @@ import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
@@ -122,7 +122,7 @@ class PageBudgetEdit : FrgSupportBaseAdv(), IEdit  {
             return false
         }
 
-        val cbi = ContextUtil.budgetUtility.getBudgetByName(mETName.text.toString())
+        val cbi = AppUtil.budgetUtility.getBudgetByName(mETName.text.toString())
         if (null != cbi && (null == mBIData || mBIData!!._id != cbi._id)) {
             DlgAlert.showAlert(context!!, R.string.dlg_warn, R.string.dlg_already_have_budget_name)
             mETName.requestFocus()
@@ -148,9 +148,9 @@ class PageBudgetEdit : FrgSupportBaseAdv(), IEdit  {
         mBIData?.let {
             val newItem = GlobalDef.INVALID_ID == it._id
             val sRet = if (newItem)
-                ContextUtil.budgetUtility.createData(it)
+                AppUtil.budgetUtility.createData(it)
             else
-                ContextUtil.budgetUtility.modifyData(it)
+                AppUtil.budgetUtility.modifyData(it)
             if (!sRet) {
                 DlgAlert.showAlert(context!!, R.string.dlg_warn,
                         newItem.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))

@@ -15,7 +15,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.RecordTypeItem
 import wxm.KeepAccount.ui.dialog.DlgRecordInfo
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
@@ -43,7 +43,7 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
             if (!UtilFun.StringIsNullOrEmpty(mCurType)) {
                 for (hm in mLHMData) {
                     if (hm[KEY_NAME] == mCurType) {
-                        ri = ContextUtil.recordTypeUtility.getData(Integer.valueOf(hm[KEY_ID]))
+                        ri = AppUtil.recordTypeUtility.getData(Integer.valueOf(hm[KEY_ID]))
                         break
                     }
                 }
@@ -110,9 +110,9 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
                         val ri = curDp.curDate
                         if (null != ri) {
                             if (R.id.rl_add == vid)
-                                ContextUtil.recordTypeUtility.createData(ri)
+                                AppUtil.recordTypeUtility.createData(ri)
                             else
-                                ContextUtil.recordTypeUtility.modifyData(ri)
+                                AppUtil.recordTypeUtility.modifyData(ri)
                             loadInfo()
                         }
                     }
@@ -151,7 +151,7 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
                             .setPositiveButton("确认",
                                     { _, _ ->
                                         for (id in lsId) {
-                                            ContextUtil.recordTypeUtility.removeData(id)
+                                            AppUtil.recordTypeUtility.removeData(id)
                                         }
 
                                         mTVNote.text = ""
@@ -189,9 +189,9 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
     private fun loadInfo() {
         mLHMData.clear()
         val alType = if (mEditType == GlobalDef.STR_RECORD_PAY) {
-            ArrayList(ContextUtil.recordTypeUtility.allPayItem)
+            ArrayList(AppUtil.recordTypeUtility.allPayItem)
         } else {
-            ArrayList(ContextUtil.recordTypeUtility.allIncomeItem)
+            ArrayList(AppUtil.recordTypeUtility.allIncomeItem)
         }
 
         alType.sortWith(Comparator { o1, o2 -> o1.type.compareTo(o2.type) })

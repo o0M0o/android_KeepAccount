@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".utility.ContextUtil"
+        android:name=".utility.AppUtil"
         android:allowBackup="true"
         android:icon="@drawable/ic_keepaccount_app"
         android:label="@string/cn_app_label"

@@ -35,7 +35,7 @@ import wxm.KeepAccount.ui.base.TouchUI.TouchColumnChartView
 import wxm.KeepAccount.ui.base.TouchUI.TouchPreviewColumnChartView
 import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.PreferencesUtil
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.view.EventHelper
@@ -84,7 +84,7 @@ class BudgetChart : ShowViewBase() {
             mBFilter = false
 
             // 填充预算数据
-            mSPBudgetData = ContextUtil.budgetUtility.budgetForCurUsr!!
+            mSPBudgetData = AppUtil.budgetUtility.budgetForCurUsr
             if (!UtilFun.ListIsNullOrEmpty(mSPBudgetData)) {
                 val lsData = ArrayList<String>().apply {
                     addAll(mSPBudgetData!!.map { it.name })
@@ -255,7 +255,7 @@ class BudgetChart : ShowViewBase() {
         ToolUtil.runInBackground(this.activity!!,
                 {
                     val hmRet = HashMap<String, ArrayList<PayNoteItem>>()
-                    ContextUtil.payIncomeUtility.getPayNoteByBudget(bi).forEach    {
+                    AppUtil.payIncomeUtility.getPayNoteByBudget(bi).forEach    {
                         val k = it.ts.toString().substring(0, 10)
                         val lsp = hmRet[k]
                         if (UtilFun.ListIsNullOrEmpty(lsp)) {

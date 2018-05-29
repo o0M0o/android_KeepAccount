@@ -7,7 +7,6 @@ import android.annotation.TargetApi
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.text.TextUtils
 import android.view.View
 import android.widget.AutoCompleteTextView
@@ -20,8 +19,9 @@ import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.usr.ACAddUsr
+import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.ui.welcome.ACWelcome
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import java.util.concurrent.TimeUnit
@@ -136,11 +136,12 @@ class FrgLogin : FrgSupportBaseAdv() {
     private fun doLogin(usr: String, pwd: String) {
         showProgress(true)
         val bRet = ToolUtil.callInBackground(
-                        { ContextUtil.usrUtility.loginByUsr(usr, pwd)}, false,
+                        { AppUtil.usrUtility.loginByUsr(usr, pwd)}, false,
                         TimeUnit.SECONDS, 3)
         showProgress(false)
 
         if(bRet)    {
+            NoteDataHelper.reloadData()
             startActivityForResult(Intent(activity, ACWelcome::class.java), 1)
         } else  {
             mETPassword.error = getString(R.string.error_incorrect_password)

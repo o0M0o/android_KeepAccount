@@ -8,7 +8,7 @@ import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.define.IncomeNoteItem
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.db.DBUtilityBase
 import wxm.androidutil.util.UtilFun
 import wxm.androidutil.util.forObj
@@ -47,7 +47,7 @@ class PayIncomeDBUtility {
      * @return      pay data use bi
      */
     fun getPayNoteByBudget(bi: BudgetItem): List<PayNoteItem> {
-        val lsPay = ContextUtil.dbHelper.payDataREDao
+        val lsPay = AppUtil.dbHelper.payDataREDao
                 .queryForEq(PayNoteItem.FIELD_BUDGET, bi._id)
         bi.useBudget(BigDecimal.ZERO)
         if (!UtilFun.ListIsNullOrEmpty(lsPay)) {
@@ -59,7 +59,7 @@ class PayIncomeDBUtility {
             bi.useBudget(allPay)
         }
 
-        ContextUtil.dbHelper.budgetDataREDao.update(bi)
+        AppUtil.dbHelper.budgetDataREDao.update(bi)
         return lsPay
     }
 
@@ -69,13 +69,13 @@ class PayIncomeDBUtility {
      * @return      added record count
      */
     fun addPayNotes(lsi: List<PayNoteItem>): Int {
-        return ContextUtil.curUsr.forObj({ t ->
+        return AppUtil.curUsr.forObj({ t ->
             lsi.filter { null == it.usr }.forEach {
                 it.usr = t
             }
             payDBUtility.createDatas(lsi)
         }, {
-            if (null != lsi.find { null == it.usr }) {
+            if (null == lsi.find { null == it.usr }) {
                 payDBUtility.createDatas(lsi)
             } else 0
         })
@@ -88,7 +88,7 @@ class PayIncomeDBUtility {
      * @return 返回添加成功的数据量
      */
     fun addIncomeNotes(lsi: List<IncomeNoteItem>): Int {
-        return ContextUtil.curUsr.forObj(
+        return AppUtil.curUsr.forObj(
                 { t ->
                     lsi.filter { null == it.usr }
                             .forEach { it.usr = t }
@@ -96,7 +96,7 @@ class PayIncomeDBUtility {
                     incomeDBUtility.createDatas(lsi)
                 },
                 {
-                    if (null != lsi.find { null == it.usr }) {
+                    if (null == lsi.find { null == it.usr }) {
                         incomeDBUtility.createDatas(lsi)
                     } else 0
                 }
@@ -124,11 +124,11 @@ class PayIncomeDBUtility {
      */
     inner class PayDBUtility internal constructor() : DBUtilityBase<PayNoteItem, Int>() {
         override fun getDBHelper(): RuntimeExceptionDao<PayNoteItem, Int> {
-            return ContextUtil.dbHelper.payDataREDao
+            return AppUtil.dbHelper.payDataREDao
         }
 
         override fun getAllData(): List<PayNoteItem> {
-            return ContextUtil.curUsr.forObj(
+            return AppUtil.curUsr.forObj(
                     { t -> dbHelper.queryForEq(PayNoteItem.FIELD_USR, t.id) },
                     { ArrayList() }
             )
@@ -155,11 +155,11 @@ class PayIncomeDBUtility {
      */
     inner class IncomeDBUtility internal constructor() : DBUtilityBase<IncomeNoteItem, Int>() {
         override fun getDBHelper(): RuntimeExceptionDao<IncomeNoteItem, Int> {
-            return ContextUtil.dbHelper.incomeDataREDao
+            return AppUtil.dbHelper.incomeDataREDao
         }
 
         override fun getAllData(): List<IncomeNoteItem> {
-            return ContextUtil.curUsr.forObj(
+            return AppUtil.curUsr.forObj(
                     { t -> dbHelper.queryForEq(IncomeNoteItem.FIELD_USR, t.id) },
                     { ArrayList() }
             )

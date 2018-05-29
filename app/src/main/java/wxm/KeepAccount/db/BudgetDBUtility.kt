@@ -4,7 +4,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao
 import org.greenrobot.eventbus.EventBus
 import wxm.KeepAccount.item.BudgetItem
 import wxm.KeepAccount.item.PayNoteItem
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.db.DBUtilityBase
 import wxm.androidutil.log.TagLog
 import wxm.androidutil.util.UtilFun
@@ -24,7 +24,7 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
         get() {
             val bret = HashMap<BudgetItem, List<PayNoteItem>>()
             budgetForCurUsr?.forEach { bi ->
-                bret[getData(bi._id)] = ContextUtil.payIncomeUtility.getPayNoteByBudget(bi)
+                bret[getData(bi._id)] = AppUtil.payIncomeUtility.getPayNoteByBudget(bi)
             }
 
             return bret
@@ -34,15 +34,14 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
      * get current usr budget
      * @return      budget data or null
      */
-    val budgetForCurUsr: List<BudgetItem>?
+    val budgetForCurUsr: List<BudgetItem>
         get() {
-            val curUsr = ContextUtil.curUsr ?: return null
-            val lsRet = dbHelper.queryForEq(BudgetItem.FIELD_USR, curUsr)
-            return if (null == lsRet || 0 == lsRet.size) null else lsRet
+            val curUsr = AppUtil.curUsr ?: return emptyList()
+            return dbHelper.queryForEq(BudgetItem.FIELD_USR, curUsr) ?: emptyList()
         }
 
     override fun getDBHelper(): RuntimeExceptionDao<BudgetItem, Int> {
-        return ContextUtil.dbHelper.budgetDataREDao
+        return AppUtil.dbHelper.budgetDataREDao
     }
 
     /**
@@ -53,7 +52,7 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
         if (UtilFun.StringIsNullOrEmpty(bn))
             return null
 
-        val curUsr = ContextUtil.curUsr ?: return null
+        val curUsr = AppUtil.curUsr ?: return null
 
         val ret = try {
             dbHelper.queryBuilder()
@@ -75,7 +74,7 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
      */
     override fun createData(bi: BudgetItem): Boolean {
         if (null == bi.usr || -1 == bi.usr!!.id) {
-            val curUsr = ContextUtil.curUsr ?: return false
+            val curUsr = AppUtil.curUsr ?: return false
 
             bi.usr = curUsr
         }
@@ -90,11 +89,11 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
      */
     override fun removeDatas(lsBiId: List<Int>): Int {
         lsBiId.forEach {
-            ContextUtil.dbHelper.payDataREDao.queryForEq(PayNoteItem.FIELD_BUDGET, it)
+            AppUtil.dbHelper.payDataREDao.queryForEq(PayNoteItem.FIELD_BUDGET, it)
                 .apply {
                     forEach {
                         it.budget = null
-                        ContextUtil.dbHelper.payDataREDao.update(it)
+                        AppUtil.dbHelper.payDataREDao.update(it)
                     }
                 }
         }

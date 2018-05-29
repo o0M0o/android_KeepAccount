@@ -8,7 +8,7 @@ import kotterknife.bindView
 import org.greenrobot.eventbus.EventBus
 import wxm.KeepAccount.R
 import wxm.KeepAccount.event.ChangePage
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.view.EventHelper
@@ -48,7 +48,7 @@ class TFSettingMain : TFSettingBase() {
                                                         .setMessage("请等待数据清理完毕...").create().let {
                                                             it.show()
                                                             ToolUtil.runInBackground(this.activity!!,
-                                                                    { ContextUtil.clearDB() },
+                                                                    { AppUtil.clearDB() },
                                                                     { it.dismiss() })
                                                         }
                                             }

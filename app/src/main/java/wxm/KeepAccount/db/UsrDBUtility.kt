@@ -10,7 +10,7 @@ import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.UsrItem
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 
 /**
  * usr数据处理类
@@ -18,7 +18,7 @@ import wxm.KeepAccount.utility.ContextUtil
  */
 class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
     override fun getDBHelper(): RuntimeExceptionDao<UsrItem, Int> {
-        return ContextUtil.dbHelper.usrItemREDao
+        return AppUtil.dbHelper.usrItemREDao
     }
 
     /**
@@ -131,9 +131,7 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
     }
 
     fun loginByUsr(usr: UsrItem, recordHistory:Boolean): Boolean    {
-        ContextUtil.curUsr = usr
-        NoteDataHelper.reloadData()
-
+        AppUtil.curUsr = usr
         if(recordHistory) LoginHistoryUtility.addHistory(usr)
         return true
     }

@@ -5,7 +5,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao
 import org.greenrobot.eventbus.EventBus
 
 import wxm.KeepAccount.item.RecordTypeItem
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.db.DBUtilityBase
 
 /**
@@ -35,7 +35,7 @@ class RecordTypeDBUtility : DBUtilityBase<RecordTypeItem, Int>() {
 
 
     override fun getDBHelper(): RuntimeExceptionDao<RecordTypeItem, Int> {
-        return ContextUtil.dbHelper.rtItemREDao
+        return AppUtil.dbHelper.rtItemREDao
     }
 
     override fun onDataModify(md: List<Int>) {

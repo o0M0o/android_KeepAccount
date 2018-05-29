@@ -1,31 +1,38 @@
 package wxm.KeepAccount.utility
 
+import android.graphics.BitmapFactory
+import wxm.KeepAccount.R
 import wxm.KeepAccount.db.*
-import wxm.KeepAccount.define.*
+import wxm.KeepAccount.define.IncomeNoteItem
 import wxm.KeepAccount.item.BudgetItem
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.item.RemindItem
 import wxm.KeepAccount.item.UsrItem
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.androidutil.app.AppBase
+import wxm.androidutil.image.ImageUtil
 import wxm.androidutil.log.TagLog
+import java.io.File
 
 /**
  * get global context & helper
  * Created by WangXM on 2016/5/7.
  */
-class ContextUtil : AppBase() {
+class AppUtil : AppBase() {
     // data for global use
     private var mUICurUsr: UsrItem? = null
     private lateinit var mMHHandler: GlobalMsgHandler
 
-    // mainly for sqlite
+    // for sqlite
     private lateinit var mDBHelper: DBOrmLiteHelper
     private lateinit var mUsrUtility: UsrDBUtility
     private lateinit var mRecordTypeUtility: RecordTypeDBUtility
     private lateinit var mBudgetUtility: BudgetDBUtility
     private lateinit var mPayIncomeUtility: PayIncomeDBUtility
     private lateinit var mRemindUtility: RemindDBUtility
+
+    // for dir
+    private lateinit var mImageDir: String
 
     override fun onCreate() {
         // TODO Auto-generated method stub
@@ -40,6 +47,25 @@ class ContextUtil : AppBase() {
         mBudgetUtility = BudgetDBUtility()
         mPayIncomeUtility = PayIncomeDBUtility()
         mRemindUtility = RemindDBUtility()
+
+        // for dir
+        val rootDir = filesDir
+        val imagePath = "$rootDir/image"
+        File(imagePath).let {
+            if (!it.exists()) {
+                it.mkdirs()
+            } else true
+        }.let {
+            mImageDir = if (it) imagePath else rootDir.path
+        }
+
+        File(defaultUsrIcon()).let1 {
+            if (!it.exists()) {
+                BitmapFactory.decodeResource(resources, R.drawable.ic_usr_big).let1 {
+                    ImageUtil.saveBitmapToJPGFile(it, mImageDir, defaultUsrIconName())
+                }
+            }
+        }
     }
 
     override fun onTerminate() {
@@ -50,11 +76,15 @@ class ContextUtil : AppBase() {
     }
 
     companion object {
-        val self: ContextUtil
-            get() = (appContext() as ContextUtil)
+        val self: AppUtil
+            get() = (appContext() as AppUtil)
+
+        val imagePath: String
+            get() = self.mImageDir
 
         /**
          * get global msg handler
+         *
          * @return      msg handler
          */
         val msgHandler: GlobalMsgHandler

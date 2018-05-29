@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 
 import wxm.KeepAccount.R
-import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
 
 /**

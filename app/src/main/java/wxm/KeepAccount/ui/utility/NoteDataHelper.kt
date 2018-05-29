@@ -2,7 +2,7 @@ package wxm.KeepAccount.ui.utility
 
 
 import wxm.KeepAccount.item.INote
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -63,7 +63,7 @@ class NoteDataHelper private constructor() {
         dayHaveNote.clear()
         monthHaveNote.clear()
         yearHaveNote.clear()
-        ContextUtil.payIncomeUtility.allNotes.forEach {
+        AppUtil.payIncomeUtility.allNotes.forEach {
             val nk = NoteKey(szDay = it.tsYearMonthDayTag)
             var lsNote = allNotes[nk]
             if(null == lsNote)    {

@@ -2,7 +2,7 @@ package wxm.KeepAccount.db
 
 import wxm.KeepAccount.item.LoginHistoryItem
 import wxm.KeepAccount.item.UsrItem
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import java.sql.Timestamp
 
 /**
@@ -10,8 +10,8 @@ import java.sql.Timestamp
  * @version     create：2018/5/28
  */
 object LoginHistoryUtility {
-    private fun getREDao() = ContextUtil.dbHelper.loginHistoryREDao
-    private fun getUsrREDao() = ContextUtil.dbHelper.usrItemREDao
+    private fun getREDao() = AppUtil.dbHelper.loginHistoryREDao
+    private fun getUsrREDao() = AppUtil.dbHelper.usrItemREDao
 
     fun addHistory(usr: UsrItem) {
         getREDao().create(LoginHistoryItem().apply {

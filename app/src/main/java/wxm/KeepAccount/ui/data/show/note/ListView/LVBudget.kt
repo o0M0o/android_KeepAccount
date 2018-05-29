@@ -137,7 +137,7 @@ class LVBudget : LVBase() {
 
     override fun loadUI(bundle: Bundle?) {
         refreshAttachLayout()
-        mLVShow.adapter = MainAdapter(ContextUtil.self, mMainPara)
+        mLVShow.adapter = MainAdapter(AppUtil.self, mMainPara)
     }
 
     override fun initUI(bundle: Bundle?) {
@@ -151,7 +151,7 @@ class LVBudget : LVBase() {
                                 mActionType = EOperation.DELETE
 
                                 (mLVShow.adapter as MainAdapter).waitDeleteItems.let {
-                                    ContextUtil.budgetUtility.removeDatas(it)
+                                    AppUtil.budgetUtility.removeDatas(it)
                                 }
                             }
 
@@ -192,7 +192,7 @@ class LVBudget : LVBase() {
         mMainPara.clear()
         mHMSubPara.clear()
 
-        ContextUtil.budgetUtility.budgetWithPayNote.toSortedMap(
+        AppUtil.budgetUtility.budgetWithPayNote.toSortedMap(
                 Comparator { a, b ->
                     if (mBODownOrder)
                         a.name.compareTo(b.name)

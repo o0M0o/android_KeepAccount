@@ -2,17 +2,14 @@ package wxm.KeepAccount.ui.dialog
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.TextView
-import kotterknife.bindView
 
 import java.util.Calendar
 import java.util.Locale
 
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.KeepAccount.R
-import wxm.KeepAccount.utility.ContextUtil
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.util.doJudge

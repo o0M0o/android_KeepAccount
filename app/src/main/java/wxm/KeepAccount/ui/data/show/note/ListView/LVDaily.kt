@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.data.show.note.ListView
 
-import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -20,7 +19,7 @@ import wxm.KeepAccount.ui.data.show.note.base.EOperation
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.utility.ContextUtil
+import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.time.CalendarUtility
@@ -32,7 +31,6 @@ import wxm.androidutil.ui.view.ViewHolder
 import wxm.androidutil.util.doJudge
 import wxm.uilib.IconButton.IconButton
 import java.util.ArrayList
-import java.util.Calendar
 import java.util.HashMap
 import java.util.LinkedList
 import java.util.Locale
@@ -254,11 +252,11 @@ class LVDaily : LVBase() {
         }
 
         if (!lsIncome.isEmpty()) {
-            ContextUtil.payIncomeUtility.deleteIncomeNotes(lsIncome)
+            AppUtil.payIncomeUtility.deleteIncomeNotes(lsIncome)
         }
 
         if (!lsPay.isEmpty()) {
-            ContextUtil.payIncomeUtility.deletePayNotes(lsPay)
+            AppUtil.payIncomeUtility.deletePayNotes(lsPay)
         }
     }
 

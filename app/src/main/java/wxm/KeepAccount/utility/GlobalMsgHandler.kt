@@ -31,11 +31,11 @@ class GlobalMsgHandler : Handler() {
                 val usr = data.getStringExtra(UsrItem.FIELD_PWD)
                 val pwd = data.getStringExtra(UsrItem.FIELD_PWD)
 
-                if (ContextUtil.usrUtility.hasUsr(usr)) {
+                if (AppUtil.usrUtility.hasUsr(usr)) {
                     replyMsg(h, EMsgType.USR_ADD.id,
                             arrayOf(false, data, "用户已经存在！"))
                 } else {
-                    val ret = null != ContextUtil.usrUtility.addUsr(usr, pwd)
+                    val ret = null != AppUtil.usrUtility.addUsr(usr, pwd)
                     replyMsg(h, EMsgType.USR_ADD.id,
                             arrayOf(ret, data))
                 }
@@ -50,14 +50,14 @@ class GlobalMsgHandler : Handler() {
                 val usr = data.getStringExtra(UsrItem.FIELD_NAME)
                 val pwd = data.getStringExtra(UsrItem.FIELD_PWD)
 
-                ContextUtil.curUsr = ContextUtil.usrUtility.CheckAndGetUsr(usr, pwd)
-                val ret = null != ContextUtil.curUsr
+                AppUtil.curUsr = AppUtil.usrUtility.CheckAndGetUsr(usr, pwd)
+                val ret = null != AppUtil.curUsr
 
                 replyMsg(h, EMsgType.USR_LOGIN.id, ret)
             }
 
             EMsgType.USR_LOGOUT -> {
-                ContextUtil.curUsr = null
+                AppUtil.curUsr = null
                 LoginHistoryUtility.cleanHistory()
                 EventBus.getDefault().post(DoLoginEvent(this.javaClass.simpleName))
             }
