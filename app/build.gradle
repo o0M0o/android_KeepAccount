@@ -122,6 +122,7 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpcore:4.4.4'
 
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
+    implementation 'com.github.vipulasri:timelineview:1.0.6'
 
     implementation files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
     implementation files('libs/extend_lib/fashjson/fastjson-1.2.33.jar')
