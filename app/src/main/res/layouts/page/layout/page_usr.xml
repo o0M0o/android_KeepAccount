@@ -21,7 +21,7 @@
             android:layout_height="64dp"
             android:layout_marginStart="12dp"
             android:background="@color/gray_eeeeee"
-            android:src="@drawable/ic_usr_big"
+            android:src="@drawable/image_default_usr"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

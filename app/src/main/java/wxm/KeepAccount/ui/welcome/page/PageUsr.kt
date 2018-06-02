@@ -56,22 +56,26 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
     }
 
     override fun loadUI(savedInstanceState: Bundle?) {
-        AppUtil.curUsr?.let1 {
-            mIVUsr.setImageURI(Uri.fromFile(File(it.iconPath)))
-            mTVUsrName.text = it.name
-        }
+        mIBChangePwd.setColdOrHot(false)
+        mCLInputPwd.visibility = View.GONE
+        loadUsrInfo()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val result = CropImage.getActivityResult(data)
-            if (resultCode == Activity.RESULT_OK) {
-                saveImage(result.uri).let1 {
-                    mIVUsr.setImageURI(Uri.fromFile(File(it)))
+            CropImage.getActivityResult(data).let1 { result ->
+                if (resultCode == Activity.RESULT_OK) {
+                    saveImage(result.uri).let1 {
+                        if (it.isNotEmpty()) {
+                            if (AppUtil.usrUtility.changeIcon(AppUtil.curUsr!!, it)) {
+                                loadUsrInfo()
+                            }
+                        }
+                    }
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    DlgAlert.showAlert(activity!!, R.string.dlg_erro, result.error.toString())
                 }
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                DlgAlert.showAlert(activity!!, R.string.dlg_erro, result.error.toString())
             }
         }
     }
@@ -90,7 +94,10 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
             }
 
             R.id.iv_usr -> {
-                CropImage.activity().start(context!!, this)
+                CropImage.activity()
+                        .setAspectRatio(1, 1)
+                        .setFixAspectRatio(true)
+                        .start(context!!, this)
             }
 
             else -> {
@@ -100,6 +107,13 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
                     }
                 }
             }
+        }
+    }
+
+    private fun loadUsrInfo()   {
+        AppUtil.curUsr?.let1 {
+            mIVUsr.setImageURI(Uri.fromFile(File(it.iconPath)))
+            mTVUsrName.text = it.name
         }
     }
 

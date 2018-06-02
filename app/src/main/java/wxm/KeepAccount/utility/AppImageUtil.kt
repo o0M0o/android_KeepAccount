@@ -67,11 +67,5 @@ fun saveImage(imageUri: Uri): String {
     return ""
 }
 
-fun defaultUsrIcon(): String {
-    //return AppUtil.imagePath + "/" + defaultUsrIconName()
-    return createPath("//android_asset", defaultUsrIconName())
-}
-
-fun defaultUsrIconName(): String {
-    return "usr_default_icon.png"
-}
+fun defaultUsrIcon(): String = createPath(AppUtil.imagePath, defaultUsrIconName())
+fun defaultUsrIconName(): String = "usr_default_icon.png"

@@ -74,15 +74,13 @@ class AppUtil : AppBase() {
             mImageDir = if (it) imagePath else rootDir.path
         }
 
-        /*
         File(defaultUsrIcon()).let1 {
             if (!it.exists()) {
-                BitmapFactory.decodeResource(resources, R.drawable.ic_usr_big).let1 {
+                BitmapFactory.decodeResource(resources, R.drawable.image_default_usr).let1 {
                     ImageUtil.saveBitmapToJPGFile(it, mImageDir, defaultUsrIconName())
                 }
             }
         }
-        */
     }
 
     private fun closeDB()   {
