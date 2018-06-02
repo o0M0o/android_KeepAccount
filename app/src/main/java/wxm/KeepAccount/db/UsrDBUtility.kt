@@ -1,141 +1,20 @@
 package wxm.KeepAccount.db
 
 import com.j256.ormlite.dao.RuntimeExceptionDao
-
 import org.greenrobot.eventbus.EventBus
-
-import wxm.androidutil.db.DBUtilityBase
-import wxm.androidutil.util.MD5Util
-import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.UsrItem
-import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.AppUtil
+import wxm.androidutil.db.DBUtilityBase
+import wxm.androidutil.util.MD5Util
+import wxm.androidutil.util.doJudge
+import wxm.androidutil.util.forObj
 
 /**
  * usr数据处理类
  * Created by WangXM on 2016/8/9.
  */
 class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
-    override fun getDBHelper(): RuntimeExceptionDao<UsrItem, Int> {
-        return AppUtil.dbHelper.usrItemREDao
-    }
-
-    /**
-     * 检查是否用户'usr'已经存在
-     * @param usr 待检查用户
-     * @return 如果存在返回true, 否则返回false
-     */
-    fun hasUsr(usr: String): Boolean {
-        if (UtilFun.StringIsNullOrEmpty(usr))
-            return false
-
-        val ret = dbHelper.queryForEq(UsrItem.FIELD_NAME, usr)
-        return !(null == ret || ret.size < 1)
-    }
-
-
-    /**
-     * 添加用户
-     * @param usr 待添加用户名
-     * @param pwd 待添加用户密码
-     * @return 添加成功返回添加后的数据, 否则返回null
-     */
-    fun addUsr(usr: String, pwd: String): UsrItem? {
-        if (UtilFun.StringIsNullOrEmpty(usr) || UtilFun.StringIsNullOrEmpty(pwd))
-            return null
-
-        var pwdpad = pwd
-        if (pwdpad.length < GlobalDef.STR_PWD_PAD.length) {
-            pwdpad += GlobalDef.STR_PWD_PAD.substring(pwd.length)
-        }
-        pwdpad = MD5Util.string2MD5(pwdpad)
-
-        var uiret: UsrItem? = null
-        val ret = dbHelper.queryForEq(UsrItem.FIELD_NAME, usr)
-        if (null == ret || ret.size < 1) {
-            val ui = UsrItem()
-            ui.name = usr
-            ui.pwd = pwdpad
-
-            if (createData(ui))
-                uiret = ui
-        } else {
-            val uiold = ret[0]
-            if (pwdpad != uiold.pwd) {
-                uiold.pwd = pwdpad
-                if (modifyData(uiold))
-                    uiret = uiold
-            } else {
-                uiret = uiold
-            }
-        }
-
-        return uiret
-    }
-
-
-    /**
-     * 检查用户
-     * @param usr 待检查用户名
-     * @param pwd 待检查用户密码
-     * @return 如果符合返回true, 否则返回false
-     */
-    fun checkUsr(usr: String, pwd: String): Boolean {
-        var pwdpad = pwd
-        if (pwdpad.length < GlobalDef.STR_PWD_PAD.length) {
-            pwdpad += GlobalDef.STR_PWD_PAD.substring(pwd.length)
-        }
-
-        val lsui = dbHelper.queryForEq(UsrItem.FIELD_NAME, usr)
-        if (null == lsui || lsui.size < 1)
-            return false
-
-        val checkPwd = MD5Util.string2MD5(pwdpad)
-        return checkPwd == lsui[0].pwd
-
-    }
-
-
-    /**
-     * 检查登录信息，如果有符合的记录就返回对应用户信息
-     * @param usr 待检查用户名
-     * @param pwd 待检查用户密码
-     * @return 如果符合返回注册用户数据, 否则返回null
-     */
-    fun CheckAndGetUsr(usr: String, pwd: String): UsrItem? {
-        var pwdpad = pwd
-        if (pwdpad.length < GlobalDef.STR_PWD_PAD.length) {
-            pwdpad += GlobalDef.STR_PWD_PAD.substring(pwd.length)
-        }
-
-        val lsui = dbHelper.queryForEq(UsrItem.FIELD_NAME, usr)
-        if (null == lsui || lsui.size < 1)
-            return null
-
-        val checkPwd = MD5Util.string2MD5(pwdpad)
-        return if (checkPwd == lsui[0].pwd) lsui[0] else null
-
-    }
-
-    /**
-     * 使用用户信息登录APP
-     * （并刷新数据)
-     * @param usr 待检查用户名
-     * @param pwd 待检查用户密码
-     * @return 如果登录成功返回true, 否则返回false
-     */
-    fun loginByUsr(usr: String, pwd: String): Boolean {
-        val ui = CheckAndGetUsr(usr, pwd) ?: return false
-        return loginByUsr(ui, true)
-    }
-
-    fun loginByUsr(usr: UsrItem, recordHistory:Boolean): Boolean    {
-        AppUtil.curUsr = usr
-        if(recordHistory) LoginHistoryUtility.addHistory(usr)
-        return true
-    }
-
     override fun onDataModify(md: List<Int>) {
         EventBus.getDefault().post(DBDataChangeEvent())
     }
@@ -146,5 +25,137 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
 
     override fun onDataRemove(dd: List<Int>) {
         EventBus.getDefault().post(DBDataChangeEvent())
+    }
+
+    override fun getDBHelper(): RuntimeExceptionDao<UsrItem, Int> {
+        return AppUtil.dbHelper.usrItemREDao
+    }
+
+    /**
+     * 检查是否用户'usr'已经存在
+     * @param usr 待检查用户
+     * @return 如果存在返回true, 否则返回false
+     */
+    fun hasUsr(usr: String): Boolean {
+        return dbHelper.queryBuilder()
+                .where()
+                .eq(UsrItem.FIELD_NAME, usr)
+                .prepare().let {
+                    dbHelper.countOf(it)
+                } < 1
+    }
+
+
+    /**
+     * 添加用户
+     * @param usr 待添加用户名
+     * @param pwd 待添加用户密码
+     * @return 添加成功返回添加后的数据, 否则返回null
+     */
+    fun addUsr(usr: String, pwd: String): UsrItem? {
+        if (usr.isEmpty() || pwd.isEmpty())
+            return null
+
+        if(hasUsr(usr))
+            return null
+
+        return UsrItem().apply{
+            this.name = usr
+            this.pwd = getMd5Pwd(pwd)
+        }.let {
+            createData(it).doJudge(it, null)
+        }
+    }
+
+
+    /**
+     * 检查用户
+     * @param usr 待检查用户名
+     * @param pwd 待检查用户密码
+     * @return 如果符合返回true, 否则返回false
+     */
+    fun checkUsr(usr: String, pwd: String): Boolean {
+        val query = dbHelper.queryBuilder().where()
+                .eq(UsrItem.FIELD_NAME, usr)
+                .and()
+                .eq(UsrItem.FIELD_PWD, getMd5Pwd(pwd))
+                .prepare()
+
+        return dbHelper.query(query).let {
+            null != it && it.isNotEmpty()
+        }
+    }
+
+
+    /**
+     * 检查登录信息，如果有符合的记录就返回对应用户信息
+     * @param usr 待检查用户名
+     * @param pwd 待检查用户密码
+     * @return 如果符合返回注册用户数据, 否则返回null
+     */
+    fun checkGetUsr(usr: String, pwd: String): UsrItem? {
+        val query = dbHelper.queryBuilder().where()
+                .eq(UsrItem.FIELD_NAME, usr)
+                .and()
+                .eq(UsrItem.FIELD_PWD, getMd5Pwd(pwd))
+                .prepare()
+
+        return dbHelper.query(query).let {
+            (null == it || it.isEmpty()).doJudge(null, it[0])
+        }
+    }
+
+    /**
+     * use usr name [usr] and password [pwd] login app
+     * and record in history
+     *
+     * return true if everything ok
+     */
+    fun loginByUsr(usr: String, pwd: String): Boolean {
+        return checkGetUsr(usr, pwd).forObj(
+                {loginByUsr(it, true)}, {false})
+    }
+
+    /**
+     * use usr [usr] login app
+     * if [recordHistory] is true, record login history
+     *
+     * return true if everything ok
+     */
+    fun loginByUsr(usr: UsrItem, recordHistory: Boolean): Boolean {
+        AppUtil.curUsr = usr
+        if (recordHistory) LoginHistoryUtility.addHistory(usr)
+        return true
+    }
+
+    /**
+     * change [usr] icon to [fn]
+     *
+     * return true if everything ok
+     */
+    fun changeIcon(usr:UsrItem, fn:String):Boolean  {
+        return dbHelper.updateBuilder().let {
+            it.updateColumnValue(UsrItem.FIELD_ICON_PATH, fn)
+            it.where().eq(UsrItem.FIELD_ID, usr.id)
+            it.update() == 1
+        }.doJudge(
+                {
+                    usr.iconPath = AppUtil.usrUtility.getData(usr.id)!!.iconPath
+                    true
+                },
+                {false}
+        )
+    }
+
+    /**
+     * return [orgPwd] as MD5 string
+     */
+    private fun getMd5Pwd(orgPwd: String): String {
+        return (orgPwd.length < GlobalDef.STR_PWD_PAD.length).doJudge(
+                { orgPwd + GlobalDef.STR_PWD_PAD.substring(orgPwd.length) },
+                { orgPwd }
+        ).let {
+            MD5Util.string2MD5(it)
+        }
     }
 }

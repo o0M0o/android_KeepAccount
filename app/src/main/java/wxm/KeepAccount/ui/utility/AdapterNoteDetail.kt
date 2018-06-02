@@ -8,12 +8,12 @@ import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.define.IncomeNoteItem
 import wxm.KeepAccount.item.PayNoteItem
-import wxm.KeepAccount.ui.base.Helper.ViewHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
+import wxm.androidutil.ui.view.ViewHelper
 import wxm.androidutil.ui.view.ViewHolder
 import wxm.uilib.SwipeLayout.SwipeLayout
 import java.util.*

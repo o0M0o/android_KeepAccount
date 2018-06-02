@@ -3,6 +3,7 @@ package wxm.KeepAccount.ui.utility
 
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.utility.AppUtil
+import wxm.androidutil.util.forObj
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -254,8 +255,8 @@ class NoteDataHelper private constructor() {
          * @param mt    month（example : '2017-01')
          * @return      data
          */
-        fun getInfoByMonth(mt: String): NoteShowInfo? {
-            return instance.mHMMonthInfo[mt]
+        fun getInfoByMonth(mt: String): NoteShowInfo {
+            return instance.mHMMonthInfo[mt].forObj({it}, {NoteShowInfo()} )
         }
 
         /**
@@ -272,8 +273,8 @@ class NoteDataHelper private constructor() {
          * @param yr    year(example : '2017')
          * @return      data
          */
-        fun getInfoByYear(yr: String): NoteShowInfo? {
-            return instance.mHMYearInfo[yr]
+        fun getInfoByYear(yr: String): NoteShowInfo {
+            return instance.mHMYearInfo[yr].forObj({it}, {NoteShowInfo()} )
         }
 
         /**
@@ -291,7 +292,7 @@ class NoteDataHelper private constructor() {
          * @return      data
          */
         fun getInfoByDay(day: String): NoteShowInfo? {
-            return instance.mHMDayInfo[day]
+            return instance.mHMDayInfo[day].forObj({it}, {NoteShowInfo()} )
         }
 
         /**

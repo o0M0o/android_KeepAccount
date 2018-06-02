@@ -215,7 +215,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
 
         val ci = CreateUtility()
         val defUi = AppUtil.usrUtility
-                .CheckAndGetUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD)
+                .checkGetUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD)
         if (null != defUi) {
             val oneDayMSec = (1000 * 3600 * 24).toLong()
             val beforeMSec = oneDayMSec * 600

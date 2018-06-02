@@ -2,10 +2,8 @@ package wxm.KeepAccount.ui.welcome.page
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.TextView
 import com.allure.lbanners.LMBanners
-import com.allure.lbanners.transformer.TransitionEffect
 import kotterknife.bindView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -18,11 +16,10 @@ import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.ui.welcome.banner.FrgAdapter
-import wxm.KeepAccount.ui.welcome.banner.FrgPara
+import wxm.KeepAccount.ui.welcome.banner.BannerAp
+import wxm.KeepAccount.ui.welcome.banner.BannerPara
 import wxm.KeepAccount.utility.DGVButtonAdapter
 import wxm.KeepAccount.utility.PreferencesUtil
-import wxm.KeepAccount.utility.let1
 import wxm.androidutil.time.CalendarUtility
 import wxm.androidutil.ui.dragGrid.DragGridView
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
@@ -35,11 +32,14 @@ import java.util.*
 class PageMain : FrgSupportBaseAdv(), PageBase {
     // for ui
     private val mDGVActions: DragGridView by bindView(R.id.dgv_buttons)
-    private val mLBanners: LMBanners<FrgPara> by bindView(R.id.banners)
+    private val mLBanners: LMBanners<BannerPara> by bindView(R.id.banners)
 
     // for data
     private val mLSData = ArrayList<HashMap<String, Any>>()
-    private val mALFrgPara = ArrayList<FrgPara>()
+    private val mALFrgPara = ArrayList<BannerPara>().apply {
+        add(BannerPara(R.layout.banner_month))
+        add(BannerPara( R.layout.banner_year))
+    }
 
     /**
      * handler for DB data change
@@ -48,7 +48,7 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
     @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDBEvent(event: DBDataChangeEvent) {
-        mLBanners.setAdapter(FrgAdapter(activity!!, null), mALFrgPara)
+        mLBanners.setAdapter(BannerAp(activity!!, null), mALFrgPara)
     }
 
     override fun getLayoutID(): Int = R.layout.page_main_page
@@ -59,9 +59,7 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
     }
 
     override fun initUI(savedInstanceState: Bundle?) {
-        initFrgPara()
         initBanner()
-
         loadUI(savedInstanceState)
     }
 
@@ -97,33 +95,11 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
         }
     }
 
-    private fun initFrgPara() {
-        mALFrgPara.add(FrgPara().apply { mFPViewId = R.layout.banner_month })
-        mALFrgPara.add(FrgPara().apply { mFPViewId = R.layout.banner_year })
-    }
-
     /**
      * banner is show in head of welcome page
      */
     private fun initBanner() {
-        mLBanners.let {
-            it.setAdapter(FrgAdapter(activity!!, null), mALFrgPara)
-
-            //参数设置
-            it.setAutoPlay(false)//自动播放
-            it.setVertical(false)//是否可以垂直
-            it.setScrollDurtion(222)//两页切换时间
-            it.setCanLoop(true)//循环播放
-            it.setSelectIndicatorRes(R.drawable.page_indicator_select)//选中的原点
-            it.setUnSelectUnIndicatorRes(R.drawable.page_indicator_unselect)//未选中的原点
-            it.setIndicatorWidth(5)//默认为5dp
-            it.setHoriZontalTransitionEffect(TransitionEffect.Default)//选中喜欢的样式
-            //it.setHoriZontalCustomTransformer(new ParallaxTransformer(R.id.id_image));//自定义样式
-            it.setDurtion(5000)//切换时间
-            it.hideIndicatorLayout()//隐藏原点
-            it.showIndicatorLayout()//显示原点
-            it.setIndicatorPosition(LMBanners.IndicaTorPosition.BOTTOM_MID)//设置原点显示位置
-        }
+        mLBanners.setAdapter(BannerAp(activity!!, null), mALFrgPara)
     }
 
 

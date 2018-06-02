@@ -50,7 +50,7 @@ class GlobalMsgHandler : Handler() {
                 val usr = data.getStringExtra(UsrItem.FIELD_NAME)
                 val pwd = data.getStringExtra(UsrItem.FIELD_PWD)
 
-                AppUtil.curUsr = AppUtil.usrUtility.CheckAndGetUsr(usr, pwd)
+                AppUtil.curUsr = AppUtil.usrUtility.checkGetUsr(usr, pwd)
                 val ret = null != AppUtil.curUsr
 
                 replyMsg(h, EMsgType.USR_LOGIN.id, ret)

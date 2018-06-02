@@ -61,29 +61,6 @@ class FrgWelcome : FrgSupportSwitcher<FrgSupportBaseAdv>() {
             when (v.id) {
                 R.id.ib_main_page-> {
                     setHot(R.id.ib_main_page)
-                    /*
-            val dlg = DlgSelectChannel()
-            dlg.hotChannel = (mDGVActions.adapter as DGVButtonAdapter).curAction
-            dlg.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
-                override fun onDialogPositiveResult(dialog: DialogFragment) {
-                    val dsc = UtilFun.cast<DlgSelectChannel>(dialog)
-                    PreferencesUtil.saveHotAction(dsc.hotChannel)
-
-                    mLSData.clear()
-                    for (i in PreferencesUtil.loadHotAction()) {
-                        val ihm = HashMap<String, Any>()
-                        ihm[DGVButtonAdapter.KEY_ACT_NAME] = i
-                        mLSData.add(ihm)
-                    }
-
-                    (mDGVActions.adapter as DGVButtonAdapter).notifyDataSetChanged()
-                }
-
-                override fun onDialogNegativeResult(dialog: DialogFragment) {}
-            })
-
-            dlg.show(activity.supportFragmentManager, "选择频道")
-            */
                     switchToPage(mPageMain)
                 }
 

@@ -16,6 +16,7 @@ import wxm.KeepAccount.db.LoginHistoryUtility
 import wxm.KeepAccount.define.EMsgType
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.help.ACHelp
+import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.ui.welcome.ACWelcome
 import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
@@ -106,6 +107,7 @@ class ACLogin : AppCompatActivity() {
                     TimeUnit.SECONDS, 3)
             if(bRet)    {
                 loadUI = false
+                NoteDataHelper.reloadData()
                 startActivityForResult(Intent(this, ACWelcome::class.java), 1)
             }
         }
