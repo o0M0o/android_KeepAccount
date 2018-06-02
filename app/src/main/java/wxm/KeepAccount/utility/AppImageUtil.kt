@@ -1,14 +1,14 @@
 package wxm.KeepAccount.utility
 
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import wxm.KeepAccount.define.GlobalDef
-import wxm.androidutil.util.FileUtil
-import wxm.androidutil.util.doJudge
 import wxm.androidutil.util.forObj
-import java.io.*
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.*
 
 /**
@@ -35,7 +35,7 @@ private fun getRealPathFromURI(contentURI: Uri): String {
 /**
  * return full path use [dir] as directory path and [fn] as file name
  */
-fun createPath(dir:String, fn:String): String   {
+fun createPath(dir: String, fn: String): String {
     return "$dir${GlobalDef.FILE_PATH_SEPARATOR}$fn"
 }
 
@@ -57,7 +57,7 @@ private fun fileCopy(src: File, dst: File) {
 fun saveImage(imageUri: Uri): String {
     val realPath = getRealPathFromURI(imageUri)
     val fnPos = realPath.lastIndexOf(".")
-    if(-1 != fnPos)    {
+    if (-1 != fnPos) {
         val newFN = AppUtil.imagePath + "/" + UUID.randomUUID().toString() + realPath.substring(fnPos)
         fileCopy(File(realPath), File(newFN))
 
@@ -67,5 +67,21 @@ fun saveImage(imageUri: Uri): String {
     return ""
 }
 
-fun defaultUsrIcon(): String = createPath(AppUtil.imagePath, defaultUsrIconName())
-fun defaultUsrIconName(): String = "usr_default_icon.png"
+fun defaultUsrIcon(): String = createPath(AppUtil.imagePath, "usr_default_icon.png")
+
+/**
+ * save [bm] to [fn] as [cf] type
+ */
+fun saveBitmapToJPGFile(bm: Bitmap, fn: String,
+                        cf: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG): Boolean {
+    return FileOutputStream(File(fn)).let {
+        try {
+            it.use { f ->
+                bm.compress(cf, 100, f)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            false
+        }
+    }
+}

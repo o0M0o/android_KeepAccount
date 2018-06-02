@@ -1,5 +1,6 @@
 package wxm.KeepAccount.utility
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.*
@@ -66,18 +67,14 @@ class AppUtil : AppBase() {
     private fun initDir()   {
         val rootDir = filesDir
         val imagePath = "$rootDir/image"
-        File(imagePath).let {
-            if (!it.exists()) {
-                it.mkdirs()
-            } else true
-        }.let {
+        createDirIfNotExist(imagePath).let1 {
             mImageDir = if (it) imagePath else rootDir.path
         }
 
         File(defaultUsrIcon()).let1 {
             if (!it.exists()) {
                 BitmapFactory.decodeResource(resources, R.drawable.image_default_usr).let1 {
-                    ImageUtil.saveBitmapToJPGFile(it, mImageDir, defaultUsrIconName())
+                    saveBitmapToJPGFile(it, defaultUsrIcon(), Bitmap.CompressFormat.PNG)
                 }
             }
         }
@@ -85,6 +82,15 @@ class AppUtil : AppBase() {
 
     private fun closeDB()   {
         mDBHelper.close()
+    }
+
+    private fun createDirIfNotExist(pn:String): Boolean   {
+        return File(pn).let {
+            if (!it.exists()) {
+                it.mkdirs()
+                it.exists()
+            } else true
+        }
     }
 
 
