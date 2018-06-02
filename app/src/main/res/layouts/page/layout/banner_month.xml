@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/banner_height"
-    android:background="#f2f2f2">
+    android:background="@color/gray_eeeeee"
+    tools:ignore="HardcodedText">
 
     <RelativeLayout
         android:id="@+id/cl_header"
@@ -49,8 +51,9 @@
         android:id="@+id/rl_value"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="42dp"
         android:layout_marginStart="12dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/il_chart"
         app:layout_constraintStart_toStartOf="parent"
@@ -122,9 +125,9 @@
         layout="@layout/ba_chart"
         android:layout_width="@dimen/banner_chart_width"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
         android:layout_marginEnd="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

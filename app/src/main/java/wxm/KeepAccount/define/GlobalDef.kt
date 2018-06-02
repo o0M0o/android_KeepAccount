@@ -38,4 +38,6 @@ object GlobalDef {
 
     const val DEF_USR_NAME = "default"
     const val DEF_USR_PWD = "123456"
+
+    const val FILE_PATH_SEPARATOR = "/"
 }

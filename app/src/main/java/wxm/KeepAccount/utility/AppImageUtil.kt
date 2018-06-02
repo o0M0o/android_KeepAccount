@@ -2,6 +2,7 @@ package wxm.KeepAccount.utility
 
 import android.net.Uri
 import android.provider.MediaStore
+import wxm.KeepAccount.define.GlobalDef
 import wxm.androidutil.util.FileUtil
 import wxm.androidutil.util.doJudge
 import wxm.androidutil.util.forObj
@@ -29,6 +30,13 @@ private fun getRealPathFromURI(contentURI: Uri): String {
                     },
                     { contentURI.path }
             )
+}
+
+/**
+ * return full path use [dir] as directory path and [fn] as file name
+ */
+fun createPath(dir:String, fn:String): String   {
+    return "$dir${GlobalDef.FILE_PATH_SEPARATOR}$fn"
 }
 
 @Throws(IOException::class)
@@ -60,7 +68,8 @@ fun saveImage(imageUri: Uri): String {
 }
 
 fun defaultUsrIcon(): String {
-    return AppUtil.imagePath + "/" + defaultUsrIconName()
+    //return AppUtil.imagePath + "/" + defaultUsrIconName()
+    return createPath("//android_asset", defaultUsrIconName())
 }
 
 fun defaultUsrIconName(): String {

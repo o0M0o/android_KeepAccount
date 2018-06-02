@@ -37,9 +37,23 @@ class AppUtil : AppBase() {
     override fun onCreate() {
         // TODO Auto-generated method stub
         super.onCreate()
-        mMHHandler = GlobalMsgHandler()
 
-        // for db
+        initMsgHandler()
+        initDB()
+        initDir()
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+
+        closeDB()
+    }
+
+    private fun initMsgHandler()    {
+        mMHHandler = GlobalMsgHandler()
+    }
+
+    private fun initDB()    {
         mDBHelper = DBOrmLiteHelper(appContext())
 
         mUsrUtility = UsrDBUtility()
@@ -47,8 +61,9 @@ class AppUtil : AppBase() {
         mBudgetUtility = BudgetDBUtility()
         mPayIncomeUtility = PayIncomeDBUtility()
         mRemindUtility = RemindDBUtility()
+    }
 
-        // for dir
+    private fun initDir()   {
         val rootDir = filesDir
         val imagePath = "$rootDir/image"
         File(imagePath).let {
@@ -59,6 +74,7 @@ class AppUtil : AppBase() {
             mImageDir = if (it) imagePath else rootDir.path
         }
 
+        /*
         File(defaultUsrIcon()).let1 {
             if (!it.exists()) {
                 BitmapFactory.decodeResource(resources, R.drawable.ic_usr_big).let1 {
@@ -66,14 +82,13 @@ class AppUtil : AppBase() {
                 }
             }
         }
+        */
     }
 
-    override fun onTerminate() {
-        super.onTerminate()
-
-        // for db
+    private fun closeDB()   {
         mDBHelper.close()
     }
+
 
     companion object {
         val self: AppUtil

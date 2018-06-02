@@ -37,12 +37,10 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
      * @return 如果存在返回true, 否则返回false
      */
     fun hasUsr(usr: String): Boolean {
-        return dbHelper.queryBuilder()
-                .where()
-                .eq(UsrItem.FIELD_NAME, usr)
-                .prepare().let {
+        return dbHelper.queryBuilder().setCountOf(true)
+                .where().eq(UsrItem.FIELD_NAME, usr).prepare().let {
                     dbHelper.countOf(it)
-                } < 1
+                } > 1
     }
 
 
@@ -101,7 +99,8 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
                 .prepare()
 
         return dbHelper.query(query).let {
-            (null == it || it.isEmpty()).doJudge(null, it[0])
+            if(null == it || it.isEmpty())  null
+            else it[0]
         }
     }
 
