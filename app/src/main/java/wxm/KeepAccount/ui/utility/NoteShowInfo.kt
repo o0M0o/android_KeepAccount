@@ -3,8 +3,6 @@ package wxm.KeepAccount.ui.utility
 import java.math.BigDecimal
 import java.util.Locale
 
-import wxm.androidutil.util.UtilFun
-
 /**
  * for show data
  * Created by WangXM on 2016/10/24.

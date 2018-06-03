@@ -15,7 +15,7 @@ import wxm.androidutil.ui.activity.ACSwitcherActivity
 class ACRecordInfoEdit : ACSwitcherActivity<FrgRecordInfoEdit>() {
 
     override fun leaveActivity() {
-        giveUpEdit()
+        cancelEdit()
     }
 
     override fun setupFragment(bundle: Bundle?) {
@@ -30,7 +30,7 @@ class ACRecordInfoEdit : ACSwitcherActivity<FrgRecordInfoEdit>() {
         menuInflater.inflate(R.menu.mu_preview_edit, menu)
 
         menu.findItem(R.id.mi_switch).isVisible = false
-        menu.findItem(R.id.mi_giveup).isVisible = false
+        menu.findItem(R.id.mi_cancel).isVisible = false
         return true
     }
 
@@ -40,8 +40,8 @@ class ACRecordInfoEdit : ACSwitcherActivity<FrgRecordInfoEdit>() {
                 acceptEdit()
             }
 
-            R.id.mi_giveup -> {
-                giveUpEdit()
+            R.id.mi_cancel -> {
+                cancelEdit()
             }
 
             else -> return super.onOptionsItemSelected(item)
@@ -50,8 +50,8 @@ class ACRecordInfoEdit : ACSwitcherActivity<FrgRecordInfoEdit>() {
         return true
     }
 
-    private fun giveUpEdit()    {
-        setResult(GlobalDef.INTRET_GIVEUP, Intent())
+    private fun cancelEdit()    {
+        setResult(GlobalDef.INTRET_CANCEL, Intent())
         finish()
     }
 

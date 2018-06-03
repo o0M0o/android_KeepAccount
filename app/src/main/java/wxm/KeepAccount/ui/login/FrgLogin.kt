@@ -49,7 +49,7 @@ class FrgLogin : FrgSupportBaseAdv() {
         mBTDefUsrLogin.setOnClickListener { _ -> doLogin(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD) }
     }
 
-    override fun getLayoutID(): Int = R.layout.vw_login
+    override fun getLayoutID(): Int = R.layout.frg_login
 
     /// PRIVATE BEGIN
 

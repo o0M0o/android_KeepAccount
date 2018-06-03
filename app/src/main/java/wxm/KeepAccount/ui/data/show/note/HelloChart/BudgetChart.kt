@@ -62,7 +62,7 @@ class BudgetChart : ShowViewBase() {
     private val mColorUsed  = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_BUDGET_UESED_COLOR]!!
 
     override fun getLayoutID(): Int {
-        return R.layout.chart_budget_pager
+        return R.layout.pg_budget_chart
     }
 
     override fun isUseEventBus(): Boolean {

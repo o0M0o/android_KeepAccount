@@ -53,7 +53,7 @@ class DayReportChart : FrgSupportBaseAdv() {
     }
 
     override fun getLayoutID(): Int {
-        return R.layout.page_report_chart
+        return R.layout.pg_report_chart
     }
 
     override fun isUseEventBus(): Boolean {

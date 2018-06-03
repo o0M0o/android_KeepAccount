@@ -16,7 +16,7 @@ class TFSettingCheckVersion : TFSettingBase() {
     private val mTVVerName: TextView by bindView(R.id.tv_ver_name)
 
     override fun getLayoutID(): Int {
-        return R.layout.page_setting_version
+        return R.layout.pg_setting_version
     }
 
     override fun isUseEventBus(): Boolean {

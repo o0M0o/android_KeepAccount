@@ -12,7 +12,7 @@
         android:background="@color/beige">
 
         <ImageButton
-            android:id="@+id/bt_giveup_filter"
+            android:id="@+id/bt_cancel_filter"
             android:layout_width="64dp"
             android:layout_height="32dp"
             android:layout_alignParentEnd="true"
@@ -39,7 +39,7 @@
         android:background="@color/antiquewhite">
 
         <ImageButton
-            android:id="@+id/bt_giveup"
+            android:id="@+id/bt_cancel"
             android:layout_width="64dp"
             android:layout_height="32dp"
             android:layout_alignParentEnd="true"
@@ -54,7 +54,7 @@
             android:layout_height="32dp"
             android:layout_centerVertical="true"
             android:layout_marginEnd="8dp"
-            android:layout_toStartOf="@+id/bt_giveup"
+            android:layout_toStartOf="@+id/bt_cancel"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_accept" />
 

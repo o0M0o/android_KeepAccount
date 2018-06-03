@@ -6,6 +6,7 @@ import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.event.ChangePage
 import wxm.KeepAccount.ui.setting.*
+import wxm.KeepAccount.ui.welcome.base.PageBase
 import wxm.androidutil.ui.frg.FrgSupportSwitcher
 
 /**

@@ -45,7 +45,7 @@ class MonthlyChart : ChartBase() {
                             .filter { !mBFilter || mFilterPara.contains(it) }
                             .forEach {
                                 val tag = it
-                                NoteDataHelper.getInfoByMonth(it)?.let {
+                                NoteDataHelper.getInfoByMonth(it).let {
                                     columns.add(Column(
                                             listOf(SubcolumnValue(it.payAmount.toFloat(), mPayColor),
                                                     SubcolumnValue(it.incomeAmount.toFloat(), mIncomeColor)))

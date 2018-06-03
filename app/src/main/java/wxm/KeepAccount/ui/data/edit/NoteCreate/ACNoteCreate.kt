@@ -8,14 +8,13 @@ import android.view.MenuItem
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.androidutil.ui.activity.ACSwitcherActivity
-import wxm.androidutil.util.UtilFun
 
 /**
  * income/pay record UI
  */
 class ACNoteCreate : ACSwitcherActivity<FrgNoteCreate>() {
     override fun leaveActivity() {
-        setResult(GlobalDef.INTRET_GIVEUP, Intent())
+        setResult(GlobalDef.INTRET_CANCEL, Intent())
         finish()
     }
 

@@ -91,7 +91,7 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
     }
 
     override fun getLayoutID(): Int {
-        return R.layout.page_edit_pay
+        return R.layout.pg_edit_pay
     }
 
     override fun isUseEventBus(): Boolean {
@@ -130,7 +130,7 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
             // 填充预算数据
             val lsBudgetName = ArrayList<String>()
             lsBudgetName.add("无预算(不使用预算)")
-            AppUtil.budgetUtility.budgetForCurUsr?.forEach {
+            AppUtil.budgetUtility.budgetForCurUsr.forEach {
                 lsBudgetName.add(it.name)
             }
 

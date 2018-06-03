@@ -6,13 +6,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import wxm.KeepAccount.define.GlobalDef
 import wxm.androidutil.ui.activity.ACSwitcherActivity
-import com.theartofdev.edmodo.cropper.CropImage
-import android.R.attr.data
-import android.app.Activity
-import org.greenrobot.eventbus.EventBus
-import wxm.KeepAccount.R
-import wxm.KeepAccount.event.UsrImage
-import wxm.androidutil.ui.dialog.DlgAlert
 
 
 /**

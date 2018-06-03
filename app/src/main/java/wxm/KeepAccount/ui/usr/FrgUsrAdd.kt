@@ -50,7 +50,7 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
             mETRepeatPwd.setOnEditorActionListener(this)
 
             EventHelper.setOnClickListener(view!!,
-                    intArrayOf(R.id.bt_confirm, R.id.bt_giveup),
+                    intArrayOf(R.id.bt_confirm, R.id.bt_cancel),
                     View.OnClickListener { v ->
                         when (v.id) {
                             R.id.bt_confirm -> {
@@ -68,9 +68,9 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
                                 }
                             }
 
-                            R.id.bt_giveup -> {
+                            R.id.bt_cancel -> {
                                 activity!!.let {
-                                    it.setResult(GlobalDef.INTRET_GIVEUP, Intent())
+                                    it.setResult(GlobalDef.INTRET_CANCEL, Intent())
                                     it.finish()
                                 }
                             }

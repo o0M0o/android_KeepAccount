@@ -39,7 +39,7 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
     private val mPGChart = DayReportChart()
 
     init {
-        setupFrgID(R.layout.vw_report, R.id.fl_page_holder)
+        setupFrgID(R.layout.frg_report, R.id.fl_page_holder)
     }
 
     /**

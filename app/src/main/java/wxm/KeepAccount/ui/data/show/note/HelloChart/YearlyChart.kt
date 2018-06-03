@@ -37,7 +37,7 @@ class YearlyChart : ChartBase() {
                             .filter { !mBFilter || mFilterPara.contains(it) }
                             .forEach {
                                 val tag = it
-                                NoteDataHelper.getInfoByYear(it)?.let {
+                                NoteDataHelper.getInfoByYear(it).let {
                                     columns.add(Column(
                                             listOf(SubcolumnValue(it.payAmount.toFloat(), mPayColor),
                                                     SubcolumnValue(it.incomeAmount.toFloat(), mIncomeColor)))

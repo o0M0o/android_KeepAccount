@@ -21,7 +21,7 @@ class ACAddUsr : ACSwitcherActivity<FrgUsrAdd>() {
     }
 
     override fun leaveActivity() {
-        setResult(GlobalDef.INTRET_GIVEUP, Intent())
+        setResult(GlobalDef.INTRET_CANCEL, Intent())
         finish()
     }
 }

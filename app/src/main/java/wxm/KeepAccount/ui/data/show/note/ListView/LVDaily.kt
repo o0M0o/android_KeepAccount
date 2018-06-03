@@ -165,6 +165,7 @@ class LVDaily : LVBase() {
      * filter event
      * @param event     param
      */
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onFilterShowEvent(event: FilterShowEvent) {
         if (NoteDataHelper.TAB_TITLE_MONTHLY == event.sender) {
@@ -190,12 +191,12 @@ class LVDaily : LVBase() {
                 redrawUI()
             }
 
-            R.id.bt_giveup -> {
+            R.id.bt_cancel -> {
                 mAction = EOperation.EDIT
                 redrawUI()
             }
 
-            R.id.bt_giveup_filter -> {
+            R.id.bt_cancel_filter -> {
                 mBFilter = false
                 reloadUI()
             }
@@ -205,7 +206,7 @@ class LVDaily : LVBase() {
     override fun initUI(bundle: Bundle?) {
         super.initUI(bundle)
         EventHelper.setOnClickOperator(view!!,
-                intArrayOf(R.id.bt_accpet, R.id.bt_giveup, R.id.bt_giveup_filter),
+                intArrayOf(R.id.bt_accpet, R.id.bt_cancel, R.id.bt_cancel_filter),
                 this::onAcceptOrCancelClick)
 
         showLoadingProgress(true)

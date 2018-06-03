@@ -37,7 +37,7 @@
         <activity
             android:name=".ui.usr.ACAddUsr"
             android:configChanges="orientation|screenSize"
-            android:label="@string/label_add_usr"
+            android:label="@string/add_usr"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.help.ACHelp"

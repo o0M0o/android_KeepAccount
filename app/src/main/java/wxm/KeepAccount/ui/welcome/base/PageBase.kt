@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.welcome.page
+package wxm.KeepAccount.ui.welcome.base
 
 import android.app.Activity
 import android.content.Intent

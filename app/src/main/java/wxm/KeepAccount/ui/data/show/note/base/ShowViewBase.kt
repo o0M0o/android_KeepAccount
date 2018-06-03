@@ -1,12 +1,10 @@
 package wxm.KeepAccount.ui.data.show.note.base
 
-import android.content.Context
 import android.view.View
 import android.widget.RelativeLayout
 
 import java.util.LinkedList
 
-import butterknife.BindView
 import kotterknife.bindView
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun

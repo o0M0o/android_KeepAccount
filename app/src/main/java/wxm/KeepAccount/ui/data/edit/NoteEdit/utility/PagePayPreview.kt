@@ -30,7 +30,7 @@ class PagePayPreview : FrgSupportBaseAdv(), IPreview {
     }
 
     override fun getLayoutID(): Int {
-        return R.layout.page_preview_pay
+        return R.layout.pg_preview_pay
     }
 
     override fun setPreviewData(data: Any) {

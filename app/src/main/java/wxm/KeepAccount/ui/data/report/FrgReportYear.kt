@@ -12,7 +12,7 @@ import wxm.androidutil.ui.frg.FrgSupportSwitcher
  */
 class FrgReportYear : FrgSupportSwitcher<FrgSupportBaseAdv>() {
     init {
-        setupFrgID(R.layout.vw_report, R.id.fl_page_holder)
+        setupFrgID(R.layout.frg_report, R.id.fl_page_holder)
     }
 
     override fun setupFragment(bundle: Bundle?) {}

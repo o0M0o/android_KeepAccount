@@ -11,7 +11,6 @@ import wxm.KeepAccount.item.RemindItem
 import wxm.KeepAccount.item.UsrItem
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.androidutil.app.AppBase
-import wxm.androidutil.image.ImageUtil
 import wxm.androidutil.log.TagLog
 import java.io.File
 

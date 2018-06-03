@@ -26,7 +26,7 @@ object GlobalDef {
     const val INTRET_RECORD_MODIFY = 1001
     const val INTRET_DAILY_DETAIL = 1002
     const val INTRET_SURE = 1003
-    const val INTRET_GIVEUP = 1099
+    const val INTRET_CANCEL = 1099
 
     const val INTRET_USR_ADD = 2000
     const val INTRET_USR_LOGOUT = 2001

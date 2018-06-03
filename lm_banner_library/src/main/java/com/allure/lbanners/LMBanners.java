@@ -170,7 +170,6 @@ public class LMBanners<T> extends FrameLayout implements ViewPager.OnPageChangeL
         viewPager.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                     case MotionEvent.ACTION_MOVE:

@@ -50,7 +50,7 @@ class LVMonthly : LVBase() {
         : ViewDataHolder<String, MonthDetailItem>(tag) {
         override fun getDataByTag(tag: String): MonthDetailItem {
             return MonthDetailItem(tag).let { map ->
-                NoteDataHelper.getInfoByMonth(tag)?.let1 {
+                NoteDataHelper.getInfoByMonth(tag).let1 {
                     map.monthDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
                             it.incomeCount.toString(), it.szIncomeAmount)
 
@@ -186,7 +186,7 @@ class LVMonthly : LVBase() {
                 }
             }
 
-            R.id.bt_giveup -> {
+            R.id.bt_cancel -> {
                 mBSelectSubFilter = false
                 mLLSubFilter.clear()
 
@@ -199,7 +199,7 @@ class LVMonthly : LVBase() {
                 refreshAttachLayout()
             }
 
-            R.id.bt_giveup_filter -> {
+            R.id.bt_cancel_filter -> {
                 mBFilter = false
                 loadUI(null)
             }
@@ -209,7 +209,7 @@ class LVMonthly : LVBase() {
     override fun initUI(bundle: Bundle?) {
         super.initUI(bundle)
         EventHelper.setOnClickOperator(view!!,
-                intArrayOf(R.id.bt_accpet, R.id.bt_giveup, R.id.bt_giveup_filter),
+                intArrayOf(R.id.bt_accpet, R.id.bt_cancel, R.id.bt_cancel_filter),
                 this::onAcceptOrCancelClick)
 
         ToolUtil.runInBackground(activity!!,

@@ -53,7 +53,7 @@ class LVYearly : LVBase() {
         : ViewDataHolder<String, YearData>(tag) {
         override fun getDataByTag(tag: String): YearData {
             val map = YearData(tag)
-            NoteDataHelper.getInfoByYear(tag)?.let {
+            NoteDataHelper.getInfoByYear(tag).let {
                 map.yearDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
                         it.incomeCount.toString(), it.szIncomeAmount)
 
@@ -78,7 +78,7 @@ class LVYearly : LVBase() {
             val map = MonthData(tag.substring(0, 4), tag)
             map.month = tag.substring(5, 7).removePrefix("0")
 
-            NoteDataHelper.getInfoByMonth(tag)?.let {
+            NoteDataHelper.getInfoByMonth(tag).let {
                 map.monthDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
                         it.incomeCount.toString(), it.szIncomeAmount)
 
@@ -173,7 +173,7 @@ class LVYearly : LVBase() {
                 refreshAttachLayout()
             }
 
-            R.id.bt_giveup -> {
+            R.id.bt_cancel -> {
                 mBSelectSubFilter = false
                 mLLSubFilter.clear()
 
@@ -194,7 +194,7 @@ class LVYearly : LVBase() {
     override fun initUI(bundle: Bundle?) {
         super.initUI(bundle)
         EventHelper.setOnClickOperator(view!!,
-                intArrayOf(R.id.bt_accpet, R.id.bt_giveup),
+                intArrayOf(R.id.bt_accpet, R.id.bt_cancel),
                 this::onAcceptOrCancelClick)
 
         ToolUtil.runInBackground(activity!!,

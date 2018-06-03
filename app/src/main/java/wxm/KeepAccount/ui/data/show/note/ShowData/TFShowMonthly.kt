@@ -14,7 +14,7 @@ import wxm.androidutil.ui.frg.FrgSupportSwitcher
  */
 class TFShowMonthly : FrgSupportSwitcher<FrgSupportBaseAdv>() {
     init {
-        setupFrgID(R.layout.tf_show_base, R.id.fl_holder)
+        setupFrgID(R.layout.vw_show_base, R.id.fl_holder)
     }
 
     override fun setupFragment(bundle: Bundle?) {

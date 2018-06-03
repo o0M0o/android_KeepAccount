@@ -3,7 +3,6 @@ package wxm.KeepAccount.ui.data.show.note.ListView
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.View

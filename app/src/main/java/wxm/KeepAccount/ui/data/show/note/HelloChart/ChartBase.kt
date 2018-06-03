@@ -42,7 +42,7 @@ abstract class ChartBase : ShowViewBase() {
     }
 
     override fun getLayoutID(): Int {
-        return R.layout.chart_pager
+        return R.layout.pg_note_chart
     }
 
     override fun initUI(bundle: Bundle?) {
@@ -127,7 +127,7 @@ abstract class ChartBase : ShowViewBase() {
             }
 
             EventHelper.setOnClickOperator(view!!,
-                    intArrayOf(R.id.bt_less_viewport, R.id.bt_more_viewport, R.id.bt_giveup_filter),
+                    intArrayOf(R.id.bt_less_viewport, R.id.bt_more_viewport, R.id.bt_cancel_filter),
                     this::onLessOrMoreView)
         }
 
@@ -182,7 +182,7 @@ abstract class ChartBase : ShowViewBase() {
                 mPrvVPWidth = Math.max(mPrvVPWidth - mPrvVPOneDataWidth / 2, mPrvVPOneDataWidth)
             }
 
-            R.id.bt_giveup_filter -> {
+            R.id.bt_cancel_filter -> {
                 mBFilter = false
                 refreshData()
             }

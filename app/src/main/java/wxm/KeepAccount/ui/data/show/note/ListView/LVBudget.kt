@@ -143,7 +143,7 @@ class LVBudget : LVBase() {
     override fun initUI(bundle: Bundle?) {
         super.initUI(bundle)
         EventHelper.setOnClickOperator(view!!,
-                intArrayOf(R.id.bt_accpet, R.id.bt_giveup),
+                intArrayOf(R.id.bt_accpet, R.id.bt_cancel),
                 {
                     when (it.id) {
                         R.id.bt_accpet -> {
@@ -158,7 +158,7 @@ class LVBudget : LVBase() {
                             loadUI(null)
                         }
 
-                        R.id.bt_giveup -> {
+                        R.id.bt_cancel -> {
                             mActionType = EOperation.EDIT
                             loadUI(null)
                         }

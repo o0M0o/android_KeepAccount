@@ -3,9 +3,10 @@ package wxm.KeepAccount.ui.welcome
 import android.os.Bundle
 import android.view.View
 import wxm.KeepAccount.R
-import wxm.KeepAccount.ui.welcome.page.PageBase
+import wxm.KeepAccount.ui.welcome.base.PageBase
 import wxm.KeepAccount.ui.welcome.page.PageMain
 import wxm.KeepAccount.ui.welcome.page.PageSetting
+import wxm.KeepAccount.ui.welcome.page.PageStat
 import wxm.KeepAccount.ui.welcome.page.PageUsr
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.ui.frg.FrgSupportSwitcher
@@ -20,6 +21,7 @@ class FrgWelcome : FrgSupportSwitcher<FrgSupportBaseAdv>() {
     // for page
     private val mPageMain = PageMain()
     private val mPageSetting = PageSetting()
+    private val mPageStat = PageStat()
     private val mPageUsr = PageUsr()
 
     init {
@@ -29,6 +31,7 @@ class FrgWelcome : FrgSupportSwitcher<FrgSupportBaseAdv>() {
     override fun setupFragment(savedInstanceState: Bundle?) {
         addChildFrg(mPageMain)
         addChildFrg(mPageSetting)
+        addChildFrg(mPageStat)
         addChildFrg(mPageUsr)
     }
 
@@ -71,6 +74,7 @@ class FrgWelcome : FrgSupportSwitcher<FrgSupportBaseAdv>() {
 
                 R.id.ib_stats -> {
                     setHot(R.id.ib_stats)
+                    switchToPage(mPageStat)
                 }
 
                 R.id.ib_usr -> {

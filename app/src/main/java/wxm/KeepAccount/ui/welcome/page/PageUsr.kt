@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.theartofdev.edmodo.cropper.CropImage
 import kotterknife.bindView
 import wxm.KeepAccount.R
+import wxm.KeepAccount.ui.welcome.base.PageBase
 import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.let1
 import wxm.KeepAccount.utility.saveImage
@@ -34,7 +35,7 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
     private val mCLInputPwd: ConstraintLayout by bindView(R.id.cl_input_pwd)
     private val mCLChangePwd: ConstraintLayout by bindView(R.id.cl_change_pwd)
 
-    override fun getLayoutID(): Int = R.layout.page_usr
+    override fun getLayoutID(): Int = R.layout.pg_usr
     //override fun isUseEventBus(): Boolean = true
     override fun leavePage(): Boolean = true
 

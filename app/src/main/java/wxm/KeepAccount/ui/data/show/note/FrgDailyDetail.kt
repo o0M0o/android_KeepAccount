@@ -84,7 +84,7 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
     }
 
     override fun getLayoutID(): Int {
-        return R.layout.vw_daily_detail
+        return R.layout.frg_daily_detail
     }
 
     override fun isUseEventBus(): Boolean {

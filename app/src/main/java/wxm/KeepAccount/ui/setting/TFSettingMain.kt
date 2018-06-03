@@ -21,7 +21,7 @@ class TFSettingMain : TFSettingBase() {
     private val mRLRemind: RelativeLayout by bindView(R.id.rl_remind)
     private val mRLShareApp: RelativeLayout by bindView(R.id.rl_share_app)
 
-    override fun getLayoutID(): Int = R.layout.page_setting_main
+    override fun getLayoutID(): Int = R.layout.pg_setting_main
 
     override fun initUI(bundle: Bundle?) {
         if (null == bundle) {

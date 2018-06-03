@@ -101,7 +101,7 @@ class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
     }
 
     override fun getLayoutID(): Int {
-        return R.layout.page_edit_income
+        return R.layout.pg_edit_income
     }
 
     override fun isUseEventBus(): Boolean {

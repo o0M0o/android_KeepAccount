@@ -9,7 +9,7 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/mi_giveup"
+        android:id="@+id/mi_cancel"
         android:orderInCategory="901"
         android:title="@string/cn_cancel"
         app:showAsAction="ifRoom" />

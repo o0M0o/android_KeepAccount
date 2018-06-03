@@ -18,6 +18,7 @@ import wxm.KeepAccount.ui.data.show.note.ACNoteShow
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.ui.welcome.banner.BannerAp
 import wxm.KeepAccount.ui.welcome.banner.BannerPara
+import wxm.KeepAccount.ui.welcome.base.PageBase
 import wxm.KeepAccount.utility.DGVButtonAdapter
 import wxm.KeepAccount.utility.PreferencesUtil
 import wxm.androidutil.time.CalendarUtility
@@ -51,7 +52,7 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
         mLBanners.setAdapter(BannerAp(activity!!, null), mALFrgPara)
     }
 
-    override fun getLayoutID(): Int = R.layout.page_main_page
+    override fun getLayoutID(): Int = R.layout.pg_main_page
     override fun isUseEventBus(): Boolean = true
 
     override fun leavePage(): Boolean {

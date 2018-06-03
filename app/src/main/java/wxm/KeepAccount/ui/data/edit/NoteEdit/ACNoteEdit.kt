@@ -18,7 +18,7 @@ class ACNoteEdit : ACSwitcherActivity<FrgEditBase>() {
     private lateinit var mMISave: MenuItem
 
     override fun leaveActivity() {
-        setResult(GlobalDef.INTRET_GIVEUP, Intent())
+        setResult(GlobalDef.INTRET_CANCEL, Intent())
         finish()
     }
 
