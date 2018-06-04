@@ -2,10 +2,6 @@ package wxm.KeepAccount.ui.welcome.page
 
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
 import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.welcome.base.PageBase
@@ -13,13 +9,10 @@ import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 
 import com.flyco.tablayout.SegmentTabLayout
 import com.flyco.tablayout.listener.OnTabSelectListener
-import wxm.KeepAccount.ui.base.noScrollViewPager.NoScrollViewPager
 import wxm.KeepAccount.ui.welcome.page.stat.DayStat
 import wxm.KeepAccount.ui.welcome.page.stat.MonthStat
 import wxm.KeepAccount.ui.welcome.page.stat.YearStat
-import wxm.androidutil.log.TagLog
 import wxm.androidutil.ui.frg.FrgSupportSwitcher
-import java.util.ArrayList
 
 /**
  * for welcome
