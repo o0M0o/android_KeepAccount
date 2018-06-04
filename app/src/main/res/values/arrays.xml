@@ -23,11 +23,4 @@
         <item>月</item>
         <item>年</item>
     </string-array>
-
-    <string-array name="page_flow">
-        <item>日</item>
-        <item>月</item>
-        <item>年</item>
-        <item>预算</item>
-    </string-array>
 </resources>

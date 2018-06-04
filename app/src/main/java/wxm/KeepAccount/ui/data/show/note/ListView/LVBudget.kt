@@ -14,7 +14,7 @@ import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
-import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent
+import wxm.KeepAccount.event.FilterShowEvent
 import wxm.KeepAccount.ui.data.show.note.base.EOperation
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.utility.*

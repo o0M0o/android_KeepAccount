@@ -1,22 +1,11 @@
 package wxm.KeepAccount.ui.welcome.page.stat
 
-
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import kotterknife.bindView
-import wxm.KeepAccount.R
-import wxm.KeepAccount.ui.welcome.base.PageBase
-import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 
-import com.flyco.tablayout.SegmentTabLayout
 import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.util.ChartUtils
-import wxm.KeepAccount.ui.data.show.note.HelloChart.ChartBase
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.log.TagLog
 import java.util.ArrayList
 
 /**
@@ -25,7 +14,6 @@ import java.util.ArrayList
  */
 class MonthStat : StatBase() {
     override fun loadUI(savedInstanceState: Bundle?) {
-        TagLog.i("here")
         ToolUtil.runInBackground(this.activity!!,
                 {
                     var idCol = 0
@@ -36,8 +24,8 @@ class MonthStat : StatBase() {
                                 val tag = it
                                 NoteDataHelper.getInfoByMonth(it).let {
                                     columns.add(Column(
-                                            listOf(SubcolumnValue(it.payAmount.toFloat(), ChartBase.mPayColor),
-                                                    SubcolumnValue(it.incomeAmount.toFloat(), ChartBase.mIncomeColor)))
+                                            listOf(SubcolumnValue(it.payAmount.toFloat(), StatBase.mPayColor),
+                                                    SubcolumnValue(it.incomeAmount.toFloat(), StatBase.mIncomeColor)))
                                             .setHasLabels(true))
                                     axisValues.add(AxisValue(idCol.toFloat()).setLabel(tag))
                                     idCol++
@@ -61,7 +49,6 @@ class MonthStat : StatBase() {
                     }
                 },
                 {
-                    TagLog.i("finish")
                     loadUIUtility() })
     }
 }

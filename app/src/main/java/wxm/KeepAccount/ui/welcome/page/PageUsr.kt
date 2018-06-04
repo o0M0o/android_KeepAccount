@@ -7,17 +7,22 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.theartofdev.edmodo.cropper.CropImage
 import kotterknife.bindView
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.UsrDBUtility
+import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.welcome.base.PageBase
 import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.let1
 import wxm.KeepAccount.utility.saveImage
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
+import wxm.androidutil.util.doJudge
 import wxm.uilib.IconButton.IconButton
 import java.io.File
 
@@ -30,10 +35,14 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
     private val mIVUsr: ImageView by bindView(R.id.iv_usr)
     private val mTVUsrName: TextView by bindView(R.id.tv_usr_name)
     private val mIBLogout: IconButton by bindView(R.id.ib_logout)
+    private val mIBAccept: ImageButton by bindView(R.id.ib_accept)
 
     private val mIBChangePwd: IconButton by bindView(R.id.ib_change_pwd)
     private val mCLInputPwd: ConstraintLayout by bindView(R.id.cl_input_pwd)
     private val mCLChangePwd: ConstraintLayout by bindView(R.id.cl_change_pwd)
+
+    private val mTENewPwd: TouchEditText by bindView(R.id.te_new_pwd)
+    private val mTERepeatNewPwd: TouchEditText by bindView(R.id.te_repeat_new_pwd)
 
     override fun getLayoutID(): Int = R.layout.pg_usr
     //override fun isUseEventBus(): Boolean = true
@@ -46,6 +55,7 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
         mIBChangePwd.setColdOrHot(false)
         mCLInputPwd.visibility = View.GONE
         mIBChangePwd.setOnClickListener(::onClick)
+        mIBAccept.setOnClickListener(::onClick)
 
         view!!.setOnClickListener(::onClick)
 
@@ -57,8 +67,12 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
     }
 
     override fun loadUI(savedInstanceState: Bundle?) {
-        mIBChangePwd.setColdOrHot(false)
-        mCLInputPwd.visibility = View.GONE
+        if(AppUtil.curUsr!!.name != GlobalDef.DEF_USR_NAME) {
+            mIBChangePwd.setColdOrHot(false)
+            mCLInputPwd.visibility = View.GONE
+        } else  {
+            mCLChangePwd.visibility = View.GONE
+        }
         loadUsrInfo()
     }
 
@@ -85,13 +99,7 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
         when (vw.id) {
             R.id.ib_logout -> doLogout(activity!!)
             R.id.ib_change_pwd -> {
-                if (mIBChangePwd.isHot) {
-                    mCLInputPwd.visibility = View.GONE
-                    mIBChangePwd.setColdOrHot(false)
-                } else {
-                    mCLInputPwd.visibility = View.VISIBLE
-                    mIBChangePwd.setColdOrHot(true)
-                }
+                showChangePwd(!mIBChangePwd.isHot)
             }
 
             R.id.iv_usr -> {
@@ -99,6 +107,17 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
                         .setAspectRatio(1, 1)
                         .setFixAspectRatio(true)
                         .start(context!!, this)
+            }
+
+            R.id.ib_accept -> {
+                if(checkPwd())  {
+                    AppUtil.usrUtility.changePwd(AppUtil.curUsr!!, mTENewPwd.text.toString())
+                            .doJudge(
+                                    {DlgAlert.showAlert(context!!, R.string.dlg_info, R.string.info_change_pwd_success)},
+                                    {DlgAlert.showAlert(context!!, R.string.dlg_warn, R.string.info_change_pwd_success)})
+
+                    showChangePwd(false)
+                }
             }
 
             else -> {
@@ -111,11 +130,48 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
         }
     }
 
+    private fun showChangePwd(show:Boolean) {
+        mCLInputPwd.visibility = show.doJudge(View.VISIBLE, View.GONE)
+        mIBAccept.visibility = show.doJudge(View.VISIBLE, View.GONE)
+        mIBChangePwd.setColdOrHot(show)
+    }
+
     private fun loadUsrInfo()   {
         AppUtil.curUsr?.let1 {
             mIVUsr.setImageURI(Uri.fromFile(File(it.iconPath)))
             mTVUsrName.text = it.name
         }
+    }
+
+
+    private fun checkPwd(): Boolean {
+        val checkEmpty = {te:TouchEditText ->
+            if(te.text.isEmpty()) {
+                te.error = getString(R.string.error_field_required)
+                te.requestFocus()
+
+                true
+            } else  false
+        }
+
+        if(checkEmpty(mTENewPwd) || checkEmpty(mTERepeatNewPwd))
+            return false
+
+        if(mTENewPwd.text.toString() != mTERepeatNewPwd.text.toString())    {
+            mTERepeatNewPwd.error = getString(R.string.error_pwd_not_match)
+            mTERepeatNewPwd.requestFocus()
+
+            return false
+        }
+
+        when(AppUtil.usrUtility.pwdValidity(mTENewPwd.text.toString())) {
+            UsrDBUtility.RET_PWD_TO_SHORT -> {
+                DlgAlert.showAlert(context!!, R.string.dlg_erro, R.string.error_password_to_short)
+                return false
+            }
+        }
+
+        return true
     }
 
 

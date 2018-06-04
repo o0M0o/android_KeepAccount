@@ -12,7 +12,7 @@
     <dimen name="rl_amount_info_width">140dp</dimen>
 
     <!-- for chart -->
-    <dimen name="item_big_text_size">20sp</dimen>
+    <dimen name="item_big_text_size">18sp</dimen>
 
     <!-- for chart -->
     <dimen name="pie_chart_text_size">42sp</dimen>

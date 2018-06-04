@@ -11,7 +11,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
-import wxm.KeepAccount.ui.data.show.note.ShowData.FilterShowEvent
+import wxm.KeepAccount.event.FilterShowEvent
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper

@@ -5,7 +5,6 @@ import android.os.Bundle
 
 import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.util.ChartUtils
-import wxm.KeepAccount.ui.data.show.note.HelloChart.ChartBase
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.log.TagLog
@@ -17,7 +16,6 @@ import java.util.ArrayList
  */
 class YearStat : StatBase() {
     override fun loadUI(savedInstanceState: Bundle?) {
-        TagLog.i("here")
         ToolUtil.runInBackground(this.activity!!,
                 {
                     var idCol = 0
@@ -28,8 +26,8 @@ class YearStat : StatBase() {
                                 val tag = it
                                 NoteDataHelper.getInfoByYear(it).let {
                                     columns.add(Column(
-                                            listOf(SubcolumnValue(it.payAmount.toFloat(), ChartBase.mPayColor),
-                                                    SubcolumnValue(it.incomeAmount.toFloat(), ChartBase.mIncomeColor)))
+                                            listOf(SubcolumnValue(it.payAmount.toFloat(), StatBase.mPayColor),
+                                                    SubcolumnValue(it.incomeAmount.toFloat(), StatBase.mIncomeColor)))
                                             .setHasLabels(true))
                                     axisValues.add(AxisValue(idCol.toFloat()).setLabel(tag))
                                     idCol++
@@ -53,7 +51,6 @@ class YearStat : StatBase() {
                     }
                 },
                 {
-                    TagLog.i("finish")
                     loadUIUtility() })
     }
 }

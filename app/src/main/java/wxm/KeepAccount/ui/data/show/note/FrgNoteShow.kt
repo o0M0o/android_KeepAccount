@@ -2,9 +2,6 @@ package wxm.KeepAccount.ui.data.show.note
 
 
 import android.os.Bundle
-import android.view.View
-import android.widget.RelativeLayout
-import android.widget.TextView
 import com.flyco.tablayout.SegmentTabLayout
 import com.flyco.tablayout.listener.OnTabSelectListener
 import kotterknife.bindView
@@ -12,14 +9,11 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.DBDataChangeEvent
-import wxm.KeepAccount.ui.base.Helper.ResourceHelper
-import wxm.KeepAccount.ui.base.Switcher.PageSwitcher
-import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowBudget
-import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowDaily
-import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowMonthly
-import wxm.KeepAccount.ui.data.show.note.ShowData.TFShowYearly
+import wxm.KeepAccount.ui.data.show.note.ListView.LVBudget
+import wxm.KeepAccount.ui.data.show.note.ListView.LVDaily
+import wxm.KeepAccount.ui.data.show.note.ListView.LVMonthly
+import wxm.KeepAccount.ui.data.show.note.ListView.LVYearly
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.ui.welcome.page.PageStat
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.ui.frg.FrgSupportSwitcher
@@ -32,21 +26,16 @@ import wxm.androidutil.ui.frg.FrgSupportSwitcher
 class FrgNoteShow : FrgSupportSwitcher<FrgSupportBaseAdv>() {
     private val mTLTab: SegmentTabLayout  by bindView(R.id.tl_stat)
 
-    private val mTFDaily = TFShowDaily()
-    private val mTFMonthly = TFShowMonthly()
-    private val mTFYearly = TFShowYearly()
-    private val mTFBudget = TFShowBudget()
+    private val mTabTitles = arrayOf(
+            NoteDataHelper.TAB_TITLE_DAILY, NoteDataHelper.TAB_TITLE_MONTHLY,
+            NoteDataHelper.TAB_TITLE_YEARLY, NoteDataHelper.TAB_TITLE_BUDGET)
 
-    private val changeFlag = Array(POS_BUDGET + 1, {false})
+    private val mTFDaily = LVDaily()
+    private val mTFMonthly = LVMonthly()
+    private val mTFYearly = LVYearly()
+    private val mTFBudget = LVBudget()
 
-    /**
-     * get hot tab item
-     * @return      hot tab item
-     */
-    val hotTabItem: FrgSupportSwitcher<*>?
-        get() {
-            return hotPage as FrgSupportSwitcher<*>
-        }
+    private val changeFlag = Array(POS_BUDGET + 1, { false })
 
     init {
         setupFrgID(R.layout.frg_note_show, R.id.fl_page_holder)
@@ -61,8 +50,10 @@ class FrgNoteShow : FrgSupportSwitcher<FrgSupportBaseAdv>() {
     @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDBChangeEvent(event: DBDataChangeEvent) {
+        hotPage.reInitUI()
+
         changeFlag.fill(true)
-        hotTabItem!!.reInitUI()
+        changeFlag[getPagePos(hotPage)] = false
     }
 
     override fun setupFragment(bundle: Bundle?) {
@@ -71,14 +62,14 @@ class FrgNoteShow : FrgSupportSwitcher<FrgSupportBaseAdv>() {
         addChildFrg(mTFYearly)
         addChildFrg(mTFBudget)
 
-        mTLTab.setTabData(resources.getStringArray(R.array.page_flow))
+        mTLTab.setTabData(mTabTitles)
         mTLTab.setOnTabSelectListener(object : OnTabSelectListener {
             override fun onTabSelect(position: Int) {
-                when(position)    {
-                    POS_DAY_FLOW -> showPage(mTFDaily, position)
-                    POS_MONTH_FLOW -> showPage(mTFMonthly, position)
-                    POS_YEAR_FLOW -> showPage(mTFYearly, position)
-                    POS_BUDGET -> showPage(mTFBudget, position)
+                when (position) {
+                    POS_DAY_FLOW -> showPage(mTFDaily)
+                    POS_MONTH_FLOW -> showPage(mTFMonthly)
+                    POS_YEAR_FLOW -> showPage(mTFYearly)
+                    POS_BUDGET -> showPage(mTFBudget)
                 }
             }
 
@@ -94,33 +85,40 @@ class FrgNoteShow : FrgSupportSwitcher<FrgSupportBaseAdv>() {
         }
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun disableViewPageTouch(bFlag: Boolean) {
-        //getHotTabItem().requestDisallowInterceptTouchEvent(bFlag);
-    }
-
     /**
      * jump to tab page use name
      * @param tabName       name for target page
      */
     fun jumpByTabName(tabName: String): Boolean {
-        return resources.getStringArray(R.array.page_flow).indexOf(tabName).let {
-            if(-1 == it) {false }
-            else    {
+        return mTabTitles.indexOf(tabName).let {
+            if (-1 == it) {
+                false
+            } else {
                 mTLTab.currentTab = it
                 true
             }
         }
     }
 
-    private fun showPage(pg:FrgSupportSwitcher<*>, pos:Int)    {
+    private fun showPage(pg: FrgSupportBaseAdv) {
         switchToPage(pg)
-        if(changeFlag[pos]) {
+
+        val pos = getPagePos(pg)
+        if (-1 != pos && changeFlag[pos]) {
             pg.reInitUI()
             changeFlag[pos] = false
         }
     }
 
+    private fun getPagePos(pg: FrgSupportBaseAdv): Int {
+        return when (pg) {
+            is LVDaily -> POS_DAY_FLOW
+            is LVMonthly -> POS_MONTH_FLOW
+            is LVYearly -> POS_YEAR_FLOW
+            is LVBudget -> POS_BUDGET
+            else -> -1
+        }
+    }
 
     /// PRIVATE BEGIN
     companion object {

@@ -54,10 +54,10 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
         if (usr.isEmpty() || pwd.isEmpty())
             return null
 
-        if(hasUsr(usr))
+        if (hasUsr(usr))
             return null
 
-        return UsrItem().apply{
+        return UsrItem().apply {
             this.name = usr
             this.pwd = getMd5Pwd(pwd)
         }.let {
@@ -99,7 +99,7 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
                 .prepare()
 
         return dbHelper.query(query).let {
-            if(null == it || it.isEmpty())  null
+            if (null == it || it.isEmpty()) null
             else it[0]
         }
     }
@@ -112,7 +112,7 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
      */
     fun loginByUsr(usr: String, pwd: String): Boolean {
         return checkGetUsr(usr, pwd).forObj(
-                {loginByUsr(it, true)}, {false})
+                { loginByUsr(it, true) }, { false })
     }
 
     /**
@@ -132,7 +132,7 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
      *
      * return true if everything ok
      */
-    fun changeIcon(usr:UsrItem, fn:String):Boolean  {
+    fun changeIcon(usr: UsrItem, fn: String): Boolean {
         return dbHelper.updateBuilder().let {
             it.updateColumnValue(UsrItem.FIELD_ICON_PATH, fn)
             it.where().eq(UsrItem.FIELD_ID, usr.id)
@@ -142,7 +142,33 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
                     usr.iconPath = AppUtil.usrUtility.getData(usr.id)!!.iconPath
                     true
                 },
-                {false}
+                { false }
+        )
+    }
+
+    /**
+     * return true if [pwd] can use as pwd
+     */
+    fun pwdValidity(pwd: String): Int {
+        return (pwd.length > 4).doJudge(RET_OK, RET_PWD_TO_SHORT)
+    }
+
+    fun changePwd(usr: UsrItem, pwd: String): Boolean {
+        if (RET_OK != pwdValidity(pwd)) {
+            return false
+        }
+
+        return dbHelper.updateBuilder().let {
+            it.updateColumnValue(UsrItem.FIELD_PWD, getMd5Pwd(pwd))
+                    .where().eq(UsrItem.FIELD_ID, usr.id)
+
+            it.update() == 1
+        }.doJudge(
+                {
+                    usr.pwd = AppUtil.usrUtility.getData(usr.id)!!.pwd
+                    true
+                },
+                { false }
         )
     }
 
@@ -156,5 +182,10 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
         ).let {
             MD5Util.string2MD5(it)
         }
+    }
+
+    companion object {
+        const val RET_OK = 0
+        const val RET_PWD_TO_SHORT = 1
     }
 }

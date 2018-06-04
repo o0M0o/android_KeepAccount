@@ -13,7 +13,6 @@ import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import com.flyco.tablayout.SegmentTabLayout
 import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.util.ChartUtils
-import wxm.KeepAccount.ui.data.show.note.HelloChart.ChartBase
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.log.TagLog
@@ -25,7 +24,6 @@ import java.util.ArrayList
  */
 class DayStat : StatBase() {
     override fun loadUI(savedInstanceState: Bundle?) {
-        TagLog.i("here")
         ToolUtil.runInBackground(this.activity!!,
                 {
                     var idCol = 0
@@ -36,8 +34,8 @@ class DayStat : StatBase() {
                                 val tag = it
                                 NoteDataHelper.getInfoByDay(it)?.let {
                                     columns.add(Column(
-                                            listOf(SubcolumnValue(it.payAmount.toFloat(), ChartBase.mPayColor),
-                                                    SubcolumnValue(it.incomeAmount.toFloat(), ChartBase.mIncomeColor)))
+                                            listOf(SubcolumnValue(it.payAmount.toFloat(), StatBase.mPayColor),
+                                                    SubcolumnValue(it.incomeAmount.toFloat(), StatBase.mIncomeColor)))
                                             .setHasLabels(true))
                                     axisValues.add(AxisValue(idCol.toFloat()).apply {
                                         setLabel(if (0 == idCol % 3) tag  else   "")
@@ -66,7 +64,6 @@ class DayStat : StatBase() {
                     }
                 },
                 {
-                    TagLog.i("finish")
                     loadUIUtility() })
     }
 }

@@ -36,7 +36,12 @@ this file include show strings in app
     <!-- error -->
     <string name="error_pwd_not_match">两次输入密码不一样</string>
     <string name="error_no_usr_name">请输入用户名</string>
+    <string name="error_password_to_short">密码太短，最少四位密码</string>
     <string name="error_invalid_password">密码太短</string>
     <string name="error_incorrect_password">密码不正确或用户名不存在</string>
     <string name="error_field_required">需此项信息</string>
+
+    <!-- result -->
+    <string name="info_change_pwd_success">修改密码成功</string>
+    <string name="info_change_pwd_failure">修改密码失败</string>
 </resources>
