@@ -28,7 +28,7 @@ class GlobalMsgHandler : Handler() {
 
                 val data = UtilFun.cast<Intent>(arr[0])
                 val h = UtilFun.cast<Handler>(arr[1])
-                val usr = data.getStringExtra(UsrItem.FIELD_PWD)
+                val usr = data.getStringExtra(UsrItem.FIELD_NAME)
                 val pwd = data.getStringExtra(UsrItem.FIELD_PWD)
 
                 if (AppUtil.usrUtility.hasUsr(usr)) {
