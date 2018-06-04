@@ -18,64 +18,47 @@ import wxm.KeepAccount.ui.welcome.page.stat.DayStat
 import wxm.KeepAccount.ui.welcome.page.stat.MonthStat
 import wxm.KeepAccount.ui.welcome.page.stat.YearStat
 import wxm.androidutil.log.TagLog
+import wxm.androidutil.ui.frg.FrgSupportSwitcher
 import java.util.ArrayList
 
 /**
  * for welcome
  * Created by WangXM on 2016/12/7.
  */
-class PageStat : FrgSupportBaseAdv(), PageBase {
+class PageStat : FrgSupportSwitcher<FrgSupportBaseAdv>(),  PageBase {
     private val mTLTab:SegmentTabLayout  by bindView(R.id.tl_stat)
-    private val mVPPage:NoScrollViewPager by bindView(R.id.vp_stat)
 
-    private lateinit var mASTitle:Array<String>
-    private val mFragments = ArrayList<FrgSupportBaseAdv>()
+    private val mPGDay = DayStat()
+    private val mPGMonth = MonthStat()
+    private val mPGYear = YearStat()
 
-    override fun getLayoutID(): Int = R.layout.pg_stat
+    init {
+        setupFrgID(R.layout.pg_frg_stat, R.id.fl_page_holder)
+    }
     override fun leavePage(): Boolean = true
 
-    override fun initUI(savedInstanceState: Bundle?) {
-        mASTitle = resources.getStringArray(R.array.page_stat)
+    override fun setupFragment(savedInstanceState: Bundle?) {
+        addChildFrg(mPGDay)
+        addChildFrg(mPGMonth)
+        addChildFrg(mPGYear)
 
-        mFragments.apply {
-            clear()
-            add(DayStat())
-            add(MonthStat())
-            add(YearStat())
-        }
-
-        mTLTab.setTabData(mASTitle)
-        mVPPage.adapter = PageAdapter(activity!!.supportFragmentManager, mASTitle, mFragments)
+        mTLTab.setTabData(resources.getStringArray(R.array.page_stat))
         mTLTab.setOnTabSelectListener(object : OnTabSelectListener {
             override fun onTabSelect(position: Int) {
-                mVPPage.currentItem = position
+                when(position)    {
+                    POS_DAY -> switchToPage(mPGDay)
+                    POS_MONTH -> switchToPage(mPGMonth)
+                    POS_YEAR -> switchToPage(mPGYear)
+                }
             }
 
             override fun onTabReselect(position: Int) {}
         })
-
-        mVPPage.addOnPageChangeListener(object:ViewPager.OnPageChangeListener{
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-
-            override fun onPageSelected(position: Int) {
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                //TagLog.i("pos=$position, posOffset=$positionOffset, posOffsetPixel=$positionOffsetPixels")
-                if(0 == positionOffsetPixels)   {
-                    mFragments[position].reloadUI()
-                }
-            }
-        })
     }
 
-
-    class PageAdapter(fm: FragmentManager,
-                      private val mTitle:Array<String>,
-                      private val mFragment:ArrayList<FrgSupportBaseAdv>): FragmentPagerAdapter(fm) {
-        override fun getCount(): Int = mFragment.size
-        override fun getPageTitle(position: Int): CharSequence = mTitle[position]
-        override fun getItem(position: Int): FrgSupportBaseAdv = mFragment[position]
+    companion object {
+        private const val POS_DAY = 0
+        private const val POS_MONTH = 1
+        private const val POS_YEAR = 2
     }
 }
