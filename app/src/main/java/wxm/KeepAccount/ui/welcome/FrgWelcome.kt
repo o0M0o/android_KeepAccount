@@ -25,7 +25,7 @@ class FrgWelcome : FrgSupportSwitcher<FrgSupportBaseAdv>() {
     private val mPageUsr = PageUsr()
 
     init {
-        setupFrgID(R.layout.vw_welcome, R.id.fl_page)
+        setupFrgID(R.layout.frg_welcome, R.id.fl_page)
     }
 
     override fun setupFragment(savedInstanceState: Bundle?) {

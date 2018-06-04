@@ -40,7 +40,7 @@ class FrgUsrAdd : FrgSupportBaseAdv(), TextView.OnEditorActionListener {
     private var mMHHandler: LocalMsgHandler = LocalMsgHandler(this)
 
     override fun getLayoutID(): Int {
-        return R.layout.vw_usr_add
+        return R.layout.frg_usr_add
     }
 
     override fun initUI(bundle: Bundle?) {

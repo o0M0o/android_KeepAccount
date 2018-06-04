@@ -13,9 +13,11 @@ import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 
 import com.flyco.tablayout.SegmentTabLayout
 import com.flyco.tablayout.listener.OnTabSelectListener
+import wxm.KeepAccount.ui.base.noScrollViewPager.NoScrollViewPager
 import wxm.KeepAccount.ui.welcome.page.stat.DayStat
 import wxm.KeepAccount.ui.welcome.page.stat.MonthStat
 import wxm.KeepAccount.ui.welcome.page.stat.YearStat
+import wxm.androidutil.log.TagLog
 import java.util.ArrayList
 
 /**
@@ -24,10 +26,10 @@ import java.util.ArrayList
  */
 class PageStat : FrgSupportBaseAdv(), PageBase {
     private val mTLTab:SegmentTabLayout  by bindView(R.id.tl_stat)
-    private val mVPPage:ViewPager  by bindView(R.id.vp_stat)
+    private val mVPPage:NoScrollViewPager by bindView(R.id.vp_stat)
 
     private lateinit var mASTitle:Array<String>
-    private val mFragments = ArrayList<Fragment>()
+    private val mFragments = ArrayList<FrgSupportBaseAdv>()
 
     override fun getLayoutID(): Int = R.layout.pg_stat
     override fun leavePage(): Boolean = true
@@ -52,17 +54,18 @@ class PageStat : FrgSupportBaseAdv(), PageBase {
             override fun onTabReselect(position: Int) {}
         })
 
-        mVPPage.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
+        mVPPage.addOnPageChangeListener(object:ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
             }
 
             override fun onPageSelected(position: Int) {
-                mTLTab.currentTab = position
             }
 
-            override fun onPageScrollStateChanged(state: Int) {
-
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                //TagLog.i("pos=$position, posOffset=$positionOffset, posOffsetPixel=$positionOffsetPixels")
+                if(0 == positionOffsetPixels)   {
+                    mFragments[position].reloadUI()
+                }
             }
         })
     }
@@ -70,9 +73,9 @@ class PageStat : FrgSupportBaseAdv(), PageBase {
 
     class PageAdapter(fm: FragmentManager,
                       private val mTitle:Array<String>,
-                      private val mFragment:ArrayList<Fragment>): FragmentPagerAdapter(fm) {
+                      private val mFragment:ArrayList<FrgSupportBaseAdv>): FragmentPagerAdapter(fm) {
         override fun getCount(): Int = mFragment.size
         override fun getPageTitle(position: Int): CharSequence = mTitle[position]
-        override fun getItem(position: Int): Fragment = mFragment[position]
+        override fun getItem(position: Int): FrgSupportBaseAdv = mFragment[position]
     }
 }

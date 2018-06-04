@@ -22,7 +22,7 @@
         tl:tl_indicator_margin_top="2dp"
         tl:tl_textBold="SELECT" />
 
-    <android.support.v4.view.ViewPager
+    <wxm.KeepAccount.ui.base.noScrollViewPager.NoScrollViewPager
         android:id="@+id/vp_stat"
         app:layout_constraintTop_toBottomOf="@id/tl_stat"
         app:layout_constraintBottom_toBottomOf="parent"
