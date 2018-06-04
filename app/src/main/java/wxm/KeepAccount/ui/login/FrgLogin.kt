@@ -9,21 +9,24 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-
+import android.widget.*
 import kotterknife.bindView
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.LoginHistoryUtility
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.event.DoLogin
 import wxm.KeepAccount.ui.usr.ACAddUsr
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.ui.welcome.ACWelcome
 import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
+import wxm.KeepAccount.utility.let1
+import wxm.androidutil.log.TagLog
+import wxm.androidutil.time.toTimestamp
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -39,6 +42,20 @@ class FrgLogin : FrgSupportBaseAdv() {
     private val mBTDefUsrLogin: Button by bindView(R.id.bt_def_usr_login)
     private val mLLLogin: LinearLayout by bindView(R.id.ll_login)
 
+    override fun getLayoutID(): Int = R.layout.frg_login
+    override fun isUseEventBus(): Boolean = true
+
+    /**
+     * handler for DB data change
+     * @param event     for event
+     */
+    @Suppress("UNUSED_PARAMETER", "unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onDoLoginEvent(event: DoLogin) {
+        TagLog.i("sender is ${event.sendName}")
+        reInitUI()
+    }
+
     override fun initUI(bundle: Bundle?) {
         mBTEmailSignIn.setOnClickListener { _ -> attemptLogin() }
 
@@ -47,11 +64,25 @@ class FrgLogin : FrgSupportBaseAdv() {
         }
 
         mBTDefUsrLogin.setOnClickListener { _ -> doLogin(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD) }
+
+        doHistoryLogin()
     }
 
-    override fun getLayoutID(): Int = R.layout.frg_login
-
     /// PRIVATE BEGIN
+
+    private fun doHistoryLogin() {
+        val cl = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -30) }
+        LoginHistoryUtility.getLastLoginAfter(cl.toTimestamp())?.let1 {
+            ToolUtil.callInBackground(
+                    { AppUtil.usrUtility.loginByUsr(it, false) }, false,
+                    TimeUnit.SECONDS, 3).let1 {
+                if (it) {
+                    NoteDataHelper.reloadData()
+                    startActivityForResult(Intent(activity, ACWelcome::class.java), 1)
+                }
+            }
+        }
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -136,14 +167,14 @@ class FrgLogin : FrgSupportBaseAdv() {
     private fun doLogin(usr: String, pwd: String) {
         showProgress(true)
         val bRet = ToolUtil.callInBackground(
-                        { AppUtil.usrUtility.loginByUsr(usr, pwd)}, false,
-                        TimeUnit.SECONDS, 3)
+                { AppUtil.usrUtility.loginByUsr(usr, pwd) }, false,
+                TimeUnit.SECONDS, 3)
         showProgress(false)
 
-        if(bRet)    {
+        if (bRet) {
             NoteDataHelper.reloadData()
             startActivityForResult(Intent(activity, ACWelcome::class.java), 1)
-        } else  {
+        } else {
             mETPassword.error = getString(R.string.error_incorrect_password)
             mETPassword.requestFocus()
         }

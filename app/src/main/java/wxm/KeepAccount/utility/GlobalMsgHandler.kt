@@ -9,7 +9,7 @@ import wxm.KeepAccount.db.LoginHistoryUtility
 import wxm.KeepAccount.define.EMsgType
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.item.UsrItem
-import wxm.KeepAccount.ui.login.DoLoginEvent
+import wxm.KeepAccount.event.DoLogin
 import wxm.androidutil.log.TagLog
 
 
@@ -59,7 +59,7 @@ class GlobalMsgHandler : Handler() {
             EMsgType.USR_LOGOUT -> {
                 AppUtil.curUsr = null
                 LoginHistoryUtility.cleanHistory()
-                EventBus.getDefault().post(DoLoginEvent(this.javaClass.simpleName))
+                EventBus.getDefault().post(DoLogin(this.javaClass.simpleName))
             }
 
             else -> {

@@ -14,7 +14,7 @@ import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
 import wxm.KeepAccount.ui.data.report.ACReport
 import wxm.KeepAccount.ui.data.show.note.ACDailyDetail
-import wxm.KeepAccount.event.FilterShowEvent
+import wxm.KeepAccount.event.FilterShow
 import wxm.KeepAccount.ui.data.show.note.base.EOperation
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
@@ -167,7 +167,7 @@ class LVDaily : LVBase() {
      */
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onFilterShowEvent(event: FilterShowEvent) {
+    fun onFilterShowEvent(event: FilterShow) {
         if (NoteDataHelper.TAB_TITLE_MONTHLY == event.sender) {
             mBFilter = true
             mAction = EOperation.EDIT

@@ -15,6 +15,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.db.LoginHistoryUtility
 import wxm.KeepAccount.define.EMsgType
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.event.DoLogin
 import wxm.KeepAccount.ui.help.ACHelp
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.ui.welcome.ACWelcome
@@ -23,38 +24,18 @@ import wxm.KeepAccount.utility.ToolUtil
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.log.TagLog
 import wxm.androidutil.time.toTimestamp
+import wxm.androidutil.ui.activity.ACSwitcherActivity
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
  * A login screen that offers login via email/password.
  */
-class ACLogin : AppCompatActivity() {
-    private val mFGLogin = FrgLogin()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.ac_login)
-
-        init_ui(savedInstanceState)
-        EventBus.getDefault().register(this)
+class ACLogin : ACSwitcherActivity<FrgLogin>() {
+    override fun setupFragment(savedInstanceState: Bundle?) {
+        addFragment(FrgLogin())
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        EventBus.getDefault().unregister(this)
-    }
-
-    /**
-     * handler for DB data change
-     * @param event     for event
-     */
-    @Suppress("UNUSED_PARAMETER", "unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onDoLoginEvent(event: DoLoginEvent) {
-        TagLog.i("sender is ${event.sendName}")
-        mFGLogin.reInitUI()
-    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -77,7 +58,6 @@ class ACLogin : AppCompatActivity() {
                     return false
                 }
 
-                //finish();
                 Process.killProcess(Process.myPid())
             }
 
@@ -93,34 +73,6 @@ class ACLogin : AppCompatActivity() {
 
         return true
     }
-
-    /**
-     * 初始化UI组件
-     */
-    private fun init_ui(savedInstanceState: Bundle?) {
-        var loadUI = true
-        val cl = Calendar.getInstance().apply {  add(Calendar.DAY_OF_YEAR, -30) }
-        val usr = LoginHistoryUtility.getLastLoginAfter(cl.toTimestamp())
-        if(null != usr) {
-            val bRet = ToolUtil.callInBackground(
-                    { AppUtil.usrUtility.loginByUsr(usr, false)}, false,
-                    TimeUnit.SECONDS, 3)
-            if(bRet)    {
-                loadUI = false
-                NoteDataHelper.reloadData()
-                startActivityForResult(Intent(this, ACWelcome::class.java), 1)
-            }
-        }
-
-        // for frg
-        if (loadUI && null == savedInstanceState) {
-            supportFragmentManager.beginTransaction().let1 {
-                it.replace(R.id.fl_login, mFGLogin)
-                it.commit()
-            }
-        }
-    }
-
 
     /**
      * 其它activity返回结果

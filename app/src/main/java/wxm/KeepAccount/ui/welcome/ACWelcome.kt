@@ -28,18 +28,4 @@ class ACWelcome : ACSwitcherActivity<FrgWelcome>()  {
             finish()
         }
     }
-
-    /*
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val result = CropImage.getActivityResult(data)
-            if (resultCode == Activity.RESULT_OK) {
-                EventBus.getDefault().post(UsrImage(ImageUri = result.uri))
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                DlgAlert.showAlert(this, R.string.dlg_erro, result.error.toString())
-            }
-        }
-    }
-    */
 }

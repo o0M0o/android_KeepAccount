@@ -20,10 +20,11 @@
         tools:replace="android:icon, android:theme, android:label">
         <activity
             android:name=".ui.login.ACLogin"
-            android:label="@string/cn_app_label">
+            android:label="@string/cn_app_label"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -74,7 +75,7 @@
             android:name=".ui.data.edit.RecordInfo.ACRecordInfoEdit"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"/>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
     </application>
 
 </manifest>

@@ -11,7 +11,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
-import wxm.KeepAccount.event.FilterShowEvent
+import wxm.KeepAccount.event.FilterShow
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.HelperDayNotesInfo
 import wxm.KeepAccount.ui.utility.ListViewHelper
@@ -145,7 +145,7 @@ class LVYearly : LVBase() {
      */
     @Suppress("unused", "UNUSED_PARAMETER")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onFilterShowEvent(event: FilterShowEvent) {
+    fun onFilterShowEvent(event: FilterShow) {
     }
 
     /**
@@ -157,7 +157,7 @@ class LVYearly : LVBase() {
                 if (!UtilFun.ListIsNullOrEmpty(mLLSubFilter)) {
                     rootActivity!!.jumpByTabName(NoteDataHelper.TAB_TITLE_MONTHLY)
                     EventBus.getDefault().post(
-                            FilterShowEvent(NoteDataHelper.TAB_TITLE_YEARLY,
+                            FilterShow(NoteDataHelper.TAB_TITLE_YEARLY,
                                     ArrayList<String>(mLLSubFilter)))
 
                     mLLSubFilter.clear()

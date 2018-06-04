@@ -69,6 +69,7 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
     override fun loadUI(savedInstanceState: Bundle?) {
         if(AppUtil.curUsr!!.name != GlobalDef.DEF_USR_NAME) {
             mIBChangePwd.setColdOrHot(false)
+            mIBAccept.visibility = View.GONE
             mCLInputPwd.visibility = View.GONE
         } else  {
             mCLChangePwd.visibility = View.GONE
