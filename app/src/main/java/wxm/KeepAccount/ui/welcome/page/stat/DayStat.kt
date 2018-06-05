@@ -34,8 +34,8 @@ class DayStat : StatBase() {
                                 val tag = it
                                 NoteDataHelper.getInfoByDay(it)?.let {
                                     columns.add(Column(
-                                            listOf(SubcolumnValue(it.payAmount.toFloat(), StatBase.mPayColor),
-                                                    SubcolumnValue(it.incomeAmount.toFloat(), StatBase.mIncomeColor)))
+                                            listOf(SubcolumnValue(it.payAmount.toFloat(), mPayColor),
+                                                    SubcolumnValue(it.incomeAmount.toFloat(), mIncomeColor)))
                                             .setHasLabels(true))
                                     axisValues.add(AxisValue(idCol.toFloat()).apply {
                                         setLabel(if (0 == idCol % 3) tag  else   "")

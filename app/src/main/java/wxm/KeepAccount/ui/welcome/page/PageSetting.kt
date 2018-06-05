@@ -1,13 +1,16 @@
 package wxm.KeepAccount.ui.welcome.page
 
 import android.os.Bundle
+import android.view.View
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.event.ChangePage
 import wxm.KeepAccount.ui.setting.*
 import wxm.KeepAccount.ui.welcome.base.PageBase
+import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.frg.FrgSupportSwitcher
+import java.util.*
 
 /**
  * for welcome
@@ -31,7 +34,17 @@ class PageSetting : FrgSupportSwitcher<TFSettingBase>(), PageBase {
     }
 
     override fun leavePage(): Boolean {
-        if(hotPage !== mTFMain)    {
+        val hp = hotPage
+        if(hp !== mTFMain)    {
+            if(hp.isSettingDirty) {
+                DlgAlert.showAlert(context!!, R.string.dlg_info, R.string.setting_changed,
+                        {db ->
+                            db.setPositiveButton(R.string.cn_sure, {_, _ ->
+                                hp.updateSetting()
+                            })
+                        })
+            }
+
             switchToPage(mTFMain)
             return false
         }

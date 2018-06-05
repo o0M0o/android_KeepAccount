@@ -38,11 +38,8 @@ abstract class StatBase : FrgSupportBaseAdv() {
     private var mPrvVPOneDataWidth = 1f
     private var mPrvVPMaxWidth = 1f
 
-    companion object {
-        val mPayColor: Int = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_PAY_COLOR]!!
-        val mIncomeColor: Int = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_INCOME_COLOR]!!
-    }
-
+    protected val mPayColor: Int = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_PAY_COLOR]!!
+    protected val mIncomeColor: Int = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_INCOME_COLOR]!!
 
     override fun initUI(bundle: Bundle?) {
         mIVIncome.setBackgroundColor(mIncomeColor)

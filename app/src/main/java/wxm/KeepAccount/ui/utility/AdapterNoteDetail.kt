@@ -11,11 +11,13 @@ import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.let1
+import wxm.androidutil.time.toCalendar
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.ViewHelper
 import wxm.androidutil.ui.view.ViewHolder
 import wxm.uilib.SwipeLayout.SwipeLayout
+import java.sql.Timestamp
 import java.util.*
 
 /**
@@ -100,7 +102,7 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
             }
 
             vh.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %s", data.valToStr))
-            vh.setText(R.id.tv_pay_time, data.ts.toString().substring(11, 16))
+            vh.setText(R.id.tv_pay_time, getHourMinute(data.ts))
 
             // for look detail
             vh.setVisibility(R.id.iv_pay_action, View.GONE)
@@ -126,7 +128,7 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
             vh.setText(R.id.tv_income_title, data.info)
 
             vh.setText(R.id.tv_income_amount, data.valToStr)
-            vh.setText(R.id.tv_income_time, data.ts.toString().substring(11, 16))
+            vh.setText(R.id.tv_income_time, getHourMinute(data.ts))
 
             // for look detail
             vh.setVisibility(R.id.iv_income_action, View.GONE)
@@ -140,6 +142,12 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
                 }
             }
         }
+    }
+
+    private fun getHourMinute(ts:Timestamp):String    {
+        val cl = ts.toCalendar()
+        return String.format(Locale.CHINA, "%02:%02d",
+                cl.get(Calendar.HOUR_OF_DAY), cl.get(Calendar.MINUTE))
     }
 
     companion object {

@@ -11,6 +11,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.db.DBDataChangeEvent
 import wxm.KeepAccount.define.EAction
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.event.PreferenceChange
 import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow
@@ -42,6 +43,10 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
         add(BannerPara( R.layout.banner_year))
     }
 
+    override fun getLayoutID(): Int = R.layout.pg_main_page
+    override fun isUseEventBus(): Boolean = true
+    override fun leavePage(): Boolean = true
+
     /**
      * handler for DB data change
      * @param event     for event
@@ -52,11 +57,13 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
         mLBanners.setAdapter(BannerAp(activity!!, null), mALFrgPara)
     }
 
-    override fun getLayoutID(): Int = R.layout.pg_main_page
-    override fun isUseEventBus(): Boolean = true
-
-    override fun leavePage(): Boolean {
-        return true
+    /**
+     * for preference change
+     */
+    @Suppress("UNUSED_PARAMETER", "unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onPreferencesEvent(event: PreferenceChange) {
+        reInitUI()
     }
 
     override fun initUI(savedInstanceState: Bundle?) {

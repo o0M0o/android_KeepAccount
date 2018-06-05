@@ -85,17 +85,19 @@ class BannerAp(private val mContext: Context, private val mVGGroup: ViewGroup?) 
      * @param ni        info to draw
      */
     private fun fillChart(v: View, ni: NoteShowInfo) {
+        val colorPay = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_PAY_COLOR]!!
+        val colorIncome = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_INCOME_COLOR]!!
         val vh = ViewHelper(v)
 
         // draw bar
-        vh.getChildView<ImageView>(R.id.iv_income)!!.setBackgroundColor(COLOR_INCOME)
-        vh.getChildView<ImageView>(R.id.iv_pay)!!.setBackgroundColor(COLOR_PAY)
+        vh.getChildView<ImageView>(R.id.iv_income)!!.setBackgroundColor(colorIncome)
+        vh.getChildView<ImageView>(R.id.iv_pay)!!.setBackgroundColor(colorPay)
 
         // draw chart
         val columns = ArrayList<Column>()
         ArrayList<SubcolumnValue>().apply {
-            add(SubcolumnValue(ni.payAmount.toFloat(), COLOR_PAY))
-            add(SubcolumnValue(ni.incomeAmount.toFloat(), COLOR_INCOME))
+            add(SubcolumnValue(ni.payAmount.toFloat(), colorPay))
+            add(SubcolumnValue(ni.incomeAmount.toFloat(), colorIncome))
 
             columns.add(Column(this).apply { setHasLabels(false) })
         }
@@ -110,10 +112,5 @@ class BannerAp(private val mContext: Context, private val mVGGroup: ViewGroup?) 
         vh.getChildView<ColumnChartView>(R.id.chart)!!.apply {
             columnChartData = mChartData
         }
-    }
-
-    companion object {
-        private val COLOR_PAY = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_PAY_COLOR]!!
-        private val COLOR_INCOME = PreferencesUtil.loadChartColor()[PreferencesUtil.SET_INCOME_COLOR]!!
     }
 }

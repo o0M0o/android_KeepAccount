@@ -44,4 +44,7 @@ this file include show strings in app
     <!-- result -->
     <string name="info_change_pwd_success">修改密码成功</string>
     <string name="info_change_pwd_failure">修改密码失败</string>
+
+    <!-- setting -->
+    <string name="setting_changed">是否保存已经修改的配置!</string>
 </resources>

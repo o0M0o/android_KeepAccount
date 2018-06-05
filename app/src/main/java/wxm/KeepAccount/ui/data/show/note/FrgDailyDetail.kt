@@ -59,10 +59,6 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
     private val mVSDataUI: ValueShow by bindView(R.id.vs_daily_info)
     private val mPBLoginProgress: ProgressBar by bindView(R.id.login_progress)
 
-    // for color
-    internal var mCLPay: Int = AppBase.getColor(R.color.darkred)
-    internal var mCLIncome: Int =AppBase.getColor(R.color.darkslategrey)
-
     // for data
     private var mSZHotDay: String? = null
     private var mLSDayContents: List<INote>? = null
@@ -145,7 +141,6 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
             R.id.ib_add -> {
                 val intent = Intent(activity, ACNoteCreate::class.java)
                 val cal = Calendar.getInstance()
-                cal.timeInMillis = System.currentTimeMillis()
                 intent.putExtra(GlobalDef.STR_RECORD_DATE,
                         String.format(Locale.CHINA, "%s %02d:%02d", mSZHotDay, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)))
 

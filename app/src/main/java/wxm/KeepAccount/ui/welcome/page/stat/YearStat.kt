@@ -26,8 +26,8 @@ class YearStat : StatBase() {
                                 val tag = it
                                 NoteDataHelper.getInfoByYear(it).let {
                                     columns.add(Column(
-                                            listOf(SubcolumnValue(it.payAmount.toFloat(), StatBase.mPayColor),
-                                                    SubcolumnValue(it.incomeAmount.toFloat(), StatBase.mIncomeColor)))
+                                            listOf(SubcolumnValue(it.payAmount.toFloat(), mPayColor),
+                                                    SubcolumnValue(it.incomeAmount.toFloat(), mIncomeColor)))
                                             .setHasLabels(true))
                                     axisValues.add(AxisValue(idCol.toFloat()).setLabel(tag))
                                     idCol++

@@ -81,7 +81,7 @@ class ACLogin : ACSwitcherActivity<FrgLogin>() {
      * @param resultCode  result param
      * @param data        data param
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (resultCode) {
             GlobalDef.INTRET_USR_LOGOUT -> {

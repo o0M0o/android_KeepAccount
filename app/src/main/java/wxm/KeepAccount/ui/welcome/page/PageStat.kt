@@ -12,6 +12,7 @@ import com.flyco.tablayout.listener.OnTabSelectListener
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.db.DBDataChangeEvent
+import wxm.KeepAccount.event.PreferenceChange
 import wxm.KeepAccount.ui.welcome.page.stat.DayStat
 import wxm.KeepAccount.ui.welcome.page.stat.MonthStat
 import wxm.KeepAccount.ui.welcome.page.stat.YearStat
@@ -36,12 +37,22 @@ class PageStat : FrgSupportSwitcher<FrgSupportBaseAdv>(),  PageBase {
     override fun leavePage(): Boolean = true
 
     /**
-     * handler for DB data change
-     * @param event     for event
+     * for DB data change
      */
     @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDBEvent(event: DBDataChangeEvent) {
+        mPGDay.reInitUI()
+        mPGMonth.reInitUI()
+        mPGYear.reInitUI()
+    }
+
+    /**
+     * for preference change
+     */
+    @Suppress("UNUSED_PARAMETER", "unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onPreferencesEvent(event: PreferenceChange) {
         mPGDay.reInitUI()
         mPGMonth.reInitUI()
         mPGYear.reInitUI()

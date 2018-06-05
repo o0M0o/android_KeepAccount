@@ -28,13 +28,7 @@ class TFSettingChartColor : TFSettingBase() {
 
     private var mHMColors: HashMap<String, Int> = PreferencesUtil.loadChartColor()
 
-    override fun getLayoutID(): Int {
-        return R.layout.pg_setting_chart_color
-    }
-
-    override fun isUseEventBus(): Boolean {
-        return false
-    }
+    override fun getLayoutID(): Int = R.layout.pg_setting_chart_color
 
     override fun initUI(bundle: Bundle?) {
         if (null == bundle) {

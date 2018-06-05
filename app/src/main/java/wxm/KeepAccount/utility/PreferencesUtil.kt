@@ -1,8 +1,11 @@
 package wxm.KeepAccount.utility
 
 import android.content.Context
+import android.content.SharedPreferences
+import org.greenrobot.eventbus.EventBus
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.EAction
+import wxm.KeepAccount.event.PreferenceChange
 import java.util.*
 
 /**
@@ -42,8 +45,8 @@ object PreferencesUtil {
      * @param acts  action in fist page
      */
     fun saveHotAction(acts: List<String>) {
-        AppUtil.self.getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
-                .edit().putString(SET_HOT_ACTION, parseToPreferences(acts)).apply()
+        getPreferences().edit().putString(SET_HOT_ACTION, parseToPreferences(acts)).apply()
+        EventBus.getDefault().post(PreferenceChange(SET_HOT_ACTION))
     }
     /// END
 
@@ -60,9 +63,7 @@ object PreferencesUtil {
                     " $SET_BUDGET_UESED_COLOR:${it.getColor(R.color.sienna)}" +
                     " $SET_BUDGET_BALANCE_COLOR:${it.getColor(R.color.teal)}"
         }.let {
-            AppUtil.self
-                    .getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
-                    .getString(SET_CHART_COLOR, it)!!
+            getPreferences().getString(SET_CHART_COLOR, it)!!
         }.let {
             parseChartColors(it)
         }
@@ -74,14 +75,16 @@ object PreferencesUtil {
      * @param ccs   color setting
      */
     fun saveChartColor(ccs: HashMap<String, Int>) {
-        AppUtil.self.getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE).apply {
-            edit().putString(SET_CHART_COLOR, parseChartColorsToString(ccs)).apply()
-        }
+        getPreferences().edit().putString(SET_CHART_COLOR, parseChartColorsToString(ccs)).apply()
+        EventBus.getDefault().post(PreferenceChange(SET_CHART_COLOR))
     }
     /// END
 
 
     /// BEGIN PRIVATE
+    private fun getPreferences(): SharedPreferences =
+            AppUtil.self.getSharedPreferences(PROPERTIES_NAME, Context.MODE_PRIVATE)
+
     /**
      * use [delimiter] split lns to arry
      */
