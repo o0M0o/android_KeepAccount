@@ -6,21 +6,16 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
-import android.view.View
-import android.widget.TabHost
-import android.widget.TextView
 import com.flyco.tablayout.SegmentTabLayout
 import com.flyco.tablayout.listener.OnTabSelectListener
 import kotterknife.bindView
 import wxm.KeepAccount.R
-import wxm.KeepAccount.define.IncomeNoteItem
+import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.item.PayNoteItem
-import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PageIncomeEdit
 import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PagePayEdit
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.utility.let1
-import wxm.androidutil.log.TagLog
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import java.util.*
 

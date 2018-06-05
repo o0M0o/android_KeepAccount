@@ -33,6 +33,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
     val incomeDataREDao: RuntimeExceptionDao<IncomeNoteItem, Int> = getRuntimeExceptionDao(IncomeNoteItem::class.java)
     val remindREDao: RuntimeExceptionDao<RemindItem, Int> = getRuntimeExceptionDao(RemindItem::class.java)
     val loginHistoryREDao: RuntimeExceptionDao<LoginHistoryItem, Int> = getRuntimeExceptionDao(LoginHistoryItem::class.java)
+    val noteImageREDao: RuntimeExceptionDao<NoteImageItem, Int> = getRuntimeExceptionDao(NoteImageItem::class.java)
 
     /**
      * This is called when the database is first created. Usually you should call createTable statements here to create
@@ -49,24 +50,25 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
     override fun onUpgrade(db: SQLiteDatabase, connectionSource: ConnectionSource, oldVersion: Int, newVersion: Int) {
         try {
             when(newVersion)    {
-                11 -> {
-                    if(oldVersion < newVersion) {
-                        TableUtils.createTableIfNotExists(connectionSource, LoginHistoryItem::class.java)
-
-                        // for usr
-                        val oldUsr = AppUtil.usrUtility.allData
-                        TableUtils.dropTable<UsrItem, Int>(connectionSource, UsrItem::class.java, true)
-                        TableUtils.createTable(connectionSource, UsrItem::class.java)
-                        // 添加默认用户
-                        oldUsr.forEach {
-                            AppUtil.usrUtility.addUsr(it.name, it.pwd)
-                        }
-                    }
-                }
+                12 -> upgrade12(oldVersion)
             }
         } catch (e: SQLException) {
             TagLog.e("Can't upgrade databases", e)
             throw RuntimeException(e)
+        }
+    }
+
+    private fun upgrade12(oldVersion: Int) {
+        TableUtils.createTableIfNotExists(connectionSource, NoteImageItem::class.java)
+        TableUtils.createTableIfNotExists(connectionSource, LoginHistoryItem::class.java)
+
+        // for usr
+        val oldUsr = AppUtil.usrUtility.allData
+        TableUtils.dropTable<UsrItem, Int>(connectionSource, UsrItem::class.java, true)
+        TableUtils.createTable(connectionSource, UsrItem::class.java)
+        // 添加默认用户
+        oldUsr.forEach {
+            AppUtil.usrUtility.addUsr(it.name, it.pwd)
         }
     }
 
@@ -79,6 +81,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
             TableUtils.createTable(connectionSource, IncomeNoteItem::class.java)
             TableUtils.createTable(connectionSource, RemindItem::class.java)
             TableUtils.createTable(connectionSource, LoginHistoryItem::class.java)
+            TableUtils.createTable(connectionSource, NoteImageItem::class.java)
         } catch (e: SQLException) {
             TagLog.e("Can't create database", e)
             throw RuntimeException(e)

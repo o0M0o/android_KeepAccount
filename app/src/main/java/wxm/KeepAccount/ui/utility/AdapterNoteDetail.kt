@@ -6,7 +6,7 @@ import android.view.View
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.INote
-import wxm.KeepAccount.define.IncomeNoteItem
+import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.utility.AppUtil
@@ -146,7 +146,7 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
 
     private fun getHourMinute(ts:Timestamp):String    {
         val cl = ts.toCalendar()
-        return String.format(Locale.CHINA, "%02:%02d",
+        return String.format(Locale.CHINA, "%02d:%02d",
                 cl.get(Calendar.HOUR_OF_DAY), cl.get(Calendar.MINUTE))
     }
 

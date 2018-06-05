@@ -12,7 +12,7 @@ import android.view.View
 import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.define.IncomeNoteItem
+import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.data.edit.base.IEdit

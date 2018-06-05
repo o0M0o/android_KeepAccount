@@ -5,14 +5,13 @@ import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.define.IPublicClone
-import wxm.KeepAccount.define.IncomeNoteItem
 import wxm.KeepAccount.utility.toMoneyString
 
 import java.math.BigDecimal
 import java.sql.Timestamp
-import java.util.Locale
 
 import wxm.androidutil.db.IDBRow
+import java.util.*
 
 /**
  * pay record
@@ -47,6 +46,12 @@ class PayNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone {
         set(tsVal) {
             field = tsVal
             tsToStr = field.toString()
+        }
+
+    override var images: LinkedList<String> = LinkedList()
+        set(value) {
+            field.clear()
+            field.addAll(value)
         }
 
     override var valToStr: String = ""

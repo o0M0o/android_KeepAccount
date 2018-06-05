@@ -5,7 +5,7 @@ import android.widget.TextView
 import kotterknife.bindView
 
 import wxm.KeepAccount.R
-import wxm.KeepAccount.define.IncomeNoteItem
+import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv

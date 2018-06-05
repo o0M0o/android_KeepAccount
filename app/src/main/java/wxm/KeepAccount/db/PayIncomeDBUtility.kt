@@ -5,7 +5,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao
 import org.greenrobot.eventbus.EventBus
 import wxm.KeepAccount.item.BudgetItem
 import wxm.KeepAccount.item.INote
-import wxm.KeepAccount.define.IncomeNoteItem
+import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.AppUtil
@@ -131,7 +131,17 @@ class PayIncomeDBUtility {
             return AppUtil.curUsr.forObj(
                     { t -> dbHelper.queryForEq(PayNoteItem.FIELD_USR, t.id) },
                     { ArrayList() }
-            )
+            ).apply {
+                filterNotNull().forEach{
+                    NoteImageUtility.setNoteImages(it)
+                }
+            }
+        }
+
+        override fun getData(id: Int): PayNoteItem? {
+            return super.getData(id)?.apply {
+                NoteImageUtility.setNoteImages(this)
+            }
         }
 
         override fun onDataModify(md: List<Int>) {
@@ -162,7 +172,17 @@ class PayIncomeDBUtility {
             return AppUtil.curUsr.forObj(
                     { t -> dbHelper.queryForEq(IncomeNoteItem.FIELD_USR, t.id) },
                     { ArrayList() }
-            )
+            ).apply {
+                filterNotNull().forEach{
+                    NoteImageUtility.setNoteImages(it)
+                }
+            }
+        }
+
+        override fun getData(id: Int): IncomeNoteItem? {
+            return super.getData(id)?.apply {
+                NoteImageUtility.setNoteImages(this)
+            }
         }
 
         override fun onDataModify(md: List<Int>) {

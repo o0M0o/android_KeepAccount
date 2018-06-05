@@ -1,19 +1,16 @@
-package wxm.KeepAccount.define
+package wxm.KeepAccount.item
 
 import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
-import wxm.KeepAccount.item.BudgetItem
-import wxm.KeepAccount.item.INote
-import wxm.KeepAccount.item.PayNoteItem
-import wxm.KeepAccount.item.UsrItem
+import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.define.IPublicClone
 import wxm.KeepAccount.utility.toMoneyString
 import wxm.androidutil.db.IDBRow
 
 import java.math.BigDecimal
 import java.sql.Timestamp
-import java.util.Locale
-
+import java.util.*
 
 
 /**
@@ -21,7 +18,7 @@ import java.util.Locale
  * Created by WangXM on 2016/5/3.
  */
 @DatabaseTable(tableName = "tbIncomeNote")
-class IncomeNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone  {
+class IncomeNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone {
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     override var id: Int = GlobalDef.INVALID_ID
 
@@ -53,6 +50,12 @@ class IncomeNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone  {
         set(tsVal) {
             field = tsVal
             tsToStr = field.toString()
+        }
+
+    override var images: LinkedList<String> = LinkedList()
+        set(value) {
+            field.clear()
+            field.addAll(value)
         }
 
     override var valToStr: String = ""

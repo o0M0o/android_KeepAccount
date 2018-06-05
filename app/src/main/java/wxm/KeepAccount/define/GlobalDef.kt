@@ -5,11 +5,9 @@ package wxm.KeepAccount.define
  * Created by WangXM on 2016/5/6.
  */
 object GlobalDef {
-    const val PACKAGE_NAME = "com.wxm.keepaccount"
-
-    const val STR_RECORD_PAY = "record_pay"
-    const val STR_RECORD_INCOME = "record_income"
-    const val STR_RECORD_BUDGET = "record_budget"
+    const val STR_RECORD_PAY = "pay"
+    const val STR_RECORD_INCOME = "income"
+    const val STR_RECORD_BUDGET = "budget"
 
     const val STR_RECORD_DATE = "record_date"
     const val STR_RECORD_TYPE = "record_type"

@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.*
-import wxm.KeepAccount.define.IncomeNoteItem
+import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.item.BudgetItem
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.item.RemindItem
@@ -30,6 +30,7 @@ class AppUtil : AppBase() {
     private lateinit var mBudgetUtility: BudgetDBUtility
     private lateinit var mPayIncomeUtility: PayIncomeDBUtility
     private lateinit var mRemindUtility: RemindDBUtility
+    private lateinit var mNoteImageUtility: NoteImageUtility
 
     // for dir
     private lateinit var mImageDir: String
@@ -61,6 +62,7 @@ class AppUtil : AppBase() {
         mBudgetUtility = BudgetDBUtility()
         mPayIncomeUtility = PayIncomeDBUtility()
         mRemindUtility = RemindDBUtility()
+        mNoteImageUtility = NoteImageUtility()
     }
 
     private fun initDir()   {
@@ -163,6 +165,13 @@ class AppUtil : AppBase() {
          */
         val remindUtility: RemindDBUtility
             get() = self.mRemindUtility
+
+        /**
+         * get remind data helper
+         * @return      helper
+         */
+        val noteImageUtility: NoteImageUtility
+            get() = self.mNoteImageUtility
 
         /**
          * clean db
