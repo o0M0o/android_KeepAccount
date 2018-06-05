@@ -1,6 +1,10 @@
 package wxm.KeepAccount.ui.data.edit.NoteEdit.utility
 
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import kotterknife.bindView
 
@@ -9,6 +13,8 @@ import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
+import wxm.androidutil.util.doJudge
+import java.io.File
 
 /**
  * preview fragment for budget
@@ -22,16 +28,12 @@ class PagePayPreview : FrgSupportBaseAdv(), IPreview {
     private val mTVDate: TextView by bindView(R.id.tv_date)
     private val mTVDayInWeek: TextView by bindView(R.id.tv_day_in_week)
     private val mTVTime: TextView by bindView(R.id.tv_time)
+    private val mRLImage: RelativeLayout by bindView(R.id.rl_image)
+    private val mIVImage: ImageView by bindView(R.id.iv_image)
 
     private var mPayData: PayNoteItem? = null
 
-    override fun isUseEventBus(): Boolean {
-        return false
-    }
-
-    override fun getLayoutID(): Int {
-        return R.layout.pg_preview_pay
-    }
+    override fun getLayoutID(): Int = R.layout.pg_preview_pay
 
     override fun setPreviewData(data: Any) {
         mPayData = data as PayNoteItem
@@ -49,6 +51,11 @@ class PagePayPreview : FrgSupportBaseAdv(), IPreview {
                 mTVDate.text = ToolUtil.formatDateString(data.ts.toString().substring(0, 10))
                 mTVTime.text = data.ts.toString().substring(11, 16)
                 mTVDayInWeek.text = ToolUtil.getDayInWeek(data.ts)
+
+                data.images.isEmpty().doJudge(
+                        { mRLImage.visibility = View.GONE },
+                        { mIVImage.setImageURI(Uri.fromFile(File(data.images[0]))) }
+                )
             } else {
                 mTVAmount.text = ""
                 mTVInfo.text = ""
@@ -57,6 +64,7 @@ class PagePayPreview : FrgSupportBaseAdv(), IPreview {
                 mTVDate.text = ""
                 mTVDayInWeek.text = ""
                 mTVTime.text = ""
+                mRLImage.visibility = View.GONE
             }
         }
     }

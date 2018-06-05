@@ -72,12 +72,11 @@ class NoteImageUtility : DBUtilityBase<NoteImageItem, Int>() {
                     .and().eq(NoteImageItem.FIELD_STATUS, NoteImageItem.STATUS_USE).prepare()
 
             val ret = LinkedList<String>()
-            ret.let1 { ll ->
-                dbHelper.query(prepare)?.filterNotNull()?.forEach {
-                    ll.add(it.imagePath)
-                }
+            dbHelper.query(prepare)?.filterNotNull()?.forEach {
+                ret.add(it.imagePath)
             }
 
+            note.images = ret
             return true
         }
     }

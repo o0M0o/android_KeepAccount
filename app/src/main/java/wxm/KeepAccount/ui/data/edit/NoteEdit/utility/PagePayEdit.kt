@@ -1,8 +1,11 @@
 package wxm.KeepAccount.ui.data.edit.NoteEdit.utility
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
@@ -10,13 +13,13 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
+import com.theartofdev.edmodo.cropper.CropImage
 import kotterknife.bindView
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.NoteImageUtility
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.item.NoteImageItem
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
@@ -25,12 +28,15 @@ import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
 import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
+import wxm.KeepAccount.utility.let1
+import wxm.KeepAccount.utility.saveImage
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.androidutil.util.doJudge
+import java.io.File
 import java.lang.String.format
 import java.math.BigDecimal
 import java.sql.Timestamp
@@ -49,10 +55,13 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
     private val mSPBudget: Spinner by bindView(R.id.ar_sp_budget)
     private val mTVBudget: TextView by bindView(R.id.ar_tv_budget)
     private val mTVNote: TouchTextView by bindView(R.id.tv_note)
+    private val mIVImage: ImageView by bindView(R.id.iv_image)
 
     private val mSZDefNote: String = AppBase.getString(R.string.notice_input_note)
     private var mOldPayNote: PayNoteItem? = null
+    private var mSZImagePath: String = ""
 
+    override fun getLayoutID(): Int = R.layout.pg_edit_pay
     override fun setEditData(data: Any) {
         mOldPayNote = data as PayNoteItem
     }
@@ -90,13 +99,7 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
         }
     }
 
-    override fun getLayoutID(): Int {
-        return R.layout.pg_edit_pay
-    }
 
-    override fun isUseEventBus(): Boolean {
-        return false
-    }
 
     override fun loadUI(bundle: Bundle?) {
         val paraDate = arguments?.getString(GlobalDef.STR_RECORD_DATE)
@@ -122,6 +125,24 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
             mTVNote.text = if (UtilFun.StringIsNullOrEmpty(szNote)) mSZDefNote else szNote
 
             mETAmount.setText(it.valToStr)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.getActivityResult(data).let1 { result ->
+                if (resultCode == Activity.RESULT_OK) {
+                    saveImage(result.uri).let1 {
+                        if (it.isNotEmpty()) {
+                            mSZImagePath = it
+                            mIVImage.setImageURI(Uri.fromFile(File(mSZImagePath)))
+                        }
+                    }
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    DlgAlert.showAlert(activity!!, R.string.dlg_erro, result.error.toString())
+                }
+            }
         }
     }
 
@@ -160,6 +181,12 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
             mETInfo.setOnTouchListener(listener)
             mETDate.setOnTouchListener(listener)
             mTVNote.setOnTouchListener(listener)
+
+            mIVImage.setOnClickListener({v ->
+                CropImage.activity()
+                        .setAspectRatio(1, 1)
+                        .start(context!!, this)
+            })
         }
 
         loadUI(bundle)
@@ -306,13 +333,17 @@ class PagePayEdit : FrgSupportBaseAdv(), IEdit {
 
         mOldPayNote?.let {
             val bCreate = GlobalDef.INVALID_ID == it.id
-            val bRet = if (bCreate)
+            var bRet = if (bCreate)
                 1 == AppUtil.payIncomeUtility.addPayNotes(listOf(it))
             else
                 AppUtil.payIncomeUtility.payDBUtility.modifyData(it)
             if (!bRet) {
                 DlgAlert.showAlert(context!!, R.string.dlg_warn,
                         bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
+            } else {
+                if(mSZImagePath.isNotEmpty())   {
+                    bRet = NoteImageUtility.addImage(it, mSZImagePath)
+                }
             }
             return bRet
         }

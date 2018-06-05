@@ -118,6 +118,7 @@ class PayNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone {
 
         obj.valToStr = this.valToStr
         obj.tsToStr = this.tsToStr
+        obj.images = this.images
         return obj
     }
 

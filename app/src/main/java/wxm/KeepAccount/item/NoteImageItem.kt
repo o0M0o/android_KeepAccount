@@ -18,7 +18,7 @@ class NoteImageItem : IDBRow<Int>, Cloneable, IPublicClone {
     @DatabaseField(generatedId = true, columnName = FIELD_ID, dataType = DataType.INTEGER)
     var id: Int = GlobalDef.INVALID_ID
 
-    @DatabaseField(columnName = FIELD_IMAGE_TYPE, unique = true, dataType = DataType.STRING)
+    @DatabaseField(columnName = FIELD_IMAGE_TYPE, dataType = DataType.STRING)
     var imageType: String = ""
 
     @DatabaseField(columnName = FIELD_FOREIGN_ID, dataType = DataType.INTEGER)

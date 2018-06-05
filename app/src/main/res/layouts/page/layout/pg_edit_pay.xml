@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="4dp">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/til_reason"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="false"
         android:background="@color/white"
-        android:padding="2dp">
+        app:layout_constraintTop_toTopOf="parent">
 
         <wxm.KeepAccount.ui.base.TouchUI.TouchEditText
             android:id="@+id/ar_et_info"
@@ -25,13 +24,12 @@
 
     <LinearLayout
         android:id="@+id/ll_date_amount"
-        android:baselineAligned="false"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/til_reason"
         android:layout_marginTop="2dp"
-        android:orientation="horizontal">
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/til_reason">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="fill_parent"
@@ -78,10 +76,11 @@
         android:id="@+id/rl_budget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll_date_amount"
         android:layout_marginTop="2dp"
         android:background="@color/white"
-        android:padding="8dp">
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/ll_date_amount">
 
         <TextView
             android:id="@+id/ar_tv_budget"
@@ -89,6 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginStart="8dp"
             android:text="@string/cn_use_budget"
             android:textColor="@color/text_fit"
             android:textSize="18sp" />
@@ -99,19 +99,19 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginEnd="8dp"
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@+id/ar_tv_budget"
             android:spinnerMode="dropdown" />
     </RelativeLayout>
 
-
     <RelativeLayout
+        android:id="@+id/rl_note"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rl_budget"
-        android:layout_marginTop="4dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:background="@color/white"
-        android:padding="8dp">
+        app:layout_constraintTop_toBottomOf="@id/rl_budget">
 
         <wxm.KeepAccount.ui.base.TouchUI.TouchTextView
             android:id="@+id/tv_note"
@@ -119,9 +119,31 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="24dp"
+            android:layout_margin="8dp"
             android:text="@string/notice_input_note"
             android:textSize="18sp" />
-
     </RelativeLayout>
-</RelativeLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rl_note">
+
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:src="@drawable/image_add_pic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

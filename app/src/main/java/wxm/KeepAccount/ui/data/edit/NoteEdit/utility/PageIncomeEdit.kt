@@ -47,6 +47,8 @@ class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
 
     private var mOldIncomeNote: IncomeNoteItem? = null
 
+    override fun getLayoutID(): Int = R.layout.pg_edit_income
+
     override fun setEditData(data: Any) {
         mOldIncomeNote = data as IncomeNoteItem
     }
@@ -98,14 +100,6 @@ class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
         }
 
         loadUI(bundle)
-    }
-
-    override fun getLayoutID(): Int {
-        return R.layout.pg_edit_income
-    }
-
-    override fun isUseEventBus(): Boolean {
-        return false
     }
 
     override fun loadUI(bundle: Bundle?) {
