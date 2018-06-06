@@ -49,6 +49,10 @@
             android:label="@string/title_report"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".ui.preview.ACImagePreview"
+            android:label="@string/title_preview"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.welcome.ACWelcome"
             android:configChanges="orientation|screenSize"
             android:label="@string/label_welcome"

@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.data.edit.NoteEdit.page
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -9,6 +10,8 @@ import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
+import wxm.KeepAccount.ui.preview.ACImagePreview
+import wxm.KeepAccount.utility.let1
 import wxm.KeepAccount.utility.setImagePath
 import wxm.KeepAccount.utility.toDayStr
 import wxm.KeepAccount.utility.toHourMinuteStr
@@ -57,7 +60,15 @@ class PgPayPreview : FrgSupportBaseAdv(), IPreview {
                         { mRLImage.visibility = View.GONE },
                         {
                             mRLImage.visibility = View.VISIBLE
-                            mIVImage.setImagePath(data.images[0])
+
+                            val fp = data.images[0]
+                            mIVImage.setImagePath(fp)
+                            mIVImage.setOnClickListener({ _ ->
+                                Intent(activity!!, ACImagePreview::class.java).let1 {
+                                    it.putExtra(ACImagePreview.IMAGE_FILE_PATH, fp)
+                                    activity!!.startActivity(it)
+                                }
+                            })
                         }
                 )
             } else {

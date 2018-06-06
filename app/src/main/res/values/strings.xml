@@ -109,4 +109,6 @@
     <string name="tv_income_show">显示收入</string>
     <string name="tv_pay_show">显示支出</string>
     <string name="tv_pay_not_show">不显示支出</string>
+
+    <string name="title_preview">预览</string>
 </resources>
