@@ -17,30 +17,6 @@ import java.util.concurrent.TimeUnit
  */
 object ToolUtil {
     /**
-     * format date string '2016-01-14' to '2016年01月14日'
-     * @param org       origin date string
-     * @return          format string
-     */
-    fun formatDateString(org: String): String {
-        val orglen = org.length
-        var ret = org.replaceFirst("-".toRegex(), "年")
-                .replaceFirst("-".toRegex(), "月")
-                .replaceFirst("-".toRegex(), "日")
-
-        if (4 == orglen)
-            ret += "年"
-
-        if (7 == orglen)
-            ret += "月"
-
-        if (10 == orglen)
-            ret += "日"
-
-        return ret
-    }
-
-
-    /**
      * date string to Timestamp
      * string must be :
      * "2016-08-06",
@@ -91,7 +67,7 @@ object ToolUtil {
      * @param dw    day order in week(1-7)
      * @return      "星期*"
      */
-    fun getDayInWeek(dw: Int): String {
+    private fun getDayInWeek(dw: Int): String {
         return when (dw) {
             Calendar.SUNDAY -> "星期日"
             Calendar.MONDAY -> "星期一"

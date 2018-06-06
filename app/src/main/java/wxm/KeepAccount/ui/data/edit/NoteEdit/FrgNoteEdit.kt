@@ -10,7 +10,7 @@ import wxm.KeepAccount.define.*
 import wxm.KeepAccount.item.BudgetItem
 import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.item.PayNoteItem
-import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.*
+import wxm.KeepAccount.ui.data.edit.NoteEdit.page.*
 import wxm.KeepAccount.ui.data.edit.base.*
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
@@ -122,15 +122,15 @@ class FrgNoteEdit :  FrgEditBase() {
             mNumOfFrags = PAGE_COUNT
             mFRFrags = when (mCurDataType!!) {
                 GlobalDef.STR_RECORD_INCOME -> {
-                    arrayOf(PageIncomePreview(), PageIncomeEdit())
+                    arrayOf(PgIncomePreview(), PgIncomeEdit())
                 }
 
                 GlobalDef.STR_RECORD_PAY -> {
-                    arrayOf(PagePayPreview(), PagePayEdit())
+                    arrayOf(PgPayPreview(), PgPayEdit())
                 }
 
                 else -> {
-                    arrayOf(PageBudgetPreview(), PageBudgetEdit())
+                    arrayOf(PgBudgetPreview(), PgBudgetEdit())
                 }
             }
         }

@@ -29,7 +29,7 @@
         android:layout_marginTop="2dp"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/til_reason">
+        app:layout_constraintTop_toBottomOf="@+id/til_reason">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="fill_parent"
@@ -80,7 +80,7 @@
         android:background="@color/white"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/ll_date_amount">
+        app:layout_constraintTop_toBottomOf="@+id/ll_date_amount">
 
         <TextView
             android:id="@+id/ar_tv_budget"
@@ -111,7 +111,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/rl_budget">
+        app:layout_constraintTop_toBottomOf="@+id/rl_budget">
 
         <wxm.KeepAccount.ui.base.TouchUI.TouchTextView
             android:id="@+id/tv_note"
@@ -133,17 +133,46 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rl_note">
 
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cl_image_header"
+            android:background="@color/trans_full"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="46dp">
+
+            <ImageButton
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ib_image_remove"
+                android:id="@+id/ib_image_refresh"
+                android:src="@drawable/ic_refresh_1"
+                android:background="@color/trans_1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+
+            <ImageButton
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                app:layout_constraintStart_toEndOf="@id/ib_image_refresh"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/ib_image_remove"
+                android:src="@drawable/ic_delete_1"
+                android:background="@color/trans_1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
         <ImageView
             android:id="@+id/iv_image"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="fitXY"
+            android:scaleType="fitCenter"
             android:src="@drawable/image_add_pic"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toBottomOf="@id/cl_image_header"  />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -12,8 +12,8 @@ import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.item.PayNoteItem
-import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PageIncomeEdit
-import wxm.KeepAccount.ui.data.edit.NoteEdit.utility.PagePayEdit
+import wxm.KeepAccount.ui.data.edit.NoteEdit.page.PgIncomeEdit
+import wxm.KeepAccount.ui.data.edit.NoteEdit.page.PgPayEdit
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
@@ -75,11 +75,11 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
 
         init {
             val bd = arguments
-            PagePayEdit().apply { arguments = bd }.let1 {
+            PgPayEdit().apply { arguments = bd }.let1 {
                 mALFra.add(it)
             }
 
-            PageIncomeEdit().apply { arguments = bd }.let1 {
+            PgIncomeEdit().apply { arguments = bd }.let1 {
                 mALFra.add(it)
             }
         }

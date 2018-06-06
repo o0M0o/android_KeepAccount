@@ -1,16 +1,22 @@
-package wxm.KeepAccount.ui.data.edit.NoteEdit.utility
+package wxm.KeepAccount.ui.data.edit.NoteEdit.page
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageView
+import com.theartofdev.edmodo.cropper.CropImage
 import kotterknife.bindView
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.NoteImageUtility
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
@@ -18,14 +24,14 @@ import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
-import wxm.KeepAccount.utility.AppUtil
-import wxm.KeepAccount.utility.ToolUtil
+import wxm.KeepAccount.utility.*
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.androidutil.util.doJudge
+import java.io.File
 import java.lang.String.format
 import java.math.BigDecimal
 import java.sql.Timestamp
@@ -37,20 +43,39 @@ import java.util.*
  * edit income
  * Created by WangXM on2016/9/28.
  */
-class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
+class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
     private val mETInfo: TouchEditText by bindView(R.id.ar_et_info)
     private val mETDate: TouchEditText by bindView(R.id.ar_et_date)
     private val mETAmount: TouchEditText by bindView(R.id.ar_et_amount)
     private val mTVNote: TouchTextView by bindView(R.id.tv_note)
+    private val mIVImage: ImageView by bindView(R.id.iv_image)
+    private var mSZImagePath: String = ""
 
     private val mSZDefNote: String = AppBase.getString(R.string.notice_input_note)
 
     private var mOldIncomeNote: IncomeNoteItem? = null
 
     override fun getLayoutID(): Int = R.layout.pg_edit_income
-
     override fun setEditData(data: Any) {
         mOldIncomeNote = data as IncomeNoteItem
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.getActivityResult(data).let1 { result ->
+                if (resultCode == Activity.RESULT_OK) {
+                    saveImage(result.uri).let1 {
+                        if (it.isNotEmpty()) {
+                            mSZImagePath = it
+                            mIVImage.setImagePath(mSZImagePath)
+                        }
+                    }
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    DlgAlert.showAlert(activity!!, R.string.dlg_erro, result.error.toString())
+                }
+            }
+        }
     }
 
     override fun refillData() {
@@ -97,6 +122,12 @@ class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
             mETInfo.setOnTouchListener(listener)
             mETDate.setOnTouchListener(listener)
             mTVNote.setOnTouchListener(listener)
+
+            mIVImage.setOnClickListener({v ->
+                CropImage.activity()
+                        .setAspectRatio(1, 1)
+                        .start(context!!, this)
+            })
         }
 
         loadUI(bundle)
@@ -108,11 +139,15 @@ class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
             mETDate.setText(paraDate ?: it.tsToStr.substring(0, 16))
             mETInfo.setText(it.info)
 
-            val szNote = it.note
-            mTVNote.text = if (UtilFun.StringIsNullOrEmpty(szNote)) mSZDefNote else szNote
             mTVNote.paint.flags = Paint.UNDERLINE_TEXT_FLAG
+            it.note.let1 {
+                mTVNote.text = if (UtilFun.StringIsNullOrEmpty(it)) mSZDefNote else it
+            }
 
             mETAmount.setText(it.valToStr)
+            if(it.images.isNotEmpty())  {
+                mIVImage.setImagePath(it.images[0])
+            }
         }
     }
 
@@ -126,32 +161,18 @@ class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
      * @return      true if record validity
      */
     private fun checkResult(): Boolean {
-        val ac = activity ?: return false
-
-        if (UtilFun.StringIsNullOrEmpty(mETAmount.text.toString())) {
-            val builder = android.app.AlertDialog.Builder(ac)
-            builder.setMessage("请输入收入数值!").setTitle("警告")
-
-            val dlg = builder.create()
-            dlg.show()
+        if (mETAmount.text.isNullOrEmpty()) {
+            mETAmount.error = getString(R.string.error_field_required)
             return false
         }
 
-        if (UtilFun.StringIsNullOrEmpty(mETInfo.text.toString())) {
-            val builder = android.app.AlertDialog.Builder(ac)
-            builder.setMessage("请输入收入信息!").setTitle("警告")
-
-            val dlg = builder.create()
-            dlg.show()
+        if (mETInfo.text.isNullOrEmpty()) {
+            mETInfo.error = getString(R.string.error_field_required)
             return false
         }
 
-        if (UtilFun.StringIsNullOrEmpty(mETDate.text.toString())) {
-            val builder = android.app.AlertDialog.Builder(ac)
-            builder.setMessage("请输入收入日期!").setTitle("警告")
-
-            val dlg = builder.create()
-            dlg.show()
+        if (mETDate.text.isNullOrEmpty()) {
+            mETDate.error = getString(R.string.error_field_required)
             return false
         }
 
@@ -167,14 +188,23 @@ class PageIncomeEdit : FrgSupportBaseAdv(), IEdit {
 
         mOldIncomeNote?.let {
             val bCreate = GlobalDef.INVALID_ID == it.id
-            val bRet = if (bCreate)
-                1 == AppUtil.payIncomeUtility.addIncomeNotes(listOf(it))
-            else
-                AppUtil.payIncomeUtility.incomeDBUtility.modifyData(it)
-            if (!bRet) {
-                DlgAlert.showAlert(context!!, R.string.dlg_erro,
-                        bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
-            }
+            var bRet = bCreate.doJudge(
+                    { 1 == AppUtil.payIncomeUtility.addIncomeNotes(listOf(it)) },
+                    { AppUtil.payIncomeUtility.incomeDBUtility.modifyData(it) }
+            )
+
+            bRet.doJudge(
+                    {
+                        if (mSZImagePath.isNotEmpty()) {
+                            bRet = NoteImageUtility.addImage(it, mSZImagePath)
+                        }
+                    },
+                    {
+                        DlgAlert.showAlert(context!!, R.string.dlg_warn,
+                                bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
+                    }
+            )
+
             return bRet
         }
 

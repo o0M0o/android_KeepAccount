@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit.NoteEdit.utility
+package wxm.KeepAccount.ui.data.edit.NoteEdit.page
 
 import android.annotation.SuppressLint
 import android.graphics.Paint
@@ -28,7 +28,7 @@ import java.math.BigDecimal
  * edit budget
  * Created by WangXM on2016/9/28.
  */
-class PageBudgetEdit : FrgSupportBaseAdv(), IEdit  {
+class PgBudgetEdit : FrgSupportBaseAdv(), IEdit  {
     private val mETName: TextInputEditText by bindView(R.id.et_budget_name)
     private val mETAmount: TextInputEditText by bindView(R.id.et_budget_amount)
     private val mTVNote: TouchTextView by bindView(R.id.tv_note)

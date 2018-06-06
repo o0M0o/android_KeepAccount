@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit.NoteEdit.utility
+package wxm.KeepAccount.ui.data.edit.NoteEdit.page
 
 import android.os.Bundle
 import android.widget.TextView
@@ -14,7 +14,7 @@ import java.util.*
  * preview fragment for budget
  * Created by WangXM on 2016/10/29.
  */
-class PageBudgetPreview : FrgSupportBaseAdv(), IPreview {
+class PgBudgetPreview : FrgSupportBaseAdv(), IPreview {
     private val mTVAllAmount: TextView by bindView(R.id.tv_all_amount)
     private val mTVLeaveAmount: TextView by bindView(R.id.tv_leave_amount)
     private val mTVName: TextView by bindView(R.id.tv_name)
