@@ -7,7 +7,9 @@ import wxm.KeepAccount.item.NoteImageItem
 import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.db.DBUtilityBase
+import wxm.androidutil.log.TagLog
 import wxm.androidutil.util.doJudge
+import java.io.File
 import java.util.*
 
 /**
@@ -39,7 +41,7 @@ class NoteImageUtility : DBUtilityBase<NoteImageItem, Int>() {
                 imagePath = igPath
             }).doJudge(
                     {
-                        note.images.add(igPath)
+                        TagLog.i("add noteId=${note.id}, igPath=$igPath")
                         true
                     },
                     { false }
@@ -51,17 +53,19 @@ class NoteImageUtility : DBUtilityBase<NoteImageItem, Int>() {
                 return false
 
             val dbHelper = AppUtil.noteImageUtility.dbHelper
-            val op = dbHelper.updateBuilder().updateColumnValue(NoteImageItem.FIELD_STATUS, NoteImageItem.STATUS_NOT_USE)
+            val op = dbHelper.deleteBuilder()
             op.where().eq(NoteImageItem.FIELD_FOREIGN_ID, note.id)
                     .and().eq(NoteImageItem.FIELD_IMAGE_TYPE, note.noteType())
                     .and().eq(NoteImageItem.FIELD_IMAGE_PATH, igPath)
-            return (op.update() == 1).doJudge(
-                    {
-                        note.images.remove(igPath)
-                        true
-                    },
-                    { false }
-            )
+            op.delete()
+
+            File(igPath).let1 {
+                if (it.exists() && it.isFile) {
+                    it.delete()
+                }
+            }
+            TagLog.i("remove noteId=${note.id}, igPath=$igPath")
+            return true
         }
 
         fun setNoteImages(note: INote): Boolean {
@@ -78,6 +82,14 @@ class NoteImageUtility : DBUtilityBase<NoteImageItem, Int>() {
 
             note.images = ret
             return true
+        }
+
+        fun clearNoteImages(note: INote) {
+            note.images.forEach {
+                removeImage(note, it)
+            }
+
+            note.images.clear()
         }
     }
 }

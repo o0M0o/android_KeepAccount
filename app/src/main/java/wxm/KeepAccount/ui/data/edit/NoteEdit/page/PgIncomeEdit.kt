@@ -104,6 +104,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
 
                 it.images = LinkedList<String>().apply {
                     if(mSZImagePath.isNotEmpty())    add(mSZImagePath)
+                    else addAll(it.images)
                 }
             }
         }
@@ -117,27 +118,27 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
                 override fun afterTextChanged(s: Editable) {
-                    val pos = s.toString().indexOf(".")
-                    if (pos >= 0) {
-                        val afterLen = s.length - (pos + 1)
-                        if (afterLen > 2) {
-                            mETAmount.error = "小数点后超过两位数!"
-                            mETAmount.setText(s.subSequence(0, pos + 3))
+                    s.toString().indexOf(".").let1 {
+                        if (it >= 0) {
+                            if (s.length - (it + 1) > 2) {
+                                mETAmount.error = "小数点后超过两位数!"
+                                mETAmount.setText(s.subSequence(0, it + 3))
+                            }
                         }
                     }
                 }
             })
 
-            val listener = View.OnTouchListener { v, event -> onTouchChildView(v, event) }
-            mETInfo.setOnTouchListener(listener)
-            mETDate.setOnTouchListener(listener)
-            mTVNote.setOnTouchListener(listener)
+            View.OnTouchListener { v, event -> onTouchChildView(v, event) }.let1 {
+                mETInfo.setOnTouchListener(it)
+                //mETAmount.setOnTouchListener(it)
+                mETDate.setOnTouchListener(it)
+                mTVNote.setOnTouchListener(it)
+            }
 
             mIVImage.setOnClickListener({v ->
                 if(mSZImagePath.isEmpty()) {
-                    CropImage.activity()
-                            .setAspectRatio(1, 1)
-                            .start(context!!, this)
+                    CropImage.activity().start(context!!, this)
                 } else  {
                     mLLImageHeader.visibility = (View.GONE == mLLImageHeader.visibility)
                             .doJudge(View.VISIBLE, View.GONE)
@@ -146,9 +147,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
 
             mIBImageRefresh.setOnClickListener({v ->
                 mLLImageHeader.visibility = View.GONE
-                CropImage.activity()
-                        .setAspectRatio(1, 1)
-                        .start(context!!, this)
+                CropImage.activity().start(context!!, this)
             })
 
             mIBImageRemove.setOnClickListener({v ->
@@ -182,7 +181,8 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
 
             mETAmount.setText(it.valToStr)
             if(it.images.isNotEmpty())  {
-                mIVImage.setImagePath(it.images[0])
+                mSZImagePath = it.images[0]
+                mIVImage.setImagePath(mSZImagePath)
             }
         }
     }
@@ -251,6 +251,14 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 when (v.id) {
+                    /*
+                    R.id.ar_et_amount ->    {
+                        if(BigDecimal.ZERO.toMoneyString() == mETAmount.text.toString())    {
+                            mETAmount.text.clear()
+                        }
+                    }
+                    */
+
                     R.id.ar_et_info -> {
                         val dp = DlgSelectRecordType()
                         dp.setOldType(GlobalDef.STR_RECORD_INCOME, mETInfo.text.toString())

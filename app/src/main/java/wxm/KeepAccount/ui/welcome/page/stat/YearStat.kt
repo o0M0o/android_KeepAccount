@@ -7,6 +7,7 @@ import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.util.ChartUtils
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
+import wxm.KeepAccount.utility.let1
 import wxm.androidutil.log.TagLog
 import java.util.ArrayList
 
@@ -22,9 +23,8 @@ class YearStat : StatBase() {
                     val axisValues = ArrayList<AxisValue>()
                     val columns = ArrayList<Column>()
                     NoteDataHelper.notesYears
-                            .forEach {
-                                val tag = it
-                                NoteDataHelper.getInfoByYear(it).let {
+                            .forEach { tag ->
+                                NoteDataHelper.getInfoByYear(tag).let1 {
                                     columns.add(Column(
                                             listOf(SubcolumnValue(it.payAmount.toFloat(), mPayColor),
                                                     SubcolumnValue(it.incomeAmount.toFloat(), mIncomeColor)))
@@ -34,19 +34,19 @@ class YearStat : StatBase() {
                                 }
                             }
 
-                    mChartData = ColumnChartData(columns)
-                    mChartData!!.axisXBottom = Axis(axisValues)
-                    mChartData!!.axisYLeft = Axis().setHasLines(true)
+                    mChartData.columns = columns
+                    mChartData.axisXBottom = Axis(axisValues)
+                    mChartData.axisYLeft = Axis().setHasLines(true)
 
                     // prepare preview data, is better to use separate deep copy for preview chart.
                     // set color to grey to make preview area more visible.
-                    mPreviewData = ColumnChartData(mChartData!!)
-                    mPreviewData!!.columns.forEach {
+                    mPreviewData = ColumnChartData(mChartData)
+                    mPreviewData.columns.forEach {
                         it.values.forEach { it.color = ChartUtils.DEFAULT_DARKEN_COLOR }
                         it.setHasLabels(false)
                     }
 
-                    mPreviewData!!.axisXBottom.values.forEach {
+                    mPreviewData.axisXBottom.values.forEach {
                         it.setLabel(String(it.labelAsChars).substring(0, 4))
                     }
                 },

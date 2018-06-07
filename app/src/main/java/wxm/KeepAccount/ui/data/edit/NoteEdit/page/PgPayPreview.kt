@@ -8,6 +8,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import kotterknife.bindView
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.NoteImageUtility
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.ui.preview.ACImagePreview
@@ -56,6 +57,7 @@ class PgPayPreview : FrgSupportBaseAdv(), IPreview {
                 mTVTime.text = data.ts.toHourMinuteStr()
                 mTVDayInWeek.text = data.ts.toCalendar().getDayInWeekString()
 
+                NoteImageUtility.setNoteImages(data)
                 data.images.isEmpty().doJudge(
                         { mRLImage.visibility = View.GONE },
                         {

@@ -31,8 +31,8 @@ abstract class StatBase : FrgSupportBaseAdv() {
     private val mBTLessViewPort: Button by bindView(R.id.bt_less_viewport)
     private val mBTMoreViewPort: Button by bindView(R.id.bt_more_viewport)
 
-    protected var mChartData: ColumnChartData? = null
-    protected var mPreviewData: ColumnChartData? = null
+    protected val mChartData: ColumnChartData = ColumnChartData()
+    protected var mPreviewData: ColumnChartData = ColumnChartData()
 
     private var mPrvVPWidth = 5f
     private var mPrvVPOneDataWidth = 1f
@@ -114,7 +114,7 @@ abstract class StatBase : FrgSupportBaseAdv() {
 
     protected fun loadUIUtility() {
         /* for chart */
-        mChartData?.let {
+        mChartData.let {
             mChart.columnChartData = it
             mPreviewChart.columnChartData = mPreviewData
 
@@ -137,7 +137,7 @@ abstract class StatBase : FrgSupportBaseAdv() {
      * adjust viewport
      * @param v clicked view
      */
-    fun onLessOrMoreView(v: View) {
+    private fun onLessOrMoreView(v: View) {
         when (v.id) {
             R.id.bt_more_viewport -> {
                 mPrvVPWidth = mPreviewChart.currentViewport.width()

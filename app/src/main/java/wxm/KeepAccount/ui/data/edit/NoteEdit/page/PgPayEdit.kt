@@ -116,6 +116,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
 
                 it.images = LinkedList<String>().apply {
                     if(mSZImagePath.isNotEmpty())    add(mSZImagePath)
+                    else addAll(it.images)
                 }
             }
         }
@@ -160,9 +161,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
 
             mIVImage.setOnClickListener({ v ->
                 if(mSZImagePath.isEmpty()) {
-                    CropImage.activity()
-                            .setAspectRatio(1, 1)
-                            .start(context!!, this)
+                    CropImage.activity().start(context!!, this)
                 } else  {
                     mCLImageHeader.visibility = (View.GONE == mCLImageHeader.visibility)
                             .doJudge(View.VISIBLE, View.GONE)
@@ -171,9 +170,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
 
             mIBImageRefresh.setOnClickListener({v ->
                 mCLImageHeader.visibility = View.GONE
-                CropImage.activity()
-                            .setAspectRatio(1, 1)
-                            .start(context!!, this)
+                CropImage.activity().start(context!!, this)
             })
 
             mIBImageRemove.setOnClickListener({v ->
@@ -361,8 +358,10 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
 
             bRet.doJudge(
                     {
+                        NoteImageUtility.clearNoteImages(it)
                         if (mSZImagePath.isNotEmpty()) {
                             bRet = NoteImageUtility.addImage(it, mSZImagePath)
+                            NoteImageUtility.setNoteImages(it)
                         }
                     },
                     {
