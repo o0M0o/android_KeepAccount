@@ -88,28 +88,29 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
             mOldPayNote?.let1 {
                 it.info = mETInfo.text.toString()
 
-                val szVal = mETAmount.text.toString()
-                it.amount = if (UtilFun.StringIsNullOrEmpty(szVal))
-                    BigDecimal.ZERO
-                else BigDecimal(szVal)
+                mETAmount.text.toString().let1 {it1 ->
+                    it.amount = it1.isEmpty().doJudge(BigDecimal.ZERO, BigDecimal(it1))
+                }
 
-                val szNote = mTVNote.text.toString()
-                it.note = if (mSZDefNote == szNote) null else szNote
+                mTVNote.text.toString().let1 { it1 ->
+                    it.note = (mSZDefNote == it1).doJudge(null, it1)
+                }
 
-                val szDate = mETDate.text.toString() + ":00"
-                it.ts =
-                        try {
-                            ToolUtil.stringToTimestamp(szDate)
-                        } catch (ex: Exception) {
-                            Timestamp(0)
-                        }
+                (mETDate.text.toString() + ":00").let1 { it1 ->
+                    it.ts = try {
+                                ToolUtil.stringToTimestamp(it1)
+                            } catch (ex: Exception) {
+                                Timestamp(0)
+                            }
+                }
 
                 it.budget = null
-                val pos = mSPBudget.selectedItemPosition
-                if (AdapterView.INVALID_POSITION != pos && 0 != pos) {
-                    val bi = AppUtil.budgetUtility.getBudgetByName(mSPBudget.selectedItem as String)
-                    if (null != bi) {
-                        it.budget = bi
+                mSPBudget.selectedItemPosition.let1 { it1 ->
+                    if (AdapterView.INVALID_POSITION != it1 && 0 != it1) {
+                        AppUtil.budgetUtility
+                                .getBudgetByName(mSPBudget.selectedItem as String)?.let1 { it2 ->
+                                    it.budget = it2
+                                }
                     }
                 }
 
@@ -123,15 +124,15 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
     override fun initUI(bundle: Bundle?) {
         if (null == bundle) {
             // 填充预算数据
-            val lsBudgetName = ArrayList<String>()
-            lsBudgetName.add("无预算(不使用预算)")
-            AppUtil.budgetUtility.budgetForCurUsr.forEach {
-                lsBudgetName.add(it.name)
+            val lsBudgetName = ArrayList<String>().apply {
+                add("无预算(不使用预算)")
+                AppUtil.budgetUtility.budgetForCurUsr.forEach {
+                    add(it.name)
+                }
             }
 
-            val spAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, lsBudgetName)
-            spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            mSPBudget.adapter = spAdapter
+            mSPBudget.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, lsBudgetName)
+                    .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
 
             // 填充其他数据
             mETAmount.addTextChangedListener(object : TextWatcher {
@@ -140,21 +141,22 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
                 override fun afterTextChanged(s: Editable) {
-                    val pos = s.toString().indexOf(".")
-                    if (pos >= 0) {
-                        val afterLen = s.length - (pos + 1)
-                        if (afterLen > 2) {
-                            mETAmount.error = "小数点后超过两位数!"
-                            mETAmount.setText(s.subSequence(0, pos + 3))
+                    s.toString().indexOf(".").let1 {
+                        if (it >= 0) {
+                            if ((s.length - (it + 1)) > 2) {
+                                mETAmount.error = "小数点后超过两位数!"
+                                mETAmount.setText(s.subSequence(0, it + 3))
+                            }
                         }
                     }
                 }
             })
 
-            val listener = View.OnTouchListener { v, event -> onTouchChildView(v, event) }
-            mETInfo.setOnTouchListener(listener)
-            mETDate.setOnTouchListener(listener)
-            mTVNote.setOnTouchListener(listener)
+            View.OnTouchListener { v, event -> onTouchChildView(v, event) }.let1 {
+                mETInfo.setOnTouchListener(it)
+                mETDate.setOnTouchListener(it)
+                mTVNote.setOnTouchListener(it)
+            }
 
             mIVImage.setOnClickListener({ v ->
                 if(mSZImagePath.isEmpty()) {
@@ -162,11 +164,8 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                             .setAspectRatio(1, 1)
                             .start(context!!, this)
                 } else  {
-                    if(View.GONE == mCLImageHeader.visibility)  {
-                        mCLImageHeader.visibility = View.VISIBLE
-                    } else  {
-                        mCLImageHeader.visibility = View.GONE
-                    }
+                    mCLImageHeader.visibility = (View.GONE == mCLImageHeader.visibility)
+                            .doJudge(View.VISIBLE, View.GONE)
                 }
             })
 
@@ -254,15 +253,15 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
 
                     R.id.ar_et_date -> {
                         val sd = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)
-                        val jDate = try {
-                            sd.parse(mETDate.text.toString())
-                        } catch (e: ParseException) {
-                            e.printStackTrace()
-                            Date()
-                        }
-
                         val cd = Calendar.getInstance()
-                        cd.time = jDate
+                        cd.time = sd.let {
+                            try {
+                                sd.parse(mETDate.text.toString())
+                            } catch (e: ParseException) {
+                                e.printStackTrace()
+                                Date()
+                            }
+                        }
 
                         val dt = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                             val strDate = format(Locale.CHINA, "%04d-%02d-%02d",

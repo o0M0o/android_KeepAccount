@@ -12,7 +12,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import com.theartofdev.edmodo.cropper.CropImage
 import kotterknife.bindView
 import wxm.KeepAccount.R
@@ -48,9 +50,13 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
     private val mETDate: TouchEditText by bindView(R.id.ar_et_date)
     private val mETAmount: TouchEditText by bindView(R.id.ar_et_amount)
     private val mTVNote: TouchTextView by bindView(R.id.tv_note)
-    private val mIVImage: ImageView by bindView(R.id.iv_image)
-    private var mSZImagePath: String = ""
 
+    private val mLLImageHeader: LinearLayout by bindView(R.id.ll_image_header)
+    private val mIBImageRefresh: ImageButton by bindView(R.id.ib_image_refresh)
+    private val mIBImageRemove: ImageButton by bindView(R.id.ib_image_remove)
+    private val mIVImage: ImageView by bindView(R.id.iv_image)
+
+    private var mSZImagePath: String = ""
     private val mSZDefNote: String = AppBase.getString(R.string.notice_input_note)
 
     private var mOldIncomeNote: IncomeNoteItem? = null
@@ -95,6 +101,10 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                 } catch (ex: Exception) {
                     Timestamp(0)
                 }
+
+                it.images = LinkedList<String>().apply {
+                    if(mSZImagePath.isNotEmpty())    add(mSZImagePath)
+                }
             }
         }
     }
@@ -124,9 +134,34 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
             mTVNote.setOnTouchListener(listener)
 
             mIVImage.setOnClickListener({v ->
+                if(mSZImagePath.isEmpty()) {
+                    CropImage.activity()
+                            .setAspectRatio(1, 1)
+                            .start(context!!, this)
+                } else  {
+                    mLLImageHeader.visibility = (View.GONE == mLLImageHeader.visibility)
+                            .doJudge(View.VISIBLE, View.GONE)
+                }
+            })
+
+            mIBImageRefresh.setOnClickListener({v ->
+                mLLImageHeader.visibility = View.GONE
                 CropImage.activity()
                         .setAspectRatio(1, 1)
                         .start(context!!, this)
+            })
+
+            mIBImageRemove.setOnClickListener({v ->
+                mLLImageHeader.visibility = View.GONE
+
+                mSZImagePath = ""
+                mOldIncomeNote?.let1 { pn ->
+                    pn.images.forEach {
+                        NoteImageUtility.removeImage(pn, it)
+                    }
+                }
+
+                mIVImage.setImageResource(R.drawable.image_add_pic)
             })
         }
 
@@ -135,6 +170,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
 
     override fun loadUI(bundle: Bundle?) {
         val paraDate = arguments?.getString(GlobalDef.STR_RECORD_DATE)
+        mLLImageHeader.visibility = View.GONE
         mOldIncomeNote?.let {
             mETDate.setText(paraDate ?: it.tsToStr.substring(0, 16))
             mETInfo.setText(it.info)

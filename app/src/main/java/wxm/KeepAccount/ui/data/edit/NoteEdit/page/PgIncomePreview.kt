@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.data.edit.NoteEdit.page
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -11,6 +12,8 @@ import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
+import wxm.KeepAccount.ui.preview.ACImagePreview
+import wxm.KeepAccount.utility.let1
 import wxm.KeepAccount.utility.setImagePath
 import wxm.KeepAccount.utility.toDayStr
 import wxm.KeepAccount.utility.toHourMinuteStr
@@ -56,7 +59,18 @@ class PgIncomePreview : FrgSupportBaseAdv(), IPreview {
 
                 data.images.isEmpty().doJudge(
                         { mRLImage.visibility = View.GONE },
-                        { mIVImage.setImagePath(data.images[0])  })
+                        {
+                            mRLImage.visibility = View.VISIBLE
+
+                            val fp = data.images[0]
+                            mIVImage.setImagePath(fp)
+                            mIVImage.setOnClickListener({ _ ->
+                                Intent(activity!!, ACImagePreview::class.java).let1 {
+                                    it.putExtra(ACImagePreview.IMAGE_FILE_PATH, fp)
+                                    activity!!.startActivity(it)
+                                }
+                            })
+                        })
             } else  {
                 mTVAmount.text = ""
                 mTVInfo.text = ""
