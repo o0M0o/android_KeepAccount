@@ -5,6 +5,7 @@ import org.greenrobot.eventbus.EventBus
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.item.NoteImageItem
 import wxm.KeepAccount.utility.AppUtil
+import wxm.KeepAccount.utility.getFileName
 import wxm.KeepAccount.utility.let1
 import wxm.androidutil.db.DBUtilityBase
 import wxm.androidutil.log.TagLog
@@ -35,13 +36,23 @@ class NoteImageUtility : DBUtilityBase<NoteImageItem, Int>() {
 
     companion object {
         fun addImage(note: INote, igPath: String): Boolean {
+            val pn = note.images.find { it.imagePath == igPath }
+            if(null != pn) {
+                if(pn.status == NoteImageItem.STATUS_NOT_USE)   {
+                    pn.status = NoteImageItem.STATUS_USE
+                    AppUtil.noteImageUtility.modifyData(pn)
+                }
+                return true
+            }
+
             return AppUtil.noteImageUtility.createData(NoteImageItem().apply {
                 foreignID = note.id
                 imageType = note.noteType()
                 imagePath = igPath
             }).doJudge(
                     {
-                        TagLog.i("add noteId=${note.id}, igPath=$igPath")
+                        TagLog.i("add noteId=${note.id}, igPath=${getFileName(igPath)}")
+                        setNoteImages(note)
                         true
                     },
                     { false }
@@ -49,22 +60,17 @@ class NoteImageUtility : DBUtilityBase<NoteImageItem, Int>() {
         }
 
         fun removeImage(note: INote, igPath: String): Boolean {
-            if (!note.images.contains(igPath))
-                return false
+            val pn = note.images.find { it.imagePath == igPath } ?: return false
 
-            val dbHelper = AppUtil.noteImageUtility.dbHelper
-            val op = dbHelper.deleteBuilder()
-            op.where().eq(NoteImageItem.FIELD_FOREIGN_ID, note.id)
-                    .and().eq(NoteImageItem.FIELD_IMAGE_TYPE, note.noteType())
-                    .and().eq(NoteImageItem.FIELD_IMAGE_PATH, igPath)
-            op.delete()
-
-            File(igPath).let1 {
+            File(pn.imagePath).let1 {
                 if (it.exists() && it.isFile) {
                     it.delete()
                 }
             }
-            TagLog.i("remove noteId=${note.id}, igPath=$igPath")
+            AppUtil.noteImageUtility.dbHelper.delete(pn)
+
+
+            TagLog.i("remove imageId=${pn.id}, igPath=${getFileName(pn.imagePath)}")
             return true
         }
 
@@ -75,21 +81,20 @@ class NoteImageUtility : DBUtilityBase<NoteImageItem, Int>() {
                     .and().eq(NoteImageItem.FIELD_IMAGE_TYPE, note.noteType())
                     .and().eq(NoteImageItem.FIELD_STATUS, NoteImageItem.STATUS_USE).prepare()
 
-            val ret = LinkedList<String>()
             dbHelper.query(prepare)?.filterNotNull()?.forEach {
-                ret.add(it.imagePath)
+                note.images.add(it)
             }
 
-            note.images = ret
             return true
         }
 
         fun clearNoteImages(note: INote) {
-            note.images.forEach {
-                removeImage(note, it)
+            if(note.images.isNotEmpty()) {
+                note.images.forEach {
+                    removeImage(note, it.imagePath)
+                }
+                note.images.clear()
             }
-
-            note.images.clear()
         }
     }
 }

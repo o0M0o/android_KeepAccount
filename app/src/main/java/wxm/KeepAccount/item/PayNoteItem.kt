@@ -18,7 +18,7 @@ import java.util.*
  * Created by WangXM on 2016/5/3.
  */
 @DatabaseTable(tableName = "tbPayNote")
-class PayNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone {
+class PayNoteItem(override var tag: Any? = null) : INote, IDBRow<Int>, Cloneable, IPublicClone {
     @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
     override var id: Int = GlobalDef.INVALID_ID
 
@@ -48,7 +48,7 @@ class PayNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone {
             tsToStr = field.toString()
         }
 
-    override var images: LinkedList<String> = LinkedList()
+    override var images: LinkedList<NoteImageItem> = LinkedList()
         set(value) {
             field.clear()
             field.addAll(value)
@@ -100,7 +100,7 @@ class PayNoteItem : INote, IDBRow<Int>, Cloneable, IPublicClone {
     }
 
     override fun clone(): Any {
-        val obj = PayNoteItem()
+        val obj = PayNoteItem(tag)
 
         obj.id = this.id
         this.usr?.let {

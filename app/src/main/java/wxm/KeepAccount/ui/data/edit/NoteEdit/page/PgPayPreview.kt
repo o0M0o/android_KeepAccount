@@ -57,17 +57,20 @@ class PgPayPreview : FrgSupportBaseAdv(), IPreview {
                 mTVTime.text = data.ts.toHourMinuteStr()
                 mTVDayInWeek.text = data.ts.toCalendar().getDayInWeekString()
 
-                NoteImageUtility.setNoteImages(data)
-                data.images.isEmpty().doJudge(
+                val pn = (data.tag == null).doJudge(
+                        {if(data.images.isEmpty()) ""
+                            else data.images[0].imagePath},
+                        {data.tag as String}
+                )
+                pn.isEmpty().doJudge(
                         { mRLImage.visibility = View.GONE },
                         {
                             mRLImage.visibility = View.VISIBLE
 
-                            val fp = data.images[0]
-                            mIVImage.setImagePath(fp)
+                            mIVImage.setImagePath(pn)
                             mIVImage.setOnClickListener({ _ ->
                                 Intent(activity!!, ACImagePreview::class.java).let1 {
-                                    it.putExtra(ACImagePreview.IMAGE_FILE_PATH, fp)
+                                    it.putExtra(ACImagePreview.IMAGE_FILE_PATH, pn)
                                     activity!!.startActivity(it)
                                 }
                             })

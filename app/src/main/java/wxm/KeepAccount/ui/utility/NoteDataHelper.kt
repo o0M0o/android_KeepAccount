@@ -1,6 +1,7 @@
 package wxm.KeepAccount.ui.utility
 
 
+import wxm.KeepAccount.db.NoteImageUtility
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.util.forObj
@@ -177,6 +178,16 @@ class NoteDataHelper private constructor() {
          */
         fun reloadData()    {
             instance.refreshData()
+        }
+
+        fun findNote(nid: Int, type:String): INote?   {
+            instance.allNotes.values.forEach {
+                it.find { it.id == nid  && type == it.noteType() }?.let {
+                    return it
+                }
+            }
+
+            return null
         }
 
         /**

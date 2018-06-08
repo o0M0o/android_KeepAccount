@@ -65,10 +65,10 @@ class PgIncomePreview : FrgSupportBaseAdv(), IPreview {
                             mRLImage.visibility = View.VISIBLE
 
                             val fp = data.images[0]
-                            mIVImage.setImagePath(fp)
+                            mIVImage.setImagePath(fp.imagePath)
                             mIVImage.setOnClickListener({ _ ->
                                 Intent(activity!!, ACImagePreview::class.java).let1 {
-                                    it.putExtra(ACImagePreview.IMAGE_FILE_PATH, fp)
+                                    it.putExtra(ACImagePreview.IMAGE_FILE_PATH, fp.imagePath)
                                     activity!!.startActivity(it)
                                 }
                             })

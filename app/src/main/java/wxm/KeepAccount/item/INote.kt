@@ -53,12 +53,17 @@ interface INote {
 
     var budget: BudgetItem?
 
-    var images: LinkedList<String>
+    var images: LinkedList<NoteImageItem>
+
+    var tag: Any?
 
     fun toPayNote(): PayNoteItem?
 
     fun toIncomeNote(): IncomeNoteItem?
 
+    /**
+     * get note type as string
+     */
     fun noteType():String   {
         return isPayNote.doJudge(GlobalDef.STR_RECORD_PAY, GlobalDef.STR_RECORD_INCOME)
     }

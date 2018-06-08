@@ -8,7 +8,6 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
@@ -25,6 +24,7 @@ import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
+import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.*
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgAlert
@@ -88,7 +88,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
             mOldPayNote?.let1 {
                 it.info = mETInfo.text.toString()
 
-                mETAmount.text.toString().let1 {it1 ->
+                mETAmount.text.toString().let1 { it1 ->
                     it.amount = it1.isEmpty().doJudge(BigDecimal.ZERO, BigDecimal(it1))
                 }
 
@@ -98,10 +98,10 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
 
                 (mETDate.text.toString() + ":00").let1 { it1 ->
                     it.ts = try {
-                                ToolUtil.stringToTimestamp(it1)
-                            } catch (ex: Exception) {
-                                Timestamp(0)
-                            }
+                        ToolUtil.stringToTimestamp(it1)
+                    } catch (ex: Exception) {
+                        Timestamp(0)
+                    }
                 }
 
                 it.budget = null
@@ -114,10 +114,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                     }
                 }
 
-                it.images = LinkedList<String>().apply {
-                    if(mSZImagePath.isNotEmpty())    add(mSZImagePath)
-                    else addAll(it.images)
-                }
+                it.tag = mSZImagePath
             }
         }
     }
@@ -160,27 +157,25 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
             }
 
             mIVImage.setOnClickListener({ v ->
-                if(mSZImagePath.isEmpty()) {
+                if (mSZImagePath.isEmpty()) {
                     CropImage.activity().start(context!!, this)
-                } else  {
+                } else {
                     mCLImageHeader.visibility = (View.GONE == mCLImageHeader.visibility)
                             .doJudge(View.VISIBLE, View.GONE)
                 }
             })
 
-            mIBImageRefresh.setOnClickListener({v ->
+            mIBImageRefresh.setOnClickListener({ v ->
                 mCLImageHeader.visibility = View.GONE
                 CropImage.activity().start(context!!, this)
             })
 
-            mIBImageRemove.setOnClickListener({v ->
+            mIBImageRemove.setOnClickListener({ v ->
                 mCLImageHeader.visibility = View.GONE
 
                 mSZImagePath = ""
                 mOldPayNote?.let1 { pn ->
-                    pn.images.forEach {
-                        NoteImageUtility.removeImage(pn, it)
-                    }
+                    NoteImageUtility.clearNoteImages(pn)
                 }
 
                 mIVImage.setImageResource(R.drawable.image_add_pic)
@@ -217,7 +212,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
 
             mETAmount.setText(it.valToStr)
             if (it.images.isNotEmpty()) {
-                mSZImagePath = it.images[0]
+                mSZImagePath = it.images[0].imagePath
                 mIVImage.setImagePath(mSZImagePath)
             }
         }
@@ -351,24 +346,37 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
 
         mOldPayNote?.let {
             val bCreate = GlobalDef.INVALID_ID == it.id
-            var bRet = bCreate.doJudge(
+            val bRet = bCreate.doJudge(
                     { 1 == AppUtil.payIncomeUtility.addPayNotes(listOf(it)) },
                     { AppUtil.payIncomeUtility.payDBUtility.modifyData(it) }
             )
 
-            bRet.doJudge(
-                    {
-                        NoteImageUtility.clearNoteImages(it)
-                        if (mSZImagePath.isNotEmpty()) {
-                            bRet = NoteImageUtility.addImage(it, mSZImagePath)
-                            NoteImageUtility.setNoteImages(it)
-                        }
-                    },
-                    {
-                        DlgAlert.showAlert(context!!, R.string.dlg_warn,
-                                bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
+            if (!bRet) {
+                DlgAlert.showAlert(context!!, R.string.dlg_warn,
+                        bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
+            } else {
+                if (bCreate) {
+                    if(mSZImagePath.isNotEmpty())   {
+                        NoteImageUtility.addImage(it, mSZImagePath)
                     }
-            )
+                } else {
+                    if(mSZImagePath.isEmpty())  {
+                        NoteImageUtility.clearNoteImages(it)
+                    } else  {
+                        val note = it
+                        it.images.find { it.imagePath == mSZImagePath }.let1 {
+                            if(null == it)  {
+                                NoteImageUtility.clearNoteImages(note)
+                                NoteImageUtility.addImage(note, mSZImagePath)
+                            }
+                        }
+                    }
+                }
+
+                NoteDataHelper.findNote(it.id, it.noteType())!!.let1 {
+                    NoteImageUtility.setNoteImages(it)
+                }
+            }
 
             return bRet
         }

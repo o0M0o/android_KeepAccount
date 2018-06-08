@@ -67,6 +67,9 @@ fun saveImage(imageUri: Uri): String {
     return ""
 }
 
+/**
+ * get default usr icon
+ */
 fun defaultUsrIcon(): String = createPath(AppUtil.imagePath, "usr_default_icon.png")
 
 /**
@@ -83,5 +86,12 @@ fun saveBitmapToJPGFile(bm: Bitmap, fn: String,
             e.printStackTrace()
             false
         }
+    }
+}
+
+fun getFileName(pn:String): String  {
+    return pn.lastIndexOf(GlobalDef.FILE_PATH_SEPARATOR).let {
+        if(-1 != it)    pn.substring(it + 1)
+        else pn
     }
 }

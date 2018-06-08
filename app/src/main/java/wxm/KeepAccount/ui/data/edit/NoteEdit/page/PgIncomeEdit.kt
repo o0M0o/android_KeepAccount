@@ -102,10 +102,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                     Timestamp(0)
                 }
 
-                it.images = LinkedList<String>().apply {
-                    if(mSZImagePath.isNotEmpty())    add(mSZImagePath)
-                    else addAll(it.images)
-                }
+                it.tag = mSZImagePath
             }
         }
     }
@@ -151,16 +148,13 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
             })
 
             mIBImageRemove.setOnClickListener({v ->
-                mLLImageHeader.visibility = View.GONE
-
-                mSZImagePath = ""
                 mOldIncomeNote?.let1 { pn ->
-                    pn.images.forEach {
-                        NoteImageUtility.removeImage(pn, it)
-                    }
+                    NoteImageUtility.removeImage(pn, mSZImagePath)
                 }
 
+                mSZImagePath = ""
                 mIVImage.setImageResource(R.drawable.image_add_pic)
+                mLLImageHeader.visibility = View.GONE
             })
         }
 
@@ -181,7 +175,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
 
             mETAmount.setText(it.valToStr)
             if(it.images.isNotEmpty())  {
-                mSZImagePath = it.images[0]
+                mSZImagePath = it.images[0].imagePath
                 mIVImage.setImagePath(mSZImagePath)
             }
         }
