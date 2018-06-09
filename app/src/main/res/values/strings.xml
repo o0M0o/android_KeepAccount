@@ -13,6 +13,7 @@
     <string name="add_usr">新建用户</string>
 
     <string name="contact_email">fly_in_wind@qq.com</string>
+    <string name="contact_title">关于应用《随手账》</string>
     <string name="contact_studio">oko studio</string>
 
     <string name="cn_income">收入</string>
@@ -71,6 +72,7 @@
     <string name="setting_reformat_data">数据格式化</string>
     <string name="setting_chart_color">设置图表颜色</string>
     <string name="setting_check_version">检查更新</string>
+    <string name="setting_email_author">联系作者</string>
     <string name="setting_share_app">分享APP</string>
     <string name="app_setting">设置</string>
     <string name="setting_pay_color">支出</string>

@@ -116,7 +116,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                         mTVNote.setOnTouchListener(it)
                     }
 
-            mIVImage.setOnClickListener({ v ->
+            mIVImage.setOnClickListener({ _ ->
                 if (mSZImagePath.isEmpty()) {
                     CropImage.activity().start(context!!, this)
                 } else {
@@ -125,12 +125,12 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                 }
             })
 
-            mIBImageRefresh.setOnClickListener({ v ->
+            mIBImageRefresh.setOnClickListener({ _ ->
                 mLLImageHeader.visibility = View.GONE
                 CropImage.activity().start(context!!, this)
             })
 
-            mIBImageRemove.setOnClickListener({ v ->
+            mIBImageRemove.setOnClickListener({ _ ->
                 mOldIncomeNote?.let1 { pn ->
                     NoteImageUtility.removeImage(pn, mSZImagePath)
                 }

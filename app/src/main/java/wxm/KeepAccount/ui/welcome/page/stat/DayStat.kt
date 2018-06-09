@@ -8,7 +8,6 @@ import lecho.lib.hellocharts.util.ChartUtils
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.KeepAccount.improve.let1
-import wxm.androidutil.util.doJudge
 import java.util.ArrayList
 
 /**
@@ -49,11 +48,11 @@ class DayStat : StatBase() {
                         it.setHasLabels(false)
                     }
 
-                    val getLabel = { label: String? ->
-                        (null != label && 4 < label.length).doJudge(label!!.substring(0, 4), "")
-                    }
                     mPreviewData.axisXBottom.values.forEach {
-                        it.setLabel(String(it.labelAsChars).substring(0, 4))
+                        it.setLabel(String(it.labelAsChars).let {
+                            if(it.length < 4) ""
+                            else it.substring(0, 4)
+                        })
                     }
                 },
                 {

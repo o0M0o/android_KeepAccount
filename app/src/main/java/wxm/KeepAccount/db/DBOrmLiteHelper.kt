@@ -58,6 +58,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun upgrade12(oldVersion: Int) {
         TableUtils.createTableIfNotExists(connectionSource, NoteImageItem::class.java)
         TableUtils.createTableIfNotExists(connectionSource, LoginHistoryItem::class.java)

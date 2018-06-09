@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.setting
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.view.View
@@ -12,6 +13,11 @@ import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.view.EventHelper
+import android.content.Intent.EXTRA_SUBJECT
+import android.content.Intent.ACTION_SENDTO
+import android.net.Uri
+import wxm.KeepAccount.improve.let1
+
 
 /**
  * main page for setting
@@ -29,9 +35,21 @@ class TFSettingMain : TFSettingBase() {
             mRLShareApp.visibility = View.GONE
 
             EventHelper.setOnClickListener(view!!,
-                    intArrayOf(R.id.rl_check_version, R.id.rl_chart_color, R.id.rl_reformat_data),
+                    intArrayOf(R.id.rl_check_version, R.id.rl_email_author, R.id.rl_chart_color, R.id.rl_reformat_data),
                     View.OnClickListener { v ->
                         when (v.id) {
+                            R.id.rl_email_author -> {
+                                DlgAlert.showAlert(context!!, R.string.dlg_info,
+                                        "作者邮箱 : ${getString(R.string.contact_email)}",
+                                        {b ->
+                                            b.setPositiveButton("直接发起邮件") {_, _ ->
+                                                sendEmailTOAuthor()
+                                            }
+                                            b.setNegativeButton(getString(R.string.cn_cancel)) {_, _ ->
+                                            }
+                                        })
+                            }
+
                             R.id.rl_check_version -> {
                                 EventBus.getDefault().post(ChangePage(TFSettingCheckVersion::class.java.name))
                             }
@@ -62,5 +80,13 @@ class TFSettingMain : TFSettingBase() {
 
     override fun updateSetting() {
         isSettingDirty = false
+    }
+
+    private fun sendEmailTOAuthor() {
+        Intent(ACTION_SENDTO).let1 {
+            it.data = Uri.parse("mailto:${getString(R.string.contact_email)}")
+            it.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.contact_title))
+            startActivity(it)
+        }
     }
 }
