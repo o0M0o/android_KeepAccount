@@ -8,8 +8,6 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v4.app.DialogFragment
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
@@ -24,7 +22,6 @@ import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
-import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.*
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgAlert
@@ -132,24 +129,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
             mSPBudget.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, lsBudgetName)
                     .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
 
-            // 填充其他数据
-            mETAmount.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-
-                override fun afterTextChanged(s: Editable) {
-                    s.toString().indexOf(".").let1 {
-                        if (it >= 0) {
-                            if ((s.length - (it + 1)) > 2) {
-                                mETAmount.error = "小数点后超过两位数!"
-                                mETAmount.setText(s.subSequence(0, it + 3))
-                            }
-                        }
-                    }
-                }
-            })
-
+            mETAmount.addTextChangedListener(MoneyTextWatcher(mETAmount))
             View.OnTouchListener { v, event -> onTouchChildView(v, event) }.let1 {
                 mETInfo.setOnTouchListener(it)
                 mETDate.setOnTouchListener(it)
@@ -190,13 +170,10 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
         mTVNote.paint.flags = Paint.UNDERLINE_TEXT_FLAG
         mCLImageHeader.visibility = View.GONE
         mOldPayNote?.let1 {
-            val bi = it.budget
-            if (null != bi) {
-                val bn = bi.name
+            it.budget?.let1 {
                 val cc = mSPBudget.adapter.count
                 for (i in 0 until cc) {
-                    val bni = UtilFun.cast<String>(mSPBudget.adapter.getItem(i))
-                    if (bn == bni) {
+                    if (it.name == (mSPBudget.adapter.getItem(i) as String)) {
                         mSPBudget.setSelection(i)
                         break
                     }
@@ -228,9 +205,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                             dp.setOldType(GlobalDef.STR_RECORD_PAY, mETInfo.text.toString())
                             dp.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
                                 override fun onDialogPositiveResult(dialog: DialogFragment) {
-                                    val dpCur = UtilFun.cast_t<DlgSelectRecordType>(dialog)
-                                    val curInfo = dpCur.curType
-                                    mETInfo.setText(curInfo)
+                                    mETInfo.setText((dialog as DlgSelectRecordType).curType)
                                     mETInfo.requestFocus()
                                 }
 
@@ -244,11 +219,9 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                     }
 
                     R.id.ar_et_date -> {
-                        val sd = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)
-                        val cd = Calendar.getInstance()
-                        cd.time = sd.let {
-                            try {
-                                sd.parse(mETDate.text.toString())
+                        val cd = Calendar.getInstance().apply {
+                            time = try {
+                                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).parse(mETDate.text.toString())
                             } catch (e: ParseException) {
                                 e.printStackTrace()
                                 Date()
@@ -278,18 +251,15 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                     }
 
                     R.id.tv_note -> {
-                        val szNote = mTVNote.text.toString()
-                        val lt = if (mSZDefNote == szNote) "" else szNote
-
                         DlgLongTxt().let1 { dlg ->
-                            dlg.longTxt = lt
+                            dlg.longTxt = mTVNote.text.toString()
+                                    .let { if (mSZDefNote == it) "" else it }
                             dlg.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
                                 override fun onDialogPositiveResult(dialogFragment: DialogFragment) {
-                                    var longTxt: String? = (dialogFragment as DlgLongTxt).longTxt
-                                    if (UtilFun.StringIsNullOrEmpty(longTxt))
-                                        longTxt = mSZDefNote
-
-                                    mTVNote.text = longTxt
+                                    mTVNote.text = (dialogFragment as DlgLongTxt).longTxt.let {
+                                        if (it.isEmpty()) mSZDefNote
+                                        else it
+                                    }
                                     mTVNote.paint.flags = Paint.UNDERLINE_TEXT_FLAG
                                 }
 
@@ -351,31 +321,11 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                     { AppUtil.payIncomeUtility.payDBUtility.modifyData(it) }
             )
 
-            if (!bRet) {
+            if (bRet) {
+                refreshNoteImage(it, mSZImagePath, bCreate)
+            } else {
                 DlgAlert.showAlert(context!!, R.string.dlg_warn,
                         bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
-            } else {
-                if (bCreate) {
-                    if(mSZImagePath.isNotEmpty())   {
-                        NoteImageUtility.addImage(it, mSZImagePath)
-                    }
-                } else {
-                    if(mSZImagePath.isEmpty())  {
-                        NoteImageUtility.clearNoteImages(it)
-                    } else  {
-                        val note = it
-                        it.images.find { it.imagePath == mSZImagePath }.let1 {
-                            if(null == it)  {
-                                NoteImageUtility.clearNoteImages(note)
-                                NoteImageUtility.addImage(note, mSZImagePath)
-                            }
-                        }
-                    }
-                }
-
-                NoteDataHelper.findNote(it.id, it.noteType())!!.let1 {
-                    NoteImageUtility.setNoteImages(it)
-                }
             }
 
             return bRet

@@ -14,10 +14,7 @@ import wxm.KeepAccount.db.NoteImageUtility
 import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.ui.preview.ACImagePreview
-import wxm.KeepAccount.utility.let1
-import wxm.KeepAccount.utility.setImagePath
-import wxm.KeepAccount.utility.toDayStr
-import wxm.KeepAccount.utility.toHourMinuteStr
+import wxm.KeepAccount.utility.*
 import wxm.androidutil.time.getDayInWeekString
 import wxm.androidutil.time.toCalendar
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
@@ -56,19 +53,22 @@ class PgIncomePreview : FrgSupportBaseAdv(), IPreview {
                 mTVNote.text = data.note
                 mTVDate.text = data.ts.toDayStr()
                 mTVTime.text = data.ts.toHourMinuteStr()
-                mTVDayInWeek.text = data.ts.toCalendar().getDayInWeekString()
+                mTVDayInWeek.text = data.ts.toDayInWeekStr()
 
-                NoteImageUtility.setNoteImages(data)
-                data.images.isEmpty().doJudge(
+                val pn = (data.tag == null).doJudge(
+                        {if(data.images.isEmpty()) ""
+                        else data.images[0].imagePath},
+                        {data.tag as String}
+                )
+                pn.isEmpty().doJudge(
                         { mRLImage.visibility = View.GONE },
                         {
                             mRLImage.visibility = View.VISIBLE
 
-                            val fp = data.images[0]
-                            mIVImage.setImagePath(fp.imagePath)
+                            mIVImage.setImagePath(pn)
                             mIVImage.setOnClickListener({ _ ->
                                 Intent(activity!!, ACImagePreview::class.java).let1 {
-                                    it.putExtra(ACImagePreview.IMAGE_FILE_PATH, fp.imagePath)
+                                    it.putExtra(ACImagePreview.IMAGE_FILE_PATH, pn)
                                     activity!!.startActivity(it)
                                 }
                             })

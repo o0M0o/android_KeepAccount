@@ -17,5 +17,8 @@ interface IEdit {
      */
     fun onAccept(): Boolean
 
+    /**
+     * update swap data
+     */
     fun refillData()
 }

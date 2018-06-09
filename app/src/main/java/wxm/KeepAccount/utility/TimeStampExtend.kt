@@ -1,5 +1,6 @@
 package wxm.KeepAccount.utility
 
+import wxm.androidutil.time.getDayInWeekString
 import wxm.androidutil.time.toCalendar
 import java.sql.Timestamp
 import java.util.*
@@ -30,3 +31,8 @@ fun Timestamp.toDayStr():String {
                 it.get(Calendar.YEAR), it.get(Calendar.MONTH) + 1, it.get(Calendar.DAY_OF_MONTH))
     }
 }
+
+/**
+ * get day in week string[星期一， 星期日]
+ */
+fun Timestamp.toDayInWeekStr(): String = this.toCalendar().getDayInWeekString()

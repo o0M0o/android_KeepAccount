@@ -5,11 +5,8 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Paint
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageButton
@@ -33,7 +30,6 @@ import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.androidutil.util.doJudge
-import java.io.File
 import java.lang.String.format
 import java.math.BigDecimal
 import java.sql.Timestamp
@@ -109,45 +105,30 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
 
     override fun initUI(bundle: Bundle?) {
         if (null == bundle) {
-            mETAmount.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-
-                override fun afterTextChanged(s: Editable) {
-                    s.toString().indexOf(".").let1 {
-                        if (it >= 0) {
-                            if (s.length - (it + 1) > 2) {
-                                mETAmount.error = "小数点后超过两位数!"
-                                mETAmount.setText(s.subSequence(0, it + 3))
-                            }
-                        }
+            mETAmount.addTextChangedListener(MoneyTextWatcher(mETAmount))
+            View.OnTouchListener { v, event -> onTouchChildView(v, event) }
+                    .let1 {
+                        mETInfo.setOnTouchListener(it)
+                        //mETAmount.setOnTouchListener(it)
+                        mETDate.setOnTouchListener(it)
+                        mTVNote.setOnTouchListener(it)
                     }
-                }
-            })
 
-            View.OnTouchListener { v, event -> onTouchChildView(v, event) }.let1 {
-                mETInfo.setOnTouchListener(it)
-                //mETAmount.setOnTouchListener(it)
-                mETDate.setOnTouchListener(it)
-                mTVNote.setOnTouchListener(it)
-            }
-
-            mIVImage.setOnClickListener({v ->
-                if(mSZImagePath.isEmpty()) {
+            mIVImage.setOnClickListener({ v ->
+                if (mSZImagePath.isEmpty()) {
                     CropImage.activity().start(context!!, this)
-                } else  {
+                } else {
                     mLLImageHeader.visibility = (View.GONE == mLLImageHeader.visibility)
                             .doJudge(View.VISIBLE, View.GONE)
                 }
             })
 
-            mIBImageRefresh.setOnClickListener({v ->
+            mIBImageRefresh.setOnClickListener({ v ->
                 mLLImageHeader.visibility = View.GONE
                 CropImage.activity().start(context!!, this)
             })
 
-            mIBImageRemove.setOnClickListener({v ->
+            mIBImageRemove.setOnClickListener({ v ->
                 mOldIncomeNote?.let1 { pn ->
                     NoteImageUtility.removeImage(pn, mSZImagePath)
                 }
@@ -174,7 +155,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
             }
 
             mETAmount.setText(it.valToStr)
-            if(it.images.isNotEmpty())  {
+            if (it.images.isNotEmpty()) {
                 mSZImagePath = it.images[0].imagePath
                 mIVImage.setImagePath(mSZImagePath)
             }
@@ -218,22 +199,17 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
 
         mOldIncomeNote?.let {
             val bCreate = GlobalDef.INVALID_ID == it.id
-            var bRet = bCreate.doJudge(
+            val bRet = bCreate.doJudge(
                     { 1 == AppUtil.payIncomeUtility.addIncomeNotes(listOf(it)) },
                     { AppUtil.payIncomeUtility.incomeDBUtility.modifyData(it) }
             )
 
-            bRet.doJudge(
-                    {
-                        if (mSZImagePath.isNotEmpty()) {
-                            bRet = NoteImageUtility.addImage(it, mSZImagePath)
-                        }
-                    },
-                    {
-                        DlgAlert.showAlert(context!!, R.string.dlg_warn,
-                                bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
-                    }
-            )
+            if (bRet) {
+                refreshNoteImage(it, mSZImagePath, bCreate)
+            } else {
+                DlgAlert.showAlert(context!!, R.string.dlg_warn,
+                        bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
+            }
 
             return bRet
         }
@@ -245,14 +221,6 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 when (v.id) {
-                    /*
-                    R.id.ar_et_amount ->    {
-                        if(BigDecimal.ZERO.toMoneyString() == mETAmount.text.toString())    {
-                            mETAmount.text.clear()
-                        }
-                    }
-                    */
-
                     R.id.ar_et_info -> {
                         val dp = DlgSelectRecordType()
                         dp.setOldType(GlobalDef.STR_RECORD_INCOME, mETInfo.text.toString())
@@ -273,17 +241,14 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                     }
 
                     R.id.ar_et_date -> {
-                        val sd = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)
-                        val jDt = try {
-                            sd.parse(mETDate.text.toString())
-                        } catch (e: ParseException) {
-                            e.printStackTrace()
-                            Date()
+                        val cd = Calendar.getInstance().apply {
+                            time = try {
+                                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).parse(mETDate.text.toString())
+                            } catch (e: ParseException) {
+                                e.printStackTrace()
+                                Date()
+                            }
                         }
-
-                        val cd = Calendar.getInstance()
-                        cd.time = jDt
-
                         val dt = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                             val strDate = format(Locale.CHINA, "%04d-%02d-%02d",
                                     year, month + 1, dayOfMonth)
@@ -296,38 +261,34 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                                 mETDate.requestFocus()
                             }
 
-                            val td = TimePickerDialog(context, ot,
+                            TimePickerDialog(context, ot,
                                     cd.get(Calendar.HOUR_OF_DAY),
-                                    cd.get(Calendar.MINUTE), true)
-                            td.show()
+                                    cd.get(Calendar.MINUTE), true).show()
                         }
 
-                        val dd = DatePickerDialog(context, dt,
-                                    cd.get(Calendar.YEAR), cd.get(Calendar.MONTH),
-                                    cd.get(Calendar.DAY_OF_MONTH))
-                        dd.show()
+                        DatePickerDialog(context, dt,
+                                cd.get(Calendar.YEAR), cd.get(Calendar.MONTH),
+                                cd.get(Calendar.DAY_OF_MONTH)).show()
                     }
 
                     R.id.tv_note -> {
-                        val szNote = mTVNote.text.toString()
-                        val lt = if (mSZDefNote == szNote) "" else szNote
+                        DlgLongTxt().let1 { dlg ->
+                            dlg.longTxt = mTVNote.text.toString()
+                                    .let { if (mSZDefNote == it) "" else it }
+                            dlg.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
+                                override fun onDialogPositiveResult(dialogFragment: DialogFragment) {
+                                    mTVNote.text = (dialogFragment as DlgLongTxt).longTxt.let {
+                                        if (it.isEmpty()) mSZDefNote
+                                        else it
+                                    }
+                                    mTVNote.paint.flags = Paint.UNDERLINE_TEXT_FLAG
+                                }
 
-                        val dlg = DlgLongTxt()
-                        dlg.longTxt = lt
-                        dlg.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
-                            override fun onDialogPositiveResult(dialogFragment: DialogFragment) {
-                                var longTxt: String? = (dialogFragment as DlgLongTxt).longTxt
-                                longTxt =   if (UtilFun.StringIsNullOrEmpty(longTxt)) mSZDefNote
-                                            else longTxt
+                                override fun onDialogNegativeResult(dialogFragment: DialogFragment) {}
+                            })
 
-                                mTVNote.text = longTxt
-                                mTVNote.paint.flags = Paint.UNDERLINE_TEXT_FLAG
-                            }
-
-                            override fun onDialogNegativeResult(dialogFragment: DialogFragment) {}
-                        })
-
-                        dlg.show(activity!!.supportFragmentManager, "edit note")
+                            dlg.show(activity!!.supportFragmentManager, "edit note")
+                        }
                     }
                 }
             }

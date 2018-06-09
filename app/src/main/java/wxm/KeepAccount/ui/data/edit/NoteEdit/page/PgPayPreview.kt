@@ -12,10 +12,7 @@ import wxm.KeepAccount.db.NoteImageUtility
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.ui.preview.ACImagePreview
-import wxm.KeepAccount.utility.let1
-import wxm.KeepAccount.utility.setImagePath
-import wxm.KeepAccount.utility.toDayStr
-import wxm.KeepAccount.utility.toHourMinuteStr
+import wxm.KeepAccount.utility.*
 import wxm.androidutil.time.getDayInWeekString
 import wxm.androidutil.time.toCalendar
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
@@ -55,7 +52,7 @@ class PgPayPreview : FrgSupportBaseAdv(), IPreview {
                 mTVBudget.text = if (null == data.budget) "" else data.budget!!.name
                 mTVDate.text = data.ts.toDayStr()
                 mTVTime.text = data.ts.toHourMinuteStr()
-                mTVDayInWeek.text = data.ts.toCalendar().getDayInWeekString()
+                mTVDayInWeek.text = data.ts.toDayInWeekStr()
 
                 val pn = (data.tag == null).doJudge(
                         {if(data.images.isEmpty()) ""

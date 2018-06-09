@@ -133,14 +133,14 @@ class PayIncomeDBUtility {
                     { ArrayList() }
             ).apply {
                 filterNotNull().forEach{
-                    NoteImageUtility.setNoteImages(it)
+                    NoteImageUtility.updateNoteImages(it)
                 }
             }
         }
 
         override fun getData(id: Int): PayNoteItem? {
             return super.getData(id)?.apply {
-                NoteImageUtility.setNoteImages(this)
+                NoteImageUtility.updateNoteImages(this)
             }
         }
 
@@ -174,14 +174,14 @@ class PayIncomeDBUtility {
                     { ArrayList() }
             ).apply {
                 filterNotNull().forEach{
-                    NoteImageUtility.setNoteImages(it)
+                    NoteImageUtility.updateNoteImages(it)
                 }
             }
         }
 
         override fun getData(id: Int): IncomeNoteItem? {
             return super.getData(id)?.apply {
-                NoteImageUtility.setNoteImages(this)
+                NoteImageUtility.updateNoteImages(this)
             }
         }
 

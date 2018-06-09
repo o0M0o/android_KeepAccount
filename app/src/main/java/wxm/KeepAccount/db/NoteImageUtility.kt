@@ -52,7 +52,7 @@ class NoteImageUtility : DBUtilityBase<NoteImageItem, Int>() {
             }).doJudge(
                     {
                         TagLog.i("add noteId=${note.id}, igPath=${getFileName(igPath)}")
-                        setNoteImages(note)
+                        updateNoteImages(note)
                         true
                     },
                     { false }
@@ -74,17 +74,22 @@ class NoteImageUtility : DBUtilityBase<NoteImageItem, Int>() {
             return true
         }
 
-        fun setNoteImages(note: INote): Boolean {
+        fun getNoteImages(nd:INote): LinkedList<NoteImageItem>  {
             val dbHelper = AppUtil.noteImageUtility.dbHelper
-            val prepare = dbHelper.queryBuilder().where()
-                    .eq(NoteImageItem.FIELD_FOREIGN_ID, note.id)
-                    .and().eq(NoteImageItem.FIELD_IMAGE_TYPE, note.noteType())
+            val smt= dbHelper.queryBuilder().where()
+                    .eq(NoteImageItem.FIELD_FOREIGN_ID, nd.id)
+                    .and().eq(NoteImageItem.FIELD_IMAGE_TYPE, nd.noteType())
                     .and().eq(NoteImageItem.FIELD_STATUS, NoteImageItem.STATUS_USE).prepare()
 
-            dbHelper.query(prepare)?.filterNotNull()?.forEach {
-                note.images.add(it)
+            return LinkedList<NoteImageItem>().apply {
+                dbHelper.query(smt)?.filterNotNull()?.forEach {
+                    add(it)
+                }
             }
+        }
 
+        fun updateNoteImages(note: INote): Boolean {
+            note.images = getNoteImages(note)
             return true
         }
 
