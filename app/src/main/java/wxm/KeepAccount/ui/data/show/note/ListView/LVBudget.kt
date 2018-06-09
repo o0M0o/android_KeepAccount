@@ -64,68 +64,64 @@ class LVBudget : LVBase() {
         var amount: String? = null
     }
 
-    internal inner class BudgetActionHelper : ActionHelper() {
-        private lateinit var mIBSort: IconButton
-        private lateinit var mIBReport: IconButton
+    init {
+        mAHActs = object : ActionHelper() {
+            private lateinit var mIBSort: IconButton
+            private lateinit var mIBReport: IconButton
 
-        override fun initActs(parentView: View) {
-            mIBSort = parentView.findViewById(R.id.ib_sort)
-            mIBReport = parentView.findViewById(R.id.ib_report)
+            override fun initActs(parentView: View) {
+                mIBSort = parentView.findViewById(R.id.ib_sort)
+                mIBReport = parentView.findViewById(R.id.ib_report)
 
-            mIBReport.visibility = View.GONE
+                mIBReport.visibility = View.GONE
 
-            mIBSort.setActIcon(if (mBODownOrder) R.drawable.ic_sort_up_1
-            else R.drawable.ic_sort_down_1)
-            mIBSort.setActName(if (mBODownOrder) R.string.cn_sort_up_by_name
-            else R.string.cn_sort_down_by_name)
+                mIBSort.setActIcon(if (mBODownOrder) R.drawable.ic_sort_up_1
+                else R.drawable.ic_sort_down_1)
+                mIBSort.setActName(if (mBODownOrder) R.string.cn_sort_up_by_name
+                else R.string.cn_sort_down_by_name)
 
-            EventHelper.setOnClickOperator(parentView,
-                    intArrayOf(R.id.ib_sort, R.id.ib_delete, R.id.ib_add, R.id.ib_refresh),
-                    this::onActionClick)
-        }
+                EventHelper.setOnClickOperator(parentView,
+                        intArrayOf(R.id.ib_sort, R.id.ib_delete, R.id.ib_add, R.id.ib_refresh),
+                        this::onActionClick)
+            }
 
-        private fun onActionClick(v: View) {
-            when (v.id) {
-                R.id.ib_sort -> {
-                    mBODownOrder = !mBODownOrder
+            private fun onActionClick(v: View) {
+                when (v.id) {
+                    R.id.ib_sort -> {
+                        mBODownOrder = !mBODownOrder
 
-                    mIBSort.setActIcon(if (mBODownOrder) R.drawable.ic_sort_up_1 else R.drawable.ic_sort_down_1)
-                    mIBSort.setActName(if (mBODownOrder) R.string.cn_sort_up_by_name else R.string.cn_sort_down_by_name)
+                        mIBSort.setActIcon(if (mBODownOrder) R.drawable.ic_sort_up_1 else R.drawable.ic_sort_down_1)
+                        mIBSort.setActName(if (mBODownOrder) R.string.cn_sort_up_by_name else R.string.cn_sort_down_by_name)
 
-                    reorderData()
-                    loadUI(null)
-                }
-
-                R.id.ib_refresh -> {
-                    mActionType = EOperation.EDIT
-                    reloadView(false)
-                }
-
-                R.id.ib_delete -> {
-                    if (EOperation.DELETE != mActionType) {
-                        mActionType = EOperation.DELETE
-                        reloadView(false)
+                        reorderData()
+                        loadUI(null)
                     }
-                }
 
-                R.id.ib_add -> {
-                    Intent(activity, ACNoteEdit::class.java).apply {
-                        putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET)
-                    }.let1 {
-                        activity!!.startActivityForResult(it, 1)
+                    R.id.ib_refresh -> {
+                        mActionType = EOperation.EDIT
+                        reInitUI()
+                    }
+
+                    R.id.ib_delete -> {
+                        if (EOperation.DELETE != mActionType) {
+                            mActionType = EOperation.DELETE
+                            reInitUI()
+                        }
+                    }
+
+                    R.id.ib_add -> {
+                        Intent(activity, ACNoteEdit::class.java).apply {
+                            putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, GlobalDef.STR_RECORD_BUDGET)
+                        }.let1 {
+                            activity!!.startActivityForResult(it, 1)
+                        }
                     }
                 }
             }
         }
     }
 
-    init {
-        mAHActs = BudgetActionHelper()
-    }
-
-    override fun isUseEventBus(): Boolean {
-        return true
-    }
+    override fun isUseEventBus(): Boolean = true
 
     /**
      * filter event
@@ -149,7 +145,7 @@ class LVBudget : LVBase() {
                     when (it.id) {
                         R.id.bt_accpet -> {
                             if (EOperation.DELETE == mActionType) {
-                                mActionType = EOperation.DELETE
+                                mActionType = EOperation.EDIT
 
                                 (mLVShow.adapter as MainAdapter).waitDeleteItems.let {
                                     AppUtil.budgetUtility.removeDatas(it)
@@ -195,10 +191,10 @@ class LVBudget : LVBase() {
 
         AppUtil.budgetUtility.budgetWithPayNote.toSortedMap(
                 Comparator { a, b ->
-                    if (mBODownOrder)
-                        a.name.compareTo(b.name)
-                    else
+                    (mBODownOrder).doJudge(
+                        a.name.compareTo(b.name),
                         b.name.compareTo(a.name)
+                    )
                 })
                 .forEach {
                     val tag = it.key._id.toString()
@@ -270,7 +266,7 @@ class LVBudget : LVBase() {
 
         private val mCLAdapter = View.OnClickListener { v ->
             val pos = mLVShow.getPositionForView(v)
-            val hm = getItem(pos) as MainAdapterItem
+            val hm = getTypedItem(pos)
             val tagId = Integer.parseInt(hm.tag)
             when (v.id) {
                 R.id.rl_delete -> {

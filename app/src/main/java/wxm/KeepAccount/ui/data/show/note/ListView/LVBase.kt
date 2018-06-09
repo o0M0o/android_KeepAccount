@@ -119,17 +119,6 @@ abstract class LVBase : ShowViewBase() {
 
 
     /**
-     * reload data & view
-     * @param bShowDialog   show dialog if true
-     */
-    protected fun reloadView(bShowDialog: Boolean) {
-        reInitUI()
-        if (bShowDialog) {
-            DlgAlert.showAlert(context!!, R.string.dlg_prompt, R.string.dlg_data_refreshed)
-        }
-    }
-
-    /**
      * Shows the progress UI
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)

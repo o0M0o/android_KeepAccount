@@ -106,7 +106,7 @@ class LVDaily : LVBase() {
 
                     R.id.ib_refresh -> {
                         mAction = EOperation.EDIT
-                        reloadView(false)
+                        reInitUI()
                     }
 
                     R.id.ib_delete -> {
@@ -227,7 +227,8 @@ class LVDaily : LVBase() {
         // load show data
         mMainPara.filter { !mBFilter || mFilterPara.contains(it[KEY_DATA]!!.tag) }
                 .sortedWith(Comparator { o1, o2 ->
-                    mBTimeDownOrder.doJudge(o2[KEY_DATA]!!.tag.compareTo(o1[KEY_DATA]!!.tag),
+                    mBTimeDownOrder.doJudge(
+                            o2[KEY_DATA]!!.tag.compareTo(o1[KEY_DATA]!!.tag),
                             o1[KEY_DATA]!!.tag.compareTo(o2[KEY_DATA]!!.tag))
                 }).let1 {
                     mLVShow.adapter = MainAdapter(context!!, it)

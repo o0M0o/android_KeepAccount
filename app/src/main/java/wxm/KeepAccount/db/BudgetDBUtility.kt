@@ -22,12 +22,11 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
      */
     val budgetWithPayNote: HashMap<BudgetItem, List<PayNoteItem>>
         get() {
-            val bret = HashMap<BudgetItem, List<PayNoteItem>>()
-            budgetForCurUsr.forEach { bi ->
-                bret[getData(bi._id)] = AppUtil.payIncomeUtility.getPayNoteByBudget(bi)
+            return HashMap<BudgetItem, List<PayNoteItem>>().apply {
+                budgetForCurUsr.forEach { bi ->
+                    put(bi, AppUtil.payIncomeUtility.getPayNoteByBudget(bi))
+                }
             }
-
-            return bret
         }
 
     /**

@@ -10,14 +10,14 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
-import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.event.FilterShow
+import wxm.KeepAccount.improve.let1
+import wxm.KeepAccount.improve.toSignalMoneyString
+import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.improve.let1
-import wxm.KeepAccount.improve.toSignalMoneyString
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder
@@ -89,54 +89,52 @@ class LVMonthly : LVBase() {
         }
     }
 
-    internal inner class MonthlyActionHelper : ActionHelper() {
-        private lateinit var mIBSort: IconButton
-        private lateinit var mIBReport: IconButton
-        private lateinit var mIBAdd: IconButton
-        private lateinit var mIBDelete: IconButton
+    init {
+        mBActionExpand = false
+        mAHActs = object : ActionHelper() {
+            private lateinit var mIBSort: IconButton
+            private lateinit var mIBReport: IconButton
+            private lateinit var mIBAdd: IconButton
+            private lateinit var mIBDelete: IconButton
 
-        override fun initActs(parentView: View) {
-            mIBSort = parentView.findViewById(R.id.ib_sort)
-            mIBReport = parentView.findViewById(R.id.ib_report)
-            mIBAdd = parentView.findViewById(R.id.ib_add)
-            mIBDelete = parentView.findViewById(R.id.ib_delete)
+            override fun initActs(parentView: View) {
+                mIBSort = parentView.findViewById(R.id.ib_sort)
+                mIBReport = parentView.findViewById(R.id.ib_report)
+                mIBAdd = parentView.findViewById(R.id.ib_add)
+                mIBDelete = parentView.findViewById(R.id.ib_delete)
 
-            mIBReport.visibility = View.GONE
-            mIBAdd.visibility = View.GONE
-            mIBDelete.visibility = View.GONE
+                mIBReport.visibility = View.GONE
+                mIBAdd.visibility = View.GONE
+                mIBDelete.visibility = View.GONE
 
-            mIBSort.setActIcon(if (mBTimeDownOrder) R.drawable.ic_sort_up_1
-            else R.drawable.ic_sort_down_1)
-            mIBSort.setActName(if (mBTimeDownOrder) R.string.cn_sort_up_by_time
-            else R.string.cn_sort_down_by_time)
+                mIBSort.setActIcon(if (mBTimeDownOrder) R.drawable.ic_sort_up_1
+                else R.drawable.ic_sort_down_1)
+                mIBSort.setActName(if (mBTimeDownOrder) R.string.cn_sort_up_by_time
+                else R.string.cn_sort_down_by_time)
 
-            EventHelper.setOnClickOperator(parentView,
-                    intArrayOf(R.id.ib_sort, R.id.ib_refresh),
-                    this::onActClick)
-        }
+                EventHelper.setOnClickOperator(parentView,
+                        intArrayOf(R.id.ib_sort, R.id.ib_refresh),
+                        this::onActClick)
+            }
 
-        private fun onActClick(v: View) {
-            when (v.id) {
-                R.id.ib_sort -> {
-                    mBTimeDownOrder = !mBTimeDownOrder
+            private fun onActClick(v: View) {
+                when (v.id) {
+                    R.id.ib_sort -> {
+                        mBTimeDownOrder = !mBTimeDownOrder
 
-                    mIBSort.setActIcon(mBTimeDownOrder.doJudge(R.drawable.ic_sort_up_1, R.drawable.ic_sort_down_1))
-                    mIBSort.setActName(mBTimeDownOrder.doJudge(R.string.cn_sort_up_by_time,
-                            R.string.cn_sort_down_by_time))
+                        mIBSort.setActIcon(mBTimeDownOrder.doJudge(R.drawable.ic_sort_up_1, R.drawable.ic_sort_down_1))
+                        mIBSort.setActName(mBTimeDownOrder.doJudge(R.string.cn_sort_up_by_time,
+                                R.string.cn_sort_down_by_time))
 
-                    reloadUI()
-                }
+                        reloadUI()
+                    }
 
-                R.id.ib_refresh -> {
-                    reloadView(false)
+                    R.id.ib_refresh -> {
+                        reInitUI()
+                    }
                 }
             }
         }
-    }
-
-    init {
-        mBActionExpand = false
-        mAHActs = MonthlyActionHelper()
     }
 
     override fun isUseEventBus(): Boolean = true
@@ -145,6 +143,7 @@ class LVMonthly : LVBase() {
      * filter view
      * @param event     param
      */
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onFilterShowEvent(event: FilterShow) {
         if (NoteDataHelper.TAB_TITLE_YEARLY == event.sender) {
@@ -181,8 +180,6 @@ class LVMonthly : LVBase() {
 
                     mBSelectSubFilter = false
                     refreshAttachLayout()
-
-
                 }
             }
 
@@ -190,9 +187,9 @@ class LVMonthly : LVBase() {
                 mBSelectSubFilter = false
                 mLLSubFilter.clear()
 
-                for (i in mLLSubFilterVW) {
-                    i.isSelected = false
-                    i.background.alpha = 0
+                mLLSubFilterVW.forEach {
+                    it.isSelected = false
+                    it.background.alpha = 0
                 }
                 mLLSubFilterVW.clear()
 
@@ -244,15 +241,15 @@ class LVMonthly : LVBase() {
     }
 
     override fun loadUI(bundle: Bundle?) {
-        // adjust attach layout
         refreshAttachLayout()
 
-        // set listview adapter
         mLVShow.adapter = MonthAdapter(context!!,
                 mLSMonthPara.filter { !mBFilter || mFilterPara.contains(it[KEY_DATA]!!.tag) }
                         .sortedWith(Comparator { o1, o2 ->
-                            if (!mBTimeDownOrder) o1[KEY_DATA]!!.tag.compareTo(o2[KEY_DATA]!!.tag)
-                            else o2[KEY_DATA]!!.tag.compareTo(o1[KEY_DATA]!!.tag)
+                            mBTimeDownOrder.doJudge(
+                                    o2[KEY_DATA]!!.tag.compareTo(o1[KEY_DATA]!!.tag),
+                                    o1[KEY_DATA]!!.tag.compareTo(o2[KEY_DATA]!!.tag)
+                            )
                         }))
     }
 
@@ -300,61 +297,57 @@ class LVMonthly : LVBase() {
         }
 
         override fun loadView(pos: Int, vhHolder: ViewHolder) {
-            if (null == vhHolder.getSelfTag(SELF_TAG_ID)) {
-                vhHolder.setSelfTag(SELF_TAG_ID, Any())
+            val item = getTypedItem(pos).data
+            val lv = vhHolder.getView<ListView>(R.id.lv_show_detail)
+            lv.visibility = EShowFold.getByShowStatus(item.show).isFold().doJudge(
+                    { View.GONE },
+                    {
+                        if (0 == lv.count)
+                            loadDayDetailView(lv, item.month)
 
-                val item = getTypedItem(pos).data
-                val lv = vhHolder.getView<ListView>(R.id.lv_show_detail)
+                        View.VISIBLE
+                    })
+
+            View.OnClickListener { _ ->
                 lv.visibility = EShowFold.getByShowStatus(item.show).isFold().doJudge(
-                        { View.GONE },
                         {
                             if (0 == lv.count)
                                 loadDayDetailView(lv, item.month)
 
+                            addUnfoldItem(item.month)
+                            item.show = EShowFold.getByFold(false).showStatus
+
                             View.VISIBLE
+                        },
+                        {
+                            removeUnfoldItem(item.month)
+                            item.show = EShowFold.getByFold(true).showStatus
+
+                            View.GONE
+                        }
+                )
+            }.let1 {
+                vhHolder.getView<ConstraintLayout>(R.id.cl_header).apply {
+                    setBackgroundColor((0 == pos % 2)
+                            .doJudge(ResourceHelper.mCRLVLineOne, ResourceHelper.mCRLVLineTwo))
+                    setOnClickListener(it)
+                }
+            }
+
+            // for month
+            vhHolder.setText(R.id.tv_month,
+                    "${item.month.subSequence(0, 4)}年" +
+                            "${item.month.subSequence(5, 7).removePrefix("0")}月")
+
+            // for graph value
+            item.monthDetail!!.let {
+                vhHolder.getView<ValueShow>(R.id.vs_monthly_info).adjustAttribute(
+                        HashMap<String, Any>().apply {
+                            put(ValueShow.ATTR_PAY_COUNT, it.mPayCount)
+                            put(ValueShow.ATTR_PAY_AMOUNT, it.mPayAmount)
+                            put(ValueShow.ATTR_INCOME_COUNT, it.mIncomeCount)
+                            put(ValueShow.ATTR_INCOME_AMOUNT, it.mIncomeAmount)
                         })
-
-                View.OnClickListener { _ ->
-                    lv.visibility = EShowFold.getByShowStatus(item.show).isFold().doJudge(
-                            {
-                                if (0 == lv.count)
-                                    loadDayDetailView(lv, item.month)
-
-                                addUnfoldItem(item.month)
-                                item.show = EShowFold.getByFold(false).showStatus
-
-                                View.VISIBLE
-                            },
-                            {
-                                removeUnfoldItem(item.month)
-                                item.show = EShowFold.getByFold(true).showStatus
-
-                                View.GONE
-                            }
-                    )
-                }.let1 {
-                    vhHolder.getView<ConstraintLayout>(R.id.cl_header).apply {
-                        setBackgroundColor((0 == pos % 2)
-                                .doJudge(ResourceHelper.mCRLVLineOne, ResourceHelper.mCRLVLineTwo))
-                        setOnClickListener(it)
-                    }
-                }
-
-                // for month
-                vhHolder.setText(R.id.tv_month,
-                        "${item.month.subSequence(0, 4)}年" +
-                                "${item.month.subSequence(5, 7).removePrefix("0")}月")
-
-                // for graph value
-                item.monthDetail!!.let {
-                    vhHolder.getView<ValueShow>(R.id.vs_monthly_info).adjustAttribute(
-                            HashMap<String, Any>().apply {
-                                put(ValueShow.ATTR_PAY_COUNT, it.mPayCount)
-                                put(ValueShow.ATTR_PAY_AMOUNT, it.mPayAmount)
-                                put(ValueShow.ATTR_INCOME_COUNT, it.mIncomeCount)
-                                put(ValueShow.ATTR_INCOME_AMOUNT, it.mIncomeAmount)
-                            })
-                }
             }
         }
     }
@@ -372,63 +365,57 @@ class LVMonthly : LVBase() {
         }
 
         override fun loadView(pos: Int, vhHolder: ViewHolder) {
-            if (null == vhHolder.getSelfTag(SELF_TAG_ID)) {
-                vhHolder.setSelfTag(SELF_TAG_ID, Any())
-
-                val item = getTypedItem(pos).data
-                vhHolder.getView<ImageView>(R.id.iv_action).apply {
-                    setBackgroundColor(mLLSubFilter.contains(item.subTag)
-                            .doJudge(ResourceHelper.mCRLVItemSel, ResourceHelper.mCRLVItemTransFull))
-                    setOnClickListener { v ->
-                        val subTag = item.subTag
-                        mLLSubFilter.contains(subTag).doJudge(
-                                {
-                                    mLLSubFilter.remove(subTag)
-                                    mLLSubFilterVW.remove(v)
-                                    if (mLLSubFilter.isEmpty()) {
-                                        mLLSubFilterVW.clear()
-                                        mBSelectSubFilter = false
-                                        refreshAttachLayout()
-                                    }
-
-                                    v.setBackgroundColor(ResourceHelper.mCRLVItemTransFull)
-                                },
-                                {
-                                    mLLSubFilter.add(subTag)
-                                    mLLSubFilterVW.add(v)
-                                    if (!mBSelectSubFilter) {
-                                        mBSelectSubFilter = true
-                                        refreshAttachLayout()
-                                    }
-
-                                    v.setBackgroundColor(ResourceHelper.mCRLVItemSel)
+            val item = getTypedItem(pos).data
+            vhHolder.getView<ImageView>(R.id.iv_action).apply {
+                setBackgroundColor(mLLSubFilter.contains(item.subTag)
+                        .doJudge(ResourceHelper.mCRLVItemSel, ResourceHelper.mCRLVItemTransFull))
+                setOnClickListener { v ->
+                    val subTag = item.subTag
+                    mLLSubFilter.contains(subTag).doJudge(
+                            {
+                                mLLSubFilter.remove(subTag)
+                                mLLSubFilterVW.remove(v)
+                                if (mLLSubFilter.isEmpty()) {
+                                    mLLSubFilterVW.clear()
+                                    mBSelectSubFilter = false
+                                    refreshAttachLayout()
                                 }
-                        )
-                    }
-                }
 
-                // for show
-                vhHolder.setText(R.id.tv_day_number, item.dayNumber)
-                vhHolder.setText(R.id.tv_day_in_week, item.dayInWeek)
+                                v.setBackgroundColor(ResourceHelper.mCRLVItemTransFull)
+                            },
+                            {
+                                mLLSubFilter.add(subTag)
+                                mLLSubFilterVW.add(v)
+                                if (!mBSelectSubFilter) {
+                                    mBSelectSubFilter = true
+                                    refreshAttachLayout()
+                                }
 
-                // for graph value
-                item.dayDetail?.let {
-                    vhHolder.getView<ValueShow>(R.id.vs_daily_info).adjustAttribute(
-                            HashMap<String, Any>().apply {
-                                put(ValueShow.ATTR_PAY_COUNT, it.mPayCount)
-                                put(ValueShow.ATTR_PAY_AMOUNT, it.mPayAmount)
-                                put(ValueShow.ATTR_INCOME_COUNT, it.mIncomeCount)
-                                put(ValueShow.ATTR_INCOME_AMOUNT, it.mIncomeAmount)
-                            })
+                                v.setBackgroundColor(ResourceHelper.mCRLVItemSel)
+                            }
+                    )
                 }
             }
 
+            // for show
+            vhHolder.setText(R.id.tv_day_number, item.dayNumber)
+            vhHolder.setText(R.id.tv_day_in_week, item.dayInWeek)
+
+            // for graph value
+            item.dayDetail?.let {
+                vhHolder.getView<ValueShow>(R.id.vs_daily_info).adjustAttribute(
+                        HashMap<String, Any>().apply {
+                            put(ValueShow.ATTR_PAY_COUNT, it.mPayCount)
+                            put(ValueShow.ATTR_PAY_AMOUNT, it.mPayAmount)
+                            put(ValueShow.ATTR_INCOME_COUNT, it.mIncomeCount)
+                            put(ValueShow.ATTR_INCOME_AMOUNT, it.mIncomeAmount)
+                        })
+            }
         }
+
     }
 
     companion object {
-        private const val SELF_TAG_ID = 0
-
         private const val KEY_DATA = "data"
     }
 }

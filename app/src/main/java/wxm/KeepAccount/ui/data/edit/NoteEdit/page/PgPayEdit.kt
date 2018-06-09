@@ -138,7 +138,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                 mTVNote.setOnTouchListener(it)
             }
 
-            mIVImage.setOnClickListener({ v ->
+            mIVImage.setOnClickListener({ _ ->
                 if (mSZImagePath.isEmpty()) {
                     CropImage.activity().start(context!!, this)
                 } else {
@@ -147,12 +147,12 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                 }
             })
 
-            mIBImageRefresh.setOnClickListener({ v ->
+            mIBImageRefresh.setOnClickListener({ _ ->
                 mCLImageHeader.visibility = View.GONE
                 CropImage.activity().start(context!!, this)
             })
 
-            mIBImageRemove.setOnClickListener({ v ->
+            mIBImageRemove.setOnClickListener({ _ ->
                 mCLImageHeader.visibility = View.GONE
 
                 mSZImagePath = ""
