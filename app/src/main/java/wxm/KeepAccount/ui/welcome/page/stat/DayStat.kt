@@ -2,21 +2,12 @@ package wxm.KeepAccount.ui.welcome.page.stat
 
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import kotterknife.bindView
-import wxm.KeepAccount.R
-import wxm.KeepAccount.ui.welcome.base.PageBase
-import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 
-import com.flyco.tablayout.SegmentTabLayout
 import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.util.ChartUtils
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.utility.let1
-import wxm.androidutil.log.TagLog
+import wxm.KeepAccount.improve.let1
 import wxm.androidutil.util.doJudge
 import java.util.ArrayList
 

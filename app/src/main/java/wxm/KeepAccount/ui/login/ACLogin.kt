@@ -4,29 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Message
 import android.os.Process
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
-import wxm.KeepAccount.db.LoginHistoryUtility
 import wxm.KeepAccount.define.EMsgType
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.event.DoLogin
 import wxm.KeepAccount.ui.help.ACHelp
-import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.ui.welcome.ACWelcome
 import wxm.KeepAccount.utility.AppUtil
-import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.utility.let1
 import wxm.androidutil.log.TagLog
-import wxm.androidutil.time.toTimestamp
 import wxm.androidutil.ui.activity.ACSwitcherActivity
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * A login screen that offers login via email/password.

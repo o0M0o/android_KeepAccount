@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.*
+import wxm.KeepAccount.improve.let1
 import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.item.BudgetItem
 import wxm.KeepAccount.item.PayNoteItem

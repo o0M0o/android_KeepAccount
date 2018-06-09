@@ -14,7 +14,7 @@ import wxm.KeepAccount.ui.data.show.note.ListView.LVDaily
 import wxm.KeepAccount.ui.data.show.note.ListView.LVMonthly
 import wxm.KeepAccount.ui.data.show.note.ListView.LVYearly
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.utility.let1
+import wxm.KeepAccount.improve.let1
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.ui.frg.FrgSupportSwitcher
 

@@ -15,7 +15,7 @@ import wxm.KeepAccount.ui.data.report.page.DayReportWebView
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.utility.let1
+import wxm.KeepAccount.improve.let1
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.ui.frg.FrgSupportSwitcher

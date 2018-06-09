@@ -17,8 +17,8 @@ import wxm.KeepAccount.ui.utility.HelperDayNotesInfo
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.utility.let1
-import wxm.KeepAccount.utility.toSignalMoneyString
+import wxm.KeepAccount.improve.let1
+import wxm.KeepAccount.improve.toSignalMoneyString
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder

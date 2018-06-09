@@ -12,7 +12,7 @@ import wxm.KeepAccount.ui.data.show.calendar.base.CalendarWeekAdapter
 import wxm.KeepAccount.ui.data.show.calendar.base.SelectedDayEvent
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.utility.let1
+import wxm.KeepAccount.improve.let1
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun

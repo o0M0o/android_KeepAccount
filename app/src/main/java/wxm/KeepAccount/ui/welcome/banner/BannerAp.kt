@@ -13,8 +13,8 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.ui.utility.NoteShowInfo
 import wxm.KeepAccount.utility.PreferencesUtil
-import wxm.KeepAccount.utility.let1
-import wxm.KeepAccount.utility.toMoneyString
+import wxm.KeepAccount.improve.let1
+import wxm.KeepAccount.improve.toMoneyString
 import wxm.androidutil.time.getMonth
 import wxm.androidutil.time.getYear
 import wxm.androidutil.ui.view.ViewHelper

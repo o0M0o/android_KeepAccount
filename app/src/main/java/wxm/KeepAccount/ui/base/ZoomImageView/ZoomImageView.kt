@@ -7,7 +7,7 @@ import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.view.*
 import android.widget.ImageView
-import wxm.KeepAccount.utility.let1
+import wxm.KeepAccount.improve.let1
 import wxm.androidutil.log.TagLog
 import wxm.androidutil.util.doJudge
 
@@ -301,7 +301,7 @@ class ZoomImageView
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 mMoveCount = 0
-                TagLog.i("ACTION_DOWN, mLastX=$mLastX, mLastY=$mLastY, x=$x, y=$y")
+                //TagLog.i("ACTION_DOWN, mLastX=$mLastX, mLastY=$mLastY, x=$x, y=$y")
                 // 解决事件冲突
                 // 当图片的 高度和宽度 大于屏幕的寬高度的时候，为图片的事件，否则为viewPager
                 if (isChong(matrixRectF)) {
@@ -313,7 +313,7 @@ class ZoomImageView
 
             MotionEvent.ACTION_MOVE -> {
                 mMoveCount += 1
-                TagLog.i("ACTION_MOVE, mMoveCount=$mMoveCount mLastX=$mLastX, mLastY=$mLastY, x=$x, y=$y")
+                //TagLog.i("ACTION_MOVE, mMoveCount=$mMoveCount mLastX=$mLastX, mLastY=$mLastY, x=$x, y=$y")
                 val f = matrixRectF
                 // 解决事件冲突
                 if (isChong(f)) {

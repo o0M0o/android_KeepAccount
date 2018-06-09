@@ -10,18 +10,19 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.event.FilterShow
+import wxm.KeepAccount.improve.let1
+import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
 import wxm.KeepAccount.ui.data.report.ACReport
 import wxm.KeepAccount.ui.data.show.note.ACDailyDetail
-import wxm.KeepAccount.event.FilterShow
 import wxm.KeepAccount.ui.data.show.note.base.EOperation
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.utility.let1
 import wxm.androidutil.time.CalendarUtility
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
@@ -30,7 +31,6 @@ import wxm.androidutil.ui.view.ViewDataHolder
 import wxm.androidutil.ui.view.ViewHolder
 import wxm.androidutil.util.doJudge
 import wxm.uilib.IconButton.IconButton
-import java.util.ArrayList
 import java.util.HashMap
 import java.util.LinkedList
 import java.util.Locale
@@ -77,89 +77,83 @@ class LVDaily : LVBase() {
         }
     }
 
-    internal inner class DailyActionHelper : ActionHelper() {
-        private lateinit var mIBSort: IconButton
+    init {
+        mBActionExpand = false
+        mAHActs = object : ActionHelper() {
+            private lateinit var mIBSort: IconButton
 
-        override fun initActs(parentView: View) {
-            mIBSort = parentView.findViewById(R.id.ib_sort)
+            override fun initActs(parentView: View) {
+                mIBSort = parentView.findViewById(R.id.ib_sort)
 
-            mIBSort.setActIcon(mBTimeDownOrder.doJudge(R.drawable.ic_sort_up_1, R.drawable.ic_sort_down_1))
-            mIBSort.setActName(mBTimeDownOrder.doJudge(R.string.cn_sort_up_by_name, R.string.cn_sort_down_by_name))
+                mIBSort.setActIcon(mBTimeDownOrder.doJudge(R.drawable.ic_sort_up_1, R.drawable.ic_sort_down_1))
+                mIBSort.setActName(mBTimeDownOrder.doJudge(R.string.cn_sort_up_by_name, R.string.cn_sort_down_by_name))
 
-            EventHelper.setOnClickOperator(parentView,
-                    intArrayOf(R.id.ib_sort, R.id.ib_delete, R.id.ib_add, R.id.ib_refresh, R.id.ib_report),
-                    this::onActionClick)
-        }
+                EventHelper.setOnClickOperator(parentView,
+                        intArrayOf(R.id.ib_sort, R.id.ib_delete, R.id.ib_add, R.id.ib_refresh, R.id.ib_report),
+                        this::onActionClick)
+            }
 
-        private fun onActionClick(v: View) {
-            when (v.id) {
-                R.id.ib_sort -> {
-                    mBTimeDownOrder = !mBTimeDownOrder
+            private fun onActionClick(v: View) {
+                when (v.id) {
+                    R.id.ib_sort -> {
+                        mBTimeDownOrder = !mBTimeDownOrder
 
-                    mIBSort.setActIcon(mBTimeDownOrder.doJudge(R.drawable.ic_sort_up_1, R.drawable.ic_sort_down_1))
-                    mIBSort.setActName(mBTimeDownOrder.doJudge(R.string.cn_sort_up_by_time, R.string.cn_sort_down_by_time))
+                        mIBSort.setActIcon(mBTimeDownOrder.doJudge(R.drawable.ic_sort_up_1, R.drawable.ic_sort_down_1))
+                        mIBSort.setActName(mBTimeDownOrder.doJudge(R.string.cn_sort_up_by_time, R.string.cn_sort_down_by_time))
 
-                    reloadUI()
-                }
-
-                R.id.ib_refresh -> {
-                    mAction = EOperation.EDIT
-                    reloadView(false)
-                }
-
-                R.id.ib_delete -> {
-                    mAction = if (mAction.isEdit) {
-                        EOperation.DELETE
-                    } else {
-                        doDelete()
-                        EOperation.EDIT
+                        reloadUI()
                     }
 
-                    redrawUI()
-                }
-
-                R.id.ib_add -> {
-                    Intent(activity, ACNoteCreate::class.java).let1 {
-                        it.putExtra(GlobalDef.STR_RECORD_DATE,
-                                CalendarUtility.SDF_YEAR_MONTH_DAY_HOUR_MINUTE.format(System.currentTimeMillis()))
-
-                        activity!!.startActivityForResult(it, 1)
+                    R.id.ib_refresh -> {
+                        mAction = EOperation.EDIT
+                        reloadView(false)
                     }
-                }
 
-                R.id.ib_report -> {
-                    DlgSelectReportDays().let1 { dlg ->
-                        dlg.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
-                            override fun onDialogPositiveResult(dialogFragment: DialogFragment) {
-                                Intent(activity, ACReport::class.java).let1 {
-                                    it.putExtra(ACReport.PARA_TYPE, ACReport.PT_DAY)
-                                    it.putStringArrayListExtra(ACReport.PARA_LOAD,
-                                            arrayListOf(dlg.startDay!!, dlg.endDay!!))
-                                    activity!!.startActivity(it)
+                    R.id.ib_delete -> {
+                        mAction = if (mAction.isEdit) {
+                            EOperation.DELETE
+                        } else {
+                            doDelete()
+                            EOperation.EDIT
+                        }
+
+                        reloadUI()
+                    }
+
+                    R.id.ib_add -> {
+                        Intent(activity, ACNoteCreate::class.java).let1 {
+                            it.putExtra(GlobalDef.STR_RECORD_DATE,
+                                    CalendarUtility.SDF_YEAR_MONTH_DAY_HOUR_MINUTE.format(System.currentTimeMillis()))
+
+                            activity!!.startActivityForResult(it, 1)
+                        }
+                    }
+
+                    R.id.ib_report -> {
+                        DlgSelectReportDays().let1 { dlg ->
+                            dlg.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
+                                override fun onDialogPositiveResult(dialogFragment: DialogFragment) {
+                                    Intent(activity, ACReport::class.java).let1 {
+                                        it.putExtra(ACReport.PARA_TYPE, ACReport.PT_DAY)
+                                        it.putStringArrayListExtra(ACReport.PARA_LOAD,
+                                                arrayListOf(dlg.startDay!!, dlg.endDay!!))
+                                        activity!!.startActivity(it)
+                                    }
                                 }
-                            }
 
-                            override fun onDialogNegativeResult(dialogFragment: DialogFragment) {
-                            }
-                        })
+                                override fun onDialogNegativeResult(dialogFragment: DialogFragment) {
+                                }
+                            })
 
-                        dlg.show(activity!!.supportFragmentManager, "select days")
+                            dlg.show(activity!!.supportFragmentManager, "select days")
+                        }
                     }
                 }
             }
         }
     }
 
-    init {
-        mBActionExpand = false
-        mAHActs = DailyActionHelper()
-
-
-    }
-
-    override fun isUseEventBus(): Boolean {
-        return true
-    }
+    override fun isUseEventBus(): Boolean = true
 
     /**
      * filter event
@@ -188,12 +182,12 @@ class LVDaily : LVBase() {
                 doDelete()
 
                 mAction = EOperation.EDIT
-                redrawUI()
+                reloadUI()
             }
 
             R.id.bt_cancel -> {
                 mAction = EOperation.EDIT
-                redrawUI()
+                reloadUI()
             }
 
             R.id.bt_cancel_filter -> {
@@ -226,16 +220,15 @@ class LVDaily : LVBase() {
 
     override fun loadUI(bundle: Bundle?) {
         // adjust attach layout
-        setAttachLayoutVisible(if (mAction.isDelete || mBFilter) View.VISIBLE
-        else View.GONE)
-        setFilterLayoutVisible(if (mBFilter) View.VISIBLE else View.GONE)
-        setAcceptGiveUpLayoutVisible(if (mAction.isDelete && !mBFilter) View.VISIBLE else View.GONE)
+        setAttachLayoutVisible((mAction.isDelete || mBFilter).doJudge(View.VISIBLE, View.GONE))
+        setFilterLayoutVisible(mBFilter.doJudge(View.VISIBLE, View.GONE))
+        setAcceptGiveUpLayoutVisible((mAction.isDelete && !mBFilter).doJudge(View.VISIBLE, View.GONE))
 
         // load show data
         mMainPara.filter { !mBFilter || mFilterPara.contains(it[KEY_DATA]!!.tag) }
                 .sortedWith(Comparator { o1, o2 ->
-                    if (!mBTimeDownOrder) o1[KEY_DATA]!!.tag.compareTo(o2[KEY_DATA]!!.tag)
-                    else o2[KEY_DATA]!!.tag.compareTo(o1[KEY_DATA]!!.tag)
+                    mBTimeDownOrder.doJudge(o2[KEY_DATA]!!.tag.compareTo(o1[KEY_DATA]!!.tag),
+                            o1[KEY_DATA]!!.tag.compareTo(o2[KEY_DATA]!!.tag))
                 }).let1 {
                     mLVShow.adapter = MainAdapter(context!!, it)
                 }
@@ -244,42 +237,16 @@ class LVDaily : LVBase() {
 
     /// BEGIN PRIVATE
     private fun doDelete() {
-        val lsIncome = ArrayList<Int>()
-        val lsPay = ArrayList<Int>()
-        (mLVShow.adapter as MainAdapter).waitDeleteDays.forEach {
-            NoteDataHelper.getNotesByDay(it)?.forEach {
-                (if (it.isPayNote) lsPay else lsIncome).add(it.id)
+        LinkedList<INote>().let1 { ls ->
+            (mLVShow.adapter as MainAdapter).waitDeleteDays.forEach {
+                NoteDataHelper.getNotesByDay(it)?.let1 {
+                    ls.addAll(it)
+                }
             }
-        }
 
-        if (!lsIncome.isEmpty()) {
-            AppUtil.payIncomeUtility.deleteIncomeNotes(lsIncome)
-        }
-
-        if (!lsPay.isEmpty()) {
-            AppUtil.payIncomeUtility.deletePayNotes(lsPay)
+            AppUtil.payIncomeUtility.deleteNotes(ls)
         }
     }
-
-    /**
-     * redraw UI
-     */
-    private fun redrawUI() {
-        // adjust attach layout
-        setAttachLayoutVisible(if (mAction.isDelete || mBFilter)
-            View.VISIBLE
-        else
-            View.GONE)
-        setFilterLayoutVisible(if (mBFilter) View.VISIBLE else View.GONE)
-        setAcceptGiveUpLayoutVisible(if (mAction.isDelete && !mBFilter) View.VISIBLE else View.GONE)
-
-        mMainPara.filter {
-            if (mBFilter) mFilterPara.contains(it[KEY_DATA]!!.tag) else true
-        }.let1 {
-            mLVShow.adapter = MainAdapter(context!!, it)
-        }
-    }
-
     /// END PRIVATE
 
     /**
@@ -297,7 +264,7 @@ class LVDaily : LVBase() {
             }
         }
 
-        private fun getTypedItem(pos:Int): ItemHolder   {
+        private fun getTypedItem(pos: Int): ItemHolder {
             @Suppress("UNCHECKED_CAST")
             return (getItem(pos) as Map<String, ItemHolder>)[KEY_DATA]!!
         }
@@ -313,7 +280,7 @@ class LVDaily : LVBase() {
                             forEachChildView({ vw, _ ->
                                 vw.findViewById<CheckBox>(R.id.cb_del)!!.let1 {
                                     if (it.isChecked) {
-                                        ret.add(tag as kotlin.String)
+                                        ret.add(it.tag as kotlin.String)
                                     }
                                 }
 
@@ -326,7 +293,9 @@ class LVDaily : LVBase() {
             }
 
         override fun loadView(pos: Int, vhHolder: ViewHolder) {
+            val it = getTypedItem(pos)
             val cb = vhHolder.getView<CheckBox>(R.id.cb_del)
+            cb.tag = it.tag
             cb.visibility = if (mAction.isEdit) {
                 cb.isChecked = false
                 View.GONE
@@ -334,21 +303,14 @@ class LVDaily : LVBase() {
                 View.VISIBLE
             }
 
-            val vwRoot = vhHolder.convertView
-            if (null == vhHolder.getSelfTag(SELF_TAG_ID)) {
-                vhHolder.setSelfTag(SELF_TAG_ID, Any())
-
-                val it = getTypedItem(pos)
-                cb.tag = it.tag
-
-                vwRoot.setBackgroundColor(if (0 == pos % 2) ResourceHelper.mCRLVLineOne
-                else ResourceHelper.mCRLVLineTwo)
-                vwRoot.setOnClickListener(mCLAdapter)
-
-                initItemShow(vhHolder, it.data,
-                        if (pos > 0) getTypedItem(pos - 1).data
-                        else null)
+            vhHolder.convertView.let1 {
+                it.setBackgroundColor((0 == pos % 2).doJudge(ResourceHelper.mCRLVLineOne,
+                        ResourceHelper.mCRLVLineTwo))
+                it.setOnClickListener(mCLAdapter)
             }
+
+            initItemShow(vhHolder, it.data,
+                    if (pos > 0) getTypedItem(pos - 1).data else null)
         }
 
         private fun initItemShow(vh: ViewHolder, item: MainAdapterItem, prvItem: MainAdapterItem?) {
@@ -375,8 +337,6 @@ class LVDaily : LVBase() {
     }
 
     companion object {
-        private const val SELF_TAG_ID = 0
-
         private const val KEY_DATA = "data"
     }
 }

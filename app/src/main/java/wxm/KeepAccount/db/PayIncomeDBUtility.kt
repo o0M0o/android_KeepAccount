@@ -3,6 +3,7 @@ package wxm.KeepAccount.db
 
 import com.j256.ormlite.dao.RuntimeExceptionDao
 import org.greenrobot.eventbus.EventBus
+import wxm.KeepAccount.improve.let1
 import wxm.KeepAccount.item.BudgetItem
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.item.IncomeNoteItem
@@ -118,6 +119,24 @@ class PayIncomeDBUtility {
     fun deleteIncomeNotes(lsi: List<Int>) {
         incomeDBUtility.removeDatas(lsi)
     }
+
+    /**
+     * delete notes in [lsn]
+     */
+    fun deleteNotes(lsn: List<INote>)   {
+        lsn.filter { it.isPayNote }.map { it.id }.toList().let1 {
+            if(it.isNotEmpty()) {
+                payDBUtility.removeDatas(it)
+            }
+        }
+
+        lsn.filter { it.isIncomeNote }.map { it.id }.toList().let1 {
+            if(it.isNotEmpty()) {
+                incomeDBUtility.removeDatas(it)
+            }
+        }
+    }
+
 
     /**
      * pay data helper

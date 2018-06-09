@@ -5,7 +5,7 @@ import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.define.IPublicClone
-import wxm.KeepAccount.utility.toMoneyString
+import wxm.KeepAccount.improve.toMoneyString
 import wxm.androidutil.db.IDBRow
 
 import java.math.BigDecimal

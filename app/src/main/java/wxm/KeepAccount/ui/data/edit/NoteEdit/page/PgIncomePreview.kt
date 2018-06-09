@@ -1,7 +1,6 @@
 package wxm.KeepAccount.ui.data.edit.NoteEdit.page
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -10,16 +9,12 @@ import android.widget.TextView
 import kotterknife.bindView
 
 import wxm.KeepAccount.R
-import wxm.KeepAccount.db.NoteImageUtility
+import wxm.KeepAccount.improve.*
 import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.ui.preview.ACImagePreview
-import wxm.KeepAccount.utility.*
-import wxm.androidutil.time.getDayInWeekString
-import wxm.androidutil.time.toCalendar
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.doJudge
-import java.io.File
 
 /**
  * preview fragment for income

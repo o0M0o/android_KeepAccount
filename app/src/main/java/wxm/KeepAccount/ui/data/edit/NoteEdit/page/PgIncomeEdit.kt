@@ -17,6 +17,8 @@ import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.NoteImageUtility
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.improve.let1
+import wxm.KeepAccount.improve.setImagePath
 import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView

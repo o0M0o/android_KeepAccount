@@ -18,7 +18,7 @@ import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.welcome.base.PageBase
 import wxm.KeepAccount.utility.AppUtil
-import wxm.KeepAccount.utility.let1
+import wxm.KeepAccount.improve.let1
 import wxm.KeepAccount.utility.saveImage
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv

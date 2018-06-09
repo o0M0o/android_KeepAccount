@@ -6,7 +6,7 @@ import wxm.KeepAccount.db.NoteImageUtility
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.utility.let1
+import wxm.KeepAccount.improve.let1
 
 /**
  * @author      WangXM
