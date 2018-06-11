@@ -6,28 +6,24 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SimpleAdapter
 import android.widget.TextView
-
-import java.util.ArrayList
-import java.util.HashMap
-
-import wxm.KeepAccount.define.EAction
-import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
+import wxm.KeepAccount.define.EAction
+import java.util.*
 
 /**
  * drag grid view adapter for buttons in welcome activity
  * Created by WangXM on 2016/9/19.
  */
 class DGVButtonAdapter(private val mCTContext: Context, data: List<Map<String, *>>)
-        : SimpleAdapter(mCTContext, data, R.layout.gi_button,
-                arrayOf(""), IntArray(0)) {
-            /**
+    : SimpleAdapter(mCTContext, data, R.layout.gi_button,
+        arrayOf(""), IntArray(0)) {
+    /**
      * get current action
      * @return      action
      */
     val curAction: List<String>
         get() {
-            return  ArrayList<String>().apply {
+            return ArrayList<String>().apply {
                 val ic = count
                 @Suppress("UNCHECKED_CAST")
                 for (i in 0 until ic) {
@@ -37,8 +33,9 @@ class DGVButtonAdapter(private val mCTContext: Context, data: List<Map<String, *
         }
 
     override fun getViewTypeCount(): Int {
-        val orgCt = count
-        return if (orgCt < 1) 1 else orgCt
+        return count.let {
+            if (it < 1) 1 else it
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -48,8 +45,7 @@ class DGVButtonAdapter(private val mCTContext: Context, data: List<Map<String, *
     override fun getView(position: Int, view: View?, arg2: ViewGroup?): View? {
         val v = super.getView(position, view, arg2)
         if (null != v) {
-            val hmd = UtilFun.cast<HashMap<String, Any>>(getItem(position))
-            val hv = UtilFun.cast<String>(hmd[KEY_ACT_NAME])
+            val hv = (getItem(position) as HashMap<*, *>)[KEY_ACT_NAME] as String
 
             v.findViewById<TextView>(R.id.tv_name).text = hv
             if (mCTContext is View.OnClickListener) {

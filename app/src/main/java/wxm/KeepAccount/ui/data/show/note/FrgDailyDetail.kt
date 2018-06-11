@@ -11,31 +11,26 @@ import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
-
+import kotterknife.bindView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-
-import java.text.ParseException
-import java.util.Calendar
-import java.util.HashMap
-import java.util.LinkedList
-import java.util.Locale
-
-import kotterknife.bindView
-import wxm.androidutil.ui.frg.FrgSupportBaseAdv
-import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.DBDataChangeEvent
 import wxm.KeepAccount.define.GlobalDef
+import wxm.androidutil.improve.let1
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.androidutil.app.AppBase
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.ui.view.EventHelper
-import wxm.androidutil.util.forObj
+import wxm.androidutil.util.UtilFun
+import wxm.androidutil.improve.forObj
+import wxm.androidutil.time.getDayInWeekStr
+import java.text.ParseException
+import java.util.*
 
 
 /**
@@ -127,13 +122,13 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
 
             R.id.rl_next -> {
                 NoteDataHelper.getNextDay(mSZHotDay!!).let {
-                    if(it.isNullOrEmpty())  {
+                    if (it.isNullOrEmpty()) {
                         mRLNext.visibility = View.GONE
-                    } else  {
-                    mSZHotDay = it
+                    } else {
+                        mSZHotDay = it
 
-                    if (View.VISIBLE != mRLPrv.visibility)
-                        mRLPrv.visibility = View.VISIBLE
+                        if (View.VISIBLE != mRLPrv.visibility)
+                            mRLPrv.visibility = View.VISIBLE
                     }
                 }
             }
@@ -179,13 +174,16 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
      * load day info header
      */
     private fun loadDayHeader() {
-        val arr = mSZHotDay!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        mTVMonthDay.text = arr[2]
-        mTVYearMonth.text = String.format(Locale.CHINA, "%s年%s月", arr[0], arr[1])
+        mSZHotDay!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray().let1 {
+                    mTVMonthDay.text = it[2]
+                    mTVYearMonth.text = String.format(Locale.CHINA, "%s年%s月", it[0], it[1])
+                }
 
         try {
-            val ts = ToolUtil.stringToTimestamp(mSZHotDay!!)
-            mTVDayInWeek.text = ToolUtil.getDayInWeek(ts)
+            ToolUtil.stringToCalendar(mSZHotDay!!).let1 {
+                mTVDayInWeek.text = it.getDayInWeekStr()
+            }
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -210,7 +208,8 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
                         it[ValueShow.ATTR_PAY_AMOUNT] = "0.00"
                         it[ValueShow.ATTR_INCOME_COUNT] = "0"
                         it[ValueShow.ATTR_INCOME_AMOUNT] = "0.00"
-                        Unit})
+                        Unit
+                    })
 
             mVSDataUI.adjustAttribute(it)
         }

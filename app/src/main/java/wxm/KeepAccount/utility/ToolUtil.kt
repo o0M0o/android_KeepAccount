@@ -1,6 +1,7 @@
 package wxm.KeepAccount.utility
 
 import android.app.Activity
+import wxm.androidutil.time.toCalendar
 
 import java.lang.ref.WeakReference
 import java.sql.Timestamp
@@ -39,45 +40,9 @@ object ToolUtil {
         return Timestamp(date.time)
     }
 
-    /**
-     * get day-in-week for [szDate]
-     * string can be :
-     * "2016-08-06",
-     * "2016年08月06日"
-     * "2016-08-06 12:00:00",
-     * "2016年08月06日 12:00:00"
-     */
-    fun getDayInWeek(szDate: String): String {
-        return getDayInWeek(stringToTimestamp(szDate))
-    }
-
-    /**
-     * get day in week for timestamp
-     * @param ts    time
-     * @return      "星期*"
-     */
-    fun getDayInWeek(ts: Timestamp): String {
-        val day = Calendar.getInstance()
-        day.timeInMillis = ts.time
-        return getDayInWeek(day.get(Calendar.DAY_OF_WEEK))
-    }
-
-    /**
-     * get "星期*"
-     * @param dw    day order in week(1-7)
-     * @return      "星期*"
-     */
-    private fun getDayInWeek(dw: Int): String {
-        return when (dw) {
-            Calendar.SUNDAY -> "星期日"
-            Calendar.MONDAY -> "星期一"
-            Calendar.TUESDAY -> "星期二"
-            Calendar.WEDNESDAY -> "星期三"
-            Calendar.THURSDAY -> "星期四"
-            Calendar.FRIDAY -> "星期五"
-            Calendar.SATURDAY -> "星期六"
-            else -> ""
-        }
+    @Throws(ParseException::class)
+    fun stringToCalendar(str: String): Calendar {
+        return stringToTimestamp(str).toCalendar()
     }
 
     /**

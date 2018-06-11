@@ -7,7 +7,7 @@ import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.util.ChartUtils
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import java.util.ArrayList
 
 /**

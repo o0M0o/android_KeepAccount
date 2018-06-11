@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import wxm.KeepAccount.define.GlobalDef
-import wxm.androidutil.util.forObj
+import wxm.androidutil.improve.forObj
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream

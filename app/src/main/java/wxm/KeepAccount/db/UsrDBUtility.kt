@@ -7,8 +7,8 @@ import wxm.KeepAccount.item.UsrItem
 import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.db.DBUtilityBase
 import wxm.androidutil.util.MD5Util
-import wxm.androidutil.util.doJudge
-import wxm.androidutil.util.forObj
+import wxm.androidutil.improve.doJudge
+import wxm.androidutil.improve.forObj
 
 /**
  * usr数据处理类

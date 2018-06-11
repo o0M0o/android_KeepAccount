@@ -3,7 +3,6 @@ package wxm.KeepAccount.ui.welcome.page
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import com.allure.lbanners.LMBanners
 import kotterknife.bindView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -25,6 +24,7 @@ import wxm.KeepAccount.utility.PreferencesUtil
 import wxm.androidutil.time.CalendarUtility
 import wxm.androidutil.ui.dragGrid.DragGridView
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
+import wxm.uilib.lbanners.LMBanners
 import java.util.*
 
 /**

@@ -13,7 +13,8 @@ import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.ui.preview.ACImagePreview
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
-import wxm.androidutil.util.doJudge
+import wxm.androidutil.improve.doJudge
+import wxm.androidutil.improve.let1
 
 /**
  * preview fragment for budget

@@ -3,7 +3,7 @@ package wxm.KeepAccount.ui.welcome.base
 import android.app.Activity
 import android.content.Intent
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 
 /**
  * @author      WangXM

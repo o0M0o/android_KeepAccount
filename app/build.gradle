@@ -16,11 +16,19 @@ android {
             storeFile       file(project.YYB_FILE_PATH)
             storePassword   project.YYB_STORE_PWD
         }
+
         KuAnKey {
             keyAlias        project.KUAN_KEY_ALIAS
             keyPassword     project.KUAN_KEY_PWD
             storeFile       file(project.KUAN_FILE_PATH)
             storePassword   project.KUAN_STORE_PWD
+        }
+
+        HuaWeiKey {
+            keyAlias        project.HUAWEI_KEY_ALIAS
+            keyPassword     project.HUAWEI_KEY_PWD
+            storeFile       file(project.HUAWEI_FILE_PATH)
+            storePassword   project.HUAWEI_STORE_PWD
         }
     }
 
@@ -74,6 +82,10 @@ android {
         KuAn_keepaccount {
             signingConfig signingConfigs.KuAnKey
         }
+
+        HuaWei_keepaccount {
+            signingConfig signingConfigs.HuaWeiKey
+        }
     }
 
     android.applicationVariants.all { variant ->
@@ -112,8 +124,8 @@ dependencies {
     //kapt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     implementation 'org.greenrobot:eventbus:3.1.1'
 
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.0'
-    implementation 'com.jakewharton:butterknife:8.8.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
 
     implementation 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
 
@@ -124,7 +136,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.0.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.squareup.okhttp3:okhttp:3.7.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
     implementation 'io.reactivex:rxandroid:1.1.0'
     implementation 'org.apache.httpcomponents:httpcore:4.4.4'
 
@@ -139,7 +151,6 @@ dependencies {
     implementation files('libs/extend_lib/sqlite_jdbc/sqlite-jdbc-3.8.11.jar')
 
     implementation project(':hellocharts-library-release')
-    implementation project(':lm_banner_library')
     implementation project(':AndroidUtil')
     implementation project(':UiLib')
 }

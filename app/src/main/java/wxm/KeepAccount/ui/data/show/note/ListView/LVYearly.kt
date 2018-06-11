@@ -11,7 +11,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.event.FilterShow
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import wxm.KeepAccount.improve.toSignalMoneyString
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
@@ -24,8 +24,8 @@ import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder
 import wxm.androidutil.ui.view.ViewHolder
 import wxm.androidutil.util.UtilFun
-import wxm.androidutil.util.doJudge
-import wxm.androidutil.util.forObj
+import wxm.androidutil.improve.doJudge
+import wxm.androidutil.improve.forObj
 import wxm.uilib.IconButton.IconButton
 import java.util.*
 import kotlin.collections.HashMap

@@ -16,7 +16,7 @@ import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.NoteImageUtility
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import wxm.KeepAccount.improve.setImagePath
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
@@ -30,7 +30,7 @@ import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
-import wxm.androidutil.util.doJudge
+import wxm.androidutil.improve.doJudge
 import java.lang.String.format
 import java.math.BigDecimal
 import java.sql.Timestamp

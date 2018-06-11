@@ -1,6 +1,6 @@
 package wxm.KeepAccount.improve
 
-import wxm.androidutil.util.doJudge
+import wxm.androidutil.improve.doJudge
 import java.math.BigDecimal
 import java.util.*
 

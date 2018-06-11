@@ -11,7 +11,7 @@ import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.event.FilterShow
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
@@ -24,12 +24,14 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.time.CalendarUtility
+import wxm.androidutil.time.getDayInWeekStr
+import wxm.androidutil.time.toCalendar
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder
 import wxm.androidutil.ui.view.ViewHolder
-import wxm.androidutil.util.doJudge
+import wxm.androidutil.improve.doJudge
 import wxm.uilib.IconButton.IconButton
 import java.util.HashMap
 import java.util.LinkedList
@@ -63,7 +65,7 @@ class LVDaily : LVBase() {
             val item = MainAdapterItem(tag.substring(0, 4), szMonth, szDay)
 
             NoteDataHelper.getInfoByDay(tag)?.let {
-                item.dayInWeek = ToolUtil.getDayInWeek(tag)
+                item.dayInWeek = ToolUtil.stringToCalendar(tag).getDayInWeekStr()
                 item.dayInfo = RecordDetail(it.payCount.toString(), it.szPayAmount,
                         it.incomeCount.toString(), it.szIncomeAmount)
 

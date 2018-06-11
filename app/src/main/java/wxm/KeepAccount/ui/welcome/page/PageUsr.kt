@@ -18,11 +18,11 @@ import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.welcome.base.PageBase
 import wxm.KeepAccount.utility.AppUtil
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import wxm.KeepAccount.utility.saveImage
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
-import wxm.androidutil.util.doJudge
+import wxm.androidutil.improve.doJudge
 import wxm.uilib.IconButton.IconButton
 import java.io.File
 

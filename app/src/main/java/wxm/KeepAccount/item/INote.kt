@@ -5,7 +5,7 @@ import java.math.BigDecimal
 import java.sql.Timestamp
 import java.util.*
 import wxm.androidutil.time.*
-import wxm.androidutil.util.doJudge
+import wxm.androidutil.improve.doJudge
 
 /**
  * Created by WangXM on 2016/10/21.

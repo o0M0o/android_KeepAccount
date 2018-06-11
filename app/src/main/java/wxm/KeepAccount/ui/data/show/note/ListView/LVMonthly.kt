@@ -11,20 +11,22 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.event.FilterShow
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import wxm.KeepAccount.improve.toSignalMoneyString
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
+import wxm.androidutil.time.getDayInWeekStr
+import wxm.androidutil.time.toCalendar
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder
 import wxm.androidutil.ui.view.ViewHolder
 import wxm.androidutil.util.UtilFun
-import wxm.androidutil.util.doJudge
-import wxm.androidutil.util.forObj
+import wxm.androidutil.improve.doJudge
+import wxm.androidutil.improve.forObj
 import wxm.uilib.IconButton.IconButton
 import java.util.*
 import kotlin.collections.HashMap
@@ -78,7 +80,7 @@ class LVMonthly : LVBase() {
             val map = DayDetailItem(mk, tag)
             NoteDataHelper.getInfoByDay(tag)?.let {
                 map.dayNumber = tag.substring(8, 10).removePrefix("0")
-                map.dayInWeek = ToolUtil.getDayInWeek(tag)
+                map.dayInWeek = ToolUtil.stringToCalendar(tag).getDayInWeekStr()
                 map.dayDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
                         it.incomeCount.toString(), it.szIncomeAmount)
 

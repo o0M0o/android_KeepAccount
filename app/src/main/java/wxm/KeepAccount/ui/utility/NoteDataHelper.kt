@@ -4,7 +4,7 @@ package wxm.KeepAccount.ui.utility
 import wxm.KeepAccount.db.NoteImageUtility
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.utility.AppUtil
-import wxm.androidutil.util.forObj
+import wxm.androidutil.improve.forObj
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 

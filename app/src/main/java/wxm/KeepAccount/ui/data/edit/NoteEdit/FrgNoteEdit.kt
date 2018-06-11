@@ -12,7 +12,7 @@ import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.data.edit.NoteEdit.page.*
 import wxm.KeepAccount.ui.data.edit.base.*
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 
 /**

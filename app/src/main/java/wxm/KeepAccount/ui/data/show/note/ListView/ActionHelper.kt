@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import wxm.KeepAccount.R
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.view.EventHelper
 

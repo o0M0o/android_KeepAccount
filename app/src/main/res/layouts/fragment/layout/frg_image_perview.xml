@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <wxm.KeepAccount.ui.base.ZoomImageView.ZoomImageView
+    <wxm.uilib.zoomImage.zoomImageView
         android:id="@+id/ziv_scale"
         android:src="@drawable/image_add_pic"
         android:layout_width="fill_parent"

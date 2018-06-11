@@ -23,7 +23,7 @@ import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.utility.AdapterNoteDetail
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.androidutil.app.AppBase
-import wxm.androidutil.util.doJudge
+import wxm.androidutil.improve.doJudge
 
 /**
  * for note pad content detail

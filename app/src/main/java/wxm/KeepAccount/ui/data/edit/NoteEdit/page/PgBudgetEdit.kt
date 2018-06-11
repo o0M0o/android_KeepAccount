@@ -21,7 +21,7 @@ import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
-import wxm.androidutil.util.doJudge
+import wxm.androidutil.improve.doJudge
 import java.math.BigDecimal
 
 /**

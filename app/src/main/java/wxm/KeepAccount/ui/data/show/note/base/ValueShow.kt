@@ -15,7 +15,7 @@ import java.util.Locale
 import kotterknife.bindView
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import wxm.androidutil.log.TagLog
 import wxm.androidutil.util.UiUtil
 

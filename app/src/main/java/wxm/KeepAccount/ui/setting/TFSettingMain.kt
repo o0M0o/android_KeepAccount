@@ -16,7 +16,7 @@ import wxm.androidutil.ui.view.EventHelper
 import android.content.Intent.EXTRA_SUBJECT
 import android.content.Intent.ACTION_SENDTO
 import android.net.Uri
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 
 
 /**

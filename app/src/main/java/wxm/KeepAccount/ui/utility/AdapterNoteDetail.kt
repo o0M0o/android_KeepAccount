@@ -10,7 +10,7 @@ import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.utility.AppUtil
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import wxm.androidutil.time.toCalendar
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.moreAdapter.MoreAdapter

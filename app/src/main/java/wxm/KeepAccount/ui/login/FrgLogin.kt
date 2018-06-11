@@ -22,7 +22,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.ui.welcome.ACWelcome
 import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import wxm.androidutil.log.TagLog
 import wxm.androidutil.time.toTimestamp
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv

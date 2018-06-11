@@ -15,7 +15,7 @@ import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.event.FilterShow
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import wxm.KeepAccount.ui.data.show.note.base.EOperation
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.utility.*
@@ -23,7 +23,7 @@ import wxm.androidutil.time.*
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewHolder
-import wxm.androidutil.util.doJudge
+import wxm.androidutil.improve.doJudge
 import wxm.uilib.IconButton.IconButton
 import java.util.*
 import kotlin.collections.ArrayList
@@ -223,13 +223,13 @@ class LVBudget : LVBase() {
             map.month = "${cl.getYear()}年${cl.getMonth()}月"
 
             map.dayNumber = cl.getDayInMonth().toString()
-            map.dayInWeek = cl.getDayInWeekString()
+            map.dayInWeek = cl.getDayInWeekStr()
 
             it.note?.let {
                 map.note = if (it.length > 10) it.substring(0, 10) + "..." else it
             }
 
-            map.time = cl.getHourMinuteString()
+            map.time = cl.getHourMinuteStr()
             map.title = it.info
             map.amount = it.valToStr
             map.id = it.id

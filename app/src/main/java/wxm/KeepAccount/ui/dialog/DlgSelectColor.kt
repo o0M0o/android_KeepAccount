@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.SimpleAdapter
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.KeepAccount.improve.let1
+import wxm.androidutil.improve.let1
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
