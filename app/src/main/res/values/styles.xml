@@ -1,13 +1,10 @@
 <resources>
-
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">#ff212121</item>
+        <item name="colorPrimaryDark">@android:color/black</item>
         <item name="colorAccent">@color/colorAccent</item>
-    </style>
 
-    <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="actionBarSize">36dp</item>
@@ -15,23 +12,4 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-
-    <!-- for switch
-    <style name="Switch">
-        <item name="textOn">@string/capital_on</item>
-        <item name="textOff">@string/capital_off</item>
-    </style>
-
-    <style name="Widget.Holo.Light.CompoundButton.Switch" parent="Switch">
-        <item name="track">@drawable/switch_track_holo_light</item>
-        <item name="thumb">@drawable/switch_inner_holo_light</item>
-        <item name="switchTextAppearance">@style/TextAppearance.Holo.Light.Widget.Switch</item>
-        <item name="textOn">@string/capital_on</item>
-        <item name="textOff">@string/capital_off</item>
-        <item name="thumbTextPadding">12dip</item>
-        <item name="switchMinWidth">96dip</item>
-        <item name="switchPadding">16dip</item>
-    </style>
-    -->
 </resources>

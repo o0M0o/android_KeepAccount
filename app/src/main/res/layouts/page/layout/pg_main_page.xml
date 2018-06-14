@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.allure.lbanners.LMBanners
+    <wxm.uilib.lbanners.LMBanners
         android:id="@+id/banners"
         android:layout_width="match_parent"
         android:layout_height="@dimen/banner_height"

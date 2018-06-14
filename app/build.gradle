@@ -144,6 +144,7 @@ dependencies {
     implementation 'com.github.vipulasri:timelineview:1.0.6'
 
     implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    implementation 'com.nineoldandroids:library:2.4.0'
 
     implementation files('libs/extend_lib/ormlite/android-logging-log4j-1.0.3.jar')
     implementation files('libs/extend_lib/fashjson/fastjson-1.2.33.jar')
