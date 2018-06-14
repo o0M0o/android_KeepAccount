@@ -7,19 +7,20 @@ import android.support.v4.app.Fragment
 import wxm.androidutil.ui.activity.ACSwitcherActivity
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.ui.base.ACBase.ACBase
 import wxm.androidutil.log.TagLog
 
 /**
  * UI for report
  * Created by WangXM on 2017/2/15.
  */
-class ACReport : ACSwitcherActivity<Fragment>() {
+class ACReport : ACBase<Fragment>() {
     override fun leaveActivity() {
         setResult(GlobalDef.INTRET_CANCEL, Intent())
         finish()
     }
 
-    override fun setupFragment(bundle: Bundle?) {
+    override fun setupFragment(savedInstanceState: Bundle?) {
         // check invoke intent
         val it = intent
         val szType = it.getStringExtra(PARA_TYPE)
@@ -29,7 +30,7 @@ class ACReport : ACSwitcherActivity<Fragment>() {
         }
 
         val alLoad = it.getStringArrayListExtra(PARA_LOAD)
-        if (UtilFun.ListIsNullOrEmpty(alLoad)) {
+        if (alLoad.isEmpty()) {
             TagLog.e( "调用intent缺少'PARA_LOAD'参数")
             return
         }

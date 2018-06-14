@@ -11,6 +11,7 @@ import android.widget.Toast
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.EMsgType
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.ui.base.ACBase.ACBase
 import wxm.KeepAccount.ui.help.ACHelp
 import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.improve.let1
@@ -20,13 +21,9 @@ import wxm.androidutil.ui.activity.ACSwitcherActivity
 /**
  * A login screen that offers login via email/password.
  */
-class ACLogin : ACSwitcherActivity<FrgLogin>() {
+class ACLogin : ACBase<FrgLogin>() {
     override fun setupFragment(savedInstanceState: Bundle?) {
         addFragment(FrgLogin())
-        findViewById<Toolbar>(R.id.toolbar).let1 {
-            it.setTitleTextAppearance(this, R.style.AppTheme_ActionBar_Text)
-            it.overflowIcon?.setTint(getColor(R.color.white))
-        }
     }
 
 

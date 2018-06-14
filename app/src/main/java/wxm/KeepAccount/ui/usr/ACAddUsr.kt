@@ -4,19 +4,20 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.ui.base.ACBase.ACBase
 
 import wxm.androidutil.ui.activity.ACSwitcherActivity
 
 /**
  * add usr
  */
-class ACAddUsr : ACSwitcherActivity<FrgUsrAdd>() {
+class ACAddUsr : ACBase<FrgUsrAdd>() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         hotFragment.reInitUI()
     }
 
-    override fun setupFragment(bundle: Bundle?) {
+    override fun setupFragment(savedInstanceState: Bundle?) {
         addFragment(FrgUsrAdd())
     }
 
