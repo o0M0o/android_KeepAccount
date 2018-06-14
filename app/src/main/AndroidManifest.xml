@@ -21,7 +21,8 @@
         <activity
             android:name=".ui.login.ACLogin"
             android:label="@string/cn_app_label"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -32,42 +33,57 @@
             android:configChanges="orientation|screenSize"
             android:exported="true"
             android:label="@string/ac_title_noteshow"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.usr.ACAddUsr"
             android:configChanges="orientation|screenSize"
-            android:label="@string/add_usr" />
+            android:label="@string/add_usr"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.help.ACHelp"
-            android:label="@string/title_help" />
+            android:label="@string/title_help"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.data.report.ACReport"
-            android:label="@string/title_report" />
+            android:label="@string/title_report"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.preview.ACImagePreview"
-            android:label="@string/title_preview" />
+            android:label="@string/title_preview"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.welcome.ACWelcome"
             android:configChanges="orientation|screenSize"
-            android:label="@string/label_welcome" />
+            android:label="@string/label_welcome"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.data.edit.NoteCreate.ACNoteCreate"
-            android:exported="true" />
-        <activity android:name=".ui.data.show.remind.ACRemindShow" />
+            android:exported="true"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.data.show.remind.ACRemindShow"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.data.show.note.ACDailyDetail"
             android:exported="false"
-            android:label="@string/title_daily_detail" />
+            android:label="@string/title_daily_detail"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.data.show.calendar.ACCalendarShow"
             android:exported="false"
-            android:label="日历展示" />
+            android:label="日历展示"
+            android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.data.edit.NoteEdit.ACNoteEdit" />
+            android:name=".ui.data.edit.NoteEdit.ACNoteEdit"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.data.edit.RecordInfo.ACRecordInfoEdit"
-            android:exported="true" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
+            android:exported="true"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

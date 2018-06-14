@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Message
 import android.os.Process
+import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -12,6 +13,7 @@ import wxm.KeepAccount.define.EMsgType
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.help.ACHelp
 import wxm.KeepAccount.utility.AppUtil
+import wxm.androidutil.improve.let1
 import wxm.androidutil.log.TagLog
 import wxm.androidutil.ui.activity.ACSwitcherActivity
 
@@ -21,6 +23,10 @@ import wxm.androidutil.ui.activity.ACSwitcherActivity
 class ACLogin : ACSwitcherActivity<FrgLogin>() {
     override fun setupFragment(savedInstanceState: Bundle?) {
         addFragment(FrgLogin())
+        findViewById<Toolbar>(R.id.toolbar).let1 {
+            it.setTitleTextAppearance(this, R.style.AppTheme_ActionBar_Text)
+            it.overflowIcon?.setTint(getColor(R.color.white))
+        }
     }
 
 

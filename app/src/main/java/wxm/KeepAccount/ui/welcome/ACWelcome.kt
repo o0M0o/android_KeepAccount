@@ -4,7 +4,11 @@ package wxm.KeepAccount.ui.welcome
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
+import android.view.View
+import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
+import wxm.androidutil.improve.let1
 import wxm.androidutil.ui.activity.ACSwitcherActivity
 
 
@@ -14,6 +18,9 @@ import wxm.androidutil.ui.activity.ACSwitcherActivity
 class ACWelcome : ACSwitcherActivity<FrgWelcome>()  {
     override fun setupFragment(savedInstanceState: Bundle?) {
         addFragment(FrgWelcome())
+        findViewById<Toolbar>(R.id.toolbar).let1 {
+            it.setTitleTextAppearance(this, R.style.AppTheme_ActionBar_Text)
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
