@@ -52,13 +52,8 @@ class DayReportChart : FrgSupportBaseAdv() {
         loadData()
     }
 
-    override fun getLayoutID(): Int {
-        return R.layout.pg_report_chart
-    }
-
-    override fun isUseEventBus(): Boolean {
-        return true
-    }
+    override fun getLayoutID(): Int = R.layout.pg_report_chart
+    override fun isUseEventBus(): Boolean = true
 
     override fun initUI(bundle: Bundle?) {
         mASParaLoad = arguments!!.getStringArrayList(ACReport.PARA_LOAD)
