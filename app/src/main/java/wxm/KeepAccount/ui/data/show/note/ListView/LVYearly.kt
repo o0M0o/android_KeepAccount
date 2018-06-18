@@ -12,7 +12,7 @@ import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.event.FilterShow
 import wxm.androidutil.improve.let1
-import wxm.KeepAccount.improve.toSignalMoneyString
+import wxm.KeepAccount.improve.toSignalMoneyStr
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.HelperDayNotesInfo
@@ -82,7 +82,7 @@ class LVYearly : LVBase() {
                 map.monthDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
                         it.incomeCount.toString(), it.szIncomeAmount)
 
-                map.amount = it.balance.toSignalMoneyString()
+                map.amount = it.balance.toSignalMoneyStr()
             }
 
             return map

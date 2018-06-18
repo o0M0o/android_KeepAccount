@@ -16,17 +16,17 @@ import wxm.androidutil.time.getDayInWeekStr
  * @version     create：2018/6/16
  */
 class MonthPieChart : PieChartBase() {
-    private lateinit var mLLDays: List<String>
-    private var mSZHotDay = ""
+    private lateinit var mLLMonths: List<String>
+    private var mSZHotMonth = ""
 
     override fun loadUI(savedInstanceState: Bundle?) {
         super.loadUI(savedInstanceState)
 
         val l = { v:View ->
-            val hotIdx = mLLDays.indexOf(mSZHotDay)
+            val hotIdx = mLLMonths.indexOf(mSZHotMonth)
             if(0 <= hotIdx) {
                 val dif = (v.id == R.id.iv_left).doJudge(-1, 1)
-                val maxIdx = mLLDays.size - 1
+                val maxIdx = mLLMonths.size - 1
                 val newIdx = hotIdx + dif
                 when {
                     0 > newIdx -> mIVLeft.visibility = View.INVISIBLE
@@ -35,7 +35,7 @@ class MonthPieChart : PieChartBase() {
                         mIVLeft.visibility = View.VISIBLE
                         mIVRight.visibility = View.VISIBLE
 
-                        mSZHotDay = mLLDays[newIdx]
+                        mSZHotMonth = mLLMonths[newIdx]
                         doLoadDay()
                     }
                 }
@@ -45,28 +45,29 @@ class MonthPieChart : PieChartBase() {
         mIVLeft.setOnClickListener(l)
         mIVRight.setOnClickListener(l)
 
-        mLLDays = NoteDataHelper.notesDays
-        mLLDays.isEmpty().doJudge(View.INVISIBLE, View.VISIBLE).let1 {
+        mTVDayInWeek.visibility = View.GONE
+
+        mLLMonths = NoteDataHelper.notesMonths
+        mLLMonths.isEmpty().doJudge(View.INVISIBLE, View.VISIBLE).let1 {
             mIVLeft.visibility = it
             mIVRight.visibility = it
         }
 
-        if (mLLDays.isNotEmpty()) {
-            mSZHotDay = mLLDays.last()
+        if (mLLMonths.isNotEmpty()) {
+            mSZHotMonth = mLLMonths.last()
             doLoadDay()
         }
     }
 
     private fun doLoadDay() {
-        mTVDateRange.text = mSZHotDay
-        mTVDayInWeek.text = ToolUtil.stringToCalendar(mSZHotDay).getDayInWeekStr()
+        mTVDateRange.text = mSZHotMonth
 
-        NoteDataHelper.getInfoByDay(mSZHotDay)?.let1 {
+        NoteDataHelper.getInfoByMonth(mSZHotMonth).let1 {
             mTVPay.text = it.payAmount.toMoneyStr()
             mTVIncome.text = it.incomeAmount.toMoneyStr()
             mTVTotal.text = it.balance.toSignalMoneyStr()
         }
 
-        loadData(mSZHotDay, mSZHotDay)
+        loadData("$mSZHotMonth-01", "$mSZHotMonth-31")
     }
 }

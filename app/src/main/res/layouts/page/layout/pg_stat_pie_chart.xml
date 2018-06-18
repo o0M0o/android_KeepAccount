@@ -18,8 +18,9 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp">
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            tools:ignore="HardcodedText">
 
             <ImageView
                 android:id="@+id/iv_left"
@@ -32,17 +33,28 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
             <TextView
                 android:id="@+id/tv_date_range"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2018/06/16"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textColor="@color/text_fit"
+                app:layout_constraintBottom_toTopOf="@id/tv_date_in_week"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_date_in_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="星期一"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/tv_date_range"
+                app:layout_constraintStart_toStartOf="@id/tv_date_range"
+                app:layout_constraintTop_toBottomOf="@id/tv_date_range" />
 
             <ImageView
                 android:id="@+id/iv_right"
@@ -51,19 +63,102 @@
                 android:layout_marginEnd="36dp"
                 android:src="@drawable/ic_to_right_64dp"
                 android:tint="@color/mediumseagreen"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/darker_gray" />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tb_income"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText">
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/gl_vertical_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.05" />
+
+                <TextView
+                    android:id="@+id/tv_tag_income"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cn_income"
+                    android:textAppearance="@style/AppTheme.Info.Title"
+                    app:layout_constraintBottom_toTopOf="@id/tv_tag_pay"
+                    app:layout_constraintStart_toStartOf="@id/gl_vertical_start"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/gl_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.3" />
+
+                <TextView
+                    android:id="@+id/tv_income"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1000"
+                    android:textColor="@color/waterblue"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_tag_income"
+                    app:layout_constraintStart_toStartOf="@id/gl_vertical"
+                    app:layout_constraintTop_toTopOf="@id/tv_tag_income"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/tv_tag_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cn_pay"
+                    android:textAppearance="@style/AppTheme.Info.Title"
+                    app:layout_constraintBottom_toTopOf="@id/tv_tag_total"
+                    app:layout_constraintStart_toStartOf="@id/gl_vertical_start"
+                    app:layout_constraintTop_toBottomOf="@id/tv_tag_income" />
+
+                <TextView
+                    android:id="@+id/tv_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1000"
+                    android:textColor="@color/red_ff725f"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_tag_pay"
+                    app:layout_constraintStart_toStartOf="@id/gl_vertical"
+                    app:layout_constraintTop_toTopOf="@id/tv_tag_pay"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/tv_tag_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cn_total"
+                    android:textAppearance="@style/AppTheme.Info.Title"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/gl_vertical_start"
+                    app:layout_constraintTop_toBottomOf="@id/tv_tag_pay" />
+
+                <TextView
+                    android:id="@+id/tv_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1000"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_tag_total"
+                    app:layout_constraintStart_toStartOf="@id/gl_vertical"
+                    app:layout_constraintTop_toTopOf="@id/tv_tag_total"
+                    tools:ignore="HardcodedText" />
+
+            </android.support.constraint.ConstraintLayout>
 
             <ToggleButton
                 android:id="@+id/tb_income"
@@ -73,7 +168,8 @@
                 android:textOff="@string/tv_income_not_show"
                 android:textOn="@string/tv_income_show"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toStartOf="@id/tb_pay" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ToggleButton
                 android:id="@+id/tb_pay"
@@ -83,15 +179,18 @@
                 android:textOff="@string/tv_pay_not_show"
                 android:textOn="@string/tv_pay_show"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tb_income" />
+        </android.support.constraint.ConstraintLayout>
 
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <lecho.lib.hellocharts.view.PieChartView
                 android:id="@+id/chart"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tb_pay" />
+                android:layout_height="match_parent" />
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 </LinearLayout>

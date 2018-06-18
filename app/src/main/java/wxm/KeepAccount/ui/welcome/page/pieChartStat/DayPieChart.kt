@@ -3,9 +3,13 @@ package wxm.KeepAccount.ui.welcome.page.pieChartStat
 import android.os.Bundle
 import android.view.View
 import wxm.KeepAccount.R
+import wxm.KeepAccount.improve.toMoneyStr
+import wxm.KeepAccount.improve.toSignalMoneyStr
 import wxm.KeepAccount.ui.utility.NoteDataHelper
+import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.improve.doJudge
 import wxm.androidutil.improve.let1
+import wxm.androidutil.time.getDayInWeekStr
 
 /**
  * @author      WangXM
@@ -55,6 +59,14 @@ class DayPieChart : PieChartBase() {
 
     private fun doLoadDay() {
         mTVDateRange.text = mSZHotDay
+        mTVDayInWeek.text = ToolUtil.stringToCalendar(mSZHotDay).getDayInWeekStr()
+
+        NoteDataHelper.getInfoByDay(mSZHotDay)?.let1 {
+            mTVPay.text = it.payAmount.toMoneyStr()
+            mTVIncome.text = it.incomeAmount.toMoneyStr()
+            mTVTotal.text = it.balance.toSignalMoneyStr()
+        }
+
         loadData(mSZHotDay, mSZHotDay)
     }
 }

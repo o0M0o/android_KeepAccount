@@ -12,14 +12,13 @@ import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.event.FilterShow
 import wxm.androidutil.improve.let1
-import wxm.KeepAccount.improve.toSignalMoneyString
+import wxm.KeepAccount.improve.toSignalMoneyStr
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.time.getDayInWeekStr
-import wxm.androidutil.time.toCalendar
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.ui.view.ViewDataHolder
@@ -56,7 +55,7 @@ class LVMonthly : LVBase() {
                     map.monthDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
                             it.incomeCount.toString(), it.szIncomeAmount)
 
-                    map.amount = it.balance.toSignalMoneyString()
+                    map.amount = it.balance.toSignalMoneyStr()
 
                     map.show = EShowFold.getByFold(!checkUnfoldItem(tag)).showStatus
                 }
@@ -84,7 +83,7 @@ class LVMonthly : LVBase() {
                 map.dayDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
                         it.incomeCount.toString(), it.szIncomeAmount)
 
-                map.amount = it.balance.toSignalMoneyString()
+                map.amount = it.balance.toSignalMoneyStr()
             }
 
             return map

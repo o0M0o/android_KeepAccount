@@ -19,6 +19,7 @@
     <string name="cn_income_pay">收支</string>
     <string name="cn_income">收入</string>
     <string name="cn_pay">支出</string>
+    <string name="cn_total">总计</string>
 
     <string name="cn_day_flow">日流水</string>
     <string name="cn_month_flow">月流水</string>

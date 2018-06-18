@@ -14,6 +14,8 @@ import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.db.DBDataChangeEvent
 import wxm.KeepAccount.event.PreferenceChange
 import wxm.KeepAccount.ui.welcome.page.pieChartStat.DayPieChart
+import wxm.KeepAccount.ui.welcome.page.pieChartStat.MonthPieChart
+import wxm.KeepAccount.ui.welcome.page.pieChartStat.YearPieChart
 import wxm.KeepAccount.ui.welcome.page.stat.DayStat
 import wxm.KeepAccount.ui.welcome.page.stat.MonthStat
 import wxm.KeepAccount.ui.welcome.page.stat.YearStat
@@ -27,8 +29,8 @@ class PageStat : FrgSupportSwitcher<FrgSupportBaseAdv>(),  PageBase {
     private val mTLTab:SegmentTabLayout  by bindView(R.id.tl_stat)
 
     private val mPGDay = DayPieChart()
-    private val mPGMonth = DayPieChart()
-    private val mPGYear = DayPieChart()
+    private val mPGMonth = MonthPieChart()
+    private val mPGYear = YearPieChart()
 
     override fun isUseEventBus(): Boolean = true
 

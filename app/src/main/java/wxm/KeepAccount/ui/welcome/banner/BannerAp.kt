@@ -12,7 +12,7 @@ import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.ui.utility.NoteShowInfo
 import wxm.KeepAccount.utility.PreferencesUtil
 import wxm.androidutil.improve.let1
-import wxm.KeepAccount.improve.toMoneyString
+import wxm.KeepAccount.improve.toMoneyStr
 import wxm.androidutil.time.getMonth
 import wxm.androidutil.time.getYear
 import wxm.androidutil.ui.view.ViewHelper
@@ -57,8 +57,8 @@ class BannerAp(private val mContext: Context, private val mVGGroup: ViewGroup?) 
 
         NoteDataHelper.getInfoByMonth(SimpleDateFormat("yyyy-MM", Locale.CHINA).format(ci.time))
                 .let1 {
-                    vh.setText(R.id.tv_pay_amount, it.payAmount.toMoneyString())
-                    vh.setText(R.id.tv_income_amount, it.incomeAmount.toMoneyString())
+                    vh.setText(R.id.tv_pay_amount, it.payAmount.toMoneyStr())
+                    vh.setText(R.id.tv_income_amount, it.incomeAmount.toMoneyStr())
                     fillChart(v, it)
                 }
     }
@@ -73,8 +73,8 @@ class BannerAp(private val mContext: Context, private val mVGGroup: ViewGroup?) 
         vh.setText(R.id.tv_year_number, String.format(Locale.CHINA, "%04d", ci.getYear()))
         NoteDataHelper.getInfoByYear(SimpleDateFormat("yyyy", Locale.CHINA).format(ci.time))
                 .let1 {
-                    vh.setText(R.id.tv_pay_amount, it.payAmount.toMoneyString())
-                    vh.setText(R.id.tv_income_amount, it.incomeAmount.toMoneyString())
+                    vh.setText(R.id.tv_pay_amount, it.payAmount.toMoneyStr())
+                    vh.setText(R.id.tv_income_amount, it.incomeAmount.toMoneyStr())
                     fillChart(v, it)
                 }
     }

@@ -14,6 +14,7 @@ import lecho.lib.hellocharts.model.SliceValue
 import lecho.lib.hellocharts.util.ChartUtils
 import lecho.lib.hellocharts.view.PieChartView
 import wxm.KeepAccount.R
+import wxm.KeepAccount.improve.toMoneyStr
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
@@ -40,6 +41,11 @@ abstract class PieChartBase : FrgSupportBaseAdv() {
     protected val mTVDateRange: TextView by bindView(R.id.tv_date_range)
     protected val mIVLeft: ImageView by bindView(R.id.iv_left)
     protected val mIVRight: ImageView by bindView(R.id.iv_right)
+    protected val mTVDayInWeek: TextView by bindView(R.id.tv_date_in_week)
+
+    protected val mTVPay: TextView by bindView(R.id.tv_pay)
+    protected val mTVIncome: TextView by bindView(R.id.tv_income)
+    protected val mTVTotal: TextView by bindView(R.id.tv_total)
 
     private val mCIItem = LinkedList<ChartItem>()
 
@@ -51,8 +57,7 @@ abstract class PieChartBase : FrgSupportBaseAdv() {
         EventHelper.setOnClickOperator(view!!,
                 intArrayOf(R.id.tb_income, R.id.tb_pay),
                 { v ->
-                    val vid = v.id
-                    when (vid) {
+                    when (v.id) {
                         R.id.tb_income -> {
                             mTBPay.isClickable = mTBIncome.isChecked
                         }
@@ -71,9 +76,11 @@ abstract class PieChartBase : FrgSupportBaseAdv() {
     }
 
 
+    @Suppress("RedundantOverride")
     override fun loadUI(savedInstanceState: Bundle?) {
         super.loadUI(savedInstanceState)
 
+        /*
         mCVChart.onValueTouchListener = object : PieChartOnValueSelectListener {
             override fun onValueSelected(i: Int, sliceValue: SliceValue) {
                 val sz = String.format(Locale.CHINA, "%s : %.02f",
@@ -83,9 +90,7 @@ abstract class PieChartBase : FrgSupportBaseAdv() {
 
             override fun onValueDeselected() {}
         }
-
-        //
-        // loadData()
+        */
     }
 
 
@@ -99,7 +104,7 @@ abstract class PieChartBase : FrgSupportBaseAdv() {
         val pd = PieChartData()
         pd.values = lsCI.map {
             SliceValue(it.mBDVal.toFloat(), ChartUtils.pickColor()).apply {
-                setLabel(it.mSZName)
+                setLabel(String.format(Locale.CHINA, "%S %s", it.mSZName, it.mBDVal.toMoneyStr()))
             }
         }
 
@@ -115,8 +120,7 @@ abstract class PieChartBase : FrgSupportBaseAdv() {
         // Get font size from dimens.xml and convert it to sp(library uses sp values).
         pd.centerText1FontSize = ChartUtils.px2sp(
                 resources.displayMetrics.scaledDensity,
-                resources.getDimension(R.dimen.pie_chart_text_size).toInt())
-
+                resources.getDimensionPixelSize(R.dimen.pie_chart_text_size))
         return pd
     }
 

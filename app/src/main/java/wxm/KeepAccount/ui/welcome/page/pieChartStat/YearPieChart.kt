@@ -15,18 +15,18 @@ import wxm.androidutil.time.getDayInWeekStr
  * @author      WangXM
  * @version     create：2018/6/16
  */
-class MonthPieChart : PieChartBase() {
-    private lateinit var mLLMonths: List<String>
-    private var mSZHotMonth = ""
+class YearPieChart : PieChartBase() {
+    private lateinit var mLLYears: List<String>
+    private var mSZHotYear = ""
 
     override fun loadUI(savedInstanceState: Bundle?) {
         super.loadUI(savedInstanceState)
 
         val l = { v:View ->
-            val hotIdx = mLLMonths.indexOf(mSZHotMonth)
+            val hotIdx = mLLYears.indexOf(mSZHotYear)
             if(0 <= hotIdx) {
                 val dif = (v.id == R.id.iv_left).doJudge(-1, 1)
-                val maxIdx = mLLMonths.size - 1
+                val maxIdx = mLLYears.size - 1
                 val newIdx = hotIdx + dif
                 when {
                     0 > newIdx -> mIVLeft.visibility = View.INVISIBLE
@@ -35,7 +35,7 @@ class MonthPieChart : PieChartBase() {
                         mIVLeft.visibility = View.VISIBLE
                         mIVRight.visibility = View.VISIBLE
 
-                        mSZHotMonth = mLLMonths[newIdx]
+                        mSZHotYear = mLLYears[newIdx]
                         doLoadDay()
                     }
                 }
@@ -47,27 +47,27 @@ class MonthPieChart : PieChartBase() {
 
         mTVDayInWeek.visibility = View.GONE
 
-        mLLMonths = NoteDataHelper.notesMonths
-        mLLMonths.isEmpty().doJudge(View.INVISIBLE, View.VISIBLE).let1 {
+        mLLYears = NoteDataHelper.notesYears
+        mLLYears.isEmpty().doJudge(View.INVISIBLE, View.VISIBLE).let1 {
             mIVLeft.visibility = it
             mIVRight.visibility = it
         }
 
-        if (mLLMonths.isNotEmpty()) {
-            mSZHotMonth = mLLMonths.last()
+        if (mLLYears.isNotEmpty()) {
+            mSZHotYear = mLLYears.last()
             doLoadDay()
         }
     }
 
     private fun doLoadDay() {
-        mTVDateRange.text = mSZHotMonth
+        mTVDateRange.text = mSZHotYear
 
-        NoteDataHelper.getInfoByMonth(mSZHotMonth)?.let1 {
+        NoteDataHelper.getInfoByYear(mSZHotYear).let1 {
             mTVPay.text = it.payAmount.toMoneyStr()
             mTVIncome.text = it.incomeAmount.toMoneyStr()
             mTVTotal.text = it.balance.toSignalMoneyStr()
         }
 
-        loadData("$mSZHotMonth-01", "$mSZHotMonth-31")
+        loadData("$mSZHotYear-01-01", "$mSZHotYear-12-31")
     }
 }
