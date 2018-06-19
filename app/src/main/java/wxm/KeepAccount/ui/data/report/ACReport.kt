@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 
-import wxm.androidutil.ui.activity.ACSwitcherActivity
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.base.ACBase.ACBase

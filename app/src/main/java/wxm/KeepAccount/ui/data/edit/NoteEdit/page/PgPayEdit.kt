@@ -6,24 +6,28 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
 import android.support.v4.app.DialogFragment
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import com.theartofdev.edmodo.cropper.CropImage
 import kotterknife.bindView
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
-import wxm.KeepAccount.db.NoteImageUtility
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.event.PicPath
 import wxm.androidutil.improve.let1
-import wxm.KeepAccount.improve.setImagePath
+import wxm.KeepAccount.item.NoteImageItem
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
+import wxm.KeepAccount.ui.data.edit.NoteEdit.page.base.IAddPicPath
+import wxm.KeepAccount.ui.data.edit.NoteEdit.page.base.PicLVAdapter
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
+import wxm.KeepAccount.ui.preview.ACImagePreview
 import wxm.KeepAccount.utility.*
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgAlert
@@ -37,6 +41,7 @@ import java.sql.Timestamp
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * edit pay
@@ -49,19 +54,56 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
     private val mSPBudget: Spinner by bindView(R.id.ar_sp_budget)
     private val mTVBudget: TextView by bindView(R.id.ar_tv_budget)
     private val mTVNote: TouchTextView by bindView(R.id.tv_note)
-    private val mIVImage: ImageView by bindView(R.id.iv_image)
 
-    private val mCLImageHeader: ConstraintLayout by bindView(R.id.cl_image_header)
-    private val mIBImageRefresh: ImageButton by bindView(R.id.ib_image_refresh)
-    private val mIBImageRemove: ImageButton by bindView(R.id.ib_image_remove)
+    private val mLVImage: ListView by bindView(R.id.lv_pic)
+    private val mIBAddImage: ImageButton by bindView(R.id.ib_add_pic)
+    private var mLSImagePath = ArrayList<String>()
+    private var mIAddPicPath:IAddPicPath? = null
 
     private val mSZDefNote: String = AppBase.getString(R.string.notice_input_note)
     private var mOldPayNote: PayNoteItem? = null
-    private var mSZImagePath: String = ""
 
-    override fun getLayoutID(): Int = R.layout.pg_edit_pay
+
+    override fun getLayoutID(): Int = R.layout.pg_pay_edit
+    override fun isUseEventBus(): Boolean = true
+
     override fun setEditData(data: Any) {
         mOldPayNote = data as PayNoteItem
+    }
+
+    /**
+     * remove/refresh/preview pic in [event]
+     */
+    @Suppress("UNUSED_PARAMETER", "unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onPicPath(event: PicPath) {
+        when(event.action)  {
+            PicPath.REMOVE_PIC -> {
+                if(mLSImagePath.contains(event.picPath)) {
+                    mLSImagePath.remove(event.picPath)
+                    reloadPics()
+                }
+            }
+
+            PicPath.REFRESH_PIC ->  {
+                mIAddPicPath = object : IAddPicPath {
+                    override fun addPicPath(path: String) {
+                        mLSImagePath.remove(event.picPath)
+                        mLSImagePath.add(path)
+                        reloadPics()
+                    }
+                }
+
+                CropImage.activity().start(activity!!, this)
+            }
+
+            PicPath.PREVIEW_PIC ->  {
+                Intent(activity!!, ACImagePreview::class.java).let1 {
+                    it.putExtra(ACImagePreview.IMAGE_FILE_PATH, event.picPath)
+                    activity!!.startActivity(it)
+                }
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -71,8 +113,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                 if (resultCode == Activity.RESULT_OK) {
                     saveImage(result.uri).let1 {
                         if (it.isNotEmpty()) {
-                            mSZImagePath = it
-                            mIVImage.setImagePath(mSZImagePath)
+                            mIAddPicPath?.addPicPath(it)
                         }
                     }
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -113,7 +154,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                     }
                 }
 
-                it.tag = mSZImagePath
+                it.tag = mLSImagePath
             }
         }
     }
@@ -138,30 +179,18 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                 mTVNote.setOnTouchListener(it)
             }
 
-            mIVImage.setOnClickListener({ _ ->
-                if (mSZImagePath.isEmpty()) {
-                    CropImage.activity().start(context!!, this)
-                } else {
-                    mCLImageHeader.visibility = (View.GONE == mCLImageHeader.visibility)
-                            .doJudge(View.VISIBLE, View.GONE)
-                }
-            })
-
-            mIBImageRefresh.setOnClickListener({ _ ->
-                mCLImageHeader.visibility = View.GONE
-                CropImage.activity().start(context!!, this)
-            })
-
-            mIBImageRemove.setOnClickListener({ _ ->
-                mCLImageHeader.visibility = View.GONE
-
-                mSZImagePath = ""
-                mOldPayNote?.let1 { pn ->
-                    NoteImageUtility.clearNoteImages(pn)
+            mIBAddImage.setOnClickListener{_ ->
+                mIAddPicPath = object : IAddPicPath {
+                    override fun addPicPath(path: String) {
+                        if(!mLSImagePath.contains(path)) {
+                            mLSImagePath.add(path)
+                            reloadPics()
+                        }
+                    }
                 }
 
-                mIVImage.setImageResource(R.drawable.image_add_pic)
-            })
+                CropImage.activity().start(activity!!, this)
+            }
         }
 
         loadUI(bundle)
@@ -170,7 +199,6 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
     override fun loadUI(bundle: Bundle?) {
         val paraDate = arguments?.getString(GlobalDef.STR_RECORD_DATE)
         mTVNote.paint.flags = Paint.UNDERLINE_TEXT_FLAG
-        mCLImageHeader.visibility = View.GONE
         mOldPayNote?.let1 {
             it.budget?.let1 {
                 val cc = mSPBudget.adapter.count
@@ -191,8 +219,10 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
 
             mETAmount.setText(it.valToStr)
             if (it.images.isNotEmpty()) {
-                mSZImagePath = it.images[0].imagePath
-                mIVImage.setImagePath(mSZImagePath)
+                mLSImagePath.clear()
+                mLSImagePath.addAll(it.images.filter { it.status == NoteImageItem.STATUS_USE }
+                        .map { it.imagePath })
+                reloadPics()
             }
         }
     }
@@ -286,6 +316,15 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
         return checkResult() && fillResult()
     }
 
+
+    private fun reloadPics()    {
+        ArrayList<Map<String, String>>().apply {
+            addAll(mLSImagePath.map { HashMap<String, String>().apply { put(PicLVAdapter.PIC_PATH, it) } })
+        }.let1 {
+            mLVImage.adapter = PicLVAdapter(context!!,  it, true)
+        }
+    }
+
     /**
      * check data validity
      * @return      true if data validity
@@ -324,7 +363,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
             )
 
             if (bRet) {
-                refreshNoteImage(it, mSZImagePath, bCreate)
+                refreshNoteImage(it, mLSImagePath, bCreate)
             } else {
                 DlgAlert.showAlert(context!!, R.string.dlg_warn,
                         bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))

@@ -12,19 +12,26 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ListView
 import com.theartofdev.edmodo.cropper.CropImage
 import kotterknife.bindView
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.NoteImageUtility
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.event.PicPath
 import wxm.androidutil.improve.let1
-import wxm.KeepAccount.improve.setImagePath
 import wxm.KeepAccount.item.IncomeNoteItem
+import wxm.KeepAccount.item.NoteImageItem
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
+import wxm.KeepAccount.ui.data.edit.NoteEdit.page.base.IAddPicPath
+import wxm.KeepAccount.ui.data.edit.NoteEdit.page.base.PicLVAdapter
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
+import wxm.KeepAccount.ui.preview.ACImagePreview
 import wxm.KeepAccount.utility.*
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgAlert
@@ -32,6 +39,7 @@ import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.androidutil.improve.doJudge
+import wxm.androidutil.improve.setImagePath
 import java.lang.String.format
 import java.math.BigDecimal
 import java.sql.Timestamp
@@ -49,20 +57,57 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
     private val mETAmount: TouchEditText by bindView(R.id.ar_et_amount)
     private val mTVNote: TouchTextView by bindView(R.id.tv_note)
 
-    private val mLLImageHeader: LinearLayout by bindView(R.id.ll_image_header)
-    private val mIBImageRefresh: ImageButton by bindView(R.id.ib_image_refresh)
-    private val mIBImageRemove: ImageButton by bindView(R.id.ib_image_remove)
-    private val mIVImage: ImageView by bindView(R.id.iv_image)
+    private val mLVImage: ListView by bindView(R.id.lv_pic)
+    private val mIBAddImage: ImageButton by bindView(R.id.ib_add_pic)
+    private var mLSImagePath = ArrayList<String>()
+    private var mIAddPicPath:IAddPicPath? = null
 
-    private var mSZImagePath: String = ""
     private val mSZDefNote: String = AppBase.getString(R.string.notice_input_note)
 
     private var mOldIncomeNote: IncomeNoteItem? = null
 
-    override fun getLayoutID(): Int = R.layout.pg_edit_income
+    override fun getLayoutID(): Int = R.layout.pg_income_edit
+    override fun isUseEventBus(): Boolean = true
+
     override fun setEditData(data: Any) {
         mOldIncomeNote = data as IncomeNoteItem
     }
+
+    /**
+     * remove/refresh/preview pic in [event]
+     */
+    @Suppress("UNUSED_PARAMETER", "unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onPicPath(event: PicPath) {
+        when(event.action)  {
+            PicPath.REMOVE_PIC -> {
+                if(mLSImagePath.contains(event.picPath)) {
+                    mLSImagePath.remove(event.picPath)
+                    reloadPics()
+                }
+            }
+
+            PicPath.REFRESH_PIC ->  {
+                mIAddPicPath = object : IAddPicPath {
+                    override fun addPicPath(path: String) {
+                        mLSImagePath.remove(event.picPath)
+                        mLSImagePath.add(path)
+                        reloadPics()
+                    }
+                }
+
+                CropImage.activity().start(activity!!, this)
+            }
+
+            PicPath.PREVIEW_PIC ->  {
+                Intent(activity!!, ACImagePreview::class.java).let1 {
+                    it.putExtra(ACImagePreview.IMAGE_FILE_PATH, event.picPath)
+                    activity!!.startActivity(it)
+                }
+            }
+        }
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -71,8 +116,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                 if (resultCode == Activity.RESULT_OK) {
                     saveImage(result.uri).let1 {
                         if (it.isNotEmpty()) {
-                            mSZImagePath = it
-                            mIVImage.setImagePath(mSZImagePath)
+                            mIAddPicPath?.addPicPath(it)
                         }
                     }
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -100,7 +144,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                     Timestamp(0)
                 }
 
-                it.tag = mSZImagePath
+                it.tag = mLSImagePath
             }
         }
     }
@@ -116,29 +160,18 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                         mTVNote.setOnTouchListener(it)
                     }
 
-            mIVImage.setOnClickListener({ _ ->
-                if (mSZImagePath.isEmpty()) {
-                    CropImage.activity().start(context!!, this)
-                } else {
-                    mLLImageHeader.visibility = (View.GONE == mLLImageHeader.visibility)
-                            .doJudge(View.VISIBLE, View.GONE)
-                }
-            })
-
-            mIBImageRefresh.setOnClickListener({ _ ->
-                mLLImageHeader.visibility = View.GONE
-                CropImage.activity().start(context!!, this)
-            })
-
-            mIBImageRemove.setOnClickListener({ _ ->
-                mOldIncomeNote?.let1 { pn ->
-                    NoteImageUtility.removeImage(pn, mSZImagePath)
+            mIBAddImage.setOnClickListener{_ ->
+                mIAddPicPath = object : IAddPicPath {
+                    override fun addPicPath(path: String) {
+                        if(!mLSImagePath.contains(path)) {
+                            mLSImagePath.add(path)
+                            reloadPics()
+                        }
+                    }
                 }
 
-                mSZImagePath = ""
-                mIVImage.setImageResource(R.drawable.image_add_pic)
-                mLLImageHeader.visibility = View.GONE
-            })
+                CropImage.activity().start(activity!!, this)
+            }
         }
 
         loadUI(bundle)
@@ -146,7 +179,6 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
 
     override fun loadUI(bundle: Bundle?) {
         val paraDate = arguments?.getString(GlobalDef.STR_RECORD_DATE)
-        mLLImageHeader.visibility = View.GONE
         mOldIncomeNote?.let {
             mETDate.setText(paraDate ?: it.tsToStr.substring(0, 16))
             mETInfo.setText(it.info)
@@ -158,8 +190,10 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
 
             mETAmount.setText(it.valToStr)
             if (it.images.isNotEmpty()) {
-                mSZImagePath = it.images[0].imagePath
-                mIVImage.setImagePath(mSZImagePath)
+                mLSImagePath.clear()
+                mLSImagePath.addAll(it.images.filter { it.status == NoteImageItem.STATUS_USE }
+                        .map { it.imagePath })
+                reloadPics()
             }
         }
     }
@@ -169,56 +203,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
     }
 
 
-    /**
-     * check record validity
-     * @return      true if record validity
-     */
-    private fun checkResult(): Boolean {
-        if (mETAmount.text.isNullOrEmpty()) {
-            mETAmount.error = getString(R.string.error_field_required)
-            return false
-        }
-
-        if (mETInfo.text.isNullOrEmpty()) {
-            mETInfo.error = getString(R.string.error_field_required)
-            return false
-        }
-
-        if (mETDate.text.isNullOrEmpty()) {
-            mETDate.error = getString(R.string.error_field_required)
-            return false
-        }
-
-        return true
-    }
-
-    /**
-     * write record
-     * @return      true if success
-     */
-    private fun fillResult(): Boolean {
-        refillData()
-
-        mOldIncomeNote?.let {
-            val bCreate = GlobalDef.INVALID_ID == it.id
-            val bRet = bCreate.doJudge(
-                    { 1 == AppUtil.payIncomeUtility.addIncomeNotes(listOf(it)) },
-                    { AppUtil.payIncomeUtility.incomeDBUtility.modifyData(it) }
-            )
-
-            if (bRet) {
-                refreshNoteImage(it, mSZImagePath, bCreate)
-            } else {
-                DlgAlert.showAlert(context!!, R.string.dlg_warn,
-                        bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
-            }
-
-            return bRet
-        }
-
-        return false
-    }
-
+    /// BEGIN PRIVATE
     private fun onTouchChildView(v: View, event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -302,4 +287,65 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
 
         return true
     }
+
+
+
+    private fun reloadPics()    {
+        ArrayList<Map<String, String>>().apply {
+            addAll(mLSImagePath.map { HashMap<String, String>().apply { put(PicLVAdapter.PIC_PATH, it) } })
+        }.let1 {
+            mLVImage.adapter = PicLVAdapter(context!!,  it, true)
+        }
+    }
+
+    /**
+     * check record validity
+     * @return      true if record validity
+     */
+    private fun checkResult(): Boolean {
+        if (mETAmount.text.isNullOrEmpty()) {
+            mETAmount.error = getString(R.string.error_field_required)
+            return false
+        }
+
+        if (mETInfo.text.isNullOrEmpty()) {
+            mETInfo.error = getString(R.string.error_field_required)
+            return false
+        }
+
+        if (mETDate.text.isNullOrEmpty()) {
+            mETDate.error = getString(R.string.error_field_required)
+            return false
+        }
+
+        return true
+    }
+
+    /**
+     * write record
+     * @return      true if success
+     */
+    private fun fillResult(): Boolean {
+        refillData()
+
+        mOldIncomeNote?.let {
+            val bCreate = GlobalDef.INVALID_ID == it.id
+            val bRet = bCreate.doJudge(
+                    { 1 == AppUtil.payIncomeUtility.addIncomeNotes(listOf(it)) },
+                    { AppUtil.payIncomeUtility.incomeDBUtility.modifyData(it) }
+            )
+
+            if (bRet) {
+                refreshNoteImage(it, mLSImagePath, bCreate)
+            } else {
+                DlgAlert.showAlert(context!!, R.string.dlg_warn,
+                        bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
+            }
+
+            return bRet
+        }
+
+        return false
+    }
+    /// END PRIVATE
 }

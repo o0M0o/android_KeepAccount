@@ -20,7 +20,7 @@ import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.data.report.ACReport
-import wxm.KeepAccount.ui.data.report.base.EventSelectDays
+import wxm.KeepAccount.event.SelectDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
@@ -46,7 +46,7 @@ class DayReportChart : FrgSupportBaseAdv() {
      * @param event for day range
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onSelectDaysEvent(event: EventSelectDays) {
+    fun onSelectDaysEvent(event: SelectDays) {
         mASParaLoad!![0] = event.mSZStartDay
         mASParaLoad!![1] = event.mSZEndDay
         loadData()

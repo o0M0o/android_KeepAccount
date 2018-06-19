@@ -11,6 +11,17 @@ this file include show strings in app
     <string name="page_setting">设置</string>
     <string name="page_usr">用户</string>
 
+    <!-- titles -->
+    <string name="title_create_note">创建记录</string>
+    <string name="title_welcome">首页</string>
+    <string name="title_noteshow">查看流水</string>
+    <string name="title_help">帮助</string>
+    <string name="title_daily_detail">日详情</string>
+    <string name="title_report">报告</string>
+    <string name="title_preview">预览</string>
+    <string name="title_calender_show">日历展示</string>
+    <string name="title_note">记录</string>
+
     <!-- actions -->
     <string name="act_accept">确认</string>
     <string name="act_logout">退出登录</string>

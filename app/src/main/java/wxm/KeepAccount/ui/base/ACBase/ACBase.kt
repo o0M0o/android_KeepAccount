@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.base.ACBase
 
-import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import wxm.KeepAccount.R
 import wxm.androidutil.improve.let1

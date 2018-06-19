@@ -153,6 +153,7 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
     /**
      * Shows the progress UI and hides the login form.
      */
+    @Suppress("unused")
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private fun showProgress(show: Boolean) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow

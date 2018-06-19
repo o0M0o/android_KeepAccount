@@ -2,19 +2,33 @@ package wxm.KeepAccount.ui.data.edit.NoteEdit.page
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.view.View
-import android.widget.ImageView
+import android.widget.ListView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import org.greenrobot.eventbus.Subscribe
 import kotterknife.bindView
+import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
-import wxm.KeepAccount.improve.*
+import wxm.KeepAccount.event.PicPath
+import wxm.KeepAccount.improve.toDayInWeekStr
+import wxm.KeepAccount.improve.toDayStr
+import wxm.KeepAccount.improve.toHourMinuteStr
+import wxm.KeepAccount.item.NoteImageItem
 import wxm.KeepAccount.item.PayNoteItem
+import wxm.KeepAccount.ui.data.edit.NoteEdit.page.base.PicLVAdapter
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.ui.preview.ACImagePreview
-import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.improve.doJudge
 import wxm.androidutil.improve.let1
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
+import java.util.HashMap
+import kotlin.collections.ArrayList
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.filter
+import kotlin.collections.map
 
 /**
  * preview fragment for budget
@@ -28,15 +42,34 @@ class PgPayPreview : FrgSupportBaseAdv(), IPreview {
     private val mTVDate: TextView by bindView(R.id.tv_date)
     private val mTVDayInWeek: TextView by bindView(R.id.tv_day_in_week)
     private val mTVTime: TextView by bindView(R.id.tv_time)
-    private val mRLImage: RelativeLayout by bindView(R.id.rl_image)
-    private val mIVImage: ImageView by bindView(R.id.iv_image)
+
+    private val mRLImage: ConstraintLayout by bindView(R.id.rl_image)
+    private val mLVImage: ListView by bindView(R.id.lv_pic)
+
+    private val mRLBudget: ConstraintLayout by bindView(R.id.rl_budget)
+    private val mRLNote: ConstraintLayout by bindView(R.id.rl_note)
 
     private var mPayData: PayNoteItem? = null
 
-    override fun getLayoutID(): Int = R.layout.pg_preview_pay
+    override fun getLayoutID(): Int = R.layout.pg_pay_preview
+    override fun isUseEventBus(): Boolean = true
 
     override fun setPreviewData(data: Any) {
         mPayData = data as PayNoteItem
+    }
+
+    /**
+     * preview pic
+     */
+    @Suppress("UNUSED_PARAMETER", "unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onPreviewPicPath(event: PicPath) {
+        if(PicPath.PREVIEW_PIC == event.action) {
+            Intent(activity!!, ACImagePreview::class.java).let1 {
+                it.putExtra(ACImagePreview.IMAGE_FILE_PATH, event.picPath)
+                activity!!.startActivity(it)
+            }
+        }
     }
 
     override fun initUI(savedInstanceState: Bundle?) {
@@ -46,29 +79,47 @@ class PgPayPreview : FrgSupportBaseAdv(), IPreview {
 
                 mTVAmount.text = data.valToStr
                 mTVInfo.text = data.info
-                mTVNote.text = data.note
-                mTVBudget.text = if (null == data.budget) "" else data.budget!!.name
+
+                if (data.note.isNullOrEmpty()) {
+                    mRLNote.visibility = View.GONE
+                } else {
+                    mRLNote.visibility = View.VISIBLE
+                    mTVNote.text = data.note
+                }
+
+                (if (null == data.budget) "" else data.budget!!.name).let1 {
+                    if (it.isEmpty()) {
+                        mRLBudget.visibility = View.GONE
+                    } else {
+                        mRLBudget.visibility = View.VISIBLE
+                        mTVBudget.text = it
+                    }
+                }
+
                 mTVDate.text = data.ts.toDayStr()
                 mTVTime.text = data.ts.toHourMinuteStr()
                 mTVDayInWeek.text = data.ts.toDayInWeekStr()
 
+                @Suppress("UNCHECKED_CAST")
                 val pn = (data.tag == null).doJudge(
-                        {if(data.images.isEmpty()) ""
-                            else data.images[0].imagePath},
-                        {data.tag as String}
+                        {
+                            if (data.images.isEmpty()) ArrayList()
+                            else ArrayList<String>().apply {
+                                addAll(data.images.filter { it.status == NoteImageItem.STATUS_USE }.map { it.imagePath })
+                            }
+                        },
+                        { data.tag as List<String> }
                 )
                 pn.isEmpty().doJudge(
                         { mRLImage.visibility = View.GONE },
                         {
                             mRLImage.visibility = View.VISIBLE
 
-                            mIVImage.setImagePath(pn)
-                            mIVImage.setOnClickListener({ _ ->
-                                Intent(activity!!, ACImagePreview::class.java).let1 {
-                                    it.putExtra(ACImagePreview.IMAGE_FILE_PATH, pn)
-                                    activity!!.startActivity(it)
-                                }
-                            })
+                            ArrayList<Map<String, String>>().apply {
+                                addAll(pn.map { HashMap<String, String>().apply { put(PicLVAdapter.PIC_PATH, it) } })
+                            }.let1 {
+                                mLVImage.adapter = PicLVAdapter(context!!, it, false)
+                            }
                         }
                 )
             } else {

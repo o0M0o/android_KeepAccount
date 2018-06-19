@@ -9,7 +9,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
-import wxm.KeepAccount.ui.data.report.base.EventSelectDays
+import wxm.KeepAccount.event.SelectDays
 import wxm.KeepAccount.ui.data.report.page.DayReportChart
 import wxm.KeepAccount.ui.data.report.page.DayReportWebView
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
@@ -47,7 +47,7 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
      * @param event     event with start & end day
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onSelectDaysEvent(event: EventSelectDays) {
+    fun onSelectDaysEvent(event: SelectDays) {
         mASParaLoad!![0] = event.mSZStartDay
         mASParaLoad!![1] = event.mSZEndDay
 
@@ -87,7 +87,7 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
                                 dlgDay.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
                                     override fun onDialogPositiveResult(dialogFragment: DialogFragment) {
                                         EventBus.getDefault().post(
-                                                EventSelectDays(dlgDay.startDay!!, dlgDay.endDay!!))
+                                                SelectDays(dlgDay.startDay!!, dlgDay.endDay!!))
                                     }
 
                                     override fun onDialogNegativeResult(dialogFragment: DialogFragment) {}

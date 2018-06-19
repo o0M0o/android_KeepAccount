@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/li_pay_detail_shape">
+    android:background="@drawable/li_pay_detail_shape"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -15,14 +17,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_show_pay" />
-
-        <ImageView
-            android:id="@+id/iv_pay_budget"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_show_budget" />
+            android:src="@drawable/ic_pay_color" />
     </LinearLayout>
 
     <LinearLayout
@@ -47,7 +42,6 @@
             android:id="@+id/rl_clock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
             android:layout_marginTop="1dp"
             android:orientation="horizontal">
 
@@ -55,14 +49,15 @@
                 android:id="@+id/iv_clock"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:src="@drawable/ic_clock" />
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_clock_new" />
 
             <TextView
                 android:id="@+id/tv_pay_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="6dp"
                 android:layout_toEndOf="@id/iv_clock"
                 android:text="12:04"
                 android:textSize="13sp" />
@@ -79,14 +74,15 @@
                 android:id="@+id/iv_budget"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:src="@drawable/ic_budget_1" />
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_budget_new" />
 
             <TextView
                 android:id="@+id/tv_pay_budget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="6dp"
                 android:layout_toEndOf="@id/iv_budget"
                 android:text="生活费"
                 android:textSize="13sp" />
@@ -103,14 +99,16 @@
                 android:id="@+id/iv_note"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:src="@drawable/ic_note" />
+                android:padding="1dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_note_new" />
 
             <TextView
                 android:id="@+id/tv_pay_note"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="6dp"
                 android:layout_toEndOf="@id/iv_note"
                 android:text="日常生活开销"
                 android:textSize="12sp" />

@@ -64,3 +64,28 @@ fun refreshNoteImage(nd: INote, pn:String, createFlg:Boolean)    {
         NoteImageUtility.updateNoteImages(it)
     }
 }
+
+/**
+ * use [pns] as [nd] new image attr
+ * if [createFlg] is true is new note else is modified data
+ */
+fun refreshNoteImage(nd: INote, pns:List<String>, createFlg:Boolean)    {
+    if (createFlg) {
+        pns.forEach {
+            if (it.isNotEmpty()) {
+                NoteImageUtility.addImage(nd, it)
+            }
+        }
+    } else {
+        if(pns.isEmpty())  {
+            NoteImageUtility.clearNoteImages(nd)
+        } else  {
+            pns.forEach { NoteImageUtility.addImage(nd, it) }
+        }
+    }
+
+    // update app global data
+    NoteDataHelper.findNote(nd.id, nd.noteType())!!.let1 {
+        NoteImageUtility.updateNoteImages(it)
+    }
+}

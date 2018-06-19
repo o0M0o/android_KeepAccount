@@ -5,6 +5,9 @@ import android.net.Uri
 import android.provider.MediaStore
 import wxm.KeepAccount.define.GlobalDef
 import wxm.androidutil.improve.forObj
+import wxm.androidutil.tightUUID.tightUUID
+import wxm.androidutil.util.FileUtil.createPath
+import wxm.androidutil.util.FileUtil.fileCopy
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -33,24 +36,6 @@ private fun getRealPathFromURI(contentURI: Uri): String {
 }
 
 /**
- * return full path use [dir] as directory path and [fn] as file name
- */
-fun createPath(dir: String, fn: String): String {
-    return "$dir${GlobalDef.FILE_PATH_SEPARATOR}$fn"
-}
-
-@Throws(IOException::class)
-private fun fileCopy(src: File, dst: File) {
-    val inStream = FileInputStream(src)
-    val outStream = FileOutputStream(dst)
-    val inChannel = inStream.channel
-    val outChannel = outStream.channel
-    inChannel.transferTo(0, inChannel.size(), outChannel)
-    inStream.close()
-    outStream.close()
-}
-
-/**
  * save image from [imageUri] to app image directory
  * return image file name
  */
@@ -58,8 +43,8 @@ fun saveImage(imageUri: Uri): String {
     val realPath = getRealPathFromURI(imageUri)
     val fnPos = realPath.lastIndexOf(".")
     if (-1 != fnPos) {
-        val newFN = AppUtil.imagePath + "/" + UUID.randomUUID().toString() + realPath.substring(fnPos)
-        fileCopy(File(realPath), File(newFN))
+        val newFN = AppUtil.imagePath + "/" + tightUUID.getFineTUUID() + realPath.substring(fnPos)
+        fileCopy(realPath, newFN)
 
         return newFN
     }

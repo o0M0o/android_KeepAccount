@@ -4,7 +4,6 @@ import android.os.Bundle
 import wxm.KeepAccount.ui.base.ACBase.ACBase
 
 import wxm.androidutil.log.TagLog
-import wxm.androidutil.ui.activity.ACSwitcherActivity
 
 /**
  * day detail UI

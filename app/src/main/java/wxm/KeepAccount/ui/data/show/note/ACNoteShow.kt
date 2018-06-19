@@ -2,12 +2,7 @@ package wxm.KeepAccount.ui.data.show.note
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-
-import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.base.ACBase.ACBase
-import wxm.androidutil.ui.activity.ACSwitcherActivity
 
 /**
  * for Note show

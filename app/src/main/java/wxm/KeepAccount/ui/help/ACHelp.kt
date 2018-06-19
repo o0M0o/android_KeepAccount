@@ -1,14 +1,12 @@
 package wxm.KeepAccount.ui.help
 
 import android.os.Bundle
-
-import wxm.androidutil.ui.activity.ACSwitcherActivity
-
+import wxm.KeepAccount.ui.base.ACBase.ACBase
 
 /**
  * UI for help
  */
-class ACHelp : ACSwitcherActivity<FrgHelp>() {
+class ACHelp : ACBase<FrgHelp>() {
 
     override fun setupFragment(bundle: Bundle?) {
         addFragment(FrgHelp())

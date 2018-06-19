@@ -6,14 +6,14 @@ import android.view.Menu
 import android.view.MenuItem
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.ui.base.ACBase.ACBase
 import wxm.KeepAccount.ui.data.edit.base.FrgEditBase
 import wxm.KeepAccount.utility.AppUtil
-import wxm.androidutil.ui.activity.ACSwitcherActivity
 
 /**
  * preview/edit UI for note
  */
-class ACNoteEdit : ACSwitcherActivity<FrgEditBase>() {
+class ACNoteEdit : ACBase<FrgEditBase>() {
     private lateinit var mMISwitch: MenuItem
     private lateinit var mMISave: MenuItem
 

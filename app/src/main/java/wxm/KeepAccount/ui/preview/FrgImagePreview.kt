@@ -5,7 +5,7 @@ import android.os.Bundle
 import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.androidutil.improve.let1
-import wxm.KeepAccount.improve.setImagePath
+import wxm.androidutil.improve.setImagePath
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.uilib.zoomImage.zoomImageView
 

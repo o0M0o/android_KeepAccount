@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="4dp">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/til_reason"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="false"
         android:background="@color/white"
         android:padding="2dp">
 
@@ -27,8 +27,6 @@
         android:id="@+id/ll_date_amount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/til_reason"
         android:layout_marginTop="2dp"
         android:baselineAligned="false"
         android:orientation="horizontal">
@@ -78,7 +76,6 @@
         android:id="@+id/ll_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_date_amount"
         android:layout_marginTop="4dp"
         android:background="@color/white"
         android:padding="8dp">
@@ -94,45 +91,30 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_image"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_note"
-        android:layout_marginTop="4dp"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_marginTop="2dp"
+        android:background="@color/white">
 
-        <LinearLayout
-            android:id="@+id/ll_image_header"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/ib_image_refresh"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="2dp"
-                android:layout_weight="1.0"
-                android:background="@color/trans_1"
-                android:src="@drawable/ic_refresh_1" />
-
-            <ImageButton
-                android:id="@+id/ib_image_remove"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="2dp"
-                android:layout_weight="1.0"
-                android:background="@color/trans_1"
-                android:src="@drawable/ic_delete_1" />
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/iv_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <ImageButton
+            android:id="@+id/ib_add_pic"
+            android:layout_width="64dp"
+            android:layout_height="42dp"
+            android:layout_margin="2dp"
+            android:background="@color/trans_full"
+            android:padding="4dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/image_add_pic" />
-    </LinearLayout>
-</RelativeLayout>
+            android:src="@drawable/ic_add_pic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ListView
+            android:id="@+id/lv_pic"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ib_add_pic" />
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>

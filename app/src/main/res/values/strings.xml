@@ -37,7 +37,7 @@
     <string name="cn_hint_budget_name">请输入预算名</string>
     <string name="cn_hint_budget_amount">请输入预算金额</string>
     <string name="cn_use_budget">使用预算 :</string>
-    <string name="ac_title_noteshow">查看流水</string>
+
     <string name="cn_refresh">更新视图</string>
     <string name="budget_name">预算名</string>
     <string name="budget_amount">预算金额</string>
@@ -82,11 +82,10 @@
     <string name="setting_budget_balance_color">预算余额</string>
     <string name="setting_budget_used_color">预算已使用</string>
     <string name="cn_delete_note">删除记录</string>
-    <string name="title_help">帮助</string>
 
     <string name="calendar_item_new_count">%d条</string>
     <string name="iv_act_hint">action hint</string>
-    <string name="label_welcome">首页</string>
+
     <string name="notice_input_note">请输入备注</string>
     <string name="cn_usr_message">请输入您的意见或建议</string>
 
@@ -102,17 +101,15 @@
     <string name="hint_to_prv">往前</string>
     <string name="hint_to_next">往后</string>
     <string name="cn_create">新建</string>
-    <string name="title_daily_detail">日详情</string>
+
     <string name="cn_report">生成报告</string>
     <string name="hint_report_start_day">报告开始日期 :</string>
     <string name="hint_input_day">请选择日期</string>
     <string name="hint_report_end_day">报告结束日期 :</string>
-    <string name="title_report">报告</string>
+
     <string name="hint_select_days">选择日期范围</string>
     <string name="tv_income_not_show">不显示收入</string>
     <string name="tv_income_show">显示收入</string>
     <string name="tv_pay_show">显示支出</string>
     <string name="tv_pay_not_show">不显示支出</string>
-
-    <string name="title_preview">预览</string>
 </resources>

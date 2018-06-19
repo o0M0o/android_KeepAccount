@@ -6,8 +6,6 @@ import android.os.Bundle
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.base.ACBase.ACBase
 
-import wxm.androidutil.ui.activity.ACSwitcherActivity
-
 /**
  * add usr
  */

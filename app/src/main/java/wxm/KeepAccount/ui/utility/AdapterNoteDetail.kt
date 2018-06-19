@@ -27,13 +27,14 @@ import java.util.*
 class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
     : MoreAdapter(ct, data, R.layout.liit_data_swipe_holder) {
     private val mSelfContext = ct
+
     internal data class ViewTag(var mContent: View, var mRight: View)
 
     override fun loadView(pos: Int, vhHolder: ViewHolder) {
         @Suppress("UNCHECKED_CAST")
         val itemData = (getItem(pos) as Map<String, INote>)[K_NODE]!!
 
-        val sl = vhHolder.getView<SwipeLayout>(R.id.swipe)
+        val sl = vhHolder.getView<SwipeLayout>(R.id.swipe)!!
         var vt: ViewTag? = sl.tag as ViewTag?
         if (null == vt) {
             vt = ViewTag(mContent = vhHolder.getView(if (itemData.isPayNote) R.id.rl_pay else R.id.rl_income),
@@ -51,34 +52,41 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
                 it.setTag(R.id.iv_edit, itemData)
 
                 it.getChildView<View>(R.id.iv_delete)!!.setOnClickListener { v ->
-                    DlgAlert.showAlert(mSelfContext, "删除数据", "此操作不能恢复，是否继续!",
-                            { b ->
-                                b.setPositiveButton("是") { _, _ ->
-                                    (v.tag as INote).let {
-                                        if (it.isPayNote) {
-                                            AppUtil.payIncomeUtility.deletePayNotes(listOf(it.id))
-                                        } else {
-                                            AppUtil.payIncomeUtility.deleteIncomeNotes(listOf(it.id))
-                                        }
-                                    }
+                    DlgAlert.showAlert(mSelfContext, "删除数据", "此操作不能恢复，是否继续!"
+                    ) { b ->
+                        b.setPositiveButton("是") { _, _ ->
+                            (v.tag as INote).let {
+                                if (it.isPayNote) {
+                                    AppUtil.payIncomeUtility.deletePayNotes(listOf(it.id))
+                                } else {
+                                    AppUtil.payIncomeUtility.deleteIncomeNotes(listOf(it.id))
                                 }
-                                b.setNegativeButton("否") { _, _ -> }
-                            })
+                            }
+                        }
+                        b.setNegativeButton("否") { _, _ -> }
+                    }
                 }
 
                 it.getChildView<View>(R.id.iv_edit)!!.setOnClickListener { v ->
-                    Intent(mSelfContext, ACNoteEdit::class.java).let1 {
-                        val data = v.tag as INote
-                        it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, data.id)
-                        it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
-                                if (data.isPayNote) GlobalDef.STR_RECORD_PAY else GlobalDef.STR_RECORD_INCOME)
-
-                        mSelfContext.startActivity(it)
-                    }
+                    previewEditNote(v.tag as INote)
                 }
             }
 
+            vt.mContent.setOnClickListener{
+                previewEditNote(itemData)
+            }
+
             sl.tag = vt
+        }
+    }
+
+    private fun previewEditNote(data: INote) {
+        Intent(mSelfContext, ACNoteEdit::class.java).let1 {
+            it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, data.id)
+            it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
+                    if (data.isPayNote) GlobalDef.STR_RECORD_PAY else GlobalDef.STR_RECORD_INCOME)
+
+            mSelfContext.startActivity(it)
         }
     }
 
@@ -96,7 +104,6 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
                     vh.setText(R.id.tv_pay_budget, it!!)
                 } else {
                     vh.setVisibility(R.id.tv_pay_budget, View.GONE)
-                    vh.setVisibility(R.id.iv_pay_budget, View.GONE)
                     vh.setVisibility(R.id.rl_budget, View.GONE)
                 }
             }
@@ -144,7 +151,7 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
         }
     }
 
-    private fun getHourMinute(ts:Timestamp):String    {
+    private fun getHourMinute(ts: Timestamp): String {
         val cl = ts.toCalendar()
         return String.format(Locale.CHINA, "%02d:%02d",
                 cl.get(Calendar.HOUR_OF_DAY), cl.get(Calendar.MINUTE))

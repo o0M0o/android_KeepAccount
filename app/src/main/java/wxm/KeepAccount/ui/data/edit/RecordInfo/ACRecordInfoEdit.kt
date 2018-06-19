@@ -7,12 +7,12 @@ import android.view.MenuItem
 
 import wxm.KeepAccount.R
 import wxm.KeepAccount.define.GlobalDef
-import wxm.androidutil.ui.activity.ACSwitcherActivity
+import wxm.KeepAccount.ui.base.ACBase.ACBase
 
 /**
  * for record info
  */
-class ACRecordInfoEdit : ACSwitcherActivity<FrgRecordInfoEdit>() {
+class ACRecordInfoEdit : ACBase<FrgRecordInfoEdit>() {
 
     override fun leaveActivity() {
         cancelEdit()

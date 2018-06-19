@@ -10,6 +10,7 @@ this file include dialog strings in app
 
     <string name="dlg_clear_all_data">此操作不能恢复，是否继续操作!</string>
     <string name="dlg_data_refreshed">数据已刷新!</string>
+    <string name="dlg_data_deleted">是否删除!</string>
 
     <string name="dlg_usr_no_data">当前用户没有数据!</string>
 

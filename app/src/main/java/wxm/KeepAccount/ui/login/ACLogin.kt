@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Message
 import android.os.Process
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -14,9 +13,7 @@ import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.base.ACBase.ACBase
 import wxm.KeepAccount.ui.help.ACHelp
 import wxm.KeepAccount.utility.AppUtil
-import wxm.androidutil.improve.let1
 import wxm.androidutil.log.TagLog
-import wxm.androidutil.ui.activity.ACSwitcherActivity
 
 /**
  * A login screen that offers login via email/password.

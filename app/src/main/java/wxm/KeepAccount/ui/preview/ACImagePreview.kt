@@ -2,7 +2,6 @@ package wxm.KeepAccount.ui.preview
 
 import android.os.Bundle
 import wxm.KeepAccount.ui.base.ACBase.ACBase
-import wxm.androidutil.ui.activity.ACSwitcherActivity
 
 /**
  * A login screen that offers login via email/password.

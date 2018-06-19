@@ -26,10 +26,7 @@ class IncomeNoteItem(override var tag: Any? = null) : INote, IDBRow<Int>, Clonea
     override var usr: UsrItem? = null
 
     //@DatabaseField(columnName = "budget_id", foreign = true, foreignColumnName = BudgetItem.FIELD_ID)
-    override var budget: BudgetItem?
-        set(value)  {
-            throw AssertionError("NOT SUPPORT")
-        }
+    override var budget: BudgetItem? = null
         get() = null
 
     @DatabaseField(columnName = "info", canBeNull = false, dataType = DataType.STRING)
