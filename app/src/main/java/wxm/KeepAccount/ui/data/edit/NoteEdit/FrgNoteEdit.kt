@@ -24,6 +24,8 @@ class FrgNoteEdit :  FrgEditBase() {
     private var mCurData: Any? = null
     private var mCurDataType: String? = null
 
+    override fun getLayoutID(): Int = R.layout.vw_viewpage
+
     override fun isEditStatus(): Boolean {
         return mVPPages.currentItem == PAGE_IDX_EDIT
     }
@@ -70,13 +72,6 @@ class FrgNoteEdit :  FrgEditBase() {
         }
     }
 
-    override fun isUseEventBus(): Boolean {
-        return false
-    }
-
-    override fun getLayoutID(): Int {
-        return R.layout.vw_viewpage
-    }
 
     override fun initUI(bundle: Bundle?) {
         if(null == bundle) {

@@ -8,12 +8,13 @@ import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.base.ACBase.ACBase
 import wxm.androidutil.log.TagLog
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 
 /**
  * UI for report
  * Created by WangXM on 2017/2/15.
  */
-class ACReport : ACBase<Fragment>() {
+class ACReport : ACBase<FrgSupportBaseAdv>() {
     override fun leaveActivity() {
         setResult(GlobalDef.INTRET_CANCEL, Intent())
         finish()
@@ -35,7 +36,7 @@ class ACReport : ACBase<Fragment>() {
         }
 
         // for holder
-        var mSelfFrg: android.support.v4.app.Fragment? = null
+        var mSelfFrg: FrgSupportBaseAdv? = null
         when (szType) {
             PT_DAY -> {
                 mSelfFrg = FrgReportDay()

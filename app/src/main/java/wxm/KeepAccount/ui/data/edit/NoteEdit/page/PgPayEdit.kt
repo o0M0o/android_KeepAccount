@@ -62,7 +62,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
 
     private val mSZDefNote: String = AppBase.getString(R.string.notice_input_note)
     private var mOldPayNote: PayNoteItem? = null
-
+    private var mUsrVisible = true
 
     override fun getLayoutID(): Int = R.layout.pg_pay_edit
     override fun isUseEventBus(): Boolean = true
@@ -71,12 +71,20 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
         mOldPayNote = data as PayNoteItem
     }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        mUsrVisible = isVisibleToUser
+    }
+
     /**
      * remove/refresh/preview pic in [event]
      */
     @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPicPath(event: PicPath) {
+        if(!mUsrVisible)
+            return
+
         when(event.action)  {
             PicPath.REMOVE_PIC -> {
                 if(mLSImagePath.contains(event.picPath)) {

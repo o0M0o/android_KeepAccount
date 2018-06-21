@@ -24,10 +24,13 @@ import wxm.KeepAccount.event.PicPath
 import wxm.androidutil.improve.let1
 import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.item.NoteImageItem
+import wxm.KeepAccount.ui.base.ACBase.ACBase
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
+import wxm.KeepAccount.ui.data.edit.NoteEdit.FrgNoteEdit
 import wxm.KeepAccount.ui.data.edit.NoteEdit.page.base.IAddPicPath
 import wxm.KeepAccount.ui.data.edit.NoteEdit.page.base.PicLVAdapter
+import wxm.KeepAccount.ui.data.edit.base.FrgEditBase
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
@@ -65,6 +68,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
     private val mSZDefNote: String = AppBase.getString(R.string.notice_input_note)
 
     private var mOldIncomeNote: IncomeNoteItem? = null
+    private var mUsrVisible = true
 
     override fun getLayoutID(): Int = R.layout.pg_income_edit
     override fun isUseEventBus(): Boolean = true
@@ -73,12 +77,20 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
         mOldIncomeNote = data as IncomeNoteItem
     }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        mUsrVisible = isVisibleToUser
+    }
+
     /**
      * remove/refresh/preview pic in [event]
      */
     @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPicPath(event: PicPath) {
+        if(!mUsrVisible)
+            return
+
         when(event.action)  {
             PicPath.REMOVE_PIC -> {
                 if(mLSImagePath.contains(event.picPath)) {

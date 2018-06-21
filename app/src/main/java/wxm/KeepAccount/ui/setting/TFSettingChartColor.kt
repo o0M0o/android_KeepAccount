@@ -13,7 +13,7 @@ import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.dialog.DlgSelectColor
-import wxm.KeepAccount.utility.PreferencesUtil
+import wxm.KeepAccount.preference.PreferencesUtil
 import wxm.androidutil.ui.view.EventHelper
 
 /**

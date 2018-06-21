@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="2dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="HardcodedText"
+    android:background="@color/white">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/gl_vertical"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_sender"
+        android:text="10086"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/gl_vertical"
+        android:textAppearance="@style/AppTheme.Page.BigText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:id="@+id/vw_ln"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/gray"
+        app:layout_constraintTop_toBottomOf="@id/tv_sender"
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:text="2018/06/22 12:30"
+        app:layout_constraintTop_toBottomOf="@id/vw_ln"
+        app:layout_constraintStart_toEndOf="@id/gl_vertical"
+        android:textAppearance="@style/AppTheme.Page.MiddleText"
+        android:textColor="@color/text_half_fit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:text="10086"
+        app:layout_constraintTop_toBottomOf="@id/tv_date"
+        app:layout_constraintStart_toEndOf="@id/gl_vertical"
+        android:textAppearance="@style/AppTheme.Page.MiddleText"
+        android:textColor="@color/text_half_fit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</android.support.constraint.ConstraintLayout>

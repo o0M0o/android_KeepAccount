@@ -10,7 +10,7 @@ import lecho.lib.hellocharts.view.ColumnChartView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.ui.utility.NoteShowInfo
-import wxm.KeepAccount.utility.PreferencesUtil
+import wxm.KeepAccount.preference.PreferencesUtil
 import wxm.androidutil.improve.let1
 import wxm.KeepAccount.improve.toMoneyStr
 import wxm.androidutil.time.getMonth

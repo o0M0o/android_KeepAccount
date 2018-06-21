@@ -46,10 +46,11 @@ class PgPayPreview : FrgSupportBaseAdv(), IPreview {
     private val mRLImage: ConstraintLayout by bindView(R.id.rl_image)
     private val mLVImage: ListView by bindView(R.id.lv_pic)
 
-    private val mRLBudget: ConstraintLayout by bindView(R.id.rl_budget)
-    private val mRLNote: ConstraintLayout by bindView(R.id.rl_note)
+    private val mRLBudget: RelativeLayout by bindView(R.id.rl_budget)
+    private val mRLNote: RelativeLayout by bindView(R.id.rl_note)
 
     private var mPayData: PayNoteItem? = null
+    private var mUsrVisible = true
 
     override fun getLayoutID(): Int = R.layout.pg_pay_preview
     override fun isUseEventBus(): Boolean = true
@@ -58,12 +59,20 @@ class PgPayPreview : FrgSupportBaseAdv(), IPreview {
         mPayData = data as PayNoteItem
     }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        mUsrVisible = isVisibleToUser
+    }
+
     /**
      * preview pic
      */
     @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPreviewPicPath(event: PicPath) {
+        if(!mUsrVisible)
+            return
+
         if(PicPath.PREVIEW_PIC == event.action) {
             Intent(activity!!, ACImagePreview::class.java).let1 {
                 it.putExtra(ACImagePreview.IMAGE_FILE_PATH, event.picPath)

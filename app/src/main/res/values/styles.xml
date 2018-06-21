@@ -24,4 +24,19 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="AppTheme.Page.BigText" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/darkslategrey</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AppTheme.Page.MiddleText" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/darkslategrey</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AppTheme.Page.SmallText" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/darkslategrey</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

@@ -19,4 +19,8 @@
 
     <!-- for chart -->
     <dimen name="input_text_size">14sp</dimen>
+
+    <!-- for icon -->
+    <dimen name="icon_width">24dp</dimen>
+    <dimen name="icon_height">24dp</dimen>
 </resources>

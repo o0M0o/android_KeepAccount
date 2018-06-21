@@ -3,6 +3,7 @@ package wxm.KeepAccount.ui.welcome.page
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import kotterknife.bindView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -20,7 +21,8 @@ import wxm.KeepAccount.ui.welcome.banner.BannerAp
 import wxm.KeepAccount.ui.welcome.banner.BannerPara
 import wxm.KeepAccount.ui.welcome.base.PageBase
 import wxm.KeepAccount.utility.DGVButtonAdapter
-import wxm.KeepAccount.utility.PreferencesUtil
+import wxm.KeepAccount.preference.PreferencesUtil
+import wxm.KeepAccount.ui.sync.ACSync
 import wxm.androidutil.time.CalendarUtility
 import wxm.androidutil.ui.dragGrid.DragGridView
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
@@ -152,6 +154,10 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
 
             EAction.LOGOUT -> {
                 doLogout(activity!!)
+            }
+
+            EAction.SYNC_SMS -> {
+                startActivityForResult(Intent(context, ACSync::class.java), 1)
             }
         }
     }

@@ -18,7 +18,7 @@ class ACRecordInfoEdit : ACBase<FrgRecordInfoEdit>() {
         cancelEdit()
     }
 
-    override fun setupFragment(bundle: Bundle?) {
+    override fun setupFragment(savedInstanceState: Bundle?) {
         val it = intent
         val tf = FrgRecordInfoEdit()
         tf.mEditType = it.getStringExtra(IT_PARA_RECORD_TYPE)

@@ -18,7 +18,7 @@ class ACNoteCreate : ACBase<FrgNoteCreate>() {
         finish()
     }
 
-    override fun setupFragment(bundle: Bundle?) {
+    override fun setupFragment(savedInstanceState: Bundle?) {
         val date = intent.getStringExtra(GlobalDef.STR_RECORD_DATE)!!
         FrgNoteCreate().let {
             it.arguments = Bundle().apply {

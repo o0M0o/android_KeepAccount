@@ -7,11 +7,6 @@ import wxm.KeepAccount.ui.base.ACBase.ACBase
  * UI for help
  */
 class ACHelp : ACBase<FrgHelp>() {
-
-    override fun setupFragment(bundle: Bundle?) {
-        addFragment(FrgHelp())
-    }
-
     companion object {
         const val STR_HELP_TYPE = "HELP_TYPE"
 

@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -47,6 +48,10 @@
         <activity
             android:name=".ui.data.report.ACReport"
             android:label="@string/title_report"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.sync.ACSync"
+            android:label="@string/title_sync"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.preview.ACImagePreview"

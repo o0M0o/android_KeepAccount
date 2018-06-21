@@ -37,12 +37,12 @@ class PageSetting : FrgSupportSwitcher<TFSettingBase>(), PageBase {
         val hp = hotPage
         if(hp !== mTFMain)    {
             if(hp.isSettingDirty) {
-                DlgAlert.showAlert(context!!, R.string.dlg_info, R.string.setting_changed,
-                        {db ->
-                            db.setPositiveButton(R.string.cn_sure, {_, _ ->
-                                hp.updateSetting()
-                            })
-                        })
+                DlgAlert.showAlert(context!!, R.string.dlg_info, R.string.setting_changed
+                ) { db ->
+                    db.setPositiveButton(R.string.cn_sure) { _, _ ->
+                        hp.updateSetting()
+                    }
+                }
             }
 
             switchToPage(mTFMain)

@@ -18,6 +18,7 @@ this file include show strings in app
     <string name="title_help">帮助</string>
     <string name="title_daily_detail">日详情</string>
     <string name="title_report">报告</string>
+    <string name="title_sync">同步数据</string>
     <string name="title_preview">预览</string>
     <string name="title_calender_show">日历展示</string>
     <string name="title_note">记录</string>

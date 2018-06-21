@@ -13,7 +13,7 @@ import lecho.lib.hellocharts.model.Viewport
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.base.TouchUI.TouchColumnChartView
 import wxm.KeepAccount.ui.base.TouchUI.TouchPreviewColumnChartView
-import wxm.KeepAccount.utility.PreferencesUtil
+import wxm.KeepAccount.preference.PreferencesUtil
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.ui.view.EventHelper
 

@@ -194,10 +194,10 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
             Rect().apply { getVWObj(vw).getGlobalVisibleRect(this) }.top
         }
 
-        getVWObj(v).setOnFocusChangeListener({ _: View, hasFocus: Boolean ->
+        getVWObj(v).setOnFocusChangeListener { _: View, hasFocus: Boolean ->
             vwHome.scrollY = if (hasFocus) {
                 getTop(topVW) - getTop(vwHome)
             } else 0
-        })
+        }
     }
 }
