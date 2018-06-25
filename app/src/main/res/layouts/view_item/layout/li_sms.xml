@@ -1,58 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/sms_shape"
     android:padding="2dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:ignore="HardcodedText"
-    android:background="@color/white">
+    tools:ignore="HardcodedText">
 
     <android.support.constraint.Guideline
-        android:id="@+id/gl_vertical"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.03"
+        android:id="@+id/gl_horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="36dp" />
+
+    <ImageButton
+        android:id="@+id/ib_remove"
+        android:layout_width="64dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="2dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_delete_1"
+        app:layout_constraintBottom_toTopOf="@+id/gl_horizontal"
+        app:layout_constraintEnd_toStartOf="@id/gl_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ib_to_pay"
+        android:layout_width="64dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="2dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_pay_color"
+        app:layout_constraintBottom_toTopOf="@+id/gl_horizontal"
+        app:layout_constraintStart_toEndOf="@+id/ib_remove"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ib_to_income"
+        android:layout_width="64dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="2dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_income_color"
+        app:layout_constraintBottom_toTopOf="@+id/gl_horizontal"
+        app:layout_constraintStart_toEndOf="@+id/ib_to_pay"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_sender"
-        android:text="10086"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/gl_vertical"
-        android:textAppearance="@style/AppTheme.Page.BigText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="10086"
+        android:textAppearance="@style/AppTheme.Page.BigText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gl_horizontal" />
 
     <View
         android:id="@+id/vw_ln"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/gray"
-        app:layout_constraintTop_toBottomOf="@id/tv_sender"
         android:layout_width="match_parent"
-        android:layout_height="2dp" />
+        android:layout_height="1dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/gray"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sender" />
 
     <TextView
         android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="2018/06/22 12:30"
-        app:layout_constraintTop_toBottomOf="@id/vw_ln"
-        app:layout_constraintStart_toEndOf="@id/gl_vertical"
         android:textAppearance="@style/AppTheme.Page.MiddleText"
         android:textColor="@color/text_half_fit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vw_ln" />
 
     <TextView
         android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="10086"
-        app:layout_constraintTop_toBottomOf="@id/tv_date"
-        app:layout_constraintStart_toEndOf="@id/gl_vertical"
         android:textAppearance="@style/AppTheme.Page.MiddleText"
         android:textColor="@color/text_half_fit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_date" />
 
 </android.support.constraint.ConstraintLayout>
