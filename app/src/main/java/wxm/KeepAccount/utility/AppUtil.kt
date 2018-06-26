@@ -32,6 +32,7 @@ class AppUtil : AppBase() {
     private lateinit var mPayIncomeUtility: PayIncomeDBUtility
     private lateinit var mRemindUtility: RemindDBUtility
     private lateinit var mNoteImageUtility: NoteImageUtility
+    private lateinit var mSmsParseUtility: SmsParseDBUtility
 
     // for dir
     private lateinit var mImageDir: String
@@ -64,6 +65,7 @@ class AppUtil : AppBase() {
         mPayIncomeUtility = PayIncomeDBUtility()
         mRemindUtility = RemindDBUtility()
         mNoteImageUtility = NoteImageUtility()
+        mSmsParseUtility = SmsParseDBUtility()
     }
 
     private fun initDir()   {
@@ -105,26 +107,18 @@ class AppUtil : AppBase() {
 
         /**
          * get global msg handler
-         *
-         * @return      msg handler
          */
         val msgHandler: GlobalMsgHandler
             get() = self.mMHHandler
 
         /**
          * get DB helper
-         * @return      helper
          */
         val dbHelper: DBOrmLiteHelper
             get() = self.mDBHelper
 
         /**
-         * get current usr
-         * @return      current usr
-         */
-        /**
          * set current usr
-         * @param cur_usr   current usr
          */
         var curUsr: UsrItem?
             get() = self.mUICurUsr
@@ -134,45 +128,45 @@ class AppUtil : AppBase() {
 
         /**
          * get usr db helper
-         * @return      usr db helper
          */
         val usrUtility: UsrDBUtility
             get() = self.mUsrUtility
 
         /**
          * get record type db helper
-         * @return      helper
          */
         val recordTypeUtility: RecordTypeDBUtility
             get() = self.mRecordTypeUtility
 
         /**
          * get budget helper
-         * @return      helper
          */
         val budgetUtility: BudgetDBUtility
             get() = self.mBudgetUtility
 
         /**
          * get pay & income data helper
-         * @return      helper
          */
         val payIncomeUtility: PayIncomeDBUtility
             get() = self.mPayIncomeUtility
 
         /**
          * get remind data helper
-         * @return      helper
          */
         val remindUtility: RemindDBUtility
             get() = self.mRemindUtility
 
         /**
          * get remind data helper
-         * @return      helper
          */
         val noteImageUtility: NoteImageUtility
             get() = self.mNoteImageUtility
+
+        /**
+         * get sms parse data helper
+         */
+        val smsParseDBUtility : SmsParseDBUtility
+            get() = self.mSmsParseUtility
 
         /**
          * clean db
@@ -205,6 +199,7 @@ class AppUtil : AppBase() {
                         Unit
                     }
 
+                    smsParseDBUtility.clean()
                     NoteDataHelper.reloadData()
                 }
             } catch (e: java.sql.SQLException) {

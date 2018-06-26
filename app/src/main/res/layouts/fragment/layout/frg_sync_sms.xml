@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/lightyellow"
+    android:padding="4dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,25 +14,40 @@
         app:layout_constraintGuide_begin="64dp" />
 
     <wxm.uilib.IconButton.IconButton
+        android:id="@+id/ib_reload_sms"
+        android:layout_width="96dp"
+        android:layout_height="36dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/bt_shape"
-        android:id="@+id/ib_reload_sms"
-        app:ibIcon="@drawable/ic_refresh_1"
         app:ibActName="@string/title_sync"
+        app:ibIcon="@drawable/ic_refresh_1"
         app:ibIconHeight="16dp"
         app:ibIconWidth="16dp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/gl_horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_width="96dp"
-        android:layout_height="36dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+
+    <wxm.uilib.IconButton.IconButton
+        android:id="@+id/ib_reset_sms"
+        android:layout_width="96dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bt_shape"
+        app:ibActName="@string/title_reset"
+        app:ibIcon="@drawable/ic_reset"
+        app:ibIconHeight="18dp"
+        app:ibIconWidth="18dp"
+        app:layout_constraintBottom_toTopOf="@id/gl_horizontal"
+        app:layout_constraintStart_toEndOf="@id/ib_reload_sms"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/lv_sms"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:dividerHeight="3dp"
+        android:divider="@color/trans_full"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gl_horizontal" />
 

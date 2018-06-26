@@ -40,7 +40,7 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
         return dbHelper.queryBuilder().setCountOf(true)
                 .where().eq(UsrItem.FIELD_NAME, usr).prepare().let {
                     dbHelper.countOf(it)
-                } > 1
+                } >= 1
     }
 
 

@@ -34,6 +34,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
     val remindREDao: RuntimeExceptionDao<RemindItem, Int> = getRuntimeExceptionDao(RemindItem::class.java)
     val loginHistoryREDao: RuntimeExceptionDao<LoginHistoryItem, Int> = getRuntimeExceptionDao(LoginHistoryItem::class.java)
     val noteImageREDao: RuntimeExceptionDao<NoteImageItem, Int> = getRuntimeExceptionDao(NoteImageItem::class.java)
+    val smsParseREDao: RuntimeExceptionDao<SmsParseItem, Int> = getRuntimeExceptionDao(SmsParseItem::class.java)
 
     /**
      * This is called when the database is first created. Usually you should call createTable statements here to create
@@ -51,6 +52,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
         try {
             when(newVersion)    {
                 12 -> upgrade12(oldVersion)
+                13 -> upgrade13(oldVersion)
             }
         } catch (e: SQLException) {
             TagLog.e("Can't upgrade databases", e)
@@ -73,6 +75,14 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
         }
     }
 
+    private fun upgrade13(oldVersion: Int) {
+        if(12 > oldVersion)    {
+            upgrade12(oldVersion)
+        }
+
+        TableUtils.createTableIfNotExists(connectionSource, SmsParseItem::class.java)
+    }
+
     private fun createAndInitTable() {
         try {
             TableUtils.createTable(connectionSource, UsrItem::class.java)
@@ -83,6 +93,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
             TableUtils.createTable(connectionSource, RemindItem::class.java)
             TableUtils.createTable(connectionSource, LoginHistoryItem::class.java)
             TableUtils.createTable(connectionSource, NoteImageItem::class.java)
+            TableUtils.createTable(connectionSource, SmsParseItem::class.java)
         } catch (e: SQLException) {
             TagLog.e("Can't create database", e)
             throw RuntimeException(e)
@@ -242,7 +253,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
                                     usr = defUi
                                     info = ci.payInfo
                                     amount = ci.getVal(payMax, payMin)
-                                    ts.time = startDt.time
+                                    ts.time = startDt.time + rand1.nextInt(oneDayMSec.toInt())
                                 })
                             }
                         }.let {
@@ -261,7 +272,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
                                     usr = defUi
                                     info = ci.incomeInfo
                                     amount = ci.getVal(incomeMax, incomeMin)
-                                    ts.time = startDt.time
+                                    ts.time = startDt.time + rand2.nextInt(oneDayMSec.toInt())
                                 })
                             }
                         }.let {
@@ -281,6 +292,6 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
 
         // dataBase version
         // in version 10, add login-history
-        private const val DATABASE_VERSION = 12
+        private const val DATABASE_VERSION = 13
     }
 }

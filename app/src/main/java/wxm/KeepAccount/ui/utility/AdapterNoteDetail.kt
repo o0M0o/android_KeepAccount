@@ -111,9 +111,6 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
             vh.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %s", data.valToStr))
             vh.setText(R.id.tv_pay_time, getHourMinute(data.ts))
 
-            // for look detail
-            vh.setVisibility(R.id.iv_pay_action, View.GONE)
-
             // for note
             data.note.let1 {
                 if (it.isNullOrEmpty()) {
@@ -136,9 +133,6 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
 
             vh.setText(R.id.tv_income_amount, data.valToStr)
             vh.setText(R.id.tv_income_time, getHourMinute(data.ts))
-
-            // for look detail
-            vh.setVisibility(R.id.iv_income_action, View.GONE)
 
             // for note
             data.note.let1 {

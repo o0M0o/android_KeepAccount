@@ -1,9 +1,12 @@
 package wxm.KeepAccount.ui.welcome.page
 
+import android.Manifest.permission.READ_SMS
+import android.Manifest.permission.RECEIVE_SMS
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.widget.TextView
-import android.widget.Toast
 import kotterknife.bindView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -12,22 +15,26 @@ import wxm.KeepAccount.db.DBDataChangeEvent
 import wxm.KeepAccount.define.EAction
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.event.PreferenceChange
+import wxm.KeepAccount.preference.PreferencesUtil
 import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow
+import wxm.KeepAccount.ui.sync.ACSync
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.ui.welcome.banner.BannerAp
 import wxm.KeepAccount.ui.welcome.banner.BannerPara
 import wxm.KeepAccount.ui.welcome.base.PageBase
 import wxm.KeepAccount.utility.DGVButtonAdapter
-import wxm.KeepAccount.preference.PreferencesUtil
-import wxm.KeepAccount.ui.sync.ACSync
+import wxm.androidutil.app.AppBase
+import wxm.androidutil.improve.let1
 import wxm.androidutil.time.CalendarUtility
+import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.dragGrid.DragGridView
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.uilib.lbanners.LMBanners
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * for welcome
@@ -42,7 +49,7 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
     private val mLSData = ArrayList<HashMap<String, Any>>()
     private val mALFrgPara = ArrayList<BannerPara>().apply {
         add(BannerPara(R.layout.banner_month))
-        add(BannerPara( R.layout.banner_year))
+        add(BannerPara(R.layout.banner_year))
     }
 
     override fun getLayoutID(): Int = R.layout.pg_main_page
@@ -105,11 +112,39 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
         }
     }
 
+
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
+        if (requestCode == REQUEST_ALL) {
+            grantResults.indices.forEach {
+                if (grantResults[it] != PackageManager.PERMISSION_GRANTED) {
+                    String.format(Locale.CHINA, "由于缺少必须的权限(%s)，无法解析短信!",
+                            permissions[it]).let {
+                        DlgAlert.showAlert(context!!, R.string.dlg_warn, it) { b ->
+                            b.setPositiveButton(R.string.cn_sure) { _, _ ->
+                            }
+                        }
+                    }
+                }
+            }
+
+            toSyncSms()
+        }
+    }
+
+
     /**
      * banner is show in head of welcome page
      */
     private fun initBanner() {
         mLBanners.setAdapter(BannerAp(activity!!, null), mALFrgPara)
+    }
+
+    private fun toSyncSms() {
+        startActivityForResult(Intent(context, ACSync::class.java), 1)
     }
 
 
@@ -157,8 +192,28 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
             }
 
             EAction.SYNC_SMS -> {
-                startActivityForResult(Intent(context, ACSync::class.java), 1)
+                ArrayList<String>().let {
+                    if (!AppBase.checkPermission(READ_SMS)) {
+                        it.add(READ_SMS)
+                    }
+
+                    if (!AppBase.checkPermission(RECEIVE_SMS)) {
+                        it.add(RECEIVE_SMS)
+                    }
+
+                    it
+                }.toTypedArray().let1 {
+                    if (it.isEmpty()) {
+                        toSyncSms()
+                    } else {
+                        ActivityCompat.requestPermissions(activity!!, it, REQUEST_ALL)
+                    }
+                }
             }
         }
+    }
+
+    companion object {
+        private const val REQUEST_ALL = 99
     }
 }

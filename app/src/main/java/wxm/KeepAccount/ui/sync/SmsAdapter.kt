@@ -1,6 +1,8 @@
 package wxm.KeepAccount.ui.sync
 
 import android.content.Context
+import android.widget.ImageButton
+import org.greenrobot.eventbus.EventBus
 import wxm.KeepAccount.R
 import wxm.KeepAccount.improve.toDayHourMinuteStr
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
@@ -20,6 +22,18 @@ class SmsAdapter
         vhHolder.setText(R.id.tv_sender, si.address)
         vhHolder.setText(R.id.tv_date, si.date.toDayHourMinuteStr())
         vhHolder.setText(R.id.tv_content, si.body)
+
+        vhHolder.getView<ImageButton>(R.id.ib_remove).setOnClickListener { _ ->
+            EventBus.getDefault().post(SmsEvent(si.id, SmsEvent.EVENT_DELETE))
+        }
+
+        vhHolder.getView<ImageButton>(R.id.ib_to_pay).setOnClickListener { _ ->
+            EventBus.getDefault().post(SmsEvent(si.id, SmsEvent.EVENT_TO_PAY))
+        }
+
+        vhHolder.getView<ImageButton>(R.id.ib_to_income).setOnClickListener { _ ->
+            EventBus.getDefault().post(SmsEvent(si.id, SmsEvent.EVENT_TO_INCOME))
+        }
     }
 
     companion object {

@@ -19,9 +19,11 @@ this file include show strings in app
     <string name="title_daily_detail">日详情</string>
     <string name="title_report">报告</string>
     <string name="title_sync">同步数据</string>
+    <string name="title_reset">复位数据</string>
     <string name="title_preview">预览</string>
     <string name="title_calender_show">日历展示</string>
     <string name="title_note">记录</string>
+    <string name="title_sms_to_note">转换记录</string>
 
     <!-- actions -->
     <string name="act_accept">确认</string>

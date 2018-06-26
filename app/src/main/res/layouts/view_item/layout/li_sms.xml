@@ -12,42 +12,35 @@
         android:id="@+id/gl_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="36dp" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="68dp" />
 
     <ImageButton
         android:id="@+id/ib_remove"
         android:layout_width="64dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="2dp"
+        android:layout_height="42dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_delete_1"
-        app:layout_constraintBottom_toTopOf="@+id/gl_horizontal"
-        app:layout_constraintEnd_toStartOf="@id/gl_vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/ib_to_pay"
         android:layout_width="64dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="2dp"
+        android:layout_height="42dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_pay_color"
-        app:layout_constraintBottom_toTopOf="@+id/gl_horizontal"
-        app:layout_constraintStart_toEndOf="@+id/ib_remove"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ib_remove" />
 
     <ImageButton
         android:id="@+id/ib_to_income"
         android:layout_width="64dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="2dp"
+        android:layout_height="42dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_income_color"
-        app:layout_constraintBottom_toTopOf="@+id/gl_horizontal"
-        app:layout_constraintStart_toEndOf="@+id/ib_to_pay"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ib_to_pay" />
 
     <TextView
         android:id="@+id/tv_sender"
@@ -55,18 +48,20 @@
         android:layout_height="wrap_content"
         android:text="10086"
         android:textAppearance="@style/AppTheme.Page.BigText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/gl_horizontal" />
+        app:layout_constraintStart_toEndOf="@+id/gl_horizontal"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/vw_ln"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginBottom="1dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="1dp"
         android:background="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/gl_horizontal"
         app:layout_constraintTop_toBottomOf="@+id/tv_sender" />
 
     <TextView
@@ -76,17 +71,18 @@
         android:text="2018/06/22 12:30"
         android:textAppearance="@style/AppTheme.Page.MiddleText"
         android:textColor="@color/text_half_fit"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/gl_horizontal"
         app:layout_constraintTop_toBottomOf="@+id/vw_ln" />
 
     <TextView
         android:id="@+id/tv_content"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="10086"
+        android:text="您尾号6122的储蓄卡账户7月24日10时14分跨行其他渠道消费支出人民币160.00元,活期余额9645.21元"
         android:textAppearance="@style/AppTheme.Page.MiddleText"
         android:textColor="@color/text_half_fit"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/gl_horizontal"
         app:layout_constraintTop_toBottomOf="@+id/tv_date" />
 
 </android.support.constraint.ConstraintLayout>

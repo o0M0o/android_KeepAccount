@@ -85,6 +85,10 @@
             android:label="@string/title_note"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".ui.data.edit.SmsToNote.ACSmsToNote"
+            android:label="@string/title_sms_to_note"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.data.edit.RecordInfo.ACRecordInfoEdit"
             android:label="@string/title_note"
             android:theme="@style/AppTheme.NoActionBar" />
