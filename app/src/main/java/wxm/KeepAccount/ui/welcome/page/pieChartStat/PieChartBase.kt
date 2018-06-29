@@ -5,10 +5,8 @@ import android.os.Handler
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import android.widget.ToggleButton
 import kotterknife.bindView
-import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener
 import lecho.lib.hellocharts.model.PieChartData
 import lecho.lib.hellocharts.model.SliceValue
 import lecho.lib.hellocharts.util.ChartUtils
@@ -17,6 +15,7 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.improve.toMoneyStr
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.utility.NoteDataHelper
+import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.improve.doJudge
 import wxm.androidutil.improve.forObj
@@ -54,23 +53,23 @@ abstract class PieChartBase : FrgSupportBaseAdv() {
     override fun initUI(savedInstanceState: Bundle?) {
         super.initUI(savedInstanceState)
 
+        mCVChart.circleFillRatio = 0.6f
         EventHelper.setOnClickOperator(view!!,
-                intArrayOf(R.id.tb_income, R.id.tb_pay),
-                { v ->
-                    when (v.id) {
-                        R.id.tb_income -> {
-                            mTBPay.isClickable = mTBIncome.isChecked
-                        }
+                intArrayOf(R.id.tb_income, R.id.tb_pay)
+        ) { v ->
+            when (v.id) {
+                R.id.tb_income -> {
+                    mTBPay.isClickable = mTBIncome.isChecked
+                }
 
-                        R.id.tb_pay -> {
-                            mTBIncome.isClickable = mTBPay.isChecked
-                        }
-                    }
+                R.id.tb_pay -> {
+                    mTBIncome.isClickable = mTBPay.isChecked
+                }
+            }
 
-                    // update show
-                    mCVChart.circleFillRatio = 0.6f
-                    mCVChart.pieChartData = generateData()
-                })
+            // update show
+            mCVChart.pieChartData = generateData()
+        }
 
         loadUI(savedInstanceState)
     }
@@ -99,29 +98,41 @@ abstract class PieChartBase : FrgSupportBaseAdv() {
         val bPay = mTBPay.isChecked
         val bIncome = mTBIncome.isChecked
         val lsCI = mCIItem.filter { (bPay && it.isPay()) || (bIncome && it.isIncome()) }
-
-        // create values
-        val pd = PieChartData()
-        pd.values = lsCI.map {
-            SliceValue(it.mBDVal.toFloat(), ChartUtils.pickColor()).apply {
-                setLabel(String.format(Locale.CHINA, "%S %s", it.mSZName, it.mBDVal.toMoneyStr()))
-            }
-        }
-
-        pd.setHasLabels(true)
-        pd.setHasLabelsOutside(true)
-        pd.setHasCenterCircle(true)
-        pd.slicesSpacing = 12
-
-        // hasCenterText1
-        pd.centerText1 = getString(if (bPay && bIncome) R.string.cn_income_pay
+        val ct = getString(if (bPay && bIncome) R.string.cn_income_pay
         else if (bPay) R.string.cn_pay else R.string.cn_income)
 
-        // Get font size from dimens.xml and convert it to sp(library uses sp values).
-        pd.centerText1FontSize = ChartUtils.px2sp(
-                resources.displayMetrics.scaledDensity,
-                resources.getDimensionPixelSize(R.dimen.pie_chart_text_size))
-        return pd
+        val clList = LinkedList<Int>()
+        val pickCl = {
+            if (clList.isEmpty()) {
+                clList.addAll(clArr.toList())
+            }
+
+            val idx = Random().nextInt(clList.size)
+            val ret = clList[idx]
+            clList.removeAt(idx)
+
+            ret
+        }
+
+        return PieChartData().apply {
+            values = lsCI.map {
+                SliceValue(it.mBDVal.toFloat(), pickCl()).apply {
+                    setLabel(String.format(Locale.CHINA, "%S %s", it.mSZName, it.mBDVal.toMoneyStr()))
+                }
+            }
+
+            setHasLabels(true)
+            setHasLabelsOutside(true)
+            setHasCenterCircle(true)
+            slicesSpacing = 4
+
+            // hasCenterText1
+            // Get font size from dimens.xml and convert it to sp(library uses sp values).
+            centerText1 = ct
+            centerText1FontSize = ChartUtils.px2sp(
+                    resources.displayMetrics.scaledDensity,
+                    resources.getDimensionPixelSize(R.dimen.pie_chart_text_size))
+        }
     }
 
 
@@ -141,14 +152,13 @@ abstract class PieChartBase : FrgSupportBaseAdv() {
                     llData.forEach {
                         ChartItem(it.isPayNote.doJudge(PAY_ITEM, INCOME_ITEM), it.info, it.amount).apply {
                             mCIItem.find { it.mSZName == mSZName && it.mType == mType }.forObj(
-                                    { it.mBDVal = it.mBDVal.add(mBDVal) },
+                                    { obj -> obj.mBDVal = obj.mBDVal.add(mBDVal) },
                                     { mCIItem.add(this) }
                             )
                         }
                     }
                 },
                 {
-                    mCVChart.circleFillRatio = 0.6f
                     mCVChart.pieChartData = generateData()
 
                     Handler().postDelayed({
@@ -161,5 +171,11 @@ abstract class PieChartBase : FrgSupportBaseAdv() {
     companion object {
         const val PAY_ITEM: Int = 1
         const val INCOME_ITEM: Int = 2
+
+        private val getCl = { id: Int -> AppUtil.self.getColor(id) }
+        private val clArr = intArrayOf(
+                getCl(R.color.pink), getCl(R.color.coral), getCl(R.color.palevioletred),
+                getCl(R.color.lightgreen), getCl(R.color.greenyellow), getCl(R.color.sienna),
+                getCl(R.color.darkslategrey), getCl(R.color.darkolivegreen), getCl(R.color.darkgreen))
     }
 }

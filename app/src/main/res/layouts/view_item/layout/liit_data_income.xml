@@ -39,8 +39,7 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/iv_lock"
@@ -55,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="6dp"
-                android:layout_toEndOf="@id/iv_lock"
+                android:layout_toEndOf="@+id/iv_lock"
                 android:text="12:04"
                 android:textSize="13sp" />
         </RelativeLayout>
