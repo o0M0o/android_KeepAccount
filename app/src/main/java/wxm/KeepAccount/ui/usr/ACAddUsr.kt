@@ -15,10 +15,6 @@ class ACAddUsr : ACBase<FrgUsrAdd>() {
         hotFragment.reInitUI()
     }
 
-    override fun setupFragment(savedInstanceState: Bundle?) {
-        addFragment(FrgUsrAdd())
-    }
-
     override fun leaveActivity() {
         setResult(GlobalDef.INTRET_CANCEL, Intent())
         finish()

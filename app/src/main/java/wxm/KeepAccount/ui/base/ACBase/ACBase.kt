@@ -24,11 +24,13 @@ abstract class ACBase<T:FrgSupportBaseAdv>  : ACSwitcherActivity<T>(){
         }
     }
 
-    override fun setupFragment(savedInstanceState: Bundle?) {
-        ((javaClass.genericSuperclass as ParameterizedType)
-                .actualTypeArguments[0] as Class<*>).let1 {
-            @Suppress("UNCHECKED_CAST")
-            addFragment(it.newInstance() as T)
+    override fun setupFragment(): MutableList<T> {
+        return ArrayList<T>().apply {
+            ((javaClass.genericSuperclass as ParameterizedType)
+                    .actualTypeArguments[0] as Class<*>).let1 {
+                @Suppress("UNCHECKED_CAST")
+                add(it.newInstance() as T)
+            }
         }
     }
 }

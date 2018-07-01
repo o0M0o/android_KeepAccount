@@ -10,10 +10,6 @@ import wxm.KeepAccount.ui.base.ACBase.ACBase
  * first page after login
  */
 class ACWelcome : ACBase<FrgWelcome>()  {
-    override fun setupFragment(savedInstanceState: Bundle?) {
-        addFragment(FrgWelcome())
-    }
-
     override fun onConfigurationChanged(newConfig: Configuration) {
         // TODO Auto-generated method stub
         super.onConfigurationChanged(newConfig)

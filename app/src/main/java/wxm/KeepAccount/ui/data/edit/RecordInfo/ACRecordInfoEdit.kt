@@ -18,12 +18,12 @@ class ACRecordInfoEdit : ACBase<FrgRecordInfoEdit>() {
         cancelEdit()
     }
 
-    override fun setupFragment(savedInstanceState: Bundle?) {
-        val it = intent
-        val tf = FrgRecordInfoEdit()
-        tf.mEditType = it.getStringExtra(IT_PARA_RECORD_TYPE)
-
-        addFragment(tf)
+    override fun setupFragment(): MutableList<FrgRecordInfoEdit> {
+        return FrgRecordInfoEdit().apply {
+            mEditType = intent.getStringExtra(IT_PARA_RECORD_TYPE)
+        }.let {
+            arrayListOf(it)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

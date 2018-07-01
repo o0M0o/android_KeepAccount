@@ -13,17 +13,13 @@ import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.base.ACBase.ACBase
 import wxm.KeepAccount.ui.help.ACHelp
 import wxm.KeepAccount.utility.AppUtil
+import wxm.androidutil.improve.let1
 import wxm.androidutil.log.TagLog
 
 /**
  * A login screen that offers login via email/password.
  */
 class ACLogin : ACBase<FrgLogin>() {
-    override fun setupFragment(savedInstanceState: Bundle?) {
-        addFragment(FrgLogin())
-    }
-
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         val inflater = menuInflater
@@ -49,10 +45,11 @@ class ACLogin : ACBase<FrgLogin>() {
             }
 
             R.id.acm_mi_help -> {
-                val intent = Intent(this, ACHelp::class.java)
-                intent.putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_MAIN)
-
-                startActivityForResult(intent, 1)
+                Intent(this, ACHelp::class.java).apply {
+                    putExtra(ACHelp.STR_HELP_TYPE, ACHelp.STR_HELP_MAIN)
+                }.let1 {
+                    startActivityForResult(it, 1)
+                }
             }
 
             else -> return super.onOptionsItemSelected(item)

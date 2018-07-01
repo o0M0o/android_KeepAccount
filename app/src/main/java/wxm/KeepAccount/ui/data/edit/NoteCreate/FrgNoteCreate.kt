@@ -74,7 +74,7 @@ class FrgNoteCreate : FrgSupportBaseAdv() {
         internal var mALFra: ArrayList<Fragment> = ArrayList()
 
         init {
-            val bd = arguments
+            val bd = arguments!!
             PgPayEdit().apply { arguments = bd }.let1 {
                 mALFra.add(it)
             }

@@ -18,20 +18,20 @@ class ACNoteCreate : ACBase<FrgNoteCreate>() {
         finish()
     }
 
-    override fun setupFragment(savedInstanceState: Bundle?) {
-        val date = intent.getStringExtra(GlobalDef.STR_RECORD_DATE)!!
-        FrgNoteCreate().let {
-            it.arguments = Bundle().apply {
-                putString(GlobalDef.STR_RECORD_DATE, date)
+    override fun setupFragment(): MutableList<FrgNoteCreate> {
+        val arg = Bundle().apply {
+            putString(GlobalDef.STR_RECORD_DATE, intent.getStringExtra(GlobalDef.STR_RECORD_DATE)!!)
+        }
+
+        return arrayListOf(FrgNoteCreate()).apply {
+            forEach {
+                it.arguments = arg
             }
-            addFragment(it)
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        val inflater = menuInflater
-        inflater.inflate(R.menu.mu_note_add, menu)
+        menuInflater.inflate(R.menu.mu_note_add, menu)
         return true
     }
 

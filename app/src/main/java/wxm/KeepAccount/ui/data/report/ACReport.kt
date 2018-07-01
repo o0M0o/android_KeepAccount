@@ -20,19 +20,19 @@ class ACReport : ACBase<FrgSupportBaseAdv>() {
         finish()
     }
 
-    override fun setupFragment(savedInstanceState: Bundle?) {
+    override fun setupFragment(): MutableList<FrgSupportBaseAdv> {
         // check invoke intent
         val it = intent
         val szType = it.getStringExtra(PARA_TYPE)
-        if (UtilFun.StringIsNullOrEmpty(szType)) {
+        if (szType.isNullOrEmpty()) {
             TagLog.e( "调用intent缺少'PARA_TYPE'参数")
-            return
+            return arrayListOf()
         }
 
         val alLoad = it.getStringArrayListExtra(PARA_LOAD)
         if (alLoad.isEmpty()) {
             TagLog.e( "调用intent缺少'PARA_LOAD'参数")
-            return
+            return arrayListOf()
         }
 
         // for holder
@@ -51,13 +51,12 @@ class ACReport : ACBase<FrgSupportBaseAdv>() {
             }
         }
 
-        if (null != mSelfFrg) {
-            val bd = Bundle()
-            bd.putStringArrayList(PARA_LOAD, alLoad)
-            mSelfFrg.arguments = bd
+        return if (null != mSelfFrg) {
+            mSelfFrg.arguments = Bundle().apply { putStringArrayList(PARA_LOAD, alLoad) }
+            arrayListOf(mSelfFrg)
+        } else  {
+            arrayListOf()
         }
-
-        addFragment(mSelfFrg)
     }
 
     companion object {

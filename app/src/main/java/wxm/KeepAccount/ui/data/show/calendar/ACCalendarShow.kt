@@ -9,8 +9,4 @@ import wxm.KeepAccount.ui.base.ACBase.ACBase
  * for calendar
  * Created by WangXM on 2016/12/4.
  */
-class ACCalendarShow : ACBase<FrgCalendarHolder>() {
-    override fun setupFragment(savedInstanceState: Bundle?) {
-        addFragment(FrgCalendarHolder())
-    }
-}
+class ACCalendarShow : ACBase<FrgCalendarHolder>()

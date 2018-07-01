@@ -22,7 +22,9 @@ class ACNoteEdit : ACBase<FrgEditBase>() {
         finish()
     }
 
-    override fun setupFragment(savedInstanceState: Bundle?) {
+    override fun setupFragment(): MutableList<FrgEditBase> {
+        val ret = ArrayList<FrgEditBase>()
+
         val it = intent
         val type = it.getStringExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE)
         val id = it.getIntExtra(GlobalDef.INTENT_LOAD_RECORD_ID, -1)
@@ -30,19 +32,21 @@ class ACNoteEdit : ACBase<FrgEditBase>() {
         when (type) {
             GlobalDef.STR_RECORD_PAY -> {
                 frg.setCurData(type, AppUtil.payIncomeUtility.payDBUtility.getData(id))
-                addFragment(frg)
+                ret.add(frg)
             }
 
             GlobalDef.STR_RECORD_INCOME -> {
                 frg.setCurData(type, AppUtil.payIncomeUtility.incomeDBUtility.getData(id))
-                addFragment(frg)
+                ret.add(frg)
             }
 
             GlobalDef.STR_RECORD_BUDGET -> {
                 frg.setCurData(type, AppUtil.budgetUtility.getData(id))
-                addFragment(frg)
+                ret.add(frg)
             }
         }
+
+        return ret
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
