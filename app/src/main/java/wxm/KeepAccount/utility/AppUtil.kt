@@ -4,12 +4,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.*
+import wxm.KeepAccount.item.*
 import wxm.androidutil.improve.let1
-import wxm.KeepAccount.item.IncomeNoteItem
-import wxm.KeepAccount.item.BudgetItem
-import wxm.KeepAccount.item.PayNoteItem
-import wxm.KeepAccount.item.RemindItem
-import wxm.KeepAccount.item.UsrItem
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.log.TagLog
@@ -26,13 +22,6 @@ class AppUtil : AppBase() {
 
     // for sqlite
     private lateinit var mDBHelper: DBOrmLiteHelper
-    private lateinit var mUsrUtility: UsrDBUtility
-    private lateinit var mRecordTypeUtility: RecordTypeDBUtility
-    private lateinit var mBudgetUtility: BudgetDBUtility
-    private lateinit var mPayIncomeUtility: PayIncomeDBUtility
-    private lateinit var mRemindUtility: RemindDBUtility
-    private lateinit var mNoteImageUtility: NoteImageUtility
-    private lateinit var mSmsParseUtility: SmsParseDBUtility
 
     // for dir
     private lateinit var mImageDir: String
@@ -58,14 +47,6 @@ class AppUtil : AppBase() {
 
     private fun initDB()    {
         mDBHelper = DBOrmLiteHelper(appContext())
-
-        mUsrUtility = UsrDBUtility()
-        mRecordTypeUtility = RecordTypeDBUtility()
-        mBudgetUtility = BudgetDBUtility()
-        mPayIncomeUtility = PayIncomeDBUtility()
-        mRemindUtility = RemindDBUtility()
-        mNoteImageUtility = NoteImageUtility()
-        mSmsParseUtility = SmsParseDBUtility()
     }
 
     private fun initDir()   {
@@ -127,48 +108,6 @@ class AppUtil : AppBase() {
             }
 
         /**
-         * get usr db helper
-         */
-        val usrUtility: UsrDBUtility
-            get() = self.mUsrUtility
-
-        /**
-         * get record type db helper
-         */
-        val recordTypeUtility: RecordTypeDBUtility
-            get() = self.mRecordTypeUtility
-
-        /**
-         * get budget helper
-         */
-        val budgetUtility: BudgetDBUtility
-            get() = self.mBudgetUtility
-
-        /**
-         * get pay & income data helper
-         */
-        val payIncomeUtility: PayIncomeDBUtility
-            get() = self.mPayIncomeUtility
-
-        /**
-         * get remind data helper
-         */
-        val remindUtility: RemindDBUtility
-            get() = self.mRemindUtility
-
-        /**
-         * get remind data helper
-         */
-        val noteImageUtility: NoteImageUtility
-            get() = self.mNoteImageUtility
-
-        /**
-         * get sms parse data helper
-         */
-        val smsParseDBUtility : SmsParseDBUtility
-            get() = self.mSmsParseUtility
-
-        /**
          * clean db
          */
         fun clearDB() {
@@ -177,12 +116,12 @@ class AppUtil : AppBase() {
                     val uid = it.id
                     self.mDBHelper.let {
                         it.payDataREDao.deleteBuilder().apply {
-                            where().eq(PayNoteItem.FIELD_USR, uid)
+                            where().eq(INote.FIELD_USR, uid)
                             delete()
                         }
 
                         it.incomeDataREDao.deleteBuilder().apply {
-                            where().eq(IncomeNoteItem.FIELD_USR, uid)
+                            where().eq(INote.FIELD_USR, uid)
                             delete()
                         }
 
@@ -199,7 +138,7 @@ class AppUtil : AppBase() {
                         Unit
                     }
 
-                    smsParseDBUtility.clean()
+                    SmsParseDBUtility.instance.clean()
                     NoteDataHelper.reloadData()
                 }
             } catch (e: java.sql.SQLException) {

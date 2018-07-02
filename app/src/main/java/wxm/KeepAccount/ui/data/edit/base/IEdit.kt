@@ -21,4 +21,11 @@ interface IEdit {
      * update swap data
      */
     fun refillData()
+
+    /**
+     * get edit data if need
+     */
+    fun getEditData(): Any? {
+        return null
+    }
 }

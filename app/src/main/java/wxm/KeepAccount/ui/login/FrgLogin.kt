@@ -15,6 +15,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.LoginHistoryUtility
+import wxm.KeepAccount.db.UsrDBUtility
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.event.DoLogin
 import wxm.KeepAccount.ui.usr.ACAddUsr
@@ -74,7 +75,7 @@ class FrgLogin : FrgSupportBaseAdv() {
         val cl = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -30) }
         LoginHistoryUtility.getLastLoginAfter(cl.toTimestamp())?.let1 {
             ToolUtil.callInBackground(
-                    { AppUtil.usrUtility.loginByUsr(it, false) }, false,
+                    { UsrDBUtility.instance.loginByUsr(it, false) }, false,
                     TimeUnit.SECONDS, 3).let1 {
                 if (it) {
                     NoteDataHelper.reloadData()
@@ -167,7 +168,7 @@ class FrgLogin : FrgSupportBaseAdv() {
     private fun doLogin(usr: String, pwd: String) {
         showProgress(true)
         val bRet = ToolUtil.callInBackground(
-                { AppUtil.usrUtility.loginByUsr(usr, pwd) }, false,
+                { UsrDBUtility.instance.loginByUsr(usr, pwd) }, false,
                 TimeUnit.SECONDS, 3)
         showProgress(false)
 

@@ -14,7 +14,7 @@ class CalendarDayModel : BaseItemModel() {
         get() {
             if(-1 == field) {
                 field = 0
-                NoteDataHelper.getInfoByDay(szDate)?.let {
+                NoteDataHelper.getInfoByDay(szDate).let {
                     field = it.incomeCount + it.payCount
                 }
             }

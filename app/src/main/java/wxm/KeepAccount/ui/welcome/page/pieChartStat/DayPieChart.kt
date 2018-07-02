@@ -3,13 +3,17 @@ package wxm.KeepAccount.ui.welcome.page.pieChartStat
 import android.os.Bundle
 import android.view.View
 import wxm.KeepAccount.R
+import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.improve.toMoneyStr
 import wxm.KeepAccount.improve.toSignalMoneyStr
+import wxm.KeepAccount.ui.data.show.note.ACNoteDetail
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.improve.doJudge
 import wxm.androidutil.improve.let1
 import wxm.androidutil.time.getDayInWeekStr
+import wxm.androidutil.util.UtilFun
+import java.util.ArrayList
 
 /**
  * @author      WangXM
@@ -57,11 +61,26 @@ class DayPieChart : PieChartBase() {
         }
     }
 
+    override fun lookDetail() {
+        val ts = ToolUtil.stringToTimestamp(mSZHotDay)
+        val para = ArrayList<String>().apply {
+            if(mTBIncome.isChecked) {
+                add(GlobalDef.STR_RECORD_INCOME)
+            }
+
+            if(mTBPay.isChecked) {
+                add(GlobalDef.STR_RECORD_PAY)
+            }
+        }
+
+        ACNoteDetail.start(context!!, this, ts, ts, para)
+    }
+
     private fun doLoadDay() {
         mTVDateRange.text = mSZHotDay
         mTVDayInWeek.text = ToolUtil.stringToCalendar(mSZHotDay).getDayInWeekStr()
 
-        NoteDataHelper.getInfoByDay(mSZHotDay)?.let1 {
+        NoteDataHelper.getInfoByDay(mSZHotDay).let1 {
             mTVPay.text = it.payAmount.toMoneyStr()
             mTVIncome.text = it.incomeAmount.toMoneyStr()
             mTVTotal.text = it.balance.toSignalMoneyStr()

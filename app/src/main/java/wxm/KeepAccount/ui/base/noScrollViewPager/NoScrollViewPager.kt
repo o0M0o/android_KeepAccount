@@ -20,10 +20,10 @@ class NoScrollViewPager : ViewPager {
     /**
      * 1.dispatchTouchEvent一般情况不做处理
      * ,如果修改了默认的返回值,子孩子都无法收到事件
-     */
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         return super.dispatchTouchEvent(ev)   // return true;不行
     }
+     */
 
     /**
      * 是否拦截

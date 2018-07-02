@@ -1,6 +1,5 @@
 package wxm.KeepAccount.ui.base.ACBase
 
-import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import wxm.KeepAccount.R
 import wxm.androidutil.improve.let1
@@ -12,7 +11,7 @@ import java.lang.reflect.ParameterizedType
  * @author      WangXM
  * @version     create：2018/6/14
  */
-abstract class ACBase<T:FrgSupportBaseAdv>  : ACSwitcherActivity<T>(){
+abstract class ACBase<T : FrgSupportBaseAdv> : ACSwitcherActivity<T>() {
     override fun setupToolbar(tb: Toolbar?) {
         super.setupToolbar(tb)
         tb?.let1 {
@@ -25,12 +24,9 @@ abstract class ACBase<T:FrgSupportBaseAdv>  : ACSwitcherActivity<T>(){
     }
 
     override fun setupFragment(): MutableList<T> {
-        return ArrayList<T>().apply {
-            ((javaClass.genericSuperclass as ParameterizedType)
-                    .actualTypeArguments[0] as Class<*>).let1 {
-                @Suppress("UNCHECKED_CAST")
-                add(it.newInstance() as T)
-            }
-        }
+        @Suppress("UNCHECKED_CAST")
+        return arrayListOf(
+                ((javaClass.genericSuperclass as ParameterizedType)
+                        .actualTypeArguments[0] as Class<*>).newInstance() as T)
     }
 }

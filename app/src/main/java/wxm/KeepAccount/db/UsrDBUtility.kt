@@ -139,7 +139,7 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
             it.update() == 1
         }.doJudge(
                 {
-                    usr.iconPath = AppUtil.usrUtility.getData(usr.id)!!.iconPath
+                    usr.iconPath = instance.getData(usr.id)!!.iconPath
                     true
                 },
                 { false }
@@ -165,7 +165,7 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
             it.update() == 1
         }.doJudge(
                 {
-                    usr.pwd = AppUtil.usrUtility.getData(usr.id)!!.pwd
+                    usr.pwd = instance.getData(usr.id)!!.pwd
                     true
                 },
                 { false }
@@ -187,5 +187,7 @@ class UsrDBUtility : DBUtilityBase<UsrItem, Int>() {
     companion object {
         const val RET_OK = 0
         const val RET_PWD_TO_SHORT = 1
+
+        val instance = UsrDBUtility()
     }
 }

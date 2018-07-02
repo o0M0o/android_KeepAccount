@@ -10,6 +10,7 @@ import android.text.TextWatcher
 import android.view.MotionEvent
 import kotterknife.bindView
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.BudgetDBUtility
 import wxm.KeepAccount.item.BudgetItem
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
@@ -122,7 +123,7 @@ class PgBudgetEdit : FrgSupportBaseAdv(), IEdit  {
             return false
         }
 
-        val cbi = AppUtil.budgetUtility.getBudgetByName(mETName.text.toString())
+        val cbi = BudgetDBUtility.instance.getBudgetByName(mETName.text.toString())
         if (null != cbi && (null == mBIData || mBIData!!._id != cbi._id)) {
             DlgAlert.showAlert(context!!, R.string.dlg_warn, R.string.dlg_already_have_budget_name)
             mETName.requestFocus()
@@ -148,9 +149,9 @@ class PgBudgetEdit : FrgSupportBaseAdv(), IEdit  {
         mBIData?.let {
             val newItem = GlobalDef.INVALID_ID == it._id
             val sRet = if (newItem)
-                AppUtil.budgetUtility.createData(it)
+                BudgetDBUtility.instance.createData(it)
             else
-                AppUtil.budgetUtility.modifyData(it)
+                BudgetDBUtility.instance.modifyData(it)
             if (!sRet) {
                 DlgAlert.showAlert(context!!, R.string.dlg_warn,
                         newItem.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))

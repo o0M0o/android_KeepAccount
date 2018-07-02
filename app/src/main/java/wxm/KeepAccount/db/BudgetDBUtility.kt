@@ -24,7 +24,7 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
         get() {
             return HashMap<BudgetItem, List<PayNoteItem>>().apply {
                 budgetForCurUsr.forEach { bi ->
-                    put(bi, AppUtil.payIncomeUtility.getPayNoteByBudget(bi))
+                    put(bi, PayIncomeDBUtility.instance.getPayNoteByBudget(bi))
                 }
             }
         }
@@ -110,5 +110,9 @@ class BudgetDBUtility : DBUtilityBase<BudgetItem, Int>() {
 
     override fun onDataRemove(dd: List<Int>) {
         EventBus.getDefault().post(DBDataChangeEvent())
+    }
+
+    companion object {
+        val instance = BudgetDBUtility()
     }
 }

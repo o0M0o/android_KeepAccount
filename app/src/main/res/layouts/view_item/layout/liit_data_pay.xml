@@ -5,135 +5,151 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/li_pay_detail_shape"
-    tools:ignore="HardcodedText">
+    android:paddingEnd="12dp"
+    android:paddingStart="12dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
+    tools:ignore="HardcodedText, ContentDescription">
 
-    <ImageView
-        android:id="@+id/iv_tag"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="14dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_pay_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:layout_width="0dp"
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:orientation="vertical"
-        android:padding="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_tag"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_tag"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_pay_color" />
 
         <TextView
             android:id="@+id/tv_pay_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_toEndOf="@id/iv_tag"
             android:text="交通费"
             android:textColor="@color/black"
-            android:textSize="19sp" />
+            android:textSize="18sp" />
+    </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/rl_clock"
+    <View
+        android:id="@+id/vl_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/trans_2"
+        app:layout_constraintTop_toBottomOf="@id/rl_title" />
+
+    <RelativeLayout
+        android:id="@+id/rl_clock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="1dp"
+        android:paddingTop="1dp"
+        app:layout_constraintTop_toBottomOf="@id/vl_line">
+
+        <ImageView
+            android:id="@+id/iv_clock"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_clock_new" />
+
+        <TextView
+            android:id="@+id/tv_pay_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp">
+            android:layout_centerVertical="true"
+            android:layout_marginStart="6dp"
+            android:layout_toEndOf="@id/iv_clock"
+            android:text="12:04"
+            android:textSize="@dimen/text_small" />
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/iv_clock"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_clock_new" />
+    <RelativeLayout
+        android:id="@+id/rl_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="1dp"
+        android:paddingTop="1dp"
+        app:layout_constraintTop_toBottomOf="@id/rl_clock">
 
-            <TextView
-                android:id="@+id/tv_pay_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="6dp"
-                android:layout_toEndOf="@id/iv_clock"
-                android:text="12:04"
-                android:textSize="13sp" />
-        </RelativeLayout>
+        <ImageView
+            android:id="@+id/iv_amount"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_yuan" />
 
-
-        <RelativeLayout
-            android:id="@+id/rl_amount"
+        <TextView
+            android:id="@+id/tv_pay_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp">
+            android:layout_centerVertical="true"
+            android:layout_marginStart="6dp"
+            android:layout_toEndOf="@id/iv_amount"
+            android:text="- 145999.75"
+            android:textColor="@color/darkred"
+            android:textSize="@dimen/text_small" />
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/iv_amount"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_yuan" />
+    <RelativeLayout
+        android:id="@+id/rl_budget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="1dp"
+        android:paddingTop="1dp"
+        app:layout_constraintTop_toBottomOf="@id/rl_amount">
 
-            <TextView
-                android:id="@+id/tv_pay_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="6dp"
-                android:layout_toEndOf="@id/iv_amount"
-                android:text="- 145999.75"
-                android:textColor="@color/darkred"
-                android:textSize="13sp" />
-        </RelativeLayout>
+        <ImageView
+            android:id="@+id/iv_budget"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_budget_new" />
 
-        <RelativeLayout
-            android:id="@+id/rl_budget"
+        <TextView
+            android:id="@+id/tv_pay_budget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp">
+            android:layout_centerVertical="true"
+            android:layout_marginStart="6dp"
+            android:layout_toEndOf="@id/iv_budget"
+            android:text="生活费"
+            android:textSize="@dimen/text_small" />
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/iv_budget"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_budget_new" />
+    <RelativeLayout
+        android:id="@+id/rl_pay_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="1dp"
+        android:paddingTop="1dp"
+        app:layout_constraintTop_toBottomOf="@id/rl_budget">
 
-            <TextView
-                android:id="@+id/tv_pay_budget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="6dp"
-                android:layout_toEndOf="@id/iv_budget"
-                android:text="生活费"
-                android:textSize="13sp" />
-        </RelativeLayout>
+        <ImageView
+            android:id="@+id/iv_note"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_centerVertical="true"
+            android:padding="1dp"
+            android:src="@drawable/ic_note_new" />
 
-        <RelativeLayout
-            android:id="@+id/rl_pay_note"
+        <TextView
+            android:id="@+id/tv_pay_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp">
-
-            <ImageView
-                android:id="@+id/iv_note"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_centerVertical="true"
-                android:padding="1dp"
-                android:src="@drawable/ic_note_new" />
-
-            <TextView
-                android:id="@+id/tv_pay_note"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="6dp"
-                android:layout_toEndOf="@id/iv_note"
-                android:text="日常生活开销"
-                android:textSize="12sp" />
-        </RelativeLayout>
-    </LinearLayout>
+            android:layout_centerVertical="true"
+            android:layout_marginStart="6dp"
+            android:layout_toEndOf="@id/iv_note"
+            android:text="日常生活开销"
+            android:textSize="@dimen/text_small" />
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

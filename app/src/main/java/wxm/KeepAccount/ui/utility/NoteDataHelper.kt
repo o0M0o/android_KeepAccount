@@ -2,7 +2,10 @@ package wxm.KeepAccount.ui.utility
 
 
 import wxm.KeepAccount.db.NoteImageUtility
+import wxm.KeepAccount.db.PayIncomeDBUtility
+import wxm.KeepAccount.improve.toYearMonthDayTag
 import wxm.KeepAccount.item.INote
+import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.improve.forObj
 import kotlin.collections.ArrayList
@@ -65,8 +68,8 @@ class NoteDataHelper private constructor() {
         dayHaveNote.clear()
         monthHaveNote.clear()
         yearHaveNote.clear()
-        AppUtil.payIncomeUtility.allNotes.forEach {
-            val nk = NoteKey(szDay = it.tsYearMonthDayTag)
+        PayIncomeDBUtility.instance.allNotes.forEach {
+            val nk = NoteKey(szDay = it.ts.toYearMonthDayTag())
             var lsNote = allNotes[nk]
             if(null == lsNote)    {
                 lsNote = ArrayList()
@@ -108,7 +111,7 @@ class NoteDataHelper private constructor() {
         allNotes.forEach{
             mHMDayInfo[it.key.szDay] = NoteShowInfo().apply {
                 it.value.forEach{
-                    if (it.isPayNote) {
+                    if (it is PayNoteItem) {
                         payCount += 1
                         payAmount = payAmount.add(it.amount)
                     } else {
@@ -192,15 +195,17 @@ class NoteDataHelper private constructor() {
 
         /**
          * get note between [[start] - [end]]
+         * example : '2016-10-24' - '2017-10-24' ---- pay/income note
          */
-        fun getNotesBetweenDays(start: String, end: String): HashMap<String, ArrayList<INote>?> {
-            return HashMap<String, ArrayList<INote>?>().apply {
+        fun getNotesBetweenDays(start: String, end: String): HashMap<String, ArrayList<INote>> {
+            return HashMap<String, ArrayList<INote>>().apply {
                 instance.allNotes.filter { it.key.szDay in start..end }.forEach {
                     put(it.key.szDay, it.value) } }
         }
 
         /**
          * get note for [day]
+         * example : '2016-10-24' ---- pay/income note
          */
         fun getNotesByDay(day: String): List<INote>? {
             val nk = NoteKey(day)
@@ -298,12 +303,29 @@ class NoteDataHelper private constructor() {
             }
 
         /**
-         * get data for year
-         * @param day   day（example : '2017-01-12')
-         * @return      data
+         * get data for [day]
+         * example: '2017-01-12'
          */
-        fun getInfoByDay(day: String): NoteShowInfo? {
+        fun getInfoByDay(day: String): NoteShowInfo {
             return instance.mHMDayInfo[day].forObj({it}, {NoteShowInfo()} )
+        }
+
+        /**
+         * get data from [firstDay] to [lastDay]
+         * example: '2017-01-12', '2017-02-12'
+         */
+        fun getInfoByDay(firstDay: String, lastDay: String): NoteShowInfo {
+            val ret = NoteShowInfo()
+            instance.dayHaveNote.filter { it in firstDay..lastDay }.forEach {
+                val ni = instance.mHMDayInfo[it]!!
+                ret.payCount += ni.payCount
+                ret.payAmount += ni.payAmount
+
+                ret.incomeCount += ni.incomeCount
+                ret.incomeAmount += ni.incomeAmount
+            }
+
+            return ret
         }
 
         /**

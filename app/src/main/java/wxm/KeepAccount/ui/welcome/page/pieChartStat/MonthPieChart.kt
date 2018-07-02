@@ -3,13 +3,17 @@ package wxm.KeepAccount.ui.welcome.page.pieChartStat
 import android.os.Bundle
 import android.view.View
 import wxm.KeepAccount.R
+import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.improve.toMoneyStr
 import wxm.KeepAccount.improve.toSignalMoneyStr
+import wxm.KeepAccount.ui.data.show.note.ACNoteDetail
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.improve.doJudge
 import wxm.androidutil.improve.let1
 import wxm.androidutil.time.getDayInWeekStr
+import wxm.androidutil.time.toCalendar
+import java.util.*
 
 /**
  * @author      WangXM
@@ -57,6 +61,26 @@ class MonthPieChart : PieChartBase() {
             mSZHotMonth = mLLMonths.last()
             doLoadDay()
         }
+    }
+
+    override fun lookDetail() {
+        val fDay = ToolUtil.stringToTimestamp("$mSZHotMonth-01")
+        val lDay = String.format(Locale.CHINA, "%s-%02d",
+                mSZHotMonth, fDay.toCalendar().getActualMaximum(Calendar.DAY_OF_MONTH)).let {
+            ToolUtil.stringToTimestamp(it)
+        }
+
+        val para = ArrayList<String>().apply {
+            if(mTBIncome.isChecked) {
+                add(GlobalDef.STR_RECORD_INCOME)
+            }
+
+            if(mTBPay.isChecked) {
+                add(GlobalDef.STR_RECORD_PAY)
+            }
+        }
+
+        ACNoteDetail.start(context!!, this, fDay, lDay, para)
     }
 
     private fun doLoadDay() {

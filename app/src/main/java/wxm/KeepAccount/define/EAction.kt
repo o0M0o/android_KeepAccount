@@ -17,6 +17,7 @@ enum class EAction(val actName: String, bm_id: Int) {
     LOOK_BUDGET("查看预算", R.drawable.ic_wallet),
     ADD_BUDGET("添加预算", R.drawable.ic_act_add_budget),
     ADD_DATA("添加记录", R.drawable.ic_bt_add),
+    ADD_DEBT("添加借贷", R.drawable.ic_borrow_lend),
     SYNC_SMS("同步数据", R.drawable.ic_sms),
     LOGOUT("退出登录", R.drawable.ic_bt_logout);
 

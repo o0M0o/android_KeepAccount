@@ -13,6 +13,7 @@ import kotterknife.bindView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.SmsParseDBUtility
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.SmsParseItem
 import wxm.KeepAccount.ui.data.edit.SmsToNote.ACSmsToNote
@@ -62,7 +63,7 @@ class FrgSync : FrgSupportBaseAdv() {
 
         when (event.eventType) {
             SmsEvent.EVENT_DELETE -> {
-                AppUtil.smsParseDBUtility.addParseResult(event.smsId, SmsParseItem.FIELD_VAL_REMOVE)
+                SmsParseDBUtility.instance.addParseResult(event.smsId, SmsParseItem.FIELD_VAL_REMOVE)
                 loadSMS()
             }
 
@@ -87,7 +88,7 @@ class FrgSync : FrgSupportBaseAdv() {
                     SmsParseItem.FIELD_VAL_TO_INCOME
             }
 
-            AppUtil.smsParseDBUtility.addParseResult(sms.id, ty)
+            SmsParseDBUtility.instance.addParseResult(sms.id, ty)
             loadSMS()
         }
     }
@@ -98,7 +99,7 @@ class FrgSync : FrgSupportBaseAdv() {
         }
 
         mIBReset.setOnClickListener { _ ->
-            AppUtil.smsParseDBUtility.clean()
+            SmsParseDBUtility.instance.clean()
             loadSMS()
         }
 
@@ -168,7 +169,7 @@ class FrgSync : FrgSupportBaseAdv() {
      */
     private fun checkSms(sms: SmsItem): Boolean {
         if (mPtNum.matcher(sms.body).matches() && mPtKeyWord.matcher(sms.body).matches()) {
-            val st = AppUtil.smsParseDBUtility.getParseResult(sms.id)
+            val st = SmsParseDBUtility.instance.getParseResult(sms.id)
             return SmsParseItem.FIELD_VAL_NONE == st
         }
 

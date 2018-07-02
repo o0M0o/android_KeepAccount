@@ -1,86 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/gray_eeeeee"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="4dp">
+    android:orientation="vertical">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/til_reason"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@color/white">
 
         <wxm.KeepAccount.ui.base.TouchUI.TouchEditText
             android:id="@+id/ar_et_info"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:hint="@string/cn_pay_type"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:textSize="@dimen/text_big" />
     </android.support.design.widget.TextInputLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_date_amount"
-        android:layout_width="match_parent"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/til_reason">
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="fill_parent"
+        <wxm.KeepAccount.ui.base.TouchUI.TouchEditText
+            android:id="@+id/ar_et_date"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="1dp"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:padding="2dp">
+            android:ems="10"
+            android:hint="@string/cn_date"
+            android:inputType="date"
+            android:maxLines="1"
+            android:textSize="@dimen/text_middle" />
+    </android.support.design.widget.TextInputLayout>
 
-            <wxm.KeepAccount.ui.base.TouchUI.TouchEditText
-                android:id="@+id/ar_et_date"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:ems="10"
-                android:hint="@string/cn_date"
-                android:inputType="date"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="fill_parent"
+        <wxm.KeepAccount.ui.base.TouchUI.TouchEditText
+            android:id="@+id/ar_et_amount"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:padding="2dp">
-
-            <wxm.KeepAccount.ui.base.TouchUI.TouchEditText
-                android:id="@+id/ar_et_amount"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:ems="10"
-                android:hint="@string/cn_amount"
-                android:inputType="numberDecimal"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
-    </LinearLayout>
+            android:ems="10"
+            android:hint="@string/cn_amount"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:textSize="@dimen/text_middle" />
+    </android.support.design.widget.TextInputLayout>
 
     <RelativeLayout
         android:id="@+id/rl_budget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="1dp"
         android:background="@color/white"
         android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/ll_date_amount">
+        android:paddingTop="8dp" >
 
         <TextView
             android:id="@+id/ar_tv_budget"
@@ -109,9 +91,11 @@
         android:id="@+id/rl_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="1dp"
         android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/rl_budget">
+        android:padding="4dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp">
 
         <wxm.KeepAccount.ui.base.TouchUI.TouchTextView
             android:id="@+id/tv_note"
@@ -119,19 +103,17 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_margin="8dp"
             android:text="@string/notice_input_note"
             android:textSize="18sp" />
     </RelativeLayout>
 
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cl_image"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="2dp"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rl_note">
+        android:background="@color/white">
 
         <ImageButton
             android:id="@+id/ib_add_pic"
@@ -147,9 +129,9 @@
 
         <ListView
             android:id="@+id/lv_pic"
-            app:layout_constraintStart_toEndOf="@id/ib_add_pic"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="0dp"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ib_add_pic" />
     </android.support.constraint.ConstraintLayout>
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

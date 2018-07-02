@@ -17,6 +17,9 @@ import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.dialog.base.DlgResource
 import wxm.KeepAccount.utility.DGVButtonAdapter
+import wxm.androidutil.improve.doJudge
+import wxm.androidutil.ui.moreAdapter.MoreAdapter
+import wxm.androidutil.ui.view.ViewHolder
 
 /**
  * select follow channel
@@ -44,11 +47,9 @@ class DlgSelectChannel : DlgOKOrNOBase() {
     override fun initDlgView(savedInstanceState: Bundle?) {
         val gv: GridView = findDlgChildView(R.id.gv_channels)!!
         gv.setOnItemClickListener { parent, view, position, _ ->
-            val hmd = UtilFun.cast<HashMap<String, Any>>(parent.adapter.getItem(position))
-            val act = UtilFun.cast<String>(hmd[DGVButtonAdapter.KEY_ACT_NAME])
-
-            val hot = mLSHotChannel.contains(act)
-            if (hot) {
+            @Suppress("UNCHECKED_CAST")
+            val act = (parent.adapter.getItem(position) as Map<String, String>)[DGVButtonAdapter.KEY_ACT_NAME]!!
+            if (mLSHotChannel.contains(act)) {
                 mLSHotChannel.remove(act)
                 view.background = DlgResource.mDAChannelNoSel
             } else {
@@ -57,18 +58,16 @@ class DlgSelectChannel : DlgOKOrNOBase() {
             }
         }
 
-        val lsData = ArrayList<HashMap<String, Any>>()
-        for (ea in EAction.values()) {
-            val hm = HashMap<String, Any>()
-            hm[DGVButtonAdapter.KEY_ACT_NAME] = ea.actName
-
-            lsData.add(hm)
+        val lsData = ArrayList<HashMap<String, String>>().apply {
+            EAction.values().forEach {
+                add(HashMap<String, String>().apply {
+                    put(DGVButtonAdapter.KEY_ACT_NAME, it.actName)
+                })
+            }
         }
 
-        val ga = GVChannelAdapter(activity!!, lsData, arrayOf(DGVButtonAdapter.KEY_ACT_NAME),
+        gv.adapter = GVChannelAdapter(activity!!, lsData, arrayOf(DGVButtonAdapter.KEY_ACT_NAME),
                         intArrayOf(R.id.tv_name))
-        gv.adapter = ga
-        ga.notifyDataSetChanged()
     }
 
 
@@ -77,37 +76,23 @@ class DlgSelectChannel : DlgOKOrNOBase() {
      */
     inner class GVChannelAdapter
         internal constructor(context: Context, data: List<Map<String, *>>,
-                            from: Array<String>, to: IntArray)
-        : SimpleAdapter(context, data, R.layout.gi_channel, from, to) {
-        override fun getViewTypeCount(): Int {
-            val orgCount = count
-            return if (orgCount < 1) 1 else orgCount
-        }
+                            from: Array<String?>, to: IntArray)
+        : MoreAdapter(context, data, R.layout.gi_channel, from, to) {
 
-        override fun getItemViewType(position: Int): Int {
-            return position
-        }
+        override fun loadView(pos: Int, vhHolder: ViewHolder) {
+            @Suppress("UNCHECKED_CAST")
+            val hv = (getItem(pos) as Map<String, String>)[DGVButtonAdapter.KEY_ACT_NAME]!!
 
-        override fun getView(position: Int, view: View?, arg2: ViewGroup?): View? {
-            val v = super.getView(position, view, arg2)
-            if (null != v) {
-                val hmd = UtilFun.cast<HashMap<String, Any>>(getItem(position))
-                val hv = UtilFun.cast<String>(hmd[DGVButtonAdapter.KEY_ACT_NAME])
+            vhHolder.convertView.background = mLSHotChannel.contains(hv).doJudge(
+                DlgResource.mDAChannelSel, DlgResource.mDAChannelNoSel)
 
-                v.background = if (mLSHotChannel.contains(hv))
-                    DlgResource.mDAChannelSel
-                else
-                    DlgResource.mDAChannelNoSel
-
-                // for image
-                val bm = EAction.getIcon(hv)
-                if (null != bm) {
-                    val iv = UtilFun.cast_t<ImageView>(v.findViewById(R.id.iv_act))
-                    iv.setImageBitmap(bm)
+            // for image
+            EAction.getIcon(hv)!!.let {
+                vhHolder.getView<ImageView>(R.id.iv_act)!!.apply {
+                    setImageBitmap(it)
+                    scaleType = ImageView.ScaleType.CENTER_CROP
                 }
             }
-
-            return v
         }
     }
 }

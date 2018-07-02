@@ -167,6 +167,6 @@
     <color name="red_ff725f">#ff725f</color>
     <color name="red_ff725f_half">#30ff725f</color>
 
-    <color name="bc_pay">#f8aba6</color>
-    <color name="bc_income">#cde6c7</color>
+    <color name="bc_pay">#aaf8aba6</color>
+    <color name="bc_income">#aacde6c7</color>
 </resources>

@@ -2,6 +2,7 @@ package wxm.KeepAccount.ui.data.show.note
 
 import android.os.Bundle
 import wxm.KeepAccount.ui.base.ACBase.ACBase
+import wxm.KeepAccount.ui.data.show.note.page.FrgDailyDetail
 
 import wxm.androidutil.log.TagLog
 

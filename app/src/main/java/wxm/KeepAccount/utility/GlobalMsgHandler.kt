@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Message
 import org.greenrobot.eventbus.EventBus
 import wxm.KeepAccount.db.LoginHistoryUtility
+import wxm.KeepAccount.db.UsrDBUtility
 
 import wxm.KeepAccount.define.EMsgType
 import wxm.androidutil.util.UtilFun
@@ -31,11 +32,11 @@ class GlobalMsgHandler : Handler() {
                 val usr = data.getStringExtra(UsrItem.FIELD_NAME)
                 val pwd = data.getStringExtra(UsrItem.FIELD_PWD)
 
-                if (AppUtil.usrUtility.hasUsr(usr)) {
+                if (UsrDBUtility.instance.hasUsr(usr)) {
                     replyMsg(h, EMsgType.USR_ADD.id,
                             arrayOf(false, data, "用户已经存在！"))
                 } else {
-                    val ret = null != AppUtil.usrUtility.addUsr(usr, pwd)
+                    val ret = null != UsrDBUtility.instance.addUsr(usr, pwd)
                     replyMsg(h, EMsgType.USR_ADD.id,
                             arrayOf(ret, data))
                 }
@@ -50,7 +51,7 @@ class GlobalMsgHandler : Handler() {
                 val usr = data.getStringExtra(UsrItem.FIELD_NAME)
                 val pwd = data.getStringExtra(UsrItem.FIELD_PWD)
 
-                AppUtil.curUsr = AppUtil.usrUtility.checkGetUsr(usr, pwd)
+                AppUtil.curUsr = UsrDBUtility.instance.checkGetUsr(usr, pwd)
                 val ret = null != AppUtil.curUsr
 
                 replyMsg(h, EMsgType.USR_LOGIN.id, ret)

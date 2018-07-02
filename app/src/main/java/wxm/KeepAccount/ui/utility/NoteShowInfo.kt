@@ -1,5 +1,6 @@
 package wxm.KeepAccount.ui.utility
 
+import wxm.KeepAccount.improve.toMoneyStr
 import java.math.BigDecimal
 import java.util.Locale
 
@@ -12,22 +13,9 @@ class NoteShowInfo {
     var incomeCount: Int = 0
 
     var payAmount: BigDecimal = BigDecimal.ZERO
-        set(mPayAmount) {
-            field = mPayAmount
-            szPayAmount = String.format(Locale.CHINA, "%.02f", field)
-        }
-    var szPayAmount: String = "0"
 
     var incomeAmount: BigDecimal = BigDecimal.ZERO
-        set(mIncomeAmount) {
-            field = mIncomeAmount
-            szIncomeAmount = String.format(Locale.CHINA, "%.02f", field)
-        }
-    var szIncomeAmount: String = "0"
 
     val balance: BigDecimal
         get() = incomeAmount.subtract(payAmount)
-
-    init {
-    }
 }

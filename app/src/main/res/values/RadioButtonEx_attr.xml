@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RadioButtonEx">
+        <attr name="rbt_draw_width" format="dimension" />
+        <attr name="rbt_draw_height" format="dimension" />
+    </declare-styleable>
+</resources>

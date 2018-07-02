@@ -5,12 +5,9 @@ import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.define.IPublicClone
-import wxm.KeepAccount.improve.toMoneyStr
-
+import wxm.androidutil.db.IDBRow
 import java.math.BigDecimal
 import java.sql.Timestamp
-
-import wxm.androidutil.db.IDBRow
 import java.util.*
 
 /**
@@ -18,74 +15,44 @@ import java.util.*
  * Created by WangXM on 2016/5/3.
  */
 @DatabaseTable(tableName = "tbPayNote")
-class PayNoteItem(override var tag: Any? = null) : INote, IDBRow<Int>, Cloneable, IPublicClone {
-    @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
+class PayNoteItem(override var tag: Any? = null) :
+        INote, IImage, IDBRow<Int>, Cloneable, IPublicClone {
+    @DatabaseField(generatedId = true, columnName = INote.FILELD_ID, dataType = DataType.INTEGER)
     override var id: Int = GlobalDef.INVALID_ID
 
-    @DatabaseField(columnName = FIELD_USR, foreign = true, foreignColumnName = UsrItem.FIELD_ID, canBeNull = false)
+    @DatabaseField(columnName = INote.FIELD_USR, foreign = true, foreignColumnName = UsrItem.FIELD_ID, canBeNull = false)
     override var usr: UsrItem? = null
 
     @DatabaseField(columnName = FIELD_BUDGET, foreign = true, foreignColumnName = BudgetItem.FIELD_ID)
-    override var budget: BudgetItem? = null
+    var budget: BudgetItem? = null
 
-    @DatabaseField(columnName = "info", canBeNull = false, dataType = DataType.STRING)
+    @DatabaseField(columnName = INote.FIELD_INFO, canBeNull = false, dataType = DataType.STRING)
     override var info: String = ""
 
-    @DatabaseField(columnName = "note", dataType = DataType.STRING)
+    @DatabaseField(columnName = INote.FIELD_NOTE, dataType = DataType.STRING)
     override var note: String? = null
 
-    @DatabaseField(columnName = "val", dataType = DataType.BIG_DECIMAL)
+    @DatabaseField(columnName = INote.FIELD_AMOUNT, dataType = DataType.BIG_DECIMAL)
     override var amount: BigDecimal = BigDecimal.ZERO
-        set(newAmount) {
-            field = newAmount
-            valToStr = field.toMoneyStr()
-        }
 
-    @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
+    @DatabaseField(columnName = INote.FIELD_TS, dataType = DataType.TIME_STAMP)
     override var ts: Timestamp = Timestamp(0)
-        set(tsVal) {
-            field = tsVal
-            tsToStr = field.toString()
-        }
+
+    /// IImage START
+    override val holderId
+        get() = id
+
+    override val holderType
+        get() = noteType()
 
     override var images: LinkedList<NoteImageItem> = LinkedList()
         set(value) {
             field.clear()
             field.addAll(value)
         }
+    /// IImage END
 
-    override var valToStr: String = ""
-        get() {
-            if(field.isEmpty())  field = amount.toMoneyStr()
-            return field
-        }
-        private set(value) {
-            field = value
-        }
-
-    override var tsToStr: String = ""
-        get() {
-            if(field.isEmpty())  field = ts.toString()
-            return field
-        }
-        private set(value) {
-            field = value
-        }
-
-    override val isPayNote: Boolean
-        get() = true
-
-    override val isIncomeNote: Boolean
-        get() = false
-
-
-    override fun toPayNote(): PayNoteItem {
-        return this
-    }
-
-    override fun toIncomeNote(): IncomeNoteItem? {
-        return null
-    }
+    override fun noteType(): String = GlobalDef.STR_RECORD_PAY
 
     override fun toString(): String {
         return String.format(Locale.CHINA, "info : %s, amount : %f, timestamp : %s\nnote : %s", info, amount, ts.toString(), note)
@@ -116,8 +83,6 @@ class PayNoteItem(override var tag: Any? = null) : INote, IDBRow<Int>, Cloneable
         obj.note = this.note
         obj.ts = this.ts
 
-        obj.valToStr = this.valToStr
-        obj.tsToStr = this.tsToStr
         obj.images = this.images
         return obj
     }
@@ -127,7 +92,6 @@ class PayNoteItem(override var tag: Any? = null) : INote, IDBRow<Int>, Cloneable
     }
 
     companion object {
-        const val FIELD_USR = "usr_id"
         const val FIELD_BUDGET = "budget_id"
     }
 }

@@ -31,17 +31,13 @@ class RecordTypeItem : IDBRow<Int> {
      * 辅助注释信息
      */
     @DatabaseField(columnName = "note", dataType = DataType.STRING)
-    var note: String? = null
+    var note: String = ""
 
     companion object {
         const val FIELD_ITEM_TYPE = "itemType"
 
         const val DEF_INCOME = "income"
         const val DEF_PAY = "pay"
-    }
-
-    init {
-        note = ""
     }
 
     override fun getID(): Int {

@@ -10,6 +10,8 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.event.SelectDays
+import wxm.KeepAccount.item.IncomeNoteItem
+import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.data.report.page.DayReportChart
 import wxm.KeepAccount.ui.data.report.page.DayReportWebView
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
@@ -19,8 +21,8 @@ import wxm.androidutil.improve.let1
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.ui.frg.FrgSupportSwitcher
-import wxm.androidutil.util.UtilFun
 import wxm.androidutil.ui.view.EventHelper
+import wxm.androidutil.util.UtilFun
 import java.math.BigDecimal
 import java.util.*
 
@@ -76,12 +78,12 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
                     intArrayOf(R.id.iv_switch, R.id.tv_select_days),
                     View.OnClickListener { v ->
                         when (v.id) {
-                            // switch report type
+                        // switch report type
                             R.id.iv_switch -> {
                                 switchPage()
                             }
 
-                            // reset start-end day
+                        // reset start-end day
                             R.id.tv_select_days -> {
                                 val dlgDay = DlgSelectReportDays()
                                 dlgDay.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
@@ -111,21 +113,21 @@ class FrgReportDay : FrgSupportSwitcher<FrgSupportBaseAdv>() {
                     {
                         val dStart = frg.mASParaLoad!![0]
                         val dEnd = frg.mASParaLoad!![1]
-                        param[0] = String.format(Locale.CHINA,
-                                "%s - %s", dStart, dEnd)
                         val lsNote = NoteDataHelper.getNotesBetweenDays(dStart, dEnd)
 
                         var mBDTotalPay = BigDecimal.ZERO
                         var mBDTotalIncome = BigDecimal.ZERO
-                        for (ls_n in lsNote.values) {
-                            for (id in ls_n!!) {
-                                if (id.isPayNote)
-                                    mBDTotalPay = mBDTotalPay.add(id.amount)
-                                else
-                                    mBDTotalIncome = mBDTotalIncome.add(id.amount)
+                        lsNote.values.forEach {
+                            it.forEach {
+                                when (it) {
+                                    is PayNoteItem -> mBDTotalPay = mBDTotalPay.add(it.amount)
+                                    is IncomeNoteItem -> mBDTotalIncome = mBDTotalIncome.add(it.amount)
+                                }
                             }
                         }
 
+
+                        param[0] = String.format(Locale.CHINA, "%s - %s", dStart, dEnd)
                         param[1] = mBDTotalPay
                         param[2] = mBDTotalIncome
                     },

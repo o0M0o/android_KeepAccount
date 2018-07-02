@@ -89,4 +89,8 @@ class RemindDBUtility : DBUtilityBase<RemindItem, Int>() {
     override fun onDataRemove(dd: List<Int>) {
         EventBus.getDefault().post(DBDataChangeEvent())
     }
+
+    companion object {
+        val instance = RemindDBUtility()
+    }
 }

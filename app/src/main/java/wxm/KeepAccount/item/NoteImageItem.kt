@@ -1,5 +1,7 @@
 package wxm.KeepAccount.item
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.j256.ormlite.field.DataType
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
@@ -14,7 +16,8 @@ import wxm.androidutil.db.IDBRow
  * Created by WangXM on 2016/8/5.
  */
 @DatabaseTable(tableName = "tbNoteImage")
-class NoteImageItem : IDBRow<Int>, Cloneable, IPublicClone {
+class NoteImageItem()
+    : IDBRow<Int>, Cloneable, IPublicClone, Parcelable {
     @DatabaseField(generatedId = true, columnName = FIELD_ID, dataType = DataType.INTEGER)
     var id: Int = GlobalDef.INVALID_ID
 
@@ -29,6 +32,14 @@ class NoteImageItem : IDBRow<Int>, Cloneable, IPublicClone {
 
     @DatabaseField(columnName = FIELD_STATUS, dataType = DataType.INTEGER)
     var status: Int = STATUS_USE
+
+    constructor(parcel: Parcel) : this() {
+        id = parcel.readInt()
+        imageType = parcel.readString()
+        foreignID = parcel.readInt()
+        imagePath = parcel.readString()
+        status = parcel.readInt()
+    }
 
     override fun getID(): Int {
         return id
@@ -54,6 +65,18 @@ class NoteImageItem : IDBRow<Int>, Cloneable, IPublicClone {
         return clone()
     }
 
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(imageType)
+        parcel.writeInt(foreignID)
+        parcel.writeString(imagePath)
+        parcel.writeInt(status)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
     companion object {
         const val FIELD_ID = "_id"
         const val FIELD_FOREIGN_ID = "foreignID"
@@ -63,5 +86,15 @@ class NoteImageItem : IDBRow<Int>, Cloneable, IPublicClone {
 
         const val STATUS_USE = 1
         const val STATUS_NOT_USE = 0
+
+        @JvmField val CREATOR = object : Parcelable.Creator<NoteImageItem> {
+            override fun createFromParcel(parcel: Parcel): NoteImageItem {
+                return NoteImageItem(parcel)
+            }
+
+            override fun newArray(size: Int): Array<NoteImageItem?> {
+                return arrayOfNulls(size)
+            }
+        }
     }
 }

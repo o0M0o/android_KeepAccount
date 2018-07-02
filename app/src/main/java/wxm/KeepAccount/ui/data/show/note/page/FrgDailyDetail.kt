@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.show.note
+package wxm.KeepAccount.ui.data.show.note.page
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -17,17 +17,18 @@ import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.db.DBDataChangeEvent
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.improve.toMoneyStr
 import wxm.androidutil.improve.let1
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
+import wxm.KeepAccount.ui.data.show.note.ACDailyDetail
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
-import wxm.KeepAccount.ui.utility.AdapterNoteDetail
+import wxm.KeepAccount.ui.utility.AdapterNoteDailyDetail
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.ui.view.EventHelper
 import wxm.androidutil.util.UtilFun
-import wxm.androidutil.improve.forObj
 import wxm.androidutil.time.getDayInWeekStr
 import java.text.ParseException
 import java.util.*
@@ -196,21 +197,12 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
      */
     private fun loadDayInfo() {
         HashMap<String, Any>().let {
-            NoteDataHelper.getInfoByDay(mSZHotDay!!).forObj(
-                    { t ->
+            NoteDataHelper.getInfoByDay(mSZHotDay!!).let1 { t ->
                         it[ValueShow.ATTR_PAY_COUNT] = t.payCount.toString()
-                        it[ValueShow.ATTR_PAY_AMOUNT] = t.szPayAmount
+                        it[ValueShow.ATTR_PAY_AMOUNT] = t.payAmount.toMoneyStr()
                         it[ValueShow.ATTR_INCOME_COUNT] = t.incomeCount.toString()
-                        it[ValueShow.ATTR_INCOME_AMOUNT] = t.szIncomeAmount
-                        Unit
-                    },
-                    {
-                        it[ValueShow.ATTR_PAY_COUNT] = "0"
-                        it[ValueShow.ATTR_PAY_AMOUNT] = "0.00"
-                        it[ValueShow.ATTR_INCOME_COUNT] = "0"
-                        it[ValueShow.ATTR_INCOME_AMOUNT] = "0.00"
-                        Unit
-                    })
+                        it[ValueShow.ATTR_INCOME_AMOUNT] = t.incomeAmount.toMoneyStr()
+                    }
 
             mVSDataUI.adjustAttribute(it)
         }
@@ -223,11 +215,11 @@ class FrgDailyDetail : FrgSupportBaseAdv() {
         val para = LinkedList<HashMap<String, INote>>()
         mLSDayContents!!.let {
             it.sortedBy { it.ts }.forEach {
-                para.add(HashMap<String, INote>().apply { put(AdapterNoteDetail.K_NODE, it) })
+                para.add(HashMap<String, INote>().apply { put(AdapterNoteDailyDetail.K_NODE, it) })
             }
         }
 
-        mLVBody.adapter = AdapterNoteDetail(activity!!, para)
+        mLVBody.adapter = AdapterNoteDailyDetail(activity!!, para)
     }
 
     /**

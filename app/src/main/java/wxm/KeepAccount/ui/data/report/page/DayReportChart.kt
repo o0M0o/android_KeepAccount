@@ -18,9 +18,11 @@ import lecho.lib.hellocharts.view.PieChartView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
-import wxm.KeepAccount.item.INote
-import wxm.KeepAccount.ui.data.report.ACReport
 import wxm.KeepAccount.event.SelectDays
+import wxm.KeepAccount.item.INote
+import wxm.KeepAccount.item.IncomeNoteItem
+import wxm.KeepAccount.item.PayNoteItem
+import wxm.KeepAccount.ui.data.report.ACReport
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
@@ -132,7 +134,7 @@ class DayReportChart : FrgSupportBaseAdv() {
             ToolUtil.runInBackground(this.activity!!,
                     {
                         val hmNote = NoteDataHelper.getNotesBetweenDays(it[0], it[1])
-                        hmNote.values.iterator().forEach { mLLOrgData.addAll(it!!) }
+                        hmNote.values.iterator().forEach { mLLOrgData.addAll(it) }
                         generateData(cvData)
                     },
                     {
@@ -147,8 +149,8 @@ class DayReportChart : FrgSupportBaseAdv() {
     private fun generateData(pd: PieChartData) {
         class ChartItem {
             var mType: Int = 0
-            var mSZName: String? = null
-            var mBDVal: BigDecimal? = null
+            var mSZName: String = ""
+            var mBDVal: BigDecimal = BigDecimal.ZERO
 
             /**
              * update list item
@@ -159,7 +161,7 @@ class DayReportChart : FrgSupportBaseAdv() {
                 for (ci in lsData) {
                     if (ci.mSZName == mSZName && ci.mType == mType) {
                         bf = true
-                        ci.mBDVal = ci.mBDVal!!.add(mBDVal)
+                        ci.mBDVal = ci.mBDVal.add(mBDVal)
                         break
                     }
                 }
@@ -174,29 +176,24 @@ class DayReportChart : FrgSupportBaseAdv() {
         val bPay = mTBPay.isChecked
         val bIncome = mTBIncome.isChecked
         val lsCI = LinkedList<ChartItem>()
-        for (data in mLLOrgData) {
-            if (data.isPayNote && !bPay)
-                continue
+        mLLOrgData.forEach {
+            if ((it is PayNoteItem && bPay) || (it is IncomeNoteItem && bIncome)) {
+                val ci = ChartItem()
+                ci.mBDVal = it.amount
+                ci.mType = if (it is PayNoteItem) PAY_ITEM else INCOME_ITEM
+                ci.mSZName = it.info
 
-            if (data.isIncomeNote && !bIncome)
-                continue
-
-            val ci = ChartItem()
-            ci.mBDVal = data.amount
-            ci.mType = if (data.isPayNote) PAY_ITEM else INCOME_ITEM
-            ci.mSZName = data.info
-
-            ci.updateList(lsCI)
+                ci.updateList(lsCI)
+            }
         }
 
         // create values
         val values = ArrayList<SliceValue>()
-        for (ci in lsCI) {
-
-            val sliceValue = SliceValue(ci.mBDVal!!.toFloat(), ChartUtils.pickColor())
+        lsCI.forEach {
+            val sliceValue = SliceValue(it.mBDVal.toFloat(), ChartUtils.pickColor())
             //sliceValue.setLabel((ci.mType == ChartItem.PAY_ITEM ? "p " : "i ")
             //                        + ci.mSZName);
-            sliceValue.setLabel(ci.mSZName!!)
+            sliceValue.setLabel(it.mSZName)
             values.add(sliceValue)
         }
 

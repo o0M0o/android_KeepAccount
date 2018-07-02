@@ -41,4 +41,8 @@ class SmsParseDBUtility : DBUtilityBase<SmsParseItem, Int>() {
 
         return ret[0].parseStatus
     }
+
+    companion object {
+        val instance = SmsParseDBUtility()
+    }
 }

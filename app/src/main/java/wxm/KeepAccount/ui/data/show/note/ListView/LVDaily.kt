@@ -9,8 +9,10 @@ import android.widget.CheckBox
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.PayIncomeDBUtility
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.event.FilterShow
+import wxm.KeepAccount.improve.toMoneyStr
 import wxm.androidutil.improve.let1
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
@@ -64,10 +66,10 @@ class LVDaily : LVBase() {
             val szDay = tag.substring(8, 10).removePrefix("0")
             val item = MainAdapterItem(tag.substring(0, 4), szMonth, szDay)
 
-            NoteDataHelper.getInfoByDay(tag)?.let {
+            NoteDataHelper.getInfoByDay(tag).let {
                 item.dayInWeek = ToolUtil.stringToCalendar(tag).getDayInWeekStr()
-                item.dayInfo = RecordDetail(it.payCount.toString(), it.szPayAmount,
-                        it.incomeCount.toString(), it.szIncomeAmount)
+                item.dayInfo = RecordDetail(it.payCount.toString(), it.payAmount.toMoneyStr(),
+                        it.incomeCount.toString(), it.incomeAmount.toMoneyStr())
 
                 item.amount = String.format(Locale.CHINA,
                         if (0 < it.balance.toFloat()) "+ %.02f" else "%.02f", it.balance)
@@ -247,7 +249,7 @@ class LVDaily : LVBase() {
                 }
             }
 
-            AppUtil.payIncomeUtility.deleteNotes(ls)
+            PayIncomeDBUtility.instance.deleteNotes(ls)
         }
     }
     /// END PRIVATE

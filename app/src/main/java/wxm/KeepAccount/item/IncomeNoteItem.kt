@@ -18,75 +18,41 @@ import java.util.*
  * Created by WangXM on 2016/5/3.
  */
 @DatabaseTable(tableName = "tbIncomeNote")
-class IncomeNoteItem(override var tag: Any? = null) : INote, IDBRow<Int>, Cloneable, IPublicClone {
-    @DatabaseField(generatedId = true, columnName = "_id", dataType = DataType.INTEGER)
+class IncomeNoteItem(override var tag: Any? = null) :
+        INote, IImage, IDBRow<Int>, Cloneable, IPublicClone {
+    @DatabaseField(generatedId = true, columnName = INote.FILELD_ID, dataType = DataType.INTEGER)
     override var id: Int = GlobalDef.INVALID_ID
 
-    @DatabaseField(columnName = FIELD_USR, foreign = true, foreignColumnName = UsrItem.FIELD_ID, canBeNull = false)
+    @DatabaseField(columnName = INote.FIELD_USR, foreign = true, foreignColumnName = UsrItem.FIELD_ID, canBeNull = false)
     override var usr: UsrItem? = null
 
-    //@DatabaseField(columnName = "budget_id", foreign = true, foreignColumnName = BudgetItem.FIELD_ID)
-    override var budget: BudgetItem? = null
-        get() = null
-
-    @DatabaseField(columnName = "info", canBeNull = false, dataType = DataType.STRING)
+    @DatabaseField(columnName = INote.FIELD_INFO, canBeNull = false, dataType = DataType.STRING)
     override var info: String = ""
 
-    @DatabaseField(columnName = "note", dataType = DataType.STRING)
+    @DatabaseField(columnName = INote.FIELD_NOTE, dataType = DataType.STRING)
     override var note: String? = null
 
-    @DatabaseField(columnName = "val", dataType = DataType.BIG_DECIMAL)
+    @DatabaseField(columnName = INote.FIELD_AMOUNT, dataType = DataType.BIG_DECIMAL)
     override var amount: BigDecimal = BigDecimal.ZERO
-        set(newAmount) {
-            field = newAmount
-            valToStr = field.toMoneyStr()
-        }
 
-    @DatabaseField(columnName = "ts", dataType = DataType.TIME_STAMP)
+    @DatabaseField(columnName = INote.FIELD_TS, dataType = DataType.TIME_STAMP)
     override var ts: Timestamp = Timestamp(0)
-        set(tsVal) {
-            field = tsVal
-            tsToStr = field.toString()
-        }
+
+    /// IImage START
+    override val holderId
+        get() = id
+
+    override val holderType
+        get() = noteType()
 
     override var images: LinkedList<NoteImageItem> = LinkedList()
         set(value) {
             field.clear()
             field.addAll(value)
         }
+    /// IImage END
 
-    override var valToStr: String = ""
-        get() {
-            if(field.isEmpty())  field = amount.toMoneyStr()
-            return field
-        }
-        private set(value) {
-            field = value
-        }
-
-    override var tsToStr: String = ""
-        get() {
-            if(field.isEmpty())  field = ts.toString()
-            return field
-        }
-        private set(value) {
-            field = value
-        }
-
-    override val isPayNote: Boolean
-        get() = false
-
-    override val isIncomeNote: Boolean
-        get() = true
-
-    override fun toPayNote(): PayNoteItem? {
-        return null
-    }
-
-    override fun toIncomeNote(): IncomeNoteItem? {
-        return this
-    }
-
+    override fun noteType(): String = GlobalDef.STR_RECORD_INCOME
 
     override fun toString(): String {
         return String.format(Locale.CHINA,
@@ -110,27 +76,17 @@ class IncomeNoteItem(override var tag: Any? = null) : INote, IDBRow<Int>, Clonea
             obj.usr = it.publicClone() as UsrItem
         }
 
-        this.budget?.let {
-            obj.budget = it.publicClone() as BudgetItem
-        }
-
         obj.amount = this.amount
         obj.info = this.info
         obj.note = this.note
         obj.ts = this.ts
 
-        obj.valToStr = this.valToStr
-        obj.tsToStr = this.tsToStr
         obj.images = this.images
         return obj
     }
 
     override fun publicClone(): Any {
         return clone()
-    }
-
-    companion object {
-        const val FIELD_USR = "usr_id"
     }
 }
 

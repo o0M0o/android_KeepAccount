@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/mi_switch"
+        android:icon="@drawable/ic_switch_1"
+        android:orderInCategory="900"
+        android:title="@string/cn_edit"
+        app:showAsAction="ifRoom|withText" />
+
+    <item
+        android:id="@+id/mi_cancel"
+        android:icon="@drawable/ic_cancel"
+        android:orderInCategory="901"
+        android:title="@string/cn_cancel"
+        app:showAsAction="ifRoom" />
+</menu>

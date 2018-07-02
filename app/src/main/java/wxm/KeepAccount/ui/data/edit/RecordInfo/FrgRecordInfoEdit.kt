@@ -1,24 +1,26 @@
 package wxm.KeepAccount.ui.data.edit.RecordInfo
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
-import android.view.ViewGroup
 import android.widget.GridView
+import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.SimpleAdapter
 import android.widget.TextView
 import kotterknife.bindView
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.RecordTypeDBUtility
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.RecordTypeItem
 import wxm.KeepAccount.ui.dialog.DlgRecordInfo
-import wxm.KeepAccount.utility.AppUtil
 import wxm.androidutil.app.AppBase
+import wxm.androidutil.improve.let1
+import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
+import wxm.androidutil.ui.moreAdapter.MoreAdapter
+import wxm.androidutil.ui.view.ViewHolder
 import wxm.androidutil.util.UtilFun
 import java.util.*
 
@@ -28,24 +30,20 @@ import java.util.*
  */
 class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
     // data for view
-     var mEditType: String? = null
+    var mEditType: String? = null
         set(value) {
             field = UtilFun.cast_t<String>(value)
         }
 
     private var mCurType: String? = null
     private var mLHMData: ArrayList<HashMap<String, String>> = ArrayList()
-    private var mGVAdapter: GVTypeAdapter? = null
 
     val curData: Any?
         get() {
             var ri: RecordTypeItem? = null
             if (!UtilFun.StringIsNullOrEmpty(mCurType)) {
-                for (hm in mLHMData) {
-                    if (hm[KEY_NAME] == mCurType) {
-                        ri = AppUtil.recordTypeUtility.getData(Integer.valueOf(hm[KEY_ID]))
-                        break
-                    }
+                mLHMData.find { it[KEY_NAME] == mCurType }?.let1 {
+                    ri = RecordTypeDBUtility.instance.getData(Integer.valueOf(it[KEY_ID]))
                 }
             }
 
@@ -53,25 +51,17 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
         }
 
     // ui component for view
-    private val mTVNote: TextView by bindView(R.id.tv_note)
-    private val mRLActAdd: RelativeLayout by bindView(R.id.rl_add)
-    private val mRLActMinus: RelativeLayout by bindView(R.id.rl_minus)
-    private val mRLActPencil: RelativeLayout by bindView(R.id.rl_pencil)
-    private val mRLActAccept: RelativeLayout by bindView(R.id.rl_accept)
-    private val mRLActReject: RelativeLayout by bindView(R.id.rl_reject)
+    private val mRLActAdd: ImageView by bindView(R.id.iv_add)
+    private val mRLActMinus: ImageView by bindView(R.id.iv_minus)
+    private val mRLActPencil: ImageView by bindView(R.id.iv_edit)
+    private val mRLActAccept: ImageView by bindView(R.id.iv_accept)
+    private val mRLActReject: ImageView by bindView(R.id.iv_reject)
     private val mGVHolder: GridView by bindView(R.id.gv_record_info)
 
-
-    override fun isUseEventBus(): Boolean {
-        return false
-    }
-
-    override fun getLayoutID(): Int {
-        return R.layout.vw_edit_record_info
-    }
+    override fun getLayoutID(): Int = R.layout.vw_edit_record_info
 
     override fun initUI(savedInstanceState: Bundle?) {
-        if(null == savedInstanceState) {
+        if (null == savedInstanceState) {
             mRLActAdd.setOnClickListener(this)
             mRLActMinus.setOnClickListener(this)
             mRLActAccept.setOnClickListener(this)
@@ -89,10 +79,6 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
             return
 
         // init gv
-        mLHMData.clear()
-        mGVAdapter = GVTypeAdapter(activity!!, mLHMData,
-                arrayOf(KEY_NAME), intArrayOf(R.id.tv_type_name))
-        mGVHolder.adapter = mGVAdapter
         mGVHolder.setOnItemClickListener { _, _, position, _ -> onGVItemClick(position) }
         loadInfo()
     }
@@ -100,85 +86,71 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
     override fun onClick(v: View) {
         val vid = v.id
         when (vid) {
-            R.id.rl_pencil, R.id.rl_add -> {
-                val dp = DlgRecordInfo()
-                dp.setInitDate(if (R.id.rl_pencil == vid) curData as RecordTypeItem else null)
-                dp.setRecordType(mEditType!!)
-                dp.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
-                    override fun onDialogPositiveResult(dialog: DialogFragment) {
-                        val curDp = UtilFun.cast_t<DlgRecordInfo>(dialog)
-                        val ri = curDp.curDate
-                        if (null != ri) {
-                            if (R.id.rl_add == vid)
-                                AppUtil.recordTypeUtility.createData(ri)
-                            else
-                                AppUtil.recordTypeUtility.modifyData(ri)
-                            loadInfo()
+            R.id.iv_edit, R.id.iv_add-> {
+                DlgRecordInfo().let1 { dp ->
+                    dp.setInitDate(if (R.id.iv_edit == vid) curData as RecordTypeItem else null)
+                    dp.setRecordType(mEditType!!)
+                    dp.addDialogListener(object : DlgOKOrNOBase.DialogResultListener {
+                        override fun onDialogPositiveResult(dialog: DialogFragment) {
+                            (dialog as DlgRecordInfo).curDate?.let1 {
+                                if (R.id.iv_add == vid)
+                                    RecordTypeDBUtility.instance.createData(it)
+                                else
+                                    RecordTypeDBUtility.instance.modifyData(it)
+                                loadInfo()
+                            }
                         }
-                    }
 
-                    override fun onDialogNegativeResult(dialog: DialogFragment) {}
-                })
+                        override fun onDialogNegativeResult(dialog: DialogFragment) {}
+                    })
 
-                dp.show(fragmentManager, "添加记录信息")
+                    dp.show(fragmentManager, "添加记录信息")
+                }
             }
 
-            R.id.rl_minus -> {
+            R.id.iv_minus -> {
                 updateAct(SELECTED_MINUS)
                 mCurType = ""
-                for (hm in mLHMData) {
-                    hm[KEY_SELECTED] = VAL_NOT_SELECTED
+                mLHMData.forEach {
+                    it[KEY_SELECTED] = VAL_NOT_SELECTED
                 }
 
                 mRLActAccept.visibility = View.INVISIBLE
-                mTVNote.text = if (mRLActMinus.isSelected) "请选择待删除项" else ""
-                mGVAdapter!!.notifyDataSetChanged()
+                (mGVHolder.adapter as GVTypeAdapter).notifyDataSetChanged()
             }
 
-            R.id.rl_accept -> {
+            R.id.iv_accept -> {
                 //for gv
-                val lsId = LinkedList<Int>()
-                for (hm in mLHMData) {
-                    if (hm[KEY_SELECTED] == VAL_SELECTED) {
-                        lsId.add(Integer.valueOf(hm[KEY_ID]))
+                LinkedList<Int>().apply {
+                    mLHMData.filter { it[KEY_SELECTED] == VAL_SELECTED }
+                            .map { add(Integer.valueOf(it[KEY_ID])) }
+                }.let1 {lsId ->
+                    if (lsId.isNotEmpty()) {
+                        DlgAlert.showAlert(context!!, R.string.dlg_warn, "请确认是否删除数据!") {
+                            it.setPositiveButton("确认") { _, _ ->
+                                RecordTypeDBUtility.instance.removeDatas(lsId)
+
+                                loadInfo()
+                                updateAct(SELECTED_ACCEPT)
+                            }
+
+                            it.setNegativeButton("取消") { _, _ -> }
+                        }
+                    } else {
+                        loadInfo()
+                        updateAct(SELECTED_ACCEPT)
                     }
                 }
-
-                if (0 < lsId.size) {
-                    val dlg = AlertDialog.Builder(activity)
-                            .setTitle("警告")
-                            .setMessage("请确认是否删除数据!")
-                            .setPositiveButton("确认",
-                                    { _, _ ->
-                                        for (id in lsId) {
-                                            AppUtil.recordTypeUtility.removeData(id)
-                                        }
-
-                                        mTVNote.text = ""
-                                        loadInfo()
-                                        updateAct(SELECTED_ACCEPT)
-                                    })
-                            .setNegativeButton("取消", { _, _ -> })
-                            .create()
-
-                    dlg.show()
-                } else {
-                    mTVNote.text = ""
-                    loadInfo()
-                    updateAct(SELECTED_ACCEPT)
-                }
             }
 
-            R.id.rl_reject -> {
+            R.id.iv_reject -> {
                 // for ui
                 updateAct(SELECTED_REJECT)
 
                 // for gv
-                for (hm in mLHMData) {
-                    hm[KEY_SELECTED] = VAL_NOT_SELECTED
-                }
-                mTVNote.text = ""
-                mGVAdapter!!.notifyDataSetChanged()
+                mLHMData.map { it[KEY_SELECTED] = VAL_NOT_SELECTED }
+
+                (mGVHolder.adapter as GVTypeAdapter).notifyDataSetChanged()
             }
         }
     }
@@ -188,25 +160,27 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
      */
     private fun loadInfo() {
         mLHMData.clear()
-        val alType = if (mEditType == GlobalDef.STR_RECORD_PAY) {
-            ArrayList(AppUtil.recordTypeUtility.allPayItem)
+        if (mEditType == GlobalDef.STR_RECORD_PAY) {
+            ArrayList(RecordTypeDBUtility.instance.allPayItem)
         } else {
-            ArrayList(AppUtil.recordTypeUtility.allIncomeItem)
+            ArrayList(RecordTypeDBUtility.instance.allIncomeItem)
+        }.let1 {
+            it.sortWith(Comparator { o1, o2 ->
+                o1.type.compareTo(o2.type)
+            })
+
+            mLHMData.addAll(it.map {
+                HashMap<String, String>().apply {
+                    put(KEY_NAME, it.type)
+                    put(KEY_NOTE, it.note)
+                    put(KEY_SELECTED, VAL_NOT_SELECTED)
+                    put(KEY_ID, it._id.toString())
+                }
+            })
         }
 
-        alType.sortWith(Comparator { o1, o2 -> o1.type.compareTo(o2.type) })
-
-        for (ri in alType) {
-            val hmd = HashMap<String, String>()
-            hmd[KEY_NAME] = ri.type
-            ri.note?.let { hmd[KEY_NOTE] = it }
-            hmd[KEY_SELECTED] = VAL_NOT_SELECTED
-            hmd[KEY_ID] = ri._id.toString()
-
-            mLHMData.add(hmd)
-        }
-
-        mGVAdapter!!.notifyDataSetChanged()
+        mGVHolder.adapter = GVTypeAdapter(activity!!, mLHMData,
+                arrayOf(KEY_NAME, KEY_NOTE), intArrayOf(R.id.tv_type_name, R.id.tv_type_note))
     }
 
     /**
@@ -217,8 +191,14 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
         when (type) {
             SELECTED_NONE -> {
                 mRLActPencil.visibility = View.INVISIBLE
+                mRLActAdd.setBackgroundColor(mCLNotSelected)
+
                 mRLActAdd.visibility = View.VISIBLE
+                mRLActAdd.setBackgroundColor(mCLNotSelected)
+
                 mRLActMinus.visibility = View.VISIBLE
+                mRLActMinus.setBackgroundColor(mCLNotSelected)
+
                 mRLActAccept.visibility = View.INVISIBLE
                 mRLActReject.visibility = View.INVISIBLE
             }
@@ -255,6 +235,8 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
                 mRLActAdd.visibility = View.VISIBLE
                 mRLActAccept.visibility = View.INVISIBLE
                 mRLActReject.visibility = View.INVISIBLE
+
+                mRLActMinus.isSelected = false
                 mRLActMinus.setBackgroundColor(mCLNotSelected)
             }
         }
@@ -265,44 +247,38 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
      * @param position      current click position
      */
     private fun onGVItemClick(position: Int) {
+        val hm = mLHMData[position]
         if (mRLActMinus.isSelected) {
-            val hm = mLHMData[position]
-            val oldSel = hm[KEY_SELECTED]
-            hm[KEY_SELECTED] = if (oldSel == VAL_SELECTED)
+            hm[KEY_SELECTED] = if (hm[KEY_SELECTED] == VAL_SELECTED)
                 VAL_NOT_SELECTED
             else
                 VAL_SELECTED
 
-            val iSel = mLHMData.count { it[KEY_SELECTED] == VAL_SELECTED }
-            mRLActAccept.visibility = if (0 == iSel) View.INVISIBLE else View.VISIBLE
-            mTVNote.text = String.format(Locale.CHINA, "已选择%d项待删除", iSel)
-            mGVAdapter!!.notifyDataSetChanged()
+            mRLActAccept.visibility = if (0 == mLHMData.count { it[KEY_SELECTED] == VAL_SELECTED })
+                View.INVISIBLE else View.VISIBLE
+
+            (mGVHolder.adapter as GVTypeAdapter).notifyDataSetChanged()
         } else {
-            val tvStr = mLHMData[position][KEY_NAME]
-            for (hm in mLHMData) {
-                if (hm[KEY_NAME] == tvStr) {
-                    if (hm[KEY_SELECTED] == VAL_NOT_SELECTED) {
-                        hm[KEY_SELECTED] = VAL_SELECTED
-                        mTVNote.text = if (UtilFun.StringIsNullOrEmpty(hm[KEY_NOTE]))
-                            ""
-                        else
-                            hm[KEY_NOTE]
+            val tvStr = hm[KEY_NAME]
+            mLHMData.forEach {
+                if (it[KEY_NAME] == tvStr) {
+                    if (it[KEY_SELECTED] == VAL_NOT_SELECTED) {
+                        it[KEY_SELECTED] = VAL_SELECTED
 
                         mRLActPencil.visibility = View.VISIBLE
                         mCurType = tvStr
                     } else {
-                        hm[KEY_SELECTED] = VAL_NOT_SELECTED
-                        mTVNote.text = ""
+                        it[KEY_SELECTED] = VAL_NOT_SELECTED
 
                         mRLActPencil.visibility = View.INVISIBLE
                         mCurType = ""
                     }
                 } else {
-                    hm[KEY_SELECTED] = VAL_NOT_SELECTED
+                    it[KEY_SELECTED] = VAL_NOT_SELECTED
                 }
             }
 
-            mGVAdapter!!.notifyDataSetChanged()
+            (mGVHolder.adapter as GVTypeAdapter).notifyDataSetChanged()
         }
     }
 
@@ -310,30 +286,11 @@ class FrgRecordInfoEdit : FrgSupportBaseAdv(), View.OnClickListener {
      * adapter for gridview
      */
     inner class GVTypeAdapter
-            internal constructor(context: Context, data: List<Map<String, *>>, from: Array<String>, to: IntArray)
-            : SimpleAdapter(context, data, R.layout.gi_record_type, from, to) {
-
-        override fun getViewTypeCount(): Int {
-            val orgCount = count
-            return if (orgCount < 1) 1 else orgCount
-        }
-
-        override fun getItemViewType(position: Int): Int {
-            return position
-        }
-
-        override fun getView(position: Int, view: View?, arg2: ViewGroup?): View? {
-            val v = super.getView(position, view, arg2)
-            if (null != v) {
-                val hm = mLHMData[position]
-                val curCL = if (hm[KEY_SELECTED] == VAL_SELECTED)
-                    mCLSelected
-                else
-                    mCLNotSelected
-                v.setBackgroundColor(curCL)
-            }
-
-            return v
+    internal constructor(context: Context, data: List<Map<String, *>>, from: Array<String?>, to: IntArray)
+        : MoreAdapter(context, data, R.layout.gi_record_type, from, to) {
+        override fun loadView(pos: Int, vhHolder: ViewHolder) {
+            vhHolder.convertView.setBackgroundColor(if (mLHMData[pos][KEY_SELECTED] == VAL_SELECTED)
+                mCLSelected else mCLNotSelected)
         }
     }
 

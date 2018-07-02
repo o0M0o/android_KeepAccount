@@ -10,27 +10,24 @@ import android.support.v4.app.DialogFragment
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ListView
 import com.theartofdev.edmodo.cropper.CropImage
 import kotterknife.bindView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
-import wxm.KeepAccount.db.NoteImageUtility
+import wxm.KeepAccount.db.PayIncomeDBUtility
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.event.PicPath
+import wxm.KeepAccount.improve.toDayHourMinuteStr
+import wxm.KeepAccount.improve.toMoneyStr
 import wxm.androidutil.improve.let1
 import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.item.NoteImageItem
-import wxm.KeepAccount.ui.base.ACBase.ACBase
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
-import wxm.KeepAccount.ui.data.edit.NoteEdit.FrgNoteEdit
-import wxm.KeepAccount.ui.data.edit.NoteEdit.page.base.IAddPicPath
-import wxm.KeepAccount.ui.data.edit.NoteEdit.page.base.PicLVAdapter
-import wxm.KeepAccount.ui.data.edit.base.FrgEditBase
+import wxm.KeepAccount.ui.base.page.*
+import wxm.KeepAccount.ui.base.page.pgUtil.refreshNoteImage
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
@@ -42,12 +39,10 @@ import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.androidutil.improve.doJudge
-import wxm.androidutil.improve.setImagePath
+import wxm.androidutil.time.CalendarUtility
+import wxm.androidutil.time.toTimestamp
 import java.lang.String.format
 import java.math.BigDecimal
-import java.sql.Timestamp
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -63,7 +58,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
     private val mLVImage: ListView by bindView(R.id.lv_pic)
     private val mIBAddImage: ImageButton by bindView(R.id.ib_add_pic)
     private var mLSImagePath = ArrayList<String>()
-    private var mIAddPicPath:IAddPicPath? = null
+    private var mIAddPicPath: IAddPicPath? = null
 
     private val mSZDefNote: String = AppBase.getString(R.string.notice_input_note)
 
@@ -149,14 +144,9 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                 val szNote = mTVNote.text.toString()
                 it.note = if (mSZDefNote == szNote) null else szNote
 
-                val szDate = mETDate.text.toString() + ":00"
-                it.ts = try {
-                    ToolUtil.stringToTimestamp(szDate)
-                } catch (ex: Exception) {
-                    Timestamp(0)
-                }
+                it.ts = ToolUtil.stringToTimestamp(mETDate.text.toString())
 
-                it.tag = mLSImagePath
+                refreshNoteImage(it, mLSImagePath)
             }
         }
     }
@@ -192,7 +182,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
     override fun loadUI(bundle: Bundle?) {
         val paraDate = arguments?.getString(GlobalDef.STR_RECORD_DATE)
         mOldIncomeNote?.let {
-            mETDate.setText(paraDate ?: it.tsToStr.substring(0, 16))
+            mETDate.setText(paraDate ?: it.ts.toDayHourMinuteStr())
             mETInfo.setText(it.info)
 
             mTVNote.paint.flags = Paint.UNDERLINE_TEXT_FLAG
@@ -200,7 +190,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                 mTVNote.text = if (UtilFun.StringIsNullOrEmpty(it)) mSZDefNote else it
             }
 
-            mETAmount.setText(it.valToStr)
+            mETAmount.setText(it.amount.toMoneyStr())
             if (it.images.isNotEmpty()) {
                 mLSImagePath.clear()
                 mLSImagePath.addAll(it.images.filter { it.status == NoteImageItem.STATUS_USE }
@@ -240,34 +230,16 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                     }
 
                     R.id.ar_et_date -> {
-                        val cd = Calendar.getInstance().apply {
-                            time = try {
-                                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).parse(mETDate.text.toString())
-                            } catch (e: ParseException) {
-                                e.printStackTrace()
-                                Date()
-                            }
+                        val cd = mETDate.text.toString().let {
+                            if (it.isEmpty())
+                                Calendar.getInstance()
+                            else
+                                CalendarUtility.YearMonthDayHourMinute.parse(it)
                         }
-                        val dt = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                            val strDate = format(Locale.CHINA, "%04d-%02d-%02d",
-                                    year, month + 1, dayOfMonth)
-
-                            val ot = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                                val tm = format(Locale.CHINA, "%s %02d:%02d",
-                                        strDate, hourOfDay, minute)
-
-                                mETDate.setText(tm)
-                                mETDate.requestFocus()
-                            }
-
-                            TimePickerDialog(context, ot,
-                                    cd.get(Calendar.HOUR_OF_DAY),
-                                    cd.get(Calendar.MINUTE), true).show()
+                        pgUtil.pickDateDlg(context!!, cd) {
+                            mETDate.setText(it.toTimestamp().toDayHourMinuteStr())
+                            mETDate.requestFocus()
                         }
-
-                        DatePickerDialog(context, dt,
-                                cd.get(Calendar.YEAR), cd.get(Calendar.MONTH),
-                                cd.get(Calendar.DAY_OF_MONTH)).show()
                     }
 
                     R.id.tv_note -> {
@@ -306,7 +278,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
         ArrayList<Map<String, String>>().apply {
             addAll(mLSImagePath.map { HashMap<String, String>().apply { put(PicLVAdapter.PIC_PATH, it) } })
         }.let1 {
-            mLVImage.adapter = PicLVAdapter(context!!,  it, true)
+            mLVImage.adapter = PicLVAdapter(context!!, it, true)
         }
     }
 
@@ -343,13 +315,11 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
         mOldIncomeNote?.let {
             val bCreate = GlobalDef.INVALID_ID == it.id
             val bRet = bCreate.doJudge(
-                    { 1 == AppUtil.payIncomeUtility.addIncomeNotes(listOf(it)) },
-                    { AppUtil.payIncomeUtility.incomeDBUtility.modifyData(it) }
+                    { 1 == PayIncomeDBUtility.instance.addIncomeNotes(listOf(it)) },
+                    { PayIncomeDBUtility.instance.incomeDBUtility.modifyData(it) }
             )
 
-            if (bRet) {
-                refreshNoteImage(it, mLSImagePath, bCreate)
-            } else {
+            if (!bRet) {
                 DlgAlert.showAlert(context!!, R.string.dlg_warn,
                         bCreate.doJudge(R.string.dlg_create_data_failure, R.string.dlg_modify_data_failure))
             }

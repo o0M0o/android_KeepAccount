@@ -4,164 +4,170 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-    android:focusable="true"
-    android:longClickable="true"
     android:orientation="vertical"
-    android:padding="4dp">
+    tools:ignore="HardcodedText">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp">
+
+        <ImageView
+            android:id="@+id/iv_left"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="36dp"
+            android:src="@drawable/ic_to_left_64dp"
+            android:tint="@color/mediumseagreen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_date_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2018/06/16"
+            android:textColor="@color/text_fit"
+            android:textSize="@dimen/text_big"
+            app:layout_constraintBottom_toTopOf="@id/tv_date_in_week"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_date_in_week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="星期一"
+            android:textColor="@color/text_fit"
+            android:textSize="@dimen/text_small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_date_range"
+            app:layout_constraintStart_toStartOf="@id/tv_date_range"
+            app:layout_constraintTop_toBottomOf="@id/tv_date_range" />
+
+        <ImageView
+            android:id="@+id/iv_right"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="36dp"
+            android:src="@drawable/ic_to_right_64dp"
+            android:tint="@color/mediumseagreen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/gl_vertical_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <TextView
+            android:id="@+id/tv_tag_income"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cn_income"
+            android:textAppearance="@style/AppTheme.Info.Title"
+            app:layout_constraintBottom_toTopOf="@id/tv_tag_pay"
+            app:layout_constraintStart_toStartOf="@id/gl_vertical_start"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/gl_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <TextView
+            android:id="@+id/tv_income"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1000"
+            android:textColor="@color/waterblue"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_tag_income"
+            app:layout_constraintStart_toStartOf="@id/gl_vertical"
+            app:layout_constraintTop_toTopOf="@id/tv_tag_income"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/tv_tag_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cn_pay"
+            android:textAppearance="@style/AppTheme.Info.Title"
+            app:layout_constraintBottom_toTopOf="@id/tv_tag_total"
+            app:layout_constraintStart_toStartOf="@id/gl_vertical_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_tag_income" />
+
+        <TextView
+            android:id="@+id/tv_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1000"
+            android:textColor="@color/red_ff725f"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_tag_pay"
+            app:layout_constraintStart_toStartOf="@id/gl_vertical"
+            app:layout_constraintTop_toTopOf="@id/tv_tag_pay" />
+
+        <TextView
+            android:id="@+id/tv_tag_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cn_total"
+            android:textAppearance="@style/AppTheme.Info.Title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/gl_vertical_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_tag_pay" />
+
+        <TextView
+            android:id="@+id/tv_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1000"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_tag_total"
+            app:layout_constraintStart_toStartOf="@id/gl_vertical"
+            app:layout_constraintTop_toTopOf="@id/tv_tag_total" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
 
         <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp"
-            tools:ignore="HardcodedText">
-
-            <ImageView
-                android:id="@+id/iv_left"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="36dp"
-                android:src="@drawable/ic_to_left_64dp"
-                android:tint="@color/mediumseagreen"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <TextView
-                android:id="@+id/tv_date_range"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2018/06/16"
-                android:textColor="@color/text_fit"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@id/tv_date_in_week"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_date_in_week"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="星期一"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/tv_date_range"
-                app:layout_constraintStart_toStartOf="@id/tv_date_range"
-                app:layout_constraintTop_toBottomOf="@id/tv_date_range" />
-
-            <ImageView
-                android:id="@+id/iv_right"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="36dp"
-                android:src="@drawable/ic_to_right_64dp"
-                android:tint="@color/mediumseagreen"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </android.support.constraint.ConstraintLayout>
-
-
-        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cl_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+            <ImageView
+                android:id="@+id/iv_look_detail"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_look_simple"
+                android:tint="@color/darkseagreen"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tb_income"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="HardcodedText">
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/gl_vertical_start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.05" />
-
-                <TextView
-                    android:id="@+id/tv_tag_income"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cn_income"
-                    android:textAppearance="@style/AppTheme.Info.Title"
-                    app:layout_constraintBottom_toTopOf="@id/tv_tag_pay"
-                    app:layout_constraintStart_toStartOf="@id/gl_vertical_start"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/gl_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.25" />
-
-                <TextView
-                    android:id="@+id/tv_income"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1000"
-                    android:textSize="16sp"
-                    android:textColor="@color/waterblue"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_tag_income"
-                    app:layout_constraintStart_toStartOf="@id/gl_vertical"
-                    app:layout_constraintTop_toTopOf="@id/tv_tag_income"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:id="@+id/tv_tag_pay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cn_pay"
-                    android:textAppearance="@style/AppTheme.Info.Title"
-                    app:layout_constraintBottom_toTopOf="@id/tv_tag_total"
-                    app:layout_constraintStart_toStartOf="@id/gl_vertical_start"
-                    app:layout_constraintTop_toBottomOf="@id/tv_tag_income" />
-
-                <TextView
-                    android:id="@+id/tv_pay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1000"
-                    android:textSize="16sp"
-                    android:textColor="@color/red_ff725f"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_tag_pay"
-                    app:layout_constraintStart_toStartOf="@id/gl_vertical"
-                    app:layout_constraintTop_toTopOf="@id/tv_tag_pay"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:id="@+id/tv_tag_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cn_total"
-                    android:textAppearance="@style/AppTheme.Info.Title"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/gl_vertical_start"
-                    app:layout_constraintTop_toBottomOf="@id/tv_tag_pay" />
-
-                <TextView
-                    android:id="@+id/tv_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1000"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_tag_total"
-                    app:layout_constraintStart_toStartOf="@id/gl_vertical"
-                    app:layout_constraintTop_toTopOf="@id/tv_tag_total"
-                    tools:ignore="HardcodedText" />
-
-            </android.support.constraint.ConstraintLayout>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ToggleButton
                 android:id="@+id/tb_income"
@@ -170,7 +176,8 @@
                 android:checked="true"
                 android:textOff="@string/cn_income"
                 android:textOn="@string/cn_income"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_small"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -181,19 +188,17 @@
                 android:checked="true"
                 android:textOff="@string/cn_pay"
                 android:textOn="@string/cn_pay"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tb_income" />
+                android:textSize="@dimen/text_small"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tb_income" />
         </android.support.constraint.ConstraintLayout>
 
-        <android.support.constraint.ConstraintLayout
+        <lecho.lib.hellocharts.view.PieChartView
+            android:id="@+id/chart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <lecho.lib.hellocharts.view.PieChartView
-                android:id="@+id/chart"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </android.support.constraint.ConstraintLayout>
-    </LinearLayout>
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_buttons" />
+    </android.support.constraint.ConstraintLayout>
 </LinearLayout>

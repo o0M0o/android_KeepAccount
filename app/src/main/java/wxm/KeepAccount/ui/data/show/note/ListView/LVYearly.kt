@@ -11,6 +11,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.event.FilterShow
+import wxm.KeepAccount.improve.toMoneyStr
 import wxm.androidutil.improve.let1
 import wxm.KeepAccount.improve.toSignalMoneyStr
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
@@ -54,8 +55,8 @@ class LVYearly : LVBase() {
         override fun getDataByTag(tag: String): YearData {
             val map = YearData(tag)
             NoteDataHelper.getInfoByYear(tag).let {
-                map.yearDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
-                        it.incomeCount.toString(), it.szIncomeAmount)
+                map.yearDetail = RecordDetail(it.payCount.toString(), it.payAmount.toMoneyStr(),
+                        it.incomeCount.toString(), it.incomeAmount.toMoneyStr())
 
                 map.amount = String.format(Locale.CHINA,
                         if (0 < it.balance.toFloat()) "+ %.02f" else "%.02f", it.balance)
@@ -79,8 +80,8 @@ class LVYearly : LVBase() {
             map.month = tag.substring(5, 7).removePrefix("0")
 
             NoteDataHelper.getInfoByMonth(tag).let {
-                map.monthDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
-                        it.incomeCount.toString(), it.szIncomeAmount)
+                map.monthDetail = RecordDetail(it.payCount.toString(), it.payAmount.toMoneyStr(),
+                        it.incomeCount.toString(), it.incomeAmount.toMoneyStr())
 
                 map.amount = it.balance.toSignalMoneyStr()
             }

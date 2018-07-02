@@ -15,6 +15,7 @@ import wxm.KeepAccount.db.DBDataChangeEvent
 import wxm.KeepAccount.event.PreferenceChange
 import wxm.KeepAccount.ui.welcome.page.pieChartStat.DayPieChart
 import wxm.KeepAccount.ui.welcome.page.pieChartStat.MonthPieChart
+import wxm.KeepAccount.ui.welcome.page.pieChartStat.WeekPieChart
 import wxm.KeepAccount.ui.welcome.page.pieChartStat.YearPieChart
 import wxm.KeepAccount.ui.welcome.page.stat.DayStat
 import wxm.KeepAccount.ui.welcome.page.stat.MonthStat
@@ -29,15 +30,16 @@ class PageStat : FrgSupportSwitcher<FrgSupportBaseAdv>(),  PageBase {
     private val mTLTab:SegmentTabLayout  by bindView(R.id.tl_stat)
 
     private val mPGDay = DayPieChart()
+    private val mPGWeek = WeekPieChart()
     private val mPGMonth = MonthPieChart()
     private val mPGYear = YearPieChart()
-
-    override fun isUseEventBus(): Boolean = true
 
     init {
         setupFrgID(R.layout.pg_frg_stat, R.id.fl_page_holder)
     }
+
     override fun leavePage(): Boolean = true
+    override fun isUseEventBus(): Boolean = true
 
     /**
      * for DB data change
@@ -46,6 +48,7 @@ class PageStat : FrgSupportSwitcher<FrgSupportBaseAdv>(),  PageBase {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDBEvent(event: DBDataChangeEvent) {
         mPGDay.reInitUI()
+        mPGWeek.reInitUI()
         mPGMonth.reInitUI()
         mPGYear.reInitUI()
     }
@@ -57,12 +60,14 @@ class PageStat : FrgSupportSwitcher<FrgSupportBaseAdv>(),  PageBase {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPreferencesEvent(event: PreferenceChange) {
         mPGDay.reInitUI()
+        mPGWeek.reInitUI()
         mPGMonth.reInitUI()
         mPGYear.reInitUI()
     }
 
     override fun setupFragment(savedInstanceState: Bundle?) {
         addChildFrg(mPGDay)
+        addChildFrg(mPGWeek)
         addChildFrg(mPGMonth)
         addChildFrg(mPGYear)
 
@@ -71,6 +76,7 @@ class PageStat : FrgSupportSwitcher<FrgSupportBaseAdv>(),  PageBase {
             override fun onTabSelect(position: Int) {
                 when(position)    {
                     POS_DAY -> switchToPage(mPGDay)
+                    POS_WEEK -> switchToPage(mPGWeek)
                     POS_MONTH -> switchToPage(mPGMonth)
                     POS_YEAR -> switchToPage(mPGYear)
                 }
@@ -82,7 +88,8 @@ class PageStat : FrgSupportSwitcher<FrgSupportBaseAdv>(),  PageBase {
 
     companion object {
         private const val POS_DAY = 0
-        private const val POS_MONTH = 1
-        private const val POS_YEAR = 2
+        private const val POS_WEEK = 1
+        private const val POS_MONTH = 2
+        private const val POS_YEAR = 3
     }
 }

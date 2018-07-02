@@ -23,7 +23,7 @@ class DayStat : StatBase() {
                     val columns = ArrayList<Column>()
                     NoteDataHelper.notesDays
                             .forEach { tag ->
-                                NoteDataHelper.getInfoByDay(tag)?.let1 {
+                                NoteDataHelper.getInfoByDay(tag).let1 {
                                     columns.add(Column(
                                             listOf(SubcolumnValue(it.payAmount.toFloat(), mPayColor),
                                                     SubcolumnValue(it.incomeAmount.toFloat(), mIncomeColor)))

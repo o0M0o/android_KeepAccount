@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.edit.NoteEdit.page.base
+package wxm.KeepAccount.ui.base.page
 
 import android.content.Context
 import android.view.View

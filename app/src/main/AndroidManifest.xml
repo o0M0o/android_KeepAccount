@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -58,14 +58,22 @@
             android:label="@string/title_preview"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".ui.data.show.note.ACNoteDetail"
+            android:label="@string/title_note_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.search.ACNoteSearch"
+            android:label="@string/title_search"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.welcome.ACWelcome"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_welcome"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.data.edit.NoteCreate.ACNoteCreate"
-            android:label="@string/title_create_note"
             android:exported="true"
+            android:label="@string/title_create_note"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.data.show.remind.ACRemindShow"
@@ -89,11 +97,20 @@
             android:label="@string/title_sms_to_note"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".ui.data.edit.debt.ACDebtCreate"
+            android:exported="true"
+            android:label="@string/title_debt"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.data.edit.debt.ACDebtActionCreate"
+            android:exported="true"
+            android:label="@string/title_debt_flow"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.data.edit.RecordInfo.ACRecordInfoEdit"
             android:label="@string/title_note"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
     </application>
 
 </manifest>

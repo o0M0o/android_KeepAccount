@@ -23,7 +23,7 @@ public class PropertyUtil {
      * Returns the description of the property with the provided
      * name on the provided object's interface.
      *
-     * @return the descriptor of the property, or null if the property does not exist.
+     * @return the descriptor of the property, or null if the property does not notExist.
      * @throws IllegalArgumentException if there's a introspection failure
      */
     public static PropertyDescriptor getPropertyDescriptor(String propertyName, Object fromObj) throws IllegalArgumentException {

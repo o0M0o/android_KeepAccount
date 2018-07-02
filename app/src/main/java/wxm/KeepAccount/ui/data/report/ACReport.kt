@@ -22,14 +22,13 @@ class ACReport : ACBase<FrgSupportBaseAdv>() {
 
     override fun setupFragment(): MutableList<FrgSupportBaseAdv> {
         // check invoke intent
-        val it = intent
-        val szType = it.getStringExtra(PARA_TYPE)
+        val szType = intent.getStringExtra(PARA_TYPE)
+        val alLoad = intent.getStringArrayListExtra(PARA_LOAD)
         if (szType.isNullOrEmpty()) {
             TagLog.e( "调用intent缺少'PARA_TYPE'参数")
             return arrayListOf()
         }
 
-        val alLoad = it.getStringArrayListExtra(PARA_LOAD)
         if (alLoad.isEmpty()) {
             TagLog.e( "调用intent缺少'PARA_LOAD'参数")
             return arrayListOf()

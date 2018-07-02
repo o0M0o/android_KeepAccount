@@ -36,6 +36,9 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
     val noteImageREDao: RuntimeExceptionDao<NoteImageItem, Int> = getRuntimeExceptionDao(NoteImageItem::class.java)
     val smsParseREDao: RuntimeExceptionDao<SmsParseItem, Int> = getRuntimeExceptionDao(SmsParseItem::class.java)
 
+    val debtREDao: RuntimeExceptionDao<DebtNoteItem, Int> = getRuntimeExceptionDao(DebtNoteItem::class.java)
+    val debtActionREDao: RuntimeExceptionDao<DebtActionItem, Int> = getRuntimeExceptionDao(DebtActionItem::class.java)
+
     /**
      * This is called when the database is first created. Usually you should call createTable statements here to create
      * the tables that will store your data.
@@ -66,12 +69,12 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
         TableUtils.createTableIfNotExists(connectionSource, LoginHistoryItem::class.java)
 
         // for usr
-        val oldUsr = AppUtil.usrUtility.allData
+        val oldUsr = UsrDBUtility.instance.allData
         TableUtils.dropTable<UsrItem, Int>(connectionSource, UsrItem::class.java, true)
         TableUtils.createTable(connectionSource, UsrItem::class.java)
         // 添加默认用户
         oldUsr.forEach {
-            AppUtil.usrUtility.addUsr(it.name, it.pwd)
+            UsrDBUtility.instance.addUsr(it.name, it.pwd)
         }
     }
 
@@ -118,7 +121,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
 
 
         // 添加默认用户
-        AppUtil.usrUtility.addUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD)
+        UsrDBUtility.instance.addUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD)
 
         @Suppress("ConstantConditionIf")
         if (BuildConfig.FILL_TESTDATA)
@@ -151,8 +154,8 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
      * 填充测试数据
      */
     private fun addTestData() {
-        val uiWxm = AppUtil.usrUtility.addUsr("wxm", "123456")
-        val uiHugo = AppUtil.usrUtility.addUsr("hugo", "123456")
+        val uiWxm = UsrDBUtility.instance.addUsr("wxm", "123456")
+        val uiHugo = UsrDBUtility.instance.addUsr("hugo", "123456")
 
         // for wxm
         val lsPay = LinkedList<PayNoteItem>()
@@ -177,7 +180,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
             amount = BigDecimal(12.34)
             ts.time = de.time
         })
-        AppUtil.payIncomeUtility.addPayNotes(lsPay)
+        PayIncomeDBUtility.instance.addPayNotes(lsPay)
 
         val lsIncome = LinkedList<IncomeNoteItem>().apply {
             add(IncomeNoteItem().apply {
@@ -187,7 +190,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
                 ts.time = de.time
             })
         }.let {
-            AppUtil.payIncomeUtility.addIncomeNotes(it)
+            PayIncomeDBUtility.instance.addIncomeNotes(it)
             it
         }
 
@@ -196,13 +199,13 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
             it.id = GlobalDef.INVALID_ID
             it.usr = uiHugo
         }
-        AppUtil.payIncomeUtility.addPayNotes(lsPay)
+        PayIncomeDBUtility.instance.addPayNotes(lsPay)
 
         lsIncome.forEach {
             it.id = GlobalDef.INVALID_ID
             it.usr = uiHugo
         }
-        AppUtil.payIncomeUtility.addIncomeNotes(lsIncome)
+        PayIncomeDBUtility.instance.addIncomeNotes(lsIncome)
 
         createTestDataForDefaultUsr()
     }
@@ -229,7 +232,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
         }
 
         val ci = CreateUtility()
-        val defUi = AppUtil.usrUtility
+        val defUi = UsrDBUtility.instance
                 .checkGetUsr(GlobalDef.DEF_USR_NAME, GlobalDef.DEF_USR_PWD)
         if (null != defUi) {
             val oneDayMSec = (1000 * 3600 * 24).toLong()
@@ -257,7 +260,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
                                 })
                             }
                         }.let {
-                            AppUtil.payIncomeUtility.addPayNotes(it)
+                            PayIncomeDBUtility.instance.addPayNotes(it)
                         }
                     }
 
@@ -276,7 +279,7 @@ class DBOrmLiteHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DATAB
                                 })
                             }
                         }.let {
-                            AppUtil.payIncomeUtility.addIncomeNotes(it)
+                            PayIncomeDBUtility.instance.addIncomeNotes(it)
                         }
                     }
                 }

@@ -13,7 +13,6 @@ import wxm.KeepAccount.ui.base.ACBase.ACBase
  * for record info
  */
 class ACRecordInfoEdit : ACBase<FrgRecordInfoEdit>() {
-
     override fun leaveActivity() {
         cancelEdit()
     }
@@ -27,7 +26,7 @@ class ACRecordInfoEdit : ACBase<FrgRecordInfoEdit>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.mu_preview_edit, menu)
+        menuInflater.inflate(R.menu.mu_preview_cancel, menu)
 
         menu.findItem(R.id.mi_switch).isVisible = false
         menu.findItem(R.id.mi_cancel).isVisible = false

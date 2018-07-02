@@ -10,11 +10,14 @@ import android.widget.ListView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.BudgetDBUtility
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.PayNoteItem
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.event.FilterShow
+import wxm.KeepAccount.improve.toMoneyStr
+import wxm.KeepAccount.improve.toYearMonthDayHourMinuteTag
 import wxm.androidutil.improve.let1
 import wxm.KeepAccount.ui.data.show.note.base.EOperation
 import wxm.KeepAccount.ui.utility.ListViewHelper
@@ -140,27 +143,27 @@ class LVBudget : LVBase() {
     override fun initUI(bundle: Bundle?) {
         super.initUI(bundle)
         EventHelper.setOnClickOperator(view!!,
-                intArrayOf(R.id.bt_accpet, R.id.bt_cancel),
-                {
-                    when (it.id) {
-                        R.id.bt_accpet -> {
-                            if (EOperation.DELETE == mActionType) {
-                                mActionType = EOperation.EDIT
+                intArrayOf(R.id.bt_accpet, R.id.bt_cancel)
+        ) {
+            when (it.id) {
+                R.id.bt_accpet -> {
+                    if (EOperation.DELETE == mActionType) {
+                        mActionType = EOperation.EDIT
 
-                                (mLVShow.adapter as MainAdapter).waitDeleteItems.let {
-                                    AppUtil.budgetUtility.removeDatas(it)
-                                }
-                            }
-
-                            loadUI(null)
-                        }
-
-                        R.id.bt_cancel -> {
-                            mActionType = EOperation.EDIT
-                            loadUI(null)
+                        (mLVShow.adapter as MainAdapter).waitDeleteItems.let {
+                            BudgetDBUtility.instance.removeDatas(it)
                         }
                     }
-                })
+
+                    loadUI(null)
+                }
+
+                R.id.bt_cancel -> {
+                    mActionType = EOperation.EDIT
+                    loadUI(null)
+                }
+            }
+        }
 
         ToolUtil.runInBackground(activity!!,
                 { this.parseNotes() },
@@ -189,7 +192,7 @@ class LVBudget : LVBase() {
         mMainPara.clear()
         mHMSubPara.clear()
 
-        AppUtil.budgetUtility.budgetWithPayNote.toSortedMap(
+        BudgetDBUtility.instance.budgetWithPayNote.toSortedMap(
                 Comparator { a, b ->
                     (mBODownOrder).doJudge(
                         a.name.compareTo(b.name),
@@ -219,7 +222,7 @@ class LVBudget : LVBase() {
         lsPay.sortedBy { it.ts }.forEach {
             val cl = it.ts.toCalendar()
 
-            val map = SubAdapterItem(parentTag, it.tsToStr.substring(0, 10))
+            val map = SubAdapterItem(parentTag, it.ts.toYearMonthDayHourMinuteTag())
             map.month = "${cl.getYear()}年${cl.getMonth()}月"
 
             map.dayNumber = cl.getDayInMonth().toString()
@@ -231,7 +234,7 @@ class LVBudget : LVBase() {
 
             map.time = cl.getHourMinuteStr()
             map.title = it.info
-            map.amount = it.valToStr
+            map.amount = it.amount.toMoneyStr()
             map.id = it.id
             curLs.add(map)
         }

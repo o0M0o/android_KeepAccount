@@ -18,6 +18,7 @@ import wxm.KeepAccount.event.PreferenceChange
 import wxm.KeepAccount.preference.PreferencesUtil
 import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
+import wxm.KeepAccount.ui.data.edit.debt.ACDebtCreate
 import wxm.KeepAccount.ui.data.show.calendar.ACCalendarShow
 import wxm.KeepAccount.ui.data.show.note.ACNoteShow
 import wxm.KeepAccount.ui.sync.ACSync
@@ -189,6 +190,12 @@ class PageMain : FrgSupportBaseAdv(), PageBase {
 
             EAction.LOGOUT -> {
                 doLogout(activity!!)
+            }
+
+            EAction.ADD_DEBT -> {
+                Intent(context, ACDebtCreate::class.java).apply {
+                    startActivityForResult(this, 1)
+                }
             }
 
             EAction.SYNC_SMS -> {

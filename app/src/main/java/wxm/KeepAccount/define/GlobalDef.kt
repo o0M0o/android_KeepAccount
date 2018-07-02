@@ -8,6 +8,11 @@ object GlobalDef {
     const val STR_RECORD_PAY = "pay"
     const val STR_RECORD_INCOME = "income"
     const val STR_RECORD_BUDGET = "budget"
+    const val STR_RECORD_DEBT = "debt"
+    const val STR_RECORD_DEBT_ACTION = "debt_action"
+
+    const val STR_DEBT_LEND = "lend"
+    const val STR_DEBT_BORROW = "borrow"
 
     const val STR_RECORD_DATE = "record_date"
     const val STR_RECORD_TYPE = "record_type"
@@ -15,7 +20,7 @@ object GlobalDef {
     const val STR_CREATE = "create"
     const val STR_MODIFY = "modify"
 
-    const val STR_PWD_PAD = """JkpYkhiayh@#${'$'}_)("""
+    const val STR_PWD_PAD = """JkpYkhiayh@#$\{'$'}_)("""
 
     const val INTENT_LOAD_RECORD_ID = "record_id"
     const val INTENT_LOAD_RECORD_TYPE = "record_type"

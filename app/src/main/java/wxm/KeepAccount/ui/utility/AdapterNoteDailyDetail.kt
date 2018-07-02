@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.PayIncomeDBUtility
 import wxm.KeepAccount.define.GlobalDef
+import wxm.KeepAccount.improve.toHourMinuteStr
+import wxm.KeepAccount.improve.toMoneyStr
 import wxm.KeepAccount.item.INote
 import wxm.KeepAccount.item.IncomeNoteItem
 import wxm.KeepAccount.item.PayNoteItem
@@ -24,7 +27,7 @@ import java.util.*
  * adapter for note detail
  * Created by WangXM on 2017/1/23.
  */
-class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
+class AdapterNoteDailyDetail(ct: Context, data: List<Map<String, INote>>)
     : MoreAdapter(ct, data, R.layout.liit_data_swipe_holder) {
     private val mSelfContext = ct
 
@@ -37,14 +40,14 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
         val sl = vhHolder.getView<SwipeLayout>(R.id.swipe)!!
         var vt: ViewTag? = sl.tag as ViewTag?
         if (null == vt) {
-            vt = ViewTag(mContent = vhHolder.getView(if (itemData.isPayNote) R.id.rl_pay else R.id.rl_income),
+            vt = ViewTag(mContent = vhHolder.getView(if (itemData is PayNoteItem) R.id.rl_pay else R.id.rl_income),
                     mRight = vhHolder.getView(R.id.cl_swipe_right))
-            if (itemData.isPayNote) {
+            if (itemData is PayNoteItem) {
                 vhHolder.getView<View>(R.id.rl_income).visibility = View.GONE
-                initPay(vt.mContent, itemData.toPayNote()!!)
+                initPay(vt.mContent, itemData)
             } else {
                 vhHolder.getView<View>(R.id.rl_pay).visibility = View.GONE
-                initIncome(vt.mContent, itemData.toIncomeNote()!!)
+                initIncome(vt.mContent, itemData as IncomeNoteItem)
             }
 
             ViewHelper(vt.mRight).let1 {
@@ -56,10 +59,10 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
                     ) { b ->
                         b.setPositiveButton("是") { _, _ ->
                             (v.tag as INote).let {
-                                if (it.isPayNote) {
-                                    AppUtil.payIncomeUtility.deletePayNotes(listOf(it.id))
+                                if (it is PayNoteItem) {
+                                    PayIncomeDBUtility.instance.deletePayNotes(listOf(it.id))
                                 } else {
-                                    AppUtil.payIncomeUtility.deleteIncomeNotes(listOf(it.id))
+                                    PayIncomeDBUtility.instance.deleteIncomeNotes(listOf(it.id))
                                 }
                             }
                         }
@@ -83,9 +86,7 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
     private fun previewEditNote(data: INote) {
         Intent(mSelfContext, ACNoteEdit::class.java).let1 {
             it.putExtra(GlobalDef.INTENT_LOAD_RECORD_ID, data.id)
-            it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE,
-                    if (data.isPayNote) GlobalDef.STR_RECORD_PAY else GlobalDef.STR_RECORD_INCOME)
-
+            it.putExtra(GlobalDef.INTENT_LOAD_RECORD_TYPE, data.noteType())
             mSelfContext.startActivity(it)
         }
     }
@@ -108,8 +109,8 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
                 }
             }
 
-            vh.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %s", data.valToStr))
-            vh.setText(R.id.tv_pay_time, getHourMinute(data.ts))
+            vh.setText(R.id.tv_pay_amount, String.format(Locale.CHINA, "- %s", data.amount.toMoneyStr()))
+            vh.setText(R.id.tv_pay_time, data.ts.toHourMinuteStr())
 
             // for note
             data.note.let1 {
@@ -131,8 +132,8 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
         ViewHelper(vw).let1 { vh ->
             vh.setText(R.id.tv_income_title, data.info)
 
-            vh.setText(R.id.tv_income_amount, data.valToStr)
-            vh.setText(R.id.tv_income_time, getHourMinute(data.ts))
+            vh.setText(R.id.tv_income_amount, data.amount.toMoneyStr())
+            vh.setText(R.id.tv_income_time, data.ts.toHourMinuteStr())
 
             // for note
             data.note.let1 {
@@ -143,12 +144,6 @@ class AdapterNoteDetail(ct: Context, data: List<Map<String, INote>>)
                 }
             }
         }
-    }
-
-    private fun getHourMinute(ts: Timestamp): String {
-        val cl = ts.toCalendar()
-        return String.format(Locale.CHINA, "%02d:%02d",
-                cl.get(Calendar.HOUR_OF_DAY), cl.get(Calendar.MINUTE))
     }
 
     companion object {

@@ -27,12 +27,10 @@ class ACLogin : ACBase<FrgLogin>() {
         return true
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.acm_mi_leave -> {
-                Toast.makeText(applicationContext,
-                        "退出应用!",
+                Toast.makeText(this, "退出应用!",
                         Toast.LENGTH_SHORT).show()
 
                 try {

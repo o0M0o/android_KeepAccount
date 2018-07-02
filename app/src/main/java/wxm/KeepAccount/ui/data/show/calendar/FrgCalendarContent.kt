@@ -20,7 +20,7 @@ import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import wxm.androidutil.util.UtilFun
 import wxm.KeepAccount.R
 import wxm.KeepAccount.item.INote
-import wxm.KeepAccount.ui.utility.AdapterNoteDetail
+import wxm.KeepAccount.ui.utility.AdapterNoteDailyDetail
 import wxm.KeepAccount.ui.utility.NoteDataHelper
 import wxm.androidutil.app.AppBase
 import wxm.androidutil.improve.doJudge
@@ -98,7 +98,7 @@ class FrgCalendarContent : FrgSupportBaseAdv() {
         mTVYearMonth.text = String.format(Locale.CHINA, "%s年%s月", arr[0], arr[1])
 
         val ni = NoteDataHelper.getInfoByDay(mSZHotDay!!)
-        val bb = ni?.balance ?: BigDecimal.ZERO
+        val bb = ni.balance
         mTVBalance.text = String.format(Locale.CHINA,
                 "${(bb < BigDecimal.ZERO).doJudge("-", "+")} %.02f",
                 Math.abs(bb.toFloat()))
@@ -109,12 +109,12 @@ class FrgCalendarContent : FrgSupportBaseAdv() {
         if (!UtilFun.ListIsNullOrEmpty(mLSDayContents)) {
             mLSDayContents!!.forEach {
                 HashMap<String, INote>().apply {
-                    put(AdapterNoteDetail.K_NODE, it)
+                    put(AdapterNoteDailyDetail.K_NODE, it)
                 }.let { cPara.add(it) }
             }
         }
 
-        mLVBody.adapter = AdapterNoteDetail(activity!!, cPara)
+        mLVBody.adapter = AdapterNoteDailyDetail(activity!!, cPara)
     }
 
     /// PRIVATE BEGIN

@@ -10,21 +10,22 @@ import android.widget.TextView
 import kotterknife.bindView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-
 import wxm.KeepAccount.R
 import wxm.KeepAccount.event.PicPath
-import wxm.KeepAccount.improve.*
+import wxm.KeepAccount.improve.toDayInWeekStr
+import wxm.KeepAccount.improve.toDayStr
+import wxm.KeepAccount.improve.toHourMinuteStr
+import wxm.KeepAccount.improve.toMoneyStr
 import wxm.KeepAccount.item.IncomeNoteItem
-import wxm.KeepAccount.item.NoteImageItem
-import wxm.KeepAccount.ui.base.ACBase.ACBase
-import wxm.KeepAccount.ui.data.edit.NoteEdit.FrgNoteEdit
-import wxm.KeepAccount.ui.data.edit.NoteEdit.page.base.PicLVAdapter
+import wxm.KeepAccount.ui.base.page.PicLVAdapter
 import wxm.KeepAccount.ui.data.edit.base.IPreview
 import wxm.KeepAccount.ui.preview.ACImagePreview
-import wxm.androidutil.ui.frg.FrgSupportBaseAdv
-import wxm.androidutil.improve.doJudge
 import wxm.androidutil.improve.let1
+import wxm.androidutil.ui.frg.FrgSupportBaseAdv
 import java.util.HashMap
+import kotlin.collections.ArrayList
+import kotlin.collections.Map
+import kotlin.collections.map
 
 /**
  * preview fragment for income
@@ -64,10 +65,10 @@ class PgIncomePreview : FrgSupportBaseAdv(), IPreview {
     @Suppress("UNUSED_PARAMETER", "unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPreviewPicPath(event: PicPath) {
-        if(!mUsrVisible)
+        if (!mUsrVisible)
             return
 
-        if(PicPath.PREVIEW_PIC == event.action) {
+        if (PicPath.PREVIEW_PIC == event.action) {
             Intent(activity!!, ACImagePreview::class.java).let1 {
                 it.putExtra(ACImagePreview.IMAGE_FILE_PATH, event.picPath)
                 activity!!.startActivity(it)
@@ -77,10 +78,10 @@ class PgIncomePreview : FrgSupportBaseAdv(), IPreview {
 
     override fun initUI(savedInstanceState: Bundle?) {
         if (null == savedInstanceState) {
-            if(null != mINData) {
+            if (null != mINData) {
                 val data = mINData!!
 
-                mTVAmount.text = data.valToStr
+                mTVAmount.text = data.amount.toMoneyStr()
                 mTVInfo.text = data.info
                 mTVDate.text = data.ts.toDayStr()
                 mTVTime.text = data.ts.toHourMinuteStr()
@@ -93,30 +94,21 @@ class PgIncomePreview : FrgSupportBaseAdv(), IPreview {
                     mTVNote.text = data.note
                 }
 
+                if (data.images.isEmpty()) {
+                    mRLImage.visibility = View.GONE
+                } else {
+                    mRLImage.visibility = View.VISIBLE
 
-                @Suppress("UNCHECKED_CAST")
-                val pn = (data.tag == null).doJudge(
-                        {
-                            if (data.images.isEmpty()) ArrayList()
-                            else ArrayList<String>().apply {
-                                addAll(data.images.filter { it.status == NoteImageItem.STATUS_USE }.map { it.imagePath })
-                            }
-                        },
-                        { data.tag as List<String> }
-                )
-                pn.isEmpty().doJudge(
-                        { mRLImage.visibility = View.GONE },
-                        {
-                            mRLImage.visibility = View.VISIBLE
-
-                            ArrayList<Map<String, String>>().apply {
-                                addAll(pn.map { HashMap<String, String>().apply { put(PicLVAdapter.PIC_PATH, it) } })
-                            }.let1 {
-                                mLVImage.adapter = PicLVAdapter(context!!, it, false)
-                            }
-                        }
-                )
-            } else  {
+                    ArrayList<Map<String, String>>().apply {
+                        addAll(data.images.map {
+                            HashMap<String, String>()
+                                    .apply { put(PicLVAdapter.PIC_PATH, it.imagePath) }
+                        })
+                    }.let1 {
+                        mLVImage.adapter = PicLVAdapter(context!!, it, false)
+                    }
+                }
+            } else {
                 mTVAmount.text = ""
                 mTVInfo.text = ""
                 mTVNote.text = ""

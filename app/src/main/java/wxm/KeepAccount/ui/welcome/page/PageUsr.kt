@@ -84,7 +84,7 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
                 if (resultCode == Activity.RESULT_OK) {
                     saveImage(result.uri).let1 {
                         if (it.isNotEmpty()) {
-                            if (AppUtil.usrUtility.changeIcon(AppUtil.curUsr!!, it)) {
+                            if (UsrDBUtility.instance.changeIcon(AppUtil.curUsr!!, it)) {
                                 loadUsrInfo()
                             }
                         }
@@ -112,7 +112,7 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
 
             R.id.ib_accept -> {
                 if(checkPwd())  {
-                    AppUtil.usrUtility.changePwd(AppUtil.curUsr!!, mTENewPwd.text.toString())
+                    UsrDBUtility.instance.changePwd(AppUtil.curUsr!!, mTENewPwd.text.toString())
                             .doJudge(
                                     {DlgAlert.showAlert(context!!, R.string.dlg_info, R.string.info_change_pwd_success)},
                                     {DlgAlert.showAlert(context!!, R.string.dlg_warn, R.string.info_change_pwd_success)})
@@ -165,7 +165,7 @@ class PageUsr : FrgSupportBaseAdv(), PageBase {
             return false
         }
 
-        when(AppUtil.usrUtility.pwdValidity(mTENewPwd.text.toString())) {
+        when(UsrDBUtility.instance.pwdValidity(mTENewPwd.text.toString())) {
             UsrDBUtility.RET_PWD_TO_SHORT -> {
                 DlgAlert.showAlert(context!!, R.string.dlg_erro, R.string.error_password_to_short)
                 return false

@@ -11,6 +11,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import wxm.KeepAccount.R
 import wxm.KeepAccount.event.FilterShow
+import wxm.KeepAccount.improve.toMoneyStr
 import wxm.androidutil.improve.let1
 import wxm.KeepAccount.improve.toSignalMoneyStr
 import wxm.KeepAccount.ui.base.Helper.ResourceHelper
@@ -52,8 +53,8 @@ class LVMonthly : LVBase() {
         override fun getDataByTag(tag: String): MonthDetailItem {
             return MonthDetailItem(tag).let { map ->
                 NoteDataHelper.getInfoByMonth(tag).let1 {
-                    map.monthDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
-                            it.incomeCount.toString(), it.szIncomeAmount)
+                    map.monthDetail = RecordDetail(it.payCount.toString(), it.payAmount.toMoneyStr(),
+                            it.incomeCount.toString(), it.incomeAmount.toMoneyStr())
 
                     map.amount = it.balance.toSignalMoneyStr()
 
@@ -77,11 +78,11 @@ class LVMonthly : LVBase() {
         override fun getDataByTag(tag: String): DayDetailItem {
             val mk = tag.substring(0, 7)
             val map = DayDetailItem(mk, tag)
-            NoteDataHelper.getInfoByDay(tag)?.let {
+            NoteDataHelper.getInfoByDay(tag).let {
                 map.dayNumber = tag.substring(8, 10).removePrefix("0")
                 map.dayInWeek = ToolUtil.stringToCalendar(tag).getDayInWeekStr()
-                map.dayDetail = RecordDetail(it.payCount.toString(), it.szPayAmount,
-                        it.incomeCount.toString(), it.szIncomeAmount)
+                map.dayDetail = RecordDetail(it.payCount.toString(), it.payAmount.toMoneyStr(),
+                        it.incomeCount.toString(), it.incomeAmount.toMoneyStr())
 
                 map.amount = it.balance.toSignalMoneyStr()
             }

@@ -4,6 +4,7 @@
     <string name="cn_sure">确认</string>
     <string name="cn_leave">退出应用</string>
     <string name="cn_help">帮助</string>
+    <string name="cn_search">查找</string>
     <string name="cn_save">保存</string>
     <string name="cn_edit">编辑</string>
     <string name="cn_cancel">放弃</string>
@@ -19,6 +20,8 @@
     <string name="cn_income_pay">收支</string>
     <string name="cn_income">收入</string>
     <string name="cn_pay">支出</string>
+    <string name="cn_borrow">借入</string>
+    <string name="cn_lend">借出</string>
     <string name="cn_total">总计</string>
 
     <string name="cn_day_flow">日流水</string>

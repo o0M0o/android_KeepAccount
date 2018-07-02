@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.BudgetDBUtility
+import wxm.KeepAccount.db.PayIncomeDBUtility
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.base.ACBase.ACBase
 import wxm.KeepAccount.ui.data.edit.base.FrgEditBase
@@ -31,17 +33,17 @@ class ACNoteEdit : ACBase<FrgEditBase>() {
         val frg = FrgNoteEdit()
         when (type) {
             GlobalDef.STR_RECORD_PAY -> {
-                frg.setCurData(type, AppUtil.payIncomeUtility.payDBUtility.getData(id))
+                frg.setCurData(type, PayIncomeDBUtility.instance.payDBUtility.getData(id))
                 ret.add(frg)
             }
 
             GlobalDef.STR_RECORD_INCOME -> {
-                frg.setCurData(type, AppUtil.payIncomeUtility.incomeDBUtility.getData(id))
+                frg.setCurData(type, PayIncomeDBUtility.instance.incomeDBUtility.getData(id))
                 ret.add(frg)
             }
 
             GlobalDef.STR_RECORD_BUDGET -> {
-                frg.setCurData(type, AppUtil.budgetUtility.getData(id))
+                frg.setCurData(type, BudgetDBUtility.instance.getData(id))
                 ret.add(frg)
             }
         }

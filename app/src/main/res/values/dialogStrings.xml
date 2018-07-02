@@ -20,4 +20,7 @@ this file include dialog strings in app
 
     <string name="dlg_create_data_failure">创建数据失败!</string>
     <string name="dlg_modify_data_failure">更新数据失败!</string>
+
+    <string name="dlg_need_search_column">需要指定一个搜索项!</string>
+    <string name="dlg_need_search_type">需要指定一个搜索类型!</string>
 </resources>

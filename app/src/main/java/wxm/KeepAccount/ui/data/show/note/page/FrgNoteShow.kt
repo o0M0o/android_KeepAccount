@@ -1,4 +1,4 @@
-package wxm.KeepAccount.ui.data.show.note
+package wxm.KeepAccount.ui.data.show.note.page
 
 
 import android.os.Bundle

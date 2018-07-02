@@ -10,6 +10,7 @@ import android.widget.GridView
 import android.widget.SimpleAdapter
 import android.widget.TextView
 import wxm.KeepAccount.R
+import wxm.KeepAccount.db.RecordTypeDBUtility
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.ui.data.edit.RecordInfo.ACRecordInfoEdit
 import wxm.KeepAccount.ui.dialog.base.DlgResource
@@ -116,7 +117,7 @@ class DlgSelectRecordType : DlgOKOrNOBase() {
     }
 
     private fun loadData() {
-        val rd = AppUtil.recordTypeUtility
+        val rd = RecordTypeDBUtility.instance
         val alType = if (GlobalDef.STR_RECORD_PAY == mRootType)
             ArrayList(rd.allPayItem)
         else
@@ -134,7 +135,7 @@ class DlgSelectRecordType : DlgOKOrNOBase() {
         for (ri in alType) {
             val hmd = HashMap<String, String>()
             hmd[KEY_NAME] = ri.type
-            ri.note?.let { hmd[KEY_NOTE] = it }
+            ri.note.let { hmd[KEY_NOTE] = it }
 
             if (ri.type == curType) {
                 hmd[KEY_SELECTED] = VAL_SELECTED
