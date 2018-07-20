@@ -23,4 +23,5 @@ this file include dialog strings in app
 
     <string name="dlg_need_search_column">需要指定一个搜索项!</string>
     <string name="dlg_need_search_type">需要指定一个搜索类型!</string>
+    <string name="dig_find_none">搜索结果为空!</string>
 </resources>

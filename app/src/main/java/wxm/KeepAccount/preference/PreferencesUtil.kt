@@ -53,10 +53,10 @@ class PreferencesUtil : PreferenceBase() {
             return String.format(Locale.CHINA,
                     "%s$DIVIDER_CHAR%s$DIVIDER_CHAR%s" +
                             "$DIVIDER_CHAR%s$DIVIDER_CHAR%s$DIVIDER_CHAR%s" +
-                            "$DIVIDER_CHAR%s$DIVIDER_CHAR%s",
+                            "$DIVIDER_CHAR%s",
                     EAction.ADD_DATA.actName, EAction.LOOK_DATA.actName, EAction.CALENDAR_VIEW.actName,
                     EAction.LOOK_BUDGET.actName, EAction.ADD_BUDGET.actName, EAction.SYNC_SMS.actName,
-                    EAction.ADD_DEBT.actName, EAction.LOGOUT.actName).let {
+                    EAction.LOGOUT.actName).let {
                 preferenceObj.loadPreference(SET_HOT_ACTION, it)
             }.let {
                 preferenceObj.parsePreference(it, DIVIDER_CHAR)

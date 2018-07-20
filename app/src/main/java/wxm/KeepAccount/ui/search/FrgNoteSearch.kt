@@ -121,6 +121,10 @@ class FrgNoteSearch : FrgSupportBaseAdv() {
                 }
 
                 PayIncomeDBUtility.doSearch(query!!, tp.toTypedArray(), cl.toTypedArray()).let1 {
+                    if(it.isEmpty())    {
+                        DlgAlert.showAlert(context!!, R.string.dlg_info, R.string.dig_find_none)
+                    }
+
                     loadINote(it)
                 }
 
