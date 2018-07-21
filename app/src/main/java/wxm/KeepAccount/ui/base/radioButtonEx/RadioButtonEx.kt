@@ -9,6 +9,7 @@ import wxm.androidutil.improve.let1
 import wxm.androidutil.log.TagLog
 
 /**
+ * this extend for RadioButton can set drawable size
  * Created by WangXM on 2018/3/24.
  */
 class RadioButtonEx : RadioButton {
@@ -57,6 +58,10 @@ class RadioButtonEx : RadioButton {
         }
     }
 
+    /**
+     * [mDrawHeight] is drawable height
+     * [mDrawWidth] is drawable width
+     */
     private fun adjustDraw(draw: Drawable, pos: Int) {
         val oldBound = draw.bounds
         if(null != oldBound)    {
@@ -93,6 +98,10 @@ class RadioButtonEx : RadioButton {
         }
     }
 
+    /**
+     * set padding for drawable
+     * [difStart], [difTop], [difEnd] and [difBottom] is difference for padding
+     */
     private fun adjustPadding(difStart:Int, difTop:Int, difEnd:Int, difBottom:Int)  {
         setPaddingRelative(paddingStart + difStart, paddingTop + difTop,
                 paddingEnd + difEnd, paddingBottom + difBottom)

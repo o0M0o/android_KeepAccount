@@ -13,7 +13,6 @@ import wxm.KeepAccount.R
 import wxm.KeepAccount.db.BudgetDBUtility
 import wxm.KeepAccount.define.GlobalDef
 import wxm.KeepAccount.item.PayNoteItem
-import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteEdit.ACNoteEdit
 import wxm.KeepAccount.event.FilterShow
 import wxm.KeepAccount.improve.toMoneyStr
@@ -275,10 +274,10 @@ class LVBudget : LVBase() {
                 R.id.rl_delete -> {
                     if (mALWaitDeleteItems.contains(tagId)) {
                         mALWaitDeleteItems.remove(tagId as Any)
-                        v.setBackgroundColor(ResourceHelper.mCRLVItemNoSel)
+                        v.setBackgroundColor(mCRLVItemNoSel)
                     } else {
                         mALWaitDeleteItems.add(tagId)
-                        v.setBackgroundColor(ResourceHelper.mCRLVItemSel)
+                        v.setBackgroundColor(mCRLVItemSel)
                     }
                 }
 
@@ -329,7 +328,7 @@ class LVBudget : LVBase() {
                             })
                 }
 
-                it.setBackgroundColor((0 == pos % 2).doJudge(ResourceHelper.mCRLVLineOne, ResourceHelper.mCRLVLineTwo))
+                it.setBackgroundColor((0 == pos % 2).doJudge(mCRLVLineOne, mCRLVLineTwo))
             }
 
             // for delete

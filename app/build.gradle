@@ -39,8 +39,8 @@ android {
         applicationId "com.wxm.keepaccount"
         minSdkVersion 24
         targetSdkVersion 27
-        versionCode 27
-        versionName "1.27"
+        versionCode 28
+        versionName "1.28"
     }
 
     sourceSets {
@@ -61,8 +61,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //minifyEnabled true
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
 
             buildConfigField "Boolean", "FILL_TESTDATA", "false"

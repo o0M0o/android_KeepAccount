@@ -26,7 +26,7 @@ import wxm.KeepAccount.ui.base.buttonEx.ButtonEx
 import wxm.KeepAccount.ui.base.page.IAddPicPath
 import wxm.KeepAccount.ui.base.page.MoneyTextWatcher
 import wxm.KeepAccount.ui.base.page.PicLVAdapter
-import wxm.KeepAccount.ui.base.page.pgUtil
+import wxm.KeepAccount.ui.base.page.PgUtil
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.preview.ACImagePreview
@@ -228,7 +228,7 @@ class PgDebtActionEdit : FrgSupportBaseAdv(), IEdit {
                             else
                                 CalendarUtility.YearMonthDayHourMinute.parse(it)
                         }
-                        pgUtil.pickDateDlg(context!!, cd) {
+                        PgUtil.pickDateDlg(context!!, cd) {
                             mETDate.setText(it.toTimestamp().toDayHourMinuteStr())
                             mETDate.requestFocus()
                         }

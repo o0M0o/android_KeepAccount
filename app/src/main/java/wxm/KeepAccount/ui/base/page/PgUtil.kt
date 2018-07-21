@@ -14,6 +14,7 @@ import wxm.androidutil.time.CalendarUtility
 import java.util.*
 
 /**
+ * page utility
  * @author      WangXM
  * @version     create：2018/6/9
  */
@@ -42,7 +43,7 @@ class MoneyTextWatcher(private val mTEHolder: TouchEditText) : TextWatcher {
     }
 }
 
-object pgUtil {
+object PgUtil {
     /**
      * use [pns] as [nd] new image attr
      */

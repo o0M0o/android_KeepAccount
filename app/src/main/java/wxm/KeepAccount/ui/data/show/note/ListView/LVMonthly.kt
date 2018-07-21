@@ -14,7 +14,6 @@ import wxm.KeepAccount.event.FilterShow
 import wxm.KeepAccount.improve.toMoneyStr
 import wxm.androidutil.improve.let1
 import wxm.KeepAccount.improve.toSignalMoneyStr
-import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.ListViewHelper
 import wxm.KeepAccount.ui.utility.NoteDataHelper
@@ -330,8 +329,7 @@ class LVMonthly : LVBase() {
                 )
             }.let1 {
                 vhHolder.getView<ConstraintLayout>(R.id.cl_header).apply {
-                    setBackgroundColor((0 == pos % 2)
-                            .doJudge(ResourceHelper.mCRLVLineOne, ResourceHelper.mCRLVLineTwo))
+                    setBackgroundColor((0 == pos % 2).doJudge(mCRLVLineOne, mCRLVLineTwo))
                     setOnClickListener(it)
                 }
             }
@@ -370,7 +368,7 @@ class LVMonthly : LVBase() {
             val item = getTypedItem(pos).data
             vhHolder.getView<ImageView>(R.id.iv_action).apply {
                 setBackgroundColor(mLLSubFilter.contains(item.subTag)
-                        .doJudge(ResourceHelper.mCRLVItemSel, ResourceHelper.mCRLVItemTransFull))
+                        .doJudge(mCRLVItemSel, mCRLVItemTransFull))
                 setOnClickListener { v ->
                     val subTag = item.subTag
                     mLLSubFilter.contains(subTag).doJudge(
@@ -383,7 +381,7 @@ class LVMonthly : LVBase() {
                                     refreshAttachLayout()
                                 }
 
-                                v.setBackgroundColor(ResourceHelper.mCRLVItemTransFull)
+                                v.setBackgroundColor(mCRLVItemTransFull)
                             },
                             {
                                 mLLSubFilter.add(subTag)
@@ -393,7 +391,7 @@ class LVMonthly : LVBase() {
                                     refreshAttachLayout()
                                 }
 
-                                v.setBackgroundColor(ResourceHelper.mCRLVItemSel)
+                                v.setBackgroundColor(mCRLVItemSel)
                             }
                     )
                 }

@@ -13,6 +13,7 @@ import android.widget.RelativeLayout
 import kotterknife.bindView
 import wxm.KeepAccount.R
 import wxm.KeepAccount.ui.data.show.note.base.ShowViewBase
+import wxm.androidutil.app.AppBase
 import wxm.androidutil.ui.dialog.DlgAlert
 import java.util.*
 
@@ -147,5 +148,15 @@ abstract class LVBase : ShowViewBase() {
                         mPBLoading.visibility = if (show) View.VISIBLE else View.GONE
                     }
                 })
+    }
+
+    companion object {
+        val mCRLVLineOne: Int = AppBase.getColor(R.color.color_1)
+        val mCRLVLineTwo: Int = AppBase.getColor(R.color.color_2)
+
+        val mCRLVItemTransFull: Int = AppBase.getColor(R.color.trans_full)
+
+        val mCRLVItemNoSel: Int = AppBase.getColor(R.color.red_ff725f_half)
+        val mCRLVItemSel: Int =  AppBase.getColor(R.color.red_ff725f)
     }
 }

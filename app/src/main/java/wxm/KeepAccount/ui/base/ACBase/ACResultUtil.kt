@@ -2,7 +2,6 @@ package wxm.KeepAccount.ui.base.ACBase
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Parcel
 import android.os.Parcelable
 import wxm.androidutil.improve.let1
 
@@ -10,6 +9,7 @@ import wxm.androidutil.improve.let1
  * @author      WangXM
  * @version     create：2018/7/7
  */
+@Suppress("unused, MemberVisibilityCanBePrivate")
 object ACResultUtil {
     const val RET_ERROR = -1
 

@@ -15,7 +15,6 @@ import wxm.KeepAccount.event.FilterShow
 import wxm.KeepAccount.improve.toMoneyStr
 import wxm.androidutil.improve.let1
 import wxm.KeepAccount.item.INote
-import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.edit.NoteCreate.ACNoteCreate
 import wxm.KeepAccount.ui.data.report.ACReport
 import wxm.KeepAccount.ui.data.show.note.ACDailyDetail
@@ -23,11 +22,9 @@ import wxm.KeepAccount.ui.data.show.note.base.EOperation
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.dialog.DlgSelectReportDays
 import wxm.KeepAccount.ui.utility.NoteDataHelper
-import wxm.KeepAccount.utility.AppUtil
 import wxm.KeepAccount.utility.ToolUtil
 import wxm.androidutil.time.CalendarUtility
 import wxm.androidutil.time.getDayInWeekStr
-import wxm.androidutil.time.toCalendar
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.EventHelper
@@ -309,8 +306,7 @@ class LVDaily : LVBase() {
             }
 
             vhHolder.convertView.let1 {
-                it.setBackgroundColor((0 == pos % 2).doJudge(ResourceHelper.mCRLVLineOne,
-                        ResourceHelper.mCRLVLineTwo))
+                it.setBackgroundColor((0 == pos % 2).doJudge(mCRLVLineOne, mCRLVLineTwo))
                 it.setOnClickListener(mCLAdapter)
             }
 

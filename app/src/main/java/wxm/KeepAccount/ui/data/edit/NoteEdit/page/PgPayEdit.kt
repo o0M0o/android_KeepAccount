@@ -1,8 +1,6 @@
 package wxm.KeepAccount.ui.data.edit.NoteEdit.page
 
 import android.app.Activity
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
@@ -28,8 +26,8 @@ import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.base.page.IAddPicPath
 import wxm.KeepAccount.ui.base.page.MoneyTextWatcher
 import wxm.KeepAccount.ui.base.page.PicLVAdapter
-import wxm.KeepAccount.ui.base.page.pgUtil
-import wxm.KeepAccount.ui.base.page.pgUtil.refreshNoteImage
+import wxm.KeepAccount.ui.base.page.PgUtil
+import wxm.KeepAccount.ui.base.page.PgUtil.refreshNoteImage
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
@@ -44,7 +42,6 @@ import wxm.androidutil.time.toTimestamp
 import wxm.androidutil.ui.dialog.DlgAlert
 import wxm.androidutil.ui.dialog.DlgOKOrNOBase
 import wxm.androidutil.ui.frg.FrgSupportBaseAdv
-import java.lang.String.format
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
@@ -264,7 +261,7 @@ class PgPayEdit : FrgSupportBaseAdv(), IEdit {
                             else
                                 CalendarUtility.YearMonthDayHourMinute.parse(it)
                         }
-                        pgUtil.pickDateDlg(context!!, cd) {
+                        PgUtil.pickDateDlg(context!!, cd) {
                             mETDate.setText(it.toTimestamp().toDayHourMinuteStr())
                             mETDate.requestFocus()
                         }

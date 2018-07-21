@@ -9,6 +9,7 @@ import wxm.androidutil.log.TagLog
 import wxm.KeepAccount.R
 
 /**
+ * this extend for button can set drawable size
  * Created by WangXM on 2018/3/24.
  */
 class ButtonEx : Button {
@@ -28,6 +29,10 @@ class ButtonEx : Button {
         init(context, attrs)
     }
 
+    /**
+     * [mDrawHeight] is drawable height
+     * [mDrawWidth] is drawable width
+     */
     private fun init(context: Context, attrs: AttributeSet?) {
         if (null != attrs) {
             val array = context.obtainStyledAttributes(attrs, R.styleable.ButtonEx)
@@ -35,7 +40,7 @@ class ButtonEx : Button {
                 mDrawWidth = array.getDimensionPixelSize(R.styleable.ButtonEx_bt_draw_width, 0)
                 mDrawHeight = array.getDimensionPixelSize(R.styleable.ButtonEx_bt_draw_height, 0)
 
-                TagLog.i("width = $mDrawWidth, height = $mDrawHeight")
+                //TagLog.i("width = $mDrawWidth, height = $mDrawHeight")
                 if (0 != mDrawHeight && 0 != mDrawWidth) {
                     compoundDrawables?.let1 {
                         it[0]?.let1 { adjustDraw(it, POS_START) }
@@ -57,6 +62,9 @@ class ButtonEx : Button {
         }
     }
 
+    /**
+     * set drawable size and padding for drawable
+     */
     private fun adjustDraw(draw: Drawable, pos: Int) {
         val oldBound = draw.bounds
         if(null != oldBound)    {
@@ -93,6 +101,10 @@ class ButtonEx : Button {
         }
     }
 
+    /**
+     * set padding for drawable
+     * [difStart], [difTop], [difEnd] and [difBottom] is difference for padding
+     */
     private fun adjustPadding(difStart:Int, difTop:Int, difEnd:Int, difBottom:Int)  {
         setPaddingRelative(paddingStart + difStart, paddingTop + difTop,
                 paddingEnd + difEnd, paddingBottom + difBottom)

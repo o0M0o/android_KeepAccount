@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 
 /**
+ * this viewPager not scroll when slide right or left
  * @author      WangXM
  * @version     create：2018/6/4
  */

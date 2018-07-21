@@ -49,8 +49,6 @@ class FrgNoteSearch : FrgSupportBaseAdv() {
         }
     }
 
-
-
     private fun initCheckBox()  {
         mCBAll.setOnClickListener   {
             if((it as CheckBox).isChecked)  {

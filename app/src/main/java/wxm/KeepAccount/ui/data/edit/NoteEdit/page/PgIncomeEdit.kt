@@ -1,8 +1,6 @@
 package wxm.KeepAccount.ui.data.edit.NoteEdit.page
 
 import android.app.Activity
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
@@ -27,7 +25,7 @@ import wxm.KeepAccount.item.NoteImageItem
 import wxm.KeepAccount.ui.base.TouchUI.TouchEditText
 import wxm.KeepAccount.ui.base.TouchUI.TouchTextView
 import wxm.KeepAccount.ui.base.page.*
-import wxm.KeepAccount.ui.base.page.pgUtil.refreshNoteImage
+import wxm.KeepAccount.ui.base.page.PgUtil.refreshNoteImage
 import wxm.KeepAccount.ui.data.edit.base.IEdit
 import wxm.KeepAccount.ui.dialog.DlgLongTxt
 import wxm.KeepAccount.ui.dialog.DlgSelectRecordType
@@ -41,7 +39,6 @@ import wxm.androidutil.util.UtilFun
 import wxm.androidutil.improve.doJudge
 import wxm.androidutil.time.CalendarUtility
 import wxm.androidutil.time.toTimestamp
-import java.lang.String.format
 import java.math.BigDecimal
 import java.util.*
 
@@ -236,7 +233,7 @@ class PgIncomeEdit : FrgSupportBaseAdv(), IEdit {
                             else
                                 CalendarUtility.YearMonthDayHourMinute.parse(it)
                         }
-                        pgUtil.pickDateDlg(context!!, cd) {
+                        PgUtil.pickDateDlg(context!!, cd) {
                             mETDate.setText(it.toTimestamp().toDayHourMinuteStr())
                             mETDate.requestFocus()
                         }

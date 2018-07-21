@@ -15,6 +15,7 @@ import wxm.androidutil.ui.moreAdapter.MoreAdapter
 import wxm.androidutil.ui.view.ViewHolder
 
 /**
+ * adapter for picture
  * @author      WangXM
  * @version     create：2018/6/19
  */

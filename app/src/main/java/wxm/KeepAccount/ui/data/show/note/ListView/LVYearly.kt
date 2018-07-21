@@ -14,7 +14,6 @@ import wxm.KeepAccount.event.FilterShow
 import wxm.KeepAccount.improve.toMoneyStr
 import wxm.androidutil.improve.let1
 import wxm.KeepAccount.improve.toSignalMoneyStr
-import wxm.KeepAccount.ui.base.Helper.ResourceHelper
 import wxm.KeepAccount.ui.data.show.note.base.ValueShow
 import wxm.KeepAccount.ui.utility.HelperDayNotesInfo
 import wxm.KeepAccount.ui.utility.ListViewHelper
@@ -293,13 +292,12 @@ class LVYearly : LVBase() {
 
             // adjust row color
             vhHolder.getView<ConstraintLayout>(R.id.cl_header).let {
-                it.setBackgroundColor((0 == pos % 2)
-                        .doJudge(ResourceHelper.mCRLVLineOne, ResourceHelper.mCRLVLineTwo))
+                it.setBackgroundColor((0 == pos % 2).doJudge(mCRLVLineOne, mCRLVLineTwo))
 
-                it.setOnClickListener({ _ ->
+                it.setOnClickListener { _ ->
                     hm.show = hm.show.isFold().doJudge(EShowFold.UNFOLD, EShowFold.FOLD)
                     doFold(lv, hm)
-                })
+                }
             }
 
             // for year
@@ -330,12 +328,12 @@ class LVYearly : LVBase() {
             val hm = (getItem(pos) as Map<String, MonthItemHolder>)[KEY_DATA]!!.data
             vhHolder.getView<ImageView>(R.id.iv_action).let {
                 it.setBackgroundColor(mLLSubFilter.contains(hm.subTag)
-                        .doJudge(ResourceHelper.mCRLVItemSel, ResourceHelper.mCRLVItemTransFull))
+                        .doJudge(mCRLVItemSel, mCRLVItemTransFull))
                 it.setOnClickListener { v ->
                     val subTag = hm.subTag
                     mLLSubFilter.contains(subTag).doJudge(
                             {
-                                v.setBackgroundColor(ResourceHelper.mCRLVItemTransFull)
+                                v.setBackgroundColor(mCRLVItemTransFull)
 
                                 mLLSubFilter.remove(subTag)
                                 mLLSubFilterVW.remove(v)
@@ -347,7 +345,7 @@ class LVYearly : LVBase() {
                                 }
                             },
                             {
-                                v.setBackgroundColor(ResourceHelper.mCRLVItemSel)
+                                v.setBackgroundColor(mCRLVItemSel)
 
                                 mLLSubFilter.add(subTag)
                                 mLLSubFilterVW.add(v)
